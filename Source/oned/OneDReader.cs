@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using BinaryBitmap = com.google.zxing.BinaryBitmap;
 using DecodeHintType = com.google.zxing.DecodeHintType;
 using Reader = com.google.zxing.Reader;
@@ -48,7 +49,7 @@ namespace com.google.zxing.oned
 		}
 		
 		// Note that we don't try rotation without the try harder flag, even if rotation was supported.
-		public virtual Result decode(BinaryBitmap image, System.Collections.Hashtable hints)
+      public virtual Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
 		{
 			try
 			{
@@ -62,14 +63,14 @@ namespace com.google.zxing.oned
 					BinaryBitmap rotatedImage = image.rotateCounterClockwise();
 					Result result = doDecode(rotatedImage, hints);
 					// Record that we found it rotated 90 degrees CCW / 270 degrees CW
-					System.Collections.Hashtable metadata = result.ResultMetadata;
+					var metadata = result.ResultMetadata;
 					int orientation = 270;
 					if (metadata != null && metadata.ContainsKey(ResultMetadataType.ORIENTATION))
 					{
 						// But if we found it reversed in doDecode(), add in that result here:
-						orientation = (orientation + ((System.Int32) metadata[ResultMetadataType.ORIENTATION])) % 360;
+						orientation = (orientation + ((Int32) metadata[ResultMetadataType.ORIENTATION])) % 360;
 					}
-					result.putMetadata(ResultMetadataType.ORIENTATION, (System.Object) orientation);
+					result.putMetadata(ResultMetadataType.ORIENTATION, orientation);
 					// Update result points
 					ResultPoint[] points = result.ResultPoints;
 					int height = rotatedImage.Height;
@@ -102,7 +103,7 @@ namespace com.google.zxing.oned
 		/// <returns> The contents of the decoded barcode
 		/// </returns>
 		/// <throws>  ReaderException Any spontaneous errors which occur </throws>
-		private Result doDecode(BinaryBitmap image, System.Collections.Hashtable hints)
+      private Result doDecode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
 		{
 			int width = image.Width;
 			int height = image.Height;
@@ -158,13 +159,13 @@ namespace com.google.zxing.oned
 						// that start on the center line.
 						if (hints != null && hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK))
 						{
-							System.Collections.Hashtable newHints = System.Collections.Hashtable.Synchronized(new System.Collections.Hashtable()); // Can't use clone() in J2ME
-							System.Collections.IEnumerator hintEnum = hints.Keys.GetEnumerator();
+                     var newHints = new Dictionary<DecodeHintType, object>(); // Can't use clone() in J2ME
+							var hintEnum = hints.Keys.GetEnumerator();
 							//UPGRADE_TODO: Method 'java.util.Enumeration.hasMoreElements' was converted to 'System.Collections.IEnumerator.MoveNext' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javautilEnumerationhasMoreElements'"
 							while (hintEnum.MoveNext())
 							{
 								//UPGRADE_TODO: Method 'java.util.Enumeration.nextElement' was converted to 'System.Collections.IEnumerator.Current' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073_javautilEnumerationnextElement'"
-								System.Object key = hintEnum.Current;
+								var key = hintEnum.Current;
 								if (!key.Equals(DecodeHintType.NEED_RESULT_POINT_CALLBACK))
 								{
 									newHints[key] = hints[key];
@@ -327,6 +328,6 @@ namespace com.google.zxing.oned
 		/// <returns> {@link Result} containing encoded string and start/end of barcode
 		/// </returns>
 		/// <throws>  ReaderException if an error occurs or barcode cannot be found </throws>
-		public abstract Result decodeRow(int rowNumber, BitArray row, System.Collections.Hashtable hints);
+      public abstract Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints);
 	}
 }

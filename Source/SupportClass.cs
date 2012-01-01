@@ -41,7 +41,7 @@ public class SupportClass
 	/// <returns>The new array of bytes</returns>
 	public static byte[] ToByteArray(System.String sourceString)
 	{
-		return System.Text.UTF8Encoding.UTF8.GetBytes(sourceString);
+		return System.Text.Encoding.UTF8.GetBytes(sourceString);
 	}
 
 	/// <summary>
@@ -178,20 +178,18 @@ public class SupportClass
 	}
 
 	/*******************************/
-	/// <summary>
-	/// Sets the capacity for the specified ArrayList
-	/// </summary>
-	/// <param name="vector">The ArrayList which capacity will be set</param>
-	/// <param name="newCapacity">The new capacity value</param>
-	public static void SetCapacity(System.Collections.ArrayList vector, int newCapacity)
-	{
-		if (newCapacity > vector.Count)
-			vector.AddRange(new Array[newCapacity-vector.Count]);
-		else if (newCapacity < vector.Count)
-			vector.RemoveRange(newCapacity, vector.Count - newCapacity);
-		vector.Capacity = newCapacity;
-	}
-
+   /// <summary>
+   /// Sets the capacity for the specified List
+   /// </summary>
+   /// <param name="vector">The List which capacity will be set</param>
+   /// <param name="newCapacity">The new capacity value</param>
+   public static void SetCapacity<T>(System.Collections.Generic.IList<T> vector, int newCapacity) where T : new()
+   {
+      while (newCapacity > vector.Count)
+         vector.Add(new T());
+      while (newCapacity < vector.Count)
+         vector.RemoveAt(vector.Count - 1);
+   }
 
 
 	/*******************************/

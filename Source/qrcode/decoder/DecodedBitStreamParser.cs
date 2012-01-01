@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using ReaderException = com.google.zxing.ReaderException;
 using BitSource = com.google.zxing.common.BitSource;
 using CharacterSetECI = com.google.zxing.common.CharacterSetECI;
@@ -56,7 +57,7 @@ namespace com.google.zxing.qrcode.decoder
 			System.Text.StringBuilder result = new System.Text.StringBuilder(50);
 			CharacterSetECI currentCharacterSetECI = null;
 			bool fc1InEffect = false;
-			System.Collections.ArrayList byteSegments = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(1));
+			IList<byte[]> byteSegments = new List<byte[]>();
 			Mode mode;
 			do 
 			{
@@ -72,7 +73,7 @@ namespace com.google.zxing.qrcode.decoder
 					{
 						mode = Mode.forBits(bits.readBits(4)); // mode is encoded by 4 bits
 					}
-					catch (System.ArgumentException)
+					catch (ArgumentException)
 					{
 						throw ReaderException.Instance;
 					}
@@ -162,15 +163,15 @@ namespace com.google.zxing.qrcode.decoder
 			try
 			{
 				//UPGRADE_TODO: The differences in the Format  of parameters for constructor 'java.lang.String.String'  may cause compilation errors.  "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1092'"
-				result.Append(System.Text.Encoding.GetEncoding(SHIFT_JIS).GetString(SupportClass.ToByteArray(buffer)));
+            result.Append(System.Text.Encoding.GetEncoding(SHIFT_JIS).GetString(SupportClass.ToByteArray(buffer), 0, buffer.Length));
 			}
 			catch (System.IO.IOException)
 			{
 				throw ReaderException.Instance;
 			}
 		}
-		
-		private static void  decodeByteSegment(BitSource bits, System.Text.StringBuilder result, int count, CharacterSetECI currentCharacterSetECI, System.Collections.ArrayList byteSegments)
+
+      private static void decodeByteSegment(BitSource bits, System.Text.StringBuilder result, int count, CharacterSetECI currentCharacterSetECI, IList<byte[]> byteSegments)
 		{
 			sbyte[] readBytes = new sbyte[count];
 			if (count << 3 > bits.available())
@@ -181,7 +182,7 @@ namespace com.google.zxing.qrcode.decoder
 			{
 				readBytes[i] = (sbyte) bits.readBits(8);
 			}
-			System.String encoding;
+			String encoding;
 			if (currentCharacterSetECI == null)
 			{
 				// The spec isn't clear on this mode; see
@@ -198,7 +199,7 @@ namespace com.google.zxing.qrcode.decoder
 			try
 			{
 				//UPGRADE_TODO: The differences in the Format  of parameters for constructor 'java.lang.String.String'  may cause compilation errors.  "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1092'"
-				result.Append(System.Text.Encoding.GetEncoding(encoding).GetString(SupportClass.ToByteArray(readBytes)));
+            result.Append(System.Text.Encoding.GetEncoding(encoding).GetString(SupportClass.ToByteArray(readBytes), 0, readBytes.Length));
 			}
 			catch (System.IO.IOException)
 			{

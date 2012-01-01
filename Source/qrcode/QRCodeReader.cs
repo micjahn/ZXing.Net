@@ -13,20 +13,16 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
-using BarcodeFormat = com.google.zxing.BarcodeFormat;
-using DecodeHintType = com.google.zxing.DecodeHintType;
-using Reader = com.google.zxing.Reader;
-using ReaderException = com.google.zxing.ReaderException;
-using Result = com.google.zxing.Result;
-using ResultPoint = com.google.zxing.ResultPoint;
-using ResultMetadataType = com.google.zxing.ResultMetadataType;
-using BinaryBitmap = com.google.zxing.BinaryBitmap;
+using System.Collections.Generic;
+
 using BitMatrix = com.google.zxing.common.BitMatrix;
 using DecoderResult = com.google.zxing.common.DecoderResult;
 using DetectorResult = com.google.zxing.common.DetectorResult;
 using Decoder = com.google.zxing.qrcode.decoder.Decoder;
 using Detector = com.google.zxing.qrcode.detector.Detector;
+
 namespace com.google.zxing.qrcode
 {
 	
@@ -65,7 +61,7 @@ namespace com.google.zxing.qrcode
 			return decode(image, null);
 		}
 		
-		public virtual Result decode(BinaryBitmap image, System.Collections.Hashtable hints)
+		public virtual Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
 		{
 			DecoderResult decoderResult;
 			ResultPoint[] points;
@@ -105,7 +101,7 @@ namespace com.google.zxing.qrcode
 			
 			int height = image.Height;
 			int width = image.Width;
-			int minDimension = System.Math.Min(height, width);
+			int minDimension = Math.Min(height, width);
 			
 			// First, skip white border by tracking diagonally from the top left down and to the right:
 			int borderWidth = 0;

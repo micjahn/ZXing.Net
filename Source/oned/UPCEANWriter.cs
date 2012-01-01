@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using BarcodeFormat = com.google.zxing.BarcodeFormat;
 using Writer = com.google.zxing.Writer;
 using WriterException = com.google.zxing.WriterException;
@@ -37,7 +38,7 @@ namespace com.google.zxing.oned
 			return encode(contents, format, width, height, null);
 		}
 		
-		public virtual ByteMatrix encode(System.String contents, BarcodeFormat format, int width, int height, System.Collections.Hashtable hints)
+		public virtual ByteMatrix encode(System.String contents, BarcodeFormat format, int width, int height, IDictionary<EncodeHintType, object> hints)
 		{
 			if (contents == null || contents.Length == 0)
 			{

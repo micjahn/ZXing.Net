@@ -13,15 +13,15 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
-using BarcodeFormat = com.google.zxing.BarcodeFormat;
-using EncodeHintType = com.google.zxing.EncodeHintType;
-using Writer = com.google.zxing.Writer;
-using WriterException = com.google.zxing.WriterException;
+using System.Collections.Generic;
+
 using ByteMatrix = com.google.zxing.common.ByteMatrix;
 using Encoder = com.google.zxing.qrcode.encoder.Encoder;
 using QRCode = com.google.zxing.qrcode.encoder.QRCode;
 using ErrorCorrectionLevel = com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+
 namespace com.google.zxing.qrcode
 {
 	
@@ -37,28 +37,28 @@ namespace com.google.zxing.qrcode
 		
 		private const int QUIET_ZONE_SIZE = 4;
 		
-		public ByteMatrix encode(System.String contents, BarcodeFormat format, int width, int height)
+		public ByteMatrix encode(String contents, BarcodeFormat format, int width, int height)
 		{
 			
 			return encode(contents, format, width, height, null);
 		}
 		
-		public ByteMatrix encode(System.String contents, BarcodeFormat format, int width, int height, System.Collections.Hashtable hints)
+		public ByteMatrix encode(String contents, BarcodeFormat format, int width, int height, IDictionary<EncodeHintType, object> hints)
 		{
 			
 			if (contents == null || contents.Length == 0)
 			{
-				throw new System.ArgumentException("Found empty contents");
+				throw new ArgumentException("Found empty contents");
 			}
 			
 			if (format != BarcodeFormat.QR_CODE)
 			{
-				throw new System.ArgumentException("Can only encode QR_CODE, but got " + format);
+				throw new ArgumentException("Can only encode QR_CODE, but got " + format);
 			}
 			
 			if (width < 0 || height < 0)
 			{
-				throw new System.ArgumentException("Requested dimensions are too small: " + width + 'x' + height);
+				throw new ArgumentException("Requested dimensions are too small: " + width + 'x' + height);
 			}
 			
 			ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.L;

@@ -118,21 +118,21 @@ namespace com.google.zxing.qrcode.encoder
 				// Type info bits at the left top corner. See 8.9 of JISX0510:2004 (p.46).
 				int x1 = TYPE_INFO_COORDINATES[i][0];
 				int y1 = TYPE_INFO_COORDINATES[i][1];
-				matrix.set_Renamed(x1, y1, bit);
+				matrix[x1, y1] = bit;
 				
 				if (i < 8)
 				{
 					// Right top corner.
 					int x2 = matrix.Width - i - 1;
 					int y2 = 8;
-					matrix.set_Renamed(x2, y2, bit);
+					matrix[x2, y2] = bit;
 				}
 				else
 				{
 					// Left bottom corner.
 					int x2 = 8;
 					int y2 = matrix.Height - 7 + (i - 8);
-					matrix.set_Renamed(x2, y2, bit);
+					matrix[x2, y2] = bit;
 				}
 			}
 		}
@@ -158,9 +158,9 @@ namespace com.google.zxing.qrcode.encoder
 					int bit = versionInfoBits.at(bitIndex);
 					bitIndex--;
 					// Left bottom corner.
-					matrix.set_Renamed(i, matrix.Height - 11 + j, bit);
+					matrix[i, matrix.Height - 11 + j] = bit;
 					// Right bottom corner.
-					matrix.set_Renamed(matrix.Height - 11 + j, i, bit);
+					matrix[matrix.Height - 11 + j, i] = bit;
 				}
 			}
 		}
@@ -188,7 +188,7 @@ namespace com.google.zxing.qrcode.encoder
 					{
 						int xx = x - i;
 						// Skip the cell if it's not empty.
-						if (!isEmpty(matrix.get_Renamed(xx, y)))
+						if (!isEmpty(matrix[xx, y]))
 						{
 							continue;
 						}
@@ -213,7 +213,7 @@ namespace com.google.zxing.qrcode.encoder
 								bit ^= 0x1;
 							}
 						}
-						matrix.set_Renamed(xx, y, bit);
+						matrix[xx, y] = bit;
 					}
 					y += direction;
 				}
@@ -345,22 +345,22 @@ namespace com.google.zxing.qrcode.encoder
 			{
 				int bit = (i + 1) % 2;
 				// Horizontal line.
-				if (!isValidValue(matrix.get_Renamed(i, 6)))
+				if (!isValidValue(matrix[i, 6]))
 				{
 					throw new WriterException();
 				}
-				if (isEmpty(matrix.get_Renamed(i, 6)))
+				if (isEmpty(matrix[i, 6]))
 				{
-					matrix.set_Renamed(i, 6, bit);
+					matrix[i, 6] = bit;
 				}
 				// Vertical line.
-				if (!isValidValue(matrix.get_Renamed(6, i)))
+				if (!isValidValue(matrix[6, i]))
 				{
 					throw new WriterException();
 				}
-				if (isEmpty(matrix.get_Renamed(6, i)))
+				if (isEmpty(matrix[6, i]))
 				{
-					matrix.set_Renamed(6, i, bit);
+					matrix[6, i] = bit;
 				}
 			}
 		}
@@ -368,7 +368,7 @@ namespace com.google.zxing.qrcode.encoder
 		// Embed the lonely dark dot at left bottom corner. JISX0510:2004 (p.46)
 		private static void  embedDarkDotAtLeftBottomCorner(ByteMatrix matrix)
 		{
-			if (matrix.get_Renamed(8, matrix.Height - 8) == 0)
+			if (matrix[8, matrix.Height - 8] == 0)
 			{
 				throw new WriterException();
 			}
@@ -384,11 +384,11 @@ namespace com.google.zxing.qrcode.encoder
 			}
 			for (int x = 0; x < 8; ++x)
 			{
-				if (!isEmpty(matrix.get_Renamed(xStart + x, yStart)))
+				if (!isEmpty(matrix[xStart + x, yStart]))
 				{
 					throw new WriterException();
 				}
-				matrix.set_Renamed(xStart + x, yStart, HORIZONTAL_SEPARATION_PATTERN[0][x]);
+				matrix[xStart + x, yStart] = HORIZONTAL_SEPARATION_PATTERN[0][x];
 			}
 		}
 		
@@ -401,11 +401,11 @@ namespace com.google.zxing.qrcode.encoder
 			}
 			for (int y = 0; y < 7; ++y)
 			{
-				if (!isEmpty(matrix.get_Renamed(xStart, yStart + y)))
+				if (!isEmpty(matrix[xStart, yStart + y]))
 				{
 					throw new WriterException();
 				}
-				matrix.set_Renamed(xStart, yStart + y, VERTICAL_SEPARATION_PATTERN[y][0]);
+				matrix[xStart, yStart + y] = VERTICAL_SEPARATION_PATTERN[y][0];
 			}
 		}
 		
@@ -423,11 +423,11 @@ namespace com.google.zxing.qrcode.encoder
 			{
 				for (int x = 0; x < 5; ++x)
 				{
-					if (!isEmpty(matrix.get_Renamed(xStart + x, yStart + y)))
+					if (!isEmpty(matrix[xStart + x, yStart + y]))
 					{
 						throw new WriterException();
 					}
-					matrix.set_Renamed(xStart + x, yStart + y, POSITION_ADJUSTMENT_PATTERN[y][x]);
+					matrix[xStart + x, yStart + y] = POSITION_ADJUSTMENT_PATTERN[y][x];
 				}
 			}
 		}
@@ -443,11 +443,11 @@ namespace com.google.zxing.qrcode.encoder
 			{
 				for (int x = 0; x < 7; ++x)
 				{
-					if (!isEmpty(matrix.get_Renamed(xStart + x, yStart + y)))
+					if (!isEmpty(matrix[xStart + x, yStart + y]))
 					{
 						throw new WriterException();
 					}
-					matrix.set_Renamed(xStart + x, yStart + y, POSITION_DETECTION_PATTERN[y][x]);
+					matrix[xStart + x, yStart + y] = POSITION_DETECTION_PATTERN[y][x];
 				}
 			}
 		}
@@ -505,7 +505,7 @@ namespace com.google.zxing.qrcode.encoder
 						continue;
 					}
 					// If the cell is unset, we embed the position adjustment pattern here.
-					if (isEmpty(matrix.get_Renamed(x, y)))
+					if (isEmpty(matrix[x, y]))
 					{
 						// -2 is necessary since the x/y coordinates point to the center of the pattern, not the
 						// left top corner.

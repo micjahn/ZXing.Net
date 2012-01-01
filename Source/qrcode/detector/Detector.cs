@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using DecodeHintType = com.google.zxing.DecodeHintType;
 using ReaderException = com.google.zxing.ReaderException;
 using ResultPoint = com.google.zxing.ResultPoint;
@@ -81,7 +82,7 @@ namespace com.google.zxing.qrcode.detector
 		/// <returns> {@link DetectorResult} encapsulating results of detecting a QR Code
 		/// </returns>
 		/// <throws>  ReaderException if no QR Code can be found </throws>
-		public virtual DetectorResult detect(System.Collections.Hashtable hints)
+		public virtual DetectorResult detect(IDictionary<DecodeHintType, object> hints)
 		{
 			
 			resultPointCallback = hints == null?null:(ResultPointCallback) hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];

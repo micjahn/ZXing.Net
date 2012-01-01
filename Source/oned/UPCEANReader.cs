@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using ReaderException = com.google.zxing.ReaderException;
 using Result = com.google.zxing.Result;
 using ResultPointCallback = com.google.zxing.ResultPointCallback;
@@ -99,8 +100,8 @@ namespace com.google.zxing.oned
 			}
 			return startRange;
 		}
-		
-		public override Result decodeRow(int rowNumber, BitArray row, System.Collections.Hashtable hints)
+
+      public override Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
 		{
 			return decodeRow(rowNumber, row, findStartGuardPattern(row), hints);
 		}
@@ -109,7 +110,7 @@ namespace com.google.zxing.oned
 		/// allows caller to inform method about where the UPC/EAN start pattern is
 		/// found. This allows this to be computed once and reused across many implementations.</p>
 		/// </summary>
-		public virtual Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange, System.Collections.Hashtable hints)
+		public virtual Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange, IDictionary<DecodeHintType, object> hints)
 		{
 			
 			ResultPointCallback resultPointCallback = hints == null?null:(ResultPointCallback) hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];

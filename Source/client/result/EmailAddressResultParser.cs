@@ -13,62 +13,59 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
-using Result = com.google.zxing.Result;
+
 namespace com.google.zxing.client.result
 {
-	
-	/// <summary> Represents a result that encodes an e-mail address, either as a plain address
-	/// like "joe@example.org" or a mailto: URL like "mailto:joe@example.org".
-	/// 
-	/// </summary>
-	/// <author>  Sean Owen
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
-	sealed class EmailAddressResultParser:ResultParser
-	{
-		
-		public static EmailAddressParsedResult parse(Result result)
-		{
-			System.String rawText = result.Text;
-			if (rawText == null)
-			{
-				return null;
-			}
-			System.String emailAddress;
-			if (rawText.StartsWith("mailto:") || rawText.StartsWith("MAILTO:"))
-			{
-				// If it starts with mailto:, assume it is definitely trying to be an email address
-				emailAddress = rawText.Substring(7);
-				int queryStart = emailAddress.IndexOf('?');
-				if (queryStart >= 0)
-				{
-					emailAddress = emailAddress.Substring(0, (queryStart) - (0));
-				}
-				System.Collections.Hashtable nameValues = parseNameValuePairs(rawText);
-				System.String subject = null;
-				System.String body = null;
-				if (nameValues != null)
-				{
-					if (emailAddress.Length == 0)
-					{
-						emailAddress = ((System.String) nameValues["to"]);
-					}
-					subject = ((System.String) nameValues["subject"]);
-					body = ((System.String) nameValues["body"]);
-				}
-				return new EmailAddressParsedResult(emailAddress, subject, body, rawText);
-			}
-			else
-			{
-				if (!EmailDoCoMoResultParser.isBasicallyValidEmailAddress(rawText))
-				{
-					return null;
-				}
-				emailAddress = rawText;
-				return new EmailAddressParsedResult(emailAddress, null, null, "mailto:" + emailAddress);
-			}
-		}
-	}
+   /// <summary> Represents a result that encodes an e-mail address, either as a plain address
+   /// like "joe@example.org" or a mailto: URL like "mailto:joe@example.org".
+   /// 
+   /// </summary>
+   /// <author>  Sean Owen
+   /// </author>
+   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
+   /// </author>
+   sealed class EmailAddressResultParser : ResultParser
+   {
+      public static EmailAddressParsedResult parse(Result result)
+      {
+         String rawText = result.Text;
+         if (rawText == null)
+         {
+            return null;
+         }
+         String emailAddress;
+         if (rawText.ToLower().StartsWith("mailto:"))
+         {
+            // If it starts with mailto:, assume it is definitely trying to be an email address
+            emailAddress = rawText.Substring(7);
+            int queryStart = emailAddress.IndexOf('?');
+            if (queryStart >= 0)
+            {
+               emailAddress = emailAddress.Substring(0, (queryStart) - (0));
+            }
+            var nameValues = parseNameValuePairs(rawText);
+            String subject = null;
+            String body = null;
+            if (nameValues != null)
+            {
+               if (emailAddress.Length == 0)
+               {
+                  emailAddress = nameValues["to"];
+               }
+               subject = nameValues["subject"];
+               body = nameValues["body"];
+            }
+            return new EmailAddressParsedResult(emailAddress, subject, body, rawText);
+         }
+
+         if (!EmailDoCoMoResultParser.isBasicallyValidEmailAddress(rawText))
+         {
+            return null;
+         }
+         emailAddress = rawText;
+         return new EmailAddressParsedResult(emailAddress, null, null, "mailto:" + emailAddress);
+      }
+   }
 }

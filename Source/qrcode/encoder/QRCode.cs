@@ -225,7 +225,7 @@ namespace com.google.zxing.qrcode.encoder
 		public int at(int x, int y)
 		{
 			// The value must be zero or one.
-			int value_Renamed = matrix.get_Renamed(x, y);
+			int value_Renamed = matrix[x, y];
 			if (!(value_Renamed == 0 || value_Renamed == 1))
 			{
 				// this is really like an assert... not sure what better exception to use?

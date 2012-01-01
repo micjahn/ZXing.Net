@@ -143,7 +143,7 @@ namespace com.google.zxing.oned
 			{
 				if (lgPatternFound == FIRST_DIGIT_ENCODINGS[d])
 				{
-					resultString.Insert(0, (char) ('0' + d));
+					resultString.Insert(0, new char[] { (char) ('0' + d) });
 					return ;
 				}
 			}

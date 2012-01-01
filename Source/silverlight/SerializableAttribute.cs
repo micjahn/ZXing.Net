@@ -1,4 +1,4 @@
-/*
+﻿/*
 * Copyright 2008 ZXing authors
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,24 +18,7 @@ using System;
 
 namespace com.google.zxing
 {
-	/// <summary> A base class which covers the range of exceptions which may occur when encoding a barcode using
-	/// the Writer framework.
-	/// 
-	/// </summary>
-	/// <author>  dswitkin@google.com (Daniel Switkin)
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
-	[Serializable]
-	public sealed class WriterException : Exception
-	{
-		public WriterException()
-		{
-		}
-		
-		public WriterException(String message)
-         :base(message)
-		{
-		}
-	}
+   internal class SerializableAttribute : Attribute
+   {
+   }
 }

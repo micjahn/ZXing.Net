@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using ErrorCorrectionLevel = com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 namespace com.google.zxing.common
 {
@@ -37,7 +38,7 @@ namespace com.google.zxing.common
 			}
 			
 		}
-		public System.String Text
+		public String Text
 		{
 			get
 			{
@@ -45,7 +46,7 @@ namespace com.google.zxing.common
 			}
 			
 		}
-		public System.Collections.ArrayList ByteSegments
+      public IList<byte[]> ByteSegments
 		{
 			get
 			{
@@ -67,15 +68,15 @@ namespace com.google.zxing.common
 		//UPGRADE_NOTE: Final was removed from the declaration of 'text '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private System.String text;
 		//UPGRADE_NOTE: Final was removed from the declaration of 'byteSegments '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.Collections.ArrayList byteSegments;
+      private IList<byte[]> byteSegments;
 		//UPGRADE_NOTE: Final was removed from the declaration of 'ecLevel '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private ErrorCorrectionLevel ecLevel;
 		
-		public DecoderResult(sbyte[] rawBytes, System.String text, System.Collections.ArrayList byteSegments, ErrorCorrectionLevel ecLevel)
+		public DecoderResult(sbyte[] rawBytes, String text, IList<byte[]> byteSegments, ErrorCorrectionLevel ecLevel)
 		{
 			if (rawBytes == null && text == null)
 			{
-				throw new System.ArgumentException();
+				throw new ArgumentException();
 			}
 			this.rawBytes = rawBytes;
 			this.text = text;

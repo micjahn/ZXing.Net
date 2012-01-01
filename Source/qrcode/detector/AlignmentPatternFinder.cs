@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using ReaderException = com.google.zxing.ReaderException;
 using ResultPoint = com.google.zxing.ResultPoint;
 using ResultPointCallback = com.google.zxing.ResultPointCallback;
@@ -43,7 +44,7 @@ namespace com.google.zxing.qrcode.detector
 		//UPGRADE_NOTE: Final was removed from the declaration of 'image '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private BitMatrix image;
 		//UPGRADE_NOTE: Final was removed from the declaration of 'possibleCenters '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.Collections.ArrayList possibleCenters;
+		private IList<ResultPoint> possibleCenters;
 		//UPGRADE_NOTE: Final was removed from the declaration of 'startX '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private int startX;
 		//UPGRADE_NOTE: Final was removed from the declaration of 'startY '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
@@ -77,7 +78,7 @@ namespace com.google.zxing.qrcode.detector
 		internal AlignmentPatternFinder(BitMatrix image, int startX, int startY, int width, int height, float moduleSize, ResultPointCallback resultPointCallback)
 		{
 			this.image = image;
-			this.possibleCenters = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(5));
+			this.possibleCenters = new List<ResultPoint>(5);
 			this.startX = startX;
 			this.startY = startY;
 			this.width = width;

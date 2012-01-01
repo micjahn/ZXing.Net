@@ -40,14 +40,14 @@ namespace com.google.zxing.common
 		/// </param>
 		/// <param name="comparator">comparator to define sort ordering
 		/// </param>
-		public static void  insertionSort(System.Collections.ArrayList vector, Comparator comparator)
+      public static void insertionSort<T>(System.Collections.Generic.IList<T> vector, Comparator comparator)
 		{
 			int max = vector.Count;
 			for (int i = 1; i < max; i++)
 			{
-				System.Object value_Renamed = vector[i];
+				T value_Renamed = vector[i];
 				int j = i - 1;
-				System.Object valueB;
+				T valueB;
 				while (j >= 0 && comparator.compare((valueB = vector[j]), value_Renamed) > 0)
 				{
 					vector[j + 1] = valueB;

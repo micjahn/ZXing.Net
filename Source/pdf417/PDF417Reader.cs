@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using BarcodeFormat = com.google.zxing.BarcodeFormat;
 using BinaryBitmap = com.google.zxing.BinaryBitmap;
 using DecodeHintType = com.google.zxing.DecodeHintType;
@@ -56,7 +57,7 @@ namespace com.google.zxing.pdf417
 			return decode(image, null);
 		}
 		
-		public Result decode(BinaryBitmap image, System.Collections.Hashtable hints)
+		public Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
 		{
 			DecoderResult decoderResult;
 			ResultPoint[] points;

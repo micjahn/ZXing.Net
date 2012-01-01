@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using BarcodeFormat = com.google.zxing.BarcodeFormat;
 using WriterException = com.google.zxing.WriterException;
 using ByteMatrix = com.google.zxing.common.ByteMatrix;
@@ -33,8 +34,8 @@ namespace com.google.zxing.oned
 	{
 		
 		private const int codeWidth = 3 + (7 * 6) + 5 + (7 * 6) + 3; // end guard
-		
-		public override ByteMatrix encode(System.String contents, BarcodeFormat format, int width, int height, System.Collections.Hashtable hints)
+
+      public override ByteMatrix encode(System.String contents, BarcodeFormat format, int width, int height, IDictionary<EncodeHintType, object> hints)
 		{
 			if (format != BarcodeFormat.EAN_13)
 			{

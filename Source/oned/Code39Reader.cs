@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using BarcodeFormat = com.google.zxing.BarcodeFormat;
 using ReaderException = com.google.zxing.ReaderException;
 using Result = com.google.zxing.Result;
@@ -89,8 +90,8 @@ namespace com.google.zxing.oned
 			this.usingCheckDigit = usingCheckDigit;
 			this.extendedMode = extendedMode;
 		}
-		
-		public override Result decodeRow(int rowNumber, BitArray row, System.Collections.Hashtable hints)
+
+      public override Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
 		{
 			
 			int[] start = findAsteriskPattern(row);

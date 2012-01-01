@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using DecodeHintType = com.google.zxing.DecodeHintType;
 using ReaderException = com.google.zxing.ReaderException;
 using ResultPoint = com.google.zxing.ResultPoint;
@@ -103,7 +104,7 @@ namespace com.google.zxing.multi.qrcode.detector
 		/// <throws>  ReaderException if 3 such finder patterns do not exist </throws>
 		private FinderPattern[][] selectBestPatterns()
 		{
-			System.Collections.ArrayList possibleCenters = PossibleCenters;
+			var possibleCenters = PossibleCenters;
 			int size = possibleCenters.Count;
 			
 			if (size < 3)
@@ -137,8 +138,8 @@ namespace com.google.zxing.multi.qrcode.detector
 			* a QR code, or are just by chance layouted so it looks like there might be a QR code there.
 			* So, if the layout seems right, lets have the decoder try to decode.     
 			*/
-			
-			System.Collections.ArrayList results = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(10)); // holder for the results
+
+		   var results = new List<ResultPoint[]>();
 			
 			for (int i1 = 0; i1 < (size - 2); i1++)
 			{
@@ -237,8 +238,8 @@ namespace com.google.zxing.multi.qrcode.detector
 			// Nothing found!
 			throw ReaderException.Instance;
 		}
-		
-		public FinderPatternInfo[] findMulti(System.Collections.Hashtable hints)
+
+      public FinderPatternInfo[] findMulti(IDictionary<DecodeHintType, object> hints)
 		{
 			bool tryHarder = hints != null && hints.ContainsKey(DecodeHintType.TRY_HARDER);
 			BitMatrix image = Image;
@@ -341,7 +342,7 @@ namespace com.google.zxing.multi.qrcode.detector
 				} // end if foundPatternCross
 			} // for i=iSkip-1 ...
 			FinderPattern[][] patternInfo = selectBestPatterns();
-			System.Collections.ArrayList result = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(10));
+			var result = new List<FinderPatternInfo>();
 			for (int i = 0; i < patternInfo.Length; i++)
 			{
 				FinderPattern[] pattern = patternInfo[i];

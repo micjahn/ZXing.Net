@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using ReaderException = com.google.zxing.ReaderException;
 using ResultPoint = com.google.zxing.ResultPoint;
 using BitMatrix = com.google.zxing.common.BitMatrix;
@@ -73,7 +74,7 @@ namespace com.google.zxing.datamatrix.detector
 			// Point A and D are across the diagonal from one another,
 			// as are B and C. Figure out which are the solid black lines
 			// by counting transitions
-			System.Collections.ArrayList transitions = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(4));
+			var transitions = new List<ResultPointsAndTransitions>();
 			transitions.Add(transitionsBetween(pointA, pointB));
 			transitions.Add(transitionsBetween(pointA, pointC));
 			transitions.Add(transitionsBetween(pointB, pointD));
@@ -87,7 +88,7 @@ namespace com.google.zxing.datamatrix.detector
 			
 			// Figure out which point is their intersection by tallying up the number of times we see the
 			// endpoints in the four endpoints. One will show up twice.
-			System.Collections.Hashtable pointCount = System.Collections.Hashtable.Synchronized(new System.Collections.Hashtable());
+			var pointCount = new Dictionary<ResultPoint, int>();
 			increment(pointCount, lSideOne.From);
 			increment(pointCount, lSideOne.To);
 			increment(pointCount, lSideTwo.From);
@@ -178,7 +179,7 @@ namespace com.google.zxing.datamatrix.detector
 		}
 		
 		/// <summary> Increments the Integer associated with a key by one.</summary>
-		private static void  increment(System.Collections.Hashtable table, ResultPoint key)
+		private static void  increment(IDictionary<ResultPoint, int> table, ResultPoint key)
 		{
             //System.Int32 value_Renamed = (System.Int32) table[key];
             ////UPGRADE_TODO: The 'System.Int32' structure does not have an equivalent to NULL. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1291'"

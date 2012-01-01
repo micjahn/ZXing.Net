@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using BinaryBitmap = com.google.zxing.BinaryBitmap;
 using ReaderException = com.google.zxing.ReaderException;
 using ResultPoint = com.google.zxing.ResultPoint;
@@ -87,7 +88,7 @@ namespace com.google.zxing.pdf417.detector
 		/// <returns> {@link DetectorResult} encapsulating results of detecting a PDF417 Code
 		/// </returns>
 		/// <throws>  ReaderException if no PDF417 Code can be found </throws>
-		public DetectorResult detect(System.Collections.Hashtable hints)
+		public DetectorResult detect(IDictionary<DecodeHintType, object> hints)
 		{
 			// Fetch the 1 bit matrix once up front.
 			BitMatrix matrix = image.BlackMatrix;

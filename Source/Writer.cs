@@ -13,11 +13,14 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
+using System.Collections.Generic;
+
 using ByteMatrix = com.google.zxing.common.ByteMatrix;
+
 namespace com.google.zxing
 {
-	
 	/// <summary> The base class for all objects which encode/generate a barcode image.
 	/// 
 	/// </summary>
@@ -25,10 +28,8 @@ namespace com.google.zxing
 	/// </author>
 	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
 	/// </author>
-
 	public interface Writer
 	{
-		
 		/// <summary> Encode a barcode using the default settings.
 		/// 
 		/// </summary>
@@ -57,6 +58,6 @@ namespace com.google.zxing
 		/// </param>
 		/// <returns> The generated barcode as a Matrix of unsigned bytes (0 == black, 255 == white)
 		/// </returns>
-		ByteMatrix encode(System.String contents, BarcodeFormat format, int width, int height, System.Collections.Hashtable hints);
+		ByteMatrix encode(String contents, BarcodeFormat format, int width, int height, IDictionary<EncodeHintType, object> hints);
 	}
 }

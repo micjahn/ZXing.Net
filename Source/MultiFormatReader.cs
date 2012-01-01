@@ -13,14 +13,17 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
+using System.Collections.Generic;
+
 using MultiFormatOneDReader = com.google.zxing.oned.MultiFormatOneDReader;
 using PDF417Reader = com.google.zxing.pdf417.PDF417Reader;
 using QRCodeReader = com.google.zxing.qrcode.QRCodeReader;
 using DataMatrixReader = com.google.zxing.datamatrix.DataMatrixReader;
+
 namespace com.google.zxing
 {
-	
 	/// <summary> MultiFormatReader is a convenience class and the main entry point into the library for most uses.
 	/// By default it attempts to decode all barcode formats that the library supports. Optionally, you
 	/// can provide a hints object to request different behavior, for example only decoding QR codes.
@@ -41,15 +44,15 @@ namespace com.google.zxing
 		/// </summary>
 		/// <param name="hints">The set of hints to use for subsequent calls to decode(image)
 		/// </param>
-		public System.Collections.Hashtable Hints
+      public IDictionary<DecodeHintType, object> Hints
 		{
 			set
 			{
 				this.hints = value;
 				
 				bool tryHarder = value != null && value.ContainsKey(DecodeHintType.TRY_HARDER);
-				System.Collections.ArrayList formats = value == null?null:(System.Collections.ArrayList) value[DecodeHintType.POSSIBLE_FORMATS];
-				readers = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(10));
+            IList<BarcodeFormat> formats = value == null ? null : (IList<BarcodeFormat>)value[DecodeHintType.POSSIBLE_FORMATS];
+			   readers = new List<Reader>();
 				if (formats != null)
 				{
 					bool addOneDReader = formats.Contains(BarcodeFormat.UPC_A) || formats.Contains(BarcodeFormat.UPC_E) || formats.Contains(BarcodeFormat.EAN_13) || formats.Contains(BarcodeFormat.EAN_8) || formats.Contains(BarcodeFormat.CODE_39) || formats.Contains(BarcodeFormat.CODE_128) || formats.Contains(BarcodeFormat.ITF);
@@ -98,9 +101,9 @@ namespace com.google.zxing
 			}
 			
 		}
-		
-		private System.Collections.Hashtable hints;
-		private System.Collections.ArrayList readers;
+
+      private IDictionary<DecodeHintType, object> hints;
+		private IList<Reader> readers;
 		
 		/// <summary> This version of decode honors the intent of Reader.decode(BinaryBitmap) in that it
 		/// passes null as a hint to the decoders. However, that makes it inefficient to call repeatedly.
@@ -128,7 +131,7 @@ namespace com.google.zxing
 		/// <returns> The contents of the image
 		/// </returns>
 		/// <throws>  ReaderException Any errors which occurred </throws>
-		public Result decode(BinaryBitmap image, System.Collections.Hashtable hints)
+      public Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
 		{
 			Hints = hints;
 			return decodeInternal(image);

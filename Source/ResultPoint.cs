@@ -49,8 +49,12 @@ namespace com.google.zxing
 		private float x;
 		//UPGRADE_NOTE: Final was removed from the declaration of 'y '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private float y;
-		
-		public ResultPoint(float x, float y)
+
+      public ResultPoint()
+      {
+      }
+      
+      public ResultPoint(float x, float y)
 		{
 			this.x = x;
 			this.y = y;

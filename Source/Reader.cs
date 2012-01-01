@@ -14,6 +14,8 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
+
 namespace com.google.zxing
 {
 	
@@ -60,6 +62,6 @@ namespace com.google.zxing
 		/// <returns> String which the barcode encodes
 		/// </returns>
 		/// <throws>  ReaderException if the barcode cannot be located or decoded for any reason </throws>
-		Result decode(BinaryBitmap image, System.Collections.Hashtable hints);
+		Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints);
 	}
 }

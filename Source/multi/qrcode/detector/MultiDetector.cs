@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using ReaderException = com.google.zxing.ReaderException;
 using DetectorResult = com.google.zxing.common.DetectorResult;
 using BitMatrix = com.google.zxing.common.BitMatrix;
@@ -42,8 +43,8 @@ namespace com.google.zxing.multi.qrcode.detector
 		public MultiDetector(BitMatrix image):base(image)
 		{
 		}
-		
-		public DetectorResult[] detectMulti(System.Collections.Hashtable hints)
+
+      public DetectorResult[] detectMulti(IDictionary<DecodeHintType, object> hints)
 		{
 			BitMatrix image = Image;
 			MultiFinderPatternFinder finder = new MultiFinderPatternFinder(image);
@@ -54,7 +55,7 @@ namespace com.google.zxing.multi.qrcode.detector
 				throw ReaderException.Instance;
 			}
 			
-			System.Collections.ArrayList result = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(10));
+			var result = new List<DetectorResult>();
 			for (int i = 0; i < info.Length; i++)
 			{
 				try

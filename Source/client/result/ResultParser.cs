@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using Result = com.google.zxing.Result;
 namespace com.google.zxing.client.result
 {
@@ -304,14 +305,14 @@ namespace com.google.zxing.client.result
 			return true;
 		}
 		
-		internal static System.Collections.Hashtable parseNameValuePairs(System.String uri)
+		internal static IDictionary<string, string> parseNameValuePairs(String uri)
 		{
 			int paramStart = uri.IndexOf('?');
 			if (paramStart < 0)
 			{
 				return null;
 			}
-			System.Collections.Hashtable result = System.Collections.Hashtable.Synchronized(new System.Collections.Hashtable(3));
+			var result = new Dictionary<string, string>();
 			paramStart++;
 			int paramEnd;
 			//UPGRADE_WARNING: Method 'java.lang.String.indexOf' was converted to 'System.String.IndexOf' which may throw an exception. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1101'"
@@ -324,24 +325,24 @@ namespace com.google.zxing.client.result
 			return result;
 		}
 		
-		private static void  appendKeyValue(System.String uri, int paramStart, int paramEnd, System.Collections.Hashtable result)
+		private static void  appendKeyValue(String uri, int paramStart, int paramEnd, IDictionary<string, string> result)
 		{
 			//UPGRADE_WARNING: Method 'java.lang.String.indexOf' was converted to 'System.String.IndexOf' which may throw an exception. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1101'"
 			int separator = uri.IndexOf('=', paramStart);
 			if (separator >= 0)
 			{
 				// key = value
-				System.String key = uri.Substring(paramStart, (separator) - (paramStart));
-				System.String value_Renamed = uri.Substring(separator + 1, (paramEnd) - (separator + 1));
+				String key = uri.Substring(paramStart, (separator) - (paramStart));
+				String value_Renamed = uri.Substring(separator + 1, (paramEnd) - (separator + 1));
 				value_Renamed = urlDecode(value_Renamed);
 				result[key] = value_Renamed;
 			}
 			// Can't put key, null into a hashtable
 		}
 		
-		internal static System.String[] matchPrefixedField(System.String prefix, System.String rawText, char endChar, bool trim)
+		internal static String[] matchPrefixedField(String prefix, String rawText, char endChar, bool trim)
 		{
-			System.Collections.ArrayList matches = null;
+			IList<string> matches = null;
 			int i = 0;
 			int max = rawText.Length;
 			while (i < max)
@@ -375,9 +376,9 @@ namespace com.google.zxing.client.result
 						// found a match
 						if (matches == null)
 						{
-							matches = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(3)); // lazy init
+						   matches = new List<string>();
 						}
-						System.String element = unescapeBackslash(rawText.Substring(start, (i) - (start)));
+						String element = unescapeBackslash(rawText.Substring(start, (i) - (start)));
 						if (trim)
 						{
 							element = element.Trim();
@@ -395,19 +396,19 @@ namespace com.google.zxing.client.result
 			return toStringArray(matches);
 		}
 		
-		internal static System.String matchSinglePrefixedField(System.String prefix, System.String rawText, char endChar, bool trim)
+		internal static String matchSinglePrefixedField(System.String prefix, System.String rawText, char endChar, bool trim)
 		{
-			System.String[] matches = matchPrefixedField(prefix, rawText, endChar, trim);
+			String[] matches = matchPrefixedField(prefix, rawText, endChar, trim);
 			return matches == null?null:matches[0];
 		}
 		
-		internal static System.String[] toStringArray(System.Collections.ArrayList strings)
+		internal static String[] toStringArray(IList<string> strings)
 		{
 			int size = strings.Count;
-			System.String[] result = new System.String[size];
+			String[] result = new String[size];
 			for (int j = 0; j < size; j++)
 			{
-				result[j] = ((System.String) strings[j]);
+				result[j] = strings[j];
 			}
 			return result;
 		}

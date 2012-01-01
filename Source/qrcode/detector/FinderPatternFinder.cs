@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using DecodeHintType = com.google.zxing.DecodeHintType;
 using ReaderException = com.google.zxing.ReaderException;
 using ResultPoint = com.google.zxing.ResultPoint;
@@ -44,7 +45,7 @@ namespace com.google.zxing.qrcode.detector
 			}
 			
 		}
-		virtual protected internal System.Collections.ArrayList PossibleCenters
+		virtual protected internal IList<ResultPoint> PossibleCenters
 		{
 			get
 			{
@@ -74,7 +75,7 @@ namespace com.google.zxing.qrcode.detector
 		//UPGRADE_NOTE: Final was removed from the declaration of 'image '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private BitMatrix image;
 		//UPGRADE_NOTE: Final was removed from the declaration of 'possibleCenters '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.Collections.ArrayList possibleCenters;
+      private IList<ResultPoint> possibleCenters;
 		private bool hasSkipped;
 		//UPGRADE_NOTE: Final was removed from the declaration of 'crossCheckStateCount '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private int[] crossCheckStateCount;
@@ -86,19 +87,20 @@ namespace com.google.zxing.qrcode.detector
 		/// </summary>
 		/// <param name="image">image to search
 		/// </param>
-		public FinderPatternFinder(BitMatrix image):this(image, null)
+		public FinderPatternFinder(BitMatrix image)
+         :this(image, null)
 		{
 		}
 		
 		public FinderPatternFinder(BitMatrix image, ResultPointCallback resultPointCallback)
 		{
 			this.image = image;
-			this.possibleCenters = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(10));
+         this.possibleCenters = new List<ResultPoint>();
 			this.crossCheckStateCount = new int[5];
 			this.resultPointCallback = resultPointCallback;
 		}
-		
-		internal virtual FinderPatternInfo find(System.Collections.Hashtable hints)
+
+      internal virtual FinderPatternInfo find(IDictionary<DecodeHintType, object> hints)
 		{
 			bool tryHarder = hints != null && hints.ContainsKey(DecodeHintType.TRY_HARDER);
 			int maxI = image.Height;

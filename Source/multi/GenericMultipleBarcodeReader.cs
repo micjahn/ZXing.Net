@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using Reader = com.google.zxing.Reader;
 using Result = com.google.zxing.Result;
 using BinaryBitmap = com.google.zxing.BinaryBitmap;
@@ -56,10 +57,10 @@ namespace com.google.zxing.multi
 		{
 			return decodeMultiple(image, null);
 		}
-		
-		public Result[] decodeMultiple(BinaryBitmap image, System.Collections.Hashtable hints)
+
+      public Result[] decodeMultiple(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
 		{
-			System.Collections.ArrayList results = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(10));
+			var results = new List<Result>();
 			doDecodeMultiple(image, hints, results, 0, 0);
 			if ((results.Count == 0))
 			{
@@ -73,8 +74,8 @@ namespace com.google.zxing.multi
 			}
 			return resultArray;
 		}
-		
-		private void  doDecodeMultiple(BinaryBitmap image, System.Collections.Hashtable hints, System.Collections.ArrayList results, int xOffset, int yOffset)
+
+      private void doDecodeMultiple(BinaryBitmap image, IDictionary<DecodeHintType, object> hints, IList<Result> results, int xOffset, int yOffset)
 		{
 			Result result;
 			try

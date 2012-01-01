@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using BarcodeFormat = com.google.zxing.BarcodeFormat;
 using BinaryBitmap = com.google.zxing.BinaryBitmap;
 using ReaderException = com.google.zxing.ReaderException;
@@ -48,10 +49,10 @@ namespace com.google.zxing.multi.qrcode
 		{
 			return decodeMultiple(image, null);
 		}
-		
-		public Result[] decodeMultiple(BinaryBitmap image, System.Collections.Hashtable hints)
+
+      public Result[] decodeMultiple(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
 		{
-			System.Collections.ArrayList results = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(10));
+			var results = new List<Result>();
 			DetectorResult[] detectorResult = new MultiDetector(image.BlackMatrix).detectMulti(hints);
 			for (int i = 0; i < detectorResult.Length; i++)
 			{

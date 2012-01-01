@@ -13,7 +13,9 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
+
 namespace com.google.zxing
 {
 	
@@ -28,7 +30,7 @@ namespace com.google.zxing
 	/// </author>
 
 	[Serializable]
-	public sealed class ReaderException:System.Exception
+	public sealed class ReaderException : Exception
 	{
 		public static ReaderException Instance
 		{

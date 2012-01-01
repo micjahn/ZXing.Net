@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using BarcodeFormat = com.google.zxing.BarcodeFormat;
 using DecodeHintType = com.google.zxing.DecodeHintType;
 using ReaderException = com.google.zxing.ReaderException;
@@ -69,8 +70,8 @@ namespace com.google.zxing.oned
 		/// <summary> Patterns of Wide / Narrow lines to indicate each digit</summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'PATTERNS '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private static readonly int[][] PATTERNS = new int[][]{new int[]{N, N, W, W, N}, new int[]{W, N, N, N, W}, new int[]{N, W, N, N, W}, new int[]{W, W, N, N, N}, new int[]{N, N, W, N, W}, new int[]{W, N, W, N, N}, new int[]{N, W, W, N, N}, new int[]{N, N, N, W, W}, new int[]{W, N, N, W, N}, new int[]{N, W, N, W, N}};
-		
-		public override Result decodeRow(int rowNumber, BitArray row, System.Collections.Hashtable hints)
+
+      public override Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
 		{
 			
 			// Find out where the Middle section (payload) starts & ends

@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using ReaderException = com.google.zxing.ReaderException;
 using BitSource = com.google.zxing.common.BitSource;
 using DecoderResult = com.google.zxing.common.DecoderResult;
@@ -69,7 +70,7 @@ namespace com.google.zxing.datamatrix.decoder
 			BitSource bits = new BitSource(bytes);
 			System.Text.StringBuilder result = new System.Text.StringBuilder(100);
 			System.Text.StringBuilder resultTrailer = new System.Text.StringBuilder(0);
-			System.Collections.ArrayList byteSegments = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(1));
+			var byteSegments = new List<byte[]>();
 			int mode = ASCII_ENCODE;
 			do 
 			{
@@ -578,7 +579,7 @@ namespace com.google.zxing.datamatrix.decoder
 		}
 		
 		/// <summary> See ISO 16022:2006, 5.2.9 and Annex B, B.2</summary>
-		private static void  decodeBase256Segment(BitSource bits, System.Text.StringBuilder result, System.Collections.ArrayList byteSegments)
+		private static void  decodeBase256Segment(BitSource bits, System.Text.StringBuilder result, IList<byte[]> byteSegments)
 		{
 			// Figure out how long the Base 256 Segment is.
 			int d1 = bits.readBits(8);
@@ -605,7 +606,7 @@ namespace com.google.zxing.datamatrix.decoder
 			try
 			{
 				//UPGRADE_TODO: The differences in the Format  of parameters for constructor 'java.lang.String.String'  may cause compilation errors.  "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1092'"
-				result.Append(System.Text.Encoding.GetEncoding("ISO8859_1").GetString(SupportClass.ToByteArray(bytes)));
+            result.Append(System.Text.Encoding.GetEncoding("ISO8859_1").GetString(SupportClass.ToByteArray(bytes), 0, bytes.Length));
 			}
 			catch (System.IO.IOException uee)
 			{

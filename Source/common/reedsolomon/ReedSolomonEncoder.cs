@@ -14,6 +14,8 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
+
 namespace com.google.zxing.common.reedsolomon
 {
 	
@@ -32,7 +34,7 @@ namespace com.google.zxing.common.reedsolomon
 		//UPGRADE_NOTE: Final was removed from the declaration of 'field '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private GF256 field;
 		//UPGRADE_NOTE: Final was removed from the declaration of 'cachedGenerators '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.Collections.ArrayList cachedGenerators;
+      private IList<GF256Poly> cachedGenerators;
 		
 		public ReedSolomonEncoder(GF256 field)
 		{
@@ -41,7 +43,7 @@ namespace com.google.zxing.common.reedsolomon
 				throw new System.ArgumentException("Only QR Code is supported at this time");
 			}
 			this.field = field;
-			this.cachedGenerators = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(10));
+         this.cachedGenerators = new List<GF256Poly>();
 			cachedGenerators.Add(new GF256Poly(field, new int[]{1}));
 		}
 		

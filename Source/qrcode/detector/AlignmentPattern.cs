@@ -13,8 +13,9 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
-using ResultPoint = com.google.zxing.ResultPoint;
+
 namespace com.google.zxing.qrcode.detector
 {
 	
@@ -42,9 +43,9 @@ namespace com.google.zxing.qrcode.detector
 		/// </summary>
 		internal bool aboutEquals(float moduleSize, float i, float j)
 		{
-			if (System.Math.Abs(i - Y) <= moduleSize && System.Math.Abs(j - X) <= moduleSize)
+			if (Math.Abs(i - Y) <= moduleSize && Math.Abs(j - X) <= moduleSize)
 			{
-				float moduleSizeDiff = System.Math.Abs(moduleSize - estimatedModuleSize);
+				float moduleSizeDiff = Math.Abs(moduleSize - estimatedModuleSize);
 				return moduleSizeDiff <= 1.0f || moduleSizeDiff / estimatedModuleSize <= 1.0f;
 			}
 			return false;

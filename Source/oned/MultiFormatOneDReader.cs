@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using BarcodeFormat = com.google.zxing.BarcodeFormat;
 using DecodeHintType = com.google.zxing.DecodeHintType;
 using ReaderException = com.google.zxing.ReaderException;
@@ -32,13 +33,13 @@ namespace com.google.zxing.oned
 	{
 		
 		//UPGRADE_NOTE: Final was removed from the declaration of 'readers '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.Collections.ArrayList readers;
+		private IList<Reader> readers;
 		
-		public MultiFormatOneDReader(System.Collections.Hashtable hints)
+		public MultiFormatOneDReader(IDictionary<DecodeHintType, object> hints)
 		{
-			System.Collections.ArrayList possibleFormats = hints == null?null:(System.Collections.ArrayList) hints[DecodeHintType.POSSIBLE_FORMATS];
+         var possibleFormats = hints == null ? null : (IList<BarcodeFormat>)hints[DecodeHintType.POSSIBLE_FORMATS];
 			bool useCode39CheckDigit = hints != null && hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != null;
-			readers = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(10));
+			readers = new List<Reader>();
 			if (possibleFormats != null)
 			{
 				if (possibleFormats.Contains(BarcodeFormat.EAN_13) || possibleFormats.Contains(BarcodeFormat.UPC_A) || possibleFormats.Contains(BarcodeFormat.EAN_8) || possibleFormats.Contains(BarcodeFormat.UPC_E))
@@ -66,8 +67,8 @@ namespace com.google.zxing.oned
 				readers.Add(new ITFReader());
 			}
 		}
-		
-		public override Result decodeRow(int rowNumber, BitArray row, System.Collections.Hashtable hints)
+
+      public override Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
 		{
 			int size = readers.Count;
 			for (int i = 0; i < size; i++)

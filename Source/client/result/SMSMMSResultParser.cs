@@ -13,11 +13,11 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
-using Result = com.google.zxing.Result;
+
 namespace com.google.zxing.client.result
 {
-	
 	/// <summary> <p>Parses an "sms:" URI result, which specifies a number to SMS and optional
 	/// "via" number. See <a href="http://gbiv.com/protocols/uri/drafts/draft-antti-gsm-sms-url-04.txt">
 	/// the IETF draft</a> on this.</p>
@@ -33,14 +33,13 @@ namespace com.google.zxing.client.result
 	/// </author>
 	sealed class SMSMMSResultParser:ResultParser
 	{
-		
 		private SMSMMSResultParser()
 		{
 		}
 		
 		public static SMSParsedResult parse(Result result)
 		{
-			System.String rawText = result.Text;
+			String rawText = result.Text;
 			if (rawText == null)
 			{
 				return null;
@@ -60,21 +59,21 @@ namespace com.google.zxing.client.result
 			}
 			
 			// Check up front if this is a URI syntax string with query arguments
-			System.Collections.Hashtable nameValuePairs = parseNameValuePairs(rawText);
-			System.String subject = null;
-			System.String body = null;
-			bool querySyntax = false;
-			if (nameValuePairs != null && !(nameValuePairs.Count == 0))
+			var nameValuePairs = parseNameValuePairs(rawText);
+			String subject = null;
+			String body = null;
+         var querySyntax = false;
+			if (nameValuePairs != null && nameValuePairs.Count != 0)
 			{
-				subject = ((System.String) nameValuePairs["subject"]);
-				body = ((System.String) nameValuePairs["body"]);
+				subject = nameValuePairs["subject"];
+				body = nameValuePairs["body"];
 				querySyntax = true;
 			}
 			
 			// Drop sms, query portion
 			//UPGRADE_WARNING: Method 'java.lang.String.indexOf' was converted to 'System.String.IndexOf' which may throw an exception. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1101'"
-			int queryStart = rawText.IndexOf('?', prefixLength);
-			System.String smsURIWithoutQuery;
+			var queryStart = rawText.IndexOf('?', prefixLength);
+			String smsURIWithoutQuery;
 			// If it's not query syntax, the question mark is part of the subject or message
 			if (queryStart < 0 || !querySyntax)
 			{
@@ -84,9 +83,9 @@ namespace com.google.zxing.client.result
 			{
 				smsURIWithoutQuery = rawText.Substring(prefixLength, (queryStart) - (prefixLength));
 			}
-			int numberEnd = smsURIWithoutQuery.IndexOf(';');
-			System.String number;
-			System.String via;
+			var numberEnd = smsURIWithoutQuery.IndexOf(';');
+			String number;
+			String via;
 			if (numberEnd < 0)
 			{
 				number = smsURIWithoutQuery;
@@ -95,15 +94,8 @@ namespace com.google.zxing.client.result
 			else
 			{
 				number = smsURIWithoutQuery.Substring(0, (numberEnd) - (0));
-				System.String maybeVia = smsURIWithoutQuery.Substring(numberEnd + 1);
-				if (maybeVia.StartsWith("via="))
-				{
-					via = maybeVia.Substring(4);
-				}
-				else
-				{
-					via = null;
-				}
+				var maybeVia = smsURIWithoutQuery.Substring(numberEnd + 1);
+				via = maybeVia.StartsWith("via=") ? maybeVia.Substring(4) : null;
 			}
 			
 			// Thanks to dominik.wild for suggesting this enhancement to support

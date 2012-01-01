@@ -13,9 +13,10 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
-using WriterException = com.google.zxing.WriterException;
-using EncodeHintType = com.google.zxing.EncodeHintType;
+using System.Collections.Generic;
+
 using ByteArray = com.google.zxing.common.ByteArray;
 using ByteMatrix = com.google.zxing.common.ByteMatrix;
 using CharacterSetECI = com.google.zxing.common.CharacterSetECI;
@@ -24,6 +25,7 @@ using ReedSolomonEncoder = com.google.zxing.common.reedsolomon.ReedSolomonEncode
 using ErrorCorrectionLevel = com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 using Mode = com.google.zxing.qrcode.decoder.Mode;
 using Version = com.google.zxing.qrcode.decoder.Version;
+
 namespace com.google.zxing.qrcode.encoder
 {
 	
@@ -40,7 +42,7 @@ namespace com.google.zxing.qrcode.encoder
 		//UPGRADE_NOTE: Final was removed from the declaration of 'ALPHANUMERIC_TABLE'. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private static readonly int[] ALPHANUMERIC_TABLE = new int[]{- 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, - 1, 36, - 1, - 1, - 1, 37, 38, - 1, - 1, - 1, - 1, 39, 40, - 1, 41, 42, 43, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 44, - 1, - 1, - 1, - 1, - 1, - 1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, - 1, - 1, - 1, - 1, - 1};
 		
-		internal const System.String DEFAULT_BYTE_MODE_ENCODING = "ISO-8859-1";
+		internal const String DEFAULT_BYTE_MODE_ENCODING = "ISO-8859-1";
 		
 		private Encoder()
 		{
@@ -68,15 +70,15 @@ namespace com.google.zxing.qrcode.encoder
 		/// Note that there is no way to encode bytes in MODE_KANJI. We might want to add EncodeWithMode()
 		/// with which clients can specify the encoding mode. For now, we don't need the functionality.
 		/// </summary>
-		public static void  encode(System.String content, ErrorCorrectionLevel ecLevel, QRCode qrCode)
+		public static void  encode(String content, ErrorCorrectionLevel ecLevel, QRCode qrCode)
 		{
 			encode(content, ecLevel, null, qrCode);
 		}
 		
-		public static void  encode(System.String content, ErrorCorrectionLevel ecLevel, System.Collections.Hashtable hints, QRCode qrCode)
+		public static void  encode(String content, ErrorCorrectionLevel ecLevel, IDictionary<EncodeHintType, object> hints, QRCode qrCode)
 		{
 			
-			System.String encoding = hints == null?null:(System.String) hints[EncodeHintType.CHARACTER_SET];
+			String encoding = hints == null?null:(String) hints[EncodeHintType.CHARACTER_SET];
 			if (encoding == null)
 			{
 				encoding = DEFAULT_BYTE_MODE_ENCODING;
@@ -144,7 +146,7 @@ namespace com.google.zxing.qrcode.encoder
 			return - 1;
 		}
 		
-		public static Mode chooseMode(System.String content)
+		public static Mode chooseMode(String content)
 		{
 			return chooseMode(content, null);
 		}
@@ -152,7 +154,7 @@ namespace com.google.zxing.qrcode.encoder
 		/// <summary> Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
 		/// if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
 		/// </summary>
-		public static Mode chooseMode(System.String content, System.String encoding)
+		public static Mode chooseMode(String content, String encoding)
 		{
 			if ("Shift_JIS".Equals(encoding))
 			{
@@ -188,7 +190,7 @@ namespace com.google.zxing.qrcode.encoder
 			return Mode.BYTE;
 		}
 		
-		private static bool isOnlyDoubleByteKanji(System.String content)
+		private static bool isOnlyDoubleByteKanji(String content)
 		{
 			sbyte[] bytes;
 			try
@@ -219,7 +221,7 @@ namespace com.google.zxing.qrcode.encoder
 		private static int chooseMaskPattern(BitVector bits, ErrorCorrectionLevel ecLevel, int version, ByteMatrix matrix)
 		{
 			
-			int minPenalty = System.Int32.MaxValue; // Lower penalty is better.
+			int minPenalty = Int32.MaxValue; // Lower penalty is better.
 			int bestMaskPattern = - 1;
 			// We try all mask patterns to choose the best one.
 			for (int maskPattern = 0; maskPattern < QRCode.NUM_MASK_PATTERNS; maskPattern++)
@@ -400,7 +402,7 @@ namespace com.google.zxing.qrcode.encoder
 			int maxNumEcBytes = 0;
 			
 			// Since, we know the number of reedsolmon blocks, we can initialize the vector with the number.
-			System.Collections.ArrayList blocks = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(numRSBlocks));
+         IList<BlockPair> blocks = new List<BlockPair>(numRSBlocks);
 			
 			for (int i = 0; i < numRSBlocks; ++i)
 			{
@@ -413,8 +415,8 @@ namespace com.google.zxing.qrcode.encoder
 				ByteArray ecBytes = generateECBytes(dataBytes, numEcBytesInBlock[0]);
 				blocks.Add(new BlockPair(dataBytes, ecBytes));
 				
-				maxNumDataBytes = System.Math.Max(maxNumDataBytes, dataBytes.size());
-				maxNumEcBytes = System.Math.Max(maxNumEcBytes, ecBytes.size());
+				maxNumDataBytes = Math.Max(maxNumDataBytes, dataBytes.size());
+				maxNumEcBytes = Math.Max(maxNumEcBytes, ecBytes.size());
 				dataBytesOffset += numDataBytesInBlock[0];
 			}
 			if (numDataBytes != dataBytesOffset)
@@ -490,7 +492,7 @@ namespace com.google.zxing.qrcode.encoder
 		}
 		
 		/// <summary> Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".</summary>
-		internal static void  appendBytes(System.String content, Mode mode, BitVector bits, System.String encoding)
+		internal static void  appendBytes(String content, Mode mode, BitVector bits, String encoding)
 		{
 			if (mode.Equals(Mode.NUMERIC))
 			{
@@ -514,7 +516,7 @@ namespace com.google.zxing.qrcode.encoder
 			}
 		}
 		
-		internal static void  appendNumericBytes(System.String content, BitVector bits)
+		internal static void  appendNumericBytes(String content, BitVector bits)
 		{
 			int length = content.Length;
 			int i = 0;
@@ -545,7 +547,7 @@ namespace com.google.zxing.qrcode.encoder
 			}
 		}
 		
-		internal static void  appendAlphanumericBytes(System.String content, BitVector bits)
+		internal static void  appendAlphanumericBytes(String content, BitVector bits)
 		{
 			int length = content.Length;
 			int i = 0;
@@ -576,7 +578,7 @@ namespace com.google.zxing.qrcode.encoder
 			}
 		}
 		
-		internal static void  append8BitBytes(System.String content, BitVector bits, System.String encoding)
+		internal static void  append8BitBytes(String content, BitVector bits, String encoding)
 		{
 			sbyte[] bytes;
 			try
@@ -595,7 +597,7 @@ namespace com.google.zxing.qrcode.encoder
 			}
 		}
 		
-		internal static void  appendKanjiBytes(System.String content, BitVector bits)
+		internal static void  appendKanjiBytes(String content, BitVector bits)
 		{
 			sbyte[] bytes;
 			try

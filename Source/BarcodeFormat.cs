@@ -14,6 +14,8 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
+
 namespace com.google.zxing
 {
 	
@@ -39,7 +41,7 @@ namespace com.google.zxing
 		// No, we can't use an enum here. J2ME doesn't support it.
 		
 		//UPGRADE_NOTE: Final was removed from the declaration of 'VALUES '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private static readonly System.Collections.Hashtable VALUES = System.Collections.Hashtable.Synchronized(new System.Collections.Hashtable());
+		private static readonly IDictionary<string, BarcodeFormat> VALUES = new Dictionary<string, BarcodeFormat>();
 		
 		/// <summary>QR Code 2D barcode format. </summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'QR_CODE '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"

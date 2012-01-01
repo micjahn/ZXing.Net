@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using BarcodeFormat = com.google.zxing.BarcodeFormat;
 using ReaderException = com.google.zxing.ReaderException;
 using Result = com.google.zxing.Result;
@@ -31,7 +31,8 @@ namespace com.google.zxing.oned
     /// </author>
     public sealed class Code39Writer:UPCEANWriter
     {
-      public override ByteMatrix encode(string contents, BarcodeFormat format, int width, int height, Hashtable hints)  {
+       public override ByteMatrix encode(string contents, BarcodeFormat format, int width, int height, IDictionary<EncodeHintType, object> hints)
+       {
             if (format != BarcodeFormat.CODE_39) {
                 throw new ArgumentException("Can only encode CODE_39, but got " + format);
             }

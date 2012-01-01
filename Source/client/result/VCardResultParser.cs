@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using Result = com.google.zxing.Result;
 namespace com.google.zxing.client.result
 {
@@ -74,7 +75,7 @@ namespace com.google.zxing.client.result
 		
 		private static System.String[] matchVCardPrefixedField(System.String prefix, System.String rawText, bool trim)
 		{
-			System.Collections.ArrayList matches = null;
+			IList<string> matches = null;
 			int i = 0;
 			int max = rawText.Length;
 			while (i < max)
@@ -115,7 +116,7 @@ namespace com.google.zxing.client.result
 					// found a match
 					if (matches == null)
 					{
-						matches = System.Collections.ArrayList.Synchronized(new System.Collections.ArrayList(3)); // lazy init
+					   matches = new List<string>();
 					}
 					System.String element = rawText.Substring(start, (i) - (start));
 					if (trim)

@@ -14,6 +14,8 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
+
 namespace com.google.zxing.common
 {
 	
@@ -35,19 +37,19 @@ namespace com.google.zxing.common
 			}
 			
 		}
-		
-		private static System.Collections.Hashtable VALUE_TO_ECI;
-		private static System.Collections.Hashtable NAME_TO_ECI;
+
+      private static IDictionary<int, CharacterSetECI> VALUE_TO_ECI;
+      private static IDictionary<string, CharacterSetECI> NAME_TO_ECI;
 		
 		private static void  initialize()
 		{
-			VALUE_TO_ECI = System.Collections.Hashtable.Synchronized(new System.Collections.Hashtable(29));
-			NAME_TO_ECI = System.Collections.Hashtable.Synchronized(new System.Collections.Hashtable(29));
+			VALUE_TO_ECI = new Dictionary<int, CharacterSetECI>();
+			NAME_TO_ECI = new Dictionary<string, CharacterSetECI>();
 			// TODO figure out if these values are even right!
 			addCharacterSet(0, "Cp437");
-			addCharacterSet(1, new System.String[]{"ISO8859_1", "ISO-8859-1"});
+			addCharacterSet(1, new []{"ISO8859_1", "ISO-8859-1"});
 			addCharacterSet(2, "Cp437");
-			addCharacterSet(3, new System.String[]{"ISO8859_1", "ISO-8859-1"});
+			addCharacterSet(3, new []{"ISO8859_1", "ISO-8859-1"});
 			addCharacterSet(4, "ISO8859_2");
 			addCharacterSet(5, "ISO8859_3");
 			addCharacterSet(6, "ISO8859_4");
@@ -62,7 +64,7 @@ namespace com.google.zxing.common
 			addCharacterSet(16, "ISO8859_14");
 			addCharacterSet(17, "ISO8859_15");
 			addCharacterSet(18, "ISO8859_16");
-			addCharacterSet(20, new System.String[]{"SJIS", "Shift_JIS"});
+			addCharacterSet(20, new []{"SJIS", "Shift_JIS"});
 		}
 		
 		//UPGRADE_NOTE: Final was removed from the declaration of 'encodingName '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"

@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using Result = com.google.zxing.Result;
 using BinaryBitmap = com.google.zxing.BinaryBitmap;
 using ReaderException = com.google.zxing.ReaderException;
@@ -34,7 +35,7 @@ namespace com.google.zxing.multi
 	{
 		
 		Result[] decodeMultiple(BinaryBitmap image);
-		
-		Result[] decodeMultiple(BinaryBitmap image, System.Collections.Hashtable hints);
+
+      Result[] decodeMultiple(BinaryBitmap image, IDictionary<DecodeHintType, object> hints);
 	}
 }

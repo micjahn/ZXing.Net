@@ -14,6 +14,8 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
+
 namespace com.google.zxing
 {
 	
@@ -29,7 +31,7 @@ namespace com.google.zxing
 	{
 		/// <returns> raw text encoded by the barcode, if applicable, otherwise <code>null</code>
 		/// </returns>
-		public System.String Text
+		public String Text
 		{
 			get
 			{
@@ -73,7 +75,7 @@ namespace com.google.zxing
 		/// <code>null</code>. This contains optional metadata about what was detected about the barcode,
 		/// like orientation.
 		/// </returns>
-		public System.Collections.Hashtable ResultMetadata
+      public IDictionary<ResultMetadataType, Object> ResultMetadata
 		{
 			get
 			{
@@ -90,13 +92,13 @@ namespace com.google.zxing
 		private ResultPoint[] resultPoints;
 		//UPGRADE_NOTE: Final was removed from the declaration of 'format '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private BarcodeFormat format;
-		private System.Collections.Hashtable resultMetadata;
+      private IDictionary<ResultMetadataType, Object> resultMetadata;
 		
-		public Result(System.String text, sbyte[] rawBytes, ResultPoint[] resultPoints, BarcodeFormat format)
+		public Result(String text, sbyte[] rawBytes, ResultPoint[] resultPoints, BarcodeFormat format)
 		{
 			if (text == null && rawBytes == null)
 			{
-				throw new System.ArgumentException("Text and bytes are null");
+				throw new ArgumentException("Text and bytes are null");
 			}
 			this.text = text;
 			this.rawBytes = rawBytes;
@@ -105,25 +107,22 @@ namespace com.google.zxing
 			this.resultMetadata = null;
 		}
 		
-		public void  putMetadata(ResultMetadataType type, System.Object value_Renamed)
+		public void  putMetadata(ResultMetadataType type, Object value_Renamed)
 		{
 			if (resultMetadata == null)
 			{
-				resultMetadata = System.Collections.Hashtable.Synchronized(new System.Collections.Hashtable(3));
+			   resultMetadata = new Dictionary<ResultMetadataType, Object>();
 			}
 			resultMetadata[type] = value_Renamed;
 		}
 		
-		public override System.String ToString()
+		public override String ToString()
 		{
 			if (text == null)
 			{
 				return "[" + rawBytes.Length + " bytes]";
 			}
-			else
-			{
-				return text;
-			}
+			return text;
 		}
 	}
 }

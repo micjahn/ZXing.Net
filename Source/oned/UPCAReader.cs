@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using BarcodeFormat = com.google.zxing.BarcodeFormat;
 using ReaderException = com.google.zxing.ReaderException;
 using Result = com.google.zxing.Result;
@@ -44,13 +45,13 @@ namespace com.google.zxing.oned
 		
 		//UPGRADE_NOTE: Final was removed from the declaration of 'ean13Reader '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private UPCEANReader ean13Reader = new EAN13Reader();
-		
-		public override Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange, System.Collections.Hashtable hints)
+
+      public override Result decodeRow(int rowNumber, BitArray row, int[] startGuardRange, IDictionary<DecodeHintType, object> hints)
 		{
 			return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row, startGuardRange, hints));
 		}
-		
-		public override Result decodeRow(int rowNumber, BitArray row, System.Collections.Hashtable hints)
+
+      public override Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
 		{
 			return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row, hints));
 		}
@@ -59,8 +60,8 @@ namespace com.google.zxing.oned
 		{
 			return maybeReturnResult(ean13Reader.decode(image));
 		}
-		
-		public override Result decode(BinaryBitmap image, System.Collections.Hashtable hints)
+
+      public override Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
 		{
 			return maybeReturnResult(ean13Reader.decode(image, hints));
 		}
