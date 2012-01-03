@@ -62,6 +62,10 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="aztec\AztecDetectorResult.cs" />
+    <Compile Include="aztec\AztecReader.cs" />
+    <Compile Include="aztec\decoder\Decoder.cs" />
+    <Compile Include="aztec\detector\Detector.cs" />
     <Compile Include="BarcodeFormat.cs" />
     <Compile Include="Binarizer.cs" />
     <Compile Include="BinaryBitmap.cs" />
@@ -112,13 +116,14 @@
     <Compile Include="common\DefaultGridSampler.cs" />
     <Compile Include="common\DetectorResult.cs" />
     <Compile Include="common\detector\MonochromeRectangleDetector.cs" />
+    <Compile Include="common\detector\WhiteRectangleDetector.cs" />
     <Compile Include="common\ECI.cs" />
     <Compile Include="common\GlobalHistogramBinarizer.cs" />
     <Compile Include="common\GridSampler.cs" />
     <Compile Include="common\HybridBinarizer.cs" />
     <Compile Include="common\PerspectiveTransform.cs" />
-    <Compile Include="common\reedsolomon\GF256.cs" />
-    <Compile Include="common\reedsolomon\GF256Poly.cs" />
+    <Compile Include="common\reedsolomon\GenericGF.cs" />
+    <Compile Include="common\reedsolomon\GenericGFPoly.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonDecoder.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonEncoder.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonException.cs" />
@@ -131,6 +136,7 @@
     <Compile Include="datamatrix\detector\Detector.cs" />
     <Compile Include="DecodeHintType.cs" />
     <Compile Include="EncodeHintType.cs" />
+    <Compile Include="FormatException.cs" />
     <Compile Include="LuminanceSource.cs" />
     <Compile Include="MultiFormatReader.cs" />
     <Compile Include="MultiFormatWriter.cs" />
@@ -140,6 +146,7 @@
     <Compile Include="multi\qrcode\detector\MultiDetector.cs" />
     <Compile Include="multi\qrcode\detector\MultiFinderPatternFinder.cs" />
     <Compile Include="multi\qrcode\QRCodeMultiReader.cs" />
+    <Compile Include="NotFoundException.cs" />
     <Compile Include="oned\Code128Reader.cs" />
     <Compile Include="oned\Code39Reader.cs" />
     <Compile Include="oned\Code39Writer.cs" />

@@ -446,8 +446,8 @@ namespace com.google.zxing.pdf417.detector
 			// Note that unlike the QR Code sampler, we didn't find the center of modules, but the
 			// very corners. So there is no 0.5f here; 0.0f is right.
 			GridSampler sampler = GridSampler.Instance;
-			
-			return sampler.sampleGrid(matrix, dimension, 0.0f, 0.0f, dimension, 0.0f, dimension, dimension, 0.0f, dimension, topLeft.X, topLeft.Y, topRight.X, topRight.Y, bottomRight.X, bottomRight.Y, bottomLeft.X, bottomLeft.Y); // p4FromY
+
+         return sampler.sampleGrid(matrix, dimension, dimension, 0.0f, 0.0f, dimension, 0.0f, dimension, dimension, 0.0f, dimension, topLeft.X, topLeft.Y, topRight.X, topRight.Y, bottomRight.X, bottomRight.Y, bottomLeft.X, bottomLeft.Y); // p4FromY
 		}
 		
 		/// <summary> Ends up being a bit faster than Math.round(). This merely rounds its

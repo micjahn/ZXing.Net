@@ -191,7 +191,7 @@ namespace com.google.zxing.qrcode.detector
 		{
 			
 			GridSampler sampler = GridSampler.Instance;
-			return sampler.sampleGrid(image, dimension, transform);
+			return sampler.sampleGrid(image, dimension, dimension, transform);
 		}
 		
 		/// <summary> <p>Computes the dimension (number of modules on a size) of the QR Code based on the position

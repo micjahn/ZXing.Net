@@ -42,8 +42,12 @@ namespace com.google.zxing
 		
 		//UPGRADE_NOTE: Final was removed from the declaration of 'VALUES '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		private static readonly IDictionary<string, BarcodeFormat> VALUES = new Dictionary<string, BarcodeFormat>();
-		
-		/// <summary>QR Code 2D barcode format. </summary>
+
+      /// <summary>Aztec 2D barcode format.</summary>
+      //UPGRADE_NOTE: Final was removed from the declaration of 'AZTEC '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
+      public static readonly BarcodeFormat AZTEC = new BarcodeFormat("AZTEC");
+      
+      /// <summary>QR Code 2D barcode format. </summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'QR_CODE '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		public static readonly BarcodeFormat QR_CODE = new BarcodeFormat("QR_CODE");
 		

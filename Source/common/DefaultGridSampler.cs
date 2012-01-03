@@ -25,19 +25,23 @@ namespace com.google.zxing.common
 	public sealed class DefaultGridSampler:GridSampler
 	{
 		
-		public override BitMatrix sampleGrid(BitMatrix image, int dimension, float p1ToX, float p1ToY, float p2ToX, float p2ToY, float p3ToX, float p3ToY, float p4ToX, float p4ToY, float p1FromX, float p1FromY, float p2FromX, float p2FromY, float p3FromX, float p3FromY, float p4FromX, float p4FromY)
+		public override BitMatrix sampleGrid(BitMatrix image, int dimensionX, int dimensionY, float p1ToX, float p1ToY, float p2ToX, float p2ToY, float p3ToX, float p3ToY, float p4ToX, float p4ToY, float p1FromX, float p1FromY, float p2FromX, float p2FromY, float p3FromX, float p3FromY, float p4FromX, float p4FromY)
 		{
 			
 			PerspectiveTransform transform = PerspectiveTransform.quadrilateralToQuadrilateral(p1ToX, p1ToY, p2ToX, p2ToY, p3ToX, p3ToY, p4ToX, p4ToY, p1FromX, p1FromY, p2FromX, p2FromY, p3FromX, p3FromY, p4FromX, p4FromY);
 			
-			return sampleGrid(image, dimension, transform);
+			return sampleGrid(image, dimensionX, dimensionY, transform);
 		}
 		
-		public override BitMatrix sampleGrid(BitMatrix image, int dimension, PerspectiveTransform transform)
+		public override BitMatrix sampleGrid(BitMatrix image, int dimensionX, int dimensionY, PerspectiveTransform transform)
 		{
-			BitMatrix bits = new BitMatrix(dimension);
-			float[] points = new float[dimension << 1];
-			for (int y = 0; y < dimension; y++)
+         if (dimensionX <= 0 || dimensionY <= 0)
+         {
+            throw NotFoundException.Instance;
+         }
+         BitMatrix bits = new BitMatrix(dimensionX, dimensionY);
+			float[] points = new float[dimensionX << 1];
+			for (int y = 0; y < dimensionY; y++)
 			{
 				int max = points.Length;
 				//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"

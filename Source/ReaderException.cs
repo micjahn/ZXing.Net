@@ -18,7 +18,6 @@ using System;
 
 namespace com.google.zxing
 {
-	
 	/// <summary> The general exception class throw when something goes wrong during decoding of a barcode.
 	/// This includes, but is not limited to, failing checksums / error correction algorithms, being
 	/// unable to locate finder timing patterns, and so on.
@@ -28,9 +27,8 @@ namespace com.google.zxing
 	/// </author>
 	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
 	/// </author>
-
 	[Serializable]
-	public sealed class ReaderException : Exception
+	public class ReaderException : Exception
 	{
 		public static ReaderException Instance
 		{
@@ -76,7 +74,7 @@ namespace com.google.zxing
 		//  private static int exceptionCount = 0;
 		//  private static Map<String,Integer> throwers = new HashMap<String,Integer>(32);
 		
-		private ReaderException()
+		protected ReaderException()
 		{
 			// do nothing
 		}

@@ -16,11 +16,10 @@
 
 using System;
 using System.Collections.Generic;
-
+using com.google.zxing.common.reedsolomon;
 using ByteArray = com.google.zxing.common.ByteArray;
 using ByteMatrix = com.google.zxing.common.ByteMatrix;
 using CharacterSetECI = com.google.zxing.common.CharacterSetECI;
-using GF256 = com.google.zxing.common.reedsolomon.GF256;
 using ReedSolomonEncoder = com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
 using ErrorCorrectionLevel = com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 using Mode = com.google.zxing.qrcode.decoder.Mode;
@@ -463,7 +462,7 @@ namespace com.google.zxing.qrcode.encoder
 			{
 				toEncode[i] = dataBytes.at(i);
 			}
-			new ReedSolomonEncoder(GF256.QR_CODE_FIELD).encode(toEncode, numEcBytesInBlock);
+			new ReedSolomonEncoder(GenericGF.QR_CODE_FIELD_256).encode(toEncode, numEcBytesInBlock);
 			
 			ByteArray ecBytes = new ByteArray(numEcBytesInBlock);
 			for (int i = 0; i < numEcBytesInBlock; i++)

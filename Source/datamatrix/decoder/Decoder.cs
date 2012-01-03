@@ -14,10 +14,10 @@
 * limitations under the License.
 */
 using System;
+using com.google.zxing.common.reedsolomon;
 using ReaderException = com.google.zxing.ReaderException;
 using BitMatrix = com.google.zxing.common.BitMatrix;
 using DecoderResult = com.google.zxing.common.DecoderResult;
-using GF256 = com.google.zxing.common.reedsolomon.GF256;
 using ReedSolomonDecoder = com.google.zxing.common.reedsolomon.ReedSolomonDecoder;
 using ReedSolomonException = com.google.zxing.common.reedsolomon.ReedSolomonException;
 namespace com.google.zxing.datamatrix.decoder
@@ -39,7 +39,7 @@ namespace com.google.zxing.datamatrix.decoder
 		
 		public Decoder()
 		{
-			rsDecoder = new ReedSolomonDecoder(GF256.DATA_MATRIX_FIELD);
+			rsDecoder = new ReedSolomonDecoder(GenericGF.DATA_MATRIX_FIELD_256);
 		}
 		
 		/// <summary> <p>Convenience method that can decode a Data Matrix Code represented as a 2D array of booleans.

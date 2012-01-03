@@ -214,7 +214,7 @@ namespace com.google.zxing.datamatrix.detector
 			// Note that unlike in the QR Code sampler, we didn't find the center of modules, but the
 			// very corners. So there is no 0.5f here; 0.0f is right.
 			GridSampler sampler = GridSampler.Instance;
-			return sampler.sampleGrid(image, dimension, 0.0f, 0.0f, dimension, 0.0f, dimension, dimension, 0.0f, dimension, topLeft.X, topLeft.Y, topRightX, topRightY, bottomRight.X, bottomRight.Y, bottomLeft.X, bottomLeft.Y);
+         return sampler.sampleGrid(image, dimension, dimension, 0.0f, 0.0f, dimension, 0.0f, dimension, dimension, 0.0f, dimension, topLeft.X, topLeft.Y, topRightX, topRightY, bottomRight.X, bottomRight.Y, bottomLeft.X, bottomLeft.Y);
 		}
 		
 		/// <summary> Counts the number of black/white transitions between two points, using something like Bresenham's algorithm.</summary>

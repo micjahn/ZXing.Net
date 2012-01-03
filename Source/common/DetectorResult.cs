@@ -27,7 +27,7 @@ namespace com.google.zxing.common
 	/// </author>
 	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
 	/// </author>
-	public sealed class DetectorResult
+	public class DetectorResult
 	{
 		public BitMatrix Bits
 		{
