@@ -18,19 +18,15 @@ using System;
 
 namespace com.google.zxing.common.detector
 {
-   /**
-    * <p>
-    * Detects a candidate barcode-like rectangular region within an image. It
-    * starts around the center of the image, increases the size of the candidate
-    * region until it finds a white rectangular region. By keeping track of the
-    * last black points it encountered, it determines the corners of the barcode.
-    * </p>
-    *
-    * @author David Olivier
-    */
+   /// <summary>
+   /// Detects a candidate barcode-like rectangular region within an image. It
+   /// starts around the center of the image, increases the size of the candidate
+   /// region until it finds a white rectangular region. By keeping track of the
+   /// last black points it encountered, it determines the corners of the barcode.
+   /// </summary>
+   /// <author>David Olivier</author>
    public sealed class WhiteRectangleDetector
    {
-
       private static int INIT_SIZE = 30;
       private static int CORR = 1;
 
@@ -42,9 +38,11 @@ namespace com.google.zxing.common.detector
       private int downInit;
       private int upInit;
 
-      /**
-       * @throws NotFoundException if image is too small
-       */
+      /// <summary>
+      /// Initializes a new instance of the <see cref="WhiteRectangleDetector"/> class.
+      /// </summary>
+      /// <param name="image">The image.</param>
+      /// <exception cref="NotFoundException">if image is too small</exception>
       public WhiteRectangleDetector(BitMatrix image)
       {
          this.image = image;
@@ -60,9 +58,14 @@ namespace com.google.zxing.common.detector
          }
       }
 
-      /**
-       * @throws NotFoundException if image is too small
-       */
+      /// <summary>
+      /// Initializes a new instance of the <see cref="WhiteRectangleDetector"/> class.
+      /// </summary>
+      /// <param name="image">The image.</param>
+      /// <param name="initSize">Size of the init.</param>
+      /// <param name="x">The x.</param>
+      /// <param name="y">The y.</param>
+      /// <exception cref="NotFoundException">if image is too small</exception>
       public WhiteRectangleDetector(BitMatrix image, int initSize, int x, int y)
       {
          this.image = image;
@@ -79,20 +82,17 @@ namespace com.google.zxing.common.detector
          }
       }
 
-      /**
-       * <p>
-       * Detects a candidate barcode-like rectangular region within an image. It
-       * starts around the center of the image, increases the size of the candidate
-       * region until it finds a white rectangular region.
-       * </p>
-       *
-       * @return {@link ResultPoint}[] describing the corners of the rectangular
-       *         region. The first and last points are opposed on the diagonal, as
-       *         are the second and third. The first point will be the topmost
-       *         point and the last, the bottommost. The second point will be
-       *         leftmost and the third, the rightmost
-       * @throws NotFoundException if no Data Matrix Code can be found
-       */
+      /// <summary>
+      /// Detects a candidate barcode-like rectangular region within an image. It
+      /// starts around the center of the image, increases the size of the candidate
+      /// region until it finds a white rectangular region.
+      /// </summary>
+      /// <returns>{@link ResultPoint}[] describing the corners of the rectangular
+      /// region. The first and last points are opposed on the diagonal, as
+      /// are the second and third. The first point will be the topmost
+      /// point and the last, the bottommost. The second point will be
+      /// leftmost and the third, the rightmost</returns>
+      /// <exception cref="NotFoundException">if no Data Matrix Code can be found</exception>
       public ResultPoint[] detect()
       {
 
@@ -273,10 +273,12 @@ namespace com.google.zxing.common.detector
          }
       }
 
-      /**
-       * Ends up being a bit faster than Math.round(). This merely rounds its
-       * argument to the nearest int, where x.5 rounds up.
-       */
+      /// <summary>
+      /// Ends up being a bit faster than Math.round(). This merely rounds its
+      /// argument to the nearest int, where x.5 rounds up.
+      /// </summary>
+      /// <param name="d">The d.</param>
+      /// <returns></returns>
       private static int round(float d)
       {
          return (int)(d + 0.5f);
@@ -307,23 +309,21 @@ namespace com.google.zxing.common.detector
          return round((float)Math.Sqrt(xDiff * xDiff + yDiff * yDiff));
       }
 
-      /**
-       * recenters the points of a constant distance towards the center
-       *
-       * @param y bottom most point
-       * @param z left most point
-       * @param x right most point
-       * @param t top most point
-       * @return {@link ResultPoint}[] describing the corners of the rectangular
-       *         region. The first and last points are opposed on the diagonal, as
-       *         are the second and third. The first point will be the topmost
-       *         point and the last, the bottommost. The second point will be
-       *         leftmost and the third, the rightmost
-       */
+      /// <summary>
+      /// recenters the points of a constant distance towards the center
+      /// </summary>
+      /// <param name="y">bottom most point</param>
+      /// <param name="z">left most point</param>
+      /// <param name="x">right most point</param>
+      /// <param name="t">top most point</param>
+      /// <returns>{@link ResultPoint}[] describing the corners of the rectangular
+      /// region. The first and last points are opposed on the diagonal, as
+      /// are the second and third. The first point will be the topmost
+      /// point and the last, the bottommost. The second point will be
+      /// leftmost and the third, the rightmost</returns>
       private ResultPoint[] centerEdges(ResultPoint y, ResultPoint z,
                                         ResultPoint x, ResultPoint t)
       {
-
          //
          //       t            t
          //  z                      x
@@ -342,34 +342,38 @@ namespace com.google.zxing.common.detector
 
          if (yi < width / 2)
          {
-            return new[]{
-          new ResultPoint(ti - CORR, tj + CORR),
-          new ResultPoint(zi + CORR, zj + CORR),
-          new ResultPoint(xi - CORR, xj - CORR),
-          new ResultPoint(yi + CORR, yj - CORR)};
+            return new[]
+                      {
+                         new ResultPoint(ti - CORR, tj + CORR),
+                         new ResultPoint(zi + CORR, zj + CORR),
+                         new ResultPoint(xi - CORR, xj - CORR),
+                         new ResultPoint(yi + CORR, yj - CORR)
+                      };
          }
          else
          {
-            return new[]{
-          new ResultPoint(ti + CORR, tj + CORR),
-          new ResultPoint(zi + CORR, zj - CORR),
-          new ResultPoint(xi - CORR, xj + CORR),
-          new ResultPoint(yi - CORR, yj - CORR)};
+            return new[]
+                      {
+                         new ResultPoint(ti + CORR, tj + CORR),
+                         new ResultPoint(zi + CORR, zj - CORR),
+                         new ResultPoint(xi - CORR, xj + CORR),
+                         new ResultPoint(yi - CORR, yj - CORR)
+                      };
          }
       }
 
-      /**
-       * Determines whether a segment contains a black point
-       *
-       * @param a          min value of the scanned coordinate
-       * @param b          max value of the scanned coordinate
-       * @param fixed      value of fixed coordinate
-       * @param horizontal set to true if scan must be horizontal, false if vertical
-       * @return true if a black point has been found, else false.
-       */
+      /// <summary>
+      /// Determines whether a segment contains a black point
+      /// </summary>
+      /// <param name="a">min value of the scanned coordinate</param>
+      /// <param name="b">max value of the scanned coordinate</param>
+      /// <param name="fixed">value of fixed coordinate</param>
+      /// <param name="horizontal">set to true if scan must be horizontal, false if vertical</param>
+      /// <returns>
+      ///   true if a black point has been found, else false.
+      /// </returns>
       private bool containsBlackPoint(int a, int b, int @fixed, bool horizontal)
       {
-
          if (horizontal)
          {
             for (int x = a; x <= b; x++)
@@ -390,9 +394,7 @@ namespace com.google.zxing.common.detector
                }
             }
          }
-
          return false;
       }
-
    }
 }
