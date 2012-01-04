@@ -13,79 +13,76 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
 using System.Collections.Generic;
 
 namespace com.google.zxing.common.reedsolomon
 {
-	
-	/// <summary> <p>Implements Reed-Solomon enbcoding, as the name implies.</p>
-	/// 
-	/// </summary>
-	/// <author>  Sean Owen
-	/// </author>
-	/// <author>  William Rucklidge
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
-	public sealed class ReedSolomonEncoder
-	{
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'field '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private GenericGF field;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'cachedGenerators '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
+   /// <summary> <p>Implements Reed-Solomon enbcoding, as the name implies.</p>
+   /// 
+   /// </summary>
+   /// <author>  Sean Owen
+   /// </author>
+   /// <author>  William Rucklidge
+   /// </author>
+   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
+   /// </author>
+   public sealed class ReedSolomonEncoder
+   {
+      private GenericGF field;
       private IList<GenericGFPoly> cachedGenerators;
-		
-		public ReedSolomonEncoder(GenericGF field)
-		{
-			if (!GenericGF.QR_CODE_FIELD_256.Equals(field))
-			{
-				throw new System.ArgumentException("Only QR Code is supported at this time");
-			}
-			this.field = field;
+
+      public ReedSolomonEncoder(GenericGF field)
+      {
+         if (!GenericGF.QR_CODE_FIELD_256.Equals(field))
+         {
+            throw new System.ArgumentException("Only QR Code is supported at this time");
+         }
+         this.field = field;
          this.cachedGenerators = new List<GenericGFPoly>();
-			cachedGenerators.Add(new GenericGFPoly(field, new int[]{1}));
-		}
-		
-		private GenericGFPoly buildGenerator(int degree)
-		{
-			if (degree >= cachedGenerators.Count)
-			{
-				GenericGFPoly lastGenerator = (GenericGFPoly) cachedGenerators[cachedGenerators.Count - 1];
-				for (int d = cachedGenerators.Count; d <= degree; d++)
-				{
-					GenericGFPoly nextGenerator = lastGenerator.multiply(new GenericGFPoly(field, new int[]{1, field.exp(d - 1)}));
-					cachedGenerators.Add(nextGenerator);
-					lastGenerator = nextGenerator;
-				}
-			}
-			return (GenericGFPoly) cachedGenerators[degree];
-		}
-		
-		public void  encode(int[] toEncode, int ecBytes)
-		{
-			if (ecBytes == 0)
-			{
-				throw new System.ArgumentException("No error correction bytes");
-			}
-			int dataBytes = toEncode.Length - ecBytes;
-			if (dataBytes <= 0)
-			{
-				throw new System.ArgumentException("No data bytes provided");
-			}
-			GenericGFPoly generator = buildGenerator(ecBytes);
-			int[] infoCoefficients = new int[dataBytes];
-			Array.Copy(toEncode, 0, infoCoefficients, 0, dataBytes);
-			GenericGFPoly info = new GenericGFPoly(field, infoCoefficients);
-			info = info.multiplyByMonomial(ecBytes, 1);
-			GenericGFPoly remainder = info.divide(generator)[1];
-			int[] coefficients = remainder.Coefficients;
-			int numZeroCoefficients = ecBytes - coefficients.Length;
-			for (int i = 0; i < numZeroCoefficients; i++)
-			{
-				toEncode[dataBytes + i] = 0;
-			}
-			Array.Copy(coefficients, 0, toEncode, dataBytes + numZeroCoefficients, coefficients.Length);
-		}
-	}
+         cachedGenerators.Add(new GenericGFPoly(field, new int[] { 1 }));
+      }
+
+      private GenericGFPoly buildGenerator(int degree)
+      {
+         if (degree >= cachedGenerators.Count)
+         {
+            var lastGenerator = cachedGenerators[cachedGenerators.Count - 1];
+            for (int d = cachedGenerators.Count; d <= degree; d++)
+            {
+               var nextGenerator = lastGenerator.multiply(new GenericGFPoly(field, new int[] { 1, field.exp(d - 1) }));
+               cachedGenerators.Add(nextGenerator);
+               lastGenerator = nextGenerator;
+            }
+         }
+         return cachedGenerators[degree];
+      }
+
+      public void encode(int[] toEncode, int ecBytes)
+      {
+         if (ecBytes == 0)
+         {
+            throw new System.ArgumentException("No error correction bytes");
+         }
+         int dataBytes = toEncode.Length - ecBytes;
+         if (dataBytes <= 0)
+         {
+            throw new System.ArgumentException("No data bytes provided");
+         }
+         GenericGFPoly generator = buildGenerator(ecBytes);
+         int[] infoCoefficients = new int[dataBytes];
+         Array.Copy(toEncode, 0, infoCoefficients, 0, dataBytes);
+         GenericGFPoly info = new GenericGFPoly(field, infoCoefficients);
+         info = info.multiplyByMonomial(ecBytes, 1);
+         GenericGFPoly remainder = info.divide(generator)[1];
+         int[] coefficients = remainder.Coefficients;
+         int numZeroCoefficients = ecBytes - coefficients.Length;
+         for (int i = 0; i < numZeroCoefficients; i++)
+         {
+            toEncode[dataBytes + i] = 0;
+         }
+         Array.Copy(coefficients, 0, toEncode, dataBytes + numZeroCoefficients, coefficients.Length);
+      }
+   }
 }

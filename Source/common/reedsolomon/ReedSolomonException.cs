@@ -13,24 +13,25 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
+
 namespace com.google.zxing.common.reedsolomon
 {
-	
-	/// <summary> <p>Thrown when an exception occurs during Reed-Solomon decoding, such as when
-	/// there are too many errors to correct.</p>
-	/// 
-	/// </summary>
-	/// <author>  Sean Owen
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
-	[Serializable]
-	public sealed class ReedSolomonException:System.Exception
-	{
-		
-		public ReedSolomonException(System.String message):base(message)
-		{
-		}
-	}
+   /// <summary> <p>Thrown when an exception occurs during Reed-Solomon decoding, such as when
+   /// there are too many errors to correct.</p>
+   /// 
+   /// </summary>
+   /// <author>  Sean Owen
+   /// </author>
+   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
+   /// </author>
+   [Serializable]
+   public sealed class ReedSolomonException : Exception
+   {
+      public ReedSolomonException(String message)
+         : base(message)
+      {
+      }
+   }
 }
