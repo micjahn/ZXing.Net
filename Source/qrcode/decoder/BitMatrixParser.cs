@@ -164,7 +164,7 @@ namespace com.google.zxing.qrcode.decoder
 		
 		private int copyBit(int i, int j, int versionBits)
 		{
-			return bitMatrix.get_Renamed(i, j)?(versionBits << 1) | 0x1:versionBits << 1;
+			return bitMatrix[i, j]?(versionBits << 1) | 0x1:versionBits << 1;
 		}
 		
 		/// <summary> <p>Reads the bits in the {@link BitMatrix} representing the finder pattern in the
@@ -210,12 +210,12 @@ namespace com.google.zxing.qrcode.decoder
 					for (int col = 0; col < 2; col++)
 					{
 						// Ignore bits covered by the function pattern
-						if (!functionPattern.get_Renamed(j - col, i))
+						if (!functionPattern[j - col, i])
 						{
 							// Read a bit
 							bitsRead++;
 							currentByte <<= 1;
-							if (bitMatrix.get_Renamed(j - col, i))
+							if (bitMatrix[j - col, i])
 							{
 								currentByte |= 1;
 							}

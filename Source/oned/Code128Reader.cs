@@ -67,7 +67,7 @@ namespace com.google.zxing.oned
 			int rowOffset = 0;
 			while (rowOffset < width)
 			{
-				if (row.get_Renamed(rowOffset))
+				if (row[rowOffset])
 				{
 					break;
 				}
@@ -82,7 +82,7 @@ namespace com.google.zxing.oned
 			
 			for (int i = rowOffset; i < width; i++)
 			{
-				bool pixel = row.get_Renamed(i);
+				bool pixel = row[i];
 				if (pixel ^ isWhite)
 				{
 					counters[counterPosition]++;
@@ -393,7 +393,7 @@ namespace com.google.zxing.oned
 			// we fudged decoding CODE_STOP since it actually has 7 bars, not 6. There is a black bar left
 			// to read off. Would be slightly better to properly read. Here we just skip it:
 			int width = row.Size;
-			while (nextStart < width && row.get_Renamed(nextStart))
+			while (nextStart < width && row[nextStart])
 			{
 				nextStart++;
 			}

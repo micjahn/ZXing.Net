@@ -246,10 +246,10 @@ namespace com.google.zxing.datamatrix.detector
 			int ystep = fromY < toY?1:- 1;
 			int xstep = fromX < toX?1:- 1;
 			int transitions = 0;
-			bool inBlack = image.get_Renamed(steep?fromY:fromX, steep?fromX:fromY);
+			bool inBlack = image[steep?fromY:fromX, steep?fromX:fromY];
 			for (int x = fromX, y = fromY; x != toX; x += xstep)
 			{
-				bool isBlack = image.get_Renamed(steep?y:x, steep?x:y);
+				bool isBlack = image[steep?y:x, steep?x:y];
 				if (isBlack != inBlack)
 				{
 					transitions++;

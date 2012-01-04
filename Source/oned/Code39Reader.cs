@@ -93,18 +93,17 @@ namespace com.google.zxing.oned
 
       public override Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
 		{
-			
 			int[] start = findAsteriskPattern(row);
 			int nextStart = start[1];
 			int end = row.Size;
 			
 			// Read off white space
-			while (nextStart < end && !row.get_Renamed(nextStart))
+			while (nextStart < end && !row[nextStart])
 			{
 				nextStart++;
 			}
 			
-			System.Text.StringBuilder result = new System.Text.StringBuilder(20);
+			var result = new System.Text.StringBuilder(20);
 			int[] counters = new int[9];
 			char decodedChar;
 			int lastStart;
@@ -124,7 +123,7 @@ namespace com.google.zxing.oned
 					nextStart += counters[i];
 				}
 				// Read off white space
-				while (nextStart < end && !row.get_Renamed(nextStart))
+				while (nextStart < end && !row[nextStart])
 				{
 					nextStart++;
 				}
@@ -187,7 +186,7 @@ namespace com.google.zxing.oned
 			int rowOffset = 0;
 			while (rowOffset < width)
 			{
-				if (row.get_Renamed(rowOffset))
+				if (row[rowOffset])
 				{
 					break;
 				}
@@ -202,7 +201,7 @@ namespace com.google.zxing.oned
 			
 			for (int i = rowOffset; i < width; i++)
 			{
-				bool pixel = row.get_Renamed(i);
+				bool pixel = row[i];
 				if (pixel ^ isWhite)
 				{
 					counters[counterPosition]++;

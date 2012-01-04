@@ -88,10 +88,7 @@ namespace com.google.zxing.common
 					for (int x = 0; x < width; x++)
 					{
 						int pixel = localLuminances[offset + x] & 0xff;
-						if (pixel < blackPoint)
-						{
-							matrix.set_Renamed(x, y);
-						}
+					   matrix[x, y] = (pixel < blackPoint);
 					}
 				}
 				
@@ -144,10 +141,7 @@ namespace com.google.zxing.common
 				int right = localLuminances[x + 1] & 0xff;
 				// A simple -1 4 -1 box filter with a weight of 2.
 				int luminance = ((center << 2) - left - right) >> 1;
-				if (luminance < blackPoint)
-				{
-					row.set_Renamed(x);
-				}
+				row[x] = (luminance < blackPoint);
 				left = center;
 				center = right;
 			}

@@ -271,7 +271,7 @@ namespace com.google.zxing.multi.qrcode.detector
 				int currentState = 0;
 				for (int j = 0; j < maxJ; j++)
 				{
-					if (image.get_Renamed(j, i))
+					if (image[j, i])
 					{
 						// Black pixel
 						if ((currentState & 1) == 1)
@@ -301,7 +301,7 @@ namespace com.google.zxing.multi.qrcode.detector
 											// Advance to next black pixel
 											j++;
 										}
-										while (j < maxJ && !image.get_Renamed(j, i));
+										while (j < maxJ && !image[j, i]);
 										j--; // back up to that last white pixel
 									}
 									// Clear state to start looking again

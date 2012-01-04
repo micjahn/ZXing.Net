@@ -91,7 +91,7 @@ namespace com.google.zxing.pdf417
 			
 			// First, skip white border by tracking diagonally from the top left down and to the right:
 			int borderWidth = 0;
-			while (borderWidth < minDimension && !matrix.get_Renamed(borderWidth, borderWidth))
+			while (borderWidth < minDimension && !matrix[borderWidth, borderWidth])
 			{
 				borderWidth++;
 			}
@@ -102,7 +102,7 @@ namespace com.google.zxing.pdf417
 			
 			// And then keep tracking across the top-left black module to determine module size
 			int moduleEnd = borderWidth;
-			while (moduleEnd < minDimension && matrix.get_Renamed(moduleEnd, moduleEnd))
+			while (moduleEnd < minDimension && matrix[moduleEnd, moduleEnd])
 			{
 				moduleEnd++;
 			}
@@ -115,7 +115,7 @@ namespace com.google.zxing.pdf417
 			
 			// And now find where the rightmost black module on the first row ends
 			int rowEndOfSymbol = width - 1;
-			while (rowEndOfSymbol >= 0 && !matrix.get_Renamed(rowEndOfSymbol, borderWidth))
+			while (rowEndOfSymbol >= 0 && !matrix[rowEndOfSymbol, borderWidth])
 			{
 				rowEndOfSymbol--;
 			}
@@ -150,10 +150,7 @@ namespace com.google.zxing.pdf417
 				int iOffset = borderWidth + y * moduleSize;
 				for (int x = 0; x < dimension; x++)
 				{
-					if (matrix.get_Renamed(borderWidth + x * moduleSize, iOffset))
-					{
-						bits.set_Renamed(x, y);
-					}
+				   bits[x, y] = matrix[borderWidth + x*moduleSize, iOffset];
 				}
 			}
 			return bits;

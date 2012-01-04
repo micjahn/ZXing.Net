@@ -201,7 +201,7 @@ namespace com.google.zxing.common.detector
 			int start = center;
 			while (start >= minDim)
 			{
-				if (horizontal?image.get_Renamed(start, fixedDimension):image.get_Renamed(fixedDimension, start))
+				if (horizontal?image[start, fixedDimension]:image[fixedDimension, start])
 				{
 					start--;
 				}
@@ -212,7 +212,7 @@ namespace com.google.zxing.common.detector
 					{
 						start--;
 					}
-					while (start >= minDim && !(horizontal?image.get_Renamed(start, fixedDimension):image.get_Renamed(fixedDimension, start)));
+					while (start >= minDim && !(horizontal?image[start, fixedDimension]:image[fixedDimension, start]));
 					int whiteRunSize = whiteRunStart - start;
 					if (start < minDim || whiteRunSize > maxWhiteRun)
 					{
@@ -227,7 +227,7 @@ namespace com.google.zxing.common.detector
 			int end = center;
 			while (end < maxDim)
 			{
-				if (horizontal?image.get_Renamed(end, fixedDimension):image.get_Renamed(fixedDimension, end))
+				if (horizontal?image[end, fixedDimension]:image[fixedDimension, end])
 				{
 					end++;
 				}
@@ -238,7 +238,7 @@ namespace com.google.zxing.common.detector
 					{
 						end++;
 					}
-					while (end < maxDim && !(horizontal?image.get_Renamed(end, fixedDimension):image.get_Renamed(fixedDimension, end)));
+					while (end < maxDim && !(horizontal?image[end, fixedDimension]:image[fixedDimension, end]));
 					int whiteRunSize = end - whiteRunStart;
 					if (end >= maxDim || whiteRunSize > maxWhiteRun)
 					{

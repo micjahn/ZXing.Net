@@ -59,10 +59,7 @@ namespace com.google.zxing.pdf417.decoder
 			{
 				for (int j = 0; j < dimension; j++)
 				{
-					if (image[j][i])
-					{
-						bits.set_Renamed(j, i);
-					}
+				   bits[j, i] = image[j][i];
 				}
 			}
 			return decode(bits);

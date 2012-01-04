@@ -199,12 +199,11 @@ namespace com.google.zxing.oned
 		/// <throws>  ReaderException if the quiet zone cannot be found, a ReaderException is thrown. </throws>
 		private void  validateQuietZone(BitArray row, int startPattern)
 		{
-			
 			int quietCount = this.narrowLineWidth * 10; // expect to find this many pixels of quiet zone
 			
 			for (int i = startPattern - 1; quietCount > 0 && i >= 0; i--)
 			{
-				if (row.get_Renamed(i))
+				if (row[i])
 				{
 					break;
 				}
@@ -231,7 +230,7 @@ namespace com.google.zxing.oned
 			int endStart = 0;
 			while (endStart < width)
 			{
-				if (row.get_Renamed(endStart))
+				if (row[endStart])
 				{
 					break;
 				}
@@ -312,7 +311,7 @@ namespace com.google.zxing.oned
 			int patternStart = rowOffset;
 			for (int x = rowOffset; x < width; x++)
 			{
-				bool pixel = row.get_Renamed(x);
+				bool pixel = row[x];
 				if (pixel ^ isWhite)
 				{
 					counters[counterPosition]++;

@@ -115,7 +115,7 @@ namespace com.google.zxing.pdf417.decoder
 				{
 					// Accumulate differences between this line and the
 					// previous line.
-					if (bitMatrix.get_Renamed(j, i) != bitMatrix.get_Renamed(j, i - 1))
+					if (bitMatrix[j, i] != bitMatrix[j, i - 1])
 					{
 						rowDifference++;
 					}
@@ -125,7 +125,7 @@ namespace com.google.zxing.pdf417.decoder
 					for (int j = 0; j < width; j++)
 					{
 						// Accumulate the black pixels on this line
-						if (bitMatrix.get_Renamed(j, i))
+						if (bitMatrix[j, i])
 						{
 							rowCounters[j]++;
 						}

@@ -256,7 +256,7 @@ namespace com.google.zxing.aztec
             ReedSolomonDecoder rsDecoder = new ReedSolomonDecoder(GenericGF.AZTEC_PARAM);
             rsDecoder.decode(parameterWords, numECCodewords);
          }
-         catch (ReedSolomonException rse)
+         catch (ReedSolomonException )
          {
             throw zxing.NotFoundException.Instance;
          }
@@ -382,7 +382,7 @@ namespace com.google.zxing.aztec
             pointD = cornerPoints[3];
 
          }
-         catch (NotFoundException e)
+         catch (NotFoundException )
          {
 
             // This exception can be in case the initial rectangle is white
@@ -411,7 +411,7 @@ namespace com.google.zxing.aztec
             pointC = cornerPoints[2];
             pointD = cornerPoints[3];
          }
-         catch (NotFoundException e)
+         catch (NotFoundException )
          {
 
             // This exception can be in case the initial rectangle is white
@@ -545,7 +545,7 @@ namespace com.google.zxing.aztec
 
          for (int i = 0; i < size; i++)
          {
-            res[i] = image.get_Renamed(round(px), round(py));
+            res[i] = image[round(px), round(py)];
             px += dx;
             py += dy;
          }
@@ -612,13 +612,13 @@ namespace com.google.zxing.aztec
          float px = p1.x;
          float py = p1.y;
 
-         bool colorModel = image.get_Renamed(p1.x, p1.y);
+         bool colorModel = image[p1.x, p1.y];
 
          for (int i = 0; i < d; i++)
          {
             px += dx;
             py += dy;
-            if (image.get_Renamed(round(px), round(py)) != colorModel)
+            if (image[round(px), round(py)] != colorModel)
             {
                error++;
             }
@@ -649,7 +649,7 @@ namespace com.google.zxing.aztec
          int x = init.x + dx;
          int y = init.y + dy;
 
-         while (isValid(x, y) && image.get_Renamed(x, y) == color)
+         while (isValid(x, y) && image[x, y] == color)
          {
             x += dx;
             y += dy;
@@ -658,13 +658,13 @@ namespace com.google.zxing.aztec
          x -= dx;
          y -= dy;
 
-         while (isValid(x, y) && image.get_Renamed(x, y) == color)
+         while (isValid(x, y) && image[x, y] == color)
          {
             x += dx;
          }
          x -= dx;
 
-         while (isValid(x, y) && image.get_Renamed(x, y) == color)
+         while (isValid(x, y) && image[x, y] == color)
          {
             y += dy;
          }
@@ -711,6 +711,5 @@ namespace com.google.zxing.aztec
              * (a.x - b.x) + (a.y - b.y)
              * (a.y - b.y));
       }
-
    }
 }

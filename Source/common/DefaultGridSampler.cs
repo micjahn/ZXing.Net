@@ -61,11 +61,7 @@ namespace com.google.zxing.common
 					for (int x = 0; x < max; x += 2)
 					{
 						//UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-						if (image.get_Renamed((int) points[x], (int) points[x + 1]))
-						{
-							// Black(-ish) pixel
-							bits.set_Renamed(x >> 1, y);
-						}
+					   bits[x >> 1, y] = image[(int) points[x], (int) points[x + 1]];
 					}
 				}
 				catch (System.IndexOutOfRangeException)

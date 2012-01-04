@@ -16,12 +16,11 @@
 
 namespace com.google.zxing
 {
-   /**
-    * Thrown when a barcode was not found in the image. It might have been
-    * partially detected but could not be confirmed.
-    *
-    * @author Sean Owen
-    */
+   /// <summary>
+   /// Thrown when a barcode was not found in the image. It might have been
+   /// partially detected but could not be confirmed.
+   /// <author>Sean Owen</author>
+   /// </summary>
    public sealed class NotFoundException : ReaderException
    {
       private static readonly NotFoundException instance = new NotFoundException();
@@ -31,14 +30,12 @@ namespace com.google.zxing
          // do nothing
       }
 
-      public static NotFoundException Instance
+      new public static NotFoundException Instance
       {
          get
          {
             return instance;
          }
-
       }
-
    }
 }

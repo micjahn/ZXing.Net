@@ -336,14 +336,14 @@ namespace com.google.zxing.qrcode.detector
 				if (state == 1)
 				{
 					// In white pixels, looking for black
-					if (image.get_Renamed(realX, realY))
+					if (image[realX, realY])
 					{
 						state++;
 					}
 				}
 				else
 				{
-					if (!image.get_Renamed(realX, realY))
+					if (!image[realX, realY])
 					{
 						state++;
 					}

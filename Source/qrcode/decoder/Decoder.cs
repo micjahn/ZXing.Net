@@ -59,10 +59,7 @@ namespace com.google.zxing.qrcode.decoder
 			{
 				for (int j = 0; j < dimension; j++)
 				{
-					if (image[i][j])
-					{
-						bits.set_Renamed(j, i);
-					}
+				   bits[j, i] = image[i][j];
 				}
 			}
 			return decode(bits);

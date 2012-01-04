@@ -292,7 +292,7 @@ namespace com.google.zxing.common.detector
          {
             int x = round(aX + i * xStep);
             int y = round(aY + i * yStep);
-            if (image.get_Renamed(x, y))
+            if (image[x, y])
             {
                return new ResultPoint(x, y);
             }
@@ -374,7 +374,7 @@ namespace com.google.zxing.common.detector
          {
             for (int x = a; x <= b; x++)
             {
-               if (image.get_Renamed(x, @fixed))
+               if (image[x, @fixed])
                {
                   return true;
                }
@@ -384,7 +384,7 @@ namespace com.google.zxing.common.detector
          {
             for (int y = a; y <= b; y++)
             {
-               if (image.get_Renamed(@fixed, y))
+               if (image[@fixed, y])
                {
                   return true;
                }

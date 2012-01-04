@@ -115,14 +115,14 @@ namespace com.google.zxing.qrcode.detector
 				// Burn off leading white pixels before anything else; if we start in the middle of
 				// a white run, it doesn't make sense to count its length, since we don't know if the
 				// white run continued to the left of the start point
-				while (j < maxJ && !image.get_Renamed(j, i))
+				while (j < maxJ && !image[j, i])
 				{
 					j++;
 				}
 				int currentState = 0;
 				while (j < maxJ)
 				{
-					if (image.get_Renamed(j, i))
+					if (image[j, i])
 					{
 						// Black pixel
 						if (currentState == 1)
@@ -242,7 +242,7 @@ namespace com.google.zxing.qrcode.detector
 			
 			// Start counting up from center
 			int i = startI;
-			while (i >= 0 && image.get_Renamed(centerJ, i) && stateCount[1] <= maxCount)
+			while (i >= 0 && image[centerJ, i] && stateCount[1] <= maxCount)
 			{
 				stateCount[1]++;
 				i--;
@@ -252,7 +252,7 @@ namespace com.google.zxing.qrcode.detector
 			{
 				return System.Single.NaN;
 			}
-			while (i >= 0 && !image.get_Renamed(centerJ, i) && stateCount[0] <= maxCount)
+			while (i >= 0 && !image[centerJ, i] && stateCount[0] <= maxCount)
 			{
 				stateCount[0]++;
 				i--;
@@ -264,7 +264,7 @@ namespace com.google.zxing.qrcode.detector
 			
 			// Now also count down from center
 			i = startI + 1;
-			while (i < maxI && image.get_Renamed(centerJ, i) && stateCount[1] <= maxCount)
+			while (i < maxI && image[centerJ, i] && stateCount[1] <= maxCount)
 			{
 				stateCount[1]++;
 				i++;
@@ -273,7 +273,7 @@ namespace com.google.zxing.qrcode.detector
 			{
 				return System.Single.NaN;
 			}
-			while (i < maxI && !image.get_Renamed(centerJ, i) && stateCount[2] <= maxCount)
+			while (i < maxI && !image[centerJ, i] && stateCount[2] <= maxCount)
 			{
 				stateCount[2]++;
 				i++;

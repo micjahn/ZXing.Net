@@ -484,7 +484,7 @@ namespace com.google.zxing.pdf417.detector
 			int patternStart = column;
 			for (int x = column; x < column + width; x++)
 			{
-				bool pixel = matrix.get_Renamed(x, row);
+				bool pixel = matrix[x, row];
 				if (pixel ^ isWhite)
 				{
 					counters[counterPosition]++;

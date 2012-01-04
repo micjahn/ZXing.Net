@@ -228,12 +228,12 @@ namespace com.google.zxing.oned
 			{
 				throw ReaderException.Instance;
 			}
-			bool isWhite = !row.get_Renamed(start);
+			bool isWhite = !row[start];
 			int counterPosition = 0;
 			int i2 = start;
 			while (i2 < end)
 			{
-				bool pixel = row.get_Renamed(i2);
+				bool pixel = row[i2];
 				if (pixel ^ isWhite)
 				{
 					// that is, exactly one is true

@@ -235,7 +235,7 @@ namespace com.google.zxing.oned
 			bool isWhite = false;
 			while (rowOffset < width)
 			{
-				isWhite = !row.get_Renamed(rowOffset);
+				isWhite = !row[rowOffset];
 				if (whiteFirst == isWhite)
 				{
 					break;
@@ -247,7 +247,7 @@ namespace com.google.zxing.oned
 			int patternStart = rowOffset;
 			for (int x = rowOffset; x < width; x++)
 			{
-				bool pixel = row.get_Renamed(x);
+				bool pixel = row[x];
 				if (pixel ^ isWhite)
 				{
 					counters[counterPosition]++;

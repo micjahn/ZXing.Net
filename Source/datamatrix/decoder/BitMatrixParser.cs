@@ -140,7 +140,7 @@ namespace com.google.zxing.datamatrix.decoder
 					// Sweep upward diagonally to the right
 					do 
 					{
-						if ((row < numRows) && (column >= 0) && !readMappingMatrix.get_Renamed(column, row))
+						if ((row < numRows) && (column >= 0) && !readMappingMatrix[column, row])
 						{
 							result[resultOffset++] = (sbyte) readUtah(row, column, numRows, numColumns);
 						}
@@ -154,7 +154,7 @@ namespace com.google.zxing.datamatrix.decoder
 					// Sweep downward diagonally to the left
 					do 
 					{
-						if ((row >= 0) && (column < numColumns) && !readMappingMatrix.get_Renamed(column, row))
+						if ((row >= 0) && (column < numColumns) && !readMappingMatrix[column, row])
 						{
 							result[resultOffset++] = (sbyte) readUtah(row, column, numRows, numColumns);
 						}
@@ -201,8 +201,8 @@ namespace com.google.zxing.datamatrix.decoder
 				column += numColumns;
 				row += 4 - ((numColumns + 4) & 0x07);
 			}
-			readMappingMatrix.set_Renamed(column, row);
-			return mappingBitMatrix.get_Renamed(column, row);
+			readMappingMatrix[column, row] = true;
+			return mappingBitMatrix[column, row];
 		}
 		
 		/// <summary> <p>Reads the 8 bits of the standard Utah-shaped pattern.</p>
@@ -532,10 +532,10 @@ namespace com.google.zxing.datamatrix.decoder
 						for (int j = 0; j < dataRegionSizeColumns; ++j)
 						{
 							int readColumnOffset = dataRegionColumn * (dataRegionSizeColumns + 2) + 1 + j;
-							if (bitMatrix.get_Renamed(readColumnOffset, readRowOffset))
+							if (bitMatrix[readColumnOffset, readRowOffset])
 							{
 								int writeColumnOffset = dataRegionColumnOffset + j;
-								bitMatrixWithoutAlignment.set_Renamed(writeColumnOffset, writeRowOffset);
+								bitMatrixWithoutAlignment[writeColumnOffset, writeRowOffset] = true;
 							}
 						}
 					}

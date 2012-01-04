@@ -130,14 +130,11 @@ namespace com.google.zxing.common
 			for (int y = 0; y < 8; y++)
 			{
 				int offset = (yoffset + y) * stride + xoffset;
-				for (int x = 0; x < 8; x++)
-				{
-					int pixel = luminances[offset + x] & 0xff;
-					if (pixel < threshold)
-					{
-						matrix.set_Renamed(xoffset + x, yoffset + y);
-					}
-				}
+            for (int x = 0; x < 8; x++)
+            {
+               int pixel = luminances[offset + x] & 0xff;
+               matrix[xoffset + x, yoffset + y] = (pixel < threshold);
+            }
 			}
 		}
 		
