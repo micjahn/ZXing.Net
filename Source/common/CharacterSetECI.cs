@@ -13,116 +13,120 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
 using System.Collections.Generic;
 
 namespace com.google.zxing.common
 {
-	
-	/// <summary> Encapsulates a Character Set ECI, according to "Extended Channel Interpretations" 5.3.1.1
-	/// of ISO 18004.
-	/// 
-	/// </summary>
-	/// <author>  Sean Owen
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
-	public sealed class CharacterSetECI:ECI
-	{
-		public System.String EncodingName
-		{
-			get
-			{
-				return encodingName;
-			}
-			
-		}
+
+   /// <summary> Encapsulates a Character Set ECI, according to "Extended Channel Interpretations" 5.3.1.1
+   /// of ISO 18004.
+   /// 
+   /// </summary>
+   /// <author>  Sean Owen
+   /// </author>
+   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
+   /// </author>
+   public sealed class CharacterSetECI : ECI
+   {
+      public String EncodingName
+      {
+         get
+         {
+            return encodingName;
+         }
+
+      }
 
       private static IDictionary<int, CharacterSetECI> VALUE_TO_ECI;
       private static IDictionary<string, CharacterSetECI> NAME_TO_ECI;
-		
-		private static void  initialize()
-		{
-			VALUE_TO_ECI = new Dictionary<int, CharacterSetECI>();
-			NAME_TO_ECI = new Dictionary<string, CharacterSetECI>();
-			// TODO figure out if these values are even right!
-			addCharacterSet(0, "Cp437");
-			addCharacterSet(1, new []{"ISO8859_1", "ISO-8859-1"});
-			addCharacterSet(2, "Cp437");
-			addCharacterSet(3, new []{"ISO8859_1", "ISO-8859-1"});
-			addCharacterSet(4, "ISO8859_2");
-			addCharacterSet(5, "ISO8859_3");
-			addCharacterSet(6, "ISO8859_4");
-			addCharacterSet(7, "ISO8859_5");
-			addCharacterSet(8, "ISO8859_6");
-			addCharacterSet(9, "ISO8859_7");
-			addCharacterSet(10, "ISO8859_8");
-			addCharacterSet(11, "ISO8859_9");
-			addCharacterSet(12, "ISO8859_10");
-			addCharacterSet(13, "ISO8859_11");
-			addCharacterSet(15, "ISO8859_13");
-			addCharacterSet(16, "ISO8859_14");
-			addCharacterSet(17, "ISO8859_15");
-			addCharacterSet(18, "ISO8859_16");
-			addCharacterSet(20, new []{"SJIS", "Shift_JIS"});
-		}
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'encodingName '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String encodingName;
-		
-		private CharacterSetECI(int value_Renamed, System.String encodingName):base(value_Renamed)
-		{
-			this.encodingName = encodingName;
-		}
-		
-		private static void  addCharacterSet(int value_Renamed, System.String encodingName)
-		{
-			CharacterSetECI eci = new CharacterSetECI(value_Renamed, encodingName);
-			VALUE_TO_ECI[(System.Int32) value_Renamed] = eci; // can't use valueOf
-			NAME_TO_ECI[encodingName] = eci;
-		}
-		
-		private static void  addCharacterSet(int value_Renamed, System.String[] encodingNames)
-		{
-			CharacterSetECI eci = new CharacterSetECI(value_Renamed, encodingNames[0]);
-			VALUE_TO_ECI[(System.Int32) value_Renamed] = eci; // can't use valueOf
-			for (int i = 0; i < encodingNames.Length; i++)
-			{
-				NAME_TO_ECI[encodingNames[i]] = eci;
-			}
-		}
-		
-		/// <param name="value">character set ECI value
-		/// </param>
-		/// <returns> {@link CharacterSetECI} representing ECI of given value, or null if it is legal but
-		/// unsupported
-		/// </returns>
-		/// <throws>  IllegalArgumentException if ECI value is invalid </throws>
-		public static CharacterSetECI getCharacterSetECIByValue(int value_Renamed)
-		{
-			if (VALUE_TO_ECI == null)
-			{
-				initialize();
-			}
-			if (value_Renamed < 0 || value_Renamed >= 900)
-			{
-				throw new System.ArgumentException("Bad ECI value: " + value_Renamed);
-			}
-			return (CharacterSetECI) VALUE_TO_ECI[(System.Int32) value_Renamed];
-		}
-		
-		/// <param name="name">character set ECI encoding name
-		/// </param>
-		/// <returns> {@link CharacterSetECI} representing ECI for character encoding, or null if it is legal
-		/// but unsupported
-		/// </returns>
-		public static CharacterSetECI getCharacterSetECIByName(System.String name)
-		{
-			if (NAME_TO_ECI == null)
-			{
-				initialize();
-			}
-			return (CharacterSetECI) NAME_TO_ECI[name];
-		}
-	}
+
+      static CharacterSetECI()
+      {
+         VALUE_TO_ECI = new Dictionary<int, CharacterSetECI>();
+         NAME_TO_ECI = new Dictionary<string, CharacterSetECI>();
+         // TODO figure out if these values are even right!
+         addCharacterSet(0, "CP437");
+         addCharacterSet(1, new[] { "ISO8859_1", "ISO-8859-1" });
+         addCharacterSet(2, "CP437");
+         addCharacterSet(3, new[] { "ISO8859_1", "ISO-8859-1" });
+         addCharacterSet(4, "ISO8859_2");
+         addCharacterSet(5, "ISO8859_3");
+         addCharacterSet(6, "ISO8859_4");
+         addCharacterSet(7, "ISO8859_5");
+         addCharacterSet(8, "ISO8859_6");
+         addCharacterSet(9, "ISO8859_7");
+         addCharacterSet(10, "ISO8859_8");
+         addCharacterSet(11, "ISO8859_9");
+         addCharacterSet(12, "ISO8859_10");
+         addCharacterSet(13, "ISO8859_11");
+         addCharacterSet(15, "ISO8859_13");
+         addCharacterSet(16, "ISO8859_14");
+         addCharacterSet(17, "ISO8859_15");
+         addCharacterSet(18, "ISO8859_16");
+         addCharacterSet(20, new[] { "SJIS", "Shift_JIS" });
+         addCharacterSet(21, new[] { "CP1250", "windows-1250" });
+         addCharacterSet(22, new[] { "CP1251", "windows-1251" });
+         addCharacterSet(23, new[] { "CP1252", "windows-1252" });
+         addCharacterSet(24, new[] { "CP1256", "windows-1256" });
+         addCharacterSet(25, new[] { "UTF-16BE", "UnicodeBig" });
+         addCharacterSet(26, new[] { "UTF8", "UTF-8" });
+         addCharacterSet(27, "US-ASCII");
+         addCharacterSet(170, "US-ASCII");
+         addCharacterSet(28, "BIG5");
+         addCharacterSet(29, new[] { "GB18030", "GB2312", "EUC_CN", "GBK" });
+         addCharacterSet(30, new[] { "EUC_KR", "EUC-KR" });
+      }
+
+      private String encodingName;
+
+      private CharacterSetECI(int value_Renamed, String encodingName)
+         : base(value_Renamed)
+      {
+         this.encodingName = encodingName;
+      }
+
+      private static void addCharacterSet(int value, String encodingName)
+      {
+         var eci = new CharacterSetECI(value, encodingName);
+         VALUE_TO_ECI[value] = eci; // can't use valueOf
+         NAME_TO_ECI[encodingName] = eci;
+      }
+
+      private static void addCharacterSet(int value, String[] encodingNames)
+      {
+         var eci = new CharacterSetECI(value, encodingNames[0]);
+         VALUE_TO_ECI[value] = eci; // can't use valueOf
+         foreach (string t in encodingNames)
+         {
+            NAME_TO_ECI[t] = eci;
+         }
+      }
+
+      /// <param name="value">character set ECI value
+      /// </param>
+      /// <returns> {@link CharacterSetECI} representing ECI of given value, or null if it is legal but
+      /// unsupported
+      /// </returns>
+      /// <throws>  IllegalArgumentException if ECI value is invalid </throws>
+      public static CharacterSetECI getCharacterSetECIByValue(int value)
+      {
+         if (value < 0 || value >= 900)
+         {
+            throw new ArgumentException("Bad ECI value: " + value);
+         }
+         return VALUE_TO_ECI[value];
+      }
+
+      /// <param name="name">character set ECI encoding name
+      /// </param>
+      /// <returns> {@link CharacterSetECI} representing ECI for character encoding, or null if it is legal
+      /// but unsupported
+      /// </returns>
+      public static CharacterSetECI getCharacterSetECIByName(String name)
+      {
+         return NAME_TO_ECI[name];
+      }
+   }
 }
