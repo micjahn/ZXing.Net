@@ -108,6 +108,7 @@
     <Compile Include="BarcodeFormat.cs" />
     <Compile Include="Binarizer.cs" />
     <Compile Include="BinaryBitmap.cs" />
+    <Compile Include="ChecksumException.cs" />
     <Compile Include="client\result\AbstractDoCoMoResultParser.cs" />
     <Compile Include="client\result\AddressBookAUResultParser.cs" />
     <Compile Include="client\result\AddressBookDoCoMoResultParser.cs" />
@@ -177,6 +178,10 @@
     <Compile Include="EncodeHintType.cs" />
     <Compile Include="FormatException.cs" />
     <Compile Include="LuminanceSource.cs" />
+    <Compile Include="maxicode\decoder\BitMatrixParser.cs" />
+    <Compile Include="maxicode\decoder\DecodedBitStreamParser.cs" />
+    <Compile Include="maxicode\decoder\Decoder.cs" />
+    <Compile Include="maxicode\MaxiCodeReader.cs" />
     <Compile Include="MultiFormatReader.cs" />
     <Compile Include="MultiFormatWriter.cs" />
     <Compile Include="multi\ByQuadrantReader.cs" />

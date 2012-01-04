@@ -29,7 +29,7 @@ namespace com.google.zxing
 
 	public sealed class BarcodeFormat
 	{
-		public System.String Name
+		public String Name
 		{
 			get
 			{
@@ -83,30 +83,34 @@ namespace com.google.zxing
 		//UPGRADE_NOTE: Final was removed from the declaration of 'ITF '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		public static readonly BarcodeFormat ITF = new BarcodeFormat("ITF");
 		
-		/// <summary>PDF417 format. </summary>
+      /// <summary>MaxiCode 2D barcode format.</summary>
+		//UPGRADE_NOTE: Final was removed from the declaration of 'PDF417 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
+		public static readonly BarcodeFormat MAXICODE = new BarcodeFormat("MAXICODE");
+
+      /// <summary>PDF417 format. </summary>
 		//UPGRADE_NOTE: Final was removed from the declaration of 'PDF417 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
 		public static readonly BarcodeFormat PDF417 = new BarcodeFormat("PDF417");
 		
 		//UPGRADE_NOTE: Final was removed from the declaration of 'name '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String name;
+		private String name;
 		
-		private BarcodeFormat(System.String name)
+		private BarcodeFormat(String name)
 		{
 			this.name = name;
 			VALUES[name] = this;
 		}
 		
-		public override System.String ToString()
+		public override String ToString()
 		{
 			return name;
 		}
 		
-		public static BarcodeFormat valueOf(System.String name)
+		public static BarcodeFormat valueOf(String name)
 		{
-			BarcodeFormat format = (BarcodeFormat) VALUES[name];
+			BarcodeFormat format = VALUES[name];
 			if (format == null)
 			{
-				throw new System.ArgumentException();
+				throw new ArgumentException();
 			}
 			return format;
 		}
