@@ -74,7 +74,7 @@ namespace com.google.zxing.datamatrix
             decoderResult = decoder.decode(detectorResult.Bits);
             points = detectorResult.Points;
          }
-         Result result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.DATAMATRIX);
+         Result result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.DATA_MATRIX);
          if (decoderResult.ByteSegments != null)
          {
             result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, decoderResult.ByteSegments);

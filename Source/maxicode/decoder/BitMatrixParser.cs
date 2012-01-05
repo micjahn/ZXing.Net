@@ -25,6 +25,7 @@ namespace com.google.zxing.maxicode.decoder
    /// <author>Manuel Kasten</author>
    internal sealed class BitMatrixParser
    {
+      // TODO: validate if the initialization is correct
       private static int[][] BITNR = new int[][]
       {
          new []{121,120,127,126,133,132,139,138,145,144,151,150,157,156,163,162,169,168,175,174,181,180,187,186,193,192,199,198, -2, -2},

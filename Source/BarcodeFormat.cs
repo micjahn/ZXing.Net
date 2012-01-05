@@ -13,106 +13,65 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-using System;
-using System.Collections.Generic;
 
 namespace com.google.zxing
 {
-	
-	/// <summary> Enumerates barcode formats known to this package.
-	/// 
-	/// </summary>
-	/// <author>  Sean Owen
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
-
-	public sealed class BarcodeFormat
-	{
-		public String Name
-		{
-			get
-			{
-				return name;
-			}
-			
-		}
-		
-		// No, we can't use an enum here. J2ME doesn't support it.
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'VALUES '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private static readonly IDictionary<string, BarcodeFormat> VALUES = new Dictionary<string, BarcodeFormat>();
-
+   /// <summary>
+   /// Enumerates barcode formats known to this package.
+   /// </summary>
+   /// <author>  Sean Owen
+   /// </author>
+   public enum BarcodeFormat
+   {
       /// <summary>Aztec 2D barcode format.</summary>
-      //UPGRADE_NOTE: Final was removed from the declaration of 'AZTEC '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-      public static readonly BarcodeFormat AZTEC = new BarcodeFormat("AZTEC");
-      
-      /// <summary>QR Code 2D barcode format. </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'QR_CODE '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public static readonly BarcodeFormat QR_CODE = new BarcodeFormat("QR_CODE");
-		
-		/// <summary>DataMatrix 2D barcode format. </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'DATAMATRIX '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public static readonly BarcodeFormat DATAMATRIX = new BarcodeFormat("DATAMATRIX");
-		
-		/// <summary>UPC-E 1D format. </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'UPC_E '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public static readonly BarcodeFormat UPC_E = new BarcodeFormat("UPC_E");
-		
-		/// <summary>UPC-A 1D format. </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'UPC_A '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public static readonly BarcodeFormat UPC_A = new BarcodeFormat("UPC_A");
-		
-		/// <summary>EAN-8 1D format. </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'EAN_8 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public static readonly BarcodeFormat EAN_8 = new BarcodeFormat("EAN_8");
-		
-		/// <summary>EAN-13 1D format. </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'EAN_13 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public static readonly BarcodeFormat EAN_13 = new BarcodeFormat("EAN_13");
-		
-		/// <summary>Code 128 1D format. </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'CODE_128 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public static readonly BarcodeFormat CODE_128 = new BarcodeFormat("CODE_128");
-		
-		/// <summary>Code 39 1D format. </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'CODE_39 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public static readonly BarcodeFormat CODE_39 = new BarcodeFormat("CODE_39");
-		
-		/// <summary>ITF (Interleaved Two of Five) 1D format. </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'ITF '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public static readonly BarcodeFormat ITF = new BarcodeFormat("ITF");
-		
-      /// <summary>MaxiCode 2D barcode format.</summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'PDF417 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public static readonly BarcodeFormat MAXICODE = new BarcodeFormat("MAXICODE");
+      AZTEC,
 
-      /// <summary>PDF417 format. </summary>
-		//UPGRADE_NOTE: Final was removed from the declaration of 'PDF417 '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		public static readonly BarcodeFormat PDF417 = new BarcodeFormat("PDF417");
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'name '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private String name;
-		
-		private BarcodeFormat(String name)
-		{
-			this.name = name;
-			VALUES[name] = this;
-		}
-		
-		public override String ToString()
-		{
-			return name;
-		}
-		
-		public static BarcodeFormat valueOf(String name)
-		{
-			BarcodeFormat format = VALUES[name];
-			if (format == null)
-			{
-				throw new ArgumentException();
-			}
-			return format;
-		}
-	}
+      /// <summary>CODABAR 1D format.</summary>
+      CODABAR,
+
+      /// <summary>Code 39 1D format.</summary>
+      CODE_39,
+
+      /// <summary>Code 93 1D format.</summary>
+      CODE_93,
+
+      /// <summary>Code 128 1D format.</summary>
+      CODE_128,
+
+      /// <summary>Data Matrix 2D barcode format.</summary>
+      DATA_MATRIX,
+
+      /// <summary>EAN-8 1D format.</summary>
+      EAN_8,
+
+      /// <summary>EAN-13 1D format.</summary>
+      EAN_13,
+
+      /// <summary>ITF (Interleaved Two of Five) 1D format.</summary>
+      ITF,
+
+      /// <summary>MaxiCode 2D barcode format.</summary>
+      MAXICODE,
+
+      /// <summary>PDF417 format.</summary>
+      PDF_417,
+
+      /// <summary>QR Code 2D barcode format.</summary>
+      QR_CODE,
+
+      /// <summary>RSS 14</summary>
+      RSS_14,
+
+      /// <summary>RSS EXPANDED</summary>
+      RSS_EXPANDED,
+
+      /// <summary>UPC-A 1D format.</summary>
+      UPC_A,
+
+      /// <summary>UPC-E 1D format.</summary>
+      UPC_E,
+
+      /// <summary>UPC/EAN extension format. Not a stand-alone format.</summary>
+      UPC_EAN_EXTENSION
+   }
 }

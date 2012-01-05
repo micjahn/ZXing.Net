@@ -65,11 +65,11 @@ namespace com.google.zxing
 					{
 						readers.Add(new QRCodeReader());
 					}
-					if (formats.Contains(BarcodeFormat.DATAMATRIX))
+					if (formats.Contains(BarcodeFormat.DATA_MATRIX))
 					{
 						readers.Add(new DataMatrixReader());
 					}
-					if (formats.Contains(BarcodeFormat.PDF417))
+					if (formats.Contains(BarcodeFormat.PDF_417))
 					{
 						readers.Add(new PDF417Reader());
 					}

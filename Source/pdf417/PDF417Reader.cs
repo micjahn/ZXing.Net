@@ -73,7 +73,7 @@ namespace com.google.zxing.pdf417
 				decoderResult = decoder.decode(detectorResult.Bits);
 				points = detectorResult.Points;
 			}
-			return new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.PDF417);
+			return new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.PDF_417);
 		}
 		
 		/// <summary> This method detects a barcode in a "pure" image -- that is, pure monochrome image
