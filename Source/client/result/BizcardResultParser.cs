@@ -19,7 +19,6 @@ using System.Collections.Generic;
 
 namespace com.google.zxing.client.result
 {
-
    /// <summary> Implements the "BIZCARD" address book entry format, though this has been
    /// largely reverse-engineered from examples observed in the wild -- still
    /// looking for a definitive reference.
@@ -35,7 +34,7 @@ namespace com.google.zxing.client.result
       // like the DoCoMo MECARD format, but this is not technically one of 
       // DoCoMo's proposed formats
 
-      public static AddressBookParsedResult parse(Result result)
+      override public ParsedResult parse(Result result)
       {
          String rawText = result.Text;
          if (rawText == null || !rawText.StartsWith("BIZCARD:"))
@@ -53,7 +52,20 @@ namespace com.google.zxing.client.result
          String phoneNumber3 = matchSingleDoCoMoPrefixedField("F:", rawText, true);
          String email = matchSingleDoCoMoPrefixedField("E:", rawText, true);
 
-         return new AddressBookParsedResult(maybeWrap(fullName), null, buildPhoneNumbers(phoneNumber1, phoneNumber2, phoneNumber3), maybeWrap(email), null, addresses, org, null, title, null);
+         return new AddressBookParsedResult(maybeWrap(fullName),
+                                            null,
+                                            buildPhoneNumbers(phoneNumber1, phoneNumber2, phoneNumber3),
+                                            null,
+                                            maybeWrap(email),
+                                            null,
+                                            null,
+                                            null,
+                                            addresses,
+                                            null,
+                                            org,
+                                            null,
+                                            title,
+                                            null);
       }
 
       private static String[] buildPhoneNumbers(String number1, String number2, String number3)
@@ -76,12 +88,7 @@ namespace com.google.zxing.client.result
          {
             return null;
          }
-         var result = new String[size];
-         for (int i = 0; i < size; i++)
-         {
-            result[i] = numbers[i];
-         }
-         return result;
+         return SupportClass.toStringArray(numbers);
       }
 
       private static String buildName(String firstName, String lastName)

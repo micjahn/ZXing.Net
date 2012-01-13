@@ -59,6 +59,12 @@ namespace com.google.zxing.common
          }
       }
 
+      public BitArray()
+      {
+         this.size = 0;
+         this.bits = new int[1];
+      }
+
       public BitArray(int size)
       {
          if (size < 1)

@@ -19,66 +19,159 @@ using System.Text;
 
 namespace com.google.zxing.client.result
 {
-
    /// <author>  Sean Owen
    /// </author>
    /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
    /// </author>
    public sealed class AddressBookParsedResult : ParsedResult
    {
-      public String[] Names { get; private set; }
+      private String[] names;
+      private String pronunciation;
+      private String[] phoneNumbers;
+      private String[] phoneTypes;
+      private String[] emails;
+      private String[] emailTypes;
+      private String instantMessenger;
+      private String note;
+      private String[] addresses;
+      private String[] addressTypes;
+      private String org;
+      private String birthday;
+      private String title;
+      private String url;
 
-      /// <summary> In Japanese, the name is written in kanji, which can have multiple readings. Therefore a hint
+      public AddressBookParsedResult(String[] names,
+                                     String pronunciation,
+                                     String[] phoneNumbers,
+                                     String[] phoneTypes,
+                                     String[] emails,
+                                     String[] emailTypes,
+                                     String instantMessenger,
+                                     String note,
+                                     String[] addresses,
+                                     String[] addressTypes,
+                                     String org,
+                                     String birthday,
+                                     String title,
+                                     String url)
+         : base(ParsedResultType.ADDRESSBOOK)
+      {
+         this.names = names;
+         this.pronunciation = pronunciation;
+         this.phoneNumbers = phoneNumbers;
+         this.phoneTypes = phoneTypes;
+         this.emails = emails;
+         this.emailTypes = emailTypes;
+         this.instantMessenger = instantMessenger;
+         this.note = note;
+         this.addresses = addresses;
+         this.addressTypes = addressTypes;
+         this.org = org;
+         this.birthday = birthday;
+         this.title = title;
+         this.url = url;
+      }
+
+      public String[] getNames
+      {
+         get { return names; }
+      }
+
+      /// <summary>
+      /// In Japanese, the name is written in kanji, which can have multiple readings. Therefore a hint
       /// is often provided, called furigana, which spells the name phonetically.
-      /// 
       /// </summary>
-      /// <returns> The pronunciation of the getNames() field, often in hiragana or katakana.
-      /// </returns>
-      public String Pronunciation { get; private set; }
-      public String[] PhoneNumbers { get; private set; }
-      public String[] Emails { get; private set; }
-      public String Note { get; private set; }
-      public String[] Addresses { get; private set; }
-      public String Title { get; private set; }
-      public String Org { get; private set; }
-      public String URL { get; private set; }
-      /// <returns> birthday formatted as yyyyMMdd (e.g. 19780917)
-      /// </returns>
-      public String Birthday { get; private set; }
+      /// <return>The pronunciation of the getNames() field, often in hiragana or katakana.</return>
+      public String Pronunciation
+      {
+         get { return pronunciation; }
+      }
+
+      public String[] PhoneNumbers
+      {
+         get { return phoneNumbers; }
+      }
+
+      /// <return>optional descriptions of the type of each phone number. It could be like "HOME", but,
+      /// there is no guaranteed or standard format.</return>
+      public String[] PhoneTypes
+      {
+         get { return phoneTypes; }
+      }
+
+      public String[] Emails
+      {
+         get { return emails; }
+      }
+
+      /// <return>optional descriptions of the type of each e-mail. It could be like "WORK", but,
+      /// there is no guaranteed or standard format.</return>
+      public String[] EmailTypes
+      {
+         get { return emailTypes; }
+      }
+
+      public String InstantMessenger
+      {
+         get { return instantMessenger; }
+      }
+
+      public String Note
+      {
+         get { return note; }
+      }
+
+      public String[] Addresses
+      {
+         get { return addresses; }
+      }
+
+      /// <return>optional descriptions of the type of each e-mail. It could be like "WORK", but,
+      /// there is no guaranteed or standard format.</return>
+      public String[] AddressTypes
+      {
+         get { return addressTypes; }
+      }
+
+      public String Title
+      {
+         get { return title; }
+      }
+
+      public String Org
+      {
+         get { return org; }
+      }
+
+      public String URL
+      {
+         get { return url; }
+      }
+
+      /// <return>birthday formatted as yyyyMMdd (e.g. 19780917)</return>
+      public String Birthday
+      {
+         get { return birthday; }
+      }
 
       override public String DisplayResult
       {
          get
          {
             var result = new StringBuilder(100);
-            maybeAppend(Names, result);
-            maybeAppend(Pronunciation, result);
-            maybeAppend(Title, result);
-            maybeAppend(Org, result);
-            maybeAppend(Addresses, result);
-            maybeAppend(PhoneNumbers, result);
-            maybeAppend(Emails, result);
-            maybeAppend(URL, result);
-            maybeAppend(Birthday, result);
-            maybeAppend(Note, result);
+            maybeAppend(names, result);
+            maybeAppend(pronunciation, result);
+            maybeAppend(title, result);
+            maybeAppend(org, result);
+            maybeAppend(addresses, result);
+            maybeAppend(phoneNumbers, result);
+            maybeAppend(emails, result);
+            maybeAppend(instantMessenger, result);
+            maybeAppend(url, result);
+            maybeAppend(birthday, result);
+            maybeAppend(note, result);
             return result.ToString();
          }
-
-      }
-
-      public AddressBookParsedResult(String[] names, String pronunciation, String[] phoneNumbers, String[] emails, String note, String[] addresses, String org, String birthday, String title, String url)
-         : base(ParsedResultType.ADDRESSBOOK)
-      {
-         Names = names;
-         Pronunciation = pronunciation;
-         PhoneNumbers = phoneNumbers;
-         Emails = emails;
-         Note = note;
-         Addresses = addresses;
-         Org = org;
-         Birthday = birthday;
-         Title = title;
-         URL = url;
       }
    }
 }

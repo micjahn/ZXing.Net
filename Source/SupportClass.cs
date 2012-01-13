@@ -10,11 +10,12 @@
 //
 
 using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// Contains conversion support elements such as classes, interfaces and static methods.
 /// </summary>
-public class SupportClass
+public static class SupportClass
 {
 	/// <summary>
 	/// Converts an array of sbytes to an array of bytes
@@ -210,4 +211,10 @@ public class SupportClass
 		return sbyteArray;
 	}
 
+   public static String[] toStringArray(ICollection<string> strings)
+   {
+      var result = new String[strings.Count];
+      strings.CopyTo(result, 0);
+      return result;
+   }
 }

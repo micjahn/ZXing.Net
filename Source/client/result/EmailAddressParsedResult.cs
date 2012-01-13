@@ -30,6 +30,15 @@ namespace com.google.zxing.client.result
       public String Body { get; private set; }
       public String MailtoURI { get; private set; }
 
+      internal EmailAddressParsedResult(String emailAddress, String subject, String body, String mailtoURI)
+         : base(ParsedResultType.EMAIL_ADDRESS)
+      {
+         EmailAddress = emailAddress;
+         Subject = subject;
+         Body = body;
+         MailtoURI = mailtoURI;
+      }
+
       override public String DisplayResult
       {
          get
@@ -41,15 +50,6 @@ namespace com.google.zxing.client.result
             return result.ToString();
          }
 
-      }
-
-      internal EmailAddressParsedResult(String emailAddress, String subject, String body, String mailtoURI)
-         : base(ParsedResultType.EMAIL_ADDRESS)
-      {
-         EmailAddress = emailAddress;
-         Subject = subject;
-         Body = body;
-         MailtoURI = mailtoURI;
       }
    }
 }

@@ -14,6 +14,8 @@
 * limitations under the License.
 */
 using System;
+using System.Collections.Generic;
+
 namespace com.google.zxing.common
 {
 	
@@ -40,7 +42,7 @@ namespace com.google.zxing.common
 		/// </param>
 		/// <param name="comparator">comparator to define sort ordering
 		/// </param>
-      public static void insertionSort<T>(System.Collections.Generic.IList<T> vector, Comparator comparator)
+      public static void insertionSort<T>(System.Collections.Generic.IList<T> vector, IComparer<T> comparator)
 		{
 			int max = vector.Count;
 			for (int i = 1; i < max; i++)
@@ -48,7 +50,7 @@ namespace com.google.zxing.common
 				T value_Renamed = vector[i];
 				int j = i - 1;
 				T valueB;
-				while (j >= 0 && comparator.compare((valueB = vector[j]), value_Renamed) > 0)
+				while (j >= 0 && comparator.Compare((valueB = vector[j]), value_Renamed) > 0)
 				{
 					vector[j + 1] = valueB;
 					j--;

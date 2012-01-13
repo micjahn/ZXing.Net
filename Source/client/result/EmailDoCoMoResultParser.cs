@@ -13,89 +13,59 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
-using Result = com.google.zxing.Result;
+using System.Text.RegularExpressions;
+
 namespace com.google.zxing.client.result
 {
-	
-	/// <summary> Implements the "MATMSG" email message entry format.
-	/// 
-	/// Supported keys: TO, SUB, BODY
-	/// 
-	/// </summary>
-	/// <author>  Sean Owen
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
-	sealed class EmailDoCoMoResultParser:AbstractDoCoMoResultParser
-	{
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'ATEXT_SYMBOLS'. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private static readonly char[] ATEXT_SYMBOLS = new char[]{'@', '.', '!', '#', '$', '%', '&', '\'', '*', '+', '-', '/', '=', '?', '^', '_', '`', '{', '|', '}', '~'};
-		
-		public static EmailAddressParsedResult parse(Result result)
-		{
-			System.String rawText = result.Text;
-			if (rawText == null || !rawText.StartsWith("MATMSG:"))
-			{
-				return null;
-			}
-			System.String[] rawTo = matchDoCoMoPrefixedField("TO:", rawText, true);
-			if (rawTo == null)
-			{
-				return null;
-			}
-			System.String to = rawTo[0];
-			if (!isBasicallyValidEmailAddress(to))
-			{
-				return null;
-			}
-			System.String subject = matchSingleDoCoMoPrefixedField("SUB:", rawText, false);
-			System.String body = matchSingleDoCoMoPrefixedField("BODY:", rawText, false);
-			return new EmailAddressParsedResult(to, subject, body, "mailto:" + to);
-		}
-		
-		/// <summary> This implements only the most basic checking for an email address's validity -- that it contains
-		/// an '@' contains no characters disallowed by RFC 2822. This is an overly lenient definition of
-		/// validity. We want to generally be lenient here since this class is only intended to encapsulate what's
-		/// in a barcode, not "judge" it.
-		/// </summary>
-		internal static bool isBasicallyValidEmailAddress(System.String email)
-		{
-			if (email == null)
-			{
-				return false;
-			}
-			bool atFound = false;
-			for (int i = 0; i < email.Length; i++)
-			{
-				char c = email[i];
-				if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && (c < '0' || c > '9') && !isAtextSymbol(c))
-				{
-					return false;
-				}
-				if (c == '@')
-				{
-					if (atFound)
-					{
-						return false;
-					}
-					atFound = true;
-				}
-			}
-			return atFound;
-		}
-		
-		private static bool isAtextSymbol(char c)
-		{
-			for (int i = 0; i < ATEXT_SYMBOLS.Length; i++)
-			{
-				if (c == ATEXT_SYMBOLS[i])
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-	}
+   /// <summary>
+   /// Implements the "MATMSG" email message entry format.
+   /// 
+   /// Supported keys: TO, SUB, BODY
+   /// 
+   /// </summary>
+   /// <author>  Sean Owen
+   /// </author>
+   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
+   /// </author>
+   sealed class EmailDoCoMoResultParser : AbstractDoCoMoResultParser
+   {
+      private static Regex ATEXT_ALPHANUMERIC = new Regex("[a-zA-Z0-9@.!#$%&'*+\\-/=?^_`{|}~]+", RegexOptions.Compiled);
+
+      override public ParsedResult parse(Result result)
+      {
+         String rawText = result.Text;
+         if (!rawText.StartsWith("MATMSG:"))
+         {
+            return null;
+         }
+         String[] rawTo = matchDoCoMoPrefixedField("TO:", rawText, true);
+         if (rawTo == null)
+         {
+            return null;
+         }
+         String to = rawTo[0];
+         if (!isBasicallyValidEmailAddress(to))
+         {
+            return null;
+         }
+         String subject = matchSingleDoCoMoPrefixedField("SUB:", rawText, false);
+         String body = matchSingleDoCoMoPrefixedField("BODY:", rawText, false);
+
+         return new EmailAddressParsedResult(to, subject, body, "mailto:" + to);
+      }
+
+      /**
+       * This implements only the most basic checking for an email address's validity -- that it contains
+       * an '@' and contains no characters disallowed by RFC 2822. This is an overly lenient definition of
+       * validity. We want to generally be lenient here since this class is only intended to encapsulate what's
+       * in a barcode, not "judge" it.
+       */
+
+      internal static bool isBasicallyValidEmailAddress(String email)
+      {
+         return email != null && ATEXT_ALPHANUMERIC.Match(email).Success && email.IndexOf('@') >= 0;
+      }
+   }
 }

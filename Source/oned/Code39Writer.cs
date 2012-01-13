@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 ZXing authors
+ * Copyright 2010 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,69 +13,80 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 using System;
 using System.Collections.Generic;
-using BarcodeFormat = com.google.zxing.BarcodeFormat;
-using ReaderException = com.google.zxing.ReaderException;
-using Result = com.google.zxing.Result;
-using ResultPoint = com.google.zxing.ResultPoint;
-using ByteMatrix = com.google.zxing.common.ByteMatrix;
+
+using com.google.zxing.common;
+
 namespace com.google.zxing.oned
 {
-    /// <summary> <p>Implements decoding of the EAN-13 format.</p>
-    ///
-    /// </summary>
-    /// <author>  erik.barbara@gmail.com (Erik Barbara)
-    /// </author>
-    /// <author>  em@nerd.ocracy.org (Emanuele Aina) - Ported from ZXING Java Source
-    /// </author>
-    public sealed class Code39Writer:UPCEANWriter
-    {
-       public override ByteMatrix encode(string contents, BarcodeFormat format, int width, int height, IDictionary<EncodeHintType, object> hints)
-       {
-            if (format != BarcodeFormat.CODE_39) {
-                throw new ArgumentException("Can only encode CODE_39, but got " + format);
-            }
-            return base.encode(contents, format, width, height, hints);
+   /// <summary>
+   /// This object renders a CODE39 code as a <see cref="BitMatrix" />.
+   /// 
+   /// <author>erik.barbara@gmail.com (Erik Barbara)</author>
+   /// </summary>
+   public sealed class Code39Writer : UPCEANWriter
+   {
+
+      public BitMatrix encode(String contents,
+                              BarcodeFormat format,
+                              int width,
+                              int height,
+                              IDictionary<EncodeHintType, object> hints)
+      {
+         if (format != BarcodeFormat.CODE_39)
+         {
+            throw new ArgumentException("Can only encode CODE_39, but got " + format);
+         }
+         return base.encode(contents, format, width, height, hints);
       }
-    
-      public override sbyte[] encode(string contents) {
-            int length = contents.Length;
-            if (length > 80) {
-                throw new ArgumentException("Requested contents should be less than 80 digits long, but got " + length);
-            }
 
-            int[] widths = new int[9];
-            int codeWidth = 24 + 1 + length;
-            for (int i = 0; i < length; i++) {
-                int indexInString = Code39Reader.ALPHABET_STRING.IndexOf(contents[i]);
-                toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
-                for(int j = 0; j < widths.Length; j++) {
-                    codeWidth += widths[j];
-                }
+      override public sbyte[] encode(String contents)
+      {
+         int length = contents.Length;
+         if (length > 80)
+         {
+            throw new ArgumentException(
+                "Requested contents should be less than 80 digits long, but got " + length);
+         }
+
+         int[] widths = new int[9];
+         int codeWidth = 24 + 1 + length;
+         for (int i = 0; i < length; i++)
+         {
+            int indexInString = Code39Reader.ALPHABET_STRING.IndexOf(contents[i]);
+            toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
+            foreach (int width in widths)
+            {
+               codeWidth += width;
             }
-            sbyte[] result = new sbyte[codeWidth];
-            toIntArray(Code39Reader.CHARACTER_ENCODINGS[39], widths);
-            int pos = appendPattern(result, 0, widths, 1);
-            int[] narrowWhite = {1};
-            pos += appendPattern(result, pos, narrowWhite, 0);
-            //append next character to bytematrix
-            for(int i = length-1; i >= 0; i--) {
-                int indexInString = Code39Reader.ALPHABET_STRING.IndexOf(contents[i]);
-                toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
-                pos += appendPattern(result, pos, widths, 1);
-                pos += appendPattern(result, pos, narrowWhite, 0);
-            }
-            toIntArray(Code39Reader.CHARACTER_ENCODINGS[39], widths);
+         }
+         sbyte[] result = new sbyte[codeWidth];
+         toIntArray(Code39Reader.CHARACTER_ENCODINGS[39], widths);
+         int pos = appendPattern(result, 0, widths, 1);
+         int[] narrowWhite = { 1 };
+         pos += appendPattern(result, pos, narrowWhite, 0);
+         //append next character to bytematrix
+         for (int i = length - 1; i >= 0; i--)
+         {
+            int indexInString = Code39Reader.ALPHABET_STRING.IndexOf(contents[i]);
+            toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
             pos += appendPattern(result, pos, widths, 1);
-            return result;
-        }
+            pos += appendPattern(result, pos, narrowWhite, 0);
+         }
+         toIntArray(Code39Reader.CHARACTER_ENCODINGS[39], widths);
+         pos += appendPattern(result, pos, widths, 1);
+         return result;
+      }
 
-        private static void toIntArray(int a, int[] toReturn) {
-            for (int i = 0; i < 9; i++) {
-                int temp = a & (1 << i);
-                toReturn[i] = (temp == 0) ? 1 : 2;
-            }
-        }
-    }
+      private static void toIntArray(int a, int[] toReturn)
+      {
+         for (int i = 0; i < 9; i++)
+         {
+            int temp = a & (1 << i);
+            toReturn[i] = temp == 0 ? 1 : 2;
+         }
+      }
+   }
 }

@@ -37,7 +37,7 @@ namespace com.google.zxing.client.result
       public virtual ParsedResultType Type { get; private set; }
       public abstract String DisplayResult { get; }
 
-      protected internal ParsedResult(ParsedResultType type)
+      protected ParsedResult(ParsedResultType type)
       {
          Type = type;
       }

@@ -13,100 +13,138 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
+using System.Text;
+
 namespace com.google.zxing.client.result
 {
-	
-	/// <author>  Sean Owen
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
-	public sealed class SMSParsedResult:ParsedResult
-	{
-		public System.String SMSURI
-		{
-			get
-			{
-				return smsURI;
-			}
-			
-		}
-		public System.String Number
-		{
-			get
-			{
-				return number;
-			}
-			
-		}
-		public System.String Via
-		{
-			get
-			{
-				return via;
-			}
-			
-		}
-		public System.String Subject
-		{
-			get
-			{
-				return subject;
-			}
-			
-		}
-		public System.String Body
-		{
-			get
-			{
-				return body;
-			}
-			
-		}
-		public System.String Title
-		{
-			get
-			{
-				return title;
-			}
-			
-		}
-		override public System.String DisplayResult
-		{
-			get
-			{
-				System.Text.StringBuilder result = new System.Text.StringBuilder(100);
-				maybeAppend(number, result);
-				maybeAppend(via, result);
-				maybeAppend(subject, result);
-				maybeAppend(body, result);
-				maybeAppend(title, result);
-				return result.ToString();
-			}
-			
-		}
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'smsURI '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String smsURI;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'number '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String number;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'via '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String via;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'subject '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String subject;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'body '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String body;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'title '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String title;
-		
-		public SMSParsedResult(System.String smsURI, System.String number, System.String via, System.String subject, System.String body, System.String title):base(ParsedResultType.SMS)
-		{
-			this.smsURI = smsURI;
-			this.number = number;
-			this.via = via;
-			this.subject = subject;
-			this.body = body;
-			this.title = title;
-		}
-	}
+   /// <author>  Sean Owen
+   /// </author>
+   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
+   /// </author>
+   public sealed class SMSParsedResult : ParsedResult
+   {
+      private String[] numbers;
+      private String[] vias;
+      private String subject;
+      private String body;
+
+      public SMSParsedResult(String number,
+                             String via,
+                             String subject,
+                             String body)
+         : base(ParsedResultType.SMS)
+      {
+         this.numbers = new [] { number };
+         this.vias = new [] { via };
+         this.subject = subject;
+         this.body = body;
+      }
+
+      public SMSParsedResult(String[] numbers,
+                             String[] vias,
+                             String subject,
+                             String body)
+         : base(ParsedResultType.SMS)
+      {
+         this.numbers = numbers;
+         this.vias = vias;
+         this.subject = subject;
+         this.body = body;
+      }
+
+      public String getSMSURI()
+      {
+         var result = new StringBuilder();
+         result.Append("sms:");
+         bool first = true;
+         for (int i = 0; i < numbers.Length; i++)
+         {
+            if (first)
+            {
+               first = false;
+            }
+            else
+            {
+               result.Append(',');
+            }
+            result.Append(numbers[i]);
+            if (vias != null && vias[i] != null)
+            {
+               result.Append(";via=");
+               result.Append(vias[i]);
+            }
+         }
+         bool hasBody = body != null;
+         bool hasSubject = subject != null;
+         if (hasBody || hasSubject)
+         {
+            result.Append('?');
+            if (hasBody)
+            {
+               result.Append("body=");
+               result.Append(body);
+            }
+            if (hasSubject)
+            {
+               if (hasBody)
+               {
+                  result.Append('&');
+               }
+               result.Append("subject=");
+               result.Append(subject);
+            }
+         }
+         return result.ToString();
+      }
+
+      public String[] Numbers
+      {
+         get
+         {
+            return numbers;
+         }
+
+      }
+
+      public String[] Vias
+      {
+         get
+         {
+            return vias;
+         }
+
+      }
+
+      public String Subject
+      {
+         get
+         {
+            return subject;
+         }
+
+      }
+
+      public String Body
+      {
+         get
+         {
+            return body;
+         }
+
+      }
+
+      override public String DisplayResult
+      {
+         get
+         {
+            var result = new StringBuilder(100);
+            maybeAppend(numbers, result);
+            maybeAppend(subject, result);
+            maybeAppend(body, result);
+            return result.ToString();
+         }
+      }
+   }
 }

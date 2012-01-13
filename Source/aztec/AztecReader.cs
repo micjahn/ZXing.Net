@@ -63,12 +63,12 @@ namespace com.google.zxing.aztec
 
          Result result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.AZTEC);
 
-         IList<byte[]> byteSegments = decoderResult.ByteSegments;
+         IList<sbyte[]> byteSegments = decoderResult.ByteSegments;
          if (byteSegments != null)
          {
             result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
          }
-         String ecLevel = decoderResult.ECLevel.ToString();
+         var ecLevel = decoderResult.ECLevel;
          if (ecLevel != null)
          {
             result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);

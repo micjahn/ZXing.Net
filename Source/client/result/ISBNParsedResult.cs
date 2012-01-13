@@ -13,39 +13,40 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
+
 namespace com.google.zxing.client.result
 {
-	
-	/// <author>  jbreiden@google.com (Jeff Breidenbach)
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
-	public sealed class ISBNParsedResult:ParsedResult
-	{
-		public System.String ISBN
-		{
-			get
-			{
-				return isbn;
-			}
-			
-		}
-		override public System.String DisplayResult
-		{
-			get
-			{
-				return isbn;
-			}
-			
-		}
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'isbn '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String isbn;
-		
-		internal ISBNParsedResult(System.String isbn):base(ParsedResultType.ISBN)
-		{
-			this.isbn = isbn;
-		}
-	}
+   /// <author>  jbreiden@google.com (Jeff Breidenbach)
+   /// </author>
+   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
+   /// </author>
+   public sealed class ISBNParsedResult : ParsedResult
+   {
+      private String isbn;
+
+      internal ISBNParsedResult(System.String isbn)
+         : base(ParsedResultType.ISBN)
+      {
+         this.isbn = isbn;
+      }
+
+      public String ISBN
+      {
+         get
+         {
+            return isbn;
+         }
+
+      }
+
+      override public String DisplayResult
+      {
+         get
+         {
+            return isbn;
+         }
+      }
+   }
 }

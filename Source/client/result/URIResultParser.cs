@@ -13,94 +13,54 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
-using Result = com.google.zxing.Result;
+using System.Text.RegularExpressions;
+
 namespace com.google.zxing.client.result
 {
-	
-	/// <summary> Tries to parse results that are a URI of some kind.
-	/// 
-	/// </summary>
-	/// <author>  Sean Owen
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
-	sealed class URIResultParser:ResultParser
-	{
-		
-		private URIResultParser()
-		{
-		}
-		
-		public static URIParsedResult parse(Result result)
-		{
-			System.String rawText = result.Text;
-			// We specifically handle the odd "URL" scheme here for simplicity
-			if (rawText != null && rawText.StartsWith("URL:"))
-			{
-				rawText = rawText.Substring(4);
-			}
-			if (!isBasicallyValidURI(rawText))
-			{
-				return null;
-			}
-			return new URIParsedResult(rawText, null);
-		}
-		
-		/// <summary> Determines whether a string is not obviously not a URI. This implements crude checks; this class does not
-		/// intend to strictly check URIs as its only function is to represent what is in a barcode, but, it does
-		/// need to know when a string is obviously not a URI.
-		/// </summary>
-		internal static bool isBasicallyValidURI(System.String uri)
-		{
-			if (uri == null || uri.IndexOf(' ') >= 0 || uri.IndexOf('\n') >= 0)
-			{
-				return false;
-			}
-			// Look for period in a domain but followed by at least a two-char TLD
-			// Forget strings that don't have a valid-looking protocol
-			int period = uri.IndexOf('.');
-			if (period >= uri.Length - 2)
-			{
-				return false;
-			}
-			int colon = uri.IndexOf(':');
-			if (period < 0 && colon < 0)
-			{
-				return false;
-			}
-			if (colon >= 0)
-			{
-				if (period < 0 || period > colon)
-				{
-					// colon ends the protocol
-					for (int i = 0; i < colon; i++)
-					{
-						char c = uri[i];
-						if ((c < 'a' || c > 'z') && (c < 'A' || c > 'Z'))
-						{
-							return false;
-						}
-					}
-				}
-				else
-				{
-					// colon starts the port; crudely look for at least two numbers
-					if (colon >= uri.Length - 2)
-					{
-						return false;
-					}
-					for (int i = colon + 1; i < colon + 3; i++)
-					{
-						char c = uri[i];
-						if (c < '0' || c > '9')
-						{
-							return false;
-						}
-					}
-				}
-			}
-			return true;
-		}
-	}
+   /// <summary> Tries to parse results that are a URI of some kind.
+   /// 
+   /// </summary>
+   /// <author>  Sean Owen
+   /// </author>
+   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
+   /// </author>
+   sealed class URIResultParser : ResultParser
+   {
+      private static String PATTERN_END =
+          "(:\\d{1,5})?" + // maybe port
+          "(/|\\?|$)"; // query, path or nothing
+      private static Regex URL_WITH_PROTOCOL_PATTERN = new Regex(
+          "[a-zA-Z0-9]{2,}://" + // protocol
+          "[a-zA-Z0-9\\-]{2,}(\\.[a-zA-Z0-9\\-]{2,})*" + // host name elements
+          PATTERN_END, RegexOptions.Compiled);
+      private static Regex URL_WITHOUT_PROTOCOL_PATTERN = new Regex(
+          "[a-zA-Z0-9\\-]{2,}(\\.[a-zA-Z0-9\\-]{2,})+" + // host name elements
+          PATTERN_END, RegexOptions.Compiled);
+
+      override public ParsedResult parse(Result result)
+      {
+         String rawText = result.Text;
+         // We specifically handle the odd "URL" scheme here for simplicity
+         if (rawText.StartsWith("URL:"))
+         {
+
+            rawText = rawText.Substring(4);
+         }
+         rawText = rawText.Trim();
+         return isBasicallyValidURI(rawText) ? new URIParsedResult(rawText, null) : null;
+      }
+
+      internal static bool isBasicallyValidURI(String uri)
+      {
+         var m = URL_WITH_PROTOCOL_PATTERN.Match(uri);
+         if (m.Success && m.Index == 0)
+         { // match at start only
+            return true;
+         }
+         m = URL_WITHOUT_PROTOCOL_PATTERN.Match(uri);
+         return m.Success && m.Index == 0;
+      }
+   }
 }

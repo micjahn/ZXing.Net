@@ -37,8 +37,7 @@ namespace com.google.zxing.client.result
    /// </author>
    sealed class AddressBookDoCoMoResultParser : AbstractDoCoMoResultParser
    {
-
-      public static AddressBookParsedResult parse(Result result)
+      override public ParsedResult parse(Result result)
       {
          String rawText = result.Text;
          if (rawText == null || !rawText.StartsWith("MECARD:"))
@@ -68,7 +67,20 @@ namespace com.google.zxing.client.result
          // honor it when found in the wild.
          String org = matchSingleDoCoMoPrefixedField("ORG:", rawText, true);
 
-         return new AddressBookParsedResult(maybeWrap(name), pronunciation, phoneNumbers, emails, note, addresses, org, birthday, null, url);
+         return new AddressBookParsedResult(maybeWrap(name),
+                                            pronunciation,
+                                            phoneNumbers,
+                                            null,
+                                            emails,
+                                            null,
+                                            null,
+                                            note,
+                                            addresses,
+                                            null,
+                                            org,
+                                            birthday,
+                                            null,
+                                            url);
       }
 
       private static String parseName(String name)
@@ -77,7 +89,7 @@ namespace com.google.zxing.client.result
          if (comma >= 0)
          {
             // Format may be last,first; switch it around
-            return name.Substring(comma + 1) + ' ' + name.Substring(0, (comma) - (0));
+            return name.Substring(comma + 1) + ' ' + name.Substring(0, comma);
          }
          return name;
       }

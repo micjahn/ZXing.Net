@@ -31,7 +31,7 @@ namespace com.google.zxing.client.result
    /// </author>
    sealed class AddressBookAUResultParser : ResultParser
    {
-      public static AddressBookParsedResult parse(Result result)
+      override public ParsedResult parse(Result result)
       {
          var rawText = result.Text;
          // MEMORY is mandatory; seems like a decent indicator, as does end-of-record separator CR/LF
@@ -50,7 +50,20 @@ namespace com.google.zxing.client.result
          var note = matchSinglePrefixedField("MEMORY:", rawText, '\r', false);
          var address = matchSinglePrefixedField("ADD:", rawText, '\r', true);
          var addresses = address == null ? null : new [] { address };
-         return new AddressBookParsedResult(maybeWrap(name), pronunciation, phoneNumbers, emails, note, addresses, null, null, null, null);
+         return new AddressBookParsedResult(maybeWrap(name),
+                                            pronunciation,
+                                            phoneNumbers,
+                                            null,
+                                            emails,
+                                            null,
+                                            null,
+                                            note,
+                                            addresses,
+                                            null,
+                                            null,
+                                            null,
+                                            null,
+                                            null);
       }
 
       private static String[] matchMultipleValuePrefix(String prefix, int max, String rawText, bool trim)
@@ -73,7 +86,7 @@ namespace com.google.zxing.client.result
          {
             return null;
          }
-         return toStringArray(values);
+         return SupportClass.toStringArray(values);
       }
    }
 }

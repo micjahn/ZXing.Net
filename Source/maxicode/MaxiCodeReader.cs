@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections.Generic;
+
 using com.google.zxing.common;
 using com.google.zxing.maxicode.decoder;
 
@@ -24,9 +24,8 @@ namespace com.google.zxing.maxicode
    /// <summary>
    /// This implementation can detect and decode a MaxiCode in an image.
    /// </summary>
-   public class MaxiCodeReader : Reader
+   public sealed class MaxiCodeReader : Reader
    {
-
       private static ResultPoint[] NO_POINTS = new ResultPoint[0];
       private static int MATRIX_WIDTH = 30;
       private static int MATRIX_HEIGHT = 33;
@@ -38,14 +37,14 @@ namespace com.google.zxing.maxicode
          return decoder;
       }
 
-      /**
-       * Locates and decodes a MaxiCode in an image.
-       *
-       * @return a String representing the content encoded by the MaxiCode
-       * @throws NotFoundException if a MaxiCode cannot be found
-       * @throws FormatException if a MaxiCode cannot be decoded
-       * @throws ChecksumException if error correction fails
-       */
+      /// <summary>
+      /// Locates and decodes a MaxiCode in an image.
+      ///
+      /// <returns>a String representing the content encoded by the MaxiCode</returns>
+      /// <exception cref="NotFoundException">if a MaxiCode cannot be found</exception>
+      /// <exception cref="FormatException">if a MaxiCode cannot be decoded</exception>
+      /// <exception cref="ChecksumException">if error correction fails</exception>
+      /// </summary>
       public Result decode(BinaryBitmap image)
       {
          return decode(image, null);
@@ -85,11 +84,14 @@ namespace com.google.zxing.maxicode
       /// which contains only an unrotated, unskewed, image of a code, with some white border
       /// around it. This is a specialized method that works exceptionally fast in this special
       /// case.
+      ///
+      /// @see com.google.zxing.pdf417.PDF417Reader#extractPureBits(BitMatrix)
+      /// @see com.google.zxing.datamatrix.DataMatrixReader#extractPureBits(BitMatrix)
+      /// @see com.google.zxing.qrcode.QRCodeReader#extractPureBits(BitMatrix)
       /// </summary>
-      /// <param name="image">The image.</param>
-      /// <returns></returns>
       private static BitMatrix extractPureBits(BitMatrix image)
       {
+
          int[] enclosingRectangle = image.getEnclosingRectangle();
          if (enclosingRectangle == null)
          {
@@ -102,14 +104,17 @@ namespace com.google.zxing.maxicode
          int height = enclosingRectangle[3];
 
          // Now just read off the bits
-         var bits = new BitMatrix(MATRIX_WIDTH, MATRIX_HEIGHT);
+         BitMatrix bits = new BitMatrix(MATRIX_WIDTH, MATRIX_HEIGHT);
          for (int y = 0; y < MATRIX_HEIGHT; y++)
          {
             int iy = top + (y * height + height / 2) / MATRIX_HEIGHT;
             for (int x = 0; x < MATRIX_WIDTH; x++)
             {
                int ix = left + (x * width + width / 2 + (y & 0x01) * width / 2) / MATRIX_WIDTH;
-               bits[x, y] = image[ix, iy];
+               if (image[ix, iy])
+               {
+                  bits[x, y] = true;
+               }
             }
          }
          return bits;

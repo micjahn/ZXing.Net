@@ -25,61 +25,124 @@ namespace com.google.zxing.client.result
    /// </author>
    public sealed class CalendarParsedResult : ParsedResult
    {
-      public String Summary { get; private set; }
+      private readonly String summary;
+      private readonly String start;
+      private readonly String end;
+      private readonly String location;
+      private readonly String attendee;
+      private readonly String description;
+      private readonly double latitude;
+      private readonly double longitude;
 
-      /// <summary> <p>We would return the start and end date as a {@link java.util.Date} except that this code
+      public CalendarParsedResult(String summary,
+                                  String start,
+                                  String end,
+                                  String location,
+                                  String attendee,
+                                  String description)
+         : this(summary, start, end, location, attendee, description, Double.NaN, Double.NaN)
+      {
+      }
+
+      public CalendarParsedResult(String summary,
+                                  String start,
+                                  String end,
+                                  String location,
+                                  String attendee,
+                                  String description,
+                                  double latitude,
+                                  double longitude)
+         : base(ParsedResultType.CALENDAR)
+      {
+         validateDate(start);
+         this.summary = summary;
+         this.start = start;
+         if (end != null)
+         {
+            validateDate(end);
+            this.end = end;
+         }
+         else
+         {
+            this.end = null;
+         }
+         this.location = location;
+         this.attendee = attendee;
+         this.description = description;
+         this.latitude = latitude;
+         this.longitude = longitude;
+      }
+
+      public String Summary
+      {
+         get { return summary; }
+      }
+
+      /// <summary>
+      /// <p>We would return the start and end date as a {@link java.util.Date} except that this code
       /// needs to work under JavaME / MIDP and there is no date parsing library available there, such
-      /// as <code>java.text.SimpleDateFormat</code>.</p> See validateDate() for the return format.
-      /// 
+      /// as {@code java.text.SimpleDateFormat}.</p> See validateDate() for the return format.
       /// </summary>
-      /// <returns> start time formatted as a RFC 2445 DATE or DATE-TIME.
-      /// </returns>
-      public String Start { get; private set; }
-      public String End { get; private set; }
-      public String Location { get; private set; }
-      public String Attendee { get; private set; }
-      public String Title { get; private set; }
+      /// <return>start time formatted as a RFC 2445 DATE or DATE-TIME.</return>
+      public String Start
+      {
+         get { return start; }
+      }
 
-      override public String DisplayResult
+      /// <summary>
+      /// @see #getStart(). May return null if the event has no duration.
+      /// </summary>
+      public String End
+      {
+         get { return end; }
+      }
+
+      public String Location
+      {
+         get { return location; }
+      }
+
+      public String Attendee
+      {
+         get { return attendee; }
+      }
+
+      public String Description
+      {
+         get { return description; }
+      }
+
+      public double Latitude
+      {
+         get { return latitude; }
+      }
+
+      public double Longitude
+      {
+         get { return longitude; }
+      }
+
+      public override String DisplayResult
       {
          get
          {
             var result = new StringBuilder(100);
-            maybeAppend(Summary, result);
-            maybeAppend(Start, result);
-            maybeAppend(End, result);
-            maybeAppend(Location, result);
-            maybeAppend(Attendee, result);
-            maybeAppend(Title, result);
+            maybeAppend(summary, result);
+            maybeAppend(start, result);
+            maybeAppend(end, result);
+            maybeAppend(location, result);
+            maybeAppend(attendee, result);
+            maybeAppend(description, result);
             return result.ToString();
          }
-
       }
 
-      public CalendarParsedResult(String summary, String start, String end, String location, String attendee, String title)
-         : base(ParsedResultType.CALENDAR)
-      {
-         // Start is required, end is not
-         if (start == null)
-         {
-            throw new ArgumentException();
-         }
-         validateDate(start);
-         validateDate(end);
-         Summary = summary;
-         Start = start;
-         End = end;
-         Location = location;
-         Attendee = attendee;
-         Title = title;
-      }
-
-      /// <summary> RFC 2445 allows the start and end fields to be of type DATE (e.g. 20081021) or DATE-TIME
-      /// (e.g. 20081021T123000 for local time, or 20081021T123000Z for UTC).
-      /// 
-      /// </summary>
-      /// <param name="date">The string to validate
-      /// </param>
+      /**
+       * RFC 2445 allows the start and end fields to be of type DATE (e.g. 20081021) or DATE-TIME
+       * (e.g. 20081021T123000 for local time, or 20081021T123000Z for UTC).
+       *
+       * @param date The string to validate
+       */
       private static void validateDate(String date)
       {
          if (date != null)

@@ -13,29 +13,24 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-using System;
+
 using System.Collections.Generic;
-using Result = com.google.zxing.Result;
-using BinaryBitmap = com.google.zxing.BinaryBitmap;
-using ReaderException = com.google.zxing.ReaderException;
+
 namespace com.google.zxing.multi
 {
-	
-	/// <summary> Implementation of this interface attempt to read several barcodes from one image.
-	/// 
-	/// </summary>
-	/// <seealso cref="com.google.zxing.Reader">
-	/// </seealso>
-	/// <author>  Sean Owen
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
-
-	public interface MultipleBarcodeReader
-	{
-		
-		Result[] decodeMultiple(BinaryBitmap image);
+   /// <summary> Implementation of this interface attempt to read several barcodes from one image.
+   /// 
+   /// </summary>
+   /// <seealso cref="com.google.zxing.Reader">
+   /// </seealso>
+   /// <author>  Sean Owen
+   /// </author>
+   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
+   /// </author>
+   public interface MultipleBarcodeReader
+   {
+      Result[] decodeMultiple(BinaryBitmap image);
 
       Result[] decodeMultiple(BinaryBitmap image, IDictionary<DecodeHintType, object> hints);
-	}
+   }
 }

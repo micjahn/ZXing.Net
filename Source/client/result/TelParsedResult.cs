@@ -13,64 +13,62 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
+
 namespace com.google.zxing.client.result
 {
-	
-	/// <author>  Sean Owen
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
-	public sealed class TelParsedResult:ParsedResult
-	{
-		public System.String Number
-		{
-			get
-			{
-				return number;
-			}
-			
-		}
-		public System.String TelURI
-		{
-			get
-			{
-				return telURI;
-			}
-			
-		}
-		public System.String Title
-		{
-			get
-			{
-				return title;
-			}
-			
-		}
-		override public System.String DisplayResult
-		{
-			get
-			{
-				System.Text.StringBuilder result = new System.Text.StringBuilder(20);
-				maybeAppend(number, result);
-				maybeAppend(title, result);
-				return result.ToString();
-			}
-			
-		}
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'number '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String number;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'telURI '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String telURI;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'title '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String title;
-		
-		public TelParsedResult(System.String number, System.String telURI, System.String title):base(ParsedResultType.TEL)
-		{
-			this.number = number;
-			this.telURI = telURI;
-			this.title = title;
-		}
-	}
+   /// <author>  Sean Owen
+   /// </author>
+   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
+   /// </author>
+   public sealed class TelParsedResult : ParsedResult
+   {
+      private String number;
+      private String telURI;
+      private String title;
+
+      public TelParsedResult(String number, String telURI, String title)
+         : base(ParsedResultType.TEL)
+      {
+         this.number = number;
+         this.telURI = telURI;
+         this.title = title;
+      }
+
+      public String Number
+      {
+         get
+         {
+            return number;
+         }
+
+      }
+      public String TelURI
+      {
+         get
+         {
+            return telURI;
+         }
+
+      }
+      public String Title
+      {
+         get
+         {
+            return title;
+         }
+
+      }
+      override public String DisplayResult
+      {
+         get
+         {
+            var result = new System.Text.StringBuilder(20);
+            maybeAppend(number, result);
+            maybeAppend(title, result);
+            return result.ToString();
+         }
+      }
+   }
 }

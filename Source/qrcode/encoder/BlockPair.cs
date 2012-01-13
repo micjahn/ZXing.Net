@@ -13,39 +13,28 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-using System;
-using ByteArray = com.google.zxing.common.ByteArray;
+
 namespace com.google.zxing.qrcode.encoder
 {
-	
-	sealed class BlockPair
-	{
-		public ByteArray DataBytes
-		{
-			get
-			{
-				return dataBytes;
-			}
-			
-		}
-		public ByteArray ErrorCorrectionBytes
-		{
-			get
-			{
-				return errorCorrectionBytes;
-			}
-			
-		}
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'dataBytes '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private ByteArray dataBytes;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'errorCorrectionBytes '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private ByteArray errorCorrectionBytes;
-		
-		internal BlockPair(ByteArray data, ByteArray errorCorrection)
-		{
-			dataBytes = data;
-			errorCorrectionBytes = errorCorrection;
-		}
-	}
+   internal sealed class BlockPair
+   {
+      private readonly byte[] dataBytes;
+      private readonly byte[] errorCorrectionBytes;
+
+      public BlockPair(byte[] data, byte[] errorCorrection)
+      {
+         dataBytes = data;
+         errorCorrectionBytes = errorCorrection;
+      }
+
+      public byte[] DataBytes
+      {
+         get { return dataBytes; }
+      }
+
+      public byte[] ErrorCorrectionBytes
+      {
+         get { return errorCorrectionBytes; }
+      }
+   }
 }

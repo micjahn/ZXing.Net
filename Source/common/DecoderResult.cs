@@ -34,8 +34,8 @@ namespace com.google.zxing.common
    {
       private sbyte[] rawBytes;
       private String text;
-      private IList<byte[]> byteSegments;
-      private ErrorCorrectionLevel ecLevel;
+      private IList<sbyte[]> byteSegments;
+      private String ecLevel;
 
       public sbyte[] RawBytes
       {
@@ -53,7 +53,7 @@ namespace com.google.zxing.common
          }
 
       }
-      public IList<byte[]> ByteSegments
+      public IList<sbyte[]> ByteSegments
       {
          get
          {
@@ -61,7 +61,7 @@ namespace com.google.zxing.common
          }
 
       }
-      public ErrorCorrectionLevel ECLevel
+      public String ECLevel
       {
          get
          {
@@ -70,7 +70,7 @@ namespace com.google.zxing.common
 
       }
 
-      public DecoderResult(sbyte[] rawBytes, String text, IList<byte[]> byteSegments, ErrorCorrectionLevel ecLevel)
+      public DecoderResult(sbyte[] rawBytes, String text, IList<sbyte[]> byteSegments, String ecLevel)
       {
          if (rawBytes == null && text == null)
          {

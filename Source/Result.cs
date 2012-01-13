@@ -13,116 +13,158 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
 using System.Collections.Generic;
 
 namespace com.google.zxing
 {
-	
-	/// <summary> <p>Encapsulates the result of decoding a barcode within an image.</p>
-	/// 
-	/// </summary>
-	/// <author>  Sean Owen
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
+   /// <summary> <p>Encapsulates the result of decoding a barcode within an image.</p>
+   /// 
+   /// </summary>
+   /// <author>  Sean Owen
+   /// </author>
+   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
+   /// </author>
+   public sealed class Result
+   {
+      private String text;
+      private sbyte[] rawBytes;
+      private ResultPoint[] resultPoints;
+      private BarcodeFormat format;
+      private IDictionary<ResultMetadataType, object> resultMetadata;
+      private long timestamp;
 
-	public sealed class Result
-	{
-		/// <returns> raw text encoded by the barcode, if applicable, otherwise <code>null</code>
-		/// </returns>
-		public String Text
-		{
-			get
-			{
-				return text;
-			}
-			
-		}
-		/// <returns> raw bytes encoded by the barcode, if applicable, otherwise <code>null</code>
-		/// </returns>
-		public sbyte[] RawBytes
-		{
-			get
-			{
-				return rawBytes;
-			}
-			
-		}
-		/// <returns> points related to the barcode in the image. These are typically points
-		/// identifying finder patterns or the corners of the barcode. The exact meaning is
-		/// specific to the type of barcode that was decoded.
-		/// </returns>
-		public ResultPoint[] ResultPoints
-		{
-			get
-			{
-				return resultPoints;
-			}
-			
-		}
-		/// <returns> {@link BarcodeFormat} representing the format of the barcode that was decoded
-		/// </returns>
-		public BarcodeFormat BarcodeFormat
-		{
-			get
-			{
-				return format;
-			}
-			
-		}
-		/// <returns> {@link Hashtable} mapping {@link ResultMetadataType} keys to values. May be
-		/// <code>null</code>. This contains optional metadata about what was detected about the barcode,
-		/// like orientation.
-		/// </returns>
-      public IDictionary<ResultMetadataType, Object> ResultMetadata
-		{
-			get
-			{
-				return resultMetadata;
-			}
-			
-		}
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'text '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private System.String text;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'rawBytes '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private sbyte[] rawBytes;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'resultPoints '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private ResultPoint[] resultPoints;
-		//UPGRADE_NOTE: Final was removed from the declaration of 'format '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private BarcodeFormat format;
-      private IDictionary<ResultMetadataType, Object> resultMetadata;
-		
-		public Result(String text, sbyte[] rawBytes, ResultPoint[] resultPoints, BarcodeFormat format)
-		{
-			if (text == null && rawBytes == null)
-			{
-				throw new ArgumentException("Text and bytes are null");
-			}
-			this.text = text;
-			this.rawBytes = rawBytes;
-			this.resultPoints = resultPoints;
-			this.format = format;
-			this.resultMetadata = null;
-		}
-		
-		public void  putMetadata(ResultMetadataType type, Object value_Renamed)
-		{
-			if (resultMetadata == null)
-			{
-			   resultMetadata = new Dictionary<ResultMetadataType, Object>();
-			}
-			resultMetadata[type] = value_Renamed;
-		}
-		
-		public override String ToString()
-		{
-			if (text == null)
-			{
-				return "[" + rawBytes.Length + " bytes]";
-			}
-			return text;
-		}
-	}
+      public Result(String text,
+                    sbyte[] rawBytes,
+                    ResultPoint[] resultPoints,
+                    BarcodeFormat format)
+         : this(text, rawBytes, resultPoints, format, DateTime.Now.Ticks)
+      {
+      }
+
+      public Result(String text, sbyte[] rawBytes, ResultPoint[] resultPoints, BarcodeFormat format, long timestamp)
+      {
+         if (text == null && rawBytes == null)
+         {
+            throw new ArgumentException("Text and bytes are null");
+         }
+         this.text = text;
+         this.rawBytes = rawBytes;
+         this.resultPoints = resultPoints;
+         this.format = format;
+         this.resultMetadata = null;
+         this.timestamp = timestamp;
+      }
+
+      /// <returns> raw text encoded by the barcode, if applicable, otherwise <code>null</code>
+      /// </returns>
+      public String Text
+      {
+         get
+         {
+            return text;
+         }
+
+      }
+      /// <returns> raw bytes encoded by the barcode, if applicable, otherwise <code>null</code>
+      /// </returns>
+      public sbyte[] RawBytes
+      {
+         get
+         {
+            return rawBytes;
+         }
+
+      }
+      /// <returns> points related to the barcode in the image. These are typically points
+      /// identifying finder patterns or the corners of the barcode. The exact meaning is
+      /// specific to the type of barcode that was decoded.
+      /// </returns>
+      public ResultPoint[] ResultPoints
+      {
+         get
+         {
+            return resultPoints;
+         }
+
+      }
+      /// <returns> {@link BarcodeFormat} representing the format of the barcode that was decoded
+      /// </returns>
+      public BarcodeFormat BarcodeFormat
+      {
+         get
+         {
+            return format;
+         }
+
+      }
+      /// <returns> {@link Hashtable} mapping {@link ResultMetadataType} keys to values. May be
+      /// <code>null</code>. This contains optional metadata about what was detected about the barcode,
+      /// like orientation.
+      /// </returns>
+      public IDictionary<ResultMetadataType, object> ResultMetadata
+      {
+         get
+         {
+            return resultMetadata;
+         }
+
+      }
+
+      public void putMetadata(ResultMetadataType type, Object value)
+      {
+         if (resultMetadata == null)
+         {
+            resultMetadata = new Dictionary<ResultMetadataType, object>();
+         }
+         resultMetadata[type] = value;
+      }
+
+      public void putAllMetadata(IDictionary<ResultMetadataType, object> metadata)
+      {
+         if (metadata != null)
+         {
+            if (resultMetadata == null)
+            {
+               resultMetadata = metadata;
+            }
+            else
+            {
+               foreach (var entry in metadata)
+                  resultMetadata[entry.Key] = entry.Value;
+            }
+         }
+      }
+
+      public void addResultPoints(ResultPoint[] newPoints)
+      {
+         var oldPoints = resultPoints;
+         if (oldPoints == null)
+         {
+            resultPoints = newPoints;
+         }
+         else if (newPoints != null && newPoints.Length > 0)
+         {
+            var allPoints = new ResultPoint[oldPoints.Length + newPoints.Length];
+            Array.Copy(oldPoints, 0, allPoints, 0, oldPoints.Length);
+            Array.Copy(newPoints, 0, allPoints, oldPoints.Length, newPoints.Length);
+            resultPoints = allPoints;
+         }
+      }
+
+      public long getTimestamp()
+      {
+         return timestamp;
+      }
+
+      public override String ToString()
+      {
+         if (text == null)
+         {
+            return "[" + rawBytes.Length + " bytes]";
+         }
+         return text;
+      }
+   }
 }

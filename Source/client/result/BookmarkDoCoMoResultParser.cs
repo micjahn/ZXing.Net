@@ -24,11 +24,7 @@ namespace com.google.zxing.client.result
    /// </author>
    sealed class BookmarkDoCoMoResultParser : AbstractDoCoMoResultParser
    {
-      private BookmarkDoCoMoResultParser()
-      {
-      }
-
-      public static URIParsedResult parse(Result result)
+      override public ParsedResult parse(Result result)
       {
          String rawText = result.Text;
          if (rawText == null || !rawText.StartsWith("MEBKM:"))

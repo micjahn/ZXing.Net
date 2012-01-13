@@ -21,12 +21,15 @@ using com.google.zxing.common.reedsolomon;
 
 namespace com.google.zxing.maxicode.decoder
 {
-   /**
-    * <p>The main class which implements MaxiCode decoding -- as opposed to locating and extracting
-    * the MaxiCode from an image.</p>
-    *
-    * @author Manuel Kasten
-    */
+
+
+
+   /// <summary>
+   /// <p>The main class which implements MaxiCode decoding -- as opposed to locating and extracting
+   /// the MaxiCode from an image.</p>
+   ///
+   /// <author>Manuel Kasten</author>
+   /// </summary>
    public sealed class Decoder
    {
 
@@ -46,10 +49,11 @@ namespace com.google.zxing.maxicode.decoder
          return decode(bits, null);
       }
 
-      public DecoderResult decode(BitMatrix bits, IDictionary<DecodeHintType, object> hints)
+      public DecoderResult decode(BitMatrix bits,
+                                  IDictionary<DecodeHintType, object> hints)
       {
-         var parser = new BitMatrixParser(bits);
-         var codewords = parser.readCodewords();
+         BitMatrixParser parser = new BitMatrixParser(bits);
+         sbyte[] codewords = parser.readCodewords();
 
          correctErrors(codewords, 0, 10, 10, ALL);
          int mode = codewords[0] & 0x0F;
@@ -102,7 +106,7 @@ namespace com.google.zxing.maxicode.decoder
          {
             rsDecoder.decode(codewordsInts, ecCodewords / divisor);
          }
-         catch (ReedSolomonException )
+         catch (ReedSolomonException rse)
          {
             throw ChecksumException.Instance;
          }

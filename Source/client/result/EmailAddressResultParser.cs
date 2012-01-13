@@ -28,7 +28,7 @@ namespace com.google.zxing.client.result
    /// </author>
    sealed class EmailAddressResultParser : ResultParser
    {
-      public static EmailAddressParsedResult parse(Result result)
+      override public ParsedResult parse(Result result)
       {
          String rawText = result.Text;
          if (rawText == null)
@@ -43,7 +43,7 @@ namespace com.google.zxing.client.result
             int queryStart = emailAddress.IndexOf('?');
             if (queryStart >= 0)
             {
-               emailAddress = emailAddress.Substring(0, (queryStart) - (0));
+               emailAddress = emailAddress.Substring(0, queryStart);
             }
             var nameValues = parseNameValuePairs(rawText);
             String subject = null;

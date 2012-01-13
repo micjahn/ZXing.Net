@@ -18,7 +18,6 @@ using System;
 
 namespace com.google.zxing.client.result
 {
-
    /// <summary> <p>See
    /// <a href="http://www.nttdocomo.co.jp/english/service/imode/make/content/barcode/about/s2.html">
    /// DoCoMo's documentation</a> about the result types represented by subclasses of this class.</p>
@@ -33,7 +32,6 @@ namespace com.google.zxing.client.result
    /// </author>
    abstract class AbstractDoCoMoResultParser : ResultParser
    {
-
       internal static String[] matchDoCoMoPrefixedField(String prefix, String rawText, bool trim)
       {
          return matchPrefixedField(prefix, rawText, ';', trim);
