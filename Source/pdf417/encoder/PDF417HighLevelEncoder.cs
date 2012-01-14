@@ -21,6 +21,8 @@
 using System;
 #if NET40
 using System.Numerics;
+#else
+using BigIntegerLibrary;
 #endif
 using System.Text;
 
@@ -510,7 +512,31 @@ namespace com.google.zxing.pdf417.encoder
             idx += len;
          }
 #else
-         throw new NotSupportedException();
+         int idx = 0;
+         StringBuilder tmp = new StringBuilder(count / 3 + 1);
+         BigInteger num900 = new BigInteger(900);
+         BigInteger num0 = new BigInteger(0);
+         while (idx < count - 1)
+         {
+            tmp.Length = 0;
+            int len = Math.Min(44, count - idx);
+            String part = '1' + msg.Substring(startpos + idx, startpos + idx + len);
+            BigInteger bigint = BigInteger.Parse(part);
+            do
+            {
+               // TODO: not sure if 10 is right 
+               BigInteger c = BigInteger.ModularExponentiation(bigint, 10, num900);
+               tmp.Append(c.ToString());
+               bigint = BigInteger.Division(bigint, num900);
+            } while (!bigint.Equals(num0));
+
+            //Reverse temporary string
+            for (int i = tmp.Length - 1; i >= 0; i--)
+            {
+               sb.Append(tmp[i]);
+            }
+            idx += len;
+         }
 #endif
       }
 

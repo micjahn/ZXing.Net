@@ -15,11 +15,14 @@
  */
 
 using System;
-using System.Collections.Generic;
+using System.Text;
+
 #if NET40
 using System.Numerics;
+#else
+using BigIntegerLibrary;
 #endif
-using System.Text;
+
 using com.google.zxing.common;
 
 namespace com.google.zxing.pdf417.decoder
@@ -88,6 +91,23 @@ namespace com.google.zxing.pdf417.decoder
          for (int i = 2; i < EXP900.Length; i++)
          {
             EXP900[i] = BigInteger.Multiply(EXP900[i - 1], nineHundred);
+         }
+      }
+#else
+      /// <summary>
+      /// Table containing values for the exponent of 900.
+      /// This is used in the numeric compaction decode algorithm.
+      /// </summary>
+      private static BigInteger[] EXP900;
+      static DecodedBitStreamParser()
+      {
+         EXP900 = new BigInteger[16];
+         EXP900[0] = BigInteger.One;
+         BigInteger nineHundred = new BigInteger(900);
+         EXP900[1] = nineHundred;
+         for (int i = 2; i < EXP900.Length; i++)
+         {
+            EXP900[i] = BigInteger.Multiplication(EXP900[i - 1], nineHundred);
          }
       }
 #endif
@@ -638,7 +658,17 @@ namespace com.google.zxing.pdf417.decoder
          }
          return resultString.Substring(1);
 #else
-         throw new NotSupportedException();
+         BigInteger result = BigInteger.Zero;
+         for (int i = 0; i < count; i++)
+         {
+            result = BigInteger.Addition(result, BigInteger.Multiplication(EXP900[count - i - 1], new BigInteger(codewords[i])));
+         }
+         String resultString = result.ToString();
+         if (resultString[0] != '1')
+         {
+            throw FormatException.Instance;
+         }
+         return resultString.Substring(1);
 #endif
       }
    }

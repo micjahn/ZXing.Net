@@ -111,6 +111,10 @@
     <Compile Include="client\result\VEventResultParser.cs" />
     <Compile Include="client\result\WifiParsedResult.cs" />
     <Compile Include="client\result\WifiResultParser.cs" />
+    <Compile Include="common\BigInteger\Base10BigInteger.cs" />
+    <Compile Include="common\BigInteger\BigInteger.cs" />
+    <Compile Include="common\BigInteger\BigIntegerException.cs" />
+    <Compile Include="common\BigInteger\Sign.cs" />
     <Compile Include="common\BitArray.cs" />
     <Compile Include="common\BitMatrix.cs" />
     <Compile Include="common\BitSource.cs" />
