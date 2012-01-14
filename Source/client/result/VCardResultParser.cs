@@ -287,18 +287,26 @@ namespace com.google.zxing.client.result
             String fragment;
             if (charset == null)
             {
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4)
+               fragment = Encoding.UTF8.GetString(fragmentBytes, 0, fragmentBytes.Length);
+#else
                fragment = Encoding.Default.GetString(fragmentBytes);
+#endif
             }
             else
             {
                try
                {
-                  fragment = Encoding.GetEncoding(charset).GetString(fragmentBytes);
+                  fragment = Encoding.GetEncoding(charset).GetString(fragmentBytes, 0, fragmentBytes.Length);
                }
                catch (Exception )
                {
                   // Yikes, well try anyway:
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4)
+                  fragment = Encoding.UTF8.GetString(fragmentBytes, 0, fragmentBytes.Length);
+#else
                   fragment = Encoding.Default.GetString(fragmentBytes);
+#endif
                }
             }
             fragmentBuffer.Seek(0, SeekOrigin.Begin);

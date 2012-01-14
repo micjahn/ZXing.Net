@@ -104,7 +104,7 @@ namespace com.google.zxing.oned
             {
                if (lgPatternFound == NUMSYS_AND_CHECK_DIGIT_PATTERNS[numSys][d])
                {
-                  resultString.Insert(0, (char)('0' + numSys));
+                  resultString.Insert(0, new[] { (char)('0' + numSys) });
                   resultString.Append((char)('0' + d));
                   return;
                }

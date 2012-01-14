@@ -335,7 +335,7 @@ namespace com.google.zxing.qrcode.decoder
                   {
                      // In alpha mode, % should be converted to FNC1 separator 0x1D
                      result.Remove(i, 1);
-                     result.Insert(i, (char)0x1D);
+                     result.Insert(i, new[] { (char)0x1D });
                   }
                }
             }

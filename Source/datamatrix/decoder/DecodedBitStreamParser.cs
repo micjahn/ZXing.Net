@@ -624,7 +624,11 @@ namespace com.google.zxing.datamatrix.decoder
          byteSegments.Add(sbytes);
          try
          {
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4)
+            result.Append(Encoding.GetEncoding("ISO8859-1").GetString(bytes, 0, bytes.Length));
+#else
             result.Append(Encoding.GetEncoding("ISO8859-1").GetString(bytes));
+#endif
          }
          catch (Exception uee)
          {

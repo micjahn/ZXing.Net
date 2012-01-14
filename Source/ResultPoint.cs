@@ -68,7 +68,13 @@ namespace com.google.zxing
 
       public override int GetHashCode()
       {
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4)
+         var bytes = BitConverter.GetBytes(x);
+         return 31*((bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3]) +
+                    (bytes[4] << 24) + (bytes[5] << 16) + (bytes[6] << 8) + bytes[7];
+#else
          return 31 * (int)(BitConverter.DoubleToInt64Bits(x) + BitConverter.DoubleToInt64Bits(y));
+#endif
       }
 
       public override String ToString()

@@ -27,7 +27,11 @@ namespace com.google.zxing.common
     */
    public sealed class StringUtils
    {
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4)
+      private static String PLATFORM_DEFAULT_ENCODING = Encoding.UTF8.ToString();
+#else
       private static String PLATFORM_DEFAULT_ENCODING = Encoding.Default.ToString();
+#endif
       public static String SHIFT_JIS = "SJIS";
       public static String GB2312 = "GB2312";
       private static String EUC_JP = "EUC_JP";
