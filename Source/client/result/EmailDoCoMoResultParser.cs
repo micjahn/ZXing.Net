@@ -31,7 +31,12 @@ namespace com.google.zxing.client.result
    /// </author>
    sealed class EmailDoCoMoResultParser : AbstractDoCoMoResultParser
    {
-      private static Regex ATEXT_ALPHANUMERIC = new Regex("[a-zA-Z0-9@.!#$%&'*+\\-/=?^_`{|}~]+", RegexOptions.Compiled);
+      private static Regex ATEXT_ALPHANUMERIC = new Regex("[a-zA-Z0-9@.!#$%&'*+\\-/=?^_`{|}~]+"
+#if !(SILVERLIGHT4)
+         , RegexOptions.Compiled);
+#else
+         );
+#endif
 
       override public ParsedResult parse(Result result)
       {

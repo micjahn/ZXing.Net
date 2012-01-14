@@ -32,6 +32,15 @@ namespace com.google.zxing.client.result
    /// </author>
    sealed class VCardResultParser : ResultParser
    {
+#if SILVERLIGHT4
+      private static Regex BEGIN_VCARD = new Regex("BEGIN:VCARD", RegexOptions.IgnoreCase);
+      private static Regex VCARD_LIKE_DATE = new Regex("\\d{4}-?\\d{2}-?\\d{2}");
+      private static Regex CR_LF_SPACE_TAB = new Regex("\r\n[ \t]");
+      private static Regex NEWLINE_ESCAPE = new Regex("\\\\[nN]");
+      private static Regex VCARD_ESCAPES = new Regex("\\\\([,;\\\\])");
+      private static Regex EQUALS = new Regex("=");
+      private static Regex SEMICOLON = new Regex(";");
+#else
       private static Regex BEGIN_VCARD = new Regex("BEGIN:VCARD", RegexOptions.Compiled | RegexOptions.IgnoreCase);
       private static Regex VCARD_LIKE_DATE = new Regex("\\d{4}-?\\d{2}-?\\d{2}", RegexOptions.Compiled);
       private static Regex CR_LF_SPACE_TAB = new Regex("\r\n[ \t]", RegexOptions.Compiled);
@@ -39,6 +48,8 @@ namespace com.google.zxing.client.result
       private static Regex VCARD_ESCAPES = new Regex("\\\\([,;\\\\])", RegexOptions.Compiled);
       private static Regex EQUALS = new Regex("=", RegexOptions.Compiled);
       private static Regex SEMICOLON = new Regex(";", RegexOptions.Compiled);
+#endif
+
 
       override public ParsedResult parse(Result result)
       {
@@ -111,7 +122,11 @@ namespace com.google.zxing.client.result
 
             // At start or after newline, match prefix, followed by optional metadata 
             // (led by ;) ultimately ending in colon
+#if SILVERLIGHT4
+            var matcher = new Regex("(?:^|\n)" + prefix + "(?:;([^:]*))?:").Match(rawText);
+#else
             var matcher = new Regex("(?:^|\n)" + prefix + "(?:;([^:]*))?:", RegexOptions.Compiled).Match(rawText);
+#endif
             if (i > 0)
             {
                i--; // Find from i-1 not i since looking at the preceding character

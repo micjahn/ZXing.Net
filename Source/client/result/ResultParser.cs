@@ -58,10 +58,17 @@ namespace com.google.zxing.client.result
       new ExpandedProductResultParser(),
   };
 
+#if SILVERLIGHT4
+      private static Regex DIGITS = new Regex("\\d*");
+      private static Regex ALPHANUM = new Regex("[a-zA-Z0-9]*");
+      private static Regex AMPERSAND = new Regex("&");
+      private static Regex EQUALS = new Regex("=");
+#else
       private static Regex DIGITS = new Regex("\\d*", RegexOptions.Compiled);
       private static Regex ALPHANUM = new Regex("[a-zA-Z0-9]*", RegexOptions.Compiled);
       private static Regex AMPERSAND = new Regex("&", RegexOptions.Compiled);
       private static Regex EQUALS = new Regex("=", RegexOptions.Compiled);
+#endif
 
       /// <summary>
       /// Attempts to parse the raw {@link Result}'s contents as a particular type

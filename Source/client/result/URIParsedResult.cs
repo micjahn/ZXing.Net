@@ -25,7 +25,12 @@ namespace com.google.zxing.client.result
    /// </author>
    public sealed class URIParsedResult : ParsedResult
    {
-      private static Regex USER_IN_HOST = new Regex(":/*([^/@]+)@[^/]+", RegexOptions.Compiled);
+      private static Regex USER_IN_HOST = new Regex(":/*([^/@]+)@[^/]+"
+#if !(SILVERLIGHT4)
+         ,RegexOptions.Compiled);
+#else
+         );
+#endif
 
       private String uri;
       private String title;
