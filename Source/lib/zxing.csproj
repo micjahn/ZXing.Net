@@ -10,7 +10,7 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>zxing</AssemblyName>
-    <AssemblyOriginatorKeyFile>..\Key\private.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\Key\private.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -316,7 +316,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Key\private.snk">
+    <None Include="..\..\Key\private.snk">
       <Link>Properties\private.snk</Link>
     </None>
   </ItemGroup>

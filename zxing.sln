@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing", "Source\zxing.csproj", "{6431CF13-7A7B-4602-B96A-47CDA6F0B008}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing", "Source\lib\zxing.csproj", "{6431CF13-7A7B-4602-B96A-47CDA6F0B008}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.sl4", "Source\zxing.sl4.csproj", "{03B962BB-7A24-4589-89E5-C42A17DDC376}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.sl4", "Source\lib\zxing.sl4.csproj", "{03B962BB-7A24-4589-89E5-C42A17DDC376}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.net2.0", "Source\zxing.net2.0.csproj", "{41B69545-AAB6-42A6-96A0-6F6817E654A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.net2.0", "Source\lib\zxing.net2.0.csproj", "{41B69545-AAB6-42A6-96A0-6F6817E654A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.wp7.0", "Source\zxing.wp7.0.csproj", "{7144C757-8CA7-4433-8C6F-072C24C43C62}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.wp7.0", "Source\lib\zxing.wp7.0.csproj", "{7144C757-8CA7-4433-8C6F-072C24C43C62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.wp7.1", "Source\zxing.wp7.1.csproj", "{EC6F52B8-AF75-4FA2-85C1-82BF77861FFF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.wp7.1", "Source\lib\zxing.wp7.1.csproj", "{EC6F52B8-AF75-4FA2-85C1-82BF77861FFF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

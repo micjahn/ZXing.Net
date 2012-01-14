@@ -50,7 +50,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\Key\private.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\Key\private.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -263,7 +263,7 @@
     <Compile Include="WriterException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Key\private.snk">
+    <None Include="..\..\Key\private.snk">
       <Link>Properties\private.snk</Link>
     </None>
   </ItemGroup>
