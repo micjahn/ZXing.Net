@@ -119,23 +119,22 @@ namespace com.google.zxing.client.result
 
          while (i < max)
          {
-
             // At start or after newline, match prefix, followed by optional metadata 
             // (led by ;) ultimately ending in colon
-#if SILVERLIGHT4
             var matcher = new Regex("(?:^|\n)" + prefix + "(?:;([^:]*))?:").Match(rawText);
-#else
-            var matcher = new Regex("(?:^|\n)" + prefix + "(?:;([^:]*))?:", RegexOptions.Compiled).Match(rawText);
-#endif
+
             if (i > 0)
             {
                i--; // Find from i-1 not i since looking at the preceding character
             }
-            if (!matcher.find(i))
+            // TODO: not sure, if the following 4-5 lines are correct migrated to C#
+            // if (!matcher.find(i))
+            if (matcher.Groups.Count <= i)
             {
                break;
             }
-            i = matcher.end(0); // group 0 = whole pattern; end(0) is past final colon
+            //i = matcher.end(0); // group 0 = whole pattern; end(0) is past final colon
+            i = matcher.Groups[matcher.Groups.Count - 1].Index;
 
             String metadataString = matcher.Groups[1].Value; // group 1 = metadata substring
             List<String> metadata = null;
