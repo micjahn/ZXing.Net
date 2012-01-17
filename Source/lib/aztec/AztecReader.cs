@@ -47,7 +47,8 @@ namespace com.google.zxing.aztec
          AztecDetectorResult detectorResult = new Detector(image.BlackMatrix).detect();
          ResultPoint[] points = detectorResult.Points;
 
-         if (hints != null)
+         if (hints != null &&
+             hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK))
          {
             var rpcb = (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
             if (rpcb != null)

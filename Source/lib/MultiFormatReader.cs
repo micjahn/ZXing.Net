@@ -106,7 +106,7 @@ namespace com.google.zxing
             hints = value;
 
             var tryHarder = value != null && value.ContainsKey(DecodeHintType.TRY_HARDER);
-            var formats = value == null ? null : (IList<BarcodeFormat>)value[DecodeHintType.POSSIBLE_FORMATS];
+            var formats = value == null || !value.ContainsKey(DecodeHintType.POSSIBLE_FORMATS) ? null : (IList<BarcodeFormat>)value[DecodeHintType.POSSIBLE_FORMATS];
             readers = new List<Reader>();
 
             if (formats != null)
