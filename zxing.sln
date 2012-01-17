@@ -11,6 +11,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.wp7.0", "Source\lib\z
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.wp7.1", "Source\lib\zxing.wp7.1.csproj", "{EC6F52B8-AF75-4FA2-85C1-82BF77861FFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.test", "Source\test\src\zxing.test.csproj", "{D90C151C-5F70-4890-9B10-97955EC809ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{2D5E0A30-FC6C-493C-A756-D5E889809407}"
+	ProjectSection(SolutionItems) = preProject
+		zxing.nunit = zxing.nunit
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +44,10 @@ Global
 		{EC6F52B8-AF75-4FA2-85C1-82BF77861FFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC6F52B8-AF75-4FA2-85C1-82BF77861FFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC6F52B8-AF75-4FA2-85C1-82BF77861FFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D90C151C-5F70-4890-9B10-97955EC809ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D90C151C-5F70-4890-9B10-97955EC809ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D90C151C-5F70-4890-9B10-97955EC809ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D90C151C-5F70-4890-9B10-97955EC809ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
