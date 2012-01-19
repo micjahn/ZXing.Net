@@ -152,7 +152,8 @@ namespace com.google.zxing.common
             for (int x = 0; x < BLOCK_SIZE; x++)
             {
                int pixel = luminances[offset + x] & 0xff;
-               matrix[xoffset + x, yoffset + y] = (pixel < threshold);
+               // Comparison needs to be <= so that black == 0 pixels are black even if the threshold is 0.
+               matrix[xoffset + x, yoffset + y] = (pixel <= threshold);
             }
          }
       }

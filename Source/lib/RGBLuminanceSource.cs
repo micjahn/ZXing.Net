@@ -111,7 +111,7 @@ public class RGBLuminanceSource : LuminanceSource
                 int offset = y * width;
                 for (int x = 0; x < width; x++)
                 {
-                    int srcPixel = d.Pixels[x + (width * y)];
+                    int srcPixel = d.Pixels[x + offset];
                     c = System.Windows.Media.Color.FromArgb((byte)((srcPixel >> 0x18) & 0xff),
                           (byte)((srcPixel >> 0x10) & 0xff),
                           (byte)((srcPixel >> 8) & 0xff),

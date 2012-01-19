@@ -124,12 +124,28 @@ namespace com.google.zxing.common
       internal PerspectiveTransform buildAdjoint()
       {
          // Adjoint is the transpose of the cofactor matrix:
-         return new PerspectiveTransform(a22 * a33 - a23 * a32, a23 * a31 - a21 * a33, a21 * a32 - a22 * a31, a13 * a32 - a12 * a33, a11 * a33 - a13 * a31, a12 * a31 - a11 * a32, a12 * a23 - a13 * a22, a13 * a21 - a11 * a23, a11 * a22 - a12 * a21);
+         return new PerspectiveTransform(a22 * a33 - a23 * a32, 
+            a23 * a31 - a21 * a33, 
+            a21 * a32 - a22 * a31, 
+            a13 * a32 - a12 * a33, 
+            a11 * a33 - a13 * a31, 
+            a12 * a31 - a11 * a32, 
+            a12 * a23 - a13 * a22, 
+            a13 * a21 - a11 * a23, 
+            a11 * a22 - a12 * a21);
       }
 
       internal PerspectiveTransform times(PerspectiveTransform other)
       {
-         return new PerspectiveTransform(a11 * other.a11 + a21 * other.a12 + a31 * other.a13, a11 * other.a21 + a21 * other.a22 + a31 * other.a23, a11 * other.a31 + a21 * other.a32 + a31 * other.a33, a12 * other.a11 + a22 * other.a12 + a32 * other.a13, a12 * other.a21 + a22 * other.a22 + a32 * other.a23, a12 * other.a31 + a22 * other.a32 + a32 * other.a33, a13 * other.a11 + a23 * other.a12 + a33 * other.a13, a13 * other.a21 + a23 * other.a22 + a33 * other.a23, a13 * other.a31 + a23 * other.a32 + a33 * other.a33);
+         return new PerspectiveTransform(a11 * other.a11 + a21 * other.a12 + a31 * other.a13, 
+            a11 * other.a21 + a21 * other.a22 + a31 * other.a23, 
+            a11 * other.a31 + a21 * other.a32 + a31 * other.a33, 
+            a12 * other.a11 + a22 * other.a12 + a32 * other.a13, 
+            a12 * other.a21 + a22 * other.a22 + a32 * other.a23, 
+            a12 * other.a31 + a22 * other.a32 + a32 * other.a33, 
+            a13 * other.a11 + a23 * other.a12 + a33 * other.a13, 
+            a13 * other.a21 + a23 * other.a22 + a33 * other.a23, 
+            a13 * other.a31 + a23 * other.a32 + a33 * other.a33);
       }
    }
 }

@@ -381,9 +381,9 @@ namespace com.google.zxing.common
          {
             for (int x = 0; x < width; x++)
             {
-               result.Append(this[x, y] ? "X " : "  ");
+               result.Append(this[x, y] ? "X" : " ");
             }
-            result.Append('\n');
+            result.AppendLine("");
          }
          return result.ToString();
       }
