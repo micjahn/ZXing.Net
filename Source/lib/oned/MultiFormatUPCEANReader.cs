@@ -99,7 +99,7 @@ namespace com.google.zxing.oned
                 result.BarcodeFormat == BarcodeFormat.EAN_13 &&
                     result.Text[0] == '0';
             var possibleFormats =
-                hints == null ? null : (IList<BarcodeFormat>)hints[DecodeHintType.POSSIBLE_FORMATS];
+                hints == null || !hints.ContainsKey(DecodeHintType.POSSIBLE_FORMATS) ? null : (IList<BarcodeFormat>)hints[DecodeHintType.POSSIBLE_FORMATS];
             bool canReturnUPCA = possibleFormats == null || possibleFormats.Contains(BarcodeFormat.UPC_A);
 
             if (ean13MayBeUPCA && canReturnUPCA)
