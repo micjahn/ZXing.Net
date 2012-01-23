@@ -29,10 +29,10 @@ namespace com.google.zxing
    /// </summary>
    public sealed class BufferedImageLuminanceSource : LuminanceSource
    {
-
       private Bitmap image;
       private int left;
       private int top;
+      private Guid guid = Guid.NewGuid();
 
       public BufferedImageLuminanceSource(Bitmap image)
          : this(image, 0, 0, image.Width, image.Height)
@@ -70,11 +70,19 @@ namespace com.google.zxing
             // The underlying raster of image consists of bytes with the luminance values
             var data = image.LockBits(new Rectangle(left, top + y, width, 1), ImageLockMode.ReadOnly,
                                       PixelFormat.Format24bppRgb);
-            byte* bitmapRow = (byte*)data.Scan0;
 
-            for (int x = 0; x < width; x++)
+            try
             {
-               row[x] = (sbyte)bitmapRow[x * 3];
+               byte* bitmapRow = (byte*) data.Scan0;
+
+               for (int x = 0; x < width; x++)
+               {
+                  row[x] = (sbyte) bitmapRow[x*3];
+               }
+            }
+            finally
+            {
+               image.UnlockBits(data);
             }
          }
          return row;
@@ -94,16 +102,26 @@ namespace com.google.zxing
                // The underlying raster of image consists of bytes with the luminance values
                var data = image.LockBits(new Rectangle(left, top, width, height), ImageLockMode.ReadOnly,
                                          PixelFormat.Format24bppRgb);
-
-               for (int y = 0; y < height; y++)
+               try
                {
-                  byte* bitmapRow = (byte*)data.Scan0 + (y * data.Stride);
-                  for (int x = 0; x < width; x++)
+                  for (int y = 0; y < height; y++)
                   {
-                     matrix[y * width + x] = (sbyte)bitmapRow[x * 3];
+                     var bitmapRow = (byte*)data.Scan0 + (y * data.Stride);
+                     var offset = y*width;
+                     for (int x = 0; x < width; x++)
+                     {
+                        matrix[offset + x] = (sbyte)bitmapRow[x * 3];
+                     }
                   }
                }
+               finally
+               {
+                  image.UnlockBits(data);
+               }
             }
+#if DEBUGDATA
+            SaveArray(matrix);
+#endif
             return matrix;
          }
       }
@@ -142,7 +160,7 @@ namespace com.google.zxing
          return new BufferedImageLuminanceSource(rotatedImage, top, sourceWidth - (left + width), Height, width);
       }
 
-      public static Bitmap MakeGrayscale3(Bitmap original)
+      public Bitmap MakeGrayscale3(Bitmap original)
       {
          //create a blank bitmap the same size as original
          Bitmap newBitmap = new Bitmap(original.Width, original.Height);
@@ -174,7 +192,29 @@ namespace com.google.zxing
 
          //dispose the Graphics object
          g.Dispose();
+
+#if DEBUGDATA
+         newBitmap.Save("data\\grayscale" + guid + ".png");
+#endif
+
          return newBitmap;
       }
+
+#if DEBUGDATA
+      private void SaveArray(sbyte[] matrix)
+      {
+         var builder = new System.Text.StringBuilder(Width);
+         for (var y = 0; y < Height; y++)
+         {
+            var offset = y*Width;
+            for (var x = 0; x < Width; x++)
+            {
+               builder.Append(matrix[offset + x] == 0 ? "O" : "X");
+            }
+            builder.AppendLine("");
+         }
+         System.IO.File.WriteAllText("data\\image" + guid + ".txt", builder.ToString());
+      }
+#endif
    }
 }
