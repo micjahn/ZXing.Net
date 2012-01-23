@@ -95,19 +95,20 @@ namespace com.google.zxing.common
          bits[i >> 5] ^= 1 << (i & 0x1F);
       }
 
-      private int numberOfTrailingZeros(int num)
+      private static int numberOfTrailingZeros(int num)
       {
-         if (num == 0)
-            return 1;
-         int i = 0;
-         while (num % 10 == 0)
-         {
-            num = num / 10;
-            i++;
-         }
-         return i;
+         var index = (-num & num)%37;
+         if (index < 0)
+            index *= -1;
+         return _lookup[index];
       }
- 
+
+      private static readonly int[] _lookup =
+         {
+            32, 0, 1, 26, 2, 23, 27, 0, 3, 16, 24, 30, 28, 11, 0, 13, 4, 7, 17,
+            0, 25, 22, 31, 15, 29, 10, 12, 6, 0, 21, 14, 9, 5, 20, 8, 19, 18
+         };
+
       /// <summary>
       /// Gets the next set.
       /// </summary>

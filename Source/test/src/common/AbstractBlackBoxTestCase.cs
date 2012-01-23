@@ -20,7 +20,6 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 using NUnit.Framework;
 
@@ -32,7 +31,6 @@ namespace com.google.zxing.common
    /// </summary>
    public abstract class AbstractBlackBoxTestCase
    {
-
       public bool accept(String dir, String name)
       {
          String lowerCase = name.ToLower(CultureInfo.InvariantCulture);
@@ -40,20 +38,20 @@ namespace com.google.zxing.common
                 lowerCase.EndsWith(".gif") || lowerCase.EndsWith(".png");
       }
 
-      private string testBase;
-      private Reader barcodeReader;
-      private BarcodeFormat expectedFormat;
-      private List<TestResult> testResults;
+      private readonly string testBase;
+      private readonly Reader barcodeReader;
+      private readonly BarcodeFormat? expectedFormat;
+      private readonly List<TestResult> testResults;
 
       protected AbstractBlackBoxTestCase(String testBasePathSuffix,
                                          Reader barcodeReader,
-                                         BarcodeFormat expectedFormat)
+                                         BarcodeFormat? expectedFormat)
       {
          // A little workaround to prevent aggravation in my IDE
          if (!Directory.Exists(testBasePathSuffix))
          {
             // try starting with 'core' since the test base is often given as the project root
-            testBase = System.IO.Path.Combine("..\\..\\..\\Source", testBasePathSuffix);
+            testBase = Path.Combine("..\\..\\..\\Source", testBasePathSuffix);
          }
          this.testBase = testBase;
          this.barcodeReader = barcodeReader;

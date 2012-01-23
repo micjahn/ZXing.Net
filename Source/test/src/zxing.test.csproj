@@ -48,6 +48,11 @@
     <Compile Include="common\AbstractBlackBoxTestCase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="common\AbstractNegativeBlackBoxTestCase.cs" />
+    <Compile Include="common\BitArrayTestCase.cs" />
+    <Compile Include="common\BitMatrixTestCase.cs" />
+    <Compile Include="common\BitSourceBuilder.cs" />
+    <Compile Include="common\BitSourceTestCase.cs" />
     <Compile Include="common\PerspectiveTransformTestCase.cs" />
     <Compile Include="common\reedsolomon\AbstractReedSolomonTestCase.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonDecoderDataMatrixTestCase.cs" />
