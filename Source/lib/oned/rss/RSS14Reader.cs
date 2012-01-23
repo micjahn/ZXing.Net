@@ -175,7 +175,7 @@ namespace com.google.zxing.oned.rss
             int[] startEnd = findFinderPattern(row, 0, right);
             FinderPattern pattern = parseFoundFinderPattern(row, rowNumber, right, startEnd);
 
-            ResultPointCallback resultPointCallback = hints == null ? null :
+            ResultPointCallback resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK) ? null :
               (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
 
             if (resultPointCallback != null)

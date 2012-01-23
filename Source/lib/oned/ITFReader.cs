@@ -89,7 +89,7 @@ namespace com.google.zxing.oned
          String resultString = result.ToString();
 
          int[] allowedLengths = null;
-         if (hints != null)
+         if (hints != null && hints.ContainsKey(DecodeHintType.ALLOWED_LENGTHS))
          {
             allowedLengths = (int[])hints[DecodeHintType.ALLOWED_LENGTHS];
 

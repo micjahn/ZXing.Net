@@ -354,8 +354,15 @@ namespace com.google.zxing.datamatrix.detector
       /// </summary>
       private static void increment(IDictionary<ResultPoint, int> table, ResultPoint key)
       {
-         int value = table[key];
-         table[key] = value + 1;
+         if (table.ContainsKey(key))
+         {
+            int value = table[key];
+            table[key] = value + 1;
+         }
+         else
+         {
+            table[key] = 1;
+         }
       }
 
       private static BitMatrix sampleGrid(BitMatrix image,

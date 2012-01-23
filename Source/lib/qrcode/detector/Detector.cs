@@ -77,8 +77,7 @@ namespace com.google.zxing.qrcode.detector
       /// <throws>  ReaderException if no QR Code can be found </throws>
       public virtual DetectorResult detect(IDictionary<DecodeHintType, object> hints)
       {
-
-         resultPointCallback = hints == null ? null : (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
+         resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK) ? null : (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
 
          FinderPatternFinder finder = new FinderPatternFinder(image, resultPointCallback);
          FinderPatternInfo info = finder.find(hints);

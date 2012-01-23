@@ -32,6 +32,12 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\..\Key\private.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\3rdparty\NUnit.NET\nunit.framework.dll</HintPath>
@@ -64,6 +70,9 @@
     <Compile Include="common\TestResult.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="datamatrix\DataMatrixBlackBox1TestCase.cs" />
+    <Compile Include="datamatrix\DataMatrixBlackBox2TestCase.cs" />
+    <Compile Include="datamatrix\decoder\DecodedBitStreamParserTestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox1TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox2TestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,7 +84,11 @@
     <Compile Include="qrcode\QRCodeBlackBox6TestCase.cs" />
     <Compile Include="qrcode\QRCodeWriterTestCase.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="..\..\..\Key\private.snk">
+      <Link>Properties\private.snk</Link>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\lib\zxing.csproj">
       <Project>{6431CF13-7A7B-4602-B96A-47CDA6F0B008}</Project>
