@@ -73,6 +73,10 @@
     <Compile Include="datamatrix\DataMatrixBlackBox1TestCase.cs" />
     <Compile Include="datamatrix\DataMatrixBlackBox2TestCase.cs" />
     <Compile Include="datamatrix\decoder\DecodedBitStreamParserTestCase.cs" />
+    <Compile Include="negative\FalsePositives2BlackBoxTestCase.cs" />
+    <Compile Include="negative\FalsePositivesBlackBoxTestCase.cs" />
+    <Compile Include="negative\PartialBlackBoxTestCase.cs" />
+    <Compile Include="negative\UnsupportedBlackBoxTestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox1TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox2TestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
