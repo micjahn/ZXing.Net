@@ -55,7 +55,7 @@ namespace com.google.zxing.common
             int bitsToWriteNow = bitsLeftInNextByte;
             int numRestOfBits = numBits - bitsToWriteNow;
             int mask = 0xFF >> (8 - bitsToWriteNow);
-            int valueToWriteNow = ((int)((uint)value >> value)) & mask;
+            int valueToWriteNow = ((int)((uint)value >> numRestOfBits)) & mask;
             write(valueToWriteNow, bitsToWriteNow);
             write(value, numRestOfBits);
          }

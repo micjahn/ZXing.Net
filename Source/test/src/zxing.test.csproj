@@ -129,6 +129,12 @@
     <Compile Include="pdf417\PDF417BlackBox1TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox2TestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="qrcode\decoder\DataMaskTestCase.cs" />
+    <Compile Include="qrcode\decoder\DecodedBitStreamParserTestCase.cs" />
+    <Compile Include="qrcode\decoder\ErrorCorrectionLevelTestCase.cs" />
+    <Compile Include="qrcode\decoder\FormatInformationTestCase.cs" />
+    <Compile Include="qrcode\decoder\ModeTestCase.cs" />
+    <Compile Include="qrcode\decoder\VersionTestCase.cs" />
     <Compile Include="qrcode\QRCodeBlackBox1TestCase.cs" />
     <Compile Include="qrcode\QRCodeBlackBox2TestCase.cs" />
     <Compile Include="qrcode\QRCodeBlackBox3TestCase.cs" />
