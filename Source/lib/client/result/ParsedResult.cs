@@ -47,6 +47,19 @@ namespace com.google.zxing.client.result
          return DisplayResult;
       }
 
+      public override bool Equals(object obj)
+      {
+         var other = obj as ParsedResult;
+         if (other == null)
+            return false;
+         return other.Type.Equals(Type) && other.DisplayResult.Equals(DisplayResult);
+      }
+
+      public override int GetHashCode()
+      {
+         return Type.GetHashCode() + DisplayResult.GetHashCode();
+      }
+
       public static void maybeAppend(String value, StringBuilder result)
       {
          if (value == null || value.Length <= 0)

@@ -205,7 +205,7 @@ namespace com.google.zxing.oned.rss.expanded
       }
 
       // not private for testing
-      ExpandedPair retrieveNextPair(BitArray row, List<ExpandedPair> previousPairs, int rowNumber)
+      internal ExpandedPair retrieveNextPair(BitArray row, List<ExpandedPair> previousPairs, int rowNumber)
       {
          bool isOddPattern = previousPairs.Count % 2 == 0;
 
@@ -436,7 +436,7 @@ namespace com.google.zxing.oned.rss.expanded
          return new FinderPattern(value, new int[] { start, end }, start, end, rowNumber);
       }
 
-      DataCharacter decodeDataCharacter(BitArray row,
+      internal DataCharacter decodeDataCharacter(BitArray row,
                                         FinderPattern pattern,
                                         bool isOddPattern,
                                         bool leftChar)

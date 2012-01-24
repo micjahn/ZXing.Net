@@ -294,7 +294,7 @@ namespace com.google.zxing.oned.rss.expanded.decoders
             throw NotFoundException.Instance;
          }
 
-         String field = rawInformation.Substring(aiSize, aiSize + fieldSize);
+         String field = rawInformation.Substring(aiSize, fieldSize);
          String remaining = rawInformation.Substring(aiSize + fieldSize);
          String result = '(' + ai + ')' + field;
          String parsedAI = parseFieldsInGeneralPurpose(remaining);
@@ -313,7 +313,7 @@ namespace com.google.zxing.oned.rss.expanded.decoders
          {
             maxSize = aiSize + variableFieldSize;
          }
-         String field = rawInformation.Substring(aiSize, maxSize);
+         String field = rawInformation.Substring(aiSize, maxSize - aiSize);
          String remaining = rawInformation.Substring(maxSize);
          String result = '(' + ai + ')' + field;
          String parsedAI = parseFieldsInGeneralPurpose(remaining);

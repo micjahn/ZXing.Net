@@ -116,6 +116,22 @@ namespace com.google.zxing.client.result
          return o1 == null ? o2 == null : o1.Equals(o2);
       }
 
+      private static bool equalsOrNull(IDictionary<String, String> o1, IDictionary<String, String> o2)
+      {
+         if (o1 == null)
+            return o2 == null;
+         if (o1.Count != o2.Count)
+            return false;
+         foreach (var entry in o1)
+         {
+            if (!o2.ContainsKey(entry.Key))
+               return false;
+            if (!entry.Value.Equals(o2[entry.Key]))
+               return false;
+         }
+         return true;
+      }
+
       override public int GetHashCode()
       {
          int hash = 0;
