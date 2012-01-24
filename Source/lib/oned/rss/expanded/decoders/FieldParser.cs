@@ -29,8 +29,6 @@ using System.Collections.Generic;
 
 namespace com.google.zxing.oned.rss.expanded.decoders
 {
-
-
    /// <summary>
    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
    /// <author>Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)</author>
@@ -40,159 +38,156 @@ namespace com.google.zxing.oned.rss.expanded.decoders
 
       private static Object VARIABLE_LENGTH = new Object();
 
-      private static Object[][] TWO_DIGIT_DATA_LENGTH = new Object[][]
-                                                           {
-                                                              // "DIGITS", new Integer(LENGTH)
-                                                              //    or
-                                                              // "DIGITS", VARIABLE_LENGTH, new Integer(MAX_SIZE)
+      // "DIGITS", new Integer(LENGTH)
+      //    or
+      // "DIGITS", VARIABLE_LENGTH, new Integer(MAX_SIZE)
+      private static IDictionary<string, object[]> TWO_DIGIT_DATA_LENGTH;
+      private static IDictionary<string, object[]> THREE_DIGIT_DATA_LENGTH;
+      private static IDictionary<string, object[]> THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH;
+      private static IDictionary<string, object[]> FOUR_DIGIT_DATA_LENGTH;
 
-                                                              new object[] {"00", 18},
-                                                              new object[] {"01", 14},
-                                                              new object[] {"02", 14},
+      static FieldParser()
+      {
+         TWO_DIGIT_DATA_LENGTH = new Dictionary<string, object[]>
+                                    {
+                                       {"00", new object[] {18}},
+                                       {"01", new object[] {14}},
+                                       {"02", new object[] {14}},
+                                       {"10", new object[] {VARIABLE_LENGTH, 20}},
+                                       {"11", new object[] {6}},
+                                       {"12", new object[] {6}},
+                                       {"13", new object[] {6}},
+                                       {"15", new object[] {6}},
+                                       {"17", new object[] {6}},
+                                       {"20", new object[] {2}},
+                                       {"21", new object[] {VARIABLE_LENGTH, 20}},
+                                       {"22", new object[] {VARIABLE_LENGTH, 29}},
+                                       {"30", new object[] {VARIABLE_LENGTH, 8}},
+                                       {"37", new object[] {VARIABLE_LENGTH, 8}},
+                                       //internal company codes
+                                       {"90", new object[] {VARIABLE_LENGTH, 30}},
+                                       {"91", new object[] {VARIABLE_LENGTH, 30}},
+                                       {"92", new object[] {VARIABLE_LENGTH, 30}},
+                                       {"93", new object[] {VARIABLE_LENGTH, 30}},
+                                       {"94", new object[] {VARIABLE_LENGTH, 30}},
+                                       {"95", new object[] {VARIABLE_LENGTH, 30}},
+                                       {"96", new object[] {VARIABLE_LENGTH, 30}},
+                                       {"97", new object[] {VARIABLE_LENGTH, 30}},
+                                       {"98", new object[] {VARIABLE_LENGTH, 30}},
+                                       {"99", new object[] {VARIABLE_LENGTH, 30}}
+                                    };
+         THREE_DIGIT_DATA_LENGTH = new Dictionary<string, object[]>
+                                      {
+                                         // Same format as above
 
-                                                              new object[] {"10", VARIABLE_LENGTH, 20},
-                                                              new object[] {"11", 6},
-                                                              new object[] {"12", 6},
-                                                              new object[] {"13", 6},
-                                                              new object[] {"15", 6},
-                                                              new object[] {"17", 6},
+                                         {"240", new object[] {VARIABLE_LENGTH, 30}},
+                                         {"241", new object[] {VARIABLE_LENGTH, 30}},
+                                         {"242", new object[] {VARIABLE_LENGTH, 6}},
+                                         {"250", new object[] {VARIABLE_LENGTH, 30}},
+                                         {"251", new object[] {VARIABLE_LENGTH, 30}},
+                                         {"253", new object[] {VARIABLE_LENGTH, 17}},
+                                         {"254", new object[] {VARIABLE_LENGTH, 20}},
 
-                                                              new object[] {"20", 2},
-                                                              new object[] {"21", VARIABLE_LENGTH, 20},
-                                                              new object[] {"22", VARIABLE_LENGTH, 29},
+                                         {"400", new object[] {VARIABLE_LENGTH, 30}},
+                                         {"401", new object[] {VARIABLE_LENGTH, 30}},
+                                         {"402", new object[] {17}},
+                                         {"403", new object[] {VARIABLE_LENGTH, 30}},
+                                         {"410", new object[] {13}},
+                                         {"411", new object[] {13}},
+                                         {"412", new object[] {13}},
+                                         {"413", new object[] {13}},
+                                         {"414", new object[] {13}},
+                                         {"420", new object[] {VARIABLE_LENGTH, 20}},
+                                         {"421", new object[] {VARIABLE_LENGTH, 15}},
+                                         {"422", new object[] {3}},
+                                         {"423", new object[] {VARIABLE_LENGTH, 15}},
+                                         {"424", new object[] {3}},
+                                         {"425", new object[] {3}},
+                                         {"426", new object[] {3}},
+                                      };
+         THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH = new Dictionary<string, object[]>
+                                                 {
+                                                    {"310", new object[] {6}},
+                                                    {"311", new object[] {6}},
+                                                    {"312", new object[] {6}},
+                                                    {"313", new object[] {6}},
+                                                    {"314", new object[] {6}},
+                                                    {"315", new object[] {6}},
+                                                    {"316", new object[] {6}},
+                                                    {"320", new object[] {6}},
+                                                    {"321", new object[] {6}},
+                                                    {"322", new object[] {6}},
+                                                    {"323", new object[] {6}},
+                                                    {"324", new object[] {6}},
+                                                    {"325", new object[] {6}},
+                                                    {"326", new object[] {6}},
+                                                    {"327", new object[] {6}},
+                                                    {"328", new object[] {6}},
+                                                    {"329", new object[] {6}},
+                                                    {"330", new object[] {6}},
+                                                    {"331", new object[] {6}},
+                                                    {"332", new object[] {6}},
+                                                    {"333", new object[] {6}},
+                                                    {"334", new object[] {6}},
+                                                    {"335", new object[] {6}},
+                                                    {"336", new object[] {6}},
+                                                    {"340", new object[] {6}},
+                                                    {"341", new object[] {6}},
+                                                    {"342", new object[] {6}},
+                                                    {"343", new object[] {6}},
+                                                    {"344", new object[] {6}},
+                                                    {"345", new object[] {6}},
+                                                    {"346", new object[] {6}},
+                                                    {"347", new object[] {6}},
+                                                    {"348", new object[] {6}},
+                                                    {"349", new object[] {6}},
+                                                    {"350", new object[] {6}},
+                                                    {"351", new object[] {6}},
+                                                    {"352", new object[] {6}},
+                                                    {"353", new object[] {6}},
+                                                    {"354", new object[] {6}},
+                                                    {"355", new object[] {6}},
+                                                    {"356", new object[] {6}},
+                                                    {"357", new object[] {6}},
+                                                    {"360", new object[] {6}},
+                                                    {"361", new object[] {6}},
+                                                    {"362", new object[] {6}},
+                                                    {"363", new object[] {6}},
+                                                    {"364", new object[] {6}},
+                                                    {"365", new object[] {6}},
+                                                    {"366", new object[] {6}},
+                                                    {"367", new object[] {6}},
+                                                    {"368", new object[] {6}},
+                                                    {"369", new object[] {6}},
+                                                    {"390", new object[] {VARIABLE_LENGTH, 15}},
+                                                    {"391", new object[] {VARIABLE_LENGTH, 18}},
+                                                    {"392", new object[] {VARIABLE_LENGTH, 15}},
+                                                    {"393", new object[] {VARIABLE_LENGTH, 18}},
+                                                    {"703", new object[] {VARIABLE_LENGTH, 30}}
 
-                                                              new object[] {"30", VARIABLE_LENGTH, 8},
-                                                              new object[] {"37", VARIABLE_LENGTH, 8},
+                                                 };
+         FOUR_DIGIT_DATA_LENGTH = new Dictionary<string, object[]>
+                                     {
+                                        {"7001", new object[] {13}},
+                                        {"7002", new object[] {VARIABLE_LENGTH, 30}},
+                                        {"7003", new object[] {10}},
 
-                                                              //internal company codes
-                                                              new object[] {"90", VARIABLE_LENGTH, 30},
-                                                              new object[] {"91", VARIABLE_LENGTH, 30},
-                                                              new object[] {"92", VARIABLE_LENGTH, 30},
-                                                              new object[] {"93", VARIABLE_LENGTH, 30},
-                                                              new object[] {"94", VARIABLE_LENGTH, 30},
-                                                              new object[] {"95", VARIABLE_LENGTH, 30},
-                                                              new object[] {"96", VARIABLE_LENGTH, 30},
-                                                              new object[] {"97", VARIABLE_LENGTH, 30},
-                                                              new object[] {"98", VARIABLE_LENGTH, 30},
-                                                              new object[] {"99", VARIABLE_LENGTH, 30},
-                                                           };
-
-      private static Object[][] THREE_DIGIT_DATA_LENGTH = new Object[][]
-                                                             {
-                                                                // Same format as above
-
-                                                                new object[] {"240", VARIABLE_LENGTH, 30},
-                                                                new object[] {"241", VARIABLE_LENGTH, 30},
-                                                                new object[] {"242", VARIABLE_LENGTH, 6},
-                                                                new object[] {"250", VARIABLE_LENGTH, 30},
-                                                                new object[] {"251", VARIABLE_LENGTH, 30},
-                                                                new object[] {"253", VARIABLE_LENGTH, 17},
-                                                                new object[] {"254", VARIABLE_LENGTH, 20},
-
-                                                                new object[] {"400", VARIABLE_LENGTH, 30},
-                                                                new object[] {"401", VARIABLE_LENGTH, 30},
-                                                                new object[] {"402", 17},
-                                                                new object[] {"403", VARIABLE_LENGTH, 30},
-                                                                new object[] {"410", 13},
-                                                                new object[] {"411", 13},
-                                                                new object[] {"412", 13},
-                                                                new object[] {"413", 13},
-                                                                new object[] {"414", 13},
-                                                                new object[] {"420", VARIABLE_LENGTH, 20},
-                                                                new object[] {"421", VARIABLE_LENGTH, 15},
-                                                                new object[] {"422", 3},
-                                                                new object[] {"423", VARIABLE_LENGTH, 15},
-                                                                new object[] {"424", 3},
-                                                                new object[] {"425", 3},
-                                                                new object[] {"426", 3},
-                                                             };
-
-      private static Object[][] THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH = new Object[][]
-                                                                        {
-                                                                           // Same format as above
-
-                                                                           new object[] {"310", 6},
-                                                                           new object[] {"311", 6},
-                                                                           new object[] {"312", 6},
-                                                                           new object[] {"313", 6},
-                                                                           new object[] {"314", 6},
-                                                                           new object[] {"315", 6},
-                                                                           new object[] {"316", 6},
-                                                                           new object[] {"320", 6},
-                                                                           new object[] {"321", 6},
-                                                                           new object[] {"322", 6},
-                                                                           new object[] {"323", 6},
-                                                                           new object[] {"324", 6},
-                                                                           new object[] {"325", 6},
-                                                                           new object[] {"326", 6},
-                                                                           new object[] {"327", 6},
-                                                                           new object[] {"328", 6},
-                                                                           new object[] {"329", 6},
-                                                                           new object[] {"330", 6},
-                                                                           new object[] {"331", 6},
-                                                                           new object[] {"332", 6},
-                                                                           new object[] {"333", 6},
-                                                                           new object[] {"334", 6},
-                                                                           new object[] {"335", 6},
-                                                                           new object[] {"336", 6},
-                                                                           new object[] {"340", 6},
-                                                                           new object[] {"341", 6},
-                                                                           new object[] {"342", 6},
-                                                                           new object[] {"343", 6},
-                                                                           new object[] {"344", 6},
-                                                                           new object[] {"345", 6},
-                                                                           new object[] {"346", 6},
-                                                                           new object[] {"347", 6},
-                                                                           new object[] {"348", 6},
-                                                                           new object[] {"349", 6},
-                                                                           new object[] {"350", 6},
-                                                                           new object[] {"351", 6},
-                                                                           new object[] {"352", 6},
-                                                                           new object[] {"353", 6},
-                                                                           new object[] {"354", 6},
-                                                                           new object[] {"355", 6},
-                                                                           new object[] {"356", 6},
-                                                                           new object[] {"357", 6},
-                                                                           new object[] {"360", 6},
-                                                                           new object[] {"361", 6},
-                                                                           new object[] {"362", 6},
-                                                                           new object[] {"363", 6},
-                                                                           new object[] {"364", 6},
-                                                                           new object[] {"365", 6},
-                                                                           new object[] {"366", 6},
-                                                                           new object[] {"367", 6},
-                                                                           new object[] {"368", 6},
-                                                                           new object[] {"369", 6},
-                                                                           new object[] {"390", VARIABLE_LENGTH, 15},
-                                                                           new object[] {"391", VARIABLE_LENGTH, 18},
-                                                                           new object[] {"392", VARIABLE_LENGTH, 15},
-                                                                           new object[] {"393", VARIABLE_LENGTH, 18},
-                                                                           new object[] {"703", VARIABLE_LENGTH, 30}
-                                                                        };
-
-      private static Object[][] FOUR_DIGIT_DATA_LENGTH = new Object[][]
-                                                            {
-                                                               // Same format as above
-
-                                                               new object[] {"7001", 13},
-                                                               new object[] {"7002", VARIABLE_LENGTH, 30},
-                                                               new object[] {"7003", 10},
-
-                                                               new object[] {"8001", 14},
-                                                               new object[] {"8002", VARIABLE_LENGTH, 20},
-                                                               new object[] {"8003", VARIABLE_LENGTH, 30},
-                                                               new object[] {"8004", VARIABLE_LENGTH, 30},
-                                                               new object[] {"8005", 6},
-                                                               new object[] {"8006", 18},
-                                                               new object[] {"8007", VARIABLE_LENGTH, 30},
-                                                               new object[] {"8008", VARIABLE_LENGTH, 12},
-                                                               new object[] {"8018", 18},
-                                                               new object[] {"8020", VARIABLE_LENGTH, 25},
-                                                               new object[] {"8100", 6},
-                                                               new object[] {"8101", 10},
-                                                               new object[] {"8102", 2},
-                                                               new object[] {"8110", VARIABLE_LENGTH, 30},
-                                                            };
+                                        {"8001", new object[] {14}},
+                                        {"8002", new object[] {VARIABLE_LENGTH, 20}},
+                                        {"8003", new object[] {VARIABLE_LENGTH, 30}},
+                                        {"8004", new object[] {VARIABLE_LENGTH, 30}},
+                                        {"8005", new object[] {6}},
+                                        {"8006", new object[] {18}},
+                                        {"8007", new object[] {VARIABLE_LENGTH, 30}},
+                                        {"8008", new object[] {VARIABLE_LENGTH, 12}},
+                                        {"8018", new object[] {18}},
+                                        {"8020", new object[] {VARIABLE_LENGTH, 25}},
+                                        {"8100", new object[] {6}},
+                                        {"8101", new object[] {10}},
+                                        {"8102", new object[] {2}},
+                                        {"8110", new object[] {VARIABLE_LENGTH, 30}},
+                                     };
+      }
 
       private FieldParser()
       {
@@ -214,16 +209,14 @@ namespace com.google.zxing.oned.rss.expanded.decoders
 
          String firstTwoDigits = rawInformation.Substring(0, 2);
 
-         foreach (Object[] dataLength in TWO_DIGIT_DATA_LENGTH)
+         if (TWO_DIGIT_DATA_LENGTH.ContainsKey(firstTwoDigits))
          {
-            if (dataLength[0].Equals(firstTwoDigits))
+            var dataLength = TWO_DIGIT_DATA_LENGTH[firstTwoDigits];
+            if (dataLength[0] == VARIABLE_LENGTH)
             {
-               if (dataLength[1] == VARIABLE_LENGTH)
-               {
-                  return processVariableAI(2, (int)dataLength[2], rawInformation);
-               }
-               return processFixedAI(2, (int)dataLength[1], rawInformation);
+               return processVariableAI(2, (int)dataLength[1], rawInformation);
             }
+            return processFixedAI(2, (int)dataLength[0], rawInformation);
          }
 
          if (rawInformation.Length < 3)
@@ -233,29 +226,24 @@ namespace com.google.zxing.oned.rss.expanded.decoders
 
          String firstThreeDigits = rawInformation.Substring(0, 3);
 
-         foreach (Object[] dataLength in THREE_DIGIT_DATA_LENGTH)
+         if (THREE_DIGIT_DATA_LENGTH.ContainsKey(firstThreeDigits))
          {
-            if (dataLength[0].Equals(firstThreeDigits))
+            var dataLength = THREE_DIGIT_DATA_LENGTH[firstThreeDigits];
+            if (dataLength[0] == VARIABLE_LENGTH)
             {
-               if (dataLength[1] == VARIABLE_LENGTH)
-               {
-                  return processVariableAI(3, (int)dataLength[2], rawInformation);
-               }
-               return processFixedAI(3, (int)dataLength[1], rawInformation);
+               return processVariableAI(3, (int)dataLength[1], rawInformation);
             }
+            return processFixedAI(3, (int)dataLength[0], rawInformation);
          }
 
-
-         foreach (Object[] dataLength in THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH)
+         if (THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH.ContainsKey(firstThreeDigits))
          {
-            if (dataLength[0].Equals(firstThreeDigits))
-            {
-               if (dataLength[1] == VARIABLE_LENGTH)
+            var dataLength = THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH[firstThreeDigits];
+               if (dataLength[0] == VARIABLE_LENGTH)
                {
-                  return processVariableAI(4, (int)dataLength[2], rawInformation);
+                  return processVariableAI(4, (int)dataLength[1], rawInformation);
                }
-               return processFixedAI(4, (int)dataLength[1], rawInformation);
-            }
+            return processFixedAI(4, (int) dataLength[0], rawInformation);
          }
 
          if (rawInformation.Length < 4)
@@ -265,16 +253,14 @@ namespace com.google.zxing.oned.rss.expanded.decoders
 
          String firstFourDigits = rawInformation.Substring(0, 4);
 
-         foreach (Object[] dataLength in FOUR_DIGIT_DATA_LENGTH)
+         if (FOUR_DIGIT_DATA_LENGTH.ContainsKey(firstFourDigits))
          {
-            if (dataLength[0].Equals(firstFourDigits))
+            var dataLength = FOUR_DIGIT_DATA_LENGTH[firstFourDigits];
+            if (dataLength[0] == VARIABLE_LENGTH)
             {
-               if (dataLength[1] == VARIABLE_LENGTH)
-               {
-                  return processVariableAI(4, (int)dataLength[2], rawInformation);
-               }
-               return processFixedAI(4, (int)dataLength[1], rawInformation);
+               return processVariableAI(4, (int)dataLength[1], rawInformation);
             }
+            return processFixedAI(4, (int)dataLength[0], rawInformation);
          }
 
          throw NotFoundException.Instance;
