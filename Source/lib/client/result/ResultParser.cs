@@ -44,7 +44,6 @@ namespace com.google.zxing.client.result
       new VCardResultParser(),
       new BizcardResultParser(),
       new VEventResultParser(),
-      new EmailAddressResultParser(),
       new SMTPResultParser(),
       new TelResultParser(),
       new SMSMMSResultParser(),
@@ -56,6 +55,7 @@ namespace com.google.zxing.client.result
       new ISBNResultParser(),
       new ProductResultParser(),
       new ExpandedProductResultParser(),
+      new EmailAddressResultParser(),
   };
 
 #if SILVERLIGHT4

@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Globalization;
 using System.Text;
 
 namespace com.google.zxing.client.result
@@ -103,13 +104,13 @@ namespace com.google.zxing.client.result
          get
          {
             var result = new StringBuilder(20);
-            result.Append(latitude);
+            result.AppendFormat(CultureInfo.InvariantCulture, "{0:0.0###########}", latitude);
             result.Append(", ");
-            result.Append(longitude);
+            result.AppendFormat(CultureInfo.InvariantCulture, "{0:0.0###########}", longitude);
             if (altitude > 0.0)
             {
                result.Append(", ");
-               result.Append(altitude);
+               result.AppendFormat(CultureInfo.InvariantCulture, "{0:0.0###########}", altitude);
                result.Append('m');
             }
             if (query != null)

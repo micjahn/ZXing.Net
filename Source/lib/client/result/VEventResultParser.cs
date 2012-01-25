@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Globalization;
 
 namespace com.google.zxing.client.result
 {
@@ -63,9 +64,9 @@ namespace com.google.zxing.client.result
          else
          {
             int semicolon = geoString.IndexOf(';');
-            if (!Double.TryParse(geoString.Substring(0, semicolon), out latitude))
+            if (!Double.TryParse(geoString.Substring(0, semicolon), NumberStyles.Float, CultureInfo.InvariantCulture, out latitude))
                return null;
-            if (!Double.TryParse(geoString.Substring(semicolon + 1), out longitude))
+            if (!Double.TryParse(geoString.Substring(semicolon + 1), NumberStyles.Float, CultureInfo.InvariantCulture, out longitude))
                return null;
          }
 

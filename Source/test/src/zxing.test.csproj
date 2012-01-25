@@ -51,6 +51,18 @@
     <Compile Include="aztec\AztecBlackBox1TestCase.cs" />
     <Compile Include="aztec\AztecBlackBox2TestCase.cs" />
     <Compile Include="BufferedImageLuminanceSource.cs" />
+    <Compile Include="client\result\AddressBookParsedResultTestCase.cs" />
+    <Compile Include="client\result\CalendarParsedResultTestCase.cs" />
+    <Compile Include="client\result\EmailAddressParsedResultTestCase.cs" />
+    <Compile Include="client\result\ExpandedProductParsedResultTestCase.cs" />
+    <Compile Include="client\result\GeoParsedResultTestCase.cs" />
+    <Compile Include="client\result\ISBNParsedResultTestCase.cs" />
+    <Compile Include="client\result\ParsedReaderResultTestCase.cs" />
+    <Compile Include="client\result\ProductParsedResultTestCase.cs" />
+    <Compile Include="client\result\SMSMMSParsedResultTestCase.cs" />
+    <Compile Include="client\result\TelParsedResultTestCase.cs" />
+    <Compile Include="client\result\URIParsedResultTestCase.cs" />
+    <Compile Include="client\result\WifiParsedResultTestCase.cs" />
     <Compile Include="common\AbstractBlackBoxTestCase.cs">
       <SubType>Code</SubType>
     </Compile>

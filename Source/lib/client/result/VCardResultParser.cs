@@ -121,22 +121,20 @@ namespace com.google.zxing.client.result
          {
             // At start or after newline, match prefix, followed by optional metadata 
             // (led by ;) ultimately ending in colon
-            var matcher = new Regex("(?:^|\n)" + prefix + "(?:;([^:]*))?:").Match(rawText);
+            var matcher = new Regex("(?:^|\n)" + prefix + "(?:;([^:]*))?:", RegexOptions.IgnoreCase);
 
             if (i > 0)
             {
                i--; // Find from i-1 not i since looking at the preceding character
             }
-            // TODO: not sure, if the following 4-5 lines are correct migrated to C#
-            // if (!matcher.find(i))
-            if (matcher.Groups.Count <= i)
+            var match = matcher.Match(rawText, i);
+            if (!match.Success)
             {
                break;
             }
-            //i = matcher.end(0); // group 0 = whole pattern; end(0) is past final colon
-            i = matcher.Groups[matcher.Groups.Count - 1].Index;
+            i = match.Index + match.Length;
 
-            String metadataString = matcher.Groups[1].Value; // group 1 = metadata substring
+            String metadataString = match.Groups[1].Value; // group 1 = metadata substring
             List<String> metadata = null;
             bool quotedPrintable = false;
             String quotedPrintableCharset = null;
@@ -196,8 +194,6 @@ namespace com.google.zxing.client.result
             }
             else if (i > matchStart)
             {
-
-
                // found a match
                if (matches == null)
                {
@@ -207,7 +203,7 @@ namespace com.google.zxing.client.result
                {
                   i--; // Back up over \r, which really should be there
                }
-               String element = rawText.Substring(matchStart, i);
+               String element = rawText.Substring(matchStart, i - matchStart);
                if (trim)
                {
                   element = element.Trim();
@@ -218,15 +214,15 @@ namespace com.google.zxing.client.result
                }
                else
                {
-                  element = CR_LF_SPACE_TAB.Match(element).Result("");
-                  element = NEWLINE_ESCAPE.Match(element).Result("\n");
-                  element = VCARD_ESCAPES.Match(element).Result("$1");
+                  element = CR_LF_SPACE_TAB.Replace(element, "");
+                  element = NEWLINE_ESCAPE.Replace(element, "\n");
+                  element = VCARD_ESCAPES.Replace(element, "$1");
                }
                if (metadata == null)
                {
-                  var match = new List<String>(1);
-                  match.Add(element);
-                  matches.Add(match);
+                  var matched = new List<String>(1);
+                  matched.Add(element);
+                  matches.Add(matched);
                }
                else
                {
@@ -273,9 +269,7 @@ namespace com.google.zxing.client.result
                         int secondDigit = parseHexDigit(nextNextChar);
                         if (firstDigit >= 0 && secondDigit >= 0)
                         {
-                           // TODO: Correct order?
-                           fragmentBuffer.WriteByte((byte)firstDigit);
-                           fragmentBuffer.WriteByte((byte)secondDigit);
+                           fragmentBuffer.WriteByte((byte)((firstDigit << 4) | secondDigit));
                         } // else ignore it, assume it was incorrectly encoded
                         i += 2;
                      }
@@ -324,6 +318,7 @@ namespace com.google.zxing.client.result
                }
             }
             fragmentBuffer.Seek(0, SeekOrigin.Begin);
+            fragmentBuffer.SetLength(0);
             result.Append(fragment);
          }
       }
@@ -410,7 +405,7 @@ namespace com.google.zxing.client.result
                int componentIndex = 0;
                while ((end = name.IndexOf(';', start)) > 0)
                {
-                  components[componentIndex] = name.Substring(start, end);
+                  components[componentIndex] = name.Substring(start, end - start);
 
 
                   componentIndex++;

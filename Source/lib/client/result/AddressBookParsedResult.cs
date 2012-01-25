@@ -72,7 +72,7 @@ namespace com.google.zxing.client.result
          this.url = url;
       }
 
-      public String[] getNames
+      public String[] Names
       {
          get { return names; }
       }

@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace com.google.zxing.client.result
@@ -53,17 +54,19 @@ namespace com.google.zxing.client.result
          }
 
          String query = matcher.Groups[4].Value;
+         if (String.IsNullOrEmpty(query))
+            query = null;
 
          double latitude;
          double longitude;
          double altitude = 0.0;
-         if (!Double.TryParse(matcher.Groups[1].Value, out latitude))
+         if (!Double.TryParse(matcher.Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out latitude))
             return null;
          if (latitude > 90.0 || latitude < -90.0)
          {
             return null;
          }
-         if (!Double.TryParse(matcher.Groups[2].Value, out longitude))
+         if (!Double.TryParse(matcher.Groups[2].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out longitude))
             return null;
          if (longitude > 180.0 || longitude < -180.0)
          {
@@ -71,7 +74,7 @@ namespace com.google.zxing.client.result
          }
          if (!String.IsNullOrEmpty(matcher.Groups[3].Value))
          {
-            if (!Double.TryParse(matcher.Groups[3].Value, out altitude))
+            if (!Double.TryParse(matcher.Groups[3].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out altitude))
                return null;
             if (altitude < 0.0)
             {
