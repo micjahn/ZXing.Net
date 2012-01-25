@@ -42,7 +42,7 @@ namespace com.google.zxing.qrcode.encoder
       25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1,  // 0x50-0x5f
   };
 
-      static String DEFAULT_BYTE_MODE_ENCODING = "ISO-8859-1";
+      internal static String DEFAULT_BYTE_MODE_ENCODING = "ISO-8859-1";
 
       private Encoder()
       {
@@ -145,7 +145,8 @@ namespace com.google.zxing.qrcode.encoder
        * @return the code point of the table used in alphanumeric mode or
        *  -1 if there is no corresponding code in the table.
        */
-      static int getAlphanumericCode(int code)
+
+      internal static int getAlphanumericCode(int code)
       {
          if (code < ALPHANUMERIC_TABLE.Length)
          {
@@ -315,7 +316,8 @@ namespace com.google.zxing.qrcode.encoder
       /**
        * Terminate bits as described in 8.4.8 and 8.4.9 of JISX0510:2004 (p.24).
        */
-      static void terminateBits(int numDataBytes, BitArray bits)
+
+      internal static void terminateBits(int numDataBytes, BitArray bits)
       {
          int capacity = numDataBytes << 3;
          if (bits.Size > capacity)
@@ -354,7 +356,8 @@ namespace com.google.zxing.qrcode.encoder
        * the result in "numDataBytesInBlock", and "numECBytesInBlock". See table 12 in 8.5.1 of
        * JISX0510:2004 (p.30)
        */
-      static void getNumDataBytesAndNumECBytesForBlockID(int numTotalBytes,
+
+      internal static void getNumDataBytesAndNumECBytesForBlockID(int numTotalBytes,
                                                          int numDataBytes,
                                                          int numRSBlocks,
                                                          int blockID,
@@ -423,7 +426,8 @@ namespace com.google.zxing.qrcode.encoder
        * Interleave "bits" with corresponding error correction bytes. On success, store the result in
        * "result". The interleave rule is complicated. See 8.6 of JISX0510:2004 (p.37) for details.
        */
-      static void interleaveWithECBytes(BitArray bits,
+
+      internal static void interleaveWithECBytes(BitArray bits,
                                         int numTotalBytes,
                                         int numDataBytes,
                                         int numRSBlocks,
@@ -502,7 +506,7 @@ namespace com.google.zxing.qrcode.encoder
          }
       }
 
-      static byte[] generateECBytes(byte[] dataBytes, int numEcBytesInBlock)
+      internal static byte[] generateECBytes(byte[] dataBytes, int numEcBytesInBlock)
       {
          int numDataBytes = dataBytes.Length;
          int[] toEncode = new int[numDataBytes + numEcBytesInBlock];
@@ -525,7 +529,8 @@ namespace com.google.zxing.qrcode.encoder
       /**
        * Append mode info. On success, store the result in "bits".
        */
-      static void appendModeInfo(Mode mode, BitArray bits)
+
+      internal static void appendModeInfo(Mode mode, BitArray bits)
       {
          bits.appendBits(mode.Bits, 4);
       }
@@ -534,7 +539,8 @@ namespace com.google.zxing.qrcode.encoder
       /**
        * Append length info. On success, store the result in "bits".
        */
-      static void appendLengthInfo(int numLetters, int version, Mode mode, BitArray bits)
+
+      internal static void appendLengthInfo(int numLetters, int version, Mode mode, BitArray bits)
       {
          int numBits = mode.getCharacterCountBits(decoder.Version.getVersionForNumber(version));
          if (numLetters > ((1 << numBits) - 1))
@@ -547,7 +553,8 @@ namespace com.google.zxing.qrcode.encoder
       /**
        * Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
        */
-      static void appendBytes(String content,
+
+      internal static void appendBytes(String content,
                               Mode mode,
                               BitArray bits,
                               String encoding)
@@ -567,7 +574,7 @@ namespace com.google.zxing.qrcode.encoder
                      throw new WriterException("Invalid mode: " + mode);
       }
 
-      static void appendNumericBytes(String content, BitArray bits)
+      internal static void appendNumericBytes(String content, BitArray bits)
       {
          int length = content.Length;
 
@@ -599,7 +606,7 @@ namespace com.google.zxing.qrcode.encoder
          }
       }
 
-      static void appendAlphanumericBytes(String content, BitArray bits)
+      internal static void appendAlphanumericBytes(String content, BitArray bits)
       {
          int length = content.Length;
 
@@ -631,7 +638,7 @@ namespace com.google.zxing.qrcode.encoder
          }
       }
 
-      static void append8BitBytes(String content, BitArray bits, String encoding)
+      internal static void append8BitBytes(String content, BitArray bits, String encoding)
       {
          byte[] bytes;
          try
@@ -648,7 +655,7 @@ namespace com.google.zxing.qrcode.encoder
          }
       }
 
-      static void appendKanjiBytes(String content, BitArray bits)
+      internal static void appendKanjiBytes(String content, BitArray bits)
       {
          byte[] bytes;
          try

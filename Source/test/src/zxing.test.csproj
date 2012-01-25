@@ -135,6 +135,11 @@
     <Compile Include="qrcode\decoder\FormatInformationTestCase.cs" />
     <Compile Include="qrcode\decoder\ModeTestCase.cs" />
     <Compile Include="qrcode\decoder\VersionTestCase.cs" />
+    <Compile Include="qrcode\encoder\BitVectorTestCase.cs" />
+    <Compile Include="qrcode\encoder\EncoderTestCase.cs" />
+    <Compile Include="qrcode\encoder\MaskUtilTestCase.cs" />
+    <Compile Include="qrcode\encoder\MatrixUtilTestCase.cs" />
+    <Compile Include="qrcode\encoder\QRCodeTestCase.cs" />
     <Compile Include="qrcode\QRCodeBlackBox1TestCase.cs" />
     <Compile Include="qrcode\QRCodeBlackBox2TestCase.cs" />
     <Compile Include="qrcode\QRCodeBlackBox3TestCase.cs" />
