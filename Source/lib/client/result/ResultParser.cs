@@ -37,26 +37,26 @@ namespace com.google.zxing.client.result
    public abstract class ResultParser
    {
       private static ResultParser[] PARSERS = {
-      new BookmarkDoCoMoResultParser(),
-      new AddressBookDoCoMoResultParser(),
-      new EmailDoCoMoResultParser(),
-      new AddressBookAUResultParser(),
-      new VCardResultParser(),
-      new BizcardResultParser(),
-      new VEventResultParser(),
-      new SMTPResultParser(),
-      new TelResultParser(),
-      new SMSMMSResultParser(),
-      new SMSTOMMSTOResultParser(),
-      new GeoResultParser(),
-      new WifiResultParser(),
-      new URLTOResultParser(),
-      new URIResultParser(),
-      new ISBNResultParser(),
-      new ProductResultParser(),
-      new ExpandedProductResultParser(),
-      new EmailAddressResultParser(),
-  };
+                                                 new BookmarkDoCoMoResultParser(),
+                                                 new AddressBookDoCoMoResultParser(),
+                                                 new EmailDoCoMoResultParser(),
+                                                 new AddressBookAUResultParser(),
+                                                 new VCardResultParser(),
+                                                 new BizcardResultParser(),
+                                                 new VEventResultParser(),
+                                                 new SMTPResultParser(),
+                                                 new TelResultParser(),
+                                                 new SMSMMSResultParser(),
+                                                 new SMSTOMMSTOResultParser(),
+                                                 new GeoResultParser(),
+                                                 new WifiResultParser(),
+                                                 new URLTOResultParser(),
+                                                 new URIResultParser(),
+                                                 new ISBNResultParser(),
+                                                 new ProductResultParser(),
+                                                 new ExpandedProductResultParser(),
+                                                 new EmailAddressResultParser(),
+                                              };
 
 #if SILVERLIGHT4
       private static Regex DIGITS = new Regex("\\d*");
