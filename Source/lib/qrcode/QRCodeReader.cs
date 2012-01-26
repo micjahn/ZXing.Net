@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System;
 using System.Collections.Generic;
 
 using com.google.zxing.common;
@@ -106,7 +107,7 @@ namespace com.google.zxing.qrcode
             throw NotFoundException.Instance;
          }
 
-         int moduleSize = QRCodeReader.moduleSize(leftTopBlack, image);
+         float moduleSize = QRCodeReader.moduleSize(leftTopBlack, image);
 
          int top = leftTopBlack[1];
          int bottom = rightBottomBlack[1];
@@ -120,8 +121,8 @@ namespace com.google.zxing.qrcode
             right = left + (bottom - top);
          }
 
-         int matrixWidth = (right - left + 1) / moduleSize;
-         int matrixHeight = (bottom - top + 1) / moduleSize;
+         int matrixWidth = (int)Math.Round((right - left + 1) / moduleSize);
+         int matrixHeight = (int)Math.Round((bottom - top + 1) / moduleSize);
          if (matrixWidth <= 0 || matrixHeight <= 0)
          {
             throw NotFoundException.Instance;
@@ -135,7 +136,7 @@ namespace com.google.zxing.qrcode
          // Push in the "border" by half the module width so that we start
          // sampling in the middle of the module. Just in case the image is a
          // little off, this will help recover.
-         int nudge = moduleSize >> 1;
+         int nudge = (int)Math.Round(moduleSize / 2.0f);
          top += nudge;
          left += nudge;
 
@@ -143,10 +144,10 @@ namespace com.google.zxing.qrcode
          BitMatrix bits = new BitMatrix(matrixWidth, matrixHeight);
          for (int y = 0; y < matrixHeight; y++)
          {
-            int iOffset = top + y * moduleSize;
+            int iOffset = top + (int)(y * moduleSize);
             for (int x = 0; x < matrixWidth; x++)
             {
-               if (image[left + x * moduleSize, iOffset])
+               if (image[left + (int)(x * moduleSize), iOffset])
                {
                   bits[x, y] = true;
                }
@@ -155,14 +156,24 @@ namespace com.google.zxing.qrcode
          return bits;
       }
 
-      private static int moduleSize(int[] leftTopBlack, BitMatrix image)
+      private static float moduleSize(int[] leftTopBlack, BitMatrix image)
       {
          int height = image.Height;
          int width = image.Width;
          int x = leftTopBlack[0];
          int y = leftTopBlack[1];
-         while (x < width && y < height && image[x, y])
+         bool inBlack = true;
+         int transitions = 0;
+         while (x < width && y < height)
          {
+            if (inBlack != image[x, y])
+            {
+               if (++transitions == 5)
+               {
+                  break;
+               }
+               inBlack = !inBlack;
+            }
             x++;
             y++;
          }
@@ -170,13 +181,7 @@ namespace com.google.zxing.qrcode
          {
             throw NotFoundException.Instance;
          }
-
-         int moduleSize = x - leftTopBlack[0];
-         if (moduleSize == 0)
-         {
-            throw NotFoundException.Instance;
-         }
-         return moduleSize;
+         return (x - leftTopBlack[0]) / 7.0f;
       }
    }
 }
