@@ -45,6 +45,10 @@ namespace com.google.zxing.oned
       override public sbyte[] encode(String contents)
       {
          int length = contents.Length;
+         if (length % 2 != 0)
+         {
+            throw new ArgumentException("The lenght of the input should be even");
+         } 
          if (length > 80)
          {
             throw new ArgumentException(
