@@ -82,7 +82,7 @@ namespace com.google.zxing.qrcode.encoder
                                 IDictionary<EncodeHintType, object> hints,
                                 QRCode qrCode)
       {
-         String encoding = hints == null ? null : (String)hints[EncodeHintType.CHARACTER_SET];
+         String encoding = hints == null || !hints.ContainsKey(EncodeHintType.CHARACTER_SET) ? null : (String)hints[EncodeHintType.CHARACTER_SET];
          if (encoding == null)
          {
             encoding = DEFAULT_BYTE_MODE_ENCODING;
