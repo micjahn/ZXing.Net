@@ -31,7 +31,7 @@ namespace com.google.zxing.oned
    public sealed class Code39Reader : OneDReader
    {
       internal static String ALPHABET_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
-      private static char[] ALPHABET = ALPHABET_STRING.ToCharArray();
+      private static readonly char[] ALPHABET = ALPHABET_STRING.ToCharArray();
 
       /// <summary>
       /// These represent the encodings of characters, as patterns of wide and narrow bars.
@@ -46,10 +46,10 @@ namespace com.google.zxing.oned
                                                     0x0A8, 0x0A2, 0x08A, 0x02A // $-%
                                                  };
 
-      private static int ASTERISK_ENCODING = CHARACTER_ENCODINGS[39];
+      private static readonly int ASTERISK_ENCODING = CHARACTER_ENCODINGS[39];
 
-      private bool usingCheckDigit;
-      private bool extendedMode;
+      private readonly bool usingCheckDigit;
+      private readonly bool extendedMode;
 
       /// <summary>
       /// Creates a reader that assumes all encoded data is data, and does not treat the final
@@ -151,9 +151,9 @@ namespace com.google.zxing.oned
             result.Length = max;
          }
 
-         if (result.Length < 4)
+         if (result.Length == 0)
          {
-            // Almost surely a false positive
+            // false positive
             throw NotFoundException.Instance;
          }
 

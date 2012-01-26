@@ -467,7 +467,7 @@ namespace com.google.zxing.oned
          if (resultLength == 0)
          {
             // false positive
-            throw ChecksumException.Instance;
+            throw NotFoundException.Instance;
          }
 
          // Only bother if the result had at least one character, and if the checksum digit happened to
