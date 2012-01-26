@@ -52,7 +52,7 @@ namespace com.google.zxing.common
        */
       public static String guessEncoding(sbyte[] bytes, IDictionary<DecodeHintType, object> hints)
       {
-         if (hints != null)
+         if (hints != null && hints.ContainsKey(DecodeHintType.CHARACTER_SET))
          {
             String characterSet = (String)hints[DecodeHintType.CHARACTER_SET];
             if (characterSet != null)
