@@ -146,8 +146,9 @@ namespace com.google.zxing.qrcode.decoder
             }
          } while (mode != Mode.TERMINATOR);
 
+         var resultString = result.ToString().Replace("\r\n", "\n").Replace("\n", Environment.NewLine);
          return new DecoderResult(bytes,
-                                  result.ToString(),
+                                  resultString,
                                   byteSegments.Count == 0 ? null : byteSegments,
                                   ecLevel == null ? null : ecLevel.ToString());
       }
