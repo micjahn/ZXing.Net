@@ -476,11 +476,11 @@ namespace com.google.zxing.oned
          {
             if (codeSet == CODE_CODE_C)
             {
-               result.Remove(resultLength - 2, resultLength);
+               result.Remove(resultLength - 2, 2);
             }
             else
             {
-               result.Remove(resultLength - 1, resultLength);
+               result.Remove(resultLength - 1, 1);
             }
          }
 

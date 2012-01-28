@@ -66,7 +66,7 @@ namespace com.google.zxing.oned
 
          for (int i = 0; i <= 3; i++)
          {
-            int digit = Int32.Parse(contents.Substring(i, i + 1));
+            int digit = Int32.Parse(contents.Substring(i, 1));
             pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], 0);
          }
 
@@ -74,7 +74,7 @@ namespace com.google.zxing.oned
 
          for (int i = 4; i <= 7; i++)
          {
-            int digit = Int32.Parse(contents.Substring(i, i + 1));
+            int digit = Int32.Parse(contents.Substring(i, 1));
             pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], 1);
          }
          pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, 1);

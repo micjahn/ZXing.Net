@@ -67,7 +67,7 @@ namespace com.google.zxing.oned
          // See {@link #EAN13Reader} for a description of how the first digit & left bars are encoded
          for (int i = 1; i <= 6; i++)
          {
-            int digit = Int32.Parse(contents.Substring(i, i + 1));
+            int digit = Int32.Parse(contents.Substring(i, 1));
             if ((parities >> (6 - i) & 1) == 1)
             {
                digit += 10;
@@ -79,7 +79,7 @@ namespace com.google.zxing.oned
 
          for (int i = 7; i <= 12; i++)
          {
-            int digit = Int32.Parse(contents.Substring(i, i + 1));
+            int digit = Int32.Parse(contents.Substring(i, 1));
             pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], 1);
          }
          pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, 1);
