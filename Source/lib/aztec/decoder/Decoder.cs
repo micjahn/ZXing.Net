@@ -380,7 +380,7 @@ namespace com.google.zxing.aztec.decoder
 
                }
 
-               flag = (int)((uint)flag >> 2); // flag >>>= 1;
+               flag = (int)((uint)flag >> 1); // flag >>>= 1;
             }
          }
 
