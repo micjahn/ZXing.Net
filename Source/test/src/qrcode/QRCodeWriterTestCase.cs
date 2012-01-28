@@ -70,10 +70,12 @@ namespace com.google.zxing.qrcode
                   var bitmapRow = (byte*) data.Scan0 + (y*data.Stride);
                   for (int x = 0; x < width; x++)
                   {
-                     int pixel = bitmapRow[3*x];
-                     int luminance = (306*((pixel >> 16) & 0xFF) +
-                                      601*((pixel >> 8) & 0xFF) +
-                                      117*(pixel & 0xFF)) >> 10;
+                     int pixelR = bitmapRow[3 * x + 0];
+                     int pixelG = bitmapRow[3 * x + 1];
+                     int pixelB = bitmapRow[3 * x + 2];
+                     int luminance = (306 * pixelR +
+                                      601 * pixelG +
+                                      117 * pixelB) >> 10;
                      if (luminance <= 0x7F)
                      {
                         matrix[x, y] = true;
