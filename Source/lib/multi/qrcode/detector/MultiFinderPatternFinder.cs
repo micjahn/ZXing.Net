@@ -93,7 +93,7 @@ namespace com.google.zxing.multi.qrcode.detector
 
       /// <summary>
       /// <returns>the 3 best <see cref="FinderPattern" />s from our list of candidates. The "best" are</returns>
-      ///         those that have been detected at least <see cref="#CENTER_QUORUM" />times, and whose module
+      ///         those that have been detected at least CENTER_QUORUM times, and whose module
       ///         size differs from the average among those patterns the least
       /// <exception cref="NotFoundException">if 3 such finder patterns do not exist</exception>
       /// </summary>

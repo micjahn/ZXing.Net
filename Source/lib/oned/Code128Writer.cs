@@ -45,7 +45,7 @@ namespace com.google.zxing.oned
       private static int CODE_FNC_3 = 96;    // Code A, Code B
       private static int CODE_FNC_4_B = 100; // Code B
 
-      public BitMatrix encode(String contents,
+      public override BitMatrix encode(String contents,
                               BarcodeFormat format,
                               int width,
                               int height,
@@ -225,6 +225,5 @@ namespace com.google.zxing.oned
          }
          return end <= last; // end > last if we've run out of string
       }
-
    }
 }

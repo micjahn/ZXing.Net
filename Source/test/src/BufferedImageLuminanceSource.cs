@@ -131,9 +131,9 @@ namespace com.google.zxing
          return true;
       }
 
-      public LuminanceSource crop(int left, int top, int width, int height)
+      public override LuminanceSource crop(int l, int t, int width, int height)
       {
-         return new BufferedImageLuminanceSource(image, this.left + left, this.top + top, width, height);
+         return new BufferedImageLuminanceSource(image, left + l, top + t, width, height);
       }
 
       /// <summary>
@@ -146,7 +146,7 @@ namespace com.google.zxing
          return true;
       }
 
-      public LuminanceSource rotateCounterClockwise()
+      public override LuminanceSource rotateCounterClockwise()
       {
          //if (!isRotateSupported()) {
          //  throw new IllegalStateException("Rotate not supported");

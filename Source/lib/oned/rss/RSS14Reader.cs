@@ -106,7 +106,7 @@ namespace com.google.zxing.oned.rss
          }
       }
 
-      public void reset()
+      public override void reset()
       {
          possibleLeftPairs.Clear();
          possibleRightPairs.Clear();

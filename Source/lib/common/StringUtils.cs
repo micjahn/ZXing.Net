@@ -62,9 +62,9 @@ namespace com.google.zxing.common
          }
          // Does it start with the UTF-8 byte order mark? then guess it's UTF-8
          if (bytes.Length > 3 &&
-             bytes[0] == 0xEF &&
-             bytes[1] == 0xBB &&
-             bytes[2] == 0xBF)
+             bytes[0] == -17 /*0xEF*/ &&
+             bytes[1] == -69 /*0xBB*/ &&
+             bytes[2] == -65 /*0xBF*/)
          {
             return UTF8;
          }

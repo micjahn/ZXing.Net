@@ -30,10 +30,9 @@ namespace com.google.zxing.oned
    /// </summary>
    public sealed class UPCAReader : UPCEANReader
    {
+      private readonly UPCEANReader ean13Reader = new EAN13Reader();
 
-      private UPCEANReader ean13Reader = new EAN13Reader();
-
-      public Result decodeRow(int rowNumber,
+      override public Result decodeRow(int rowNumber,
                               BitArray row,
                               int[] startGuardRange,
                               IDictionary<DecodeHintType, object> hints)
@@ -41,17 +40,12 @@ namespace com.google.zxing.oned
          return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row, startGuardRange, hints));
       }
 
-      public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
+      override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
          return maybeReturnResult(ean13Reader.decodeRow(rowNumber, row, hints));
       }
 
-      public Result decode(BinaryBitmap image)
-      {
-         return maybeReturnResult(ean13Reader.decode(image));
-      }
-
-      public Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
+      override public Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
       {
          return maybeReturnResult(ean13Reader.decode(image, hints));
       }

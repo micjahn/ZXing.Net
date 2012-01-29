@@ -28,14 +28,13 @@ namespace com.google.zxing.oned
    /// </summary>
    public sealed class EAN8Writer : UPCEANWriter
    {
-
       private static int CODE_WIDTH = 3 + // start guard
           (7 * 4) + // left bars
           5 + // middle guard
           (7 * 4) + // right bars
           3; // end guard
 
-      public BitMatrix encode(String contents,
+      public override BitMatrix encode(String contents,
                               BarcodeFormat format,
                               int width,
                               int height,

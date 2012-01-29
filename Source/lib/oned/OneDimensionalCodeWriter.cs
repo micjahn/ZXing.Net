@@ -46,7 +46,7 @@ namespace com.google.zxing.oned
       /// {@code height} to zero to get minimum size barcode. If negative value is set to {@code width}
       /// or {@code height}, {@code IllegalArgumentException} is thrown.
       /// </summary>
-      public BitMatrix encode(String contents,
+      public virtual BitMatrix encode(String contents,
                               BarcodeFormat format,
                               int width,
                               int height,

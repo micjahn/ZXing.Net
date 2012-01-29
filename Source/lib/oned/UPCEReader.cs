@@ -38,7 +38,7 @@ namespace com.google.zxing.oned
       private static int[] MIDDLE_END_PATTERN = { 1, 1, 1, 1, 1, 1 };
 
       /// <summary>
-      /// See <see cref="#L_AND_G_PATTERNS" />; these values similarly represent patterns of
+      /// See L_AND_G_PATTERNS these values similarly represent patterns of
       /// even-odd parity encodings of digits that imply both the number system (0 or 1)
       /// used, and the check digit.
       /// </summary>
@@ -85,7 +85,7 @@ namespace com.google.zxing.oned
          return rowOffset;
       }
 
-      protected int[] decodeEnd(BitArray row, int endStart)
+      internal int[] decodeEnd(BitArray row, int endStart)
       {
          return findGuardPattern(row, endStart, true, MIDDLE_END_PATTERN);
       }

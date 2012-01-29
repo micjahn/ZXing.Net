@@ -39,7 +39,7 @@ namespace com.google.zxing.oned
       }
 
       // Note that we don't try rotation without the try harder flag, even if rotation was supported.
-      public Result decode(BinaryBitmap image,
+      virtual public Result decode(BinaryBitmap image,
                            IDictionary<DecodeHintType, object> hints)
       {
          try
@@ -82,7 +82,7 @@ namespace com.google.zxing.oned
          }
       }
 
-      public void reset()
+      virtual public void reset()
       {
          // do nothing
       }
@@ -336,8 +336,6 @@ namespace com.google.zxing.oned
       /// <returns><see cref="Result" />containing encoded string and start/end of barcode</returns>
       /// <exception cref="NotFoundException">if an error occurs or barcode cannot be found</exception>
       /// </summary>
-      public abstract Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
-    ;
-
+      public abstract Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints);
    }
 }

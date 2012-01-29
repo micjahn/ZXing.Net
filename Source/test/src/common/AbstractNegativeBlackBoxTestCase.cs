@@ -69,7 +69,7 @@ namespace com.google.zxing.common
       }
 
       [Test]
-      public void testBlackBox()
+      public new void testBlackBox()
       {
          Assert.IsFalse(testResults.Count == 0);
 

@@ -114,7 +114,7 @@ namespace com.google.zxing.oned.rss.expanded
          return constructResult(this.pairs);
       }
 
-      public void reset()
+      public override void reset()
       {
          this.pairs.Clear();
       }

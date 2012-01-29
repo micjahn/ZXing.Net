@@ -122,9 +122,9 @@ namespace com.google.zxing
       /// original data rather than a copy. Only callable if isCropSupported() is true.
       /// 
       /// </summary>
-      /// <param name="left">The left coordinate, 0 <= left < getWidth().
+      /// <param name="left">The left coordinate, 0 &lt;= left &lt; getWidth().
       /// </param>
-      /// <param name="top">The top coordinate, 0 <= top <= getHeight().
+      /// <param name="top">The top coordinate, 0 &lt;= top &lt;= getHeight().
       /// </param>
       /// <param name="width">The width of the rectangle to crop.
       /// </param>

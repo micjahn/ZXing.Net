@@ -14,24 +14,20 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections.Generic;
+
 using com.google.zxing.common;
 using com.google.zxing.oned.rss;
 using com.google.zxing.oned.rss.expanded;
 
 namespace com.google.zxing.oned
 {
-
-
-
    /// <summary>
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// <author>Sean Owen</author>
    /// </summary>
    public sealed class MultiFormatOneDReader : OneDReader
    {
-
       private OneDReader[] readers;
 
       public MultiFormatOneDReader(IDictionary<DecodeHintType, object> hints)
@@ -112,7 +108,7 @@ namespace com.google.zxing.oned
          throw NotFoundException.Instance;
       }
 
-      public void reset()
+      public override void reset()
       {
          foreach (Reader reader in readers)
          {

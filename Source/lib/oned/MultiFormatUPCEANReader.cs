@@ -112,7 +112,7 @@ namespace com.google.zxing.oned
          throw NotFoundException.Instance;
       }
 
-      public void reset()
+      public override void reset()
       {
          foreach (Reader reader in readers)
          {

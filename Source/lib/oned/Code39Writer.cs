@@ -28,8 +28,7 @@ namespace com.google.zxing.oned
    /// </summary>
    public sealed class Code39Writer : UPCEANWriter
    {
-
-      public BitMatrix encode(String contents,
+      public override BitMatrix encode(String contents,
                               BarcodeFormat format,
                               int width,
                               int height,

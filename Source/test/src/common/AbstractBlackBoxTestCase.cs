@@ -51,9 +51,9 @@ namespace com.google.zxing.common
          if (!Directory.Exists(testBasePathSuffix))
          {
             // try starting with 'core' since the test base is often given as the project root
-            testBase = Path.Combine("..\\..\\..\\Source", testBasePathSuffix);
+            testBasePathSuffix = Path.Combine("..\\..\\..\\Source", testBasePathSuffix);
          }
-         this.testBase = testBase;
+         this.testBase = testBasePathSuffix;
          this.barcodeReader = barcodeReader;
          this.expectedFormat = expectedFormat;
          testResults = new List<TestResult>();

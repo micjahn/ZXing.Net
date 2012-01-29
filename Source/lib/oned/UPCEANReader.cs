@@ -128,11 +128,11 @@ namespace com.google.zxing.oned
       }
 
       /// <summary>
-      /// <p>Like <see cref="#decodeRow(int, BitArray, java.util.Map)" />, but
+      /// <p>Like decodeRow(int, BitArray, java.util.Map), but
       /// allows caller to inform method about where the UPC/EAN start pattern is
       /// found. This allows this to be computed once and reused across many implementations.</p>
       /// </summary>
-      public Result decodeRow(int rowNumber,
+      virtual public Result decodeRow(int rowNumber,
                               BitArray row,
                               int[] startGuardRange,
                               IDictionary<DecodeHintType, object> hints)
@@ -218,7 +218,7 @@ namespace com.google.zxing.oned
       }
 
       /// <summary>
-      /// <returns><see cref="#checkStandardUPCEANChecksum(CharSequence)" /></returns>
+      /// <returns>see checkStandardUPCEANChecksum(String)</returns>
       /// </summary>
       virtual protected bool checkChecksum(String s)
       {
