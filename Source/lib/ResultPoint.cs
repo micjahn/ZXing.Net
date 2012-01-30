@@ -13,82 +13,114 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
+
 namespace com.google.zxing
 {
-   /// <summary> <p>Encapsulates a point of interest in an image containing a barcode. Typically, this
-   /// would be the location of a finder pattern or the corner of the barcode, for example.</p>
-   /// 
+   /// <summary>
+   /// Encapsulates a point of interest in an image containing a barcode. Typically, this
+   /// would be the location of a finder pattern or the corner of the barcode, for example.
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
+   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source</author>
    public class ResultPoint
    {
-      private float x;
-      private float y;
+      private readonly float x;
+      private readonly float y;
+      private readonly byte[] bytesX;
+      private readonly byte[] bytesY;
+      private String toString;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="ResultPoint"/> class.
+      /// </summary>
       public ResultPoint()
       {
       }
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="ResultPoint"/> class.
+      /// </summary>
+      /// <param name="x">The x.</param>
+      /// <param name="y">The y.</param>
       public ResultPoint(float x, float y)
       {
          this.x = x;
          this.y = y;
+         // calculate only once for GetHashCode
+         bytesX = BitConverter.GetBytes(x);
+         bytesY = BitConverter.GetBytes(y);
       }
 
+      /// <summary>
+      /// Gets the X.
+      /// </summary>
       virtual public float X
       {
          get
          {
             return x;
          }
-
       }
+
+      /// <summary>
+      /// Gets the Y.
+      /// </summary>
       virtual public float Y
       {
          get
          {
             return y;
          }
-
       }
 
-      public override bool Equals(System.Object other)
+      /// <summary>
+      /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
+      /// </summary>
+      /// <param name="other">The <see cref="System.Object"/> to compare with this instance.</param>
+      /// <returns>
+      ///   <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+      /// </returns>
+      public override bool Equals(Object other)
       {
-         if (other is ResultPoint)
-         {
-            var otherPoint = (ResultPoint)other;
-            return x == otherPoint.x && y == otherPoint.y;
-         }
-         return false;
+         var otherPoint = other as ResultPoint;
+         if (otherPoint == null)
+            return false;
+         return x == otherPoint.x && y == otherPoint.y;
       }
 
+      /// <summary>
+      /// Returns a hash code for this instance.
+      /// </summary>
+      /// <returns>
+      /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+      /// </returns>
       public override int GetHashCode()
       {
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4)
-         var bytes = BitConverter.GetBytes(x);
-         return 31*((bytes[0] << 24) + (bytes[1] << 16) + (bytes[2] << 8) + bytes[3]) +
-                    (bytes[4] << 24) + (bytes[5] << 16) + (bytes[6] << 8) + bytes[7];
-#else
-         return 31 * (int)(BitConverter.DoubleToInt64Bits(x) + BitConverter.DoubleToInt64Bits(y));
-#endif
+         return 31 * ((bytesX[0] << 24) + (bytesX[1] << 16) + (bytesX[2] << 8) + bytesX[3]) +
+                      (bytesY[0] << 24) + (bytesY[1] << 16) + (bytesY[2] << 8) + bytesY[3];
       }
 
+      /// <summary>
+      /// Returns a <see cref="System.String"/> that represents this instance.
+      /// </summary>
+      /// <returns>
+      /// A <see cref="System.String"/> that represents this instance.
+      /// </returns>
       public override String ToString()
       {
-         var result = new System.Text.StringBuilder(25);
-         result.Append('(');
-         result.Append(x);
-         result.Append(',');
-         result.Append(y);
-         result.Append(')');
-         return result.ToString();
+         if (toString == null)
+         {
+            var result = new System.Text.StringBuilder(25);
+            result.AppendFormat("({0}, {1})", x, y);
+            toString = result.ToString();
+         }
+         return toString;
       }
 
-      /// <summary> <p>Orders an array of three ResultPoints in an order [A,B,C] such that AB &lt; AC and
+      /// <summary>
+      /// Orders an array of three ResultPoints in an order [A,B,C] such that AB &lt; AC and
       /// BC &lt; AC and the angle between BC and BA is less than 180 degrees.
       /// </summary>
       public static void orderBestPatterns(ResultPoint[] patterns)
@@ -136,17 +168,20 @@ namespace com.google.zxing
       }
 
 
-      /// <returns> distance between two points
+      /// <returns>
+      /// distance between two points
       /// </returns>
       public static float distance(ResultPoint pattern1, ResultPoint pattern2)
       {
          float xDiff = pattern1.X - pattern2.X;
          float yDiff = pattern1.Y - pattern2.Y;
-         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-         return (float)System.Math.Sqrt((double)(xDiff * xDiff + yDiff * yDiff));
+
+         return (float)Math.Sqrt(xDiff * xDiff + yDiff * yDiff);
       }
 
-      /// <summary> Returns the z component of the cross product between vectors BC and BA.</summary>
+      /// <summary>
+      /// Returns the z component of the cross product between vectors BC and BA.
+      /// </summary>
       private static float crossProductZ(ResultPoint pointA, ResultPoint pointB, ResultPoint pointC)
       {
          float bX = pointB.x;
