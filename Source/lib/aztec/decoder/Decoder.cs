@@ -15,21 +15,20 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using com.google.zxing.common;
 using com.google.zxing.common.reedsolomon;
 
 namespace com.google.zxing.aztec.decoder
 {
-   /**
-    * <p>The main class which implements Aztec Code decoding -- as opposed to locating and extracting
-    * the Aztec Code from an image.</p>
-    *
-    * @author David Olivier
-    */
+   /// <summary>
+   /// The main class which implements Aztec Code decoding -- as opposed to locating and extracting
+   /// the Aztec Code from an image.
+   /// </summary>
+   /// <author>David Olivier</author>
    public sealed class Decoder
    {
-
       private enum Table
       {
          UPPER,
@@ -40,54 +39,78 @@ namespace com.google.zxing.aztec.decoder
          BINARY
       }
 
-      private static int[] NB_BITS_COMPACT = {
-      0, 104, 240, 408, 608
-  };
+      private static readonly int[] NB_BITS_COMPACT = {
+                                                         0, 104, 240, 408, 608
+                                                      };
 
-      private static int[] NB_BITS = {
-      0, 128, 288, 480, 704, 960, 1248, 1568, 1920, 2304, 2720, 3168, 3648, 4160, 4704, 5280, 5888, 6528,
-      7200, 7904, 8640, 9408, 10208, 11040, 11904, 12800, 13728, 14688, 15680, 16704, 17760, 18848, 19968
-  };
+      private static readonly int[] NB_BITS = {
+                                                 0, 128, 288, 480, 704, 960, 1248, 1568, 1920, 2304, 2720, 3168, 3648, 4160, 4704, 5280, 5888, 6528,
+                                                 7200, 7904, 8640, 9408, 10208, 11040, 11904, 12800, 13728, 14688, 15680, 16704, 17760, 18848, 19968
+                                              };
 
-      private static int[] NB_DATABLOCK_COMPACT = {
-      0, 17, 40, 51, 76
-  };
+      private static readonly int[] NB_DATABLOCK_COMPACT = {
+                                                              0, 17, 40, 51, 76
+                                                           };
 
-      private static int[] NB_DATABLOCK = {
-      0, 21, 48, 60, 88, 120, 156, 196, 240, 230, 272, 316, 364, 416, 470, 528, 588, 652, 720, 790, 864,
-      940, 1020, 920, 992, 1066, 1144, 1224, 1306, 1392, 1480, 1570, 1664
-  };
+      private static readonly int[] NB_DATABLOCK = {
+                                                      0, 21, 48, 60, 88, 120, 156, 196, 240, 230, 272, 316, 364, 416, 470, 528, 588, 652, 720, 790, 864,
+                                                      940, 1020, 920, 992, 1066, 1144, 1224, 1306, 1392, 1480, 1570, 1664
+                                                   };
 
-      private static String[] UPPER_TABLE = {
-      "CTRL_PS", " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P",
-      "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "CTRL_LL", "CTRL_ML", "CTRL_DL", "CTRL_BS"
-  };
+      private static readonly String[] UPPER_TABLE = {
+                                                        "CTRL_PS", " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" , "K", "L", "M", "N", "O", "P",
+                                                        "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "CTRL_LL", "CTRL_ML", "CTRL_DL", "CTRL_BS"
+                                                     };
 
-      private static String[] LOWER_TABLE = {
-      "CTRL_PS", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p",
-      "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "CTRL_US", "CTRL_ML", "CTRL_DL", "CTRL_BS"
-  };
+      private static readonly String[] LOWER_TABLE = {
+                                                        "CTRL_PS", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j" , "k", "l", "m", "n", "o", "p",
+                                                        "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "CTRL_US", "CTRL_ML", "CTRL_DL", "CTRL_BS"
+                                                     };
 
-      private static String[] MIXED_TABLE = {
-      "CTRL_PS", " ", "\x1", "\x2", "\x3", "\x4", "\x5", "\x6", "\x7", "\b", "\t", "\n",
-      "\xD", "\f", "\r", "\x21", "\x22", "\x23", "\x24", "\x25", "@", "\\", "^", "_",
-      "`", "|", "~", "\xB1", "CTRL_LL", "CTRL_UL", "CTRL_PL", "CTRL_BS"
-  };
+      private static readonly String[] MIXED_TABLE = {
+                                               "CTRL_PS", " ", "\x1", "\x2", "\x3", "\x4", "\x5", "\x6", "\x7", "\b", "\t", "\n",
+                                               "\xD", "\f", "\r", "\x21", "\x22", "\x23", "\x24", "\x25", "@", "\\", "^" , "_",
+                                               "`", "|", "~", "\xB1", "CTRL_LL", "CTRL_UL", "CTRL_PL", "CTRL_BS"
+                                            };
 
-      private static String[] PUNCT_TABLE = {
-      "", "\r", "\r\n", ". ", ", ", ": ", "!", "\"", "#", "$", "%", "&", "'", "(", ")",
-      "*", "+", ",", "-", ".", "/", ":", ";", "<", "=", ">", "?", "[", "]", "{", "}", "CTRL_UL"
-  };
+      private static readonly String[] PUNCT_TABLE = {
+                                                        "", "\r", "\r\n", ". ", ", ", ": ", "!", "\"", "#", "$", "%", "&", "'", "(", ")",
+                                                        "*", "+", ",", "-", ".", "/", ":", ";", "<", "=", ">", "?", "[", "]", "{", "}", "CTRL_UL"
+                                                     };
 
-      private static String[] DIGIT_TABLE = {
-    "CTRL_PS", " ", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ",", ".", "CTRL_UL", "CTRL_US"
-  };
+      private static readonly String[] DIGIT_TABLE = {
+                                                        "CTRL_PS", " ", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" , ",", ".", "CTRL_UL", "CTRL_US"
+                                                     };
 
+      private static readonly IDictionary<Table, String[]> codeTables = new Dictionary<Table, String[]>
+                                                                 {
+                                                                    {Table.UPPER, UPPER_TABLE},
+                                                                    {Table.LOWER, LOWER_TABLE},
+                                                                    {Table.MIXED, MIXED_TABLE},
+                                                                    {Table.PUNCT, PUNCT_TABLE},
+                                                                    {Table.DIGIT, DIGIT_TABLE},
+                                                                    {Table.BINARY, null}
+                                                                 };
+      private static readonly IDictionary<char, Table> codeTableMap = new Dictionary<char, Table>
+                                                                 {
+                                                                    {'U', Table.UPPER},
+                                                                    {'L', Table.LOWER},
+                                                                    {'M', Table.MIXED},
+                                                                    {'P', Table.PUNCT},
+                                                                    {'D', Table.DIGIT},
+                                                                    {'B', Table.BINARY}
+                                                                 };
+      
       private int numCodewords;
       private int codewordSize;
       private AztecDetectorResult ddata;
       private int invertedBitCount;
 
+      /// <summary>
+      /// Decodes the specified detector result.
+      /// </summary>
+      /// <param name="detectorResult">The detector result.</param>
+      /// <returns></returns>
       public DecoderResult decode(AztecDetectorResult detectorResult)
       {
          ddata = detectorResult;
@@ -108,16 +131,14 @@ namespace com.google.zxing.aztec.decoder
       }
 
 
-      /**
-       *
-       * Gets the string encoded in the aztec code bits
-       *
-       * @return the decoded string
-       * @throws FormatException if the input is not valid
-       */
+      /// <summary>
+      /// Gets the string encoded in the aztec code bits
+      /// </summary>
+      /// <param name="correctedBits">The corrected bits.</param>
+      /// <returns>the decoded string</returns>
+      /// <exception cref="FormatException">if the input is not valid</exception>
       private String getEncodedData(bool[] correctedBits)
       {
-
          int endIndex = codewordSize * ddata.getNbDatablocks() - invertedBitCount;
          if (endIndex > correctedBits.Length)
          {
@@ -126,15 +147,16 @@ namespace com.google.zxing.aztec.decoder
 
          Table lastTable = Table.UPPER;
          Table table = Table.UPPER;
+         String[] strTable = UPPER_TABLE;
          int startIndex = 0;
          StringBuilder result = new StringBuilder(20);
          bool end = false;
          bool shift = false;
          bool switchShift = false;
+         bool binaryShift = false;
 
          while (!end)
          {
-
             if (shift)
             {
                // the table is for the next character only
@@ -147,59 +169,96 @@ namespace com.google.zxing.aztec.decoder
             }
 
             int code;
-            switch (table)
+
+            if (binaryShift)
             {
-               case Table.BINARY:
+               if (endIndex - startIndex < 5)
+                  break;
+
+               var length = readCode(correctedBits, startIndex, 5);
+               startIndex += 5;
+               if (length == 0)
+               {
+                  if (endIndex - startIndex < 11)
+                     break;
+
+                  length = readCode(correctedBits, startIndex, 11) + 31;
+                  startIndex += 11;
+               }
+               for (var charCount = 0; charCount < length; charCount++)
+               {
                   if (endIndex - startIndex < 8)
                   {
                      end = true;
                      break;
                   }
+
                   code = readCode(correctedBits, startIndex, 8);
+                  result.Append(Convert.ToChar(code));
                   startIndex += 8;
-
-                  result.Append((char)code);
-                  break;
-
-               default:
-                  int size = 5;
-
-                  if (table == Table.DIGIT)
-                  {
-                     size = 4;
-                  }
-
-                  if (endIndex - startIndex < size)
-                  {
-                     end = true;
-                     break;
-                  }
-
-                  code = readCode(correctedBits, startIndex, size);
-                  startIndex += size;
-
-                  String str = getCharacter(table, code);
-                  if (str.StartsWith("CTRL_"))
-                  {
-                     // Table changes
-                     table = getTable(str[5]);
-
-                     if (str[6] == 'S')
+               }
+               binaryShift = false;
+            }
+            else
+            {
+               switch (table)
+               {
+                  case Table.BINARY:
+                     if (endIndex - startIndex < 8)
                      {
-                        shift = true;
+                        end = true;
+                        break;
                      }
-                  }
-                  else
-                  {
-                     result.Append(str);
-                  }
+                     code = readCode(correctedBits, startIndex, 8);
+                     startIndex += 8;
 
-                  break;
+                     result.Append((char) code);
+                     break;
+
+                  default:
+                     int size = 5;
+
+                     if (table == Table.DIGIT)
+                     {
+                        size = 4;
+                     }
+
+                     if (endIndex - startIndex < size)
+                     {
+                        end = true;
+                        break;
+                     }
+
+                     code = readCode(correctedBits, startIndex, size);
+                     startIndex += size;
+
+                     String str = getCharacter(strTable, code);
+                     if (str.StartsWith("CTRL_"))
+                     {
+                        // Table changes
+                        table = getTable(str[5]);
+                        strTable = codeTables[table];
+
+                        if (str[6] == 'S')
+                        {
+                           shift = true;
+                           if (str[5] == 'B')
+                              binaryShift = true;
+                        }
+                     }
+                     else
+                     {
+                        result.Append(str);
+                     }
+
+                     break;
+               }
             }
 
             if (switchShift)
             {
                table = lastTable;
+               strTable = codeTables[table];
                shift = false;
                switchShift = false;
             }
@@ -209,62 +268,35 @@ namespace com.google.zxing.aztec.decoder
       }
 
 
-      /**
-       * gets the table corresponding to the char passed
-       */
+      /// <summary>
+      /// gets the table corresponding to the char passed
+      /// </summary>
+      /// <param name="t">The t.</param>
+      /// <returns></returns>
       private static Table getTable(char t)
       {
-         switch (t)
-         {
-            case 'L':
-               return Table.LOWER;
-            case 'P':
-               return Table.PUNCT;
-            case 'M':
-               return Table.MIXED;
-            case 'D':
-               return Table.DIGIT;
-            case 'B':
-               return Table.BINARY;
-            case 'U':
-            default:
-               return Table.UPPER;
-         }
+         if (!codeTableMap.ContainsKey(t))
+            return codeTableMap['U'];
+         return codeTableMap[t];
       }
 
-      /**
-       *
-       * Gets the character (or string) corresponding to the passed code in the given table
-       *
-       * @param table the table used
-       * @param code the code of the character
-       */
-      private static String getCharacter(Table table, int code)
+      /// <summary>
+      /// Gets the character (or string) corresponding to the passed code in the given table
+      /// </summary>
+      /// <param name="table">the table used</param>
+      /// <param name="code">the code of the character</param>
+      /// <returns></returns>
+      private static String getCharacter(String[] table, int code)
       {
-         switch (table)
-         {
-            case Table.UPPER:
-               return UPPER_TABLE[code];
-            case Table.LOWER:
-               return LOWER_TABLE[code];
-            case Table.MIXED:
-               return MIXED_TABLE[code];
-            case Table.PUNCT:
-               return PUNCT_TABLE[code];
-            case Table.DIGIT:
-               return DIGIT_TABLE[code];
-            default:
-               return "";
-         }
+         return table[code];
       }
 
-      /**
-       *
-       * <p> performs RS error correction on an array of bits </p>
-       *
-       * @return the corrected array
-       * @throws FormatException if the input contains too many errors
-       */
+      /// <summary>
+      /// performs RS error correction on an array of bits
+      /// </summary>
+      /// <param name="rawbits">The rawbits.</param>
+      /// <returns>the corrected array</returns>
+      /// <exception cref="FormatException">if the input contains too many errors</exception>
       private bool[] correctBits(bool[] rawbits)
       {
          GenericGF gf;
@@ -387,13 +419,12 @@ namespace com.google.zxing.aztec.decoder
          return correctedBits;
       }
 
-      /**
-       *
-       * Gets the array of bits from an Aztec Code matrix
-       *
-       * @return the array of bits
-       * @throws FormatException if the matrix is not a valid aztec code
-       */
+      /// <summary>
+      /// Gets the array of bits from an Aztec Code matrix
+      /// </summary>
+      /// <param name="matrix">The matrix.</param>
+      /// <returns>the array of bits</returns>
+      /// <exception see="FormatException">if the matrix is not a valid aztec code</exception>
       private bool[] extractBits(BitMatrix matrix)
       {
 
@@ -451,9 +482,11 @@ namespace com.google.zxing.aztec.decoder
       }
 
 
-      /**
-       * Transforms an Aztec code matrix by removing the control dashed lines
-       */
+      /// <summary>
+      /// Transforms an Aztec code matrix by removing the control dashed lines
+      /// </summary>
+      /// <param name="matrix">The matrix.</param>
+      /// <returns></returns>
       private static BitMatrix removeDashedLines(BitMatrix matrix)
       {
          int nbDashed = 1 + 2 * ((matrix.Width - 1) / 2 / 16);
@@ -487,9 +520,13 @@ namespace com.google.zxing.aztec.decoder
          return newMatrix;
       }
 
-      /**
-       * Reads a code of given length and at given index in an array of bits
-       */
+      /// <summary>
+      /// Reads a code of given length and at given index in an array of bits
+      /// </summary>
+      /// <param name="rawbits">The rawbits.</param>
+      /// <param name="startIndex">The start index.</param>
+      /// <param name="length">The length.</param>
+      /// <returns></returns>
       private static int readCode(bool[] rawbits, int startIndex, int length)
       {
          int res = 0;
@@ -505,6 +542,5 @@ namespace com.google.zxing.aztec.decoder
 
          return res;
       }
-
    }
 }
