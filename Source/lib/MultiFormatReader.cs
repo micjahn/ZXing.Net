@@ -196,7 +196,9 @@ namespace com.google.zxing
             {
                try
                {
-                  return reader.decode(image, hints);
+                  var result = reader.decode(image, hints);
+                  if (result != null)
+                     return result;
                }
                catch (ReaderException)
                {

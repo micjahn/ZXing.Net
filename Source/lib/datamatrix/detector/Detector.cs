@@ -30,8 +30,8 @@ namespace com.google.zxing.datamatrix.detector
    /// </summary>
    public sealed class Detector
    {
-      private BitMatrix image;
-      private WhiteRectangleDetector rectangleDetector;
+      private readonly BitMatrix image;
+      private readonly WhiteRectangleDetector rectangleDetector;
 
       public Detector(BitMatrix image)
       {
@@ -103,7 +103,7 @@ namespace com.google.zxing.datamatrix.detector
 
          if (maybeTopLeft == null || bottomLeft == null || maybeBottomRight == null)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          // Bottom left is correct but top left and bottom right might be switched

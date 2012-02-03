@@ -95,17 +95,12 @@ namespace com.google.zxing.oned
       {
          foreach (OneDReader reader in readers)
          {
-            try
-            {
-               return reader.decodeRow(rowNumber, row, hints);
-            }
-            catch (ReaderException re)
-            {
-               // continue
-            }
+            var result = reader.decodeRow(rowNumber, row, hints);
+            if (result != null)
+               return result;
          }
 
-         throw NotFoundException.Instance;
+         return null;
       }
 
       public override void reset()

@@ -29,9 +29,9 @@ namespace com.google.zxing.datamatrix
    /// </summary>
    public sealed class DataMatrixReader : Reader
    {
-      private static ResultPoint[] NO_POINTS = new ResultPoint[0];
+      private static readonly ResultPoint[] NO_POINTS = new ResultPoint[0];
 
-      private Decoder decoder = new Decoder();
+      private readonly Decoder decoder = new Decoder();
 
       /// <summary>
       /// Locates and decodes a Data Matrix code in an image.
@@ -53,15 +53,22 @@ namespace com.google.zxing.datamatrix
          if (hints != null && hints.ContainsKey(DecodeHintType.PURE_BARCODE))
          {
             BitMatrix bits = extractPureBits(image.BlackMatrix);
+            if (bits == null)
+               return null;
             decoderResult = decoder.decode(bits);
             points = NO_POINTS;
          }
          else
          {
             DetectorResult detectorResult = new Detector(image.BlackMatrix).detect();
+            if (detectorResult == null)
+               return null;
             decoderResult = decoder.decode(detectorResult.Bits);
             points = detectorResult.Points;
          }
+         if (decoderResult == null)
+            return null;
+
          Result result = new Result(decoderResult.Text, decoderResult.RawBytes, points,
              BarcodeFormat.DATA_MATRIX);
          IList<sbyte[]> byteSegments = decoderResult.ByteSegments;
@@ -93,15 +100,16 @@ namespace com.google.zxing.datamatrix
       /// </summary>
       private static BitMatrix extractPureBits(BitMatrix image)
       {
-
          int[] leftTopBlack = image.getTopLeftOnBit();
          int[] rightBottomBlack = image.getBottomRightOnBit();
          if (leftTopBlack == null || rightBottomBlack == null)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
-         int moduleSize = DataMatrixReader.moduleSize(leftTopBlack, image);
+         int moduleSize;
+         if (!DataMatrixReader.moduleSize(leftTopBlack, image, out moduleSize))
+            return null;
 
          int top = leftTopBlack[1];
          int bottom = rightBottomBlack[1];
@@ -112,7 +120,7 @@ namespace com.google.zxing.datamatrix
          int matrixHeight = (bottom - top + 1) / moduleSize;
          if (matrixWidth <= 0 || matrixHeight <= 0)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          // Push in the "border" by half the module width so that we start
@@ -138,7 +146,7 @@ namespace com.google.zxing.datamatrix
          return bits;
       }
 
-      private static int moduleSize(int[] leftTopBlack, BitMatrix image)
+      private static bool moduleSize(int[] leftTopBlack, BitMatrix image, out int modulesize)
       {
          int width = image.Width;
          int x = leftTopBlack[0];
@@ -149,15 +157,16 @@ namespace com.google.zxing.datamatrix
          }
          if (x == width)
          {
-            throw NotFoundException.Instance;
+            modulesize = 0;
+            return false;
          }
 
-         int moduleSize = x - leftTopBlack[0];
-         if (moduleSize == 0)
+         modulesize = x - leftTopBlack[0];
+         if (modulesize == 0)
          {
-            throw NotFoundException.Instance;
+            return false;
          }
-         return moduleSize;
+         return true;
       }
 
    }

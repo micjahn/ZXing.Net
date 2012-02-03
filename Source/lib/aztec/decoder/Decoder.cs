@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
 using com.google.zxing.common;
 using com.google.zxing.common.reedsolomon;
 
@@ -122,10 +123,16 @@ namespace com.google.zxing.aztec.decoder
          }
 
          bool[] rawbits = extractBits(matrix);
+         if (rawbits == null)
+            return null;
 
          bool[] correctedBits = correctBits(rawbits);
+         if (correctedBits == null)
+            return null;
 
          String result = getEncodedData(correctedBits);
+         if (result == null)
+            return null;
 
          return new DecoderResult(null, result, null, null);
       }
@@ -142,7 +149,7 @@ namespace com.google.zxing.aztec.decoder
          int endIndex = codewordSize * ddata.getNbDatablocks() - invertedBitCount;
          if (endIndex > correctedBits.Length)
          {
-            throw FormatException.Instance;
+            return null;
          }
 
          Table lastTable = Table.UPPER;
@@ -355,15 +362,9 @@ namespace com.google.zxing.aztec.decoder
             //}
          }
 
-         try
-         {
-            ReedSolomonDecoder rsDecoder = new ReedSolomonDecoder(gf);
-            rsDecoder.decode(dataWords, numECCodewords);
-         }
-         catch (ReedSolomonException )
-         {
-            throw FormatException.Instance;
-         }
+         var rsDecoder = new ReedSolomonDecoder(gf);
+         if (!rsDecoder.decode(dataWords, numECCodewords))
+            return null;
 
          offset = 0;
          invertedBitCount = 0;
@@ -387,7 +388,7 @@ namespace com.google.zxing.aztec.decoder
                   if (color == seriesColor)
                   {
                      //bit must be inverted
-                     throw FormatException.Instance;
+                     return null;
                   }
 
                   seriesColor = false;
@@ -427,13 +428,12 @@ namespace com.google.zxing.aztec.decoder
       /// <exception see="FormatException">if the matrix is not a valid aztec code</exception>
       private bool[] extractBits(BitMatrix matrix)
       {
-
          bool[] rawbits;
          if (ddata.isCompact())
          {
             if (ddata.getNbLayers() > NB_BITS_COMPACT.Length)
             {
-               throw FormatException.Instance;
+               return null;
             }
             rawbits = new bool[NB_BITS_COMPACT[ddata.getNbLayers()]];
             numCodewords = NB_DATABLOCK_COMPACT[ddata.getNbLayers()];
@@ -442,7 +442,7 @@ namespace com.google.zxing.aztec.decoder
          {
             if (ddata.getNbLayers() > NB_BITS.Length)
             {
-               throw FormatException.Instance;
+               return null;
             }
             rawbits = new bool[NB_BITS[ddata.getNbLayers()]];
             numCodewords = NB_DATABLOCK[ddata.getNbLayers()];

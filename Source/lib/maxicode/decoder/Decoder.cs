@@ -21,9 +21,6 @@ using com.google.zxing.common.reedsolomon;
 
 namespace com.google.zxing.maxicode.decoder
 {
-
-
-
    /// <summary>
    /// <p>The main class which implements MaxiCode decoding -- as opposed to locating and extracting
    /// the MaxiCode from an image.</p>
@@ -32,12 +29,11 @@ namespace com.google.zxing.maxicode.decoder
    /// </summary>
    public sealed class Decoder
    {
+      private const int ALL = 0;
+      private const int EVEN = 1;
+      private const int ODD = 2;
 
-      private static int ALL = 0;
-      private static int EVEN = 1;
-      private static int ODD = 2;
-
-      private ReedSolomonDecoder rsDecoder;
+      private readonly ReedSolomonDecoder rsDecoder;
 
       public Decoder()
       {
@@ -55,7 +51,9 @@ namespace com.google.zxing.maxicode.decoder
          BitMatrixParser parser = new BitMatrixParser(bits);
          sbyte[] codewords = parser.readCodewords();
 
-         correctErrors(codewords, 0, 10, 10, ALL);
+         if (!correctErrors(codewords, 0, 10, 10, ALL))
+            return null;
+
          int mode = codewords[0] & 0x0F;
          sbyte[] datawords;
          switch (mode)
@@ -63,17 +61,21 @@ namespace com.google.zxing.maxicode.decoder
             case 2:
             case 3:
             case 4:
-               correctErrors(codewords, 20, 84, 40, EVEN);
-               correctErrors(codewords, 20, 84, 40, ODD);
+               if (!correctErrors(codewords, 20, 84, 40, EVEN))
+                  return null;
+               if (!correctErrors(codewords, 20, 84, 40, ODD))
+                  return null;
                datawords = new sbyte[94];
                break;
             case 5:
-               correctErrors(codewords, 20, 68, 56, EVEN);
-               correctErrors(codewords, 20, 68, 56, ODD);
+               if (!correctErrors(codewords, 20, 68, 56, EVEN))
+                  return null;
+               if (!correctErrors(codewords, 20, 68, 56, ODD))
+                  return null;
                datawords = new sbyte[78];
                break;
             default:
-               throw FormatException.Instance;
+               return null;
          }
 
          Array.Copy(codewords, 0, datawords, 0, 10);
@@ -82,7 +84,7 @@ namespace com.google.zxing.maxicode.decoder
          return DecodedBitStreamParser.decode(datawords, mode);
       }
 
-      private void correctErrors(sbyte[] codewordBytes,
+      private bool correctErrors(sbyte[] codewordBytes,
                                  int start,
                                  int dataCodewords,
                                  int ecCodewords,
@@ -102,14 +104,10 @@ namespace com.google.zxing.maxicode.decoder
                codewordsInts[i / divisor] = codewordBytes[i + start] & 0xFF;
             }
          }
-         try
-         {
-            rsDecoder.decode(codewordsInts, ecCodewords / divisor);
-         }
-         catch (ReedSolomonException rse)
-         {
-            throw ChecksumException.Instance;
-         }
+
+         if (!rsDecoder.decode(codewordsInts, ecCodewords / divisor))
+            return false;
+
          // Copy back into array of bytes -- only need to worry about the bytes that were data
          // We don't care about errors in the error-correction codewords
          for (int i = 0; i < dataCodewords; i++)
@@ -119,6 +117,8 @@ namespace com.google.zxing.maxicode.decoder
                codewordBytes[i + start] = (sbyte)codewordsInts[i / divisor];
             }
          }
+
+         return true;
       }
    }
 }

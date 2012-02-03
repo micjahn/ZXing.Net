@@ -14,37 +14,48 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections.Generic;
+
 using com.google.zxing.aztec.decoder;
 using com.google.zxing.common;
 
 namespace com.google.zxing.aztec
 {
-   /**
- * This implementation can detect and decode Aztec codes in an image.
- *
- * @author David Olivier
- */
+   /// <summary>
+   /// This implementation can detect and decode Aztec codes in an image.
+   /// </summary>
+   /// <author>David Olivier</author>
    public class AztecReader : Reader
    {
-
-      /**
-       * Locates and decodes a Data Matrix code in an image.
-       *
-       * @return a String representing the content encoded by the Data Matrix code
-       * @throws NotFoundException if a Data Matrix code cannot be found
-       * @throws FormatException if a Data Matrix code cannot be decoded
-       * @throws ChecksumException if error correction fails
-       */
+      /// <summary>
+      /// Locates and decodes a barcode in some format within an image.
+      /// </summary>
+      /// <param name="image">image of barcode to decode</param>
+      /// <returns>
+      /// a String representing the content encoded by the Data Matrix code
+      /// </returns>
       public Result decode(BinaryBitmap image)
       {
          return decode(image, null);
       }
+
+      /// <summary>
+      ///  Locates and decodes a Data Matrix code in an image.
+      /// </summary>
+      /// <param name="image">image of barcode to decode</param>
+      /// <param name="hints">passed as a {@link java.util.Hashtable} from {@link com.google.zxing.DecodeHintType}
+      /// to arbitrary data. The
+      /// meaning of the data depends upon the hint type. The implementation may or may not do
+      /// anything with these hints.</param>
+      /// <returns>
+      /// String which the barcode encodes
+      /// </returns>
       public Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
       {
-
          AztecDetectorResult detectorResult = new Detector(image.BlackMatrix).detect();
+         if (detectorResult == null)
+            return null;
+
          ResultPoint[] points = detectorResult.Points;
 
          if (hints != null &&
@@ -61,6 +72,8 @@ namespace com.google.zxing.aztec
          }
 
          DecoderResult decoderResult = new Decoder().decode(detectorResult);
+         if (decoderResult == null)
+            return null;
 
          Result result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.AZTEC);
 
@@ -78,6 +91,10 @@ namespace com.google.zxing.aztec
          return result;
       }
 
+      /// <summary>
+      /// Resets any internal state the implementation has after a decode, to prepare it
+      /// for reuse.
+      /// </summary>
       public void reset()
       {
          // do nothing

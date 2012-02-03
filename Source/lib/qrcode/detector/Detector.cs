@@ -61,7 +61,6 @@ namespace com.google.zxing.qrcode.detector
       /// </summary>
       /// <returns> {@link DetectorResult} encapsulating results of detecting a QR Code
       /// </returns>
-      /// <throws>  ReaderException if no QR Code can be found </throws>
       public virtual DetectorResult detect()
       {
          return detect(null);
@@ -74,7 +73,6 @@ namespace com.google.zxing.qrcode.detector
       /// </param>
       /// <returns> {@link DetectorResult} encapsulating results of detecting a QR Code
       /// </returns>
-      /// <throws>  ReaderException if no QR Code can be found </throws>
       public virtual DetectorResult detect(IDictionary<DecodeHintType, object> hints)
       {
          resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK) ? null : (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
@@ -94,9 +92,11 @@ namespace com.google.zxing.qrcode.detector
          float moduleSize = calculateModuleSize(topLeft, topRight, bottomLeft);
          if (moduleSize < 1.0f)
          {
-            throw ReaderException.Instance;
+            return null;
          }
-         int dimension = computeDimension(topLeft, topRight, bottomLeft, moduleSize);
+         int dimension;
+         if (!computeDimension(topLeft, topRight, bottomLeft, moduleSize, out dimension))
+            return null;
          Version provisionalVersion = Version.getProvisionalVersionForDimension(dimension);
          int modulesBetweenFPCenters = provisionalVersion.DimensionForVersion - 7;
 
@@ -121,16 +121,10 @@ namespace com.google.zxing.qrcode.detector
             // Kind of arbitrary -- expand search radius before giving up
             for (int i = 4; i <= 16; i <<= 1)
             {
-               try
-               {
-                  //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-                  alignmentPattern = findAlignmentInRegion(moduleSize, estAlignmentX, estAlignmentY, (float)i);
-                  break;
-               }
-               catch (ReaderException)
-               {
-                  // try next round
-               }
+               alignmentPattern = findAlignmentInRegion(moduleSize, estAlignmentX, estAlignmentY, (float)i);
+               if (alignmentPattern == null)
+                  continue;
+               break;
             }
             // If we didn't find alignment pattern... well try anyway without it
          }
@@ -202,11 +196,11 @@ namespace com.google.zxing.qrcode.detector
       /// <summary> <p>Computes the dimension (number of modules on a size) of the QR Code based on the position
       /// of the finder patterns and estimated module size.</p>
       /// </summary>
-      protected internal static int computeDimension(ResultPoint topLeft, ResultPoint topRight, ResultPoint bottomLeft, float moduleSize)
+      private static bool computeDimension(ResultPoint topLeft, ResultPoint topRight, ResultPoint bottomLeft, float moduleSize, out int dimension)
       {
          int tltrCentersDimension = round(ResultPoint.distance(topLeft, topRight) / moduleSize);
          int tlblCentersDimension = round(ResultPoint.distance(topLeft, bottomLeft) / moduleSize);
-         int dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
+         dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
          switch (dimension & 0x03)
          {
             // mod 4
@@ -218,9 +212,9 @@ namespace com.google.zxing.qrcode.detector
                dimension--;
                break;
             case 3:
-               throw ReaderException.Instance;
+               return true;
          }
-         return dimension;
+         return true;
       }
 
       /// <summary> <p>Computes an average estimated module size based on estimated derived from the positions
@@ -393,8 +387,7 @@ namespace com.google.zxing.qrcode.detector
       /// </param>
       /// <returns> {@link AlignmentPattern} if found, or null otherwise
       /// </returns>
-      /// <throws>  ReaderException if an unexpected error occurs during detection </throws>
-      protected internal virtual AlignmentPattern findAlignmentInRegion(float overallEstModuleSize, int estAlignmentX, int estAlignmentY, float allowanceFactor)
+      private AlignmentPattern findAlignmentInRegion(float overallEstModuleSize, int estAlignmentX, int estAlignmentY, float allowanceFactor)
       {
          // Look for an alignment pattern (3 modules in size) around where it
          // should be
@@ -404,7 +397,7 @@ namespace com.google.zxing.qrcode.detector
          int alignmentAreaRightX = Math.Min(image.Width - 1, estAlignmentX + allowance);
          if (alignmentAreaRightX - alignmentAreaLeftX < overallEstModuleSize * 3)
          {
-            throw ReaderException.Instance;
+            return null;
          }
 
          int alignmentAreaTopY = Math.Max(0, estAlignmentY - allowance);

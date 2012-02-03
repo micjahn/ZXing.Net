@@ -40,7 +40,7 @@ namespace com.google.zxing.common.reedsolomon
          int[] received = new int[DM_CODE_TEST_WITH_EC.Length];
          Array.Copy(DM_CODE_TEST_WITH_EC, 0, received, 0, received.Length);
          // no errors
-         checkQRRSDecode(received);
+         Assert.IsTrue(checkQRRSDecode(received, true));
       }
 
       [Test]
@@ -52,7 +52,7 @@ namespace com.google.zxing.common.reedsolomon
          {
             Array.Copy(DM_CODE_TEST_WITH_EC, 0, received, 0, received.Length);
             received[i] = random.Next(256);
-            checkQRRSDecode(received);
+            Assert.IsTrue(checkQRRSDecode(received, true));
          }
       }
 
@@ -65,7 +65,7 @@ namespace com.google.zxing.common.reedsolomon
          { // # iterations is kind of arbitrary
             Array.Copy(DM_CODE_TEST_WITH_EC, 0, received, 0, received.Length);
             corrupt(received, DM_CODE_CORRECTABLE, random);
-            checkQRRSDecode(received);
+            Assert.IsTrue(checkQRRSDecode(received, true));
          }
       }
 
@@ -76,24 +76,22 @@ namespace com.google.zxing.common.reedsolomon
          Array.Copy(DM_CODE_TEST_WITH_EC, 0, received, 0, received.Length);
          Random random = getRandom();
          corrupt(received, DM_CODE_CORRECTABLE + 1, random);
-         try
-         {
-            checkQRRSDecode(received);
+         if (checkQRRSDecode(received, false))
             Assert.Fail("Should not have decoded");
-         }
-         catch (ReedSolomonException rse)
-         {
-            // good
-         }
       }
 
-      private void checkQRRSDecode(int[] received)
+      private bool checkQRRSDecode(int[] received, bool checkResult)
       {
-         dmRSDecoder.decode(received, DM_CODE_ECC_BYTES);
-         for (int i = 0; i < DM_CODE_TEST.Length; i++)
+         var result = dmRSDecoder.decode(received, DM_CODE_ECC_BYTES);
+         if (checkResult)
          {
-            Assert.AreEqual(received[i], DM_CODE_TEST[i]);
+            for (int i = 0; i < DM_CODE_TEST.Length; i++)
+            {
+               Assert.AreEqual(received[i], DM_CODE_TEST[i]);
+            }
          }
+
+         return result;
       }
    }
 }

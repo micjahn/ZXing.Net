@@ -61,7 +61,7 @@ namespace com.google.zxing.common.reedsolomon
       /// <param name="twoS">number of error-correction codewords available
       /// </param>
       /// <throws>  ReedSolomonException if decoding fails for any reason </throws>
-      public void decode(int[] received, int twoS)
+      public bool decode(int[] received, int twoS)
       {
          GenericGFPoly poly = new GenericGFPoly(field, received);
          int[] syndromeCoefficients = new int[twoS];
@@ -79,23 +79,33 @@ namespace com.google.zxing.common.reedsolomon
          }
          if (noError)
          {
-            return;
+            return true;
          }
          GenericGFPoly syndrome = new GenericGFPoly(field, syndromeCoefficients);
+         
          GenericGFPoly[] sigmaOmega = runEuclideanAlgorithm(field.buildMonomial(twoS, 1), syndrome, twoS);
+         if (sigmaOmega == null)
+            return false;
+
          GenericGFPoly sigma = sigmaOmega[0];
-         GenericGFPoly omega = sigmaOmega[1];
          int[] errorLocations = findErrorLocations(sigma);
+         if (errorLocations == null)
+            return false;
+
+         GenericGFPoly omega = sigmaOmega[1];
          int[] errorMagnitudes = findErrorMagnitudes(omega, errorLocations, dataMatrix);
          for (int i = 0; i < errorLocations.Length; i++)
          {
             int position = received.Length - 1 - field.log(errorLocations[i]);
             if (position < 0)
             {
-               throw new ReedSolomonException("Bad error location");
+               // throw new ReedSolomonException("Bad error location");
+               return false;
             }
             received[position] = GenericGF.addOrSubtract(received[position], errorMagnitudes[i]);
          }
+
+         return true;
       }
 
       private GenericGFPoly[] runEuclideanAlgorithm(GenericGFPoly a, GenericGFPoly b, int R)
@@ -129,7 +139,8 @@ namespace com.google.zxing.common.reedsolomon
             if (rLast.Zero)
             {
                // Oops, Euclidean algorithm already terminated?
-               throw new ReedSolomonException("r_{i-1} was zero");
+               // throw new ReedSolomonException("r_{i-1} was zero");
+               return null;
             }
             r = rLastLast;
             GenericGFPoly q = field.Zero;
@@ -150,7 +161,8 @@ namespace com.google.zxing.common.reedsolomon
          int sigmaTildeAtZero = t.getCoefficient(0);
          if (sigmaTildeAtZero == 0)
          {
-            throw new ReedSolomonException("sigmaTilde(0) was zero");
+            // throw new ReedSolomonException("sigmaTilde(0) was zero");
+            return null;
          }
 
          int inverse = field.inverse(sigmaTildeAtZero);
@@ -180,7 +192,8 @@ namespace com.google.zxing.common.reedsolomon
          }
          if (e != numErrors)
          {
-            throw new ReedSolomonException("Error locator degree does not match number of roots");
+            // throw new ReedSolomonException("Error locator degree does not match number of roots");
+            return null;
          }
          return result;
       }

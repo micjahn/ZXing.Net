@@ -30,12 +30,7 @@ namespace com.google.zxing.maxicode
       private static int MATRIX_WIDTH = 30;
       private static int MATRIX_HEIGHT = 33;
 
-      private Decoder decoder = new Decoder();
-
-      Decoder getDecoder()
-      {
-         return decoder;
-      }
+      private readonly Decoder decoder = new Decoder();
 
       /// <summary>
       /// Locates and decodes a MaxiCode in an image.
@@ -56,11 +51,15 @@ namespace com.google.zxing.maxicode
          if (hints != null && hints.ContainsKey(DecodeHintType.PURE_BARCODE))
          {
             BitMatrix bits = extractPureBits(image.BlackMatrix);
+            if (bits == null)
+               return null;
             decoderResult = decoder.decode(bits, hints);
+            if (decoderResult == null)
+               return null;
          }
          else
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          ResultPoint[] points = NO_POINTS;
@@ -95,7 +94,7 @@ namespace com.google.zxing.maxicode
          int[] enclosingRectangle = image.getEnclosingRectangle();
          if (enclosingRectangle == null)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          int left = enclosingRectangle[0];

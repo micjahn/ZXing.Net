@@ -82,7 +82,6 @@ namespace com.google.zxing.qrcode.detector
       /// </summary>
       /// <returns> {@link AlignmentPattern} if found
       /// </returns>
-      /// <throws>  ReaderException if not found </throws>
       internal AlignmentPattern find()
       {
          int startX = this.startX;
@@ -168,12 +167,12 @@ namespace com.google.zxing.qrcode.detector
 
          // Hmm, nothing we saw was observed and confirmed twice. If we had
          // any guess at all, return it.
-         if (!(possibleCenters.Count == 0))
+         if (possibleCenters.Count != 0)
          {
-            return (AlignmentPattern)possibleCenters[0];
+            return possibleCenters[0];
          }
 
-         throw ReaderException.Instance;
+         return null;
       }
 
       /// <summary> Given a count of black/white/black pixels just seen and an end position,

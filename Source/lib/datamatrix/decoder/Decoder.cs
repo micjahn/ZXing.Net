@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections.Generic;
 using com.google.zxing.common;
 using com.google.zxing.common.reedsolomon;
 
 namespace com.google.zxing.datamatrix.decoder
 {
-
-
    /// <summary>
    /// <p>The main class which implements Data Matrix Code decoding -- as opposed to locating and extracting
    /// the Data Matrix Code from an image.</p>
@@ -31,9 +27,11 @@ namespace com.google.zxing.datamatrix.decoder
    /// </summary>
    public sealed class Decoder
    {
+      private readonly ReedSolomonDecoder rsDecoder;
 
-      private ReedSolomonDecoder rsDecoder;
-
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Decoder"/> class.
+      /// </summary>
       public Decoder()
       {
          rsDecoder = new ReedSolomonDecoder(GenericGF.DATA_MATRIX_FIELD_256);
@@ -76,7 +74,6 @@ namespace com.google.zxing.datamatrix.decoder
       /// </summary>
       public DecoderResult decode(BitMatrix bits)
       {
-
          // Construct a parser and read version, error-correction level
          BitMatrixParser parser = new BitMatrixParser(bits);
          Version version = BitMatrixParser.readVersion(bits);
@@ -102,7 +99,8 @@ namespace com.google.zxing.datamatrix.decoder
             DataBlock dataBlock = dataBlocks[j];
             sbyte[] codewordBytes = dataBlock.Codewords;
             int numDataCodewords = dataBlock.NumDataCodewords;
-            correctErrors(codewordBytes, numDataCodewords);
+            if (!correctErrors(codewordBytes, numDataCodewords))
+               return null;
             for (int i = 0; i < numDataCodewords; i++)
             {
                // De-interlace data blocks.
@@ -122,7 +120,7 @@ namespace com.google.zxing.datamatrix.decoder
       /// <param name="numDataCodewords">number of codewords that are data bytes</param>
       /// <exception cref="ChecksumException">if error correction fails</exception>
       /// </summary>
-      private void correctErrors(sbyte[] codewordBytes, int numDataCodewords)
+      private bool correctErrors(sbyte[] codewordBytes, int numDataCodewords)
       {
          int numCodewords = codewordBytes.Length;
          // First read into an array of ints
@@ -132,21 +130,17 @@ namespace com.google.zxing.datamatrix.decoder
             codewordsInts[i] = codewordBytes[i] & 0xFF;
          }
          int numECCodewords = codewordBytes.Length - numDataCodewords;
-         try
-         {
-            rsDecoder.decode(codewordsInts, numECCodewords);
-         }
-         catch (ReedSolomonException rse)
-         {
-            throw ChecksumException.Instance;
-         }
+         if (!rsDecoder.decode(codewordsInts, numECCodewords))
+            return false;
+
          // Copy back into array of bytes -- only need to worry about the bytes that were data
          // We don't care about errors in the error-correction codewords
          for (int i = 0; i < numDataCodewords; i++)
          {
             codewordBytes[i] = (sbyte)codewordsInts[i];
          }
-      }
 
+         return true;
+      }
    }
 }

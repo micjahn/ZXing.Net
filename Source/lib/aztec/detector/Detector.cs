@@ -30,8 +30,7 @@ namespace com.google.zxing.aztec
     */
    public sealed class Detector
    {
-
-      private BitMatrix image;
+      private readonly BitMatrix image;
 
       private bool compact;
       private int nbLayers;
@@ -44,26 +43,28 @@ namespace com.google.zxing.aztec
          this.image = image;
       }
 
-      /**
-       * <p>Detects an Aztec Code in an image.</p>
-       *
-       * @return {@link AztecDetectorResult} encapsulating results of detecting an Aztec Code
-       * @throws NotFoundException if no Aztec Code can be found
-       */
+      /// <summary>
+      /// Detects an Aztec Code in an image.
+      /// </summary>
+      /// <returns>{@link AztecDetectorResult} encapsulating results of detecting an Aztec Code</returns>
       public AztecDetectorResult detect()
       {
-
          // 1. Get the center of the aztec matrix
          Point pCenter = getMatrixCenter();
 
          // 2. Get the corners of the center bull's eye
          Point[] bullEyeCornerPoints = getBullEyeCornerPoints(pCenter);
+         if (bullEyeCornerPoints == null)
+            return null;
 
          // 3. Get the size of the matrix from the bull's eye
-         extractParameters(bullEyeCornerPoints);
+         if (!extractParameters(bullEyeCornerPoints))
+            return null;
 
          // 4. Get the corners of the matrix
          ResultPoint[] corners = getMatrixCornerPoints(bullEyeCornerPoints);
+         if (corners == null)
+            return null;
 
          // 5. Sample the grid
          BitMatrix bits = sampleGrid(image, corners[shift % 4], corners[(shift + 3) % 4], corners[(shift + 2) % 4], corners[(shift + 1) % 4]);
@@ -71,15 +72,13 @@ namespace com.google.zxing.aztec
          return new AztecDetectorResult(bits, corners, compact, nbDataBlocks, nbLayers);
       }
 
-      /**
-       * <p> Extracts the number of data layers and data blocks from the layer around the bull's eye </p>
-       *
-       * @param bullEyeCornerPoints the array of bull's eye corners
-       * @throws NotFoundException in case of too many errors or invalid parameters
-       */
-      private void extractParameters(Point[] bullEyeCornerPoints)
+      /// <summary>
+      /// Extracts the number of data layers and data blocks from the layer around the bull's eye 
+      /// </summary>
+      /// <param name="bullEyeCornerPoints">bullEyeCornerPoints the array of bull's eye corners</param>
+      /// <returns></returns>
+      private bool extractParameters(Point[] bullEyeCornerPoints)
       {
-
          // Get the bits around the bull's eye
          bool[] resab = sampleLine(bullEyeCornerPoints[0], bullEyeCornerPoints[1], 2 * nbCenterLayers + 1);
          bool[] resbc = sampleLine(bullEyeCornerPoints[1], bullEyeCornerPoints[2], 2 * nbCenterLayers + 1);
@@ -105,7 +104,7 @@ namespace com.google.zxing.aztec
          }
          else
          {
-            throw com.google.zxing.NotFoundException.Instance;
+            return false;
          }
 
          //d      a
@@ -161,23 +160,22 @@ namespace com.google.zxing.aztec
          }
 
          // corrects the error using RS algorithm
-         correctParameterData(parameterData, compact);
+         if (!correctParameterData(parameterData, compact))
+            return false;
 
          // gets the parameters from the bit array
          getParameters(parameterData);
+
+         return true;
       }
 
-      /**
-       *
-       * <p>Gets the Aztec code corners from the bull's eye corners and the parameters </p>
-       *
-       * @param bullEyeCornerPoints the array of bull's eye corners
-       * @return the array of aztec code corners
-       * @throws NotFoundException if the corner points do not fit in the image
-       */
+      /// <summary>
+      /// Gets the Aztec code corners from the bull's eye corners and the parameters
+      /// </summary>
+      /// <param name="bullEyeCornerPoints">the array of bull's eye corners</param>
+      /// <returns>the array of aztec code corners</returns>
       private ResultPoint[] getMatrixCornerPoints(Point[] bullEyeCornerPoints)
       {
-
          float ratio = (2 * nbLayers + (nbLayers > 4 ? 1 : 0) + (nbLayers - 4) / 8)
              / (2.0f * nbCenterLayers);
 
@@ -204,21 +202,19 @@ namespace com.google.zxing.aztec
 
          if (!isValid(targetax, targetay) || !isValid(targetbx, targetby) || !isValid(targetcx, targetcy) || !isValid(targetdx, targetdy))
          {
-            throw zxing.NotFoundException.Instance;
+            return null;
          }
 
          return new[] { new ResultPoint(targetax, targetay), new ResultPoint(targetbx, targetby), new ResultPoint(targetcx, targetcy), new ResultPoint(targetdx, targetdy) };
       }
 
-      /**
-       *
-       * <p> Corrects the parameter bits using Reed-Solomon algorithm </p>
-       *
-       * @param parameterData paremeter bits
-       * @param compact true if this is a compact Aztec code
-       * @throws NotFoundException if the array contains too many errors
-       */
-      private static void correctParameterData(bool[] parameterData, bool compact)
+      /// <summary>
+      /// Corrects the parameter bits using Reed-Solomon algorithm
+      /// </summary>
+      /// <param name="parameterData">paremeter bits</param>
+      /// <param name="compact">compact true if this is a compact Aztec code</param>
+      /// <returns></returns>
+      private static bool correctParameterData(bool[] parameterData, bool compact)
       {
          int numCodewords;
          int numDataCodewords;
@@ -237,7 +233,7 @@ namespace com.google.zxing.aztec
          int numECCodewords = numCodewords - numDataCodewords;
          int[] parameterWords = new int[numCodewords];
 
-         int codewordSize = 4;
+         const int codewordSize = 4;
          for (int i = 0; i < numCodewords; i++)
          {
             int flag = 1;
@@ -251,15 +247,9 @@ namespace com.google.zxing.aztec
             }
          }
 
-         try
-         {
-            ReedSolomonDecoder rsDecoder = new ReedSolomonDecoder(GenericGF.AZTEC_PARAM);
-            rsDecoder.decode(parameterWords, numECCodewords);
-         }
-         catch (ReedSolomonException )
-         {
-            throw zxing.NotFoundException.Instance;
-         }
+         var rsDecoder = new ReedSolomonDecoder(GenericGF.AZTEC_PARAM);
+         if (!rsDecoder.decode(parameterWords, numECCodewords))
+            return false;
 
          for (int i = 0; i < numDataCodewords; i++)
          {
@@ -270,16 +260,15 @@ namespace com.google.zxing.aztec
                flag <<= 1;
             }
          }
+
+         return true;
       }
 
-      /**
-       * 
-       * <p> Finds the corners of a bull-eye centered on the passed point </p>
-       * 
-       * @param pCenter Center point
-       * @return The corners of the bull-eye
-       * @throws NotFoundException If no valid bull-eye can be found
-       */
+      /// <summary>
+      /// Finds the corners of a bull-eye centered on the passed point
+      /// </summary>
+      /// <param name="pCenter">Center point</param>
+      /// <returns>The corners of the bull-eye</returns>
       private Point[] getBullEyeCornerPoints(Point pCenter)
       {
          Point pina = pCenter;
@@ -319,7 +308,7 @@ namespace com.google.zxing.aztec
 
          if (nbCenterLayers != 5 && nbCenterLayers != 7)
          {
-            throw zxing.NotFoundException.Instance;
+            return null;
          }
 
          compact = nbCenterLayers == 5;
@@ -344,7 +333,7 @@ namespace com.google.zxing.aztec
          if (!isValid(targetax, targetay) || !isValid(targetbx, targetby)
              || !isValid(targetcx, targetcy) || !isValid(targetdx, targetdy))
          {
-            throw zxing.NotFoundException.Instance;
+            return null;
          }
 
          Point pa = new Point(targetax, targetay);
@@ -363,7 +352,6 @@ namespace com.google.zxing.aztec
        */
       private Point getMatrixCenter()
       {
-
          ResultPoint pointA;
          ResultPoint pointB;
          ResultPoint pointC;

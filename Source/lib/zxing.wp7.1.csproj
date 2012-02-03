@@ -124,7 +124,6 @@
     <Compile Include="common\reedsolomon\GenericGFPoly.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonDecoder.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonEncoder.cs" />
-    <Compile Include="common\reedsolomon\ReedSolomonException.cs" />
     <Compile Include="common\StringUtils.cs" />
     <Compile Include="datamatrix\DataMatrixReader.cs" />
     <Compile Include="datamatrix\decoder\BitMatrixParser.cs" />

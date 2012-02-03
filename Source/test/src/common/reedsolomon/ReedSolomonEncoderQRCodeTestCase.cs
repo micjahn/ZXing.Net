@@ -62,7 +62,7 @@ namespace com.google.zxing.common.reedsolomon
             int[] original = new int[dataBytes];
             Array.Copy(toEncode, 0, original, 0, dataBytes);
             encoder.encode(toEncode, ecBytes);
-            decoder.decode(toEncode, ecBytes);
+            Assert.IsTrue(decoder.decode(toEncode, ecBytes));
             assertArraysEqual(original, 0, toEncode, 0, dataBytes);
          }
       }

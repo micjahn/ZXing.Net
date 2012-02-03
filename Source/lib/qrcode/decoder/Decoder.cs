@@ -45,7 +45,6 @@ namespace com.google.zxing.qrcode.decoder
       /// </param>
       /// <returns> text and bytes encoded within the QR Code
       /// </returns>
-      /// <throws>  ReaderException if the QR Code cannot be decoded </throws>
       public DecoderResult decode(bool[][] image, IDictionary<DecodeHintType, object> hints)
       {
          int dimension = image.Length;
@@ -67,7 +66,6 @@ namespace com.google.zxing.qrcode.decoder
       /// </param>
       /// <returns> text and bytes encoded within the QR Code
       /// </returns>
-      /// <throws>  ReaderException if the QR Code cannot be decoded </throws>
       public DecoderResult decode(BitMatrix bits, IDictionary<DecodeHintType, object> hints)
       {
          // Construct a parser and read version, error-correction level
@@ -94,7 +92,8 @@ namespace com.google.zxing.qrcode.decoder
          {
             sbyte[] codewordBytes = dataBlock.Codewords;
             int numDataCodewords = dataBlock.NumDataCodewords;
-            correctErrors(codewordBytes, numDataCodewords);
+            if (!correctErrors(codewordBytes, numDataCodewords))
+               return null;
             for (int i = 0; i < numDataCodewords; i++)
             {
                resultBytes[resultOffset++] = codewordBytes[i];
@@ -113,8 +112,7 @@ namespace com.google.zxing.qrcode.decoder
       /// </param>
       /// <param name="numDataCodewords">number of codewords that are data bytes
       /// </param>
-      /// <throws>  ReaderException if error correction fails </throws>
-      private void correctErrors(sbyte[] codewordBytes, int numDataCodewords)
+      private bool correctErrors(sbyte[] codewordBytes, int numDataCodewords)
       {
          int numCodewords = codewordBytes.Length;
          // First read into an array of ints
@@ -124,20 +122,18 @@ namespace com.google.zxing.qrcode.decoder
             codewordsInts[i] = codewordBytes[i] & 0xFF;
          }
          int numECCodewords = codewordBytes.Length - numDataCodewords;
-         try
-         {
-            rsDecoder.decode(codewordsInts, numECCodewords);
-         }
-         catch (ReedSolomonException)
-         {
-            throw ReaderException.Instance;
-         }
+
+         if (!rsDecoder.decode(codewordsInts, numECCodewords))
+            return false;
+
          // Copy back into array of bytes -- only need to worry about the bytes that were data
          // We don't care about errors in the error-correction codewords
          for (int i = 0; i < numDataCodewords; i++)
          {
             codewordBytes[i] = (sbyte)codewordsInts[i];
          }
+
+         return true;
       }
    }
 }

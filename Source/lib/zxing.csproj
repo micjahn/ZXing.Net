@@ -156,8 +156,6 @@
     <Compile Include="common\BitArray.cs" />
     <Compile Include="common\BitMatrix.cs" />
     <Compile Include="common\BitSource.cs" />
-    <Compile Include="common\ByteArray.cs" />
-    <Compile Include="common\ByteMatrix.cs" />
     <Compile Include="common\CharacterSetECI.cs" />
     <Compile Include="common\Collections.cs" />
     <Compile Include="common\DecoderResult.cs" />
@@ -174,7 +172,6 @@
     <Compile Include="common\reedsolomon\GenericGFPoly.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonDecoder.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonEncoder.cs" />
-    <Compile Include="common\reedsolomon\ReedSolomonException.cs" />
     <Compile Include="datamatrix\DataMatrixReader.cs" />
     <Compile Include="datamatrix\decoder\BitMatrixParser.cs" />
     <Compile Include="datamatrix\decoder\DataBlock.cs" />

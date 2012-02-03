@@ -52,15 +52,22 @@ namespace com.google.zxing.pdf417
          if (hints != null && hints.ContainsKey(DecodeHintType.PURE_BARCODE))
          {
             BitMatrix bits = extractPureBits(image.BlackMatrix);
+            if (bits == null)
+               return null;
             decoderResult = decoder.decode(bits);
             points = NO_POINTS;
          }
          else
          {
             DetectorResult detectorResult = new Detector(image).detect();
+            if (detectorResult == null)
+               return null;
             decoderResult = decoder.decode(detectorResult.Bits);
             points = detectorResult.Points;
          }
+         if (decoderResult == null)
+            return null;
+
          return new Result(decoderResult.Text, decoderResult.RawBytes, points,
              BarcodeFormat.PDF_417);
       }
@@ -86,21 +93,27 @@ namespace com.google.zxing.pdf417
          int[] rightBottomBlack = image.getBottomRightOnBit();
          if (leftTopBlack == null || rightBottomBlack == null)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
-         int moduleSize = PDF417Reader.moduleSize(leftTopBlack, image);
+         int moduleSize;
+         if (!PDF417Reader.moduleSize(leftTopBlack, image, out moduleSize))
+            return null;
 
          int top = leftTopBlack[1];
          int bottom = rightBottomBlack[1];
-         int left = findPatternStart(leftTopBlack[0], top, image);
-         int right = findPatternEnd(leftTopBlack[0], top, image);
+         int left;
+         if (!findPatternStart(leftTopBlack[0], top, image, out left))
+            return null;
+         int right;
+         if (!findPatternEnd(leftTopBlack[0], top, image, out right))
+            return null;
 
          int matrixWidth = (right - left + 1) / moduleSize;
          int matrixHeight = (bottom - top + 1) / moduleSize;
          if (matrixWidth <= 0 || matrixHeight <= 0)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          // Push in the "border" by half the module width so that we start
@@ -111,7 +124,7 @@ namespace com.google.zxing.pdf417
          left += nudge;
 
          // Now just read off the bits
-         BitMatrix bits = new BitMatrix(matrixWidth, matrixHeight);
+         var bits = new BitMatrix(matrixWidth, matrixHeight);
          for (int y = 0; y < matrixHeight; y++)
          {
             int iOffset = top + y * moduleSize;
@@ -126,7 +139,7 @@ namespace com.google.zxing.pdf417
          return bits;
       }
 
-      private static int moduleSize(int[] leftTopBlack, BitMatrix image)
+      private static bool moduleSize(int[] leftTopBlack, BitMatrix image, out int msize)
       {
          int x = leftTopBlack[0];
          int y = leftTopBlack[1];
@@ -137,22 +150,22 @@ namespace com.google.zxing.pdf417
          }
          if (x == width)
          {
-            throw NotFoundException.Instance;
+            msize = 0;
+            return false;
          }
 
-         int moduleSize = (int)((uint)(x - leftTopBlack[0]) >> 3); // (x - leftTopBlack[0]) >>> 3// We've crossed left first bar, which is 8x
-         if (moduleSize == 0)
+         msize = (int)((uint)(x - leftTopBlack[0]) >> 3); // (x - leftTopBlack[0]) >>> 3// We've crossed left first bar, which is 8x
+         if (msize == 0)
          {
-            throw NotFoundException.Instance;
+            return false;
          }
-
-         return moduleSize;
+         return true;
       }
 
-      private static int findPatternStart(int x, int y, BitMatrix image)
+      private static bool findPatternStart(int x, int y, BitMatrix image, out int start)
       {
          int width = image.Width;
-         int start = x;
+         start = x;
          // start should be on black
          int transitions = 0;
          bool black = true;
@@ -168,15 +181,15 @@ namespace com.google.zxing.pdf417
          }
          if (start == width - 1)
          {
-            throw NotFoundException.Instance;
+            return false;
          }
-         return start;
+         return true;
       }
 
-      private static int findPatternEnd(int x, int y, BitMatrix image)
+      private static bool findPatternEnd(int x, int y, BitMatrix image, out int end)
       {
          int width = image.Width;
-         int end = width - 1;
+         end = width - 1;
          // end should be on black
          while (end > x && !image[end, y])
          {
@@ -196,9 +209,9 @@ namespace com.google.zxing.pdf417
          }
          if (end == x)
          {
-            throw NotFoundException.Instance;
+            return false;
          }
-         return end;
+         return true;
       }
    }
 }

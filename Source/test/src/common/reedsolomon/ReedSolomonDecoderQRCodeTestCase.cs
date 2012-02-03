@@ -45,7 +45,7 @@ namespace com.google.zxing.common.reedsolomon
          int[] received = new int[QR_CODE_TEST_WITH_EC.Length];
          Array.Copy(QR_CODE_TEST_WITH_EC, 0, received, 0, received.Length);
          // no errors
-         checkQRRSDecode(received);
+         Assert.IsTrue(checkQRRSDecode(received, true));
       }
 
       [Test]
@@ -57,7 +57,7 @@ namespace com.google.zxing.common.reedsolomon
          {
             Array.Copy(QR_CODE_TEST_WITH_EC, 0, received, 0, received.Length);
             received[i] = random.Next(256);
-            checkQRRSDecode(received);
+            Assert.IsTrue(checkQRRSDecode(received, true));
          }
       }
 
@@ -70,7 +70,7 @@ namespace com.google.zxing.common.reedsolomon
          { // # iterations is kind of arbitrary
             Array.Copy(QR_CODE_TEST_WITH_EC, 0, received, 0, received.Length);
             corrupt(received, QR_CODE_CORRECTABLE, random);
-            checkQRRSDecode(received);
+            Assert.IsTrue(checkQRRSDecode(received, true));
          }
       }
 
@@ -81,24 +81,22 @@ namespace com.google.zxing.common.reedsolomon
          Array.Copy(QR_CODE_TEST_WITH_EC, 0, received, 0, received.Length);
          Random random = getRandom();
          corrupt(received, QR_CODE_CORRECTABLE + 1, random);
-         try
-         {
-            checkQRRSDecode(received);
+         if (checkQRRSDecode(received, false))
             Assert.Fail("Should not have decoded");
-         }
-         catch (ReedSolomonException rse)
-         {
-            // good
-         }
       }
 
-      private void checkQRRSDecode(int[] received)
+      private bool checkQRRSDecode(int[] received, bool checkResult)
       {
-         qrRSDecoder.decode(received, QR_CODE_ECC_BYTES);
-         for (int i = 0; i < QR_CODE_TEST.Length; i++)
+         var result = qrRSDecoder.decode(received, QR_CODE_ECC_BYTES);
+         if (checkResult)
          {
-            Assert.AreEqual(received[i], QR_CODE_TEST[i]);
+            for (int i = 0; i < QR_CODE_TEST.Length; i++)
+            {
+               Assert.AreEqual(received[i], QR_CODE_TEST[i]);
+            }
          }
+
+         return result;
       }
    }
 }

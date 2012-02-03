@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections.Generic;
 using com.google.zxing.common;
 
 namespace com.google.zxing.pdf417.decoder
 {
-
-
    /// <summary>
    /// <p>The main class which implements PDF417 Code decoding -- as
    /// opposed to locating and extracting the PDF417 Code from an image.</p>
@@ -30,9 +26,8 @@ namespace com.google.zxing.pdf417.decoder
    /// </summary>
    public sealed class Decoder
    {
-
-      private static int MAX_ERRORS = 3;
-      private static int MAX_EC_CODEWORDS = 512;
+      private const int MAX_ERRORS = 3;
+      private const int MAX_EC_CODEWORDS = 512;
       //private ReedSolomonDecoder rsDecoder;
 
       public Decoder()
@@ -81,15 +76,17 @@ namespace com.google.zxing.pdf417.decoder
          int[] codewords = parser.readCodewords();
          if (codewords.Length == 0)
          {
-            throw FormatException.Instance;
+            return null;
          }
 
          int ecLevel = parser.getECLevel();
          int numECCodewords = 1 << (ecLevel + 1);
          int[] erasures = parser.getErasures();
 
-         correctErrors(codewords, erasures, numECCodewords);
-         verifyCodewordCount(codewords, numECCodewords);
+         if (!correctErrors(codewords, erasures, numECCodewords))
+            return null;
+         if (!verifyCodewordCount(codewords, numECCodewords))
+            return null;
 
          // Decode the codewords
          return DecodedBitStreamParser.decode(codewords);
@@ -99,16 +96,14 @@ namespace com.google.zxing.pdf417.decoder
       /// Verify that all is OK with the codeword array.
       ///
       /// @param codewords
-      /// <returns>an index to the first data codeword.</returns>
-      /// <exception cref="FormatException"></exception>
       /// </summary>
-      private static void verifyCodewordCount(int[] codewords, int numECCodewords)
+      private static bool verifyCodewordCount(int[] codewords, int numECCodewords)
       {
          if (codewords.Length < 4)
          {
             // Codeword array size should be at least 4 allowing for
             // Count CW, At least one Data CW, Error Correction CW, Error Correction CW
-            throw FormatException.Instance;
+            return false;
          }
          // The first codeword, the Symbol Length Descriptor, shall always encode the total number of data
          // codewords in the symbol, including the Symbol Length Descriptor itself, data codewords and pad
@@ -116,7 +111,7 @@ namespace com.google.zxing.pdf417.decoder
          int numberOfCodewords = codewords[0];
          if (numberOfCodewords > codewords.Length)
          {
-            throw FormatException.Instance;
+            return false;
          }
          if (numberOfCodewords == 0)
          {
@@ -127,9 +122,10 @@ namespace com.google.zxing.pdf417.decoder
             }
             else
             {
-               throw FormatException.Instance;
+               return false;
             }
          }
+         return true;
       }
 
       /// <summary>
@@ -139,7 +135,7 @@ namespace com.google.zxing.pdf417.decoder
       /// <param name="codewords">data and error correction codewords</param>
       /// <exception cref="ChecksumException">if error correction fails</exception>
       /// </summary>
-      private static int correctErrors(int[] codewords,
+      private static bool correctErrors(int[] codewords,
                                        int[] erasures,
                                        int numECCodewords)
       {
@@ -147,7 +143,7 @@ namespace com.google.zxing.pdf417.decoder
              numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS)
          {
             // Too many errors or EC Codewords is corrupted
-            throw FormatException.Instance;
+            return false;
          }
          // Try to correct the errors
          // TODO enable error correction
@@ -160,10 +156,9 @@ namespace com.google.zxing.pdf417.decoder
          if (numErasures > MAX_ERRORS)
          {
             // Still too many errors
-            throw FormatException.Instance;
+            return false;
          }
-         return result;
+         return true;
       }
-
    }
 }

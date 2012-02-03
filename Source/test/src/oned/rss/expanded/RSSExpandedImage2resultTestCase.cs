@@ -77,6 +77,7 @@ namespace com.google.zxing.oned.rss.expanded
          BitArray row = binaryMap.getBlackRow(rowNumber, null);
 
          Result theResult = rssExpandedReader.decodeRow(rowNumber, row, null);
+         Assert.IsNotNull(theResult);
 
          Assert.AreEqual(BarcodeFormat.RSS_EXPANDED, theResult.BarcodeFormat);
 

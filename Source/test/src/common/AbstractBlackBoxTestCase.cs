@@ -253,6 +253,8 @@ namespace com.google.zxing.common
          }
 
          Result result = barcodeReader.decode(source, hints);
+         if (result == null)
+            return false;
 
          if (expectedFormat != result.BarcodeFormat)
          {

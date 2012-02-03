@@ -62,6 +62,9 @@ namespace com.google.zxing.oned
 
       private static Result maybeReturnResult(Result result)
       {
+         if (result == null)
+            return null;
+
          String text = result.Text;
          if (text[0] == '0')
          {
@@ -69,7 +72,7 @@ namespace com.google.zxing.oned
          }
          else
          {
-            throw FormatException.Instance;
+            return null;
          }
       }
    }

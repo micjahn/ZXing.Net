@@ -42,17 +42,14 @@ namespace com.google.zxing.oned
       virtual public Result decode(BinaryBitmap image,
                            IDictionary<DecodeHintType, object> hints)
       {
-         try
-         {
-            return doDecode(image, hints);
-         }
-         catch (NotFoundException nfe)
+         var result = doDecode(image, hints);
+         if (result == null)
          {
             bool tryHarder = hints != null && hints.ContainsKey(DecodeHintType.TRY_HARDER);
             if (tryHarder && image.RotateSupported)
             {
                BinaryBitmap rotatedImage = image.rotateCounterClockwise();
-               Result result = doDecode(rotatedImage, hints);
+               result = doDecode(rotatedImage, hints);
                // Record that we found it rotated 90 degrees CCW / 270 degrees CW
                IDictionary<ResultMetadataType, object> metadata = result.ResultMetadata;
                int orientation = 270;
@@ -60,7 +57,7 @@ namespace com.google.zxing.oned
                {
                   // But if we found it reversed in doDecode(), add in that result here:
                   orientation = (orientation +
-                      (int)metadata[ResultMetadataType.ORIENTATION]) % 360;
+                                 (int) metadata[ResultMetadataType.ORIENTATION])%360;
                }
                result.putMetadata(ResultMetadataType.ORIENTATION, orientation);
                // Update result points
@@ -73,13 +70,9 @@ namespace com.google.zxing.oned
                      points[i] = new ResultPoint(height - points[i].Y - 1, points[i].X);
                   }
                }
-               return result;
-            }
-            else
-            {
-               throw nfe;
             }
          }
+         return result;
       }
 
       virtual public void reset()
@@ -149,7 +142,8 @@ namespace com.google.zxing.oned
             for (int attempt = 0; attempt < 2; attempt++)
             {
                if (attempt == 1)
-               { // trying again?
+               { 
+                  // trying again?
                   row.reverse(); // reverse the row and continue
                   // This means we will only ever draw result points *once* in the life of this method
                   // since we want to avoid drawing the wrong points after flipping the row, and,
@@ -170,6 +164,8 @@ namespace com.google.zxing.oned
                {
                   // Look for a barcode
                   Result result = decodeRow(rowNumber, row, hints);
+                  if (result == null)
+                     continue;
                   // We found our barcode
                   if (attempt == 1)
                   {
@@ -192,7 +188,7 @@ namespace com.google.zxing.oned
             }
          }
 
-         throw NotFoundException.Instance;
+         return null;
       }
 
       /// <summary>

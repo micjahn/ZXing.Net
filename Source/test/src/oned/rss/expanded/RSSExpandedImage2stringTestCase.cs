@@ -300,6 +300,7 @@ namespace com.google.zxing.oned.rss.expanded
          BitArray row = binaryMap.getBlackRow(rowNumber, null);
 
          Result result = rssExpandedReader.decodeRow(rowNumber, row, null);
+         Assert.IsNotNull(result);
 
          Assert.AreEqual(BarcodeFormat.RSS_EXPANDED, result.BarcodeFormat);
          Assert.AreEqual(expected, result.Text);

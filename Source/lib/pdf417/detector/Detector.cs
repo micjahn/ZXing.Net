@@ -36,19 +36,19 @@ namespace com.google.zxing.pdf417.detector
 
       // B S B S B S B S Bar/Space pattern
       // 11111111 0 1 0 1 0 1 000
-      private static int[] START_PATTERN = { 8, 1, 1, 1, 1, 1, 1, 3 };
+      private static readonly int[] START_PATTERN = { 8, 1, 1, 1, 1, 1, 1, 3 };
 
       // 11111111 0 1 0 1 0 1 000
-      private static int[] START_PATTERN_REVERSE = { 3, 1, 1, 1, 1, 1, 1, 8 };
+      private static readonly int[] START_PATTERN_REVERSE = { 3, 1, 1, 1, 1, 1, 1, 8 };
 
       // 1111111 0 1 000 1 0 1 00 1
-      private static int[] STOP_PATTERN = { 7, 1, 1, 3, 1, 1, 1, 2, 1 };
+      private static readonly int[] STOP_PATTERN = { 7, 1, 1, 3, 1, 1, 1, 2, 1 };
 
       // B S B S B S B S B Bar/Space pattern
       // 1111111 0 1 000 1 0 1 00 1
-      private static int[] STOP_PATTERN_REVERSE = { 1, 2, 1, 1, 1, 3, 1, 1, 7 };
+      private static readonly int[] STOP_PATTERN_REVERSE = { 1, 2, 1, 1, 1, 3, 1, 1, 7 };
 
-      private BinaryBitmap image;
+      private readonly BinaryBitmap image;
 
       public Detector(BinaryBitmap image)
       {
@@ -59,7 +59,6 @@ namespace com.google.zxing.pdf417.detector
       /// <p>Detects a PDF417 Code in an image, simply.</p>
       ///
       /// <returns><see cref="DetectorResult" />encapsulating results of detecting a PDF417 Code</returns>
-      /// <exception cref="NotFoundException">if no QR Code can be found</exception>
       /// </summary>
       public DetectorResult detect()
       {
@@ -71,7 +70,6 @@ namespace com.google.zxing.pdf417.detector
       ///
       /// <param name="hints">optional hints to detector</param>
       /// <returns><see cref="DetectorResult" />encapsulating results of detecting a PDF417 Code</returns>
-      /// <exception cref="NotFoundException">if no PDF417 Code can be found</exception>
       /// </summary>
       public DetectorResult detect(IDictionary<DecodeHintType, object> hints)
       {
@@ -96,27 +94,29 @@ namespace com.google.zxing.pdf417.detector
 
          if (vertices == null)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          float moduleWidth = computeModuleWidth(vertices);
          if (moduleWidth < 1.0f)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          int dimension = computeDimension(vertices[4], vertices[6],
              vertices[5], vertices[7], moduleWidth);
          if (dimension < 1)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          // Deskew and sample image.
          BitMatrix bits = sampleGrid(matrix, vertices[4], vertices[5],
              vertices[6], vertices[7], dimension);
-         return new DetectorResult(bits, new ResultPoint[]{vertices[5],
-        vertices[4], vertices[6], vertices[7]});
+         return new DetectorResult(bits, new ResultPoint[]
+                                            {
+                                               vertices[5], vertices[4], vertices[6], vertices[7]
+                                            });
       }
 
       /// <summary>

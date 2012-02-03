@@ -59,6 +59,8 @@ namespace com.google.zxing.qrcode
          if (hints != null && hints.ContainsKey(DecodeHintType.PURE_BARCODE))
          {
             BitMatrix bits = extractPureBits(image.BlackMatrix);
+            if (bits == null)
+               return null;
             decoderResult = decoder.decode(bits, hints);
             points = NO_POINTS;
          }
@@ -68,6 +70,8 @@ namespace com.google.zxing.qrcode
             decoderResult = decoder.decode(detectorResult.Bits, hints);
             points = detectorResult.Points;
          }
+         if (decoderResult == null)
+            return null;
 
          Result result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.QR_CODE);
          IList<sbyte[]> byteSegments = decoderResult.ByteSegments;
@@ -99,15 +103,16 @@ namespace com.google.zxing.qrcode
       /// </summary>
       private static BitMatrix extractPureBits(BitMatrix image)
       {
-
          int[] leftTopBlack = image.getTopLeftOnBit();
          int[] rightBottomBlack = image.getBottomRightOnBit();
          if (leftTopBlack == null || rightBottomBlack == null)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
-         float moduleSize = QRCodeReader.moduleSize(leftTopBlack, image);
+         float moduleSize;
+         if (!QRCodeReader.moduleSize(leftTopBlack, image, out moduleSize))
+            return null;
 
          int top = leftTopBlack[1];
          int bottom = rightBottomBlack[1];
@@ -125,12 +130,12 @@ namespace com.google.zxing.qrcode
          int matrixHeight = (int)Math.Round((bottom - top + 1) / moduleSize);
          if (matrixWidth <= 0 || matrixHeight <= 0)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
          if (matrixHeight != matrixWidth)
          {
             // Only possibly decode square regions
-            throw NotFoundException.Instance;
+            return null;
          }
 
          // Push in the "border" by half the module width so that we start
@@ -156,7 +161,7 @@ namespace com.google.zxing.qrcode
          return bits;
       }
 
-      private static float moduleSize(int[] leftTopBlack, BitMatrix image)
+      private static bool moduleSize(int[] leftTopBlack, BitMatrix image, out float msize)
       {
          int height = image.Height;
          int width = image.Width;
@@ -179,9 +184,11 @@ namespace com.google.zxing.qrcode
          }
          if (x == width || y == height)
          {
-            throw NotFoundException.Instance;
+            msize = 0.0f;
+            return false;
          }
-         return (x - leftTopBlack[0]) / 7.0f;
+         msize = (x - leftTopBlack[0]) / 7.0f;
+         return true;
       }
    }
 }

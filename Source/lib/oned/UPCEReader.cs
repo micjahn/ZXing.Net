@@ -126,7 +126,7 @@ namespace com.google.zxing.oned
       /// </summary>
       public static String convertUPCEtoUPCA(String upce)
       {
-         var upceChars = upce.Substring(1, 7);
+         var upceChars = upce.Substring(1, 6);
          StringBuilder result = new StringBuilder(12);
          result.Append(upce[0]);
          char lastChar = upceChars[5];
