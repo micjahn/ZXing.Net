@@ -77,7 +77,7 @@ namespace com.google.zxing.qrcode.decoder
                }
                catch (ArgumentException)
                {
-                  throw FormatException.Instance;
+                  return null;
                }
             }
             if (mode != Mode.TERMINATOR)
@@ -100,7 +100,7 @@ namespace com.google.zxing.qrcode.decoder
                   currentCharacterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
                   if (currentCharacterSetECI == null)
                   {
-                     throw FormatException.Instance;
+                     return null;
                   }
                }
                else
@@ -113,7 +113,8 @@ namespace com.google.zxing.qrcode.decoder
                      int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
                      if (subset == GB2312_SUBSET)
                      {
-                        decodeHanziSegment(bits, result, countHanzi);
+                        if (!decodeHanziSegment(bits, result, countHanzi))
+                           return null;
                      }
                   }
                   else
@@ -123,23 +124,27 @@ namespace com.google.zxing.qrcode.decoder
                      int count = bits.readBits(mode.getCharacterCountBits(version));
                      if (mode == Mode.NUMERIC)
                      {
-                        decodeNumericSegment(bits, result, count);
+                        if (!decodeNumericSegment(bits, result, count))
+                           return null;
                      }
                      else if (mode == Mode.ALPHANUMERIC)
                      {
-                        decodeAlphanumericSegment(bits, result, count, fc1InEffect);
+                        if (!decodeAlphanumericSegment(bits, result, count, fc1InEffect))
+                           return null;
                      }
                      else if (mode == Mode.BYTE)
                      {
-                        decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments, hints);
+                        if (!decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments, hints))
+                           return null;
                      }
                      else if (mode == Mode.KANJI)
                      {
-                        decodeKanjiSegment(bits, result, count);
+                        if (!decodeKanjiSegment(bits, result, count))
+                           return null;
                      }
                      else
                      {
-                        throw FormatException.Instance;
+                        return null;
                      }
                   }
                }
@@ -156,14 +161,14 @@ namespace com.google.zxing.qrcode.decoder
       /**
        * See specification GBT 18284-2000
        */
-      private static void decodeHanziSegment(BitSource bits,
+      private static bool decodeHanziSegment(BitSource bits,
                                              StringBuilder result,
                                              int count)
       {
          // Don't crash trying to read more bits than we have available.
          if (count * 13 > bits.available())
          {
-            throw FormatException.Instance;
+            return false;
          }
 
          // Each character will require 2 bytes. Read the characters as 2-byte pairs
@@ -197,18 +202,20 @@ namespace com.google.zxing.qrcode.decoder
          }
          catch (Exception)
          {
-            throw FormatException.Instance;
+            return false;
          }
+
+         return true;
       }
 
-      private static void decodeKanjiSegment(BitSource bits,
+      private static bool decodeKanjiSegment(BitSource bits,
                                              StringBuilder result,
                                              int count)
       {
          // Don't crash trying to read more bits than we have available.
          if (count * 13 > bits.available())
          {
-            throw FormatException.Instance;
+            return false;
          }
 
          // Each character will require 2 bytes. Read the characters as 2-byte pairs
@@ -242,11 +249,12 @@ namespace com.google.zxing.qrcode.decoder
          }
          catch (Exception)
          {
-            throw FormatException.Instance;
+            return false;
          }
+         return true;
       }
 
-      private static void decodeByteSegment(BitSource bits,
+      private static bool decodeByteSegment(BitSource bits,
                                             StringBuilder result,
                                             int count,
                                             CharacterSetECI currentCharacterSetECI,
@@ -256,7 +264,7 @@ namespace com.google.zxing.qrcode.decoder
          // Don't crash trying to read more bits than we have available.
          if (count << 3 > bits.available())
          {
-            throw FormatException.Instance;
+            return false;
          }
 
          sbyte[] readBytes = new sbyte[count];
@@ -284,9 +292,11 @@ namespace com.google.zxing.qrcode.decoder
          }
          catch (Exception)
          {
-            throw FormatException.Instance;
+            return false;
          }
          byteSegments.Add(readBytes);
+
+         return true;
       }
 
       private static char toAlphaNumericChar(int value)
@@ -298,7 +308,7 @@ namespace com.google.zxing.qrcode.decoder
          return ALPHANUMERIC_CHARS[value];
       }
 
-      private static void decodeAlphanumericSegment(BitSource bits,
+      private static bool decodeAlphanumericSegment(BitSource bits,
                                                     StringBuilder result,
                                                     int count,
                                                     bool fc1InEffect)
@@ -307,7 +317,6 @@ namespace com.google.zxing.qrcode.decoder
          int start = result.Length;
          while (count > 1)
          {
-
             int nextTwoCharsBits = bits.readBits(11);
             result.Append(toAlphaNumericChar(nextTwoCharsBits / 45));
             result.Append(toAlphaNumericChar(nextTwoCharsBits % 45));
@@ -318,10 +327,10 @@ namespace com.google.zxing.qrcode.decoder
             // special case: one character left
             result.Append(toAlphaNumericChar(bits.readBits(6)));
          }
+
          // See section 6.4.8.1, 6.4.8.2
          if (fc1InEffect)
          {
-
             // We need to massage the result a bit if in an FNC1 mode:
             for (int i = start; i < result.Length; i++)
             {
@@ -341,9 +350,11 @@ namespace com.google.zxing.qrcode.decoder
                }
             }
          }
+
+         return true;
       }
 
-      private static void decodeNumericSegment(BitSource bits,
+      private static bool decodeNumericSegment(BitSource bits,
                                                StringBuilder result,
                                                int count)
       {
@@ -354,12 +365,12 @@ namespace com.google.zxing.qrcode.decoder
             // Each 10 bits encodes three digits
             if (bits.available() < 10)
             {
-               throw FormatException.Instance;
+               return false;
             }
             int threeDigitsBits = bits.readBits(10);
             if (threeDigitsBits >= 1000)
             {
-               throw FormatException.Instance;
+               return false;
             }
             result.Append(toAlphaNumericChar(threeDigitsBits / 100));
             result.Append(toAlphaNumericChar((threeDigitsBits / 10) % 10));
@@ -373,12 +384,12 @@ namespace com.google.zxing.qrcode.decoder
             // Two digits left over to read, encoded in 7 bits
             if (bits.available() < 7)
             {
-               throw FormatException.Instance;
+               return false;
             }
             int twoDigitsBits = bits.readBits(7);
             if (twoDigitsBits >= 100)
             {
-               throw FormatException.Instance;
+               return false;
             }
             result.Append(toAlphaNumericChar(twoDigitsBits / 10));
             result.Append(toAlphaNumericChar(twoDigitsBits % 10));
@@ -388,15 +399,17 @@ namespace com.google.zxing.qrcode.decoder
             // One digit left over to read
             if (bits.available() < 4)
             {
-               throw FormatException.Instance;
+               return false;
             }
             int digitBits = bits.readBits(4);
             if (digitBits >= 10)
             {
-               throw FormatException.Instance;
+               return false;
             }
             result.Append(toAlphaNumericChar(digitBits));
          }
+
+         return true;
       }
 
       private static int parseECIValue(BitSource bits)

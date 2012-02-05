@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
 using com.google.zxing.common;
 
 namespace com.google.zxing.oned
@@ -28,8 +29,7 @@ namespace com.google.zxing.oned
    /// </summary>
    public sealed class CodaBarReader : OneDReader
    {
-
-      private static String ALPHABET_STRING = "0123456789-$:/.+ABCDTN";
+      private const String ALPHABET_STRING = "0123456789-$:/.+ABCDTN";
       internal static char[] ALPHABET = ALPHABET_STRING.ToCharArray();
 
       /// <summary>
@@ -38,20 +38,20 @@ namespace com.google.zxing.oned
       /// : c is equal to the  * pattern NOTE : d is equal to the e pattern
       /// </summary>
       internal static int[] CHARACTER_ENCODINGS = {
-      0x003, 0x006, 0x009, 0x060, 0x012, 0x042, 0x021, 0x024, 0x030, 0x048, // 0-9
-      0x00c, 0x018, 0x045, 0x051, 0x054, 0x015, 0x01A, 0x029, 0x00B, 0x00E, // -$:/.+ABCD
-      0x01A, 0x029 //TN
-  };
+                                                     0x003, 0x006, 0x009, 0x060, 0x012, 0x042, 0x021, 0x024, 0x030, 0x048, // 0-9
+                                                     0x00c, 0x018, 0x045, 0x051, 0x054, 0x015, 0x01A, 0x029, 0x00B, 0x00E, // -$:/.+ABCD
+                                                     0x01A, 0x029 //TN
+                                                  };
 
       // minimal number of characters that should be present (inclusing start and stop characters)
       // this check has been added to reduce the number of false positive on other formats
       // until the cause for this behaviour has been determined
       // under normal circumstances this should be set to 3
-      private static int minCharacterLength = 6;
+      private const int minCharacterLength = 6;
 
       // multiple start/end patterns
       // official start and end patterns
-      private static char[] STARTEND_ENCODING = { 'E', '*', 'A', 'B', 'C', 'D', 'T', 'N' };
+      private static readonly char[] STARTEND_ENCODING = { 'E', '*', 'A', 'B', 'C', 'D', 'T', 'N' };
       // some codabar generator allow the codabar string to be closed by every character
       //private static char[] STARTEND_ENCODING = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '$', ':', '/', '.', '+', 'A', 'B', 'C', 'D', 'T', 'N'};
 
@@ -61,6 +61,9 @@ namespace com.google.zxing.oned
       override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
          int[] start = findAsteriskPattern(row);
+         if (start == null)
+            return null;
+
          start[1] = 0; // BAS: settings this to 0 improves the recognition rate somehow?
          // Read off white space    
          int nextStart = row.getNextSet(start[1]);
@@ -76,12 +79,13 @@ namespace com.google.zxing.oned
             {
                counters[i] = 0;
             }
-            recordPattern(row, nextStart, counters);
+            if (!recordPattern(row, nextStart, counters))
+               return null;
 
             char decodedChar = toNarrowWidePattern(counters);
             if (decodedChar == '!')
             {
-               throw NotFoundException.Instance;
+               return null;
             }
             result.Append(decodedChar);
             lastStart = nextStart;
@@ -106,20 +110,20 @@ namespace com.google.zxing.oned
          // (but if it's whitespace to the very end of the image, that's OK)
          if (nextStart != end && (whiteSpaceAfterEnd / 2 < lastPatternSize))
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          // valid result?
          if (result.Length < 2)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          char startchar = result[0];
          if (!arrayContains(STARTEND_ENCODING, startchar))
          {
             // invalid start character
-            throw NotFoundException.Instance;
+            return null;
          }
 
          // find stop character
@@ -140,7 +144,7 @@ namespace com.google.zxing.oned
          if (result.Length <= minCharacterLength)
          {
             // Almost surely a false positive ( start + stop + at least 1 character)
-            throw NotFoundException.Instance;
+            return null;
          }
 
          result.Remove(result.Length - 1, 1);
@@ -149,12 +153,14 @@ namespace com.google.zxing.oned
          float left = (float)(start[1] + start[0]) / 2.0f;
          float right = (float)(nextStart + lastStart) / 2.0f;
          return new Result(
-             result.ToString(),
-             null,
-             new ResultPoint[]{
-            new ResultPoint(left, (float) rowNumber),
-            new ResultPoint(right, (float) rowNumber)},
-             BarcodeFormat.CODABAR);
+            result.ToString(),
+            null,
+            new ResultPoint[]
+               {
+                  new ResultPoint(left, (float) rowNumber),
+                  new ResultPoint(right, (float) rowNumber)
+               },
+            BarcodeFormat.CODABAR);
       }
 
       private static int[] findAsteriskPattern(BitArray row)
@@ -207,7 +213,7 @@ namespace com.google.zxing.oned
                isWhite ^= true; // isWhite = !isWhite;
             }
          }
-         throw NotFoundException.Instance;
+         return null;
       }
 
       internal static bool arrayContains(char[] array, char key)
@@ -275,6 +281,5 @@ namespace com.google.zxing.oned
          } while (maxNarrowCounter > minCounter);
          return '!';
       }
-
    }
 }

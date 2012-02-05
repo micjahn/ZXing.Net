@@ -48,6 +48,8 @@ namespace com.google.zxing.datamatrix.detector
       public DetectorResult detect()
       {
          ResultPoint[] cornerPoints = rectangleDetector.detect();
+         if (cornerPoints == null)
+            return null;
          ResultPoint pointA = cornerPoints[0];
          ResultPoint pointB = cornerPoints[1];
          ResultPoint pointC = cornerPoints[2];
@@ -194,7 +196,6 @@ namespace com.google.zxing.datamatrix.detector
             }
 
             bits = sampleGrid(image, topLeft, bottomLeft, bottomRight, correctedTopRight, dimensionTop, dimensionRight);
-
          }
          else
          {
@@ -225,6 +226,8 @@ namespace com.google.zxing.datamatrix.detector
                               dimensionCorrected,
                               dimensionCorrected);
          }
+         if (bits == null)
+            return null;
 
          return new DetectorResult(bits, new ResultPoint[] { topLeft, bottomLeft, bottomRight, correctedTopRight });
       }

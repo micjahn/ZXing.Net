@@ -71,10 +71,17 @@ namespace com.google.zxing.qrcode.decoder
          // Construct a parser and read version, error-correction level
          BitMatrixParser parser = new BitMatrixParser(bits);
          Version version = parser.readVersion();
-         ErrorCorrectionLevel ecLevel = parser.readFormatInformation().ErrorCorrectionLevel;
+         if (version == null)
+            return null;
+         var formatinfo = parser.readFormatInformation();
+         if (formatinfo == null)
+            return null;
+         ErrorCorrectionLevel ecLevel = formatinfo.ErrorCorrectionLevel;
 
          // Read codewords
          sbyte[] codewords = parser.readCodewords();
+         if (codewords == null)
+            return null;
          // Separate into data blocks
          DataBlock[] dataBlocks = DataBlock.getDataBlocks(codewords, version, ecLevel);
 

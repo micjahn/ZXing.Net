@@ -31,7 +31,6 @@ namespace com.google.zxing.oned.rss.expanded
    /// </summary>
    internal sealed class ExpandedPair
    {
-
       internal bool MayBeLast { get; private set; }
       internal DataCharacter LeftChar { get; private set; }
       internal DataCharacter RightChar { get; private set; }

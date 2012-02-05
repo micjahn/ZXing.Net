@@ -68,6 +68,8 @@ namespace com.google.zxing.aztec
 
          // 5. Sample the grid
          BitMatrix bits = sampleGrid(image, corners[shift % 4], corners[(shift + 3) % 4], corners[(shift + 2) % 4], corners[(shift + 1) % 4]);
+         if (bits == null)
+            return null;
 
          return new AztecDetectorResult(bits, corners, compact, nbDataBlocks, nbLayers);
       }
@@ -360,28 +362,25 @@ namespace com.google.zxing.aztec
          int cy;
 
          //Get a white rectangle that can be the border of the matrix in center bull's eye or
-         try
+         ResultPoint[] cornerPoints = new WhiteRectangleDetector(image).detect();
+         if (cornerPoints != null)
          {
-
-            ResultPoint[] cornerPoints = new WhiteRectangleDetector(image).detect();
             pointA = cornerPoints[0];
             pointB = cornerPoints[1];
             pointC = cornerPoints[2];
             pointD = cornerPoints[3];
-
          }
-         catch (NotFoundException )
+         else
          {
 
             // This exception can be in case the initial rectangle is white
             // In that case, surely in the bull's eye, we try to expand the rectangle.
-            cx = image.Width / 2;
-            cy = image.Height / 2;
-            pointA = getFirstDifferent(new Point(cx + 15 / 2, cy - 15 / 2), false, 1, -1).toResultPoint();
-            pointB = getFirstDifferent(new Point(cx + 15 / 2, cy + 15 / 2), false, 1, 1).toResultPoint();
-            pointC = getFirstDifferent(new Point(cx - 15 / 2, cy + 15 / 2), false, -1, 1).toResultPoint();
-            pointD = getFirstDifferent(new Point(cx - 15 / 2, cy - 15 / 2), false, -1, -1).toResultPoint();
-
+            cx = image.Width/2;
+            cy = image.Height/2;
+            pointA = getFirstDifferent(new Point(cx + 15/2, cy - 15/2), false, 1, -1).toResultPoint();
+            pointB = getFirstDifferent(new Point(cx + 15/2, cy + 15/2), false, 1, 1).toResultPoint();
+            pointC = getFirstDifferent(new Point(cx - 15/2, cy + 15/2), false, -1, 1).toResultPoint();
+            pointD = getFirstDifferent(new Point(cx - 15/2, cy - 15/2), false, -1, -1).toResultPoint();
          }
 
          //Compute the center of the rectangle
@@ -391,24 +390,22 @@ namespace com.google.zxing.aztec
          // Redetermine the white rectangle starting from previously computed center.
          // This will ensure that we end up with a white rectangle in center bull's eye
          // in order to compute a more accurate center.
-         try
+         cornerPoints = new WhiteRectangleDetector(image, 15, cx, cy).detect();
+         if (cornerPoints != null)
          {
-            ResultPoint[] cornerPoints = new WhiteRectangleDetector(image, 15, cx, cy).detect();
             pointA = cornerPoints[0];
             pointB = cornerPoints[1];
             pointC = cornerPoints[2];
             pointD = cornerPoints[3];
          }
-         catch (NotFoundException )
+         else
          {
-
             // This exception can be in case the initial rectangle is white
             // In that case we try to expand the rectangle.
-            pointA = getFirstDifferent(new Point(cx + 15 / 2, cy - 15 / 2), false, 1, -1).toResultPoint();
-            pointB = getFirstDifferent(new Point(cx + 15 / 2, cy + 15 / 2), false, 1, 1).toResultPoint();
-            pointC = getFirstDifferent(new Point(cx - 15 / 2, cy + 15 / 2), false, -1, 1).toResultPoint();
-            pointD = getFirstDifferent(new Point(cx - 15 / 2, cy - 15 / 2), false, -1, -1).toResultPoint();
-
+            pointA = getFirstDifferent(new Point(cx + 15/2, cy - 15/2), false, 1, -1).toResultPoint();
+            pointB = getFirstDifferent(new Point(cx + 15/2, cy + 15/2), false, 1, 1).toResultPoint();
+            pointC = getFirstDifferent(new Point(cx - 15/2, cy + 15/2), false, -1, 1).toResultPoint();
+            pointD = getFirstDifferent(new Point(cx - 15/2, cy - 15/2), false, -1, -1).toResultPoint();
          }
 
          // Recompute the center of the rectangle

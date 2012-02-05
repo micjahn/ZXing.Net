@@ -52,7 +52,10 @@ namespace com.google.zxing.aztec
       /// </returns>
       public Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
       {
-         AztecDetectorResult detectorResult = new Detector(image.BlackMatrix).detect();
+         var blackmatrix = image.BlackMatrix;
+         if (blackmatrix == null)
+            return null;
+         AztecDetectorResult detectorResult = new Detector(blackmatrix).detect();
          if (detectorResult == null)
             return null;
 

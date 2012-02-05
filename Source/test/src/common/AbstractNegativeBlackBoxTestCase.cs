@@ -132,30 +132,23 @@ namespace com.google.zxing.common
          Bitmap rotatedImage = rotateImage(image, rotationInDegrees);
          LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
          BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-         Result result;
-         try
+         Result result = getReader().decode(bitmap);
+         if (result != null)
          {
-            result = getReader().decode(bitmap);
             Console.WriteLine("Found false positive: '{0}' with format '{1}' (rotation: {2})\n",
-                              result.Text, result.BarcodeFormat, (int)rotationInDegrees);
+                              result.Text, result.BarcodeFormat, (int) rotationInDegrees);
             return false;
-         }
-         catch (ReaderException re)
-         {
          }
 
          // Try "try harder" getMode
          IDictionary<DecodeHintType, Object> hints = new Dictionary<DecodeHintType, Object>();
          hints[DecodeHintType.TRY_HARDER] = true;
-         try
+         result = getReader().decode(bitmap, hints);
+         if (result != null)
          {
-            result = getReader().decode(bitmap, hints);
             Console.WriteLine("Try harder found false positive: '{0}' with format '{1}' (rotation: {2})\n",
-                              result.Text, result.BarcodeFormat, (int)rotationInDegrees);
+                              result.Text, result.BarcodeFormat, (int) rotationInDegrees);
             return false;
-         }
-         catch (ReaderException re)
-         {
          }
          return true;
       }

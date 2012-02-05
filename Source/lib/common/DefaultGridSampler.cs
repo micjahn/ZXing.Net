@@ -36,7 +36,7 @@ namespace com.google.zxing.common
       {
          if (dimensionX <= 0 || dimensionY <= 0)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
          BitMatrix bits = new BitMatrix(dimensionX, dimensionY);
          float[] points = new float[dimensionX << 1];
@@ -54,7 +54,8 @@ namespace com.google.zxing.common
             transform.transformPoints(points);
             // Quick check to see if points transformed to something inside the image;
             // sufficient to check the endpoints
-            checkAndNudgePoints(image, points);
+            if (!checkAndNudgePoints(image, points))
+               return null;
             try
             {
                for (int x = 0; x < max; x += 2)
@@ -72,7 +73,7 @@ namespace com.google.zxing.common
                // This results in an ugly runtime exception despite our clever checks above -- can't have
                // that. We could check each point's coordinates but that feels duplicative. We settle for
                // catching and wrapping ArrayIndexOutOfBoundsException.
-               throw ReaderException.Instance;
+               return null;
             }
          }
          return bits;

@@ -108,6 +108,8 @@ namespace com.google.zxing.oned
             for (int idx = 0; idx < START_END_PATTERN.Length; idx++)
                counters[idx] = 0;
             startRange = findGuardPattern(row, nextStart, false, START_END_PATTERN, counters);
+            if (startRange == null)
+               return null;
             int start = startRange[0];
             nextStart = startRange[1];
             // Make sure there is a quiet zone at least as big as the start pattern before the barcode.
@@ -151,6 +153,8 @@ namespace com.google.zxing.oned
          StringBuilder result = decodeRowStringBuffer;
          result.Length = 0;
          int endStart = decodeMiddle(row, startGuardRange, result);
+         if (endStart < 0)
+            return null;
 
          if (resultPointCallback != null)
          {
@@ -160,6 +164,8 @@ namespace com.google.zxing.oned
          }
 
          int[] endRange = decodeEnd(row, endStart);
+         if (endRange == null)
+            return null;
 
          if (resultPointCallback != null)
          {
@@ -175,34 +181,32 @@ namespace com.google.zxing.oned
          int quietEnd = end + (end - endRange[0]);
          if (quietEnd >= row.Size || !row.isRange(end, quietEnd, false))
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          String resultString = result.ToString();
          if (!checkChecksum(resultString))
          {
-            throw ChecksumException.Instance;
+            return null;
          }
 
          float left = (startGuardRange[1] + startGuardRange[0]) / 2.0f;
          float right = (endRange[1] + endRange[0]) / 2.0f;
          BarcodeFormat format = BarcodeFormat;
          Result decodeResult = new Result(resultString,
-             null, // no natural byte representation for these barcodes
-             new ResultPoint[]{
-            new ResultPoint(left, rowNumber),
-            new ResultPoint(right, rowNumber)},
-             format);
+                                          null, // no natural byte representation for these barcodes
+                                          new ResultPoint[]
+                                             {
+                                                new ResultPoint(left, rowNumber),
+                                                new ResultPoint(right, rowNumber)
+                                             },
+                                          format);
 
-         try
+         Result extensionResult = extensionReader.decodeRow(rowNumber, row, endRange[1]);
+         if (extensionResult != null)
          {
-            Result extensionResult = extensionReader.decodeRow(rowNumber, row, endRange[1]);
             decodeResult.putAllMetadata(extensionResult.ResultMetadata);
             decodeResult.addResultPoints(extensionResult.ResultPoints);
-         }
-         catch (ReaderException)
-         {
-            // continue
          }
 
          if (format == BarcodeFormat.EAN_13 || format == BarcodeFormat.UPC_A)
@@ -247,7 +251,7 @@ namespace com.google.zxing.oned
             int digit = (int)s[i] - (int)'0';
             if (digit < 0 || digit > 9)
             {
-               throw FormatException.Instance;
+               return false;
             }
             sum += digit;
          }
@@ -257,7 +261,7 @@ namespace com.google.zxing.oned
             int digit = (int)s[i] - (int)'0';
             if (digit < 0 || digit > 9)
             {
-               throw FormatException.Instance;
+               return false;
             }
             sum += digit;
          }
@@ -328,7 +332,7 @@ namespace com.google.zxing.oned
                isWhite = !isWhite;
             }
          }
-         throw NotFoundException.Instance;
+         return null;
       }
 
       /// <summary>
@@ -343,11 +347,14 @@ namespace com.google.zxing.oned
       /// <returns>horizontal offset of first pixel beyond the decoded digit</returns>
       /// <exception cref="NotFoundException">if digit cannot be decoded</exception>
       /// </summary>
-      internal static int decodeDigit(BitArray row, int[] counters, int rowOffset, int[][] patterns)
+      internal static bool decodeDigit(BitArray row, int[] counters, int rowOffset, int[][] patterns, out int digit)
       {
-         recordPattern(row, rowOffset, counters);
+         digit = -1;
+
+         if (!recordPattern(row, rowOffset, counters))
+            return false;
+
          int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
-         int bestMatch = -1;
          int max = patterns.Length;
          for (int i = 0; i < max; i++)
          {
@@ -356,17 +363,10 @@ namespace com.google.zxing.oned
             if (variance < bestVariance)
             {
                bestVariance = variance;
-               bestMatch = i;
+               digit = i;
             }
          }
-         if (bestMatch >= 0)
-         {
-            return bestMatch;
-         }
-         else
-         {
-            throw NotFoundException.Instance;
-         }
+         return digit >= 0;
       }
 
       /// <summary>
@@ -379,16 +379,13 @@ namespace com.google.zxing.oned
       /// <summary>
       /// Subclasses override this to decode the portion of a barcode between the start
       /// and end guard patterns.
-      ///
+      /// </summary>
       /// <param name="row">row of black/white values to search</param>
       /// <param name="startRange">start/end offset of start guard pattern</param>
       /// <param name="resultString"><see cref="StringBuilder" />to append decoded chars to</param>
-      /// <returns>horizontal offset of first pixel after the "middle" that was decoded</returns>
-      /// <exception cref="NotFoundException">if decoding could not complete successfully</exception>
-      /// </summary>
-      internal protected abstract int decodeMiddle(BitArray row,
-                                          int[] startRange,
-                                          StringBuilder resultString);
-
+      /// <returns>horizontal offset of first pixel after the "middle" that was decoded or -1 if decoding could not complete successfully</returns>
+      protected internal abstract int decodeMiddle(BitArray row,
+                                                   int[] startRange,
+                                                   StringBuilder resultString);
    }
 }

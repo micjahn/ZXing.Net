@@ -115,7 +115,7 @@ namespace com.google.zxing.qrcode.decoder
       {
          if (dimension % 4 != 1)
          {
-            throw ReaderException.Instance;
+            return null;
          }
          try
          {
@@ -123,7 +123,7 @@ namespace com.google.zxing.qrcode.decoder
          }
          catch (ArgumentException)
          {
-            throw ReaderException.Instance;
+            return null;
          }
       }
 

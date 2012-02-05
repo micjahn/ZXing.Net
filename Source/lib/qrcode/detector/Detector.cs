@@ -79,6 +79,8 @@ namespace com.google.zxing.qrcode.detector
 
          FinderPatternFinder finder = new FinderPatternFinder(image, resultPointCallback);
          FinderPatternInfo info = finder.find(hints);
+         if (info == null)
+            return null;
 
          return processFinderPatternInfo(info);
       }
@@ -98,6 +100,8 @@ namespace com.google.zxing.qrcode.detector
          if (!computeDimension(topLeft, topRight, bottomLeft, moduleSize, out dimension))
             return null;
          Version provisionalVersion = Version.getProvisionalVersionForDimension(dimension);
+         if (provisionalVersion == null)
+            return null;
          int modulesBetweenFPCenters = provisionalVersion.DimensionForVersion - 7;
 
          AlignmentPattern alignmentPattern = null;
@@ -132,6 +136,8 @@ namespace com.google.zxing.qrcode.detector
          PerspectiveTransform transform = createTransform(topLeft, topRight, bottomLeft, alignmentPattern, dimension);
 
          BitMatrix bits = sampleGrid(image, transform, dimension);
+         if (bits == null)
+            return null;
 
          ResultPoint[] points;
          if (alignmentPattern == null)
@@ -188,7 +194,6 @@ namespace com.google.zxing.qrcode.detector
 
       private static BitMatrix sampleGrid(BitMatrix image, PerspectiveTransform transform, int dimension)
       {
-
          GridSampler sampler = GridSampler.Instance;
          return sampler.sampleGrid(image, dimension, dimension, transform);
       }

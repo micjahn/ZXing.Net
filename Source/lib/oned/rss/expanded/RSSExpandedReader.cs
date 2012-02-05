@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using com.google.zxing.common;
 using com.google.zxing.oned.rss.expanded.decoders;
 
@@ -37,12 +38,11 @@ namespace com.google.zxing.oned.rss.expanded
    /// </summary>
    public sealed class RSSExpandedReader : AbstractRSSReader
    {
+      private static readonly int[] SYMBOL_WIDEST = { 7, 5, 4, 3, 1 };
+      private static readonly int[] EVEN_TOTAL_SUBSET = { 4, 20, 52, 104, 204 };
+      private static readonly int[] GSUM = { 0, 348, 1388, 2948, 3988 };
 
-      private static int[] SYMBOL_WIDEST = { 7, 5, 4, 3, 1 };
-      private static int[] EVEN_TOTAL_SUBSET = { 4, 20, 52, 104, 204 };
-      private static int[] GSUM = { 0, 348, 1388, 2948, 3988 };
-
-      private static int[][] FINDER_PATTERNS = {
+      private static readonly int[][] FINDER_PATTERNS = {
                                                   new[] {1, 8, 4, 1}, // A
                                                   new[] {3, 6, 4, 1}, // B
                                                   new[] {3, 4, 6, 1}, // C
@@ -51,7 +51,7 @@ namespace com.google.zxing.oned.rss.expanded
                                                   new[] {2, 2, 9, 1} // F
                                                };
 
-      private static int[][] WEIGHTS = {
+      private static readonly int[][] WEIGHTS = {
                                           new[] {1, 3, 9, 27, 81, 32, 96, 77},
                                           new[] {20, 60, 180, 118, 143, 7, 21, 63},
                                           new[] {189, 145, 13, 39, 117, 140, 209, 205},
@@ -77,14 +77,14 @@ namespace com.google.zxing.oned.rss.expanded
                                           new[] {45, 135, 194, 160, 58, 174, 100, 89}
                                        };
 
-      private static int FINDER_PAT_A = 0;
-      private static int FINDER_PAT_B = 1;
-      private static int FINDER_PAT_C = 2;
-      private static int FINDER_PAT_D = 3;
-      private static int FINDER_PAT_E = 4;
-      private static int FINDER_PAT_F = 5;
+      private const int FINDER_PAT_A = 0;
+      private const int FINDER_PAT_B = 1;
+      private const int FINDER_PAT_C = 2;
+      private const int FINDER_PAT_D = 3;
+      private const int FINDER_PAT_E = 4;
+      private const int FINDER_PAT_F = 5;
 
-      private static int[][] FINDER_PATTERN_SEQUENCES = {
+      private static readonly int[][] FINDER_PATTERN_SEQUENCES = {
     new[] { FINDER_PAT_A, FINDER_PAT_A },
     new[] { FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B },
     new[] { FINDER_PAT_A, FINDER_PAT_C, FINDER_PAT_B, FINDER_PAT_D },
@@ -97,45 +97,51 @@ namespace com.google.zxing.oned.rss.expanded
     new[] { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
   };
 
-      private static int LONGEST_SEQUENCE_SIZE = FINDER_PATTERN_SEQUENCES[FINDER_PATTERN_SEQUENCES.Length - 1].Length;
+      private static readonly int LONGEST_SEQUENCE_SIZE = FINDER_PATTERN_SEQUENCES[FINDER_PATTERN_SEQUENCES.Length - 1].Length;
 
-      private static int MAX_PAIRS = 11;
+      private const int MAX_PAIRS = 11;
 
-      private List<ExpandedPair> pairs = new List<ExpandedPair>(MAX_PAIRS);
-      private int[] startEnd = new int[2];
-      private int[] currentSequence = new int[LONGEST_SEQUENCE_SIZE];
+      private readonly List<ExpandedPair> pairs = new List<ExpandedPair>(MAX_PAIRS);
+      private readonly int[] startEnd = new int[2];
+      private readonly int[] currentSequence = new int[LONGEST_SEQUENCE_SIZE];
+
+      internal List<ExpandedPair> Pairs { get { return pairs; } }
 
       override public Result decodeRow(int rowNumber,
                               BitArray row,
                               IDictionary<DecodeHintType, object> hints)
       {
-         this.reset();
-         decodeRow2pairs(rowNumber, row);
-         return constructResult(this.pairs);
+         reset();
+         if (decodeRow2pairs(rowNumber, row) == false)
+            return null;
+         return constructResult(pairs);
       }
 
       public override void reset()
       {
-         this.pairs.Clear();
+         pairs.Clear();
       }
 
       // Not private for testing
-      internal List<ExpandedPair> decodeRow2pairs(int rowNumber, BitArray row)
+      internal bool decodeRow2pairs(int rowNumber, BitArray row)
       {
          while (true)
          {
-            ExpandedPair nextPair = retrieveNextPair(row, this.pairs, rowNumber);
-            this.pairs.Add(nextPair);
+            ExpandedPair nextPair = retrieveNextPair(row, pairs, rowNumber);
+            if (nextPair == null)
+               return false;
+
+            pairs.Add(nextPair);
 
             if (nextPair.MayBeLast)
             {
                if (checkChecksum())
                {
-                  return this.pairs;
+                  return true;
                }
                if (nextPair.MustBeLast)
                {
-                  throw NotFoundException.Instance;
+                  return false;
                }
             }
          }
@@ -161,16 +167,16 @@ namespace com.google.zxing.oned.rss.expanded
 
       private bool checkChecksum()
       {
-         ExpandedPair firstPair = this.pairs[0];
+         ExpandedPair firstPair = pairs[0];
          DataCharacter checkCharacter = firstPair.LeftChar;
          DataCharacter firstCharacter = firstPair.RightChar;
 
          int checksum = firstCharacter.ChecksumPortion;
          int s = 2;
 
-         for (int i = 1; i < this.pairs.Count; ++i)
+         for (int i = 1; i < pairs.Count; ++i)
          {
-            ExpandedPair currentPair = this.pairs[i];
+            ExpandedPair currentPair = pairs[i];
             checksum += currentPair.LeftChar.ChecksumPortion;
             s++;
             DataCharacter currentRightChar = currentPair.RightChar;
@@ -215,11 +221,12 @@ namespace com.google.zxing.oned.rss.expanded
          int forcedOffset = -1;
          do
          {
-            this.findNextPair(row, previousPairs, forcedOffset);
+            if (!findNextPair(row, previousPairs, forcedOffset))
+               return null;
             pattern = parseFoundFinderPattern(row, rowNumber, isOddPattern);
             if (pattern == null)
             {
-               forcedOffset = getNextSecondBar(row, this.startEnd[0]);
+               forcedOffset = getNextSecondBar(row, startEnd[0]);
             }
             else
             {
@@ -227,42 +234,35 @@ namespace com.google.zxing.oned.rss.expanded
             }
          } while (keepFinding);
 
-         bool mayBeLast = checkPairSequence(previousPairs, pattern);
+         bool mayBeLast;
+         if (!checkPairSequence(previousPairs, pattern, out mayBeLast))
+            return null;
 
-         DataCharacter leftChar = this.decodeDataCharacter(row, pattern, isOddPattern, true);
-         DataCharacter rightChar;
-         try
-         {
-            rightChar = this.decodeDataCharacter(row, pattern, isOddPattern, false);
-         }
-         catch (NotFoundException nfe)
-         {
-            if (mayBeLast)
-            {
-               rightChar = null;
-            }
-            else
-            {
-               throw nfe;
-            }
-         }
+         DataCharacter leftChar = decodeDataCharacter(row, pattern, isOddPattern, true);
+         if (leftChar == null)
+            return null;
+         DataCharacter rightChar = decodeDataCharacter(row, pattern, isOddPattern, false);
+         if (rightChar == null && !mayBeLast)
+            return null;
+
          return new ExpandedPair(leftChar, rightChar, pattern, mayBeLast);
       }
 
-      private bool checkPairSequence(List<ExpandedPair> previousPairs, FinderPattern pattern)
+      private bool checkPairSequence(List<ExpandedPair> previousPairs, FinderPattern pattern, out bool mayBeLast)
       {
+         mayBeLast = false;
          int currentSequenceLength = previousPairs.Count + 1;
-         if (currentSequenceLength > this.currentSequence.Length)
+         if (currentSequenceLength > currentSequence.Length)
          {
-            throw NotFoundException.Instance;
+            return false;
          }
 
          for (int pos = 0; pos < previousPairs.Count; ++pos)
          {
-            this.currentSequence[pos] = previousPairs[pos].FinderPattern.Value;
+            currentSequence[pos] = previousPairs[pos].FinderPattern.Value;
          }
 
-         this.currentSequence[currentSequenceLength - 1] = pattern.Value;
+         currentSequence[currentSequenceLength - 1] = pattern.Value;
 
          foreach (int[] validSequence in FINDER_PATTERN_SEQUENCES)
          {
@@ -271,7 +271,7 @@ namespace com.google.zxing.oned.rss.expanded
                bool valid = true;
                for (int pos = 0; pos < currentSequenceLength; ++pos)
                {
-                  if (this.currentSequence[pos] != validSequence[pos])
+                  if (currentSequence[pos] != validSequence[pos])
                   {
                      valid = false;
                      break;
@@ -280,17 +280,18 @@ namespace com.google.zxing.oned.rss.expanded
 
                if (valid)
                {
-                  return currentSequenceLength == validSequence.Length;
+                  mayBeLast = currentSequenceLength == validSequence.Length;
+                  return true;
                }
             }
          }
 
-         throw NotFoundException.Instance;
+         return false;
       }
 
-      private void findNextPair(BitArray row, List<ExpandedPair> previousPairs, int forcedOffset)
+      private bool findNextPair(BitArray row, List<ExpandedPair> previousPairs, int forcedOffset)
       {
-         int[] counters = this.getDecodeFinderCounters();
+         int[] counters = getDecodeFinderCounters();
          counters[0] = 0;
          counters[1] = 0;
          counters[2] = 0;
@@ -344,9 +345,9 @@ namespace com.google.zxing.oned.rss.expanded
 
                   if (isFinderPattern(counters))
                   {
-                     this.startEnd[0] = patternStart;
-                     this.startEnd[1] = x;
-                     return;
+                     startEnd[0] = patternStart;
+                     startEnd[1] = x;
+                     return true;
                   }
 
                   if (searchingEvenPair)
@@ -369,7 +370,7 @@ namespace com.google.zxing.oned.rss.expanded
                isWhite = !isWhite;
             }
          }
-         throw NotFoundException.Instance;
+         return false;
       }
 
       private static void reverseCounters(int[] counters)
@@ -394,7 +395,7 @@ namespace com.google.zxing.oned.rss.expanded
          {
             // If pattern number is odd, we need to locate element 1 *before* the current block.
 
-            int firstElementStart = this.startEnd[0] - 1;
+            int firstElementStart = startEnd[0] - 1;
             // Locate element 1
             while (firstElementStart >= 0 && !row[firstElementStart])
             {
@@ -402,37 +403,32 @@ namespace com.google.zxing.oned.rss.expanded
             }
 
             firstElementStart++;
-            firstCounter = this.startEnd[0] - firstElementStart;
+            firstCounter = startEnd[0] - firstElementStart;
             start = firstElementStart;
-            end = this.startEnd[1];
+            end = startEnd[1];
 
          }
          else
          {
             // If pattern number is even, the pattern is reversed, so we need to locate element 1 *after* the current block.
 
-            start = this.startEnd[0];
+            start = startEnd[0];
 
-            int firstElementStart = row.getNextUnset(this.startEnd[1] + 1);
+            int firstElementStart = row.getNextUnset(startEnd[1] + 1);
 
             end = firstElementStart;
-            firstCounter = end - this.startEnd[1];
+            firstCounter = end - startEnd[1];
          }
 
          // Make 'counters' hold 1-4
-         int[] counters = this.getDecodeFinderCounters();
+         int[] counters = getDecodeFinderCounters();
          Array.Copy(counters, 0, counters, 1, counters.Length - 1);
 
          counters[0] = firstCounter;
          int value;
-         try
-         {
-            value = parseFinderValue(counters, FINDER_PATTERNS);
-         }
-         catch (NotFoundException nfe)
-         {
+         if (!parseFinderValue(counters, FINDER_PATTERNS, out value))
             return null;
-         }
+
          return new FinderPattern(value, new int[] { start, end }, start, end, rowNumber);
       }
 
@@ -441,7 +437,7 @@ namespace com.google.zxing.oned.rss.expanded
                                         bool isOddPattern,
                                         bool leftChar)
       {
-         int[] counters = this.getDataCharacterCounters();
+         int[] counters = getDataCharacterCounters();
          counters[0] = 0;
          counters[1] = 0;
          counters[2] = 0;
@@ -453,11 +449,13 @@ namespace com.google.zxing.oned.rss.expanded
 
          if (leftChar)
          {
-            recordPatternInReverse(row, pattern.StartEnd[0], counters);
+            if (!recordPatternInReverse(row, pattern.StartEnd[0], counters))
+               return null;
          }
          else
          {
-            recordPattern(row, pattern.StartEnd[1] + 1, counters);
+            if (!recordPattern(row, pattern.StartEnd[1] + 1, counters))
+               return null;
             // reverse it
             for (int i = 0, j = counters.Length - 1; i < j; i++, j--)
             {
@@ -470,10 +468,10 @@ namespace com.google.zxing.oned.rss.expanded
          int numModules = 17; //left and right data characters have all the same length
          float elementWidth = (float)count(counters) / (float)numModules;
 
-         int[] oddCounts = this.getOddCounts();
-         int[] evenCounts = this.getEvenCounts();
-         float[] oddRoundingErrors = this.getOddRoundingErrors();
-         float[] evenRoundingErrors = this.getEvenRoundingErrors();
+         int[] oddCounts = getOddCounts();
+         int[] evenCounts = getEvenCounts();
+         float[] oddRoundingErrors = getOddRoundingErrors();
+         float[] evenRoundingErrors = getEvenRoundingErrors();
 
          for (int i = 0; i < counters.Length; i++)
          {
@@ -500,7 +498,8 @@ namespace com.google.zxing.oned.rss.expanded
             }
          }
 
-         adjustOddEvenCounts(numModules);
+         if (!adjustOddEvenCounts(numModules))
+            return null;
 
          int weightRowNumber = 4 * pattern.Value + (isOddPattern ? 0 : 2) + (leftChar ? 0 : 1) - 1;
 
@@ -530,7 +529,7 @@ namespace com.google.zxing.oned.rss.expanded
 
          if ((oddSum & 0x01) != 0 || oddSum > 13 || oddSum < 4)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          int group = (13 - oddSum) / 2;
@@ -551,11 +550,10 @@ namespace com.google.zxing.oned.rss.expanded
          return !(pattern.Value == 0 && isOddPattern && leftChar);
       }
 
-      private void adjustOddEvenCounts(int numModules)
+      private bool adjustOddEvenCounts(int numModules)
       {
-
-         int oddSum = count(this.getOddCounts());
-         int evenSum = count(this.getEvenCounts());
+         int oddSum = count(getOddCounts());
+         int evenSum = count(getEvenCounts());
          int mismatch = oddSum + evenSum - numModules;
          bool oddParityBad = (oddSum & 0x01) == 1;
          bool evenParityBad = (evenSum & 0x01) == 0;
@@ -588,7 +586,7 @@ namespace com.google.zxing.oned.rss.expanded
             {
                if (evenParityBad)
                {
-                  throw NotFoundException.Instance;
+                  return false;
                }
                decrementOdd = true;
             }
@@ -596,7 +594,7 @@ namespace com.google.zxing.oned.rss.expanded
             {
                if (!evenParityBad)
                {
-                  throw NotFoundException.Instance;
+                  return false;
                }
                decrementEven = true;
             }
@@ -607,7 +605,7 @@ namespace com.google.zxing.oned.rss.expanded
             {
                if (evenParityBad)
                {
-                  throw NotFoundException.Instance;
+                  return false;
                }
                incrementOdd = true;
             }
@@ -615,7 +613,7 @@ namespace com.google.zxing.oned.rss.expanded
             {
                if (!evenParityBad)
                {
-                  throw NotFoundException.Instance;
+                  return false;
                }
                incrementEven = true;
             }
@@ -626,7 +624,7 @@ namespace com.google.zxing.oned.rss.expanded
             {
                if (!evenParityBad)
                {
-                  throw NotFoundException.Instance;
+                  return false;
                }
                // Both bad
                if (oddSum < evenSum)
@@ -644,40 +642,42 @@ namespace com.google.zxing.oned.rss.expanded
             {
                if (evenParityBad)
                {
-                  throw NotFoundException.Instance;
+                  return false;
                }
                // Nothing to do!
             }
          }
          else
          {
-            throw NotFoundException.Instance;
+            return false;
          }
 
          if (incrementOdd)
          {
             if (decrementOdd)
             {
-               throw NotFoundException.Instance;
+               return false;
             }
-            increment(this.getOddCounts(), this.getOddRoundingErrors());
+            increment(getOddCounts(), getOddRoundingErrors());
          }
          if (decrementOdd)
          {
-            decrement(this.getOddCounts(), this.getOddRoundingErrors());
+            decrement(getOddCounts(), getOddRoundingErrors());
          }
          if (incrementEven)
          {
             if (decrementEven)
             {
-               throw NotFoundException.Instance;
+               return false;
             }
-            increment(this.getEvenCounts(), this.getOddRoundingErrors());
+            increment(getEvenCounts(), getOddRoundingErrors());
          }
          if (decrementEven)
          {
-            decrement(this.getEvenCounts(), this.getEvenRoundingErrors());
+            decrement(getEvenCounts(), getEvenRoundingErrors());
          }
+
+         return true;
       }
    }
 }

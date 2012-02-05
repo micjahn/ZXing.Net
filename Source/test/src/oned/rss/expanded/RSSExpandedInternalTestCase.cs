@@ -83,16 +83,8 @@ namespace com.google.zxing.oned.rss.expanded
          Assert.AreEqual(1, finderPattern.Value);
          Assert.IsTrue(pair3.MayBeLast);
 
-         try
-         {
-            rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
-            //   the previous was the last pair
-            throw new AssertionException(typeof(NotFoundException).Name + " expected");
-         }
-         catch (NotFoundException nfe)
-         {
-            // ok
-         }
+         //   the previous was the last pair
+         Assert.IsNull(rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber));
       }
 
       [Test]

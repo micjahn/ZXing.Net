@@ -92,9 +92,11 @@ namespace com.google.zxing.oned
 
       override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
-
          int[] counters = new int[9];
          int[] start = findAsteriskPattern(row, counters);
+         if (start == null)
+            return null;
+
          // Read off white space    
          int nextStart = row.getNextSet(start[1]);
          int end = row.Size;
@@ -104,13 +106,16 @@ namespace com.google.zxing.oned
          int lastStart;
          do
          {
-            recordPattern(row, nextStart, counters);
+            if (!recordPattern(row, nextStart, counters))
+               return null;
+
             int pattern = toNarrowWidePattern(counters);
             if (pattern < 0)
             {
-               throw NotFoundException.Instance;
+               return null;
             }
-            decodedChar = patternToChar(pattern);
+            if (!patternToChar(pattern, out decodedChar))
+               return null;
             result.Append(decodedChar);
             lastStart = nextStart;
             foreach (int counter in counters)
@@ -133,7 +138,7 @@ namespace com.google.zxing.oned
          // (but if it's whitespace to the very end of the image, that's OK)
          if (nextStart != end && (whiteSpaceAfterEnd >> 1) < lastPatternSize)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          if (usingCheckDigit)
@@ -146,7 +151,7 @@ namespace com.google.zxing.oned
             }
             if (result[max] != ALPHABET[total % 43])
             {
-               throw ChecksumException.Instance;
+               return null;
             }
             result.Length = max;
          }
@@ -154,13 +159,15 @@ namespace com.google.zxing.oned
          if (result.Length == 0)
          {
             // false positive
-            throw NotFoundException.Instance;
+            return null;
          }
 
          String resultString;
          if (extendedMode)
          {
             resultString = decodeExtended(result.ToString());
+            if (resultString == null)
+               return null;
          }
          else
          {
@@ -170,13 +177,14 @@ namespace com.google.zxing.oned
          float left = (float)(start[1] + start[0]) / 2.0f;
          float right = (float)(nextStart + lastStart) / 2.0f;
          return new Result(
-             resultString,
-             null,
-             new ResultPoint[]{
-            new ResultPoint(left, (float) rowNumber),
-            new ResultPoint(right, (float) rowNumber)},
-             BarcodeFormat.CODE_39);
-
+            resultString,
+            null,
+            new ResultPoint[]
+               {
+                  new ResultPoint(left, (float) rowNumber),
+                  new ResultPoint(right, (float) rowNumber)
+               },
+            BarcodeFormat.CODE_39);
       }
 
       private static int[] findAsteriskPattern(BitArray row, int[] counters)
@@ -221,7 +229,7 @@ namespace com.google.zxing.oned
                isWhite = !isWhite;
             }
          }
-         throw NotFoundException.Instance;
+         return null;
       }
 
       // For efficiency, returns -1 on failure. Not throwing here saved as many as 700 exceptions
@@ -280,16 +288,18 @@ namespace com.google.zxing.oned
          return -1;
       }
 
-      private static char patternToChar(int pattern)
+      private static bool patternToChar(int pattern, out char c)
       {
          for (int i = 0; i < CHARACTER_ENCODINGS.Length; i++)
          {
             if (CHARACTER_ENCODINGS[i] == pattern)
             {
-               return ALPHABET[i];
+               c = ALPHABET[i];
+               return true;
             }
          }
-         throw NotFoundException.Instance;
+         c = '*';
+         return false;
       }
 
       private static String decodeExtended(String encoded)
@@ -313,7 +323,7 @@ namespace com.google.zxing.oned
                      }
                      else
                      {
-                        throw FormatException.Instance;
+                        return null;
                      }
                      break;
                   case '$':
@@ -324,7 +334,7 @@ namespace com.google.zxing.oned
                      }
                      else
                      {
-                        throw FormatException.Instance;
+                        return null;
                      }
                      break;
                   case '%':
@@ -339,7 +349,7 @@ namespace com.google.zxing.oned
                      }
                      else
                      {
-                        throw FormatException.Instance;
+                        return null;
                      }
                      break;
                   case '/':
@@ -354,7 +364,7 @@ namespace com.google.zxing.oned
                      }
                      else
                      {
-                        throw FormatException.Instance;
+                        return null;
                      }
                      break;
                }

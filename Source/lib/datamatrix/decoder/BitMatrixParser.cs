@@ -20,17 +20,14 @@ using com.google.zxing.common;
 
 namespace com.google.zxing.datamatrix.decoder
 {
-
-
    /// <summary>
    /// <author>bbrown@google.com (Brian Brown)</author>
    /// </summary>
    sealed class BitMatrixParser
    {
-
-      private BitMatrix mappingBitMatrix;
-      private BitMatrix readMappingMatrix;
-      private Version version;
+      private readonly BitMatrix mappingBitMatrix;
+      private readonly BitMatrix readMappingMatrix;
+      private readonly Version version;
 
       /// <summary>
       /// <param name="bitMatrix"><see cref="BitMatrix" />to parse</param>
@@ -41,17 +38,20 @@ namespace com.google.zxing.datamatrix.decoder
          int dimension = bitMatrix.Height;
          if (dimension < 8 || dimension > 144 || (dimension & 0x01) != 0)
          {
-            throw FormatException.Instance;
+            return;
          }
 
          version = readVersion(bitMatrix);
-         this.mappingBitMatrix = extractDataRegion(bitMatrix);
-         this.readMappingMatrix = new BitMatrix(this.mappingBitMatrix.Width, this.mappingBitMatrix.Height);
+         if (version != null)
+         {
+            mappingBitMatrix = extractDataRegion(bitMatrix);
+            readMappingMatrix = new BitMatrix(mappingBitMatrix.Width, mappingBitMatrix.Height);
+         }
       }
 
-      Version getVersion()
+      public Version Version
       {
-         return version;
+         get { return version; }
       }
 
       /// <summary>
@@ -82,7 +82,6 @@ namespace com.google.zxing.datamatrix.decoder
       /// </summary>
       internal sbyte[] readCodewords()
       {
-
          sbyte[] result = new sbyte[version.getTotalCodewords()];
          int resultOffset = 0;
 
@@ -161,7 +160,7 @@ namespace com.google.zxing.datamatrix.decoder
 
          if (resultOffset != version.getTotalCodewords())
          {
-            throw FormatException.Instance;
+            return null;
          }
          return result;
       }

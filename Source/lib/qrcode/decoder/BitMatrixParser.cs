@@ -26,7 +26,7 @@ namespace com.google.zxing.qrcode.decoder
    /// </author>
    sealed class BitMatrixParser
    {
-      private BitMatrix bitMatrix;
+      private readonly BitMatrix bitMatrix;
       private Version parsedVersion;
       private FormatInformation parsedFormatInfo;
 
@@ -91,7 +91,7 @@ namespace com.google.zxing.qrcode.decoder
          {
             return parsedFormatInfo;
          }
-         throw FormatException.Instance;
+         return null;
       }
 
       /// <summary> <p>Reads version information from one of its two locations within the QR Code.</p>
@@ -149,7 +149,7 @@ namespace com.google.zxing.qrcode.decoder
          {
             return parsedVersion;
          }
-         throw ReaderException.Instance;
+         return null;
       }
 
       private int copyBit(int i, int j, int versionBits)
@@ -168,7 +168,11 @@ namespace com.google.zxing.qrcode.decoder
       internal sbyte[] readCodewords()
       {
          FormatInformation formatInfo = readFormatInformation();
+         if (formatInfo == null)
+            return null;
          Version version = readVersion();
+         if (version == null)
+            return null;
 
          // Get the data mask for the format used in this QR Code. This will exclude
          // some bits from reading as we wind through the bit matrix.
@@ -222,7 +226,7 @@ namespace com.google.zxing.qrcode.decoder
          }
          if (resultOffset != version.TotalCodewords)
          {
-            throw ReaderException.Instance;
+            return null;
          }
          return result;
       }

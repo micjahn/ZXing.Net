@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
 using com.google.zxing.common;
 
 namespace com.google.zxing.oned.rss
@@ -26,28 +27,27 @@ namespace com.google.zxing.oned.rss
    /// </summary>
    public sealed class RSS14Reader : AbstractRSSReader
    {
+      private static readonly int[] OUTSIDE_EVEN_TOTAL_SUBSET = { 1, 10, 34, 70, 126 };
+      private static readonly int[] INSIDE_ODD_TOTAL_SUBSET = { 4, 20, 48, 81 };
+      private static readonly int[] OUTSIDE_GSUM = { 0, 161, 961, 2015, 2715 };
+      private static readonly int[] INSIDE_GSUM = { 0, 336, 1036, 1516 };
+      private static readonly int[] OUTSIDE_ODD_WIDEST = { 8, 6, 4, 3, 1 };
+      private static readonly int[] INSIDE_ODD_WIDEST = { 2, 4, 6, 8 };
 
-      private static int[] OUTSIDE_EVEN_TOTAL_SUBSET = { 1, 10, 34, 70, 126 };
-      private static int[] INSIDE_ODD_TOTAL_SUBSET = { 4, 20, 48, 81 };
-      private static int[] OUTSIDE_GSUM = { 0, 161, 961, 2015, 2715 };
-      private static int[] INSIDE_GSUM = { 0, 336, 1036, 1516 };
-      private static int[] OUTSIDE_ODD_WIDEST = { 8, 6, 4, 3, 1 };
-      private static int[] INSIDE_ODD_WIDEST = { 2, 4, 6, 8 };
+      private static readonly int[][] FINDER_PATTERNS = {
+                                                           new[] {3, 8, 2, 1},
+                                                           new[] {3, 5, 5, 1},
+                                                           new[] {3, 3, 7, 1},
+                                                           new[] {3, 1, 9, 1},
+                                                           new[] {2, 7, 4, 1},
+                                                           new[] {2, 5, 6, 1},
+                                                           new[] {2, 3, 8, 1},
+                                                           new[] {1, 5, 7, 1},
+                                                           new[] {1, 3, 9, 1},
+                                                        };
 
-      private static int[][] FINDER_PATTERNS = {
-                                                  new[] {3, 8, 2, 1},
-                                                  new[] {3, 5, 5, 1},
-                                                  new[] {3, 3, 7, 1},
-                                                  new[] {3, 1, 9, 1},
-                                                  new[] {2, 7, 4, 1},
-                                                  new[] {2, 5, 6, 1},
-                                                  new[] {2, 3, 8, 1},
-                                                  new[] {1, 5, 7, 1},
-                                                  new[] {1, 3, 9, 1},
-                                               };
-
-      private List<Pair> possibleLeftPairs;
-      private List<Pair> possibleRightPairs;
+      private readonly List<Pair> possibleLeftPairs;
+      private readonly List<Pair> possibleRightPairs;
 
       public RSS14Reader()
       {
@@ -60,9 +60,13 @@ namespace com.google.zxing.oned.rss
                               IDictionary<DecodeHintType, object> hints)
       {
          Pair leftPair = decodePair(row, false, rowNumber, hints);
+         if (leftPair == null)
+            return null;
          addOrTally(possibleLeftPairs, leftPair);
          row.reverse();
          Pair rightPair = decodePair(row, true, rowNumber, hints);
+         if (rightPair == null)
+            return null;
          addOrTally(possibleRightPairs, rightPair);
          row.reverse();
          foreach (Pair left in possibleLeftPairs)
@@ -81,7 +85,7 @@ namespace com.google.zxing.oned.rss
                }
             }
          }
-         throw NotFoundException.Instance;
+         return null;
       }
 
       private static void addOrTally(IList<Pair> possiblePairs, Pair pair)
@@ -170,40 +174,40 @@ namespace com.google.zxing.oned.rss
 
       private Pair decodePair(BitArray row, bool right, int rowNumber, IDictionary<DecodeHintType, object> hints)
       {
-         try
-         {
-            int[] startEnd = findFinderPattern(row, 0, right);
-            FinderPattern pattern = parseFoundFinderPattern(row, rowNumber, right, startEnd);
-
-            ResultPointCallback resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK) ? null :
-              (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
-
-            if (resultPointCallback != null)
-            {
-               float center = (startEnd[0] + startEnd[1]) / 2.0f;
-               if (right)
-               {
-                  // row is actually reversed
-                  center = row.Size - 1 - center;
-               }
-               resultPointCallback.foundPossibleResultPoint(new ResultPoint(center, rowNumber));
-            }
-
-            DataCharacter outside = decodeDataCharacter(row, pattern, true);
-            DataCharacter inside = decodeDataCharacter(row, pattern, false);
-            return new Pair(1597 * outside.Value + inside.Value,
-                            outside.ChecksumPortion + 4 * inside.ChecksumPortion,
-                            pattern);
-         }
-         catch (NotFoundException re)
-         {
+         int[] startEnd = findFinderPattern(row, 0, right);
+         if (startEnd == null)
             return null;
+         FinderPattern pattern = parseFoundFinderPattern(row, rowNumber, right, startEnd);
+         if (pattern == null)
+            return null;
+
+         ResultPointCallback resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK) ? null :
+            (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
+
+         if (resultPointCallback != null)
+         {
+            float center = (startEnd[0] + startEnd[1]) / 2.0f;
+            if (right)
+            {
+               // row is actually reversed
+               center = row.Size - 1 - center;
+            }
+            resultPointCallback.foundPossibleResultPoint(new ResultPoint(center, rowNumber));
          }
+
+         DataCharacter outside = decodeDataCharacter(row, pattern, true);
+         if (outside == null)
+            return null;
+         DataCharacter inside = decodeDataCharacter(row, pattern, false);
+         if (inside == null)
+            return null;
+         return new Pair(1597*outside.Value + inside.Value,
+                         outside.ChecksumPortion + 4*inside.ChecksumPortion,
+                         pattern);
       }
 
       private DataCharacter decodeDataCharacter(BitArray row, FinderPattern pattern, bool outsideChar)
       {
-
          int[] counters = getDataCharacterCounters();
          counters[0] = 0;
          counters[1] = 0;
@@ -263,7 +267,8 @@ namespace com.google.zxing.oned.rss
             }
          }
 
-         adjustOddEvenCounts(outsideChar, numModules);
+         if (!adjustOddEvenCounts(outsideChar, numModules))
+            return null;
 
          int oddSum = 0;
          int oddChecksumPortion = 0;
@@ -287,7 +292,7 @@ namespace com.google.zxing.oned.rss
          {
             if ((oddSum & 0x01) != 0 || oddSum > 12 || oddSum < 4)
             {
-               throw NotFoundException.Instance;
+               return null;
             }
             int group = (12 - oddSum) / 2;
             int oddWidest = OUTSIDE_ODD_WIDEST[group];
@@ -302,7 +307,7 @@ namespace com.google.zxing.oned.rss
          {
             if ((evenSum & 0x01) != 0 || evenSum > 10 || evenSum < 4)
             {
-               throw NotFoundException.Instance;
+               return null;
             }
             int group = (10 - evenSum) / 2;
             int oddWidest = INSIDE_ODD_WIDEST[group];
@@ -313,7 +318,6 @@ namespace com.google.zxing.oned.rss
             int gSum = INSIDE_GSUM[group];
             return new DataCharacter(vEven * tOdd + vOdd + gSum, checksumPortion);
          }
-
       }
 
       private int[] findFinderPattern(BitArray row, int rowOffset, bool rightFinderPattern)
@@ -369,8 +373,7 @@ namespace com.google.zxing.oned.rss
                isWhite = !isWhite;
             }
          }
-         throw NotFoundException.Instance;
-
+         return null;
       }
 
       private FinderPattern parseFoundFinderPattern(BitArray row, int rowNumber, bool right, int[] startEnd)
@@ -389,7 +392,9 @@ namespace com.google.zxing.oned.rss
          int[] counters = getDecodeFinderCounters();
          Array.Copy(counters, 0, counters, 1, counters.Length - 1);
          counters[0] = firstCounter;
-         int value = parseFinderValue(counters, FINDER_PATTERNS);
+         int value;
+         if (!parseFinderValue(counters, FINDER_PATTERNS, out value))
+            return null;
          int start = firstElementStart;
          int end = startEnd[1];
          if (right)
@@ -418,9 +423,8 @@ namespace com.google.zxing.oned.rss
       }
       */
 
-      private void adjustOddEvenCounts(bool outsideChar, int numModules)
+      private bool adjustOddEvenCounts(bool outsideChar, int numModules)
       {
-
          int oddSum = count(getOddCounts());
          int evenSum = count(getEvenCounts());
          int mismatch = oddSum + evenSum - numModules;
@@ -490,7 +494,7 @@ namespace com.google.zxing.oned.rss
             {
                if (evenParityBad)
                {
-                  throw NotFoundException.Instance;
+                  return false;
                }
                decrementOdd = true;
             }
@@ -498,7 +502,7 @@ namespace com.google.zxing.oned.rss
             {
                if (!evenParityBad)
                {
-                  throw NotFoundException.Instance;
+                  return false;
                }
                decrementEven = true;
             }
@@ -509,7 +513,7 @@ namespace com.google.zxing.oned.rss
             {
                if (evenParityBad)
                {
-                  throw NotFoundException.Instance;
+                  return false;
                }
                incrementOdd = true;
             }
@@ -517,7 +521,7 @@ namespace com.google.zxing.oned.rss
             {
                if (!evenParityBad)
                {
-                  throw NotFoundException.Instance;
+                  return false;
                }
                incrementEven = true;
             }
@@ -528,7 +532,7 @@ namespace com.google.zxing.oned.rss
             {
                if (!evenParityBad)
                {
-                  throw NotFoundException.Instance;
+                  return false;
                }
                // Both bad
                if (oddSum < evenSum)
@@ -546,21 +550,21 @@ namespace com.google.zxing.oned.rss
             {
                if (evenParityBad)
                {
-                  throw NotFoundException.Instance;
+                  return false;
                }
                // Nothing to do!
             }
          }
          else
          {
-            throw NotFoundException.Instance;
+            return false;
          }
 
          if (incrementOdd)
          {
             if (decrementOdd)
             {
-               throw NotFoundException.Instance;
+               return false;
             }
             increment(getOddCounts(), getOddRoundingErrors());
          }
@@ -572,7 +576,7 @@ namespace com.google.zxing.oned.rss
          {
             if (decrementEven)
             {
-               throw NotFoundException.Instance;
+               return false;
             }
             increment(getEvenCounts(), getOddRoundingErrors());
          }
@@ -580,6 +584,8 @@ namespace com.google.zxing.oned.rss
          {
             decrement(getEvenCounts(), getEvenRoundingErrors());
          }
+
+         return true;
       }
    }
 }

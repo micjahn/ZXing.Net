@@ -86,7 +86,7 @@ namespace com.google.zxing.pdf417.decoder
             {
                // Something is wrong, since we have exceeded
                // the maximum rows in the specification.
-               throw FormatException.Instance;
+               return null;
             }
             int rowDifference = 0;
             // Scan a line of modules and check the
@@ -132,7 +132,7 @@ namespace com.google.zxing.pdf417.decoder
                   {
                      // Something is wrong, since we have exceeded
                      // the maximum columns in the specification.
-                     throw FormatException.Instance;
+                     return null;
                   }
                   // Reinitialize the row counters.
                   for (int j = 0; j < rowCounters.Length; j++)
@@ -155,9 +155,11 @@ namespace com.google.zxing.pdf417.decoder
             {
                // Something is wrong, since we have exceeded
                // the maximum rows in the specification.
-               throw FormatException.Instance;
+               return null;
             }
             next = processRow(rowCounters, rowNumber, rowHeight, codewords, next);
+            if (next < 0)
+               return null;
             rowNumber++;
             rows = rowNumber;
          }
@@ -212,7 +214,7 @@ namespace com.google.zxing.pdf417.decoder
             // This happens in real life and is almost surely a rare misdecode
             if (i + MODULES_IN_SYMBOL > rowCounters.Length)
             {
-               throw FormatException.Instance;
+               return -1;
             }
             for (int mask = MODULES_IN_SYMBOL - 1; mask >= 0; mask--)
             {
@@ -230,7 +232,7 @@ namespace com.google.zxing.pdf417.decoder
                   // Skip errors on the Right row indicator column
                   if (eraseCount >= erasures.Length)
                   {
-                     throw FormatException.Instance;
+                     return -1;
                   }
                   erasures[eraseCount] = next;
                   next++;

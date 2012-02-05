@@ -45,7 +45,6 @@ namespace com.google.zxing.common.detector
       /// the topmost point and the last, the bottommost. The second point will be leftmost and the
       /// third, the rightmost
       /// </returns>
-      /// <throws>  ReaderException if no Data Matrix Code can be found </throws>
       public ResultPoint[] detect()
       {
          int height = image.Height;
@@ -60,20 +59,26 @@ namespace com.google.zxing.common.detector
          int left = 0;
          int right = width;
          ResultPoint pointA = findCornerFromCenter(halfWidth, 0, left, right, halfHeight, -deltaY, top, bottom, halfWidth >> 1);
-         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
+         if (pointA == null)
+            return null;
          top = (int)pointA.Y - 1;
          ResultPoint pointB = findCornerFromCenter(halfWidth, -deltaX, left, right, halfHeight, 0, top, bottom, halfHeight >> 1);
-         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
+         if (pointB == null)
+            return null;
          left = (int)pointB.X - 1;
          ResultPoint pointC = findCornerFromCenter(halfWidth, deltaX, left, right, halfHeight, 0, top, bottom, halfHeight >> 1);
-         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
+         if (pointC == null)
+            return null;
          right = (int)pointC.X + 1;
          ResultPoint pointD = findCornerFromCenter(halfWidth, 0, left, right, halfHeight, deltaY, top, bottom, halfWidth >> 1);
-         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
+         if (pointD == null)
+            return null;
          bottom = (int)pointD.Y + 1;
 
          // Go try to find point A again with better information -- might have been off at first.
          pointA = findCornerFromCenter(halfWidth, 0, left, right, halfHeight, -deltaY, top, bottom, halfWidth >> 2);
+         if (pointA == null)
+            return null;
 
          return new ResultPoint[] { pointA, pointB, pointC, pointD };
       }
@@ -104,7 +109,6 @@ namespace com.google.zxing.common.detector
       /// </param>
       /// <returns> a {@link com.google.zxing.ResultPoint} encapsulating the corner that was found
       /// </returns>
-      /// <throws>  com.google.zxing.ReaderException if such a point cannot be found </throws>
       private ResultPoint findCornerFromCenter(int centerX, int deltaX, int left, int right, int centerY, int deltaY, int top, int bottom, int maxWhiteRun)
       {
          int[] lastRange = null;
@@ -125,7 +129,7 @@ namespace com.google.zxing.common.detector
             {
                if (lastRange == null)
                {
-                  throw ReaderException.Instance;
+                  return null;
                }
                // lastRange was found
                if (deltaX == 0)
@@ -164,7 +168,7 @@ namespace com.google.zxing.common.detector
             }
             lastRange = range;
          }
-         throw ReaderException.Instance;
+         return null;
       }
 
       /// <summary> Computes the start and end of a region of pixels, either horizontally or vertically, that could

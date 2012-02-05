@@ -216,6 +216,9 @@ namespace com.google.zxing.qrcode.detector
          }
 
          FinderPattern[] patternInfo = selectBestPatterns();
+         if (patternInfo == null)
+            return null;
+
          ResultPoint.orderBestPatterns(patternInfo);
 
          return new FinderPatternInfo(patternInfo);
@@ -588,21 +591,18 @@ namespace com.google.zxing.qrcode.detector
       /// those that have been detected at least {@link #CENTER_QUORUM} times, and whose module
       /// size differs from the average among those patterns the least
       /// </returns>
-      /// <throws>  ReaderException if 3 such finder patterns do not exist </throws>
       private FinderPattern[] selectBestPatterns()
       {
-
          int startSize = possibleCenters.Count;
          if (startSize < 3)
          {
             // Couldn't find enough finder patterns
-            throw ReaderException.Instance;
+            return null;
          }
 
          // Filter outlier possibilities whose module size is too different
          if (startSize > 3)
          {
-
             // But we can only afford to do so if we have at least 4 possibilities to choose from
             float totalModuleSize = 0.0f;
             float square = 0.0f;

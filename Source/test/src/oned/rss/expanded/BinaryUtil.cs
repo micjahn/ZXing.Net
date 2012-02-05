@@ -35,15 +35,11 @@ namespace com.google.zxing.oned.rss.expanded
    /// <summary>
    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
    /// </summary>
-   public sealed class BinaryUtil
+   public static class BinaryUtil
    {
-      private static string ONE = "1";
-      private static string ZERO = "0";
-      private static string SPACE = " ";
-
-      private BinaryUtil()
-      {
-      }
+      private const string ONE = "1";
+      private const string ZERO = "0";
+      private const string SPACE = " ";
 
       /// <summary>
       /// Constructs a BitArray from a String like the one returned from BitArray.toString()

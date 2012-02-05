@@ -249,8 +249,9 @@ namespace com.google.zxing.oned.rss.expanded
          int rowNumber = binaryMap.Height / 2;
          BitArray row = binaryMap.getBlackRow(rowNumber, null);
 
-         List<ExpandedPair> pairs = rssExpandedReader.decodeRow2pairs(rowNumber, row);
-         BitArray binary = BitArrayBuilder.buildBitArray(pairs);
+         Assert.IsTrue(rssExpandedReader.decodeRow2pairs(rowNumber, row));
+
+         BitArray binary = BitArrayBuilder.buildBitArray(rssExpandedReader.Pairs);
          Assert.AreEqual(expected, binary.ToString());
       }
    }

@@ -113,6 +113,8 @@ namespace com.google.zxing.pdf417.detector
          // Deskew and sample image.
          BitMatrix bits = sampleGrid(matrix, vertices[4], vertices[5],
              vertices[6], vertices[7], dimension);
+         if (bits == null)
+            return null;
          return new DetectorResult(bits, new ResultPoint[]
                                             {
                                                vertices[5], vertices[4], vertices[6], vertices[7]

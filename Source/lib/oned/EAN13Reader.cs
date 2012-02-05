@@ -85,8 +85,10 @@ namespace com.google.zxing.oned
 
          for (int x = 0; x < 6 && rowOffset < end; x++)
          {
-            int bestMatch = decodeDigit(row, counters, rowOffset, L_AND_G_PATTERNS);
-            resultString.Append((char)('0' + bestMatch % 10));
+            int bestMatch;
+            if (!decodeDigit(row, counters, rowOffset, L_AND_G_PATTERNS, out bestMatch))
+               return -1;
+            resultString.Append((char) ('0' + bestMatch%10));
             foreach (int counter in counters)
             {
                rowOffset += counter;
@@ -97,15 +99,20 @@ namespace com.google.zxing.oned
             }
          }
 
-         determineFirstDigit(resultString, lgPatternFound);
+         if (!determineFirstDigit(resultString, lgPatternFound))
+            return -1;
 
          int[] middleRange = findGuardPattern(row, rowOffset, true, MIDDLE_PATTERN);
+         if (middleRange == null)
+            return -1;
          rowOffset = middleRange[1];
 
          for (int x = 0; x < 6 && rowOffset < end; x++)
          {
-            int bestMatch = decodeDigit(row, counters, rowOffset, L_PATTERNS);
-            resultString.Append((char)('0' + bestMatch));
+            int bestMatch;
+            if (!decodeDigit(row, counters, rowOffset, L_PATTERNS, out bestMatch))
+               return -1;
+            resultString.Append((char) ('0' + bestMatch));
             foreach (int counter in counters)
             {
                rowOffset += counter;
@@ -124,24 +131,22 @@ namespace com.google.zxing.oned
       /// Based on pattern of odd-even ('L' and 'G') patterns used to encoded the explicitly-encoded
       /// digits in a barcode, determines the implicitly encoded first digit and adds it to the
       /// result string.
-      ///
+      /// </summary>
       /// <param name="resultString">string to insert decoded first digit into</param>
       /// <param name="lgPatternFound">int whose bits indicates the pattern of odd/even L/G patterns used to</param>
       ///  encode digits
-      /// <exception cref="NotFoundException">if first digit cannot be determined</exception>
-      /// </summary>
-      private static void determineFirstDigit(StringBuilder resultString, int lgPatternFound)
+      /// <return>-1 if first digit cannot be determined</return>
+      private static bool determineFirstDigit(StringBuilder resultString, int lgPatternFound)
       {
          for (int d = 0; d < 10; d++)
          {
             if (lgPatternFound == FIRST_DIGIT_ENCODINGS[d])
             {
                resultString.Insert(0, new[] { (char)('0' + d) });
-               return;
+               return true;
             }
          }
-         throw NotFoundException.Instance;
+         return false;
       }
-
    }
 }

@@ -69,7 +69,7 @@ namespace com.google.zxing
          {
             // The underlying raster of image consists of bytes with the luminance values
             var data = image.LockBits(new Rectangle(left, top + y, width, 1), ImageLockMode.ReadOnly,
-                                      PixelFormat.Format24bppRgb);
+                                      PixelFormat.Format32bppRgb);
 
             try
             {
@@ -77,7 +77,7 @@ namespace com.google.zxing
 
                for (int x = 0; x < width; x++)
                {
-                  row[x] = (sbyte) bitmapRow[x*3];
+                  row[x] = (sbyte) (bitmapRow[x*4] - 128);
                }
             }
             finally
@@ -101,7 +101,7 @@ namespace com.google.zxing
             {
                // The underlying raster of image consists of bytes with the luminance values
                var data = image.LockBits(new Rectangle(left, top, width, height), ImageLockMode.ReadOnly,
-                                         PixelFormat.Format24bppRgb);
+                                         PixelFormat.Format32bppRgb);
                try
                {
                   for (int y = 0; y < height; y++)
@@ -110,7 +110,7 @@ namespace com.google.zxing
                      var offset = y*width;
                      for (int x = 0; x < width; x++)
                      {
-                        matrix[offset + x] = (sbyte)bitmapRow[x * 3];
+                        matrix[offset + x] = (sbyte)bitmapRow[x * 4];
                      }
                   }
                }
@@ -163,7 +163,7 @@ namespace com.google.zxing
       public Bitmap MakeGrayscale3(Bitmap original)
       {
          //create a blank bitmap the same size as original
-         Bitmap newBitmap = new Bitmap(original.Width, original.Height);
+         Bitmap newBitmap = new Bitmap(original.Width, original.Height, PixelFormat.Format32bppRgb);
 
          //get a graphics object from the new image
          Graphics g = Graphics.FromImage(newBitmap);
@@ -172,9 +172,9 @@ namespace com.google.zxing
          ColorMatrix colorMatrix = new ColorMatrix(
             new float[][]
                {
-                  new float[] {.3f, .3f, .3f, 0, 0},
-                  new float[] {.59f, .59f, .59f, 0, 0},
-                  new float[] {.11f, .11f, .11f, 0, 0},
+                  new float[] {0.299f, 0.299f, 0.299f, 0, 0},
+                  new float[] {0.587f, 0.587f, 0.587f, 0, 0},
+                  new float[] {0.114f, 0.114f, 0.114f, 0, 0},
                   new float[] {0, 0, 0, 1, 0},
                   new float[] {0, 0, 0, 0, 1}
                });

@@ -82,10 +82,17 @@ namespace com.google.zxing.oned
 
          // Find out where the Middle section (payload) starts & ends
          int[] startRange = decodeStart(row);
+         if (startRange == null)
+            return null;
+
          int[] endRange = decodeEnd(row);
+         if (endRange == null)
+            return null;
 
          StringBuilder result = new StringBuilder(20);
-         decodeMiddle(row, startRange[1], endRange[0], result);
+         if (!decodeMiddle(row, startRange[1], endRange[0], result))
+            return null;
+
          String resultString = result.ToString();
 
          int[] allowedLengths = null;
@@ -113,15 +120,18 @@ namespace com.google.zxing.oned
          }
          if (!lengthOK)
          {
-            throw FormatException.Instance;
+            return null;
          }
 
          return new Result(
-             resultString,
-             null, // no natural byte representation for these barcodes
-             new ResultPoint[] { new ResultPoint(startRange[1], (float) rowNumber),
-                            new ResultPoint(endRange[0], (float) rowNumber)},
-             BarcodeFormat.ITF);
+            resultString,
+            null, // no natural byte representation for these barcodes
+            new ResultPoint[]
+               {
+                  new ResultPoint(startRange[1], (float) rowNumber),
+                  new ResultPoint(endRange[0], (float) rowNumber)
+               },
+            BarcodeFormat.ITF);
       }
 
       /// <summary>
@@ -130,12 +140,11 @@ namespace com.google.zxing.oned
       /// <param name="resultString"><see cref="StringBuilder" />to append decoded chars to</param>
       /// <exception cref="NotFoundException">if decoding could not complete successfully</exception>
       /// </summary>
-      private static void decodeMiddle(BitArray row,
+      private static bool decodeMiddle(BitArray row,
                                        int payloadStart,
                                        int payloadEnd,
                                        StringBuilder resultString)
       {
-
          // Digits are interleaved in pairs - 5 black lines for one digit, and the
          // 5
          // interleaved white lines for the second digit.
@@ -147,9 +156,10 @@ namespace com.google.zxing.oned
 
          while (payloadStart < payloadEnd)
          {
-
             // Get 10 runs of black/white.
-            recordPattern(row, payloadStart, counterDigitPair);
+            if (!recordPattern(row, payloadStart, counterDigitPair))
+               return false;
+
             // Split them into each array
             for (int k = 0; k < 5; k++)
             {
@@ -158,9 +168,12 @@ namespace com.google.zxing.oned
                counterWhite[k] = counterDigitPair[twoK + 1];
             }
 
-            int bestMatch = decodeDigit(counterBlack);
+            int bestMatch;
+            if (!decodeDigit(counterBlack, out bestMatch))
+               return false;
             resultString.Append((char)('0' + bestMatch));
-            bestMatch = decodeDigit(counterWhite);
+            if (!decodeDigit(counterWhite, out bestMatch))
+               return false;
             resultString.Append((char)('0' + bestMatch));
 
             foreach (int counterDigit in counterDigitPair)
@@ -168,6 +181,8 @@ namespace com.google.zxing.oned
                payloadStart += counterDigit;
             }
          }
+
+         return true;
       }
 
       /// <summary>
@@ -181,14 +196,20 @@ namespace com.google.zxing.oned
       int[] decodeStart(BitArray row)
       {
          int endStart = skipWhiteSpace(row);
+         if (endStart < 0)
+            return null;
+
          int[] startPattern = findGuardPattern(row, endStart, START_PATTERN);
+         if (startPattern == null)
+            return null;
 
          // Determine the width of a narrow line in pixels. We can do this by
          // getting the width of the start pattern and dividing by 4 because its
          // made up of 4 narrow lines.
-         this.narrowLineWidth = (startPattern[1] - startPattern[0]) >> 2;
+         narrowLineWidth = (startPattern[1] - startPattern[0]) >> 2;
 
-         validateQuietZone(row, startPattern[0]);
+         if (!validateQuietZone(row, startPattern[0]))
+            return null;
 
          return startPattern;
       }
@@ -208,7 +229,7 @@ namespace com.google.zxing.oned
       /// <param name="startPattern">index into row of the start or end pattern.</param>
       /// <exception cref="NotFoundException">if the quiet zone cannot be found, a ReaderException is thrown.</exception>
       /// </summary>
-      private void validateQuietZone(BitArray row, int startPattern)
+      private bool validateQuietZone(BitArray row, int startPattern)
       {
 
          int quietCount = this.narrowLineWidth * 10;  // expect to find this many pixels of quiet zone
@@ -224,8 +245,9 @@ namespace com.google.zxing.oned
          if (quietCount != 0)
          {
             // Unable to find the necessary number of quiet zone pixels.
-            throw NotFoundException.Instance;
+            return false;
          }
+         return true;
       }
 
       /// <summary>
@@ -241,7 +263,7 @@ namespace com.google.zxing.oned
          int endStart = row.getNextSet(0);
          if (endStart == width)
          {
-            throw NotFoundException.Instance;
+            return -1;
          }
 
          return endStart;
@@ -261,30 +283,28 @@ namespace com.google.zxing.oned
          // For convenience, reverse the row and then
          // search from 'the start' for the end block
          row.reverse();
-         try
-         {
-            int endStart = skipWhiteSpace(row);
-            int[] endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED);
+         int endStart = skipWhiteSpace(row);
+         if (endStart < 0)
+            return null;
+         int[] endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED);
+         row.reverse();
+         if (endPattern == null)
+            return null;
 
-            // The start & end patterns must be pre/post fixed by a quiet zone. This
-            // zone must be at least 10 times the width of a narrow line.
-            // ref: http://www.barcode-1.net/i25code.html
-            validateQuietZone(row, endPattern[0]);
+         // The start & end patterns must be pre/post fixed by a quiet zone. This
+         // zone must be at least 10 times the width of a narrow line.
+         // ref: http://www.barcode-1.net/i25code.html
+         if (!validateQuietZone(row, endPattern[0]))
+            return null;
 
-            // Now recalculate the indices of where the 'endblock' starts & stops to
-            // accommodate
-            // the reversed nature of the search
-            int temp = endPattern[0];
-            endPattern[0] = row.Size - endPattern[1];
-            endPattern[1] = row.Size - temp;
+         // Now recalculate the indices of where the 'endblock' starts & stops to
+         // accommodate
+         // the reversed nature of the search
+         int temp = endPattern[0];
+         endPattern[0] = row.Size - endPattern[1];
+         endPattern[1] = row.Size - temp;
 
-            return endPattern;
-         }
-         finally
-         {
-            // Put the row back the right way.
-            row.reverse();
-         }
+         return endPattern;
       }
 
       /// <summary>
@@ -338,7 +358,7 @@ namespace com.google.zxing.oned
                isWhite = !isWhite;
             }
          }
-         throw NotFoundException.Instance;
+         return null;
       }
 
       /// <summary>
@@ -349,11 +369,10 @@ namespace com.google.zxing.oned
       /// <returns>The decoded digit</returns>
       /// <exception cref="NotFoundException">if digit cannot be decoded</exception>
       /// </summary>
-      private static int decodeDigit(int[] counters)
+      private static bool decodeDigit(int[] counters, out int bestMatch)
       {
-
          int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
-         int bestMatch = -1;
+         bestMatch = -1;
          int max = PATTERNS.Length;
          for (int i = 0; i < max; i++)
          {
@@ -365,15 +384,7 @@ namespace com.google.zxing.oned
                bestMatch = i;
             }
          }
-         if (bestMatch >= 0)
-         {
-            return bestMatch;
-         }
-         else
-         {
-            throw NotFoundException.Instance;
-         }
+         return bestMatch >= 0;
       }
-
    }
 }

@@ -65,16 +65,18 @@ namespace com.google.zxing.common
          int[] localBuckets = buckets;
          for (int x = 0; x < width; x++)
          {
-            int pixel = localLuminances[x] & 0xff;
+            int pixel = (localLuminances[x] + 128) & 0xff;
             localBuckets[pixel >> LUMINANCE_SHIFT]++;
          }
-         int blackPoint = estimateBlackPoint(localBuckets);
+         int blackPoint;
+         if (!estimateBlackPoint(localBuckets, out blackPoint))
+            return null;
 
-         int left = localLuminances[0] & 0xff;
-         int center = localLuminances[1] & 0xff;
+         int left = (localLuminances[0] + 128) & 0xff;
+         int center = (localLuminances[1] + 128) & 0xff;
          for (int x = 1; x < width - 1; x++)
          {
-            int right = localLuminances[x + 1] & 0xff;
+            int right = (localLuminances[x + 1] + 128) & 0xff;
             // A simple -1 4 -1 box filter with a weight of 2.
             int luminance = ((center << 2) - left - right) >> 1;
             row[x] = (luminance < blackPoint);
@@ -112,7 +114,9 @@ namespace com.google.zxing.common
                   localBuckets[pixel >> LUMINANCE_SHIFT]++;
                }
             }
-            int blackPoint = estimateBlackPoint(localBuckets);
+            int blackPoint;
+            if (!estimateBlackPoint(localBuckets, out blackPoint))
+               return null;
 
             // We delay reading the entire image luminance until the black point estimation succeeds.
             // Although we end up reading four rows twice, it is consistent with our motto of
@@ -150,8 +154,9 @@ namespace com.google.zxing.common
          }
       }
 
-      private static int estimateBlackPoint(int[] buckets)
+      private static bool estimateBlackPoint(int[] buckets, out int blackPoint)
       {
+         blackPoint = 0;
          // Find the tallest peak in the histogram.
          int numBuckets = buckets.Length;
          int maxBucketCount = 0;
@@ -199,7 +204,7 @@ namespace com.google.zxing.common
          // two peaks, to determine the contrast.
          if (secondPeak - firstPeak <= numBuckets >> 4)
          {
-            throw ReaderException.Instance;
+            return false;
          }
 
          // Find a valley between them that is low and closer to the white peak.
@@ -216,7 +221,8 @@ namespace com.google.zxing.common
             }
          }
 
-         return bestValley << LUMINANCE_SHIFT;
+         blackPoint = bestValley << LUMINANCE_SHIFT;
+         return true;
       }
    }
 }

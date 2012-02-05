@@ -53,14 +53,9 @@ namespace com.google.zxing.multi.qrcode.detector
          List<DetectorResult> result = new List<DetectorResult>();
          foreach (FinderPatternInfo info in infos)
          {
-            try
-            {
-               result.Add(processFinderPatternInfo(info));
-            }
-            catch (ReaderException e)
-            {
-               // ignore
-            }
+            var oneResult = processFinderPatternInfo(info);
+            if (oneResult != null)
+               result.Add(oneResult);
          }
          if (result.Count == 0)
          {

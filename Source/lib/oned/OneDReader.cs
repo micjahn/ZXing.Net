@@ -131,6 +131,8 @@ namespace com.google.zxing.oned
             try
             {
                row = image.getBlackRow(rowNumber, row);
+               if (row == null)
+                  continue;
             }
             catch (NotFoundException nfe)
             {
@@ -160,31 +162,25 @@ namespace com.google.zxing.oned
                      hints = newHints;
                   }
                }
-               try
+               // Look for a barcode
+               Result result = decodeRow(rowNumber, row, hints);
+               if (result == null)
+                  continue;
+
+               // We found our barcode
+               if (attempt == 1)
                {
-                  // Look for a barcode
-                  Result result = decodeRow(rowNumber, row, hints);
-                  if (result == null)
-                     continue;
-                  // We found our barcode
-                  if (attempt == 1)
+                  // But it was upside down, so note that
+                  result.putMetadata(ResultMetadataType.ORIENTATION, 180);
+                  // And remember to flip the result points horizontally.
+                  ResultPoint[] points = result.ResultPoints;
+                  if (points != null)
                   {
-                     // But it was upside down, so note that
-                     result.putMetadata(ResultMetadataType.ORIENTATION, 180);
-                     // And remember to flip the result points horizontally.
-                     ResultPoint[] points = result.ResultPoints;
-                     if (points != null)
-                     {
-                        points[0] = new ResultPoint(width - points[0].X - 1, points[0].Y);
-                        points[1] = new ResultPoint(width - points[1].X - 1, points[1].Y);
-                     }
+                     points[0] = new ResultPoint(width - points[0].X - 1, points[0].Y);
+                     points[1] = new ResultPoint(width - points[1].X - 1, points[1].Y);
                   }
-                  return result;
                }
-               catch (ReaderException re)
-               {
-                  // continue -- just couldn't decode this row
-               }
+               return result;
             }
          }
 
@@ -204,7 +200,7 @@ namespace com.google.zxing.oned
       /// <exception cref="NotFoundException">if counters cannot be filled entirely from row before running out</exception>
       ///  of pixels
       /// </summary>
-      protected static void recordPattern(BitArray row,
+      protected static bool recordPattern(BitArray row,
                                           int start,
                                           int[] counters)
       {
@@ -216,7 +212,7 @@ namespace com.google.zxing.oned
          int end = row.Size;
          if (start >= end)
          {
-            throw NotFoundException.Instance;
+            return false;
          }
          bool isWhite = !row[start];
          int counterPosition = 0;
@@ -244,13 +240,10 @@ namespace com.google.zxing.oned
          }
          // If we read fully the last section of pixels and filled up our counters -- or filled
          // the last counter but ran off the side of the image, OK. Otherwise, a problem.
-         if (!(counterPosition == numCounters || (counterPosition == numCounters - 1 && i == end)))
-         {
-            throw NotFoundException.Instance;
-         }
+         return (counterPosition == numCounters || (counterPosition == numCounters - 1 && i == end));
       }
 
-      protected static void recordPatternInReverse(BitArray row, int start, int[] counters)
+      protected static bool recordPatternInReverse(BitArray row, int start, int[] counters)
       {
          // This could be more efficient I guess
          int numTransitionsLeft = counters.Length;
@@ -265,9 +258,9 @@ namespace com.google.zxing.oned
          }
          if (numTransitionsLeft >= 0)
          {
-            throw NotFoundException.Instance;
+            return false;
          }
-         recordPattern(row, start + 1, counters);
+         return recordPattern(row, start + 1, counters);
       }
 
       /// <summary>

@@ -15,24 +15,23 @@
  */
 
 using System;
-using System.Collections.Generic;
 
 namespace com.google.zxing.oned.rss
 {
    public abstract class AbstractRSSReader : OneDReader
    {
-      private static int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.2f);
-      private static int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.4f);
+      private static readonly int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.2f);
+      private static readonly int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.4f);
 
-      private static float MIN_FINDER_PATTERN_RATIO = 9.5f / 12.0f;
-      private static float MAX_FINDER_PATTERN_RATIO = 12.5f / 14.0f;
+      private const float MIN_FINDER_PATTERN_RATIO = 9.5f / 12.0f;
+      private const float MAX_FINDER_PATTERN_RATIO = 12.5f / 14.0f;
 
-      private int[] decodeFinderCounters;
-      private int[] dataCharacterCounters;
-      private float[] oddRoundingErrors;
-      private float[] evenRoundingErrors;
-      private int[] oddCounts;
-      private int[] evenCounts;
+      private readonly int[] decodeFinderCounters;
+      private readonly int[] dataCharacterCounters;
+      private readonly float[] oddRoundingErrors;
+      private readonly float[] evenRoundingErrors;
+      private readonly int[] oddCounts;
+      private readonly int[] evenCounts;
 
       protected AbstractRSSReader()
       {
@@ -74,18 +73,19 @@ namespace com.google.zxing.oned.rss
          return evenCounts;
       }
 
-      protected static int parseFinderValue(int[] counters,
-                                            int[][] finderPatterns)
+      protected static bool parseFinderValue(int[] counters,
+                                            int[][] finderPatterns,
+                                            out int value)
       {
-         for (int value = 0; value < finderPatterns.Length; value++)
+         for (value = 0; value < finderPatterns.Length; value++)
          {
             if (patternMatchVariance(counters, finderPatterns[value], MAX_INDIVIDUAL_VARIANCE) <
                 MAX_AVG_VARIANCE)
             {
-               return value;
+               return true;
             }
          }
-         throw NotFoundException.Instance;
+         return false;
       }
 
       protected static int count(int[] array)

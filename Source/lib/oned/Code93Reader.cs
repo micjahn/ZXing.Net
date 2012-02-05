@@ -31,14 +31,14 @@ namespace com.google.zxing.oned
    public sealed class Code93Reader : OneDReader
    {
       // Note that 'abcd' are dummy characters in place of control characters.
-      private static String ALPHABET_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*";
-      private static char[] ALPHABET = ALPHABET_STRING.ToCharArray();
+      private const String ALPHABET_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%abcd*";
+      private static readonly char[] ALPHABET = ALPHABET_STRING.ToCharArray();
 
       /// <summary>
       /// These represent the encodings of characters, as patterns of wide and narrow bars.
       /// The 9 least-significant bits of each int correspond to the pattern of wide and narrow.
       /// </summary>
-      private static int[] CHARACTER_ENCODINGS = {
+      private static readonly int[] CHARACTER_ENCODINGS = {
                                                     0x114, 0x148, 0x144, 0x142, 0x128, 0x124, 0x122, 0x150, 0x112, 0x10A, // 0-9
                                                     0x1A8, 0x1A4, 0x1A2, 0x194, 0x192, 0x18A, 0x168, 0x164, 0x162, 0x134, // A-J
                                                     0x11A, 0x158, 0x14C, 0x146, 0x12C, 0x116, 0x1B4, 0x1B2, 0x1AC, 0x1A6, // K-T
@@ -46,11 +46,14 @@ namespace com.google.zxing.oned
                                                     0x12E, 0x1D4, 0x1D2, 0x1CA, 0x16E, 0x176, 0x1AE, // - - %
                                                     0x126, 0x1DA, 0x1D6, 0x132, 0x15E, // Control chars? $-*
                                                  };
-      private static int ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
+      private static readonly int ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
 
       override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
          int[] start = findAsteriskPattern(row);
+         if (start == null)
+            return null;
+
          // Read off white space    
          int nextStart = row.getNextSet(start[1]);
          int end = row.Size;
@@ -61,13 +64,16 @@ namespace com.google.zxing.oned
          int lastStart;
          do
          {
-            recordPattern(row, nextStart, counters);
+            if (!recordPattern(row, nextStart, counters))
+               return null;
+
             int pattern = toPattern(counters);
             if (pattern < 0)
             {
-               throw NotFoundException.Instance;
+               return null;
             }
-            decodedChar = patternToChar(pattern);
+            if (!patternToChar(pattern, out decodedChar))
+               return null;
             result.Append(decodedChar);
             lastStart = nextStart;
             foreach (int counter in counters)
@@ -82,31 +88,35 @@ namespace com.google.zxing.oned
          // Should be at least one more black module
          if (nextStart == end || !row[nextStart])
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          if (result.Length < 2)
          {
             // false positive -- need at least 2 checksum digits
-            throw NotFoundException.Instance;
+            return null;
          }
 
-         checkChecksums(result);
+         if (!checkChecksums(result))
+            return null;
          // Remove checksum digits
          result.Length = result.Length - 2;
 
          String resultString = decodeExtended(result);
+         if (resultString == null)
+            return null;
 
-         float left = (float)(start[1] + start[0]) / 2.0f;
-         float right = (float)(nextStart + lastStart) / 2.0f;
+         float left = (start[1] + start[0]) / 2.0f;
+         float right = (nextStart + lastStart) / 2.0f;
          return new Result(
-             resultString,
-             null,
-             new ResultPoint[]{
-            new ResultPoint(left, (float) rowNumber),
-            new ResultPoint(right, (float) rowNumber)},
-             BarcodeFormat.CODE_93);
-
+            resultString,
+            null,
+            new ResultPoint[]
+               {
+                  new ResultPoint(left, rowNumber),
+                  new ResultPoint(right, rowNumber)
+               },
+            BarcodeFormat.CODE_93);
       }
 
       private static int[] findAsteriskPattern(BitArray row)
@@ -148,7 +158,7 @@ namespace com.google.zxing.oned
                isWhite = !isWhite;
             }
          }
-         throw NotFoundException.Instance;
+         return null;
       }
 
       private static int toPattern(int[] counters)
@@ -187,16 +197,18 @@ namespace com.google.zxing.oned
          return pattern;
       }
 
-      private static char patternToChar(int pattern)
+      private static bool patternToChar(int pattern, out char c)
       {
          for (int i = 0; i < CHARACTER_ENCODINGS.Length; i++)
          {
             if (CHARACTER_ENCODINGS[i] == pattern)
             {
-               return ALPHABET[i];
+               c = ALPHABET[i];
+               return true;
             }
          }
-         throw NotFoundException.Instance;
+         c = '*';
+         return false;
       }
 
       private static String decodeExtended(StringBuilder encoded)
@@ -220,7 +232,7 @@ namespace com.google.zxing.oned
                      }
                      else
                      {
-                        throw FormatException.Instance;
+                        return null;
                      }
                      break;
                   case 'a':
@@ -231,7 +243,7 @@ namespace com.google.zxing.oned
                      }
                      else
                      {
-                        throw FormatException.Instance;
+                        return null;
                      }
                      break;
                   case 'b':
@@ -246,7 +258,7 @@ namespace com.google.zxing.oned
                      }
                      else
                      {
-                        throw FormatException.Instance;
+                        return null;
                      }
                      break;
                   case 'c':
@@ -261,7 +273,7 @@ namespace com.google.zxing.oned
                      }
                      else
                      {
-                        throw FormatException.Instance;
+                        return null;
                      }
                      break;
                }
@@ -277,14 +289,17 @@ namespace com.google.zxing.oned
          return decoded.ToString();
       }
 
-      private static void checkChecksums(StringBuilder result)
+      private static bool checkChecksums(StringBuilder result)
       {
          int length = result.Length;
-         checkOneChecksum(result, length - 2, 20);
-         checkOneChecksum(result, length - 1, 15);
+         if (!checkOneChecksum(result, length - 2, 20))
+            return false;
+         if (!checkOneChecksum(result, length - 1, 15))
+            return false;
+         return true;
       }
 
-      private static void checkOneChecksum(StringBuilder result, int checkPosition, int weightMax)
+      private static bool checkOneChecksum(StringBuilder result, int checkPosition, int weightMax)
       {
          int weight = 1;
          int total = 0;
@@ -298,8 +313,9 @@ namespace com.google.zxing.oned
          }
          if (result[checkPosition] != ALPHABET[total % 47])
          {
-            throw ChecksumException.Instance;
+            return false;
          }
+         return true;
       }
    }
 }

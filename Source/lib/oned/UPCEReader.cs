@@ -35,19 +35,19 @@ namespace com.google.zxing.oned
       /// The pattern that marks the middle, and end, of a UPC-E pattern.
       /// There is no "second half" to a UPC-E barcode.
       /// </summary>
-      private static int[] MIDDLE_END_PATTERN = { 1, 1, 1, 1, 1, 1 };
+      private static readonly int[] MIDDLE_END_PATTERN = { 1, 1, 1, 1, 1, 1 };
 
       /// <summary>
       /// See L_AND_G_PATTERNS these values similarly represent patterns of
       /// even-odd parity encodings of digits that imply both the number system (0 or 1)
       /// used, and the check digit.
       /// </summary>
-      private static int[][] NUMSYS_AND_CHECK_DIGIT_PATTERNS = {
+      private static readonly int[][] NUMSYS_AND_CHECK_DIGIT_PATTERNS = {
                                                                   new[] { 0x38, 0x34, 0x32, 0x31, 0x2C, 0x26, 0x23, 0x2A, 0x29, 0x25 },
                                                                   new[] { 0x07, 0x0B, 0x0D, 0x0E, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A }
                                                                };
 
-      private int[] decodeMiddleCounters;
+      private readonly int[] decodeMiddleCounters;
 
       public UPCEReader()
       {
@@ -68,7 +68,9 @@ namespace com.google.zxing.oned
 
          for (int x = 0; x < 6 && rowOffset < end; x++)
          {
-            int bestMatch = decodeDigit(row, counters, rowOffset, L_AND_G_PATTERNS);
+            int bestMatch;
+            if (!decodeDigit(row, counters, rowOffset, L_AND_G_PATTERNS, out bestMatch))
+               return -1;
             result.Append((char)('0' + bestMatch % 10));
             foreach (int counter in counters)
             {
@@ -80,7 +82,8 @@ namespace com.google.zxing.oned
             }
          }
 
-         determineNumSysAndCheckDigit(result, lgPatternFound);
+         if (!determineNumSysAndCheckDigit(result, lgPatternFound))
+            return -1;
 
          return rowOffset;
       }
@@ -95,7 +98,7 @@ namespace com.google.zxing.oned
          return base.checkChecksum(convertUPCEtoUPCA(s));
       }
 
-      private static void determineNumSysAndCheckDigit(StringBuilder resultString, int lgPatternFound)
+      private static bool determineNumSysAndCheckDigit(StringBuilder resultString, int lgPatternFound)
       {
 
          for (int numSys = 0; numSys <= 1; numSys++)
@@ -106,11 +109,11 @@ namespace com.google.zxing.oned
                {
                   resultString.Insert(0, new[] { (char)('0' + numSys) });
                   resultString.Append((char)('0' + d));
-                  return;
+                  return true;
                }
             }
          }
-         throw NotFoundException.Instance;
+         return false;
       }
 
       override internal BarcodeFormat BarcodeFormat

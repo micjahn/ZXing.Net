@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections.Generic;
-
 namespace com.google.zxing.oned.rss
 {
-
    /// <summary> Adapted from listings in ISO/IEC 24724 Appendix B and Appendix G.</summary>
-   public sealed class RSSUtils
+   public static class RSSUtils
    {
-
-      private RSSUtils() { }
-
-      internal static int[] getRSSwidths(int val, int n, int elements, int maxWidth, bool noNarrow)
+      public static int[] getRSSwidths(int val, int n, int elements, int maxWidth, bool noNarrow)
       {
          int[] widths = new int[elements];
          int bar;

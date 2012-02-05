@@ -214,14 +214,16 @@ namespace com.google.zxing.oned
                isWhite = !isWhite;
             }
          }
-         throw NotFoundException.Instance;
+         return null;
       }
 
-      private static int decodeCode(BitArray row, int[] counters, int rowOffset)
+      private static bool decodeCode(BitArray row, int[] counters, int rowOffset, out int code)
       {
-         recordPattern(row, rowOffset, counters);
+         code = -1;
+         if (!recordPattern(row, rowOffset, counters))
+            return false;
+
          int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept
-         int bestMatch = -1;
          for (int d = 0; d < CODE_PATTERNS.Length; d++)
          {
             int[] pattern = CODE_PATTERNS[d];
@@ -229,23 +231,18 @@ namespace com.google.zxing.oned
             if (variance < bestVariance)
             {
                bestVariance = variance;
-               bestMatch = d;
+               code = d;
             }
          }
          // TODO We're overlooking the fact that the STOP pattern has 7 values, not 6.
-         if (bestMatch >= 0)
-         {
-            return bestMatch;
-         }
-         else
-         {
-            throw NotFoundException.Instance;
-         }
+         return code >= 0;
       }
 
       override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
          int[] startPatternInfo = findStartPattern(row);
+         if (startPatternInfo == null)
+            return null;
          int startCode = startPatternInfo[2];
          int codeSet;
          switch (startCode)
@@ -260,7 +257,7 @@ namespace com.google.zxing.oned
                codeSet = CODE_CODE_C;
                break;
             default:
-               throw FormatException.Instance;
+               return null;
          }
 
          bool done = false;
@@ -281,7 +278,6 @@ namespace com.google.zxing.oned
 
          while (!done)
          {
-
             bool unshift = isNextShifted;
             isNextShifted = false;
 
@@ -289,7 +285,8 @@ namespace com.google.zxing.oned
             lastCode = code;
 
             // Decode another code from image
-            code = decodeCode(row, counters, nextStart);
+            if (!decodeCode(row, counters, nextStart, out code))
+               return null;
 
             rawCodes.Add((sbyte)code);
 
@@ -319,7 +316,7 @@ namespace com.google.zxing.oned
                case CODE_START_A:
                case CODE_START_B:
                case CODE_START_C:
-                  throw FormatException.Instance;
+                  return null;
             }
 
             switch (codeSet)
@@ -451,7 +448,7 @@ namespace com.google.zxing.oned
                           Math.Min(row.Size, nextStart + (nextStart - lastStart) / 2),
                           false))
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          // Pull out from sum the value of the penultimate check code
@@ -459,7 +456,7 @@ namespace com.google.zxing.oned
          // lastCode is the checksum then:
          if (checksumTotal % 103 != lastCode)
          {
-            throw ChecksumException.Instance;
+            return null;
          }
 
          // Need to pull out the check digits from string
@@ -467,7 +464,7 @@ namespace com.google.zxing.oned
          if (resultLength == 0)
          {
             // false positive
-            throw NotFoundException.Instance;
+            return null;
          }
 
          // Only bother if the result had at least one character, and if the checksum digit happened to
@@ -495,14 +492,14 @@ namespace com.google.zxing.oned
          }
 
          return new Result(
-             result.ToString(),
-             rawBytes,
-             new ResultPoint[]{
-            new ResultPoint(left, (float) rowNumber),
-            new ResultPoint(right, (float) rowNumber)},
-             BarcodeFormat.CODE_128);
-
+            result.ToString(),
+            rawBytes,
+            new ResultPoint[]
+               {
+                  new ResultPoint(left, (float) rowNumber),
+                  new ResultPoint(right, (float) rowNumber)
+               },
+            BarcodeFormat.CODE_128);
       }
-
    }
 }

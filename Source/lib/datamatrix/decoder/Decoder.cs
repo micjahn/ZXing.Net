@@ -66,22 +66,22 @@ namespace com.google.zxing.datamatrix.decoder
       /// <summary>
       /// <p>Decodes a Data Matrix Code represented as a <see cref="BitMatrix" />. A 1 or "true" is taken
       /// to mean a black module.</p>
-      ///
+      /// </summary>
       /// <param name="bits">booleans representing white/black Data Matrix Code modules</param>
       /// <returns>text and bytes encoded within the Data Matrix Code</returns>
-      /// <exception cref="FormatException">if the Data Matrix Code cannot be decoded</exception>
-      /// <exception cref="ChecksumException">if error correction fails</exception>
-      /// </summary>
       public DecoderResult decode(BitMatrix bits)
       {
          // Construct a parser and read version, error-correction level
          BitMatrixParser parser = new BitMatrixParser(bits);
-         Version version = BitMatrixParser.readVersion(bits);
+         if (parser.Version == null)
+            return null;
 
          // Read codewords
          sbyte[] codewords = parser.readCodewords();
+         if (codewords == null)
+            return null;
          // Separate into data blocks
-         DataBlock[] dataBlocks = DataBlock.getDataBlocks(codewords, version);
+         DataBlock[] dataBlocks = DataBlock.getDataBlocks(codewords, parser.Version);
 
          int dataBlocksCount = dataBlocks.Length;
 

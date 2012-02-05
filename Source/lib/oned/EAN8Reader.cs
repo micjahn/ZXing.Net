@@ -48,7 +48,9 @@ namespace com.google.zxing.oned
 
          for (int x = 0; x < 4 && rowOffset < end; x++)
          {
-            int bestMatch = decodeDigit(row, counters, rowOffset, L_PATTERNS);
+            int bestMatch;
+            if (!decodeDigit(row, counters, rowOffset, L_PATTERNS, out bestMatch))
+               return -1;
             result.Append((char)('0' + bestMatch));
             foreach (int counter in counters)
             {
@@ -57,11 +59,15 @@ namespace com.google.zxing.oned
          }
 
          int[] middleRange = findGuardPattern(row, rowOffset, true, MIDDLE_PATTERN);
+         if (middleRange == null)
+            return -1;
          rowOffset = middleRange[1];
 
          for (int x = 0; x < 4 && rowOffset < end; x++)
          {
-            int bestMatch = decodeDigit(row, counters, rowOffset, L_PATTERNS);
+            int bestMatch;
+            if (!decodeDigit(row, counters, rowOffset, L_PATTERNS, out bestMatch))
+               return -1;
             result.Append((char)('0' + bestMatch));
             foreach (int counter in counters)
             {

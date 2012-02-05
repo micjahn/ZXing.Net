@@ -14,14 +14,14 @@
 * limitations under the License.
 */
 
-using System;
 using System.Collections.Generic;
+
 using com.google.zxing.aztec;
+using com.google.zxing.datamatrix;
 using com.google.zxing.maxicode;
-using MultiFormatOneDReader = com.google.zxing.oned.MultiFormatOneDReader;
-using PDF417Reader = com.google.zxing.pdf417.PDF417Reader;
-using QRCodeReader = com.google.zxing.qrcode.QRCodeReader;
-using DataMatrixReader = com.google.zxing.datamatrix.DataMatrixReader;
+using com.google.zxing.oned;
+using com.google.zxing.pdf417;
+using com.google.zxing.qrcode;
 
 namespace com.google.zxing
 {
@@ -194,20 +194,13 @@ namespace com.google.zxing
          {
             foreach (var reader in readers)
             {
-               try
-               {
-                  var result = reader.decode(image, hints);
-                  if (result != null)
-                     return result;
-               }
-               catch (ReaderException)
-               {
-                  // continue
-               }
+               var result = reader.decode(image, hints);
+               if (result != null)
+                  return result;
             }
          }
 
-         throw ReaderException.Instance;
+         return null;
       }
    }
 }

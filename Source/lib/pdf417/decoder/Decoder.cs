@@ -74,7 +74,7 @@ namespace com.google.zxing.pdf417.decoder
          // Construct a parser to read the data codewords and error-correction level
          BitMatrixParser parser = new BitMatrixParser(bits);
          int[] codewords = parser.readCodewords();
-         if (codewords.Length == 0)
+         if (codewords == null || codewords.Length == 0)
          {
             return null;
          }

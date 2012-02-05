@@ -149,13 +149,15 @@ namespace com.google.zxing.pdf417.decoder
                   codeIndex = textCompaction(codewords, codeIndex, result);
                   break;
             }
+            if (codeIndex < 0)
+               return null;
             if (codeIndex < codewords.Length)
             {
                code = codewords[codeIndex++];
             }
             else
             {
-               throw FormatException.Instance;
+               return null;
             }
          }
          return new DecoderResult(null, result.ToString(), null, null);
@@ -596,6 +598,8 @@ namespace com.google.zxing.pdf417.decoder
                // current Numeric Compaction mode grouping as described in 5.4.4.2,
                // and then to start a new one grouping.
                String s = decodeBase900toBase10(numericCodewords, count);
+               if (s == null)
+                  return -1;
                result.Append(s);
                count = 0;
             }
@@ -654,7 +658,7 @@ namespace com.google.zxing.pdf417.decoder
          String resultString = result.ToString();
          if (resultString[0] != '1')
          {
-            throw FormatException.Instance;
+            return null;
          }
          return resultString.Substring(1);
 #else
@@ -666,7 +670,7 @@ namespace com.google.zxing.pdf417.decoder
          String resultString = result.ToString();
          if (resultString[0] != '1')
          {
-            throw FormatException.Instance;
+            return null;
          }
          return resultString.Substring(1);
 #endif

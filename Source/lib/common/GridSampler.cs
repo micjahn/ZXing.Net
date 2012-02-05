@@ -113,8 +113,7 @@ namespace com.google.zxing.common
       /// </param>
       /// <param name="points">actual points in x1,y1,...,xn,yn form
       /// </param>
-      /// <throws>  ReaderException if an endpoint is lies outside the image boundaries </throws>
-      protected internal static void checkAndNudgePoints(BitMatrix image, float[] points)
+      protected internal static bool checkAndNudgePoints(BitMatrix image, float[] points)
       {
          int width = image.Width;
          int height = image.Height;
@@ -128,7 +127,7 @@ namespace com.google.zxing.common
             int y = (int)points[offset + 1];
             if (x < -1 || x > width || y < -1 || y > height)
             {
-               throw ReaderException.Instance;
+               return false;
             }
             nudged = false;
             if (x == -1)
@@ -162,7 +161,7 @@ namespace com.google.zxing.common
             int y = (int)points[offset + 1];
             if (x < -1 || x > width || y < -1 || y > height)
             {
-               throw ReaderException.Instance;
+               return false;
             }
             nudged = false;
             if (x == -1)
@@ -186,6 +185,8 @@ namespace com.google.zxing.common
                nudged = true;
             }
          }
+
+         return true;
       }
    }
 }

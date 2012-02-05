@@ -29,8 +29,7 @@ namespace com.google.zxing.oned
    /// </summary>
    public sealed class MultiFormatUPCEANReader : OneDReader
    {
-
-      private UPCEANReader[] readers;
+      private readonly UPCEANReader[] readers;
 
       public MultiFormatUPCEANReader(IDictionary<DecodeHintType, object> hints)
       {
@@ -72,17 +71,15 @@ namespace com.google.zxing.oned
       {
          // Compute this location once and reuse it on multiple implementations
          int[] startGuardPattern = UPCEANReader.findStartGuardPattern(row);
+         if (startGuardPattern == null)
+            return null;
+
          foreach (UPCEANReader reader in readers)
          {
-            Result result;
-            try
-            {
-               result = reader.decodeRow(rowNumber, row, startGuardPattern, hints);
-            }
-            catch (ReaderException re)
-            {
+            Result result = reader.decodeRow(rowNumber, row, startGuardPattern, hints);
+            if (result == null)
                continue;
-            }
+
             // Special case: a 12-digit code encoded in UPC-A is identical to a "0"
             // followed by those 12 digits encoded as EAN-13. Each will recognize such a code,
             // UPC-A as a 12-digit string and EAN-13 as a 13-digit string starting with "0".
@@ -109,7 +106,7 @@ namespace com.google.zxing.oned
             return result;
          }
 
-         throw NotFoundException.Instance;
+         return null;
       }
 
       public override void reset()

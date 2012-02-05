@@ -57,7 +57,7 @@ namespace com.google.zxing.multi
          doDecodeMultiple(image, hints, results, 0, 0);
          if ((results.Count == 0))
          {
-            throw ReaderException.Instance;
+            return null;
          }
          int numResults = results.Count;
          Result[] resultArray = new Result[numResults];
@@ -70,15 +70,10 @@ namespace com.google.zxing.multi
 
       private void doDecodeMultiple(BinaryBitmap image, IDictionary<DecodeHintType, object> hints, IList<Result> results, int xOffset, int yOffset)
       {
-         Result result;
-         try
-         {
-            result = _delegate.decode(image, hints);
-         }
-         catch (ReaderException)
-         {
+         Result result = _delegate.decode(image, hints);
+         if (result == null)
             return;
-         }
+
          bool alreadyFound = false;
          for (int i = 0; i < results.Count; i++)
          {

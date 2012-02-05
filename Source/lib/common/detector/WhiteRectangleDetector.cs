@@ -213,7 +213,7 @@ namespace com.google.zxing.common.detector
 
             if (z == null)
             {
-               throw NotFoundException.Instance;
+               return null;
             }
 
             ResultPoint t = null;
@@ -229,7 +229,7 @@ namespace com.google.zxing.common.detector
 
             if (t == null)
             {
-               throw NotFoundException.Instance;
+               return null;
             }
 
             ResultPoint x = null;
@@ -245,7 +245,7 @@ namespace com.google.zxing.common.detector
 
             if (x == null)
             {
-               throw NotFoundException.Instance;
+               return null;
             }
 
             ResultPoint y = null;
@@ -261,7 +261,7 @@ namespace com.google.zxing.common.detector
 
             if (y == null)
             {
-               throw NotFoundException.Instance;
+               return null;
             }
 
             return centerEdges(y, z, x, t);
@@ -269,7 +269,7 @@ namespace com.google.zxing.common.detector
          }
          else
          {
-            throw NotFoundException.Instance;
+            return null;
          }
       }
 

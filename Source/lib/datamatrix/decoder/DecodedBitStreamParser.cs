@@ -90,29 +90,35 @@ namespace com.google.zxing.datamatrix.decoder
          {
             if (mode == Mode.ASCII_ENCODE)
             {
-               mode = decodeAsciiSegment(bits, result, resultTrailer);
+               if (!decodeAsciiSegment(bits, result, resultTrailer, out mode))
+                  return null;
             }
             else
             {
                switch (mode)
                {
                   case Mode.C40_ENCODE:
-                     decodeC40Segment(bits, result);
+                     if (!decodeC40Segment(bits, result))
+                        return null;
                      break;
                   case Mode.TEXT_ENCODE:
-                     decodeTextSegment(bits, result);
+                     if (!decodeTextSegment(bits, result))
+                        return null;
                      break;
                   case Mode.ANSIX12_ENCODE:
-                     decodeAnsiX12Segment(bits, result);
+                     if (!decodeAnsiX12Segment(bits, result))
+                        return null;
                      break;
                   case Mode.EDIFACT_ENCODE:
-                     decodeEdifactSegment(bits, result);
+                     if (!decodeEdifactSegment(bits, result))
+                        return null;
                      break;
                   case Mode.BASE256_ENCODE:
-                     decodeBase256Segment(bits, result, byteSegments);
+                     if (!decodeBase256Segment(bits, result, byteSegments))
+                        return null;
                      break;
                   default:
-                     throw FormatException.Instance;
+                     return null;
                }
                mode = Mode.ASCII_ENCODE;
             }
@@ -127,17 +133,19 @@ namespace com.google.zxing.datamatrix.decoder
       /// <summary>
       /// See ISO 16022:2006, 5.2.3 and Annex C, Table C.2
       /// </summary>
-      private static Mode decodeAsciiSegment(BitSource bits,
+      private static bool decodeAsciiSegment(BitSource bits,
                                              StringBuilder result,
-                                             StringBuilder resultTrailer)
+                                             StringBuilder resultTrailer,
+                                             out Mode mode)
       {
          bool upperShift = false;
+         mode = Mode.ASCII_ENCODE;
          do
          {
             int oneByte = bits.readBits(8);
             if (oneByte == 0)
             {
-               throw FormatException.Instance;
+               return false;
             }
             else if (oneByte <= 128)
             {  // ASCII data (ASCII value + 1)
@@ -147,11 +155,13 @@ namespace com.google.zxing.datamatrix.decoder
                   //upperShift = false;
                }
                result.Append((char)(oneByte - 1));
-               return Mode.ASCII_ENCODE;
+               mode = Mode.ASCII_ENCODE;
+               return true;
             }
             else if (oneByte == 129)
             {  // Pad
-               return Mode.PAD_ENCODE;
+               mode = Mode.PAD_ENCODE;
+               return true;
             }
             else if (oneByte <= 229)
             {  // 2-digit data 00-99 (Numeric Value + 130)
@@ -164,11 +174,13 @@ namespace com.google.zxing.datamatrix.decoder
             }
             else if (oneByte == 230)
             {  // Latch to C40 encodation
-               return Mode.C40_ENCODE;
+               mode = Mode.C40_ENCODE;
+               return true;
             }
             else if (oneByte == 231)
             {  // Latch to Base 256 encodation
-               return Mode.BASE256_ENCODE;
+               mode = Mode.BASE256_ENCODE;
+               return true;
             }
             else if (oneByte == 232)
             {
@@ -197,15 +209,18 @@ namespace com.google.zxing.datamatrix.decoder
             }
             else if (oneByte == 238)
             {  // Latch to ANSI X12 encodation
-               return Mode.ANSIX12_ENCODE;
+               mode = Mode.ANSIX12_ENCODE;
+               return true;
             }
             else if (oneByte == 239)
             {  // Latch to Text encodation
-               return Mode.TEXT_ENCODE;
+               mode = Mode.TEXT_ENCODE;
+               return true;
             }
             else if (oneByte == 240)
             {  // Latch to EDIFACT encodation
-               return Mode.EDIFACT_ENCODE;
+               mode = Mode.EDIFACT_ENCODE;
+               return true;
             }
             else if (oneByte == 241)
             {  // ECI Character
@@ -222,17 +237,18 @@ namespace com.google.zxing.datamatrix.decoder
                }
                else
                {
-                  throw FormatException.Instance;
+                  return false;
                }
             }
          } while (bits.available() > 0);
-         return Mode.ASCII_ENCODE;
+         mode = Mode.ASCII_ENCODE;
+         return true;
       }
 
       /// <summary>
       /// See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
       /// </summary>
-      private static void decodeC40Segment(BitSource bits, StringBuilder result)
+      private static bool decodeC40Segment(BitSource bits, StringBuilder result)
       {
          // Three C40 values are encoded in a 16-bit value as
          // (1600 * C1) + (40 * C2) + C3 + 1
@@ -247,12 +263,13 @@ namespace com.google.zxing.datamatrix.decoder
             // If there is only one byte left then it will be encoded as ASCII
             if (bits.available() == 8)
             {
-               return;
+               return true;
             }
             int firstByte = bits.readBits(8);
             if (firstByte == 254)
-            {  // Unlatch codeword
-               return;
+            { 
+               // Unlatch codeword
+               return true;
             }
 
             parseTwoBytes(firstByte, bits.readBits(8), cValues);
@@ -282,7 +299,7 @@ namespace com.google.zxing.datamatrix.decoder
                      }
                      else
                      {
-                        throw FormatException.Instance;
+                        return false;
                      }
                      break;
                   case 1:
@@ -321,7 +338,7 @@ namespace com.google.zxing.datamatrix.decoder
                      }
                      else
                      {
-                        throw FormatException.Instance;
+                        return false;
                      }
                      shift = 0;
                      break;
@@ -338,16 +355,18 @@ namespace com.google.zxing.datamatrix.decoder
                      shift = 0;
                      break;
                   default:
-                     throw FormatException.Instance;
+                     return false;
                }
             }
          } while (bits.available() > 0);
+
+         return true;
       }
 
       /// <summary>
       /// See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
       /// </summary>
-      private static void decodeTextSegment(BitSource bits, StringBuilder result)
+      private static bool decodeTextSegment(BitSource bits, StringBuilder result)
       {
          // Three Text values are encoded in a 16-bit value as
          // (1600 * C1) + (40 * C2) + C3 + 1
@@ -361,12 +380,13 @@ namespace com.google.zxing.datamatrix.decoder
             // If there is only one byte left then it will be encoded as ASCII
             if (bits.available() == 8)
             {
-               return;
+               return true;
             }
             int firstByte = bits.readBits(8);
             if (firstByte == 254)
-            {  // Unlatch codeword
-               return;
+            {  
+               // Unlatch codeword
+               return true;
             }
 
             parseTwoBytes(firstByte, bits.readBits(8), cValues);
@@ -396,7 +416,7 @@ namespace com.google.zxing.datamatrix.decoder
                      }
                      else
                      {
-                        throw FormatException.Instance;
+                        return false;
                      }
                      break;
                   case 1:
@@ -436,7 +456,7 @@ namespace com.google.zxing.datamatrix.decoder
                      }
                      else
                      {
-                        throw FormatException.Instance;
+                        return false;
                      }
                      shift = 0;
                      break;
@@ -457,20 +477,22 @@ namespace com.google.zxing.datamatrix.decoder
                      }
                      else
                      {
-                        throw FormatException.Instance;
+                        return false;
                      }
                      break;
                   default:
-                     throw FormatException.Instance;
+                     return false;
                }
             }
          } while (bits.available() > 0);
+
+         return true;
       }
 
       /// <summary>
       /// See ISO 16022:2006, 5.2.7
       /// </summary>
-      private static void decodeAnsiX12Segment(BitSource bits,
+      private static bool decodeAnsiX12Segment(BitSource bits,
                                                StringBuilder result)
       {
          // Three ANSI X12 values are encoded in a 16-bit value as
@@ -482,12 +504,12 @@ namespace com.google.zxing.datamatrix.decoder
             // If there is only one byte left then it will be encoded as ASCII
             if (bits.available() == 8)
             {
-               return;
+               return true;
             }
             int firstByte = bits.readBits(8);
             if (firstByte == 254)
             {  // Unlatch codeword
-               return;
+               return true;
             }
 
             parseTwoBytes(firstByte, bits.readBits(8), cValues);
@@ -521,10 +543,12 @@ namespace com.google.zxing.datamatrix.decoder
                }
                else
                {
-                  throw FormatException.Instance;
+                  return false;
                }
             }
          } while (bits.available() > 0);
+
+         return true;
       }
 
       private static void parseTwoBytes(int firstByte, int secondByte, int[] result)
@@ -541,7 +565,7 @@ namespace com.google.zxing.datamatrix.decoder
       /// <summary>
       /// See ISO 16022:2006, 5.2.8 and Annex C Table C.3
       /// </summary>
-      private static void decodeEdifactSegment(BitSource bits, StringBuilder result)
+      private static bool decodeEdifactSegment(BitSource bits, StringBuilder result)
       {
          bool unlatch = false;
          do
@@ -549,7 +573,7 @@ namespace com.google.zxing.datamatrix.decoder
             // If there is only two or less bytes left then it will be encoded as ASCII
             if (bits.available() <= 16)
             {
-               return;
+               return true;
             }
 
             for (int i = 0; i < 4; i++)
@@ -574,12 +598,14 @@ namespace com.google.zxing.datamatrix.decoder
                }
             }
          } while (!unlatch && bits.available() > 0);
+
+         return true;
       }
 
       /// <summary>
       /// See ISO 16022:2006, 5.2.9 and Annex B, B.2
       /// </summary>
-      private static void decodeBase256Segment(BitSource bits,
+      private static bool decodeBase256Segment(BitSource bits,
                                                StringBuilder result,
                                                IList<sbyte[]> byteSegments)
       {
@@ -603,7 +629,7 @@ namespace com.google.zxing.datamatrix.decoder
          // We're seeing NegativeArraySizeException errors from users.
          if (count < 0)
          {
-            throw FormatException.Instance;
+            return false;
          }
 
          byte[] bytes = new byte[count];
@@ -614,7 +640,7 @@ namespace com.google.zxing.datamatrix.decoder
             // http://www.bcgen.com/demo/IDAutomationStreamingDataMatrix.aspx?MODE=3&D=Fred&PFMT=3&PT=F&X=0.3&O=0&LM=0.2
             if (bits.available() < 8)
             {
-               throw FormatException.Instance;
+               return false;
             }
             bytes[i] = (byte)unrandomize255State(bits.readBits(8), codewordPosition++);
             sbytes[i] = (sbyte)bytes[i];
@@ -632,6 +658,8 @@ namespace com.google.zxing.datamatrix.decoder
          {
             throw new InvalidOperationException("Platform does not support required encoding: " + uee);
          }
+
+         return true;
       }
 
       /// <summary>

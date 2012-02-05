@@ -136,7 +136,8 @@ namespace com.google.zxing.common
 
             for (int x = 0; x < testCount; x++)
             {
-               float rotation = testResults[x].Rotation;
+               var testResult = testResults[x];
+               float rotation = testResult.Rotation;
                Bitmap rotatedImage = rotateImage(image, rotation);
                LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
@@ -254,7 +255,7 @@ namespace com.google.zxing.common
 
          Result result = barcodeReader.decode(source, hints);
          if (result == null)
-            return false;
+            throw ReaderException.Instance;
 
          if (expectedFormat != result.BarcodeFormat)
          {
