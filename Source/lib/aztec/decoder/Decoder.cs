@@ -143,24 +143,23 @@ namespace com.google.zxing.aztec.decoder
       /// </summary>
       /// <param name="correctedBits">The corrected bits.</param>
       /// <returns>the decoded string</returns>
-      /// <exception cref="FormatException">if the input is not valid</exception>
       private String getEncodedData(bool[] correctedBits)
       {
-         int endIndex = codewordSize * ddata.getNbDatablocks() - invertedBitCount;
+         var endIndex = codewordSize * ddata.getNbDatablocks() - invertedBitCount;
          if (endIndex > correctedBits.Length)
          {
             return null;
          }
 
-         Table lastTable = Table.UPPER;
-         Table table = Table.UPPER;
-         String[] strTable = UPPER_TABLE;
-         int startIndex = 0;
-         StringBuilder result = new StringBuilder(20);
-         bool end = false;
-         bool shift = false;
-         bool switchShift = false;
-         bool binaryShift = false;
+         var lastTable = Table.UPPER;
+         var table = Table.UPPER;
+         var strTable = UPPER_TABLE;
+         var startIndex = 0;
+         var result = new StringBuilder(20);
+         var end = false;
+         var shift = false;
+         var switchShift = false;
+         var binaryShift = false;
 
          while (!end)
          {
@@ -176,23 +175,26 @@ namespace com.google.zxing.aztec.decoder
             }
 
             int code;
-
             if (binaryShift)
             {
                if (endIndex - startIndex < 5)
+               {
                   break;
+               }
 
-               var length = readCode(correctedBits, startIndex, 5);
+               int length = readCode(correctedBits, startIndex, 5);
                startIndex += 5;
                if (length == 0)
                {
                   if (endIndex - startIndex < 11)
+                  {
                      break;
+                  }
 
                   length = readCode(correctedBits, startIndex, 11) + 31;
                   startIndex += 11;
                }
-               for (var charCount = 0; charCount < length; charCount++)
+               for (int charCount = 0; charCount < length; charCount++)
                {
                   if (endIndex - startIndex < 8)
                   {
@@ -201,64 +203,63 @@ namespace com.google.zxing.aztec.decoder
                   }
 
                   code = readCode(correctedBits, startIndex, 8);
-                  result.Append(Convert.ToChar(code));
+                  result.Append((char)code);
                   startIndex += 8;
                }
                binaryShift = false;
             }
             else
             {
-               switch (table)
+               if (table == Table.BINARY)
                {
-                  case Table.BINARY:
-                     if (endIndex - startIndex < 8)
-                     {
-                        end = true;
-                        break;
-                     }
-                     code = readCode(correctedBits, startIndex, 8);
-                     startIndex += 8;
-
-                     result.Append((char) code);
+                  if (endIndex - startIndex < 8)
+                  {
+                     end = true;
                      break;
+                  }
+                  code = readCode(correctedBits, startIndex, 8);
+                  startIndex += 8;
 
-                  default:
-                     int size = 5;
+                  result.Append((char)code);
+               }
+               else
+               {
+                  int size = 5;
 
-                     if (table == Table.DIGIT)
+                  if (table == Table.DIGIT)
+                  {
+                     size = 4;
+                  }
+
+                  if (endIndex - startIndex < size)
+                  {
+                     end = true;
+                     break;
+                  }
+
+                  code = readCode(correctedBits, startIndex, size);
+                  startIndex += size;
+
+                  String str = getCharacter(strTable, code);
+                  if (str.StartsWith("CTRL_"))
+                  {
+                     // Table changes
+                     table = getTable(str[5]);
+                     strTable = codeTables[table];
+
+                     if (str[6] == 'S')
                      {
-                        size = 4;
-                     }
-
-                     if (endIndex - startIndex < size)
-                     {
-                        end = true;
-                        break;
-                     }
-
-                     code = readCode(correctedBits, startIndex, size);
-                     startIndex += size;
-
-                     String str = getCharacter(strTable, code);
-                     if (str.StartsWith("CTRL_"))
-                     {
-                        // Table changes
-                        table = getTable(str[5]);
-                        strTable = codeTables[table];
-
-                        if (str[6] == 'S')
+                        shift = true;
+                        if (str[5] == 'B')
                         {
-                           shift = true;
-                           if (str[5] == 'B')
-                              binaryShift = true;
+                           binaryShift = true;
                         }
                      }
-                     else
-                     {
-                        result.Append(str);
-                     }
-
-                     break;
+                  }
+                  else
+                  {
+                     result.Append(str);
+                  }
                }
             }
 
@@ -269,7 +270,6 @@ namespace com.google.zxing.aztec.decoder
                shift = false;
                switchShift = false;
             }
-
          }
          return result.ToString();
       }
