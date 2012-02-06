@@ -79,7 +79,7 @@ namespace com.google.zxing.oned
          {
             readers.Add(new MultiFormatUPCEANReader(hints));
             readers.Add(new Code39Reader());
-            //readers.Add(new CodaBarReader());
+            readers.Add(new CodaBarReader());
             readers.Add(new Code93Reader());
             readers.Add(new Code128Reader());
             readers.Add(new ITFReader());

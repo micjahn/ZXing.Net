@@ -22,9 +22,8 @@ namespace com.google.zxing.oned
 {
    /// <summary>
    /// This class renders CodaBar as <see cref="BitMatrix" />.
-   ///
-   /// <author>dsbnatut@gmail.com (Kazuki Nishiura)</author>
    /// </summary>
+   /// <author>dsbnatut@gmail.com (Kazuki Nishiura)</author>
    public class CodaBarWriter : OneDimensionalCodeWriter
    {
       public CodaBarWriter()
@@ -84,15 +83,21 @@ namespace com.google.zxing.oned
             char c = Char.ToUpper(contents[index]);
             if (index == contents.Length - 1)
             {
-               // Neither * nor E are in the CodaBarReader.ALPHABET.
-               // * is equal to the  c pattern, and e is equal to the d pattern
-               if (c == '*')
+               // The end chars are not in the CodaBarReader.ALPHABET.
+               switch (c)
                {
-                  c = 'C';
-               }
-               else if (c == 'E')
-               {
-                  c = 'D';
+                  case 'T':
+                     c = 'A';
+                     break;
+                  case 'N':
+                     c = 'B';
+                     break;
+                  case '*':
+                     c = 'C';
+                     break;
+                  case 'E':
+                     c = 'D';
+                     break;
                }
             }
             int code = 0;

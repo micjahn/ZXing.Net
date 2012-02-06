@@ -25,17 +25,14 @@ using com.google.zxing.qrcode;
 
 namespace com.google.zxing
 {
-   /// <summary> MultiFormatReader is a convenience class and the main entry point into the library for most uses.
+   /// <summary>
+   /// MultiFormatReader is a convenience class and the main entry point into the library for most uses.
    /// By default it attempts to decode all barcode formats that the library supports. Optionally, you
    /// can provide a hints object to request different behavior, for example only decoding QR codes.
-   /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>  dswitkin@google.com (Daniel Switkin)
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
+   /// <author>dswitkin@google.com (Daniel Switkin)</author>
+   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source</author>
    public sealed class MultiFormatReader : Reader
    {
       private IDictionary<DecodeHintType, object> hints;
@@ -116,7 +113,7 @@ namespace com.google.zxing
                   formats.Contains(BarcodeFormat.UPC_E) ||
                   formats.Contains(BarcodeFormat.EAN_13) ||
                   formats.Contains(BarcodeFormat.EAN_8) ||
-                  //formats.Contains(BarcodeFormat.CODABAR) ||
+                  formats.Contains(BarcodeFormat.CODABAR) ||
                   formats.Contains(BarcodeFormat.CODE_39) ||
                   formats.Contains(BarcodeFormat.CODE_93) ||
                   formats.Contains(BarcodeFormat.CODE_128) ||

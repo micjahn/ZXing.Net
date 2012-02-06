@@ -90,6 +90,7 @@
     <Compile Include="negative\FalsePositivesBlackBoxTestCase.cs" />
     <Compile Include="negative\PartialBlackBoxTestCase.cs" />
     <Compile Include="negative\UnsupportedBlackBoxTestCase.cs" />
+    <Compile Include="oned\CodaBarBlackBox1TestCase.cs" />
     <Compile Include="oned\CodaBarWriterTestCase.cs" />
     <Compile Include="oned\Code128BlackBox1TestCase.cs" />
     <Compile Include="oned\Code128BlackBox2TestCase.cs" />
