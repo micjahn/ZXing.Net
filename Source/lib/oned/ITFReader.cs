@@ -40,13 +40,13 @@ namespace com.google.zxing.oned
    /// </summary>
    public sealed class ITFReader : OneDReader
    {
-      private static int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
-      private static int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8f);
+      private static readonly int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
+      private static readonly int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8f);
 
-      private static int W = 3; // Pixel width of a wide line
-      private static int N = 1; // Pixed width of a narrow line
+      private const int W = 3; // Pixel width of a wide line
+      private const int N = 1; // Pixed width of a narrow line
 
-      private static int[] DEFAULT_ALLOWED_LENGTHS = { 44, 24, 20, 18, 16, 14, 12, 10, 8, 6 };
+      private static readonly int[] DEFAULT_ALLOWED_LENGTHS = { 44, 24, 20, 18, 16, 14, 12, 10, 8, 6 };
 
       // Stores the actual narrow line width of the image being decoded.
       private int narrowLineWidth = -1;
@@ -57,8 +57,8 @@ namespace com.google.zxing.oned
       /// Note: The end pattern is reversed because the row is reversed before
       /// searching for the END_PATTERN
       /// </summary>
-      private static int[] START_PATTERN = { N, N, N, N };
-      private static int[] END_PATTERN_REVERSED = { N, N, W };
+      private static readonly int[] START_PATTERN = { N, N, N, N };
+      private static readonly int[] END_PATTERN_REVERSED = { N, N, W };
 
       /// <summary>
       /// Patterns of Wide / Narrow lines to indicate each digit
@@ -79,7 +79,6 @@ namespace com.google.zxing.oned
 
       override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
-
          // Find out where the Middle section (payload) starts & ends
          int[] startRange = decodeStart(row);
          if (startRange == null)
@@ -279,7 +278,6 @@ namespace com.google.zxing.oned
       /// </summary>
       int[] decodeEnd(BitArray row)
       {
-
          // For convenience, reverse the row and then
          // search from 'the start' for the end block
          row.reverse();
@@ -287,15 +285,20 @@ namespace com.google.zxing.oned
          if (endStart < 0)
             return null;
          int[] endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED);
-         row.reverse();
          if (endPattern == null)
+         {
+            row.reverse();
             return null;
+         }
 
          // The start & end patterns must be pre/post fixed by a quiet zone. This
          // zone must be at least 10 times the width of a narrow line.
          // ref: http://www.barcode-1.net/i25code.html
          if (!validateQuietZone(row, endPattern[0]))
+         {
+            row.reverse();
             return null;
+         }
 
          // Now recalculate the indices of where the 'endblock' starts & stops to
          // accommodate
@@ -304,6 +307,7 @@ namespace com.google.zxing.oned
          endPattern[0] = row.Size - endPattern[1];
          endPattern[1] = row.Size - temp;
 
+         row.reverse();
          return endPattern;
       }
 
