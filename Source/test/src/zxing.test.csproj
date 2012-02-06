@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\Build\Debug\test\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;DEBUGDATA</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -76,6 +76,7 @@
     <Compile Include="common\reedsolomon\ReedSolomonDecoderDataMatrixTestCase.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonDecoderQRCodeTestCase.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonEncoderQRCodeTestCase.cs" />
+    <Compile Include="common\StringUtilsTestCase.cs" />
     <Compile Include="common\SummaryResults.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -20,22 +20,22 @@ using System.Text;
 
 namespace com.google.zxing.common
 {
-   /**
-    * Common string-related functions.
-    *
-    * @author Sean Owen
-    */
+   /// <summary>
+   /// Common string-related functions.
+   /// </summary>
+   /// <author>Sean Owen</author>
+   /// <author>Alex Dupre</author>
    public sealed class StringUtils
    {
 #if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4)
-      private static String PLATFORM_DEFAULT_ENCODING = "UTF8";
+      private static String PLATFORM_DEFAULT_ENCODING = "UTF-8";
 #else
       private static String PLATFORM_DEFAULT_ENCODING = Encoding.Default.WebName;
 #endif
       public static String SHIFT_JIS = "SJIS";
       public static String GB2312 = "GB2312";
       private static String EUC_JP = "EUC-JP";
-      private static String UTF8 = "UTF8";
+      private static String UTF8 = "UTF-8";
       private static String ISO88591 = "ISO8859-1";
       private static bool ASSUME_SHIFT_JIS = 
          String.Compare(SHIFT_JIS, PLATFORM_DEFAULT_ENCODING, StringComparison.OrdinalIgnoreCase) == 0 ||
