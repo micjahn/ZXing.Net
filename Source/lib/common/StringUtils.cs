@@ -25,7 +25,7 @@ namespace com.google.zxing.common
    /// </summary>
    /// <author>Sean Owen</author>
    /// <author>Alex Dupre</author>
-   public sealed class StringUtils
+   public static class StringUtils
    {
 #if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4)
       private static String PLATFORM_DEFAULT_ENCODING = "UTF-8";
@@ -34,22 +34,21 @@ namespace com.google.zxing.common
 #endif
       public static String SHIFT_JIS = "SJIS";
       public static String GB2312 = "GB2312";
-      private static String EUC_JP = "EUC-JP";
-      private static String UTF8 = "UTF-8";
-      private static String ISO88591 = "ISO8859-1";
-      private static bool ASSUME_SHIFT_JIS =
+      private const String EUC_JP = "EUC-JP";
+      private const String UTF8 = "UTF-8";
+      private const String ISO88591 = "ISO8859-1";
+      private static readonly bool ASSUME_SHIFT_JIS =
          String.Compare(SHIFT_JIS, PLATFORM_DEFAULT_ENCODING, StringComparison.OrdinalIgnoreCase) == 0 ||
          String.Compare(EUC_JP, PLATFORM_DEFAULT_ENCODING, StringComparison.OrdinalIgnoreCase) == 0;
 
-      private StringUtils() { }
-
-      /**
-       * @param bytes bytes encoding a string, whose encoding should be guessed
-       * @param hints decode hints if applicable
-       * @return name of guessed encoding; at the moment will only guess one of:
-       *  {@link #SHIFT_JIS}, {@link #UTF8}, {@link #ISO88591}, or the platform
-       *  default encoding if none of these can possibly be correct
-       */
+      /// <summary>
+      /// Guesses the encoding.
+      /// </summary>
+      /// <param name="bytes">bytes encoding a string, whose encoding should be guessed</param>
+      /// <param name="hints">decode hints if applicable</param>
+      /// <returns>name of guessed encoding; at the moment will only guess one of:
+      /// {@link #SHIFT_JIS}, {@link #UTF8}, {@link #ISO88591}, or the platform
+      /// default encoding if none of these can possibly be correct</returns>
       public static String guessEncoding(sbyte[] bytes, IDictionary<DecodeHintType, object> hints)
       {
          if (hints != null && hints.ContainsKey(DecodeHintType.CHARACTER_SET))
