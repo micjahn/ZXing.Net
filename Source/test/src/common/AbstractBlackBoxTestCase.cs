@@ -124,7 +124,7 @@ namespace com.google.zxing.common
             var image = new Bitmap(Image.FromFile(testImage));
 
             String expectedTextFile = Path.Combine(Path.GetDirectoryName(absPath), Path.GetFileNameWithoutExtension(absPath) + ".txt");
-            String expectedText = File.ReadAllText(expectedTextFile);
+            String expectedText = File.ReadAllText(expectedTextFile, System.Text.Encoding.UTF7);
 
             String expectedMetadataFile = Path.Combine(Path.GetDirectoryName(absPath), Path.GetFileNameWithoutExtension(absPath) + ".metadata.txt");
             var expectedMetadata = new Dictionary<string, string>();
