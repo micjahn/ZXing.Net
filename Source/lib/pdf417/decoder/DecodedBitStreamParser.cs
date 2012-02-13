@@ -289,6 +289,10 @@ namespace com.google.zxing.pdf417.decoder
                      else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE)
                      {
                         result.Append((char)byteCompactionData[i]);
+                        // the pdf417 specs say we have to return to the last latched
+                        // sub-mode. But I checked different encoder implementations and
+                        // all of them return to alpha sub-mode after Shift-to-Byte
+                        subMode = Mode.ALPHA;
                      }
                   }
                   break;
@@ -324,6 +328,10 @@ namespace com.google.zxing.pdf417.decoder
                      else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE)
                      {
                         result.Append((char)byteCompactionData[i]);
+                        // the pdf417 specs say we have to return to the last latched
+                        // sub-mode. But I checked different encoder implementations and
+                        // all of them return to alpha sub-mode after Shift-to-Byte
+                        subMode = Mode.ALPHA;
                      }
                   }
                   break;
@@ -361,6 +369,10 @@ namespace com.google.zxing.pdf417.decoder
                      else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE)
                      {
                         result.Append((char)byteCompactionData[i]);
+                        // the pdf417 specs say we have to return to the last latched
+                        // sub-mode. But I checked different encoder implementations and
+                        // all of them return to alpha sub-mode after Shift-to-Byte
+                        subMode = Mode.ALPHA;
                      }
                   }
                   break;
@@ -380,6 +392,10 @@ namespace com.google.zxing.pdf417.decoder
                      else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE)
                      {
                         result.Append((char)byteCompactionData[i]);
+                        // the pdf417 specs say we have to return to the last latched
+                        // sub-mode. But I checked different encoder implementations and
+                        // all of them return to alpha sub-mode after Shift-to-Byte
+                        subMode = Mode.ALPHA;
                      }
                   }
                   break;
@@ -415,6 +431,16 @@ namespace com.google.zxing.pdf417.decoder
                   {
                      if (subModeCh == PAL)
                      {
+                        subMode = Mode.ALPHA;
+                     }
+                     else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE)
+                     {
+                        // PS before Shift-to-Byte is used as a padding character, 
+                        // see 5.4.2.4 of the specification
+                        result.Append((char)byteCompactionData[i]);
+                        // the pdf417 specs say we have to return to the last latched
+                        // sub-mode. But I checked different encoder implementations and
+                        // all of them return to alpha sub-mode after Shift-to-Byte
                         subMode = Mode.ALPHA;
                      }
                   }
@@ -539,6 +565,7 @@ namespace com.google.zxing.pdf417.decoder
                      value >>= 8;
                   }
                   result.Append(decodedData);
+                  count = 0;
                }
             }
          }
