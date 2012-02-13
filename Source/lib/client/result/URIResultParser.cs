@@ -28,11 +28,11 @@ namespace com.google.zxing.client.result
    /// </author>
    sealed class URIResultParser : ResultParser
    {
-      private static String PATTERN_END =
+      private const String PATTERN_END =
           "(:\\d{1,5})?" + // maybe port
           "(/|\\?|$)"; // query, path or nothing
-      private static Regex URL_WITH_PROTOCOL_PATTERN = new Regex(
-          "[a-zA-Z0-9]{2,}://" + // protocol
+      private static readonly Regex URL_WITH_PROTOCOL_PATTERN = new Regex(
+          "[a-zA-Z0-9]{2,}:(/)*" + // protocol
           "[a-zA-Z0-9\\-]+(\\.[a-zA-Z0-9\\-]+)*" + // host name elements
           PATTERN_END
 #if !(SILVERLIGHT4)
@@ -41,7 +41,7 @@ namespace com.google.zxing.client.result
          );
 #endif
 
-      private static Regex URL_WITHOUT_PROTOCOL_PATTERN = new Regex(
+      private static readonly Regex URL_WITHOUT_PROTOCOL_PATTERN = new Regex(
           "([a-zA-Z0-9\\-]+\\.)+[a-zA-Z0-9\\-]{2,}" + // host name elements
           PATTERN_END
 #if !(SILVERLIGHT4)

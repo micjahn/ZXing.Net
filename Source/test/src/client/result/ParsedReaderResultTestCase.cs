@@ -245,7 +245,7 @@ namespace com.google.zxing.client.result
              "BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT",
              "BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT",
              ParsedResultType.TEXT);
-         doTestResult("BEGIN:VEVENT", "BEGIN:VEVENT", ParsedResultType.TEXT);
+         doTestResult("BEGIN:VEVENT", "begin:VEVENT", ParsedResultType.URI);
       }
 
       [Test]
