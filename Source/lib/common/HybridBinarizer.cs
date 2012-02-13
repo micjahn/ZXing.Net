@@ -44,15 +44,15 @@ namespace com.google.zxing.common
             binarizeEntireImage();
             return matrix;
          }
-
       }
 
       // This class uses 5x5 blocks to compute local luminance, where each block is 8x8 pixels.
       // So this is the smallest dimension in each axis we can accept.
-      private static int BLOCK_SIZE_POWER = 3;
-      private static int BLOCK_SIZE = 1 << BLOCK_SIZE_POWER;
-      private static int BLOCK_SIZE_MASK = BLOCK_SIZE - 1;
+      private const int BLOCK_SIZE_POWER = 3;
+      private const int BLOCK_SIZE = 1 << BLOCK_SIZE_POWER;
+      private const int BLOCK_SIZE_MASK = BLOCK_SIZE - 1;
       private const int MINIMUM_DIMENSION = 40;
+      private const int MIN_DYNAMIC_RANGE = 24;
 
       private BitMatrix matrix = null;
 
@@ -191,6 +191,7 @@ namespace com.google.zxing.common
                   for (int xx = 0; xx < BLOCK_SIZE; xx++)
                   {
                      int pixel = luminances[offset + xx] & 0xFF;
+                     // still looking for good contrast
                      sum += pixel;
                      if (pixel < min)
                      {
@@ -201,11 +202,23 @@ namespace com.google.zxing.common
                         max = pixel;
                      }
                   }
+                  // short-circuit min/max tests once dynamic range is met
+                  if (max - min > MIN_DYNAMIC_RANGE)
+                  {
+                     // finish the rest of the rows quickly
+                     for (yy++, offset += width; yy < BLOCK_SIZE; yy++, offset += width)
+                     {
+                        for (int xx = 0; xx < BLOCK_SIZE; xx++)
+                        {
+                           sum += luminances[offset + xx] & 0xFF;
+                        }
+                     }
+                  }
                }
 
                // The default estimate is the average of the values in the block.
-               int average = sum >> 6;
-               if (max - min <= 24)
+               int average = sum >> (BLOCK_SIZE_POWER * 2);
+               if (max - min <= MIN_DYNAMIC_RANGE)
                {
                   // If variation within the block is low, assume this is a block with only light or only
                   // dark pixels. In that case we do not want to use the average, as it would divide this
