@@ -227,7 +227,7 @@ namespace com.google.zxing.qrcode.encoder
          int numDigits = 0;
          while (value_Renamed != 0)
          {
-            value_Renamed = SupportClass.URShift(value_Renamed, 1);
+            value_Renamed = (int)((uint)value_Renamed >> 1);
             ++numDigits;
          }
          return numDigits;

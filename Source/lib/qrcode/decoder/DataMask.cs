@@ -130,7 +130,7 @@ namespace com.google.zxing.qrcode.decoder
       {
          internal override bool isMasked(int i, int j)
          {
-            return (((SupportClass.URShift(i, 1)) + (j / 3)) & 0x01) == 0;
+            return ((((int)((uint)i >> 1)) + (j / 3)) & 0x01) == 0;
          }
       }
 

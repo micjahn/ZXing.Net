@@ -147,7 +147,7 @@ namespace com.google.zxing.qrcode.encoder
                break;
 
             case 4:
-               intermediate = ((SupportClass.URShift(y, 1)) + (x / 3)) & 0x1;
+               intermediate = (((int)((uint)y >> 1)) + (x / 3)) & 0x1;
                break;
 
             case 5:

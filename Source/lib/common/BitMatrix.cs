@@ -113,7 +113,7 @@ namespace com.google.zxing.common
          get
          {
             int offset = y * rowSize + (x >> 5);
-            return ((SupportClass.URShift(bits[offset], (x & 0x1f))) & 1) != 0;
+            return (((int)((uint)(bits[offset]) >> (x & 0x1f))) & 1) != 0;
          }
          set
          {

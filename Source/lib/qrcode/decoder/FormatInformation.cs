@@ -89,14 +89,14 @@ namespace com.google.zxing.qrcode.decoder
       {
          a ^= b; // a now has a 1 bit exactly where its bit differs with b's
          // Count bits set quickly with a series of lookups:
-         return BITS_SET_IN_HALF_BYTE[a & 0x0F] + 
-            BITS_SET_IN_HALF_BYTE[(SupportClass.URShift(a, 4) & 0x0F)] +
-            BITS_SET_IN_HALF_BYTE[(SupportClass.URShift(a, 8) & 0x0F)] + 
-            BITS_SET_IN_HALF_BYTE[(SupportClass.URShift(a, 12) & 0x0F)] + 
-            BITS_SET_IN_HALF_BYTE[(SupportClass.URShift(a, 16) & 0x0F)] + 
-            BITS_SET_IN_HALF_BYTE[(SupportClass.URShift(a, 20) & 0x0F)] + 
-            BITS_SET_IN_HALF_BYTE[(SupportClass.URShift(a, 24) & 0x0F)] + 
-            BITS_SET_IN_HALF_BYTE[(SupportClass.URShift(a, 28) & 0x0F)];
+         return BITS_SET_IN_HALF_BYTE[a & 0x0F] +
+            BITS_SET_IN_HALF_BYTE[(((int)((uint)a >> 4)) & 0x0F)] +
+            BITS_SET_IN_HALF_BYTE[(((int)((uint)a >> 8)) & 0x0F)] +
+            BITS_SET_IN_HALF_BYTE[(((int)((uint)a >> 12)) & 0x0F)] +
+            BITS_SET_IN_HALF_BYTE[(((int)((uint)a >> 16)) & 0x0F)] +
+            BITS_SET_IN_HALF_BYTE[(((int)((uint)a >> 20)) & 0x0F)] +
+            BITS_SET_IN_HALF_BYTE[(((int)((uint)a >> 24)) & 0x0F)] +
+            BITS_SET_IN_HALF_BYTE[(((int)((uint)a >> 28)) & 0x0F)];
       }
 
       /// <summary>
