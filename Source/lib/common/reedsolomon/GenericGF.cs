@@ -18,17 +18,15 @@ using System;
 
 namespace com.google.zxing.common.reedsolomon
 {
-   /**
-    * <p>This class contains utility methods for performing mathematical operations over
-    * the Galois Fields. Operations use a given primitive polynomial in calculations.</p>
-    *
-    * <p>Throughout this package, elements of the GF are represented as an {@code int}
-    * for convenience and speed (but at the cost of memory).
-    * </p>
-    *
-    * @author Sean Owen
-    * @author David Olivier
-    */
+   /// <summary>
+   /// <p>This class contains utility methods for performing mathematical operations over
+   /// the Galois Fields. Operations use a given primitive polynomial in calculations.</p>
+   /// <p>Throughout this package, elements of the GF are represented as an {@code int}
+   /// for convenience and speed (but at the cost of memory).
+   /// </p>
+   /// </summary>
+   /// <author>Sean Owen</author>
+   /// <author>David Olivier</author>
    public sealed class GenericGF
    {
       public static GenericGF AZTEC_DATA_12 = new GenericGF(0x1069, 4096); // x^12 + x^6 + x^5 + x^3 + 1
@@ -40,14 +38,14 @@ namespace com.google.zxing.common.reedsolomon
       public static GenericGF AZTEC_DATA_8 = DATA_MATRIX_FIELD_256;
       public static GenericGF MAXICODE_FIELD_64 = AZTEC_DATA_6;
 
-      private static int INITIALIZATION_THRESHOLD = 0;
+      private const int INITIALIZATION_THRESHOLD = 0;
 
       private int[] expTable;
       private int[] logTable;
       private GenericGFPoly zero;
       private GenericGFPoly one;
-      private int size;
-      private int primitive;
+      private readonly int size;
+      private readonly int primitive;
       private bool initialized = false;
 
       /**
@@ -188,11 +186,12 @@ namespace com.google.zxing.common.reedsolomon
          return expTable[size - logTable[a] - 1];
       }
 
-      /**
-       * @param a
-       * @param b
-       * @return product of a and b in GF(size)
-       */
+      /// <summary>
+      /// Multiplies the specified a with b.
+      /// </summary>
+      /// <param name="a">A.</param>
+      /// <param name="b">The b.</param>
+      /// <returns>product of a and b in GF(size)</returns>
       internal int multiply(int a, int b)
       {
          checkInit();
@@ -201,14 +200,7 @@ namespace com.google.zxing.common.reedsolomon
          {
             return 0;
          }
-
-         if (a < 0 || b < 0 || a >= size || b >= size)
-         {
-            a++;
-         }
-
-         int logSum = logTable[a] + logTable[b];
-         return expTable[(logSum % size) + logSum / size];
+         return expTable[(logTable[a] + logTable[b]) % (size - 1)];
       }
 
       public int Size
