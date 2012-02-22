@@ -15,6 +15,7 @@
  */
 
 using com.google.zxing.common;
+using com.google.zxing.pdf417.decoder.ec;
 
 namespace com.google.zxing.pdf417.decoder
 {
@@ -28,12 +29,11 @@ namespace com.google.zxing.pdf417.decoder
    {
       private const int MAX_ERRORS = 3;
       private const int MAX_EC_CODEWORDS = 512;
-      //private ReedSolomonDecoder rsDecoder;
+      private ErrorCorrection errorCorrection;
 
       public Decoder()
       {
-         // TODO MGMG
-         //rsDecoder = new ReedSolomonDecoder();
+         errorCorrection = new ErrorCorrection();
       }
 
       /// <summary>
@@ -42,7 +42,6 @@ namespace com.google.zxing.pdf417.decoder
       ///
       /// <param name="image">booleans representing white/black PDF417 modules</param>
       /// <returns>text and bytes encoded within the PDF417 Code</returns>
-      /// <exception cref="NotFoundException">if the PDF417 Code cannot be decoded</exception>
       /// </summary>
       public DecoderResult decode(bool[][] image)
       {
@@ -83,7 +82,7 @@ namespace com.google.zxing.pdf417.decoder
          int numECCodewords = 1 << (ecLevel + 1);
          int[] erasures = parser.getErasures();
 
-         if (!correctErrors(codewords, erasures, numECCodewords))
+         if (!correctErrors(codewords, erasures.Length, numECCodewords))
             return null;
          if (!verifyCodewordCount(codewords, numECCodewords))
             return null;
@@ -130,34 +129,22 @@ namespace com.google.zxing.pdf417.decoder
 
       /// <summary>
       /// <p>Given data and error-correction codewords received, possibly corrupted by errors, attempts to
-      /// correct the errors in-place using Reed-Solomon error correction.</p>
+      /// correct the errors in-place.</p>
       ///
       /// <param name="codewords">data and error correction codewords</param>
-      /// <exception cref="ChecksumException">if error correction fails</exception>
       /// </summary>
-      private static bool correctErrors(int[] codewords,
-                                       int[] erasures,
-                                       int numECCodewords)
+      private bool correctErrors(int[] codewords,
+                                 int numErasures,
+                                 int numECCodewords)
       {
-         if (erasures.Length > numECCodewords / 2 + MAX_ERRORS ||
+         if (numErasures > numECCodewords/2 + MAX_ERRORS ||
              numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS)
          {
             // Too many errors or EC Codewords is corrupted
             return false;
          }
-         // Try to correct the errors
-         // TODO enable error correction
-         int result = 0; // rsDecoder.correctErrors(codewords, numECCodewords);
-         int numErasures = erasures.Length;
-         if (result > 0)
-         {
-            numErasures -= result;
-         }
-         if (numErasures > MAX_ERRORS)
-         {
-            // Still too many errors
-            return false;
-         }
+         errorCorrection.decode(codewords, numECCodewords);
+
          return true;
       }
    }

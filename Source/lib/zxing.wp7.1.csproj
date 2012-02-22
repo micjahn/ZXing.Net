@@ -203,6 +203,9 @@
     <Compile Include="pdf417\decoder\BitMatrixParser.cs" />
     <Compile Include="pdf417\decoder\DecodedBitStreamParser.cs" />
     <Compile Include="pdf417\decoder\Decoder.cs" />
+    <Compile Include="pdf417\decoder\ec\ErrorCorrection.cs" />
+    <Compile Include="pdf417\decoder\ec\ModulusGF.cs" />
+    <Compile Include="pdf417\decoder\ec\ModulusPoly.cs" />
     <Compile Include="pdf417\detector\Detector.cs" />
     <Compile Include="pdf417\encoder\BarcodeMatrix.cs" />
     <Compile Include="pdf417\encoder\BarcodeRow.cs" />
