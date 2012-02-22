@@ -114,7 +114,7 @@ namespace com.google.zxing.common
       {
          if (value < 0 || value >= 900)
          {
-            throw new ArgumentException("Bad ECI value: " + value);
+            return null;
          }
          return VALUE_TO_ECI[value];
       }

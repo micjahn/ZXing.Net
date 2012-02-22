@@ -317,6 +317,10 @@ namespace com.google.zxing.qrcode.decoder
          int start = result.Length;
          while (count > 1)
          {
+            if (bits.available() < 11)
+            {
+               return false;
+            }
             int nextTwoCharsBits = bits.readBits(11);
             result.Append(toAlphaNumericChar(nextTwoCharsBits / 45));
             result.Append(toAlphaNumericChar(nextTwoCharsBits % 45));
