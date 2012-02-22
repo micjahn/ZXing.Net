@@ -1,0 +1,3 @@
+* check RSS14BlackBox1TestCase: its bad after removing exceptions
+* check RSS14BlackBox2TestCase: its bad after removing exceptions
+* making all tests green
