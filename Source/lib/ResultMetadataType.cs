@@ -71,6 +71,11 @@ namespace com.google.zxing
       /// For some products, the possible country of manufacture as a {@link String} denoting the
       /// ISO country code. Some map to multiple possible countries, like "US/CA".
       /// </summary>
-      POSSIBLE_COUNTRY
+      POSSIBLE_COUNTRY,
+
+      /// <summary>
+      /// For some products, the extension text
+      /// </summary>
+      UPC_EAN_EXTENSION
    }
 }

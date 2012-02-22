@@ -101,7 +101,13 @@ namespace com.google.zxing.oned
 
             if (ean13MayBeUPCA && canReturnUPCA)
             {
-               return new Result(result.Text.Substring(1), null, result.ResultPoints, BarcodeFormat.UPC_A);
+               // Transfer the metdata across
+               var resultUPCA = new Result(result.Text.Substring(1),
+                                              result.RawBytes,
+                                              result.ResultPoints,
+                                              BarcodeFormat.UPC_A);
+               resultUPCA.putAllMetadata(result.ResultMetadata);
+               return resultUPCA;
             }
             return result;
          }

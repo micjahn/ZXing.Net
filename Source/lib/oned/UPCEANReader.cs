@@ -36,8 +36,8 @@ namespace com.google.zxing.oned
       // These two values are critical for determining how permissive the decoding will be.
       // We've arrived at these values through a lot of trial and error. Setting them any higher
       // lets false positives creep in quickly.
-      private static int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.48f);
-      private static int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
+      private static readonly int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.48f);
+      private static readonly int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
 
       /// <summary>
       /// Start/end guard pattern.
@@ -86,9 +86,9 @@ namespace com.google.zxing.oned
          }
       }
 
-      private StringBuilder decodeRowStringBuffer;
-      private UPCEANExtensionSupport extensionReader;
-      private EANManufacturerOrgSupport eanManSupport;
+      private readonly StringBuilder decodeRowStringBuffer;
+      private readonly UPCEANExtensionSupport extensionReader;
+      private readonly EANManufacturerOrgSupport eanManSupport;
 
       protected UPCEANReader()
       {
@@ -205,6 +205,7 @@ namespace com.google.zxing.oned
          Result extensionResult = extensionReader.decodeRow(rowNumber, row, endRange[1]);
          if (extensionResult != null)
          {
+            decodeResult.putMetadata(ResultMetadataType.UPC_EAN_EXTENSION, extensionResult.Text);
             decodeResult.putAllMetadata(extensionResult.ResultMetadata);
             decodeResult.addResultPoints(extensionResult.ResultPoints);
          }
