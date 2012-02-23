@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using ZXing.Common;
+using ZXing.Common.Test;
 
-namespace ZXing.OneD
+namespace ZXing.OneD.Test
 {
    /// <summary>
    /// A very difficult set of images taken with extreme shadows and highlights.

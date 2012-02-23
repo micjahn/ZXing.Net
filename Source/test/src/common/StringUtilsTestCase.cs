@@ -18,7 +18,7 @@ using System;
 using System.Text;
 using NUnit.Framework;
 
-namespace ZXing.Common
+namespace ZXing.Common.Test
 {
    [TestFixture]
    public class StringUtilsTestCase

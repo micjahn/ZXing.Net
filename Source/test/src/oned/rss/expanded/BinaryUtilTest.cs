@@ -30,7 +30,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using ZXing.Common;
 
-namespace ZXing.OneD.RSS.Expanded
+namespace ZXing.OneD.RSS.Expanded.Test
 {
    /// <summary>
    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
@@ -38,7 +38,7 @@ namespace ZXing.OneD.RSS.Expanded
    [TestFixture]
    public sealed class BinaryUtilTest
    {
-      private static String SPACE = " ";
+      private const String SPACE = " ";
 
       [Test]
       public void testBuildBitArrayFromString()

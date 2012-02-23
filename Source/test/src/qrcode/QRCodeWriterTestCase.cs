@@ -20,14 +20,12 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using NUnit.Framework;
+
 using ZXing.Common;
 using ZXing.QrCode.Internal;
 
-namespace ZXing.QrCode
+namespace ZXing.QrCode.Test
 {
-
-
-
    /// <summary>
    /// <author>satorux@google.com (Satoru Takabayashi) - creator</author>
    /// <author>dswitkin@google.com (Daniel Switkin) - ported and expanded from C++</author>

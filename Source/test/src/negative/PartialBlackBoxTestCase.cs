@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using ZXing.Common;
+using ZXing.Common.Test;
 
-namespace ZXing.negative
+namespace ZXing.Negative.Test
 {
    /// <summary>
    /// This test ensures that partial barcodes do not decode.

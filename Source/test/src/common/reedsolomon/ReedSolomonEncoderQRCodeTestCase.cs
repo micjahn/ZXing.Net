@@ -15,10 +15,10 @@
  */
 
 using System;
-using System.Collections.Generic;
+
 using NUnit.Framework;
 
-namespace ZXing.Common.ReedSolomon
+namespace ZXing.Common.ReedSolomon.Test
 {
    /// <summary>
    /// <author>Sean Owen</author>

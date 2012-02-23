@@ -20,7 +20,7 @@ using NUnit.Framework;
 using ZXing.Common;
 using ZXing.QrCode.Internal;
 
-namespace ZXing.QrCode.Internal
+namespace ZXing.QrCode.Internal.Test
 {
    /// <summary>
    /// <author>satorux@google.com (Satoru Takabayashi) - creator</author>

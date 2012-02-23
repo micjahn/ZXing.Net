@@ -28,8 +28,9 @@ using System;
 
 using NUnit.Framework;
 using ZXing.Common;
+using ZXing.OneD.RSS.Expanded.Test;
 
-namespace ZXing.OneD.RSS.Expanded.Decoders
+namespace ZXing.OneD.RSS.Expanded.Decoders.Test
 {
    /// <summary>
    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>

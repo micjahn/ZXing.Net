@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using ZXing.Common;
+using ZXing.Common.Test;
 
-namespace ZXing.negative
+namespace ZXing.Negative.Test
 {
    /// <summary>
    /// Additional random images with high contrast patterns which should not find any barcodes.

@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using ZXing.Common;
 
-namespace ZXing.OneD.RSS.Expanded
+namespace ZXing.OneD.RSS.Expanded.Test
 {
    /// <summary>
    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>

@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 using NUnit.Framework;
 
-namespace ZXing.Client.Result
+namespace ZXing.Client.Result.Test
 {
    /// <summary>
    /// Tests <see cref="SMSParsedResult" />.

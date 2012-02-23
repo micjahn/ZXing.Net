@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace ZXing.Common
+namespace ZXing.Common.Test
 {
    internal sealed class TestResult
    {

@@ -8,7 +8,7 @@
     <ProjectGuid>{41B69545-AAB6-42A6-96A0-6F6817E654A3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>com.google.zxing</RootNamespace>
+    <RootNamespace>ZXing</RootNamespace>
     <AssemblyName>zxing</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

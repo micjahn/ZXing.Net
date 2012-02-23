@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using ZXing.Common;
+using ZXing.Common.Test;
 
-namespace ZXing.Aztec
+namespace ZXing.Aztec.Test
 {
    /// <summary>
    /// A test of Aztec barcodes under real world lighting conditions, taken with a mobile phone.

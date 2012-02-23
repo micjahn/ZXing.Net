@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 using ZXing.PDF417.Internal;
 
-namespace zxing.test.pdf417
+namespace ZXing.PDF417.Test
 {
    [TestFixture]
    public sealed class PDF417DecodedBitStreamParserTestCase

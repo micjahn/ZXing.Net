@@ -29,7 +29,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using ZXing.Common;
 
-namespace ZXing.OneD.RSS.Expanded
+namespace ZXing.OneD.RSS.Expanded.Test
 {
    /// <summary>
    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>

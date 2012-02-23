@@ -18,7 +18,7 @@ using System;
 
 using NUnit.Framework;
 
-namespace ZXing.Datamatrix.Internal
+namespace ZXing.Datamatrix.Internal.Test
 {
    /// <summary>
    /// <author>bbrown@google.com (Brian Brown)</author>

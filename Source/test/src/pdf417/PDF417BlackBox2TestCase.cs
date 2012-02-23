@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using ZXing.Common;
+using ZXing.Common.Test;
 
-namespace ZXing.PDF417
+namespace ZXing.PDF417.Test
 {
    /// <summary>
    /// This test contains 480x240 images captured from an Android device at preview resolution.

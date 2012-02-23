@@ -22,8 +22,9 @@ using System.IO;
 using System.Linq;
 
 using NUnit.Framework;
+using ZXing.Test;
 
-namespace ZXing.Common
+namespace ZXing.Common.Test
 {
    /// <summary>
    /// <author>Sean Owen</author>

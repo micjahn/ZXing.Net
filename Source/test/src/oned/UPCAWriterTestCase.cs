@@ -18,7 +18,7 @@ using System;
 using NUnit.Framework;
 using ZXing.Common;
 
-namespace ZXing.OneD
+namespace ZXing.OneD.Test
 {
    /// <summary>
    /// <author>qwandor@google.com (Andrew Walbran)</author>

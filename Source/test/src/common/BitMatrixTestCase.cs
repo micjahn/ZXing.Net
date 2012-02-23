@@ -16,7 +16,7 @@
 
 using NUnit.Framework;
 
-namespace ZXing.Common
+namespace ZXing.Common.Test
 {
    /// <summary>
    /// <author>Sean Owen</author>

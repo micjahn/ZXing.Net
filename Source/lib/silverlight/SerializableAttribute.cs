@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing
+namespace ZXing
 {
    internal class SerializableAttribute : Attribute
    {

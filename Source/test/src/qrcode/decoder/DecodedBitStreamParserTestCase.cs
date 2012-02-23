@@ -17,9 +17,9 @@
 using System;
 
 using NUnit.Framework;
-using ZXing.Common;
+using ZXing.Common.Test;
 
-namespace ZXing.QrCode.Internal
+namespace ZXing.QrCode.Internal.Test
 {
    /// <summary>
    /// Tests <see cref="DecodedBitStreamParser" />.

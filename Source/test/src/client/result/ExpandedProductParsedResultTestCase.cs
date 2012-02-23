@@ -29,7 +29,7 @@ using System.Collections.Generic;
 
 using NUnit.Framework;
 
-namespace ZXing.Client.Result
+namespace ZXing.Client.Result.Test
 {
    /// <summary>
    /// <author>Antonio Manuel Benjumea Conde, Servinform, S.A.</author>

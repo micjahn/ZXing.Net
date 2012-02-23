@@ -16,7 +16,7 @@
 
 using NUnit.Framework;
 
-namespace ZXing.QrCode.Internal
+namespace ZXing.QrCode.Internal.Test
 {
    /// <summary>
    /// <author>satorux@google.com (Satoru Takabayashi) - creator</author>

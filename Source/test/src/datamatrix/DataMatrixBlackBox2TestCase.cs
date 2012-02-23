@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using ZXing.Common;
+using ZXing.Common.Test;
 
-namespace ZXing.Datamatrix
+namespace ZXing.Datamatrix.Test
 {
    /// <summary>
    /// <author>dswitkin@google.com (Daniel Switkin)</author>

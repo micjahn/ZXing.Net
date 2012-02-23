@@ -8,7 +8,7 @@
     <ProjectGuid>{D90C151C-5F70-4890-9B10-97955EC809ED}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>zxing.test</RootNamespace>
+    <RootNamespace>ZXing.Test</RootNamespace>
     <AssemblyName>zxing.test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

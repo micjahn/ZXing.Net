@@ -16,7 +16,7 @@
 
 using System.IO;
 
-namespace ZXing.Common
+namespace ZXing.Common.Test
 {
    /// <summary>
    /// Class that lets one easily build an array of bytes by appending bits at a time.

@@ -19,7 +19,7 @@ using System;
 using NUnit.Framework;
 using ZXing.Common;
 
-namespace ZXing.QrCode.Internal
+namespace ZXing.QrCode.Internal.Test
 {
    /// <summary>
    /// <author>Sean Owen</author>

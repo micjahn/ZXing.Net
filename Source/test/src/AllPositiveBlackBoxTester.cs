@@ -16,13 +16,13 @@
 
 using System;
 using NUnit.Framework;
-using ZXing.Aztec;
-using ZXing.Common;
-using ZXing.Datamatrix;
-using ZXing.OneD;
-using ZXing.PDF417;
+using ZXing.Aztec.Test;
+using ZXing.Common.Test;
+using ZXing.Datamatrix.Test;
+using ZXing.OneD.Test;
+using ZXing.PDF417.Test;
 
-namespace ZXing
+namespace ZXing.Test
 {
    /// <summary>
    /// This is a quick and dirty way to get totals across all the positive black box tests. It is

@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-using System;
 using NUnit.Framework;
-using ZXing.QrCode.Internal;
 
-namespace ZXing.QrCode.Internal
+namespace ZXing.QrCode.Internal.Test
 {
-
-
    /// <summary>
    /// <author>satorux@google.com (Satoru Takabayashi) - creator</author>
    /// <author>mysen@google.com (Chris Mysen) - ported from C++</author>

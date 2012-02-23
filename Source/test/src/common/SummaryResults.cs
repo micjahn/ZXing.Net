@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ZXing.Common
+namespace ZXing.Common.Test
 {
    public sealed class SummaryResults
    {

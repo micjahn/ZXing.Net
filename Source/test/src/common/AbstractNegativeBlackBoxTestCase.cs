@@ -20,8 +20,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using ZXing.Test;
 
-namespace ZXing.Common
+namespace ZXing.Common.Test
 {
    /// <summary>
    /// This abstract class looks for negative results, i.e. it only allows a certain number of false

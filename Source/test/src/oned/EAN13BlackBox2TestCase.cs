@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using ZXing.Common;
+using ZXing.Common.Test;
 
-namespace ZXing.OneD
+namespace ZXing.OneD.Test
 {
    /// <summary>
    /// This is a set of mobile image taken at 480x360 with difficult lighting.

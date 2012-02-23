@@ -16,7 +16,7 @@
 
 using NUnit.Framework;
 
-namespace ZXing.OneD
+namespace ZXing.OneD.Test
 {
    /// <summary>
    /// Tests <see cref="EANManufacturerOrgSupport" />.

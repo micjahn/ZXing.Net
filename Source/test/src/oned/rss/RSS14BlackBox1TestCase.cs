@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using ZXing.Common;
+using ZXing.Common.Test;
 
-namespace ZXing.OneD.RSS
+namespace ZXing.OneD.RSS.Test
 {
    /// <summary>
    /// <author>Sean Owen</author>
