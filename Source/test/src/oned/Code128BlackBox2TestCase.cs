@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.oned
+namespace ZXing.OneD
 {
    /// <summary>
    /// <author>dswitkin@google.com (Daniel Switkin)</author>

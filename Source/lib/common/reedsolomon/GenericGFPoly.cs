@@ -17,33 +17,30 @@
 using System;
 using System.Text;
 
-namespace com.google.zxing.common.reedsolomon
+namespace ZXing.Common.ReedSolomon
 {
-
-   /**
-    * <p>Represents a polynomial whose coefficients are elements of a GF.
-    * Instances of this class are immutable.</p>
-    *
-    * <p>Much credit is due to William Rucklidge since portions of this code are an indirect
-    * port of his C++ Reed-Solomon implementation.</p>
-    *
-    * @author Sean Owen
-    */
-   sealed class GenericGFPoly
+   /// <summary>
+   /// <p>Represents a polynomial whose coefficients are elements of a GF.
+   /// Instances of this class are immutable.</p>
+   /// <p>Much credit is due to William Rucklidge since portions of this code are an indirect
+   /// port of his C++ Reed-Solomon implementation.</p>
+   /// </summary>
+   /// <author>Sean Owen</author>
+   internal sealed class GenericGFPoly
    {
+      private readonly GenericGF field;
+      private readonly int[] coefficients;
 
-      private GenericGF field;
-      private int[] coefficients;
-
-      /**
-       * @param field the {@link GenericGF} instance representing the field to use
-       * to perform computations
-       * @param coefficients coefficients as ints representing elements of GF(size), arranged
-       * from most significant (highest-power term) coefficient to least significant
-       * @throws ArgumentException if argument is null or empty,
-       * or if leading coefficient is 0 and this is not a
-       * constant polynomial (that is, it is not the monomial "0")
-       */
+      /// <summary>
+      /// Initializes a new instance of the <see cref="GenericGFPoly"/> class.
+      /// </summary>
+      /// <param name="field">the {@link GenericGF} instance representing the field to use
+      /// to perform computations</param>
+      /// <param name="coefficients">coefficients as ints representing elements of GF(size), arranged
+      /// from most significant (highest-power term) coefficient to least significant</param>
+      /// <exception cref="ArgumentException">if argument is null or empty,
+      /// or if leading coefficient is 0 and this is not a
+      /// constant polynomial (that is, it is not the monomial "0")</exception>
       internal GenericGFPoly(GenericGF field, int[] coefficients)
       {
          if (coefficients.Length == 0)
@@ -85,9 +82,9 @@ namespace com.google.zxing.common.reedsolomon
          get { return coefficients; }
       }
 
-      /**
-       * @return degree of this polynomial
-       */
+      /// <summary>
+      /// degree of this polynomial
+      /// </summary>
       internal int Degree
       {
          get
@@ -96,25 +93,30 @@ namespace com.google.zxing.common.reedsolomon
          }
       }
 
-      /**
-       * @return true iff this polynomial is the monomial "0"
-       */
-      internal bool Zero
+      /// <summary>
+      /// Gets a value indicating whether this <see cref="GenericGFPoly"/> is zero.
+      /// </summary>
+      /// <value>true iff this polynomial is the monomial "0"</value>
+      internal bool isZero
       {
          get { return coefficients[0] == 0; }
       }
 
-      /**
-       * @return coefficient of x^degree term in this polynomial
-       */
+      /// <summary>
+      /// coefficient of x^degree term in this polynomial
+      /// </summary>
+      /// <param name="degree">The degree.</param>
+      /// <returns>coefficient of x^degree term in this polynomial</returns>
       internal int getCoefficient(int degree)
       {
          return coefficients[coefficients.Length - 1 - degree];
       }
 
-      /**
-       * @return evaluation of this polynomial at a given point
-       */
+      /// <summary>
+      /// evaluation of this polynomial at a given point
+      /// </summary>
+      /// <param name="a">A.</param>
+      /// <returns>evaluation of this polynomial at a given point</returns>
       internal int evaluateAt(int a)
       {
          int result = 0;
@@ -147,11 +149,11 @@ namespace com.google.zxing.common.reedsolomon
          {
             throw new ArgumentException("GenericGFPolys do not have same GenericGF field");
          }
-         if (Zero)
+         if (isZero)
          {
             return other;
          }
-         if (other.Zero)
+         if (other.isZero)
          {
             return this;
          }
@@ -183,7 +185,7 @@ namespace com.google.zxing.common.reedsolomon
          {
             throw new ArgumentException("GenericGFPolys do not have same GenericGF field");
          }
-         if (Zero || other.Zero)
+         if (isZero || other.isZero)
          {
             return field.Zero;
          }
@@ -248,7 +250,7 @@ namespace com.google.zxing.common.reedsolomon
          {
             throw new ArgumentException("GenericGFPolys do not have same GenericGF field");
          }
-         if (other.Zero)
+         if (other.isZero)
          {
             throw new ArgumentException("Divide by 0");
          }
@@ -259,7 +261,7 @@ namespace com.google.zxing.common.reedsolomon
          int denominatorLeadingTerm = other.getCoefficient(other.Degree);
          int inverseDenominatorLeadingTerm = field.inverse(denominatorLeadingTerm);
 
-         while (remainder.Degree >= other.Degree && !remainder.Zero)
+         while (remainder.Degree >= other.Degree && !remainder.isZero)
          {
             int degreeDifference = remainder.Degree - other.Degree;
             int scale = field.multiply(remainder.getCoefficient(remainder.Degree), inverseDenominatorLeadingTerm);
@@ -325,6 +327,5 @@ namespace com.google.zxing.common.reedsolomon
          }
          return result.ToString();
       }
-
    }
 }

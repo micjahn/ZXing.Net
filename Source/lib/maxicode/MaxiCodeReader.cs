@@ -16,10 +16,10 @@
 
 using System.Collections.Generic;
 
-using com.google.zxing.common;
-using com.google.zxing.maxicode.decoder;
+using ZXing.Common;
+using ZXing.Maxicode.Internal;
 
-namespace com.google.zxing.maxicode
+namespace ZXing.Maxicode
 {
    /// <summary>
    /// This implementation can detect and decode a MaxiCode in an image.

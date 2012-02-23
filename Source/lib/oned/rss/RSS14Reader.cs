@@ -17,10 +17,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing.oned.rss
+namespace ZXing.OneD.RSS
 {
    /// <summary>
    /// Decodes RSS-14, including truncated and stacked variants. See ISO/IEC 24724:2006.

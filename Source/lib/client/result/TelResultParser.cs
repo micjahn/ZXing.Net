@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary>
    /// Parses a "tel:" URI result, which specifies a phone number.
@@ -27,7 +27,7 @@ namespace com.google.zxing.client.result
    /// </author>
    sealed class TelResultParser : ResultParser
    {
-      override public ParsedResult parse(Result result)
+      override public ParsedResult parse(ZXing.Result result)
       {
          String rawText = result.Text;
          if (rawText == null ||

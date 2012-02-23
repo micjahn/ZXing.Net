@@ -15,10 +15,9 @@
 */
 
 using System;
+using ZXing.OneD;
 
-using com.google.zxing.oned;
-
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary>
    /// Parses strings of digits that represent a UPC code.
@@ -30,7 +29,7 @@ namespace com.google.zxing.client.result
    sealed class ProductResultParser : ResultParser
    {
       // Treat all UPC and EAN variants as UPCs, in the sense that they are all product barcodes.
-      override public ParsedResult parse(Result result)
+      override public ParsedResult parse(ZXing.Result result)
       {
          BarcodeFormat format = result.BarcodeFormat;
          if (!(format == BarcodeFormat.UPC_A || format == BarcodeFormat.UPC_E ||

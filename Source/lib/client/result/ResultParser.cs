@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
 
    /// <summary> <p>Abstract class representing the result of decoding a barcode, as more than
@@ -77,9 +77,9 @@ namespace com.google.zxing.client.result
       /// </summary>
       /// <param name="theResult">The result.</param>
       /// <returns></returns>
-      public abstract ParsedResult parse(Result theResult);
+      public abstract ParsedResult parse(ZXing.Result theResult);
 
-      public static ParsedResult parseResult(Result theResult)
+      public static ParsedResult parseResult(ZXing.Result theResult)
       {
          foreach (var parser in PARSERS)
          {

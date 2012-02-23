@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
    internal sealed class TestResult
    {

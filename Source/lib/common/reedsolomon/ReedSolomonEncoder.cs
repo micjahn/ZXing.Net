@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace com.google.zxing.common.reedsolomon
+namespace ZXing.Common.ReedSolomon
 {
    /// <summary> <p>Implements Reed-Solomon enbcoding, as the name implies.</p>
    /// 
@@ -30,8 +30,8 @@ namespace com.google.zxing.common.reedsolomon
    /// </author>
    public sealed class ReedSolomonEncoder
    {
-      private GenericGF field;
-      private IList<GenericGFPoly> cachedGenerators;
+      private readonly GenericGF field;
+      private readonly IList<GenericGFPoly> cachedGenerators;
 
       public ReedSolomonEncoder(GenericGF field)
       {

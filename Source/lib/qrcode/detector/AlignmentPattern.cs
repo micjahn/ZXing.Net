@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.qrcode.detector
+namespace ZXing.QrCode.Internal
 {
    /// <summary> <p>Encapsulates an alignment pattern, which are the smaller square patterns found in
    /// all but the simplest QR Codes.</p>

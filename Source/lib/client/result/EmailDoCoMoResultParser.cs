@@ -17,7 +17,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary>
    /// Implements the "MATMSG" email message entry format.
@@ -38,7 +38,7 @@ namespace com.google.zxing.client.result
          );
 #endif
 
-      override public ParsedResult parse(Result result)
+      override public ParsedResult parse(ZXing.Result result)
       {
          String rawText = result.Text;
          if (!rawText.StartsWith("MATMSG:"))

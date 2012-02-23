@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 using System;
-namespace com.google.zxing.qrcode.decoder
+namespace ZXing.QrCode.Internal
 {
 
    /// <summary> <p>Encapsulates a QR Code's format information, including the data mask used and

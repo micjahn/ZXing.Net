@@ -15,11 +15,10 @@
  */
 
 using System.Collections.Generic;
+using ZXing.Common;
+using ZXing.QrCode.Internal;
 
-using com.google.zxing.common;
-using com.google.zxing.qrcode.detector;
-
-namespace com.google.zxing.multi.qrcode.detector
+namespace ZXing.Multi.QrCode.Internal
 {
    /// <summary>
    /// <p>Encapsulates logic that can detect one or more QR Codes in an image, even if the QR Code

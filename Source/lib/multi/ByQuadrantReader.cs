@@ -16,7 +16,7 @@
 
 using System.Collections.Generic;
 
-namespace com.google.zxing.multi
+namespace ZXing.Multi
 {
    /// <summary>
    /// This class attempts to decode a barcode from an image, not by scanning the whole image,

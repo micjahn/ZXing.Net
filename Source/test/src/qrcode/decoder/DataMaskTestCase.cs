@@ -17,10 +17,9 @@
 using System;
 
 using NUnit.Framework;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing.qrcode.decoder
+namespace ZXing.QrCode.Internal
 {
    /// <summary>
    /// <author>Sean Owen</author>

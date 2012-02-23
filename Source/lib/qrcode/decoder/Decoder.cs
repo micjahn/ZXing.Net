@@ -13,12 +13,13 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-using System;
-using System.Collections.Generic;
-using com.google.zxing.common;
-using com.google.zxing.common.reedsolomon;
 
-namespace com.google.zxing.qrcode.decoder
+using System.Collections.Generic;
+
+using ZXing.Common;
+using ZXing.Common.ReedSolomon;
+
+namespace ZXing.QrCode.Internal
 {
    /// <summary> <p>The main class which implements QR Code decoding -- as opposed to locating and extracting
    /// the QR Code from an image.</p>

@@ -24,9 +24,9 @@
  *   http://www.piramidepse.com/
  */
 
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.oned.rss.expanded
+namespace ZXing.OneD.RSS.Expanded
 {
    public class RSSExpandedBlackBox2TestCase : AbstractBlackBoxTestCase
    {

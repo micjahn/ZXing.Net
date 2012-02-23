@@ -17,13 +17,12 @@
 using System;
 
 using NUnit.Framework;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing.qrcode.decoder
+namespace ZXing.QrCode.Internal
 {
    /// <summary>
-   /// Tests <see cref="com.google.zxing.qrcode.decoder.DecodedBitStreamParser" />.
+   /// Tests <see cref="DecodedBitStreamParser" />.
    ///
    /// <author>Sean Owen</author>
    /// </summary>

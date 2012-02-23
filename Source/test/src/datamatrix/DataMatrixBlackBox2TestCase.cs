@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.datamatrix
+namespace ZXing.Datamatrix
 {
    /// <summary>
    /// <author>dswitkin@google.com (Daniel Switkin)</author>

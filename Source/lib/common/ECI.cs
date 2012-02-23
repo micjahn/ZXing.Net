@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 using System;
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
 
    /// <summary> Superclass of classes encapsulating types ECIs, according to "Extended Channel Interpretations"

@@ -16,7 +16,7 @@
 
 using NUnit.Framework;
 
-namespace com.google.zxing.qrcode.decoder
+namespace ZXing.QrCode.Internal
 {
    /// <summary>
    /// <author>Sean Owen</author>

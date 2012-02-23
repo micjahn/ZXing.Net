@@ -16,10 +16,9 @@
 
 using System;
 using System.Collections.Generic;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing.pdf417.encoder
+namespace ZXing.PDF417.Internal
 {
    /// <summary>
    /// <author>Jacob Haynes</author>

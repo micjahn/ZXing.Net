@@ -15,15 +15,14 @@
  */
 
 using System;
-using com.google.zxing.aztec;
-using com.google.zxing.datamatrix;
-using com.google.zxing.oned;
 using NUnit.Framework;
+using ZXing.Aztec;
+using ZXing.Common;
+using ZXing.Datamatrix;
+using ZXing.OneD;
+using ZXing.PDF417;
 
-using com.google.zxing.common;
-using com.google.zxing.pdf417;
-
-namespace com.google.zxing
+namespace ZXing
 {
    /// <summary>
    /// This is a quick and dirty way to get totals across all the positive black box tests. It is

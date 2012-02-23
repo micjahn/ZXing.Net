@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary>
    /// Tests <see cref="AddressBookParsedResult" />.
@@ -119,7 +119,7 @@ namespace com.google.zxing.client.result
                                  String birthday,
                                  String note)
       {
-         Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
+         ZXing.Result fakeResult = new ZXing.Result(contents, null, null, BarcodeFormat.QR_CODE);
          ParsedResult result = ResultParser.parseResult(fakeResult);
          Assert.AreEqual(ParsedResultType.ADDRESSBOOK, result.Type);
          AddressBookParsedResult addressResult = (AddressBookParsedResult)result;

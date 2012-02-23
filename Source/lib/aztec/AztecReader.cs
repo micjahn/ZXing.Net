@@ -16,10 +16,10 @@
 
 using System.Collections.Generic;
 
-using com.google.zxing.aztec.decoder;
-using com.google.zxing.common;
+using ZXing.Common;
+using ZXing.Aztec.Internal;
 
-namespace com.google.zxing.aztec
+namespace ZXing.Aztec
 {
    /// <summary>
    /// This implementation can detect and decode Aztec codes in an image.
@@ -74,7 +74,7 @@ namespace com.google.zxing.aztec
             }
          }
 
-         DecoderResult decoderResult = new Decoder().decode(detectorResult);
+         DecoderResult decoderResult = new Internal.Decoder().decode(detectorResult);
          if (decoderResult == null)
             return null;
 

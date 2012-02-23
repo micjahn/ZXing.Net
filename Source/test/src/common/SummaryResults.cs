@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
    public sealed class SummaryResults
    {

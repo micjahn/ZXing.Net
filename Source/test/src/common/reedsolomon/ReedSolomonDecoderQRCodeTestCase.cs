@@ -18,7 +18,7 @@ using System;
 
 using NUnit.Framework;
 
-namespace com.google.zxing.common.reedsolomon
+namespace ZXing.Common.ReedSolomon
 {
    /// <summary>
    /// <author>Sean Owen</author>

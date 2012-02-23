@@ -16,10 +16,9 @@
 
 using System;
 using System.Collections.Generic;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing.oned
+namespace ZXing.OneD
 {
    /// <summary>
    /// Encapsulates functionality and implementation that is common to all families

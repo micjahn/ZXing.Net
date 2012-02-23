@@ -12,158 +12,161 @@
 using System;
 using System.Collections.Generic;
 
-/// <summary>
-/// Contains conversion support elements such as classes, interfaces and static methods.
-/// </summary>
-public static class SupportClass
+namespace ZXing
 {
-	/// <summary>
-	/// Converts an array of sbytes to an array of bytes
-	/// </summary>
-	/// <param name="sbyteArray">The array of sbytes to be converted</param>
-	/// <returns>The new array of bytes</returns>
-	public static byte[] ToByteArray(sbyte[] sbyteArray)
-	{
-		byte[] byteArray = null;
-
-		if (sbyteArray != null)
-		{
-			byteArray = new byte[sbyteArray.Length];
-			for(int index=0; index < sbyteArray.Length; index++)
-				byteArray[index] = (byte) sbyteArray[index];
-		}
-		return byteArray;
-	}
-
-	/// <summary>
-	/// Converts a string to an array of bytes
-	/// </summary>
-	/// <param name="sourceString">The string to be converted</param>
-	/// <returns>The new array of bytes</returns>
-	public static byte[] ToByteArray(System.String sourceString)
-	{
-		return System.Text.Encoding.UTF8.GetBytes(sourceString);
-	}
-
-	/// <summary>
-	/// Converts a array of object-type instances to a byte-type array.
-	/// </summary>
-	/// <param name="tempObjectArray">Array to convert.</param>
-	/// <returns>An array of byte type elements.</returns>
-	public static byte[] ToByteArray(System.Object[] tempObjectArray)
-	{
-		byte[] byteArray = null;
-		if (tempObjectArray != null)
-		{
-			byteArray = new byte[tempObjectArray.Length];
-			for (int index = 0; index < tempObjectArray.Length; index++)
-				byteArray[index] = (byte)tempObjectArray[index];
-		}
-		return byteArray;
-	}
-
-	/*******************************/
-	/// <summary>
-	/// This method returns the literal value received
-	/// </summary>
-	/// <param name="literal">The literal to return</param>
-	/// <returns>The received value</returns>
-	public static long Identity(long literal)
-	{
-		return literal;
-	}
-
-	/// <summary>
-	/// This method returns the literal value received
-	/// </summary>
-	/// <param name="literal">The literal to return</param>
-	/// <returns>The received value</returns>
-	public static ulong Identity(ulong literal)
-	{
-		return literal;
-	}
-
-	/// <summary>
-	/// This method returns the literal value received
-	/// </summary>
-	/// <param name="literal">The literal to return</param>
-	/// <returns>The received value</returns>
-	public static float Identity(float literal)
-	{
-		return literal;
-	}
-
-	/// <summary>
-	/// This method returns the literal value received
-	/// </summary>
-	/// <param name="literal">The literal to return</param>
-	/// <returns>The received value</returns>
-	public static double Identity(double literal)
-	{
-		return literal;
-	}
-
-	/*******************************/
-	/// <summary>
-	/// Copies an array of chars obtained from a String into a specified array of chars
-	/// </summary>
-	/// <param name="sourceString">The String to get the chars from</param>
-	/// <param name="sourceStart">Position of the String to start getting the chars</param>
-	/// <param name="sourceEnd">Position of the String to end getting the chars</param>
-	/// <param name="destinationArray">Array to return the chars</param>
-	/// <param name="destinationStart">Position of the destination array of chars to start storing the chars</param>
-	/// <returns>An array of chars</returns>
-	public static void GetCharsFromString(System.String sourceString, int sourceStart, int sourceEnd, char[] destinationArray, int destinationStart)
-	{	
-		int sourceCounter;
-		int destinationCounter;
-		sourceCounter = sourceStart;
-		destinationCounter = destinationStart;
-		while (sourceCounter < sourceEnd)
-		{
-			destinationArray[destinationCounter] = (char) sourceString[sourceCounter];
-			sourceCounter++;
-			destinationCounter++;
-		}
-	}
-
-	/*******************************/
    /// <summary>
-   /// Sets the capacity for the specified List
+   /// Contains conversion support elements such as classes, interfaces and static methods.
    /// </summary>
-   /// <param name="vector">The List which capacity will be set</param>
-   /// <param name="newCapacity">The new capacity value</param>
-   public static void SetCapacity<T>(System.Collections.Generic.IList<T> vector, int newCapacity) where T : new()
+   public static class SupportClass
    {
-      while (newCapacity > vector.Count)
-         vector.Add(new T());
-      while (newCapacity < vector.Count)
-         vector.RemoveAt(vector.Count - 1);
-   }
+      /// <summary>
+      /// Converts an array of sbytes to an array of bytes
+      /// </summary>
+      /// <param name="sbyteArray">The array of sbytes to be converted</param>
+      /// <returns>The new array of bytes</returns>
+      public static byte[] ToByteArray(sbyte[] sbyteArray)
+      {
+         byte[] byteArray = null;
+
+         if (sbyteArray != null)
+         {
+            byteArray = new byte[sbyteArray.Length];
+            for (int index = 0; index < sbyteArray.Length; index++)
+               byteArray[index] = (byte)sbyteArray[index];
+         }
+         return byteArray;
+      }
+
+      /// <summary>
+      /// Converts a string to an array of bytes
+      /// </summary>
+      /// <param name="sourceString">The string to be converted</param>
+      /// <returns>The new array of bytes</returns>
+      public static byte[] ToByteArray(System.String sourceString)
+      {
+         return System.Text.Encoding.UTF8.GetBytes(sourceString);
+      }
+
+      /// <summary>
+      /// Converts a array of object-type instances to a byte-type array.
+      /// </summary>
+      /// <param name="tempObjectArray">Array to convert.</param>
+      /// <returns>An array of byte type elements.</returns>
+      public static byte[] ToByteArray(System.Object[] tempObjectArray)
+      {
+         byte[] byteArray = null;
+         if (tempObjectArray != null)
+         {
+            byteArray = new byte[tempObjectArray.Length];
+            for (int index = 0; index < tempObjectArray.Length; index++)
+               byteArray[index] = (byte)tempObjectArray[index];
+         }
+         return byteArray;
+      }
+
+      /*******************************/
+      /// <summary>
+      /// This method returns the literal value received
+      /// </summary>
+      /// <param name="literal">The literal to return</param>
+      /// <returns>The received value</returns>
+      public static long Identity(long literal)
+      {
+         return literal;
+      }
+
+      /// <summary>
+      /// This method returns the literal value received
+      /// </summary>
+      /// <param name="literal">The literal to return</param>
+      /// <returns>The received value</returns>
+      public static ulong Identity(ulong literal)
+      {
+         return literal;
+      }
+
+      /// <summary>
+      /// This method returns the literal value received
+      /// </summary>
+      /// <param name="literal">The literal to return</param>
+      /// <returns>The received value</returns>
+      public static float Identity(float literal)
+      {
+         return literal;
+      }
+
+      /// <summary>
+      /// This method returns the literal value received
+      /// </summary>
+      /// <param name="literal">The literal to return</param>
+      /// <returns>The received value</returns>
+      public static double Identity(double literal)
+      {
+         return literal;
+      }
+
+      /*******************************/
+      /// <summary>
+      /// Copies an array of chars obtained from a String into a specified array of chars
+      /// </summary>
+      /// <param name="sourceString">The String to get the chars from</param>
+      /// <param name="sourceStart">Position of the String to start getting the chars</param>
+      /// <param name="sourceEnd">Position of the String to end getting the chars</param>
+      /// <param name="destinationArray">Array to return the chars</param>
+      /// <param name="destinationStart">Position of the destination array of chars to start storing the chars</param>
+      /// <returns>An array of chars</returns>
+      public static void GetCharsFromString(System.String sourceString, int sourceStart, int sourceEnd, char[] destinationArray, int destinationStart)
+      {
+         int sourceCounter;
+         int destinationCounter;
+         sourceCounter = sourceStart;
+         destinationCounter = destinationStart;
+         while (sourceCounter < sourceEnd)
+         {
+            destinationArray[destinationCounter] = (char)sourceString[sourceCounter];
+            sourceCounter++;
+            destinationCounter++;
+         }
+      }
+
+      /*******************************/
+      /// <summary>
+      /// Sets the capacity for the specified List
+      /// </summary>
+      /// <param name="vector">The List which capacity will be set</param>
+      /// <param name="newCapacity">The new capacity value</param>
+      public static void SetCapacity<T>(System.Collections.Generic.IList<T> vector, int newCapacity) where T : new()
+      {
+         while (newCapacity > vector.Count)
+            vector.Add(new T());
+         while (newCapacity < vector.Count)
+            vector.RemoveAt(vector.Count - 1);
+      }
 
 
-	/*******************************/
-	/// <summary>
-	/// Receives a byte array and returns it transformed in an sbyte array
-	/// </summary>
-	/// <param name="byteArray">Byte array to process</param>
-	/// <returns>The transformed array</returns>
-	public static sbyte[] ToSByteArray(byte[] byteArray)
-	{
-		sbyte[] sbyteArray = null;
-		if (byteArray != null)
-		{
-			sbyteArray = new sbyte[byteArray.Length];
-			for(int index=0; index < byteArray.Length; index++)
-				sbyteArray[index] = (sbyte) byteArray[index];
-		}
-		return sbyteArray;
-	}
+      /*******************************/
+      /// <summary>
+      /// Receives a byte array and returns it transformed in an sbyte array
+      /// </summary>
+      /// <param name="byteArray">Byte array to process</param>
+      /// <returns>The transformed array</returns>
+      public static sbyte[] ToSByteArray(byte[] byteArray)
+      {
+         sbyte[] sbyteArray = null;
+         if (byteArray != null)
+         {
+            sbyteArray = new sbyte[byteArray.Length];
+            for (int index = 0; index < byteArray.Length; index++)
+               sbyteArray[index] = (sbyte)byteArray[index];
+         }
+         return sbyteArray;
+      }
 
-   public static String[] toStringArray(ICollection<string> strings)
-   {
-      var result = new String[strings.Count];
-      strings.CopyTo(result, 0);
-      return result;
+      public static String[] toStringArray(ICollection<string> strings)
+      {
+         var result = new String[strings.Count];
+         strings.CopyTo(result, 0);
+         return result;
+      }
    }
 }

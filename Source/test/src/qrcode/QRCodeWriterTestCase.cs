@@ -19,11 +19,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using com.google.zxing.common;
-using com.google.zxing.qrcode.decoder;
 using NUnit.Framework;
+using ZXing.Common;
+using ZXing.QrCode.Internal;
 
-namespace com.google.zxing.qrcode
+namespace ZXing.QrCode
 {
 
 

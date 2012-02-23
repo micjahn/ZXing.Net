@@ -18,10 +18,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using com.google.zxing.common;
-using com.google.zxing.common.reedsolomon;
+using ZXing.Common;
+using ZXing.Common.ReedSolomon;
 
-namespace com.google.zxing.aztec.decoder
+namespace ZXing.Aztec.Internal
 {
    /// <summary>
    /// The main class which implements Aztec Code decoding -- as opposed to locating and extracting

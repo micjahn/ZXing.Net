@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace com.google.zxing.oned.rss
+namespace ZXing.OneD.RSS
 {
    public class DataCharacter
    {

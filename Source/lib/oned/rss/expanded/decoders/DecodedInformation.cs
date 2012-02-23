@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2010 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@
 
 using System;
 
-namespace com.google.zxing.oned.rss.expanded.decoders
+namespace ZXing.OneD.RSS.Expanded.Decoders
 {
    /// <summary>
    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>

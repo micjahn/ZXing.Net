@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.negative
+namespace ZXing.negative
 {
    /// <summary>
    /// This test ensures that random images with high contrast patterns do not decode as barcodes.

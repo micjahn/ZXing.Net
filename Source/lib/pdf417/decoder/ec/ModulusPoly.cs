@@ -17,7 +17,7 @@
 using System;
 using System.Text;
 
-namespace com.google.zxing.pdf417.decoder.ec
+namespace ZXing.PDF417.Internal.EC
 {
    /// <summary>
    /// @see com.google.zxing.common.reedsolomon.GenericGFPoly

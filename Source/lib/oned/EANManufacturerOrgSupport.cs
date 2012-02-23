@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace com.google.zxing.oned
+namespace ZXing.OneD
 {
    /// <summary>
    /// Records EAN prefix to GS1 Member Organization, where the member organization

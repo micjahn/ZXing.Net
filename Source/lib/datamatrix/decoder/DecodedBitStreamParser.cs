@@ -17,10 +17,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing.datamatrix.decoder
+namespace ZXing.Datamatrix.Internal
 {
    /// <summary>
    /// <p>Data Matrix Codes can encode text as bits in one of several modes, and can use multiple modes
@@ -31,7 +30,7 @@ namespace com.google.zxing.datamatrix.decoder
    /// <author>bbrown@google.com (Brian Brown)</author>
    /// <author>Sean Owen</author>
    /// </summary>
-   internal sealed class DecodedBitStreamParser
+   internal static class DecodedBitStreamParser
    {
       private enum Mode
       {
@@ -74,10 +73,6 @@ namespace com.google.zxing.datamatrix.decoder
                                                        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{',
                                                        '|', '}', '~', (char) 127
                                                     };
-
-      private DecodedBitStreamParser()
-      {
-      }
 
       internal static DecoderResult decode(sbyte[] bytes)
       {

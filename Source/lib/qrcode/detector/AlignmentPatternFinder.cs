@@ -16,9 +16,9 @@
 
 using System;
 using System.Collections.Generic;
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.qrcode.detector
+namespace ZXing.QrCode.Internal
 {
    /// <summary> <p>This class attempts to find alignment patterns in a QR Code. Alignment patterns look like finder
    /// patterns but are smaller and appear at regular intervals throughout the image.</p>

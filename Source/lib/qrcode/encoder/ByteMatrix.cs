@@ -17,7 +17,7 @@
 using System;
 using System.Text;
 
-namespace com.google.zxing.qrcode.encoder
+namespace ZXing.QrCode.Internal
 {
    /**
     * A class which wraps a 2D array of bytes. The default usage is signed. If you want to use it as a

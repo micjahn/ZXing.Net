@@ -16,11 +16,10 @@
 
 using System;
 using System.Text;
+using ZXing.QrCode.Internal;
+using ZXing.Common;
 
-using com.google.zxing.common;
-using com.google.zxing.qrcode.decoder;
-
-namespace com.google.zxing.maxicode.decoder
+namespace ZXing.Maxicode.Internal
 {
    /// <summary>
    /// <p>MaxiCodes can encode text or structured information as bits in one of several modes,

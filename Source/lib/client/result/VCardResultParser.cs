@@ -20,7 +20,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary> Parses contact information formatted according to the VCard (2.1) format. This is not a complete
    /// implementation but should parse information as commonly encoded in 2D barcodes.
@@ -51,7 +51,7 @@ namespace com.google.zxing.client.result
 #endif
 
 
-      override public ParsedResult parse(Result result)
+      override public ParsedResult parse(ZXing.Result result)
       {
          // Although we should insist on the raw text ending with "END:VCARD", there's no reason
          // to throw out everything else we parsed just because this was omitted. In fact, Eclair

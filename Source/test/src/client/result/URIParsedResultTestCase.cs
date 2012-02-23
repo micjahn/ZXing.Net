@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2007 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@ using System;
 
 using NUnit.Framework;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary>
    /// Tests <see cref="URIParsedResult" />.
@@ -102,7 +102,7 @@ namespace com.google.zxing.client.result
 
       private static void doTest(String contents, String uri, String title)
       {
-         Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
+         ZXing.Result fakeResult = new ZXing.Result(contents, null, null, BarcodeFormat.QR_CODE);
          ParsedResult result = ResultParser.parseResult(fakeResult);
          Assert.AreEqual(ParsedResultType.URI, result.Type);
          URIParsedResult uriResult = (URIParsedResult)result;
@@ -112,7 +112,7 @@ namespace com.google.zxing.client.result
 
       private static void doTestNotUri(String text)
       {
-         Result fakeResult = new Result(text, null, null, BarcodeFormat.QR_CODE);
+         ZXing.Result fakeResult = new ZXing.Result(text, null, null, BarcodeFormat.QR_CODE);
          ParsedResult result = ResultParser.parseResult(fakeResult);
          Assert.AreEqual(ParsedResultType.TEXT, result.Type);
          Assert.AreEqual(text, result.DisplayResult);

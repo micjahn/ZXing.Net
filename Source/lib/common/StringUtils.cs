@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
    /// <summary>
    /// Common string-related functions.

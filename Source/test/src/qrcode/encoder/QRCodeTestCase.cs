@@ -15,10 +15,10 @@
  */
 
 using System;
-using com.google.zxing.qrcode.decoder;
 using NUnit.Framework;
+using ZXing.QrCode.Internal;
 
-namespace com.google.zxing.qrcode.encoder
+namespace ZXing.QrCode.Internal
 {
 
 

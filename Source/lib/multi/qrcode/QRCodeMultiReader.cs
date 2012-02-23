@@ -16,12 +16,11 @@
 
 using System;
 using System.Collections.Generic;
+using ZXing.Common;
+using ZXing.Multi.QrCode.Internal;
+using ZXing.QrCode;
 
-using com.google.zxing.common;
-using com.google.zxing.multi.qrcode.detector;
-using com.google.zxing.qrcode;
-
-namespace com.google.zxing.multi.qrcode
+namespace ZXing.Multi.QrCode
 {
    /// <summary>
    /// This implementation can detect and decode multiple QR Codes in an image.

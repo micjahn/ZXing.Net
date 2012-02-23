@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-namespace com.google.zxing
+namespace ZXing
 {
    /// <summary>
    /// Enumerates barcode formats known to this package.

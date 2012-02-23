@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.maxicode.decoder
+namespace ZXing.Maxicode.Internal
 {
    /// <summary>
    /// <author>mike32767</author>

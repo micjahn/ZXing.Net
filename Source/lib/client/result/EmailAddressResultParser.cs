@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary> Represents a result that encodes an e-mail address, either as a plain address
    /// like "joe@example.org" or a mailto: URL like "mailto:joe@example.org".
@@ -28,7 +28,7 @@ namespace com.google.zxing.client.result
    /// </author>
    sealed class EmailAddressResultParser : ResultParser
    {
-      override public ParsedResult parse(Result result)
+      override public ParsedResult parse(ZXing.Result result)
       {
          String rawText = result.Text;
          if (rawText == null)

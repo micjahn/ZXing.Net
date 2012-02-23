@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing
+namespace ZXing
 {
    /// <summary>
    /// Encapsulates a point of interest in an image containing a barcode. Typically, this

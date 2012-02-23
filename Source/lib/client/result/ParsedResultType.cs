@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary>
    /// Represents the type of data encoded by a barcode -- from plain text, to a

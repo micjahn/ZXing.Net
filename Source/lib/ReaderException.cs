@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing
+namespace ZXing
 {
 	/// <summary> The general exception class throw when something goes wrong during decoding of a barcode.
 	/// This includes, but is not limited to, failing checksums / error correction algorithms, being

@@ -15,10 +15,10 @@
  */
 
 using System;
-using com.google.zxing.common;
 using NUnit.Framework;
+using ZXing.Common;
 
-namespace com.google.zxing.oned
+namespace ZXing.OneD
 {
    /// <summary>
    /// <author>Ari Pollak</author>

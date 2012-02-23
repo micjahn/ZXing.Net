@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2010 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary>
    /// Parses strings of digits that represent a RSS Extended code.
@@ -37,7 +37,7 @@ namespace com.google.zxing.client.result
    /// <author>Agustín Delgado, Servinform, S.A.</author>
    public class ExpandedProductResultParser : ResultParser
    {
-      override public ParsedResult parse(Result result)
+      override public ParsedResult parse(ZXing.Result result)
       {
          BarcodeFormat format = result.BarcodeFormat;
          if (format != BarcodeFormat.RSS_EXPANDED)

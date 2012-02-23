@@ -17,7 +17,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary> Tries to parse results that are a URI of some kind.
    /// 
@@ -50,7 +50,7 @@ namespace com.google.zxing.client.result
          );
 #endif
 
-      override public ParsedResult parse(Result result)
+      override public ParsedResult parse(ZXing.Result result)
       {
          String rawText = result.Text;
          // We specifically handle the odd "URL" scheme here for simplicity

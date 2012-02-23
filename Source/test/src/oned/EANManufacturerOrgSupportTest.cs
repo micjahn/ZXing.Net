@@ -16,7 +16,7 @@
 
 using NUnit.Framework;
 
-namespace com.google.zxing.oned
+namespace ZXing.OneD
 {
    /// <summary>
    /// Tests <see cref="EANManufacturerOrgSupport" />.

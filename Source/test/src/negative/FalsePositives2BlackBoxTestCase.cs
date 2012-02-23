@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.negative
+namespace ZXing.negative
 {
    /// <summary>
    /// Additional random images with high contrast patterns which should not find any barcodes.

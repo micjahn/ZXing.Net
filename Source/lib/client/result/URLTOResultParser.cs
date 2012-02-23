@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary> Parses the "URLTO" result format, which is of the form "URLTO:[title]:[url]".
    /// This seems to be used sometimes, but I am not able to find documentation
@@ -29,7 +29,7 @@ namespace com.google.zxing.client.result
    /// </author>
    sealed class URLTOResultParser : ResultParser
    {
-      override public ParsedResult parse(Result result)
+      override public ParsedResult parse(ZXing.Result result)
       {
          var rawText = result.Text;
          if (rawText == null ||

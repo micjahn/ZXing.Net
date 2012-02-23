@@ -18,7 +18,7 @@ using System;
 
 using NUnit.Framework;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary>
    /// Tests <see cref="ISBNParsedResult" />.
@@ -36,7 +36,7 @@ namespace com.google.zxing.client.result
 
       private static void doTest(String contents)
       {
-         Result fakeResult = new Result(contents, null, null, BarcodeFormat.EAN_13);
+         ZXing.Result fakeResult = new ZXing.Result(contents, null, null, BarcodeFormat.EAN_13);
          ParsedResult result = ResultParser.parseResult(fakeResult);
          Assert.AreEqual(ParsedResultType.ISBN, result.Type);
          ISBNParsedResult isbnResult = (ISBNParsedResult)result;

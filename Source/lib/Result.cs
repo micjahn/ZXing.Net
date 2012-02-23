@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace com.google.zxing
+namespace ZXing
 {
    /// <summary> <p>Encapsulates the result of decoding a barcode within an image.</p>
    /// 

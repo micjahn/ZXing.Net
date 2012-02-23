@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace com.google.zxing
+namespace ZXing
 {
    /// <summary>
    /// Thrown when a barcode was successfully detected, but some aspect of

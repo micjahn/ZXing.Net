@@ -16,10 +16,10 @@
 
 using System;
 using System.Collections.Generic;
-using com.google.zxing.common;
-using com.google.zxing.common.reedsolomon;
+using ZXing.Common;
+using ZXing.Common.ReedSolomon;
 
-namespace com.google.zxing.maxicode.decoder
+namespace ZXing.Maxicode.Internal
 {
    /// <summary>
    /// <p>The main class which implements MaxiCode decoding -- as opposed to locating and extracting

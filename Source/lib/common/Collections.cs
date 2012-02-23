@@ -16,7 +16,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
 	
 	/// <summary> <p>This is basically a substitute for <code>java.util.Collections</code>, which is not

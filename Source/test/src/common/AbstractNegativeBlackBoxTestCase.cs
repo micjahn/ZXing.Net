@@ -21,7 +21,7 @@ using System.IO;
 using System.Linq;
 using NUnit.Framework;
 
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
    /// <summary>
    /// This abstract class looks for negative results, i.e. it only allows a certain number of false

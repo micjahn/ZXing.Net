@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.datamatrix
+namespace ZXing.Datamatrix
 {
    /// <summary>
    /// <author>bbrown@google.com (Brian Brown)</author>

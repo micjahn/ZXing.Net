@@ -22,7 +22,7 @@ using System.Drawing.Imaging;
 using System.Drawing;
 #endif
 
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
 
    /// <summary> A class which wraps a 2D array of bytes. The default usage is signed. If you want to use it as a

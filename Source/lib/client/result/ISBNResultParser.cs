@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary> Parses strings of digits that represent a ISBN.
    /// 
@@ -32,7 +32,7 @@ namespace com.google.zxing.client.result
       /// </summary>
       /// <param name="result">The result.</param>
       /// <returns></returns>
-      override public ParsedResult parse(Result result)
+      override public ParsedResult parse(ZXing.Result result)
       {
          BarcodeFormat format = result.BarcodeFormat;
          if (format != BarcodeFormat.EAN_13)

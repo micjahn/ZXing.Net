@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing
+namespace ZXing
 {
 	/// <summary> A base class which covers the range of exceptions which may occur when encoding a barcode using
 	/// the Writer framework.

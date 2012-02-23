@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace com.google.zxing.pdf417.decoder.ec
+namespace ZXing.PDF417.Internal.EC
 {
    /// <summary>
    /// <p>Incomplete implementation of PDF417 error correction. For now, only detects errors.</p>

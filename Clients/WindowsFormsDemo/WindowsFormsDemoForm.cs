@@ -7,8 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using com.google.zxing;
-using com.google.zxing.common;
+using ZXing;
+using ZXing.Common;
 
 namespace WindowsFormsDemo
 {

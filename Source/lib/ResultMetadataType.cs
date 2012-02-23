@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-namespace com.google.zxing
+namespace ZXing
 {
 	/// <summary> Represents some type of metadata about the result of the decoding that the decoder
 	/// wishes to communicate back to the caller.

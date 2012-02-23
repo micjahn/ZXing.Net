@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.oned.rss
+namespace ZXing.OneD.RSS
 {
    /// <summary>
    /// <author>Sean Owen</author>

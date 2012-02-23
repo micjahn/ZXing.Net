@@ -23,9 +23,9 @@ using System.Numerics;
 using BigIntegerLibrary;
 #endif
 
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.pdf417.decoder
+namespace ZXing.PDF417.Internal
 {
    /// <summary>
    /// <p>This class contains the methods for decoding the PDF417 codewords.</p>

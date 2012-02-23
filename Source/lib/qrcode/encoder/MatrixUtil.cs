@@ -14,11 +14,10 @@
 * limitations under the License.
 */
 using System;
+using ZXing.Common;
+using ZXing.QrCode.Internal;
 
-using com.google.zxing.common;
-using com.google.zxing.qrcode.decoder;
-
-namespace com.google.zxing.qrcode.encoder
+namespace ZXing.QrCode.Internal
 {
 
    /// <author>  satorux@google.com (Satoru Takabayashi) - creator

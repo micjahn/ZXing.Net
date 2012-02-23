@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.oned.rss
+namespace ZXing.OneD.RSS
 {
    public abstract class AbstractRSSReader : OneDReader
    {

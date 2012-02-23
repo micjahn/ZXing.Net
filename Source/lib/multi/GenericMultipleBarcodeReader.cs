@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace com.google.zxing.multi
+namespace ZXing.Multi
 {
    /// <summary> <p>Attempts to locate multiple barcodes in an image by repeatedly decoding portion of the image.
    /// After one barcode is found, the areas left, above, right and below the barcode's

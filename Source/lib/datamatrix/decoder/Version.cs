@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.datamatrix.decoder
+namespace ZXing.Datamatrix.Internal
 {
    /// <summary>
    /// The Version object encapsulates attributes about a particular

@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-namespace com.google.zxing.common.reedsolomon
+namespace ZXing.Common.ReedSolomon
 {
    /// <summary> <p>Implements Reed-Solomon decoding, as the name implies.</p>
    /// 
@@ -44,7 +44,7 @@ namespace com.google.zxing.common.reedsolomon
    /// </author>
    public sealed class ReedSolomonDecoder
    {
-      private GenericGF field;
+      private readonly GenericGF field;
 
       public ReedSolomonDecoder(GenericGF field)
       {
@@ -136,7 +136,7 @@ namespace com.google.zxing.common.reedsolomon
             tLast = t;
 
             // Divide rLastLast by rLast, with quotient in q and remainder in r
-            if (rLast.Zero)
+            if (rLast.isZero)
             {
                // Oops, Euclidean algorithm already terminated?
                // throw new ReedSolomonException("r_{i-1} was zero");
@@ -146,7 +146,7 @@ namespace com.google.zxing.common.reedsolomon
             GenericGFPoly q = field.Zero;
             int denominatorLeadingTerm = rLast.getCoefficient(rLast.Degree);
             int dltInverse = field.inverse(denominatorLeadingTerm);
-            while (r.Degree >= rLast.Degree && !r.Zero)
+            while (r.Degree >= rLast.Degree && !r.isZero)
             {
                int degreeDiff = r.Degree - rLast.Degree;
                int scale = field.multiply(r.getCoefficient(r.Degree), dltInverse);

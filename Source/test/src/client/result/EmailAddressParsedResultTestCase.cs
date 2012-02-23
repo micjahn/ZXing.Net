@@ -18,7 +18,7 @@ using System;
 
 using NUnit.Framework;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary>
    /// Tests <see cref="EmailAddressParsedResult" />.
@@ -58,7 +58,7 @@ namespace com.google.zxing.client.result
                                  String subject,
                                  String body)
       {
-         Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
+         ZXing.Result fakeResult = new ZXing.Result(contents, null, null, BarcodeFormat.QR_CODE);
          ParsedResult result = ResultParser.parseResult(fakeResult);
          Assert.AreEqual(ParsedResultType.EMAIL_ADDRESS, result.Type);
          EmailAddressParsedResult emailResult = (EmailAddressParsedResult)result;

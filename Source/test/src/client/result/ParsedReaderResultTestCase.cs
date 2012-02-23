@@ -18,7 +18,7 @@ using System;
 
 using NUnit.Framework;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary>
    /// Tests <see cref="ParsedResult" />.
@@ -347,7 +347,7 @@ namespace com.google.zxing.client.result
                                        ParsedResultType type,
                                        BarcodeFormat format)
       {
-         Result fakeResult = new Result(contents, null, null, format);
+         ZXing.Result fakeResult = new ZXing.Result(contents, null, null, format);
          ParsedResult result = ResultParser.parseResult(fakeResult);
          Assert.IsNotNull(result);
          Assert.AreEqual(type, result.Type);

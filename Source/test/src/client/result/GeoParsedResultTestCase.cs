@@ -18,10 +18,10 @@ using System;
 
 using NUnit.Framework;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary>
-   /// Tests <see cref="com.google.zxing.client.result.GeoParsedResult" />.
+   /// Tests <see cref="GeoParsedResult" />.
    ///
    /// <author>Sean Owen</author>
    /// </summary>
@@ -46,7 +46,7 @@ namespace com.google.zxing.client.result
                                  double altitude,
                                  String query)
       {
-         Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
+         ZXing.Result fakeResult = new ZXing.Result(contents, null, null, BarcodeFormat.QR_CODE);
          ParsedResult result = ResultParser.parseResult(fakeResult);
          Assert.AreEqual(ParsedResultType.GEO, result.Type);
          GeoParsedResult geoResult = (GeoParsedResult)result;

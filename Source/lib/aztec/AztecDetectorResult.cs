@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.aztec
+namespace ZXing.Aztec
 {
    public class AztecDetectorResult : DetectorResult
    {

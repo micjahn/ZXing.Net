@@ -17,10 +17,10 @@
 using System;
 using System.Collections.Generic;
 
-using com.google.zxing.common;
-using com.google.zxing.common.detector;
+using ZXing.Common;
+using ZXing.Common.Detector;
 
-namespace com.google.zxing.datamatrix.detector
+namespace ZXing.Datamatrix.Internal
 {
    /// <summary>
    /// <p>Encapsulates logic that can detect a Data Matrix Code in an image, even if the Data Matrix Code

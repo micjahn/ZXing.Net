@@ -15,9 +15,9 @@
 */
 
 using System;
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.qrcode.decoder
+namespace ZXing.QrCode.Internal
 {
    /// <summary> <p>Encapsulates data masks for the data bits in a QR code, per ISO 18004:2006 6.8. Implementations
    /// of this class can un-mask a raw BitMatrix. For simplicity, they will unmask the entire BitMatrix,

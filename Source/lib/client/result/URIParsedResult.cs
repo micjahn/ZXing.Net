@@ -17,7 +17,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <author>  Sean Owen
    /// </author>

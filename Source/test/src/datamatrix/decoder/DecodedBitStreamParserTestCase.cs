@@ -18,7 +18,7 @@ using System;
 
 using NUnit.Framework;
 
-namespace com.google.zxing.datamatrix.decoder
+namespace ZXing.Datamatrix.Internal
 {
    /// <summary>
    /// <author>bbrown@google.com (Brian Brown)</author>

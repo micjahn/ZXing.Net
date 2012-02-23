@@ -17,9 +17,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.oned
+namespace ZXing.OneD
 {
    /// <summary>
    /// <p>Decodes Code 128 barcodes.</p>

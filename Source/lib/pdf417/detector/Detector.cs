@@ -16,9 +16,10 @@
 
 using System;
 using System.Collections.Generic;
-using com.google.zxing.common;
 
-namespace com.google.zxing.pdf417.detector
+using ZXing.Common;
+
+namespace ZXing.PDF417.Internal
 {
    /// <summary>
    /// <p>Encapsulates logic that can detect a PDF417 Code in an image, even if the
@@ -29,7 +30,6 @@ namespace com.google.zxing.pdf417.detector
    /// </summary>
    public sealed class Detector
    {
-
       private const int MAX_AVG_VARIANCE = (int)((1 << 8) * 0.42f);
       private const int MAX_INDIVIDUAL_VARIANCE = (int)((1 << 8) * 0.8f);
       private const int SKEW_THRESHOLD = 2;

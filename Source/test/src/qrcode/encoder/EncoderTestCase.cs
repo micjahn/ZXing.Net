@@ -18,11 +18,10 @@ using System;
 using System.Text;
 
 using NUnit.Framework;
+using ZXing.Common;
+using ZXing.QrCode.Internal;
 
-using com.google.zxing.common;
-using com.google.zxing.qrcode.decoder;
-
-namespace com.google.zxing.qrcode.encoder
+namespace ZXing.QrCode.Internal
 {
    /// <summary>
    /// <author>satorux@google.com (Satoru Takabayashi) - creator</author>

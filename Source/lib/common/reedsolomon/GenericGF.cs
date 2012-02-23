@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.common.reedsolomon
+namespace ZXing.Common.ReedSolomon
 {
    /// <summary>
    /// <p>This class contains utility methods for performing mathematical operations over

@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.qrcode.encoder
+namespace ZXing.QrCode.Internal
 {
    /// <author>  satorux@google.com (Satoru Takabayashi) - creator
    /// </author>

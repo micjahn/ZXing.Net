@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-namespace com.google.zxing
+namespace ZXing
 {
    /// <summary> Encapsulates a type of hint that a caller may pass to a barcode reader to help it
    /// more quickly or accurately decode it. It is up to implementations to decide what,

@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary> Implements the "MECARD" address book entry format.
    /// 
@@ -37,7 +37,7 @@ namespace com.google.zxing.client.result
    /// </author>
    sealed class AddressBookDoCoMoResultParser : AbstractDoCoMoResultParser
    {
-      override public ParsedResult parse(Result result)
+      override public ParsedResult parse(ZXing.Result result)
       {
          String rawText = result.Text;
          if (rawText == null || !rawText.StartsWith("MECARD:"))

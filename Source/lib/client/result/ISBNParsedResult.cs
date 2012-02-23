@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <author>  jbreiden@google.com (Jeff Breidenbach)
    /// </author>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace com.google.zxing.oned
+namespace ZXing.OneD
 {
    /// <summary>
    /// <p>Encapsulates functionality and implementation that is common to UPC and EAN families

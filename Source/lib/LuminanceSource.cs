@@ -17,7 +17,7 @@
 using System;
 using System.Text;
 
-namespace com.google.zxing
+namespace ZXing
 {
    /// <summary> The purpose of this class hierarchy is to abstract different bitmap implementations across
    /// platforms into a standard interface for requesting greyscale luminance values. The interface

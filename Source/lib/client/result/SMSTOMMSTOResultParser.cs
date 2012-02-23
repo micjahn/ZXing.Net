@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary>
    /// <p>Parses an "smsto:" URI result, whose format is not standardized but appears to be like:
@@ -28,7 +28,7 @@ namespace com.google.zxing.client.result
    /// <author>Sean Owen</author>
    public class SMSTOMMSTOResultParser : ResultParser
    {
-      override public ParsedResult parse(Result result)
+      override public ParsedResult parse(ZXing.Result result)
       {
          String rawText = result.Text;
          if (!(rawText.StartsWith("smsto:") || rawText.StartsWith("SMSTO:") ||

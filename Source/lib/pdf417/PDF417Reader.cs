@@ -15,11 +15,11 @@
  */
 
 using System.Collections.Generic;
-using com.google.zxing.common;
-using com.google.zxing.pdf417.decoder;
-using com.google.zxing.pdf417.detector;
 
-namespace com.google.zxing.pdf417
+using ZXing.Common;
+using ZXing.PDF417.Internal;
+
+namespace ZXing.PDF417
 {
    /// <summary>
    /// This implementation can detect and decode PDF417 codes in an image.
@@ -28,9 +28,9 @@ namespace com.google.zxing.pdf417
    /// </summary>
    public sealed class PDF417Reader : Reader
    {
-      private static ResultPoint[] NO_POINTS = new ResultPoint[0];
+      private static readonly ResultPoint[] NO_POINTS = new ResultPoint[0];
 
-      private Decoder decoder = new Decoder();
+      private readonly Decoder decoder = new Decoder();
 
       /// <summary>
       /// Locates and decodes a PDF417 code in an image.

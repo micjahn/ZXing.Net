@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 using System;
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
 	
 	/// <summary> This class implements an array of unsigned bytes.
@@ -96,7 +96,7 @@ namespace com.google.zxing.common
 				sbyte[] newArray = new sbyte[capacity];
 				if (bytes != null)
 				{
-					Array.Copy(bytes, 0, newArray, 0, bytes.Length);
+               Array.Copy(bytes, 0, newArray, 0, bytes.Length);
 				}
 				bytes = newArray;
 			}

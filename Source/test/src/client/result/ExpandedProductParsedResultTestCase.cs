@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2010 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ using System.Collections.Generic;
 
 using NUnit.Framework;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary>
    /// <author>Antonio Manuel Benjumea Conde, Servinform, S.A.</author>
@@ -43,8 +43,8 @@ namespace com.google.zxing.client.result
       {
          IDictionary<String, String> uncommonAIs = new Dictionary<String, String>();
          uncommonAIs["123"] = "544654";
-         Result result =
-             new Result("(01)66546(13)001205(3932)4455(3102)6544(123)544654", null, null, BarcodeFormat.RSS_EXPANDED);
+         ZXing.Result result =
+             new ZXing.Result("(01)66546(13)001205(3932)4455(3102)6544(123)544654", null, null, BarcodeFormat.RSS_EXPANDED);
          var o = (ExpandedProductParsedResult)new ExpandedProductResultParser().parse(result);
          Assert.IsNotNull(o);
          Assert.AreEqual("66546", o.ProductID);

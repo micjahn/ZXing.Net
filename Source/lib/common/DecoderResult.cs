@@ -16,9 +16,9 @@
 
 using System;
 using System.Collections.Generic;
-using ErrorCorrectionLevel = com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+using ErrorCorrectionLevel = ZXing.QrCode.Internal.ErrorCorrectionLevel;
 
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
 
    /// <summary> <p>Encapsulates the result of decoding a matrix of bits. This typically

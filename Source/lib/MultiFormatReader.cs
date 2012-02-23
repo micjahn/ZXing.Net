@@ -15,15 +15,14 @@
 */
 
 using System.Collections.Generic;
+using ZXing.Aztec;
+using ZXing.Datamatrix;
+using ZXing.Maxicode;
+using ZXing.OneD;
+using ZXing.PDF417;
+using ZXing.QrCode;
 
-using com.google.zxing.aztec;
-using com.google.zxing.datamatrix;
-using com.google.zxing.maxicode;
-using com.google.zxing.oned;
-using com.google.zxing.pdf417;
-using com.google.zxing.qrcode;
-
-namespace com.google.zxing
+namespace ZXing
 {
    /// <summary>
    /// MultiFormatReader is a convenience class and the main entry point into the library for most uses.

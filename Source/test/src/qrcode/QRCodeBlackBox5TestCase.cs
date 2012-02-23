@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.qrcode
+namespace ZXing.QrCode
 {
    /// <summary>
    /// Some very difficult exposure conditions including self-shadowing, which happens a lot when

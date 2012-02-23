@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <author>  Sean Owen
    /// </author>
@@ -24,7 +24,7 @@ namespace com.google.zxing.client.result
    /// </author>
    sealed class BookmarkDoCoMoResultParser : AbstractDoCoMoResultParser
    {
-      override public ParsedResult parse(Result result)
+      override public ParsedResult parse(ZXing.Result result)
       {
          String rawText = result.Text;
          if (rawText == null || !rawText.StartsWith("MEBKM:"))

@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary>
    /// Parses a WIFI configuration string.  Strings will be of the form:
@@ -27,7 +27,7 @@ namespace com.google.zxing.client.result
    /// <author>Vikram Aggarwal</author>
    public class WifiResultParser : ResultParser
    {
-      override public ParsedResult parse(Result result)
+      override public ParsedResult parse(ZXing.Result result)
       {
          String rawText = result.Text;
          if (!rawText.StartsWith("WIFI:"))

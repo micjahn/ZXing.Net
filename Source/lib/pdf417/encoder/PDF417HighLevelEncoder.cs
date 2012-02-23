@@ -26,7 +26,7 @@ using BigIntegerLibrary;
 #endif
 using System.Text;
 
-namespace com.google.zxing.pdf417.encoder
+namespace ZXing.PDF417.Internal
 {
    /// <summary>
    /// PDF417 high-level encoder following the algorithm described in ISO/IEC 15438:2001(E) in

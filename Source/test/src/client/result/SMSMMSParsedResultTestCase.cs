@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 using NUnit.Framework;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary>
    /// Tests <see cref="SMSParsedResult" />.
@@ -60,7 +60,7 @@ namespace com.google.zxing.client.result
                                  String body,
                                  String[] vias)
       {
-         Result fakeResult = new Result(contents, null, null, BarcodeFormat.QR_CODE);
+         ZXing.Result fakeResult = new ZXing.Result(contents, null, null, BarcodeFormat.QR_CODE);
          ParsedResult result = ResultParser.parseResult(fakeResult);
          Assert.AreEqual(ParsedResultType.SMS, result.Type);
          SMSParsedResult smsResult = (SMSParsedResult)result;

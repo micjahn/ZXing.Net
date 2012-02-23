@@ -16,7 +16,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <RootNamespace>com.google.zxing</RootNamespace>
+    <RootNamespace>ZXing</RootNamespace>
     <NoStandardLibraries>false</NoStandardLibraries>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>

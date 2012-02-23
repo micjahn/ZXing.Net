@@ -15,10 +15,9 @@
 */
 
 using System;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing
+namespace ZXing
 {
 
    /// <summary> This class is the core bitmap class used by ZXing to represent 1 bit data. Reader objects

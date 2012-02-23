@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright (C) 2010 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,11 +33,11 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using com.google.zxing.client.result;
-using com.google.zxing.common;
 using NUnit.Framework;
+using ZXing.Client.Result;
+using ZXing.Common;
 
-namespace com.google.zxing.oned.rss.expanded
+namespace ZXing.OneD.RSS.Expanded
 {
    /// <summary>
    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>

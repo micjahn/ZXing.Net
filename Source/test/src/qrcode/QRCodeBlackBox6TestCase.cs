@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.qrcode
+namespace ZXing.QrCode
 {
    /// <summary>
    /// These tests are supplied by Tim Gernat and test finder pattern detection at small size and under

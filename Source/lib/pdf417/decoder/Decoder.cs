@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-using com.google.zxing.common;
-using com.google.zxing.pdf417.decoder.ec;
+using ZXing.Common;
+using ZXing.PDF417.Internal.EC;
 
-namespace com.google.zxing.pdf417.decoder
+namespace ZXing.PDF417.Internal
 {
    /// <summary>
    /// <p>The main class which implements PDF417 Code decoding -- as
@@ -29,8 +29,11 @@ namespace com.google.zxing.pdf417.decoder
    {
       private const int MAX_ERRORS = 3;
       private const int MAX_EC_CODEWORDS = 512;
-      private ErrorCorrection errorCorrection;
+      private readonly ErrorCorrection errorCorrection;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Decoder"/> class.
+      /// </summary>
       public Decoder()
       {
          errorCorrection = new ErrorCorrection();

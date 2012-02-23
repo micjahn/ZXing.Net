@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
    /// <summary> This class implements a local thresholding algorithm, which while slower than the
    /// GlobalHistogramBinarizer, is fairly efficient for what it does. It is designed for

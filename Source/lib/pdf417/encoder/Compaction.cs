@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace com.google.zxing.pdf417.encoder
+namespace ZXing.PDF417.Internal
 {
 
 public enum Compaction {

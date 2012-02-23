@@ -18,7 +18,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace com.google.zxing
+namespace ZXing
 {
    /// <summary>
    /// This LuminanceSource implementation is meant for J2SE clients and our blackbox unit tests.

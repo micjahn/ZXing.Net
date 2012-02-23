@@ -16,12 +16,12 @@
 
 using System.Collections.Generic;
 
-namespace com.google.zxing.multi
+namespace ZXing.Multi
 {
    /// <summary> Implementation of this interface attempt to read several barcodes from one image.
    /// 
    /// </summary>
-   /// <seealso cref="com.google.zxing.Reader">
+   /// <seealso cref="Reader">
    /// </seealso>
    /// <author>  Sean Owen
    /// </author>

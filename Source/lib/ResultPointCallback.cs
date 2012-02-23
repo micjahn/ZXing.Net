@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-namespace com.google.zxing
+namespace ZXing
 {
    /// <summary> Callback which is invoked when a possible result point (significant
    /// point in the barcode image such as a corner) is found.

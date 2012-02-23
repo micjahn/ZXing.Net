@@ -15,10 +15,9 @@
  */
 
 using System;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing.pdf417.decoder
+namespace ZXing.PDF417.Internal
 {
    /// <summary>
    /// <p>

@@ -15,12 +15,11 @@
  */
 
 using System.Collections.Generic;
+using ZXing.Common;
+using ZXing.OneD.RSS;
+using ZXing.OneD.RSS.Expanded;
 
-using com.google.zxing.common;
-using com.google.zxing.oned.rss;
-using com.google.zxing.oned.rss.expanded;
-
-namespace com.google.zxing.oned
+namespace ZXing.OneD
 {
    /// <summary>
    /// <author>dswitkin@google.com (Daniel Switkin)</author>

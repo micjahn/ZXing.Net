@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.pdf417
+namespace ZXing.PDF417
 {
    /// <summary>
    /// This test consists of perfect, computer-generated images. We should have 100% passing.

@@ -13,11 +13,13 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-using System;
-namespace com.google.zxing.common
-{
 
-   /// <summary> <p>Represents a 2D matrix of bits. In function arguments below, and throughout the common
+using System;
+
+namespace ZXing.Common
+{
+   /// <summary>
+   /// <p>Represents a 2D matrix of bits. In function arguments below, and throughout the common
    /// module, x is the column position, and y is the row position. The ordering is always x, y.
    /// The origin is at the top-left.</p>
    /// 
@@ -37,10 +39,10 @@ namespace com.google.zxing.common
    /// </author>
    public sealed class BitMatrix
    {
-      private int width;
-      private int height;
-      private int rowSize;
-      private int[] bits;
+      private readonly int width;
+      private readonly int height;
+      private readonly int rowSize;
+      private readonly int[] bits;
 
       /// <returns> The width of the matrix
       /// </returns>

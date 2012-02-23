@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-using com.google.zxing.common;
-using com.google.zxing.common.reedsolomon;
+using ZXing.Common;
+using ZXing.Common.ReedSolomon;
 
-namespace com.google.zxing.datamatrix.decoder
+namespace ZXing.Datamatrix.Internal
 {
    /// <summary>
    /// <p>The main class which implements Data Matrix Code decoding -- as opposed to locating and extracting

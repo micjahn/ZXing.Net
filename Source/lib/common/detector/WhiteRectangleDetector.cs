@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.common.detector
+namespace ZXing.Common.Detector
 {
    /// <summary>
    /// Detects a candidate barcode-like rectangular region within an image. It

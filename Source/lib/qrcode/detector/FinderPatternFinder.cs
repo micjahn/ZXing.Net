@@ -16,10 +16,9 @@
 
 using System;
 using System.Collections.Generic;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing.qrcode.detector
+namespace ZXing.QrCode.Internal
 {
    /// <summary> <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square
    /// markers at three corners of a QR Code.</p>

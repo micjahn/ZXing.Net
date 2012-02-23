@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary> <p>Parses an "sms:" URI result, which specifies a number to SMS and optional
    /// "via" number. See <a href="http://gbiv.com/protocols/uri/drafts/draft-antti-gsm-sms-url-04.txt">
@@ -34,7 +34,7 @@ namespace com.google.zxing.client.result
    /// </author>
    sealed class SMSMMSResultParser : ResultParser
    {
-      override public ParsedResult parse(Result result)
+      override public ParsedResult parse(ZXing.Result result)
       {
          String rawText = result.Text;
          if (rawText == null ||

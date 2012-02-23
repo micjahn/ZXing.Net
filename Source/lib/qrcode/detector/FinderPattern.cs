@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.qrcode.detector
+namespace ZXing.QrCode.Internal
 {
 
    /// <summary> <p>Encapsulates a finder pattern, which are the three square patterns found in

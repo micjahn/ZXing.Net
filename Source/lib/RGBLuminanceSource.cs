@@ -4,7 +4,7 @@ using System.Drawing.Imaging;
 using System.Drawing;
 #endif
 
-using com.google.zxing;
+using ZXing;
 
 public class RGBLuminanceSource : LuminanceSource
 {

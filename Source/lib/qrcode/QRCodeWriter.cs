@@ -17,16 +17,11 @@
 using System;
 using System.Collections.Generic;
 
-using com.google.zxing.common;
-using com.google.zxing.qrcode.decoder;
-using com.google.zxing.qrcode.encoder;
-using ByteMatrix = com.google.zxing.qrcode.encoder.ByteMatrix;
+using ZXing.Common;
+using ZXing.QrCode.Internal;
 
-namespace com.google.zxing.qrcode
+namespace ZXing.QrCode
 {
-
-
-
    /// <summary>
    /// This object renders a QR Code as a BitMatrix 2D array of greyscale values.
    ///
@@ -34,12 +29,10 @@ namespace com.google.zxing.qrcode
    /// </summary>
    public sealed class QRCodeWriter : Writer
    {
-
-      private static int QUIET_ZONE_SIZE = 4;
+      private const int QUIET_ZONE_SIZE = 4;
 
       public BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
       {
-
          return encode(contents, format, width, height, null);
       }
 
@@ -49,7 +42,6 @@ namespace com.google.zxing.qrcode
                               int height,
                               IDictionary<EncodeHintType, object> hints)
       {
-
          if (contents.Length == 0)
          {
             throw new ArgumentException("Found empty contents");
@@ -85,7 +77,7 @@ namespace com.google.zxing.qrcode
       // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
       private static BitMatrix renderResult(QRCode code, int width, int height)
       {
-         ByteMatrix input = code.Matrix;
+         Internal.ByteMatrix input = code.Matrix;
          if (input == null)
          {
             throw new InvalidOperationException();
@@ -121,6 +113,5 @@ namespace com.google.zxing.qrcode
 
          return output;
       }
-
    }
 }

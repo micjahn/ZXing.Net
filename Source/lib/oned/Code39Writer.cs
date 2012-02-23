@@ -16,10 +16,9 @@
 
 using System;
 using System.Collections.Generic;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing.oned
+namespace ZXing.OneD
 {
    /// <summary>
    /// This object renders a CODE39 code as a <see cref="BitMatrix" />.

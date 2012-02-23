@@ -15,10 +15,9 @@
 */
 
 using System;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing.qrcode.decoder
+namespace ZXing.QrCode.Internal
 {
    /// <summary> See ISO 18004:2006 Annex D
    /// 

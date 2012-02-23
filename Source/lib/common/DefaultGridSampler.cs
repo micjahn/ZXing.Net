@@ -15,7 +15,7 @@
 */
 using System;
 
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
 
    /// <author>  Sean Owen

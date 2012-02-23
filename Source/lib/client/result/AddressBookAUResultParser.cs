@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <summary> Implements KDDI AU's address book format. See
    /// <a href="http://www.au.kddi.com/ezfactory/tec/two_dimensions/index.html">
@@ -31,7 +31,7 @@ namespace com.google.zxing.client.result
    /// </author>
    sealed class AddressBookAUResultParser : ResultParser
    {
-      override public ParsedResult parse(Result result)
+      override public ParsedResult parse(ZXing.Result result)
       {
          var rawText = result.Text;
          // MEMORY is mandatory; seems like a decent indicator, as does end-of-record separator CR/LF

@@ -17,7 +17,7 @@
 using System;
 using System.Globalization;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
 
    /// <summary> Partially implements the iCalendar format's "VEVENT" format for specifying a
@@ -30,7 +30,7 @@ namespace com.google.zxing.client.result
    /// </author>
    sealed class VEventResultParser : ResultParser
    {
-      override public ParsedResult parse(Result result)
+      override public ParsedResult parse(ZXing.Result result)
       {
          String rawText = result.Text;
          if (rawText == null)

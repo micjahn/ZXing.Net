@@ -22,7 +22,7 @@ using System;
 
 using System.Text;
 
-namespace com.google.zxing.pdf417.encoder
+namespace ZXing.PDF417.Internal
 {
    /// <summary>
    /// PDF417 error correction code following the algorithm described in ISO/IEC 15438:2001(E) in

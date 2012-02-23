@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.datamatrix.decoder
+namespace ZXing.Datamatrix.Internal
 {
    /// <summary>
    /// <p>Encapsulates a block of data within a Data Matrix Code. Data Matrix Codes may split their data into
@@ -27,8 +27,8 @@ namespace com.google.zxing.datamatrix.decoder
    /// </summary>
    sealed class DataBlock
    {
-      private int numDataCodewords;
-      private sbyte[] codewords;
+      private readonly int numDataCodewords;
+      private readonly sbyte[] codewords;
 
       private DataBlock(int numDataCodewords, sbyte[] codewords)
       {

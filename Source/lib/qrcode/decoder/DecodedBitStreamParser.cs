@@ -17,9 +17,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.qrcode.decoder
+namespace ZXing.QrCode.Internal
 {
    /// <summary> <p>QR Codes can encode text as bits in one of several modes, and can use multiple modes
    /// in one QR Code. This class decodes the bits back into text.</p>

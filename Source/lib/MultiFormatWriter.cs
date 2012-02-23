@@ -16,13 +16,12 @@
 
 using System;
 using System.Collections.Generic;
+using ZXing.Common;
+using ZXing.OneD;
+using ZXing.PDF417.Internal;
+using ZXing.QrCode;
 
-using com.google.zxing.common;
-using com.google.zxing.oned;
-using com.google.zxing.pdf417.encoder;
-using com.google.zxing.qrcode;
-
-namespace com.google.zxing
+namespace ZXing
 {
    /// <summary> This is a factory class which finds the appropriate Writer subclass for the BarcodeFormat
    /// requested and encodes the barcode with the supplied contents.

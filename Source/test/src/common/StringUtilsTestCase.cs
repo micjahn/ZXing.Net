@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2012 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@ using System;
 using System.Text;
 using NUnit.Framework;
 
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
    [TestFixture]
    public class StringUtilsTestCase

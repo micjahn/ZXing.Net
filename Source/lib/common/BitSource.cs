@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
    /// <summary> <p>This provides an easy abstraction to read bits at a time from a sequence of bytes, where the
    /// number of bits read is not often a multiple of 8.</p>

@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
    /// <summary> <p>Encapsulates the result of detecting a barcode in an image. This includes the raw
    /// matrix of black/white pixels corresponding to the barcode, and possibly points of interest

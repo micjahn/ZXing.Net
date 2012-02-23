@@ -16,11 +16,10 @@
 
 using System.Collections.Generic;
 
-using com.google.zxing.common;
-using com.google.zxing.datamatrix.decoder;
-using com.google.zxing.datamatrix.detector;
+using ZXing.Common;
+using ZXing.Datamatrix.Internal;
 
-namespace com.google.zxing.datamatrix
+namespace ZXing.Datamatrix
 {
    /// <summary>
    /// This implementation can detect and decode Data Matrix codes in an image.

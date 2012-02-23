@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2009 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,11 +16,10 @@
 
 using System;
 using System.Collections.Generic;
+using ZXing.Common;
+using ZXing.QrCode.Internal;
 
-using com.google.zxing.common;
-using com.google.zxing.qrcode.detector;
-
-namespace com.google.zxing.multi.qrcode.detector
+namespace ZXing.Multi.QrCode.Internal
 {
    /// <summary>
    /// <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square

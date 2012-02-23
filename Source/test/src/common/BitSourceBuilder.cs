@@ -16,7 +16,7 @@
 
 using System.IO;
 
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
    /// <summary>
    /// Class that lets one easily build an array of bytes by appending bits at a time.

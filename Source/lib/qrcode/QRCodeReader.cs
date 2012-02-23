@@ -17,11 +17,10 @@
 using System;
 using System.Collections.Generic;
 
-using com.google.zxing.common;
-using com.google.zxing.qrcode.decoder;
-using com.google.zxing.qrcode.detector;
+using ZXing.Common;
+using ZXing.QrCode.Internal;
 
-namespace com.google.zxing.qrcode
+namespace ZXing.QrCode
 {
    /// <summary>
    /// This implementation can detect and decode QR Codes in an image.
@@ -30,9 +29,9 @@ namespace com.google.zxing.qrcode
    /// </summary>
    public class QRCodeReader : Reader
    {
-      private static ResultPoint[] NO_POINTS = new ResultPoint[0];
+      private static readonly ResultPoint[] NO_POINTS = new ResultPoint[0];
 
-      private Decoder decoder = new Decoder();
+      private readonly Decoder decoder = new Decoder();
 
       protected Decoder getDecoder()
       {
@@ -43,9 +42,6 @@ namespace com.google.zxing.qrcode
       /// Locates and decodes a QR code in an image.
       ///
       /// <returns>a String representing the content encoded by the QR code</returns>
-      /// <exception cref="NotFoundException">if a QR code cannot be found</exception>
-      /// <exception cref="FormatException">if a QR code cannot be decoded</exception>
-      /// <exception cref="ChecksumException">if error correction fails</exception>
       /// </summary>
       public Result decode(BinaryBitmap image)
       {

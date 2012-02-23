@@ -15,10 +15,9 @@
  */
 
 using System.Collections.Generic;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing.oned
+namespace ZXing.OneD
 {
    /// <summary>
    /// <p>A reader that can read all available UPC/EAN formats. If a caller wants to try to

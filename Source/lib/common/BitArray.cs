@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
    /// <summary> <p>A simple, fast array of bits, represented compactly by an array of ints internally.</p>
    /// 

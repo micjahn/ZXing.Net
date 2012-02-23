@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
    /// <summary> Implementations of this class can, given locations of finder patterns for a QR code in an
    /// image, sample the right points in the image to reconstruct the QR code, accounting for

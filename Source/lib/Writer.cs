@@ -16,10 +16,9 @@
 
 using System;
 using System.Collections.Generic;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing
+namespace ZXing
 {
    /// <summary> The base class for all objects which encode/generate a barcode image.
    /// 

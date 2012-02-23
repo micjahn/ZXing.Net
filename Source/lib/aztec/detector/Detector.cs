@@ -16,18 +16,17 @@
 
 using System;
 
-using com.google.zxing.common;
-using com.google.zxing.common.detector;
-using com.google.zxing.common.reedsolomon;
+using ZXing.Common;
+using ZXing.Common.Detector;
+using ZXing.Common.ReedSolomon;
 
-namespace com.google.zxing.aztec
+namespace ZXing.Aztec.Internal
 {
-   /**
-    * <p>Encapsulates logic that can detect an Aztec Code in an image, even if the Aztec Code
-    * is rotated or skewed, or partially obscured.</p>
-    *
-    * @author David Olivier
-    */
+   /// <summary>
+   /// <p>Encapsulates logic that can detect an Aztec Code in an image, even if the Aztec Code
+   /// is rotated or skewed, or partially obscured.</p>
+   /// </summary>
+   /// <author>David Olivier</author>
    public sealed class Detector
    {
       private readonly BitMatrix image;

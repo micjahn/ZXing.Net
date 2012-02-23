@@ -2,7 +2,7 @@
 
 using NUnit.Framework;
 
-using com.google.zxing.pdf417.decoder;
+using ZXing.PDF417.Internal;
 
 namespace zxing.test.pdf417
 {

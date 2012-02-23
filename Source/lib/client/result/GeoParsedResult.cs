@@ -18,7 +18,7 @@ using System;
 using System.Globalization;
 using System.Text;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /// <author>  Sean Owen
    /// </author>

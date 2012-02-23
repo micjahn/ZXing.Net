@@ -16,7 +16,7 @@
 
 using System.Collections.Generic;
 
-namespace com.google.zxing
+namespace ZXing
 {
    /// <summary> Implementations of this interface can decode an image of a barcode in some format into
    /// the String it encodes. For example, {@link com.google.zxing.qrcode.QRCodeReader} can

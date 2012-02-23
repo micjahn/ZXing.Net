@@ -23,7 +23,7 @@ using System.Linq;
 
 using NUnit.Framework;
 
-namespace com.google.zxing.common
+namespace ZXing.Common
 {
    /// <summary>
    /// <author>Sean Owen</author>

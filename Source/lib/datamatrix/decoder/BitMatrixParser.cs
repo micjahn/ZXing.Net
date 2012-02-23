@@ -16,9 +16,9 @@
 
 using System;
 using System.Collections.Generic;
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.datamatrix.decoder
+namespace ZXing.Datamatrix.Internal
 {
    /// <summary>
    /// <author>bbrown@google.com (Brian Brown)</author>

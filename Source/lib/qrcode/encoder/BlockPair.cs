@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-namespace com.google.zxing.qrcode.encoder
+namespace ZXing.QrCode.Internal
 {
    internal sealed class BlockPair
    {

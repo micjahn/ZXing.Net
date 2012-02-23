@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-namespace com.google.zxing.qrcode.detector
+namespace ZXing.QrCode.Internal
 {
    /// <summary> <p>Encapsulates information about finder patterns in an image, including the location of
    /// the three finder patterns, and their estimated module size.</p>

@@ -21,29 +21,26 @@
 using System;
 using System.Text;
 
-namespace com.google.zxing.pdf417.encoder
+namespace ZXing.PDF417.Internal
 {
-
-
    /// <summary>
    /// Top-level class for the logic part of the PDF417 implementation.
    /// </summary>
    sealed class PDF417
    {
-
       /// <summary>
       /// The start pattern (17 bits)
       /// </summary>
-      private static int START_PATTERN = 0x1fea8;
+      private const int START_PATTERN = 0x1fea8;
       /// <summary>
       /// The stop pattern (18 bits)
       /// </summary>
-      private static int STOP_PATTERN = 0x3fa29;
+      private const int STOP_PATTERN = 0x3fa29;
 
       /// <summary>
       /// The codeword table from the Annex A of ISO/IEC 15438:2001(E).
       /// </summary>
-      private static int[][] CODEWORD_TABLE = {
+      private static readonly int[][] CODEWORD_TABLE = {
                                               new[]
                                                  {
                                                     0x1d5c0, 0x1eaf0, 0x1f57c, 0x1d4e0, 0x1ea78, 0x1f53e,
@@ -521,8 +518,8 @@ namespace com.google.zxing.pdf417.encoder
                                            };
 
       public static float PREFERRED_RATIO = 3.0f;
-      private static float DEFAULT_MODULE_WIDTH = 0.357f; //1px in mm
-      private static float HEIGHT = 2.0f; //mm
+      private const float DEFAULT_MODULE_WIDTH = 0.357f; //1px in mm
+      private const float HEIGHT = 2.0f; //mm
 
       private BarcodeMatrix barcodeMatrix;
       private bool compact;

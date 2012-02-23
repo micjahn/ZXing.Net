@@ -18,9 +18,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.oned
+namespace ZXing.OneD
 {
    /// <summary>
    /// <p>Encapsulates functionality and implementation that is common to UPC and EAN families

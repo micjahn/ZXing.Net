@@ -16,7 +16,7 @@
 
 using System;
 
-namespace com.google.zxing.pdf417.decoder.ec
+namespace ZXing.PDF417.Internal.EC
 {
    /// <summary>
    /// <p>A field based on powers of a generator integer, modulo some modulus.</p>

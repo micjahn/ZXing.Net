@@ -17,11 +17,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using com.google.zxing.common;
-using com.google.zxing.common.reedsolomon;
-using com.google.zxing.qrcode.decoder;
+using ZXing.Common;
+using ZXing.Common.ReedSolomon;
+using ZXing.QrCode.Internal;
 
-namespace com.google.zxing.qrcode.encoder
+namespace ZXing.QrCode.Internal
 {
    /// <author>  satorux@google.com (Satoru Takabayashi) - creator
    /// </author>
@@ -272,7 +272,7 @@ namespace com.google.zxing.qrcode.encoder
          for (int versionNum = 1; versionNum <= 40; versionNum++)
          {
 
-            var version = decoder.Version.getVersionForNumber(versionNum);
+            var version = Internal.Version.getVersionForNumber(versionNum);
             // numBytes = 196
             int numBytes = version.TotalCodewords;
             // getNumECBytes = 130
@@ -303,7 +303,7 @@ namespace com.google.zxing.qrcode.encoder
          throw new WriterException("Cannot find proper rs block info (input data too big?)");
       }
 
-      private static int getTotalInputBytes(int numInputBits, decoder.Version version, Mode mode)
+      private static int getTotalInputBytes(int numInputBits, Internal.Version version, Mode mode)
       {
          int modeInfoBits = 4;
          int charCountBits = mode.getCharacterCountBits(version);
@@ -542,7 +542,7 @@ namespace com.google.zxing.qrcode.encoder
 
       internal static void appendLengthInfo(int numLetters, int version, Mode mode, BitArray bits)
       {
-         int numBits = mode.getCharacterCountBits(decoder.Version.getVersionForNumber(version));
+         int numBits = mode.getCharacterCountBits(Internal.Version.getVersionForNumber(version));
          if (numLetters > ((1 << numBits) - 1))
          {
             throw new WriterException(numLetters + "is bigger than" + ((1 << numBits) - 1));

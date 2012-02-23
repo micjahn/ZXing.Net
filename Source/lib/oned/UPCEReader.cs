@@ -16,10 +16,9 @@
 
 using System;
 using System.Text;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing.oned
+namespace ZXing.OneD
 {
    /// <summary>
    /// <p>Implements decoding of the UPC-E format.</p>

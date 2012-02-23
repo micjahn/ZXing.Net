@@ -17,10 +17,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing.oned
+namespace ZXing.OneD
 {
    /// <summary>
    /// <p>Implements decoding of the ITF format, or Interleaved Two of Five.</p>

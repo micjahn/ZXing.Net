@@ -17,10 +17,9 @@
 using System;
 using System.Collections.Generic;
 
-using com.google.zxing.common;
-using Version = com.google.zxing.qrcode.decoder.Version;
+using ZXing.Common;
 
-namespace com.google.zxing.qrcode.detector
+namespace ZXing.QrCode.Internal
 {
    /// <summary> <p>Encapsulates logic that can detect a QR Code in an image, even if the QR Code
    /// is rotated or skewed, or partially obscured.</p>
@@ -99,7 +98,7 @@ namespace com.google.zxing.qrcode.detector
          int dimension;
          if (!computeDimension(topLeft, topRight, bottomLeft, moduleSize, out dimension))
             return null;
-         Version provisionalVersion = Version.getProvisionalVersionForDimension(dimension);
+         Internal.Version provisionalVersion = Internal.Version.getProvisionalVersionForDimension(dimension);
          if (provisionalVersion == null)
             return null;
          int modulesBetweenFPCenters = provisionalVersion.DimensionForVersion - 7;

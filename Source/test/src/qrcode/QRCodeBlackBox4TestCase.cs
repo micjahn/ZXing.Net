@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using com.google.zxing.common;
+using ZXing.Common;
 
-namespace com.google.zxing.qrcode
+namespace ZXing.QrCode
 {
    /// <summary>
    /// Tests of various QR Codes from t-shirts, which are notoriously not flat.

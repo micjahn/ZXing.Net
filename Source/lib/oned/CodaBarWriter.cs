@@ -15,10 +15,9 @@
  */
 
 using System;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing.oned
+namespace ZXing.OneD
 {
    /// <summary>
    /// This class renders CodaBar as <see cref="BitMatrix" />.

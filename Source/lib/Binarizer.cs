@@ -15,10 +15,9 @@
 */
 
 using System;
+using ZXing.Common;
 
-using com.google.zxing.common;
-
-namespace com.google.zxing
+namespace ZXing
 {
 
    /// <summary> This class hierarchy provides a set of methods to convert luminance data to 1 bit data.

@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-namespace com.google.zxing
+namespace ZXing
 {
    /// <summary>
    /// These are a set of hints that you may pass to Writers to specify their behavior.

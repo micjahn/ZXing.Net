@@ -17,7 +17,7 @@
 using System;
 using System.Text;
 
-namespace com.google.zxing.client.result
+namespace ZXing.Client.Result
 {
    /**
     * @author Vikram Aggarwal
