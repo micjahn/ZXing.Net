@@ -22,6 +22,22 @@
       <StackPanel Grid.Column="1" >
          <TextBlock x:Name="Header" Text="Barcode Scanner" FontSize="26" FontWeight="ExtraBold" />
          <Image x:Name="BarcodeImage" Width="300" Height="300"/>
+         <Rectangle x:Name="previewRect" 
+                    Margin="0" 
+                    Height="300"
+                    Width="300" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    Visibility="Collapsed">
+            <Rectangle.Fill>
+               <VideoBrush x:Name="previewVideo">
+                  <VideoBrush.RelativeTransform>
+                     <CompositeTransform  
+                        x:Name="previewTransform" CenterX=".5" CenterY=".5" />
+                  </VideoBrush.RelativeTransform>
+               </VideoBrush>
+            </Rectangle.Fill>
+         </Rectangle>
          <Grid x:Name="LayoutButtons" Background="Transparent">
             <Grid.ColumnDefinitions>
                <ColumnDefinition Width="*" />
