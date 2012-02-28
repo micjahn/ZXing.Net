@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+
 using ZXing;
 using ZXing.Common;
 
@@ -14,6 +10,9 @@ namespace WindowsFormsDemo
 {
    public partial class WindowsFormsDemoForm : Form
    {
+      private WebCam wCam;
+      private Timer webCamTimer;
+
       public WindowsFormsDemoForm()
       {
          InitializeComponent();
@@ -71,6 +70,45 @@ namespace WindowsFormsDemo
          var fileName = txtBarcodeImageFile.Text;
          if (File.Exists(fileName))
             picBarcode.Load(fileName);
+      }
+
+      private void btnDecodeWebCam_Click(object sender, EventArgs e)
+      {
+         if (wCam == null)
+         {
+            wCam = new WebCam {Container = picWebCam};
+
+            wCam.OpenConnection();
+
+            webCamTimer = new Timer();
+            webCamTimer.Tick += webCamTimer_Tick;
+            webCamTimer.Interval = 500;
+            webCamTimer.Start();
+         }
+         else
+         {
+            webCamTimer.Stop();
+            webCamTimer = null;
+            wCam.Dispose();
+            wCam = null;
+         }
+      }
+
+      void webCamTimer_Tick(object sender, EventArgs e)
+      {
+         var bitmap = wCam.GetCurrentImage();
+         if (bitmap == null)
+            return;
+         var imageSource = new RGBLuminanceSource(bitmap, bitmap.Width, bitmap.Height);
+         var binarizer = new HybridBinarizer(imageSource);
+         var binaryBitmap = new BinaryBitmap(binarizer);
+         var reader = new MultiFormatReader();
+         var result = reader.decode(binaryBitmap);
+         if (result != null)
+         {
+            txtTypeWebCam.Text = result.BarcodeFormat.ToString();
+            txtContentWebCam.Text = result.Text;
+         }
       }
    }
 }

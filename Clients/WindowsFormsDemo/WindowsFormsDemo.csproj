@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WebCam.cs" />
     <Compile Include="WindowsFormsDemoForm.cs">
       <SubType>Form</SubType>
     </Compile>

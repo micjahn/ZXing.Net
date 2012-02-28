@@ -33,6 +33,7 @@
          this.labBarcodeImageFile = new System.Windows.Forms.Label();
          this.tabCtrlMain = new System.Windows.Forms.TabControl();
          this.tabPageDecoder = new System.Windows.Forms.TabPage();
+         this.labDuration = new System.Windows.Forms.Label();
          this.labBarcodeText = new System.Windows.Forms.Label();
          this.labType = new System.Windows.Forms.Label();
          this.txtContent = new System.Windows.Forms.TextBox();
@@ -41,10 +42,18 @@
          this.picBarcode = new System.Windows.Forms.PictureBox();
          this.btnSelectBarcodeImageFileForDecoding = new System.Windows.Forms.Button();
          this.tabPageEncoder = new System.Windows.Forms.TabPage();
-         this.labDuration = new System.Windows.Forms.Label();
+         this.tabPageWebCam = new System.Windows.Forms.TabPage();
+         this.btnDecodeWebCam = new System.Windows.Forms.Button();
+         this.label1 = new System.Windows.Forms.Label();
+         this.label2 = new System.Windows.Forms.Label();
+         this.txtContentWebCam = new System.Windows.Forms.TextBox();
+         this.txtTypeWebCam = new System.Windows.Forms.TextBox();
+         this.picWebCam = new System.Windows.Forms.PictureBox();
          this.tabCtrlMain.SuspendLayout();
          this.tabPageDecoder.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.picBarcode)).BeginInit();
+         this.tabPageWebCam.SuspendLayout();
+         ((System.ComponentModel.ISupportInitialize)(this.picWebCam)).BeginInit();
          this.SuspendLayout();
          // 
          // btnClose
@@ -85,6 +94,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
          this.tabCtrlMain.Controls.Add(this.tabPageDecoder);
          this.tabCtrlMain.Controls.Add(this.tabPageEncoder);
+         this.tabCtrlMain.Controls.Add(this.tabPageWebCam);
          this.tabCtrlMain.Location = new System.Drawing.Point(12, 12);
          this.tabCtrlMain.Name = "tabCtrlMain";
          this.tabCtrlMain.SelectedIndex = 0;
@@ -110,6 +120,14 @@
          this.tabPageDecoder.TabIndex = 0;
          this.tabPageDecoder.Text = "Decoder";
          this.tabPageDecoder.UseVisualStyleBackColor = true;
+         // 
+         // labDuration
+         // 
+         this.labDuration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+         this.labDuration.Location = new System.Drawing.Point(229, 60);
+         this.labDuration.Name = "labDuration";
+         this.labDuration.Size = new System.Drawing.Size(118, 23);
+         this.labDuration.TabIndex = 10;
          // 
          // labBarcodeText
          // 
@@ -194,13 +212,82 @@
          this.tabPageEncoder.Text = "Encoder";
          this.tabPageEncoder.UseVisualStyleBackColor = true;
          // 
-         // labDuration
+         // tabPageWebCam
          // 
-         this.labDuration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-         this.labDuration.Location = new System.Drawing.Point(229, 60);
-         this.labDuration.Name = "labDuration";
-         this.labDuration.Size = new System.Drawing.Size(118, 23);
-         this.labDuration.TabIndex = 10;
+         this.tabPageWebCam.Controls.Add(this.btnDecodeWebCam);
+         this.tabPageWebCam.Controls.Add(this.label1);
+         this.tabPageWebCam.Controls.Add(this.label2);
+         this.tabPageWebCam.Controls.Add(this.txtContentWebCam);
+         this.tabPageWebCam.Controls.Add(this.txtTypeWebCam);
+         this.tabPageWebCam.Controls.Add(this.picWebCam);
+         this.tabPageWebCam.Location = new System.Drawing.Point(4, 22);
+         this.tabPageWebCam.Name = "tabPageWebCam";
+         this.tabPageWebCam.Size = new System.Drawing.Size(466, 257);
+         this.tabPageWebCam.TabIndex = 2;
+         this.tabPageWebCam.Text = "WebCam";
+         this.tabPageWebCam.UseVisualStyleBackColor = true;
+         // 
+         // btnDecodeWebCam
+         // 
+         this.btnDecodeWebCam.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+         this.btnDecodeWebCam.Location = new System.Drawing.Point(347, 57);
+         this.btnDecodeWebCam.Name = "btnDecodeWebCam";
+         this.btnDecodeWebCam.Size = new System.Drawing.Size(107, 23);
+         this.btnDecodeWebCam.TabIndex = 13;
+         this.btnDecodeWebCam.Text = "Decode";
+         this.btnDecodeWebCam.UseVisualStyleBackColor = true;
+         this.btnDecodeWebCam.Click += new System.EventHandler(this.btnDecodeWebCam_Click);
+         // 
+         // label1
+         // 
+         this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+         this.label1.AutoSize = true;
+         this.label1.Location = new System.Drawing.Point(223, 131);
+         this.label1.Name = "label1";
+         this.label1.Size = new System.Drawing.Size(44, 13);
+         this.label1.TabIndex = 12;
+         this.label1.Text = "Content";
+         // 
+         // label2
+         // 
+         this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+         this.label2.AutoSize = true;
+         this.label2.Location = new System.Drawing.Point(223, 92);
+         this.label2.Name = "label2";
+         this.label2.Size = new System.Drawing.Size(31, 13);
+         this.label2.TabIndex = 11;
+         this.label2.Text = "Type";
+         // 
+         // txtContentWebCam
+         // 
+         this.txtContentWebCam.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+         this.txtContentWebCam.Location = new System.Drawing.Point(223, 147);
+         this.txtContentWebCam.Multiline = true;
+         this.txtContentWebCam.Name = "txtContentWebCam";
+         this.txtContentWebCam.Size = new System.Drawing.Size(231, 107);
+         this.txtContentWebCam.TabIndex = 10;
+         // 
+         // txtTypeWebCam
+         // 
+         this.txtTypeWebCam.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+         this.txtTypeWebCam.Location = new System.Drawing.Point(223, 108);
+         this.txtTypeWebCam.Name = "txtTypeWebCam";
+         this.txtTypeWebCam.Size = new System.Drawing.Size(231, 20);
+         this.txtTypeWebCam.TabIndex = 9;
+         // 
+         // picWebCam
+         // 
+         this.picWebCam.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+         this.picWebCam.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+         this.picWebCam.Location = new System.Drawing.Point(3, 57);
+         this.picWebCam.Name = "picWebCam";
+         this.picWebCam.Size = new System.Drawing.Size(214, 197);
+         this.picWebCam.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+         this.picWebCam.TabIndex = 8;
+         this.picWebCam.TabStop = false;
          // 
          // WindowsFormsDemoForm
          // 
@@ -217,6 +304,9 @@
          this.tabPageDecoder.ResumeLayout(false);
          this.tabPageDecoder.PerformLayout();
          ((System.ComponentModel.ISupportInitialize)(this.picBarcode)).EndInit();
+         this.tabPageWebCam.ResumeLayout(false);
+         this.tabPageWebCam.PerformLayout();
+         ((System.ComponentModel.ISupportInitialize)(this.picWebCam)).EndInit();
          this.ResumeLayout(false);
 
       }
@@ -237,6 +327,13 @@
       private System.Windows.Forms.TextBox txtType;
       private System.Windows.Forms.Label labBarcodeText;
       private System.Windows.Forms.Label labDuration;
+      private System.Windows.Forms.TabPage tabPageWebCam;
+      private System.Windows.Forms.Label label1;
+      private System.Windows.Forms.Label label2;
+      private System.Windows.Forms.TextBox txtContentWebCam;
+      private System.Windows.Forms.TextBox txtTypeWebCam;
+      private System.Windows.Forms.PictureBox picWebCam;
+      private System.Windows.Forms.Button btnDecodeWebCam;
    }
 }
 
