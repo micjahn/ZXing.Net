@@ -49,11 +49,19 @@
          this.txtContentWebCam = new System.Windows.Forms.TextBox();
          this.txtTypeWebCam = new System.Windows.Forms.TextBox();
          this.picWebCam = new System.Windows.Forms.PictureBox();
+         this.picEncodedBarCode = new System.Windows.Forms.PictureBox();
+         this.cmbEncoderType = new System.Windows.Forms.ComboBox();
+         this.labEncoderType = new System.Windows.Forms.Label();
+         this.labEncoderContent = new System.Windows.Forms.Label();
+         this.txtEncoderContent = new System.Windows.Forms.TextBox();
+         this.btnEncode = new System.Windows.Forms.Button();
          this.tabCtrlMain.SuspendLayout();
          this.tabPageDecoder.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.picBarcode)).BeginInit();
+         this.tabPageEncoder.SuspendLayout();
          this.tabPageWebCam.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.picWebCam)).BeginInit();
+         ((System.ComponentModel.ISupportInitialize)(this.picEncodedBarCode)).BeginInit();
          this.SuspendLayout();
          // 
          // btnClose
@@ -204,6 +212,12 @@
          // 
          // tabPageEncoder
          // 
+         this.tabPageEncoder.Controls.Add(this.btnEncode);
+         this.tabPageEncoder.Controls.Add(this.txtEncoderContent);
+         this.tabPageEncoder.Controls.Add(this.labEncoderContent);
+         this.tabPageEncoder.Controls.Add(this.labEncoderType);
+         this.tabPageEncoder.Controls.Add(this.cmbEncoderType);
+         this.tabPageEncoder.Controls.Add(this.picEncodedBarCode);
          this.tabPageEncoder.Location = new System.Drawing.Point(4, 22);
          this.tabPageEncoder.Name = "tabPageEncoder";
          this.tabPageEncoder.Padding = new System.Windows.Forms.Padding(3);
@@ -289,6 +303,70 @@
          this.picWebCam.TabIndex = 8;
          this.picWebCam.TabStop = false;
          // 
+         // picEncodedBarCode
+         // 
+         this.picEncodedBarCode.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+         this.picEncodedBarCode.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+         this.picEncodedBarCode.Location = new System.Drawing.Point(3, 6);
+         this.picEncodedBarCode.Name = "picEncodedBarCode";
+         this.picEncodedBarCode.Size = new System.Drawing.Size(214, 212);
+         this.picEncodedBarCode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+         this.picEncodedBarCode.TabIndex = 9;
+         this.picEncodedBarCode.TabStop = false;
+         // 
+         // cmbEncoderType
+         // 
+         this.cmbEncoderType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+         this.cmbEncoderType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+         this.cmbEncoderType.FormattingEnabled = true;
+         this.cmbEncoderType.Location = new System.Drawing.Point(229, 23);
+         this.cmbEncoderType.Name = "cmbEncoderType";
+         this.cmbEncoderType.Size = new System.Drawing.Size(231, 21);
+         this.cmbEncoderType.TabIndex = 10;
+         // 
+         // labEncoderType
+         // 
+         this.labEncoderType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+         this.labEncoderType.AutoSize = true;
+         this.labEncoderType.Location = new System.Drawing.Point(226, 7);
+         this.labEncoderType.Name = "labEncoderType";
+         this.labEncoderType.Size = new System.Drawing.Size(31, 13);
+         this.labEncoderType.TabIndex = 11;
+         this.labEncoderType.Text = "Type";
+         // 
+         // labEncoderContent
+         // 
+         this.labEncoderContent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+         this.labEncoderContent.AutoSize = true;
+         this.labEncoderContent.Location = new System.Drawing.Point(226, 47);
+         this.labEncoderContent.Name = "labEncoderContent";
+         this.labEncoderContent.Size = new System.Drawing.Size(44, 13);
+         this.labEncoderContent.TabIndex = 12;
+         this.labEncoderContent.Text = "Content";
+         // 
+         // txtEncoderContent
+         // 
+         this.txtEncoderContent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+         this.txtEncoderContent.Location = new System.Drawing.Point(229, 63);
+         this.txtEncoderContent.Multiline = true;
+         this.txtEncoderContent.Name = "txtEncoderContent";
+         this.txtEncoderContent.Size = new System.Drawing.Size(231, 155);
+         this.txtEncoderContent.TabIndex = 13;
+         // 
+         // btnEncode
+         // 
+         this.btnEncode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+         this.btnEncode.Location = new System.Drawing.Point(353, 224);
+         this.btnEncode.Name = "btnEncode";
+         this.btnEncode.Size = new System.Drawing.Size(107, 23);
+         this.btnEncode.TabIndex = 14;
+         this.btnEncode.Text = "Encode";
+         this.btnEncode.UseVisualStyleBackColor = true;
+         this.btnEncode.Click += new System.EventHandler(this.btnEncode_Click);
+         // 
          // WindowsFormsDemoForm
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -304,9 +382,12 @@
          this.tabPageDecoder.ResumeLayout(false);
          this.tabPageDecoder.PerformLayout();
          ((System.ComponentModel.ISupportInitialize)(this.picBarcode)).EndInit();
+         this.tabPageEncoder.ResumeLayout(false);
+         this.tabPageEncoder.PerformLayout();
          this.tabPageWebCam.ResumeLayout(false);
          this.tabPageWebCam.PerformLayout();
          ((System.ComponentModel.ISupportInitialize)(this.picWebCam)).EndInit();
+         ((System.ComponentModel.ISupportInitialize)(this.picEncodedBarCode)).EndInit();
          this.ResumeLayout(false);
 
       }
@@ -334,6 +415,12 @@
       private System.Windows.Forms.TextBox txtTypeWebCam;
       private System.Windows.Forms.PictureBox picWebCam;
       private System.Windows.Forms.Button btnDecodeWebCam;
+      private System.Windows.Forms.Button btnEncode;
+      private System.Windows.Forms.TextBox txtEncoderContent;
+      private System.Windows.Forms.Label labEncoderContent;
+      private System.Windows.Forms.Label labEncoderType;
+      private System.Windows.Forms.ComboBox cmbEncoderType;
+      private System.Windows.Forms.PictureBox picEncodedBarCode;
    }
 }
 

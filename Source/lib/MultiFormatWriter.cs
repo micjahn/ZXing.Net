@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using ZXing.Common;
 using ZXing.OneD;
 using ZXing.PDF417.Internal;
@@ -49,6 +50,14 @@ namespace ZXing
                            {BarcodeFormat.PDF_417, () => new PDF417Writer()},
                            {BarcodeFormat.CODABAR, () => new CodaBarWriter()},
                         };
+      }
+
+      /// <summary>
+      /// Gets the collection of supported writers.
+      /// </summary>
+      public static ICollection<BarcodeFormat> SupportedWriters
+      {
+         get { return formatMap.Keys; }
       }
 
       public BitMatrix encode(String contents, BarcodeFormat format, int width, int height)

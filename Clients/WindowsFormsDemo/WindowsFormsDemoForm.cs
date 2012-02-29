@@ -18,6 +18,14 @@ namespace WindowsFormsDemo
          InitializeComponent();
       }
 
+      protected override void OnLoad(EventArgs e)
+      {
+         base.OnLoad(e);
+
+         foreach (var format in MultiFormatWriter.SupportedWriters)
+            cmbEncoderType.Items.Add(format);
+      }
+
       private void btnClose_Click(object sender, EventArgs e)
       {
          Close();
@@ -108,6 +116,20 @@ namespace WindowsFormsDemo
          {
             txtTypeWebCam.Text = result.BarcodeFormat.ToString();
             txtContentWebCam.Text = result.Text;
+         }
+      }
+
+      private void btnEncode_Click(object sender, EventArgs e)
+      {
+         try
+         {
+            var encoder = new MultiFormatWriter();
+            var bitMatrix = encoder.encode(txtEncoderContent.Text, (BarcodeFormat)cmbEncoderType.SelectedItem, picEncodedBarCode.Width, picEncodedBarCode.Height);
+            picEncodedBarCode.Image = bitMatrix.ToBitmap();
+         }
+         catch (Exception exc)
+         {
+            MessageBox.Show(this, exc.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
          }
       }
    }
