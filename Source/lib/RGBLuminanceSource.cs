@@ -116,7 +116,7 @@ namespace ZXing
                           (byte)((srcPixel >> 0x10) & 0xff),
                           (byte)((srcPixel >> 8) & 0xff),
                           (byte)(srcPixel & 0xff));
-                    luminances[offset + x] = (sbyte)(((int)c.R) << 16 | ((int)c.G) << 8 | ((int)c.B));
+                    luminances[offset + x] = (sbyte) (0.3*c.R + 0.59*c.G + 0.11*c.B);
                 }
             }
         }
@@ -151,7 +151,7 @@ namespace ZXing
                for (int x = 0; x < width; x++)
                {
                   c = d.GetPixel(x, y);
-                  luminances[offset + x] = (sbyte)(((int)c.R) << 16 | ((int)c.G) << 8 | ((int)c.B));
+                  luminances[offset + x] = (sbyte) (0.3*c.R + 0.59*c.G + 0.11*c.B);
                }
             }
          }
@@ -169,8 +169,7 @@ namespace ZXing
                row = new sbyte[width];
             }
             for (int i = 0; i < width; i++)
-               row[i] = luminances[y * width + i];
-            //System.arraycopy(luminances, y * width, row, 0, width);
+               row[i] = (sbyte)(luminances[y * width + i] - 128);
             return row;
          }
          else
@@ -182,8 +181,7 @@ namespace ZXing
                row = new sbyte[height];
             }
             for (int i = 0; i < height; i++)
-               row[i] = luminances[i * width + y];
-            //System.arraycopy(luminances, y * width, row, 0, width);
+               row[i] = (sbyte)(luminances[i * width + y] - 128);
             return row;
          }
       }
