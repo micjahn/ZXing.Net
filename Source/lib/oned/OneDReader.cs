@@ -49,6 +49,8 @@ namespace ZXing.OneD
             {
                BinaryBitmap rotatedImage = image.rotateCounterClockwise();
                result = doDecode(rotatedImage, hints);
+               if (result == null)
+                  return null;
                // Record that we found it rotated 90 degrees CCW / 270 degrees CW
                IDictionary<ResultMetadataType, object> metadata = result.ResultMetadata;
                int orientation = 270;
