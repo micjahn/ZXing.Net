@@ -453,8 +453,8 @@ namespace ZXing.Common
             //Unlock the pixels
             bmp.UnlockBits(bmpData);
          }
-         
-         if (!String.IsNullOrEmpty(content))
+
+         if (outputContent)
          {
             switch (format)
             {
