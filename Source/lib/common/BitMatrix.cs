@@ -19,6 +19,8 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using ZXing.OneD;
+
 #endif
 
 namespace ZXing.Common
@@ -397,32 +399,50 @@ namespace ZXing.Common
 
 #if !SILVERLIGHT
 
+      public Bitmap ToBitmap()
+      {
+         return ToBitmap(BarcodeFormat.EAN_8, null);
+      }
+
       /// <summary>
       /// Converts this ByteMatrix to a black and white bitmap.
       /// </summary>
       /// <returns>A black and white bitmap converted from this ByteMatrix.</returns>
-      public Bitmap ToBitmap()
+      public Bitmap ToBitmap(BarcodeFormat format, String content)
       {
          const byte BLACK = 0;
          const byte WHITE = 255;
          int width = Width;
          int height = Height;
+         bool outputContent = !String.IsNullOrEmpty(content) && (format == BarcodeFormat.CODE_39 ||
+                                                                 format == BarcodeFormat.CODE_128 ||
+                                                                 format == BarcodeFormat.EAN_13 ||
+                                                                 format == BarcodeFormat.EAN_8 ||
+                                                                 format == BarcodeFormat.UPC_A);
+         int emptyArea = outputContent ? 16 : 0;
 
          // create the bitmap and lock the bits because we need the stride
          // which is the width of the image and possible padding bytes
-         var bmp = new Bitmap(width, height, PixelFormat.Format8bppIndexed);
+         var bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
          var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, bmp.PixelFormat);
          try
          {
             var pixels = new byte[bmpData.Stride*height];
 
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < height - emptyArea; y++)
             {
                var offset = y*bmpData.Stride;
                for (var x = 0; x < width; x++)
                {
-                  pixels[offset + x] = this[x, y] ? BLACK : WHITE;
+                  var color = this[x, y] ? BLACK : WHITE;
+                  pixels[offset + 3 * x] = color;
+                  pixels[offset + 3 * x + 1] = color;
+                  pixels[offset + 3 * x + 2] = color;
                }
+            }
+            for (int y = (height - emptyArea) * bmpData.Stride; y < pixels.Length; y++)
+            {
+               pixels[y] = WHITE;
             }
 
             //Copy the data from the byte array into BitmapData.Scan0
@@ -432,6 +452,30 @@ namespace ZXing.Common
          {
             //Unlock the pixels
             bmp.UnlockBits(bmpData);
+         }
+         
+         if (!String.IsNullOrEmpty(content))
+         {
+            switch (format)
+            {
+               case BarcodeFormat.EAN_8:
+                  if (content.Length < 8)
+                     content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+                  content = content.Insert(4, "   ");
+                  break;
+               case BarcodeFormat.EAN_13:
+                  if (content.Length < 13)
+                     content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+                  content = content.Insert(7, "   ");
+                  content = content.Insert(1, "   ");
+                  break;
+            }
+            var font = new Font("Arial", 10, FontStyle.Regular);
+            using (var g = Graphics.FromImage(bmp))
+            {
+               var drawFormat = new StringFormat {Alignment = StringAlignment.Center};
+               g.DrawString(content, font, Brushes.Black, width / 2, height - 14, drawFormat);
+            }
          }
 
          return bmp;

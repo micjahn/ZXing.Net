@@ -49,16 +49,18 @@ namespace ZXing.OneD
 
       override public sbyte[] encode(String contents)
       {
-         if (contents.Length != 13)
+         if (contents.Length < 12 || contents.Length > 13)
          {
             throw new ArgumentException(
-                "Requested contents should be 13 digits long, but got " + contents.Length);
+                "Requested contents should be 12 (without checksum digit) or 13 digits long, but got " + contents.Length);
          }
          foreach (var ch in contents)
          {
             if (!Char.IsDigit(ch))
                throw new ArgumentException("Requested contents should only contain digits, but got '" + ch + "'");
          }
+         if (contents.Length == 12)
+            contents = CalculateChecksumDigitModulo10(contents);
 
          int firstDigit = Int32.Parse(contents.Substring(0, 1));
          int parities = EAN13Reader.FIRST_DIGIT_ENCODINGS[firstDigit];

@@ -27,7 +27,7 @@ namespace ZXing.OneD
    /// </summary>
    public abstract class OneDimensionalCodeWriter : Writer
    {
-      private int sidesMargin;
+      private readonly int sidesMargin;
 
       protected OneDimensionalCodeWriter(int sidesMargin)
       {
@@ -129,5 +129,22 @@ namespace ZXing.OneD
       /// <returns>a byte array of horizontal pixels (0 = white, 1 = black)</returns>
       /// </summary>
       public abstract sbyte[] encode(String contents);
+
+      public static String CalculateChecksumDigitModulo10(String contents)
+      {
+         var oddsum = 0;
+         var evensum = 0;
+
+         for (var index = contents.Length - 1; index >= 0; index -= 2)
+         {
+            oddsum += (contents[index] - '0');
+         }
+         for (var index = contents.Length - 2; index >= 0; index -= 2)
+         {
+            evensum += (contents[index] - '0');
+         }
+
+         return contents + ((10 - ((oddsum * 3 + evensum) % 10)) % 10);
+      }
    }
 }

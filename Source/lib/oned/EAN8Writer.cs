@@ -51,16 +51,18 @@ namespace ZXing.OneD
       /// <summary> @return a byte array of horizontal pixels (0 = white, 1 = black)</summary>
       override public sbyte[] encode(String contents)
       {
-         if (contents.Length != 8)
+         if (contents.Length < 7 || contents.Length > 8)
          {
             throw new ArgumentException(
-                "Requested contents should be 8 digits long, but got " + contents.Length);
+                "Requested contents should be 7 (without checksum digit) or 8 digits long, but got " + contents.Length);
          }
          foreach (var ch in contents)
          {
             if (!Char.IsDigit(ch))
                throw new ArgumentException("Requested contents should only contain digits, but got '" + ch + "'");
          }
+         if (contents.Length == 7)
+            contents = CalculateChecksumDigitModulo10(contents);
 
          sbyte[] result = new sbyte[CODE_WIDTH];
          int pos = 0;

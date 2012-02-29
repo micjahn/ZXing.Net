@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
 using ZXing;
 using ZXing.Common;
+using System.Drawing.Imaging;
 
 namespace WindowsFormsDemo
 {
@@ -12,10 +14,13 @@ namespace WindowsFormsDemo
    {
       private WebCam wCam;
       private Timer webCamTimer;
-
+      private readonly IDictionary<DecodeHintType, Object> tryHarderHints;
+            
       public WindowsFormsDemoForm()
       {
          InitializeComponent();
+         tryHarderHints = new Dictionary<DecodeHintType, Object>();
+         tryHarderHints[DecodeHintType.TRY_HARDER] = true;
       }
 
       protected override void OnLoad(EventArgs e)
@@ -60,6 +65,8 @@ namespace WindowsFormsDemo
          var binaryBitmap = new BinaryBitmap(binarizer);
          var reader = new MultiFormatReader();
          var result = reader.decode(binaryBitmap);
+         if (result == null)
+            result = reader.decode(binaryBitmap, tryHarderHints);
          var timerStop = DateTime.Now.Ticks;
          if (result == null)
          {
@@ -90,7 +97,7 @@ namespace WindowsFormsDemo
 
             webCamTimer = new Timer();
             webCamTimer.Tick += webCamTimer_Tick;
-            webCamTimer.Interval = 500;
+            webCamTimer.Interval = 200;
             webCamTimer.Start();
          }
          else
@@ -125,11 +132,29 @@ namespace WindowsFormsDemo
          {
             var encoder = new MultiFormatWriter();
             var bitMatrix = encoder.encode(txtEncoderContent.Text, (BarcodeFormat)cmbEncoderType.SelectedItem, picEncodedBarCode.Width, picEncodedBarCode.Height);
-            picEncodedBarCode.Image = bitMatrix.ToBitmap();
+            picEncodedBarCode.Image = bitMatrix.ToBitmap((BarcodeFormat)cmbEncoderType.SelectedItem, txtEncoderContent.Text);
          }
          catch (Exception exc)
          {
             MessageBox.Show(this, exc.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+         }
+      }
+
+      private void btnEncoderSave_Click(object sender, EventArgs e)
+      {
+         if (picEncodedBarCode.Image != null)
+         {
+            var fileName = String.Empty;
+            using (var dlg = new SaveFileDialog())
+            {
+               dlg.DefaultExt = "png";
+               dlg.Filter = "PNG Files (*.png)|*.png|All Files (*.*)|*.*";
+               if (dlg.ShowDialog(this) != DialogResult.OK)
+                  return;
+               fileName = dlg.FileName;
+            }
+            var bmp = (Bitmap) picEncodedBarCode.Image;
+            bmp.Save(fileName, ImageFormat.Png);
          }
       }
    }
