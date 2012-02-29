@@ -124,8 +124,25 @@ namespace ZXing.Common.Test
 
             var image = new Bitmap(Image.FromFile(testImage));
 
+            String expectedText;
             String expectedTextFile = Path.Combine(Path.GetDirectoryName(absPath), Path.GetFileNameWithoutExtension(absPath) + ".txt");
-            String expectedText = File.ReadAllText(expectedTextFile, System.Text.Encoding.UTF7);
+            if (File.Exists(expectedTextFile))
+            {
+               expectedText = File.ReadAllText(expectedTextFile, System.Text.Encoding.UTF8);
+            }
+            else
+            {
+               String expectedBinFile = Path.Combine(Path.GetDirectoryName(absPath), Path.GetFileNameWithoutExtension(absPath) + ".bin");
+               if (File.Exists(expectedBinFile))
+               {
+                  // it is only a dirty workaround for some special cases
+                  expectedText = File.ReadAllText(expectedTextFile, System.Text.Encoding.UTF7);
+               }
+               else
+               {
+                  throw new InvalidOperationException("Missing expected result file: " + expectedTextFile);
+               }
+            }
 
             String expectedMetadataFile = Path.Combine(Path.GetDirectoryName(absPath), Path.GetFileNameWithoutExtension(absPath) + ".metadata.txt");
             var expectedMetadata = new Dictionary<string, string>();
