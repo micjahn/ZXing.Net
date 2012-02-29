@@ -53,6 +53,12 @@ namespace ZXing.OneD
             throw new ArgumentException(
                 "Requested contents should be less than 80 digits long, but got " + length);
          }
+         for (var i = 0; i < length; i++)
+         {
+            if (!Char.IsDigit(contents[i]))
+               throw new ArgumentException("Requested contents should only contain digits, but got '" + contents[i] + "'");
+         }
+
          sbyte[] result = new sbyte[9 + 9 * length];
          int[] start = { 1, 1, 1, 1 };
          int pos = appendPattern(result, 0, start, 1);

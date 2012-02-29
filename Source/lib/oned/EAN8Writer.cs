@@ -56,6 +56,11 @@ namespace ZXing.OneD
             throw new ArgumentException(
                 "Requested contents should be 8 digits long, but got " + contents.Length);
          }
+         foreach (var ch in contents)
+         {
+            if (!Char.IsDigit(ch))
+               throw new ArgumentException("Requested contents should only contain digits, but got '" + ch + "'");
+         }
 
          sbyte[] result = new sbyte[CODE_WIDTH];
          int pos = 0;

@@ -48,6 +48,12 @@ namespace ZXing.OneD
             throw new ArgumentException(
                 "Requested contents should be less than 80 digits long, but got " + length);
          }
+         for (int i = 0; i < length; i++)
+         {
+            int indexInString = Code39Reader.ALPHABET_STRING.IndexOf(contents[i]);
+            if (indexInString < 0)
+               throw new ArgumentException("Requested contents contains a not encodable character: '" + contents[i] + "'");
+         }
 
          int[] widths = new int[9];
          int codeWidth = 24 + 1 + length;

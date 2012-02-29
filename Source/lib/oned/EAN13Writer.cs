@@ -54,6 +54,11 @@ namespace ZXing.OneD
             throw new ArgumentException(
                 "Requested contents should be 13 digits long, but got " + contents.Length);
          }
+         foreach (var ch in contents)
+         {
+            if (!Char.IsDigit(ch))
+               throw new ArgumentException("Requested contents should only contain digits, but got '" + ch + "'");
+         }
 
          int firstDigit = Int32.Parse(contents.Substring(0, 1));
          int parities = EAN13Reader.FIRST_DIGIT_ENCODINGS[firstDigit];
