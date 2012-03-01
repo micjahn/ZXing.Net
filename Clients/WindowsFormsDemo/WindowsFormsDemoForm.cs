@@ -14,13 +14,23 @@ namespace WindowsFormsDemo
    {
       private WebCam wCam;
       private Timer webCamTimer;
-      private readonly IDictionary<DecodeHintType, Object> tryHarderHints;
-            
+      private readonly IBarcodeReader barcodeReader;
+      private IList<ResultPoint> resultPoints;
+
       public WindowsFormsDemoForm()
       {
          InitializeComponent();
-         tryHarderHints = new Dictionary<DecodeHintType, Object>();
-         tryHarderHints[DecodeHintType.TRY_HARDER] = true;
+         barcodeReader = new BarcodeReader
+         {
+            ResultPointCallback = (point) =>
+                                     {
+                                        if (point == null)
+                                           resultPoints.Clear();
+                                        else
+                                           resultPoints.Add(point);
+                                     }
+         };
+         resultPoints = new List<ResultPoint>();
       }
 
       protected override void OnLoad(EventArgs e)
@@ -60,13 +70,14 @@ namespace WindowsFormsDemo
 
          var timerStart = DateTime.Now.Ticks;
          var image = (Bitmap)Bitmap.FromFile(fileName);
-         var imageSource = new RGBLuminanceSource(image, image.Width, image.Height);
-         var binarizer = new HybridBinarizer(imageSource);
-         var binaryBitmap = new BinaryBitmap(binarizer);
-         var reader = new MultiFormatReader();
-         var result = reader.decode(binaryBitmap);
+         barcodeReader.TryHarder = false;
+         resultPoints.Clear();
+         var result = barcodeReader.Decode(image);
          if (result == null)
-            result = reader.decode(binaryBitmap, tryHarderHints);
+         {
+            barcodeReader.TryHarder = true;
+            result = barcodeReader.Decode(image);
+         }
          var timerStop = DateTime.Now.Ticks;
          if (result == null)
          {
@@ -78,6 +89,26 @@ namespace WindowsFormsDemo
             txtContent.Text = result.Text;
          }
          labDuration.Text = new TimeSpan(timerStop - timerStart).Milliseconds.ToString("0 ms");
+
+         if (result != null && resultPoints.Count > 0)
+         {
+            var rect = new Rectangle((int)resultPoints[0].X, (int)resultPoints[0].Y, 1, 1);
+            foreach (var point in resultPoints)
+            {
+               if (point.X < rect.Left)
+                  rect = new Rectangle((int)point.X, rect.Y, rect.Width + rect.X - (int)point.X, rect.Height);
+               if (point.X > rect.Right)
+                  rect = new Rectangle(rect.X, rect.Y, rect.Width + (int)point.X - rect.X, rect.Height);
+               if (point.Y < rect.Top)
+                  rect = new Rectangle(rect.X, (int)point.Y, rect.Width, rect.Height + rect.Y - (int)point.Y);
+               if (point.Y > rect.Bottom)
+                  rect = new Rectangle(rect.X, rect.Y, rect.Width, rect.Height + (int)point.Y - rect.Y);
+            }
+            using (var g = picBarcode.CreateGraphics())
+            {
+               g.DrawRectangle(Pens.Green, rect);
+            }
+         }
       }
 
       private void txtBarcodeImageFile_TextChanged(object sender, EventArgs e)

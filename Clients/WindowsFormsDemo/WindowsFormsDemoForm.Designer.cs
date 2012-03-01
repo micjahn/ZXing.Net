@@ -42,6 +42,7 @@
          this.picBarcode = new System.Windows.Forms.PictureBox();
          this.btnSelectBarcodeImageFileForDecoding = new System.Windows.Forms.Button();
          this.tabPageEncoder = new System.Windows.Forms.TabPage();
+         this.btnEncoderSave = new System.Windows.Forms.Button();
          this.btnEncode = new System.Windows.Forms.Button();
          this.txtEncoderContent = new System.Windows.Forms.TextBox();
          this.labEncoderContent = new System.Windows.Forms.Label();
@@ -55,7 +56,6 @@
          this.txtContentWebCam = new System.Windows.Forms.TextBox();
          this.txtTypeWebCam = new System.Windows.Forms.TextBox();
          this.picWebCam = new System.Windows.Forms.PictureBox();
-         this.btnEncoderSave = new System.Windows.Forms.Button();
          this.tabCtrlMain.SuspendLayout();
          this.tabPageDecoder.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.picBarcode)).BeginInit();
@@ -196,7 +196,6 @@
          this.picBarcode.Location = new System.Drawing.Point(9, 54);
          this.picBarcode.Name = "picBarcode";
          this.picBarcode.Size = new System.Drawing.Size(214, 197);
-         this.picBarcode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
          this.picBarcode.TabIndex = 4;
          this.picBarcode.TabStop = false;
          // 
@@ -227,6 +226,17 @@
          this.tabPageEncoder.TabIndex = 1;
          this.tabPageEncoder.Text = "Encoder";
          this.tabPageEncoder.UseVisualStyleBackColor = true;
+         // 
+         // btnEncoderSave
+         // 
+         this.btnEncoderSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+         this.btnEncoderSave.Location = new System.Drawing.Point(240, 224);
+         this.btnEncoderSave.Name = "btnEncoderSave";
+         this.btnEncoderSave.Size = new System.Drawing.Size(107, 23);
+         this.btnEncoderSave.TabIndex = 15;
+         this.btnEncoderSave.Text = "Save";
+         this.btnEncoderSave.UseVisualStyleBackColor = true;
+         this.btnEncoderSave.Click += new System.EventHandler(this.btnEncoderSave_Click);
          // 
          // btnEncode
          // 
@@ -368,17 +378,6 @@
          this.picWebCam.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
          this.picWebCam.TabIndex = 8;
          this.picWebCam.TabStop = false;
-         // 
-         // btnEncoderSave
-         // 
-         this.btnEncoderSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-         this.btnEncoderSave.Location = new System.Drawing.Point(240, 224);
-         this.btnEncoderSave.Name = "btnEncoderSave";
-         this.btnEncoderSave.Size = new System.Drawing.Size(107, 23);
-         this.btnEncoderSave.TabIndex = 15;
-         this.btnEncoderSave.Text = "Save";
-         this.btnEncoderSave.UseVisualStyleBackColor = true;
-         this.btnEncoderSave.Click += new System.EventHandler(this.btnEncoderSave_Click);
          // 
          // WindowsFormsDemoForm
          // 
