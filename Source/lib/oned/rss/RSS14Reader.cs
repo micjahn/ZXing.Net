@@ -191,7 +191,7 @@ namespace ZXing.OneD.RSS
                // row is actually reversed
                center = row.Size - 1 - center;
             }
-            resultPointCallback.foundPossibleResultPoint(new ResultPoint(center, rowNumber));
+            resultPointCallback(new ResultPoint(center, rowNumber));
          }
 
          DataCharacter outside = decodeDataCharacter(row, pattern, true);

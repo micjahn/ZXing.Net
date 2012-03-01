@@ -145,7 +145,7 @@ namespace ZXing.OneD
 
          if (resultPointCallback != null)
          {
-            resultPointCallback.foundPossibleResultPoint(new ResultPoint(
+            resultPointCallback(new ResultPoint(
                 (startGuardRange[0] + startGuardRange[1]) / 2.0f, rowNumber
             ));
          }
@@ -158,7 +158,7 @@ namespace ZXing.OneD
 
          if (resultPointCallback != null)
          {
-            resultPointCallback.foundPossibleResultPoint(new ResultPoint(
+            resultPointCallback(new ResultPoint(
                 endStart, rowNumber
             ));
          }
@@ -169,7 +169,7 @@ namespace ZXing.OneD
 
          if (resultPointCallback != null)
          {
-            resultPointCallback.foundPossibleResultPoint(new ResultPoint(
+            resultPointCallback(new ResultPoint(
                 (endRange[0] + endRange[1]) / 2.0f, rowNumber
             ));
          }

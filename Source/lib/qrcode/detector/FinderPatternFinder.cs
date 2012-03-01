@@ -503,7 +503,7 @@ namespace ZXing.QrCode.Internal
                   if (resultPointCallback != null)
                   {
 
-                     resultPointCallback.foundPossibleResultPoint(point);
+                     resultPointCallback(point);
                   }
                }
                return true;

@@ -22,8 +22,5 @@ namespace ZXing
    /// </summary>
    /// <seealso cref="DecodeHintType.NEED_RESULT_POINT_CALLBACK">
    /// </seealso>
-   public interface ResultPointCallback
-   {
-      void foundPossibleResultPoint(ResultPoint point);
-   }
+   public delegate void ResultPointCallback(ResultPoint point);
 }

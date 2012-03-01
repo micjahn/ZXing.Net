@@ -69,7 +69,7 @@ namespace ZXing.Aztec
             {
                foreach (var point in points)
                {
-                  rpcb.foundPossibleResultPoint(point);
+                  rpcb(point);
                }
             }
          }

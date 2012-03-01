@@ -317,7 +317,7 @@ namespace ZXing.QrCode.Internal
             possibleCenters.Add(point);
             if (resultPointCallback != null)
             {
-               resultPointCallback.foundPossibleResultPoint(point);
+               resultPointCallback(point);
             }
          }
          return null;
