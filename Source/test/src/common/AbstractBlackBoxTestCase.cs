@@ -136,7 +136,7 @@ namespace ZXing.Common.Test
                if (File.Exists(expectedBinFile))
                {
                   // it is only a dirty workaround for some special cases
-                  expectedText = File.ReadAllText(expectedTextFile, System.Text.Encoding.UTF7);
+                  expectedText = File.ReadAllText(expectedBinFile, System.Text.Encoding.UTF7);
                }
                else
                {
