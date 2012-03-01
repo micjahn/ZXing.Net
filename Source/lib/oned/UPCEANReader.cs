@@ -269,7 +269,7 @@ namespace ZXing.OneD
          return sum % 10 == 0;
       }
 
-      int[] decodeEnd(BitArray row, int endStart)
+      virtual protected int[] decodeEnd(BitArray row, int endStart)
       {
          return findGuardPattern(row, endStart, false, START_END_PATTERN);
       }

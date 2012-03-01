@@ -87,7 +87,7 @@ namespace ZXing.OneD
          return rowOffset;
       }
 
-      internal int[] decodeEnd(BitArray row, int endStart)
+      override protected int[] decodeEnd(BitArray row, int endStart)
       {
          return findGuardPattern(row, endStart, true, MIDDLE_END_PATTERN);
       }
