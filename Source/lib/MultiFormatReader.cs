@@ -15,6 +15,7 @@
 */
 
 using System.Collections.Generic;
+
 using ZXing.Aztec;
 using ZXing.Datamatrix;
 using ZXing.Maxicode;
@@ -103,7 +104,6 @@ namespace ZXing
 
             var tryHarder = value != null && value.ContainsKey(DecodeHintType.TRY_HARDER);
             var formats = value == null || !value.ContainsKey(DecodeHintType.POSSIBLE_FORMATS) ? null : (IList<BarcodeFormat>)value[DecodeHintType.POSSIBLE_FORMATS];
-            readers = new List<Reader>();
 
             if (formats != null)
             {
@@ -120,6 +120,8 @@ namespace ZXing
                   formats.Contains(BarcodeFormat.RSS_14) ||
                   formats.Contains(BarcodeFormat.RSS_EXPANDED);
 
+               readers = new List<Reader>();
+               
                // Put 1D readers upfront in "normal" mode
                if (addOneDReader && !tryHarder)
                {
@@ -152,8 +154,11 @@ namespace ZXing
                }
             }
 
-            if (readers.Count == 0)
+            if (readers == null ||
+                readers.Count == 0)
             {
+               readers = readers ?? new List<Reader>();
+
                if (!tryHarder)
                {
                   readers.Add(new MultiFormatOneDReader(value));
@@ -170,7 +175,6 @@ namespace ZXing
                }
             }
          }
-
       }
 
       public void reset()
@@ -188,11 +192,26 @@ namespace ZXing
       {
          if (readers != null)
          {
-            foreach (var reader in readers)
+            var rpCallback = hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)
+                                ? (ResultPointCallback) hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
+                                : null;
+
+            for (var index = 0; index < readers.Count; index++)
             {
+               var reader = readers[index];
                var result = reader.decode(image, hints);
                if (result != null)
+               {
+                  // found a barcode, pushing the successful reader up front
+                  // I assume that the same type of barcode is read multiple times
+                  // so the reordering of the readers list should speed up the next reading
+                  // a little bit
+                  readers.RemoveAt(index);
+                  readers.Insert(0, reader);
                   return result;
+               }
+               if (rpCallback != null)
+                  rpCallback(null);
             }
          }
 
