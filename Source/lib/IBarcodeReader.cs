@@ -1,5 +1,9 @@
 ﻿using System;
+#if !SILVERLIGHT
 using System.Drawing;
+#else
+using System.Windows.Media.Imaging;
+#endif
 
 namespace ZXing
 {
@@ -33,6 +37,7 @@ namespace ZXing
       /// </value>
       ResultPointCallback ResultPointCallback { get; set; }
 
+#if !SILVERLIGHT
       /// <summary>
       /// Optional: Gets or sets the function to create a luminance source object for a bitmap.
       /// If null then RGBLuminanceSource is used
@@ -41,6 +46,16 @@ namespace ZXing
       /// The function to create a luminance source object.
       /// </value>
       Func<Bitmap, LuminanceSource> CreateLuminanceSource { get; set; }
+#else
+      /// <summary>
+      /// Optional: Gets or sets the function to create a luminance source object for a bitmap.
+      /// If null then RGBLuminanceSource is used
+      /// </summary>
+      /// <value>
+      /// The function to create a luminance source object.
+      /// </value>
+      Func<WriteableBitmap, LuminanceSource> CreateLuminanceSource { get; set; }
+#endif
 
       /// <summary>
       /// Optional: Gets or sets the function to create a binarizer object for a luminance source.
@@ -51,11 +66,20 @@ namespace ZXing
       /// </value>
       Func<LuminanceSource, Binarizer> CreateBinarizer { get; set; }
 
+#if !SILVERLIGHT
       /// <summary>
       /// Decodes the specified barcode bitmap.
       /// </summary>
       /// <param name="barcodeBitmap">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
       Result Decode(Bitmap barcodeBitmap);
+#else
+      /// <summary>
+      /// Decodes the specified barcode bitmap.
+      /// </summary>
+      /// <param name="barcodeBitmap">The barcode bitmap.</param>
+      /// <returns>the result data or null</returns>
+      Result Decode(WriteableBitmap barcodeBitmap);
+#endif
    }
 }

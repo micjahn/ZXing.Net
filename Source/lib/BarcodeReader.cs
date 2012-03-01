@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+#if !SILVERLIGHT
 using System.Drawing;
+#else
+using System.Windows.Media.Imaging;
+#endif
 
 using ZXing.Common;
 
@@ -11,15 +15,24 @@ namespace ZXing
    /// </summary>
    public class BarcodeReader : IBarcodeReader
    {
+#if !SILVERLIGHT
       private static readonly Func<Bitmap, LuminanceSource> defaultCreateLuminanceSource =
          (bitmap) => new RGBLuminanceSource(bitmap, bitmap.Width, bitmap.Height);
+#else
+      private static readonly Func<WriteableBitmap, LuminanceSource> defaultCreateLuminanceSource =
+         (bitmap) => new RGBLuminanceSource(bitmap, bitmap.PixelWidth, bitmap.PixelHeight);
+#endif
       private static readonly Func<LuminanceSource, Binarizer> defaultCreateBinarizer =
          (luminanceSource) => new HybridBinarizer(luminanceSource);
 
       private Reader reader;
       private MultiFormatReader defaultReader;
       private readonly IDictionary<DecodeHintType, object> hints;
+#if !SILVERLIGHT
       private Func<Bitmap, LuminanceSource> createLuminanceSource;
+#else
+      private Func<WriteableBitmap, LuminanceSource> createLuminanceSource;
+#endif
       private Func<LuminanceSource, Binarizer> createBinarizer;
       private bool usePreviousState;
 
@@ -106,6 +119,7 @@ namespace ZXing
          }
       }
 
+#if !SILVERLIGHT
       /// <summary>
       /// Optional: Gets or sets the function to create a luminance source object for a bitmap.
       /// If null then RGBLuminanceSource is used
@@ -114,6 +128,16 @@ namespace ZXing
       /// The function to create a luminance source object.
       /// </value>
       public Func<Bitmap, LuminanceSource> CreateLuminanceSource
+#else
+      /// <summary>
+      /// Optional: Gets or sets the function to create a luminance source object for a bitmap.
+      /// If null then RGBLuminanceSource is used
+      /// </summary>
+      /// <value>
+      /// The function to create a luminance source object.
+      /// </value>
+      public Func<WriteableBitmap, LuminanceSource> CreateLuminanceSource
+#endif
       {
          get
          {
@@ -153,12 +177,21 @@ namespace ZXing
          usePreviousState = false;
       }
 
+#if !SILVERLIGHT
       /// <summary>
       /// Decodes the specified barcode bitmap.
       /// </summary>
       /// <param name="barcodeBitmap">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
       public Result Decode(Bitmap barcodeBitmap)
+#else
+      /// <summary>
+      /// Decodes the specified barcode bitmap.
+      /// </summary>
+      /// <param name="barcodeBitmap">The barcode bitmap.</param>
+      /// <returns>the result data or null</returns>
+      public Result Decode(WriteableBitmap barcodeBitmap)
+#endif
       {
          if (barcodeBitmap == null)
             throw new ArgumentNullException("barcodeBitmap");

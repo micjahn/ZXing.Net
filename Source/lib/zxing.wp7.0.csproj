@@ -54,6 +54,7 @@
     <Compile Include="aztec\decoder\Decoder.cs" />
     <Compile Include="aztec\detector\Detector.cs" />
     <Compile Include="BarcodeFormat.cs" />
+    <Compile Include="BarcodeReader.cs" />
     <Compile Include="Binarizer.cs" />
     <Compile Include="BinaryBitmap.cs" />
     <Compile Include="client\result\AbstractDoCoMoResultParser.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="DecodeHintType.cs" />
     <Compile Include="EncodeHintType.cs" />
     <Compile Include="FormatException.cs" />
+    <Compile Include="IBarcodeReader.cs" />
     <Compile Include="LuminanceSource.cs" />
     <Compile Include="maxicode\decoder\BitMatrixParser.cs" />
     <Compile Include="maxicode\decoder\DecodedBitStreamParser.cs" />
