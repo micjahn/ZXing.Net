@@ -84,9 +84,9 @@ namespace ZXing.Common
          int isoHighOther = 0;
 
          bool utf8bom = bytes.Length > 3 &&
-             bytes[0] == (byte)0xEF &&
-             bytes[1] == (byte)0xBB &&
-             bytes[2] == (byte)0xBF;
+             bytes[0] == (sbyte)-17 /* 0xEF */ &&
+             bytes[1] == (sbyte)-69 /* 0xBB */ &&
+             bytes[2] == (sbyte)-65 /* 0xBF */;
 
          for (int i = 0;
               i < length && (canBeISO88591 || canBeShiftJIS || canBeUTF8);
