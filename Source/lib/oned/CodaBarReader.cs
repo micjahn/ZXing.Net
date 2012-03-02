@@ -284,7 +284,7 @@ namespace ZXing.OneD
       {
          counters[counterLength] = e;
          counterLength++;
-         if (counterLength >= counterLength)
+         if (counterLength >= counters.Length)
          {
             int[] temp = new int[counterLength * 2];
             Array.Copy(counters, 0, temp, 0, counterLength);
