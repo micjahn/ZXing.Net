@@ -269,7 +269,7 @@ namespace ZXing.Common
                   if (x32 * 32 + 31 > right)
                   {
                      int bit = 31;
-                     while ((theBits = (int)((uint)theBits >> bit)) == 0) // (theBits >>> bit)
+                     while (((int)((uint)theBits >> bit)) == 0) // (theBits >>> bit)
                      {
                         bit--;
                      }
@@ -339,7 +339,7 @@ namespace ZXing.Common
          int theBits = bits[bitsOffset];
          int bit = 31;
 
-         while ((theBits = (int)((uint)theBits >> bit)) == 0) // (theBits >>> bit)
+         while (((int)((uint)theBits >> bit)) == 0) // (theBits >>> bit)
          {
             bit--;
          }
