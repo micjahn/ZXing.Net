@@ -32,13 +32,19 @@ namespace ZXing.QrCode.Internal
       /// <param name="bitMatrix">{@link BitMatrix} to parse
       /// </param>
       /// <throws>  ReaderException if dimension is not >= 21 and 1 mod 4 </throws>
-      internal BitMatrixParser(BitMatrix bitMatrix)
+      internal static BitMatrixParser createBitMatrixParser(BitMatrix bitMatrix)
       {
          int dimension = bitMatrix.Height;
          if (dimension < 21 || (dimension & 0x03) != 1)
          {
-            throw ReaderException.Instance;
+            return null;
          }
+         return new BitMatrixParser(bitMatrix);
+      }
+
+      private BitMatrixParser(BitMatrix bitMatrix)
+      {
+         // Should only be called from createBitMatrixParser with the important checks before
          this.bitMatrix = bitMatrix;
       }
 

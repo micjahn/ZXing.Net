@@ -70,7 +70,9 @@ namespace ZXing.QrCode.Internal
       public DecoderResult decode(BitMatrix bits, IDictionary<DecodeHintType, object> hints)
       {
          // Construct a parser and read version, error-correction level
-         BitMatrixParser parser = new BitMatrixParser(bits);
+         BitMatrixParser parser = BitMatrixParser.createBitMatrixParser(bits);
+         if (parser == null)
+            return null;
          Version version = parser.readVersion();
          if (version == null)
             return null;
