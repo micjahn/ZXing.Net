@@ -139,7 +139,7 @@ namespace ZXing.QrCode
          // Push in the "border" by half the module width so that we start
          // sampling in the middle of the module. Just in case the image is a
          // little off, this will help recover.
-         int nudge = (int)Math.Round(moduleSize / 2.0f);
+         int nudge = (int)(moduleSize / 2.0f);
          top += nudge;
          left += nudge;
 
