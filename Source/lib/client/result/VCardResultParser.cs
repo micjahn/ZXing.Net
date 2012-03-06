@@ -33,21 +33,23 @@ namespace ZXing.Client.Result
    sealed class VCardResultParser : ResultParser
    {
 #if SILVERLIGHT4
-      private static Regex BEGIN_VCARD = new Regex("BEGIN:VCARD", RegexOptions.IgnoreCase);
-      private static Regex VCARD_LIKE_DATE = new Regex("\\d{4}-?\\d{2}-?\\d{2}");
-      private static Regex CR_LF_SPACE_TAB = new Regex("\r\n[ \t]");
-      private static Regex NEWLINE_ESCAPE = new Regex("\\\\[nN]");
-      private static Regex VCARD_ESCAPES = new Regex("\\\\([,;\\\\])");
-      private static Regex EQUALS = new Regex("=");
-      private static Regex SEMICOLON = new Regex(";");
+      private static readonly Regex BEGIN_VCARD = new Regex("BEGIN:VCARD", RegexOptions.IgnoreCase);
+      private static readonly Regex VCARD_LIKE_DATE = new Regex("\\d{4}-?\\d{2}-?\\d{2}");
+      private static readonly Regex CR_LF_SPACE_TAB = new Regex("\r\n[ \t]");
+      private static readonly Regex NEWLINE_ESCAPE = new Regex("\\\\[nN]");
+      private static readonly Regex VCARD_ESCAPES = new Regex("\\\\([,;\\\\])");
+      private static readonly Regex EQUALS = new Regex("=");
+      private static readonly Regex SEMICOLON = new Regex(";");
+      private static readonly Regex SEMICOLONS = new Regex(";+");
 #else
-      private static Regex BEGIN_VCARD = new Regex("BEGIN:VCARD", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-      private static Regex VCARD_LIKE_DATE = new Regex("\\d{4}-?\\d{2}-?\\d{2}", RegexOptions.Compiled);
-      private static Regex CR_LF_SPACE_TAB = new Regex("\r\n[ \t]", RegexOptions.Compiled);
-      private static Regex NEWLINE_ESCAPE = new Regex("\\\\[nN]", RegexOptions.Compiled);
-      private static Regex VCARD_ESCAPES = new Regex("\\\\([,;\\\\])", RegexOptions.Compiled);
-      private static Regex EQUALS = new Regex("=", RegexOptions.Compiled);
-      private static Regex SEMICOLON = new Regex(";", RegexOptions.Compiled);
+      private static readonly Regex BEGIN_VCARD = new Regex("BEGIN:VCARD", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+      private static readonly Regex VCARD_LIKE_DATE = new Regex("\\d{4}-?\\d{2}-?\\d{2}", RegexOptions.Compiled);
+      private static readonly Regex CR_LF_SPACE_TAB = new Regex("\r\n[ \t]", RegexOptions.Compiled);
+      private static readonly Regex NEWLINE_ESCAPE = new Regex("\\\\[nN]", RegexOptions.Compiled);
+      private static readonly Regex VCARD_ESCAPES = new Regex("\\\\([,;\\\\])", RegexOptions.Compiled);
+      private static readonly Regex EQUALS = new Regex("=", RegexOptions.Compiled);
+      private static readonly Regex SEMICOLON = new Regex(";", RegexOptions.Compiled);
+      private static readonly Regex SEMICOLONS = new Regex(";+", RegexOptions.Compiled);
 #endif
 
 
@@ -78,16 +80,16 @@ namespace ZXing.Client.Result
          {
             foreach (var list in addresses)
             {
-               list.Insert(0, list[0]);
+               var adr = list[0];
+               // Semicolon separators -- just make them a newline
+               adr = SEMICOLONS.Replace(adr, Environment.NewLine).Trim();
+               list[0] = adr;
             }
          }
          List<String> org = matchSingleVCardPrefixedField("ORG", rawText, true);
          List<String> birthday = matchSingleVCardPrefixedField("BDAY", rawText, true);
          if (birthday != null && !isLikeVCardDate(birthday[0]))
          {
-
-
-
             birthday = null;
          }
          List<String> title = matchSingleVCardPrefixedField("TITLE", rawText, true);
