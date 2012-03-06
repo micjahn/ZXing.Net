@@ -155,6 +155,11 @@ namespace ZXing.PDF417.Internal
             }
          }
 
+         if (result.Length == 0)
+         {
+            return null;
+         }
+
          return new DecoderResult(null, result.ToString(), null, null);
       }
 
