@@ -84,7 +84,7 @@ namespace ZXing.Client.Result
                                                           String rawText,
                                                           bool trim)
       {
-         var values = VCardResultParser.matchSingleVCardPrefixedField(prefix, rawText, trim);
+         var values = VCardResultParser.matchSingleVCardPrefixedField(prefix, rawText, trim, false);
          return values == null || values.Count == 0 ? null : values[0];
       }
    }

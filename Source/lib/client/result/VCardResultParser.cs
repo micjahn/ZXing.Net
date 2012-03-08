@@ -40,7 +40,7 @@ namespace ZXing.Client.Result
       private static readonly Regex VCARD_ESCAPES = new Regex("\\\\([,;\\\\])");
       private static readonly Regex EQUALS = new Regex("=");
       private static readonly Regex SEMICOLON = new Regex(";");
-      private static readonly Regex SEMICOLONS = new Regex(";+");
+      private static readonly Regex UNESCAPED_SEMICOLONS = new Regex("(?<!\\\\);+");
 #else
       private static readonly Regex BEGIN_VCARD = new Regex("BEGIN:VCARD", RegexOptions.Compiled | RegexOptions.IgnoreCase);
       private static readonly Regex VCARD_LIKE_DATE = new Regex("\\d{4}-?\\d{2}-?\\d{2}", RegexOptions.Compiled);
@@ -49,9 +49,8 @@ namespace ZXing.Client.Result
       private static readonly Regex VCARD_ESCAPES = new Regex("\\\\([,;\\\\])", RegexOptions.Compiled);
       private static readonly Regex EQUALS = new Regex("=", RegexOptions.Compiled);
       private static readonly Regex SEMICOLON = new Regex(";", RegexOptions.Compiled);
-      private static readonly Regex SEMICOLONS = new Regex(";+", RegexOptions.Compiled);
+      private static readonly Regex UNESCAPED_SEMICOLONS = new Regex("(?<!\\\\);+", RegexOptions.Compiled);
 #endif
-
 
       override public ParsedResult parse(ZXing.Result result)
       {
@@ -64,37 +63,26 @@ namespace ZXing.Client.Result
          {
             return null;
          }
-         List<List<String>> names = matchVCardPrefixedField("FN", rawText, true);
+         List<List<String>> names = matchVCardPrefixedField("FN", rawText, true, false);
          if (names == null)
          {
-
             // If no display names found, look for regular name fields and format them
-            names = matchVCardPrefixedField("N", rawText, true);
+            names = matchVCardPrefixedField("N", rawText, true, false);
             formatNames(names);
          }
-         List<List<String>> phoneNumbers = matchVCardPrefixedField("TEL", rawText, true);
-         List<List<String>> emails = matchVCardPrefixedField("EMAIL", rawText, true);
-         List<String> note = matchSingleVCardPrefixedField("NOTE", rawText, false);
-         List<List<String>> addresses = matchVCardPrefixedField("ADR", rawText, true);
-         if (addresses != null)
-         {
-            foreach (var list in addresses)
-            {
-               var adr = list[0];
-               // Semicolon separators -- just make them a newline
-               adr = SEMICOLONS.Replace(adr, Environment.NewLine).Trim();
-               list[0] = adr;
-            }
-         }
-         List<String> org = matchSingleVCardPrefixedField("ORG", rawText, true);
-         List<String> birthday = matchSingleVCardPrefixedField("BDAY", rawText, true);
+         List<List<String>> phoneNumbers = matchVCardPrefixedField("TEL", rawText, true, false);
+         List<List<String>> emails = matchVCardPrefixedField("EMAIL", rawText, true, false);
+         List<String> note = matchSingleVCardPrefixedField("NOTE", rawText, false, false);
+         List<List<String>> addresses = matchVCardPrefixedField("ADR", rawText, true, true);
+         List<String> org = matchSingleVCardPrefixedField("ORG", rawText, true, false);
+         List<String> birthday = matchSingleVCardPrefixedField("BDAY", rawText, true, false);
          if (birthday != null && !isLikeVCardDate(birthday[0]))
          {
             birthday = null;
          }
-         List<String> title = matchSingleVCardPrefixedField("TITLE", rawText, true);
-         List<String> url = matchSingleVCardPrefixedField("URL", rawText, true);
-         List<String> instantMessenger = matchSingleVCardPrefixedField("IMPP", rawText, true);
+         List<String> title = matchSingleVCardPrefixedField("TITLE", rawText, true, false);
+         List<String> url = matchSingleVCardPrefixedField("URL", rawText, true, false);
+         List<String> instantMessenger = matchSingleVCardPrefixedField("IMPP", rawText, true, false);
          return new AddressBookParsedResult(toPrimaryValues(names),
                                             null,
                                             toPrimaryValues(phoneNumbers),
@@ -113,7 +101,8 @@ namespace ZXing.Client.Result
 
       private static List<List<String>> matchVCardPrefixedField(String prefix,
                                                                 String rawText,
-                                                                bool trim)
+                                                                bool trim,
+                                                                bool parseFieldDivider)
       {
          List<List<String>> matches = null;
          int i = 0;
@@ -213,9 +202,17 @@ namespace ZXing.Client.Result
                if (quotedPrintable)
                {
                   element = decodeQuotedPrintable(element, quotedPrintableCharset);
+                  if (parseFieldDivider)
+                  {
+                     element = UNESCAPED_SEMICOLONS.Replace(element, "\n").Trim();
+                  }
                }
                else
                {
+                  if (parseFieldDivider)
+                  {
+                     element = UNESCAPED_SEMICOLONS.Replace(element, "\n").Trim();
+                  }
                   element = CR_LF_SPACE_TAB.Replace(element, "");
                   element = NEWLINE_ESCAPE.Replace(element, "\n");
                   element = VCARD_ESCAPES.Replace(element, "$1");
@@ -327,9 +324,10 @@ namespace ZXing.Client.Result
 
       internal static List<String> matchSingleVCardPrefixedField(String prefix,
                                                     String rawText,
-                                                    bool trim)
+                                                    bool trim,
+                                                    bool parseFieldDivider)
       {
-         List<List<String>> values = matchVCardPrefixedField(prefix, rawText, trim);
+         List<List<String>> values = matchVCardPrefixedField(prefix, rawText, trim, parseFieldDivider);
          return values == null || values.Count == 0 ? null : values[0];
       }
 
