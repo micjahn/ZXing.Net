@@ -192,7 +192,7 @@ namespace ZXing
       {
          if (readers != null)
          {
-            var rpCallback = hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)
+            var rpCallback = hints != null && hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)
                                 ? (ResultPointCallback) hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK]
                                 : null;
 
