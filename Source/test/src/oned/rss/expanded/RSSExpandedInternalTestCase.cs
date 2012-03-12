@@ -26,7 +26,11 @@
 
 using System;
 using System.Collections.Generic;
+#if !SILVERLIGHT
 using System.Drawing;
+#else
+using System.Windows.Media.Imaging;
+#endif
 using System.IO;
 
 using NUnit.Framework;
@@ -56,7 +60,12 @@ namespace ZXing.OneD.RSS.Expanded.Test
             path = Path.Combine("..\\..\\..\\Source", path);
          }
 
-         var image = (Bitmap)Bitmap.FromFile(path);
+#if !SILVERLIGHT
+         var image = new Bitmap(Image.FromFile(path));
+#else
+         var image = new WriteableBitmap(0, 0);
+         image.SetSource(File.OpenRead(path));
+#endif
          BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
          int rowNumber = binaryMap.Height / 2;
          BitArray row = binaryMap.getBlackRow(rowNumber, null);
@@ -99,7 +108,12 @@ namespace ZXing.OneD.RSS.Expanded.Test
             path = Path.Combine("..\\..\\..\\Source", path);
          }
 
-         var image = (Bitmap)Bitmap.FromFile(path);
+#if !SILVERLIGHT
+         var image = new Bitmap(Image.FromFile(path));
+#else
+         var image = new WriteableBitmap(0, 0);
+         image.SetSource(File.OpenRead(path));
+#endif
          BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
          int rowNumber = binaryMap.Height / 2;
          BitArray row = binaryMap.getBlackRow(rowNumber, null);
@@ -132,13 +146,22 @@ namespace ZXing.OneD.RSS.Expanded.Test
             path = Path.Combine("..\\..\\..\\Source", path);
          }
 
-         var image = (Bitmap)Bitmap.FromFile(path);
+#if !SILVERLIGHT
+         var image = new Bitmap(Image.FromFile(path));
+#else
+         var image = new WriteableBitmap(0, 0);
+         image.SetSource(File.OpenRead(path));
+#endif
          BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
          BitArray row = binaryMap.getBlackRow(binaryMap.Height / 2, null);
 
          int[] startEnd = { 145, 243 };//image pixels where the A1 pattern starts (at 124) and ends (at 214)
          int value = 0;// A
+#if !SILVERLIGHT
          FinderPattern finderPatternA1 = new FinderPattern(value, startEnd, startEnd[0], startEnd[1], image.Height / 2);
+#else
+         FinderPattern finderPatternA1 = new FinderPattern(value, startEnd, startEnd[0], startEnd[1], image.PixelHeight / 2);
+#endif
          //{1, 8, 4, 1, 1};
          DataCharacter dataCharacter = rssExpandedReader.decodeDataCharacter(row, finderPatternA1, true, true);
 
@@ -157,13 +180,22 @@ namespace ZXing.OneD.RSS.Expanded.Test
             path = Path.Combine("..\\..\\..\\Source", path);
          }
 
-         var image = (Bitmap)Bitmap.FromFile(path);
+#if !SILVERLIGHT
+         var image = new Bitmap(Image.FromFile(path));
+#else
+         var image = new WriteableBitmap(0, 0);
+         image.SetSource(File.OpenRead(path));
+#endif
          BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
          BitArray row = binaryMap.getBlackRow(binaryMap.Height / 2, null);
 
          int[] startEnd = { 145, 243 };//image pixels where the A1 pattern starts (at 124) and ends (at 214)
          int value = 0; // A
+#if !SILVERLIGHT
          FinderPattern finderPatternA1 = new FinderPattern(value, startEnd, startEnd[0], startEnd[1], image.Height / 2);
+#else
+         FinderPattern finderPatternA1 = new FinderPattern(value, startEnd, startEnd[0], startEnd[1], image.PixelHeight / 2);
+#endif
          //{1, 8, 4, 1, 1};
          DataCharacter dataCharacter = rssExpandedReader.decodeDataCharacter(row, finderPatternA1, true, false);
 

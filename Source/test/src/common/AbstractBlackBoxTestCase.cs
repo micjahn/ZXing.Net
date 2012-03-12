@@ -16,11 +16,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-
+#if !SILVERLIGHT
+using System.Drawing;
+#else
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+#endif
 using NUnit.Framework;
 using ZXing.Test;
 
@@ -122,7 +127,12 @@ namespace ZXing.Common.Test
             var absPath = Path.GetFullPath(testImage);
             Console.WriteLine("Starting {0}\n", absPath);
 
+#if !SILVERLIGHT
             var image = new Bitmap(Image.FromFile(testImage));
+#else
+            var image = new WriteableBitmap(0, 0);
+            image.SetSource(File.OpenRead(testImage));
+#endif
 
             String expectedText;
             String expectedTextFile = Path.Combine(Path.GetDirectoryName(absPath), Path.GetFileNameWithoutExtension(absPath) + ".txt");
@@ -136,7 +146,7 @@ namespace ZXing.Common.Test
                if (File.Exists(expectedBinFile))
                {
                   // it is only a dirty workaround for some special cases
-                  expectedText = File.ReadAllText(expectedBinFile, System.Text.Encoding.UTF7);
+                  expectedText = File.ReadAllText(expectedBinFile, System.Text.Encoding.GetEncoding("UTF7"));
                }
                else
                {
@@ -148,7 +158,7 @@ namespace ZXing.Common.Test
             var expectedMetadata = new Dictionary<string, string>();
             if (File.Exists(expectedMetadataFile))
             {
-               foreach (var row in File.ReadAllLines(expectedMetadataFile))
+               foreach (var row in File.ReadLines(expectedMetadataFile))
                   expectedMetadata.Add(row.Split('=')[0], string.Join("=", row.Split('=').Skip(1).ToArray()));
             }
 
@@ -156,7 +166,7 @@ namespace ZXing.Common.Test
             {
                var testResult = testResults[x];
                float rotation = testResult.Rotation;
-               Bitmap rotatedImage = rotateImage(image, rotation);
+               var rotatedImage = rotateImage(image, rotation);
                LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
                try
@@ -308,6 +318,7 @@ namespace ZXing.Common.Test
          return true;
       }
 
+#if !SILVERLIGHT
       protected static Bitmap rotateImage(Bitmap original, float degrees)
       {
          if (degrees == 0.0f)
@@ -334,27 +345,48 @@ namespace ZXing.Common.Test
          var newRotated = (Bitmap)original.Clone();
          newRotated.RotateFlip(rotate);
          return newRotated;
-
-         //double radians = Math.toRadians(degrees);
-
-         //// Transform simply to find out the new bounding box (don't actually run the image through it)
-         //AffineTransform at = new AffineTransform();
-         //at.rotate(radians, original.getWidth() / 2.0, original.getHeight() / 2.0);
-         //BufferedImageOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
-
-         //Rectangle2D r = op.getBounds2D(original);
-         //int width = (int)Math.ceil(r.getWidth());
-         //int height = (int)Math.ceil(r.getHeight());
-
-         //// Real transform, now that we know the size of the new image and how to translate after we rotate
-         //// to keep it centered
-         //at = new AffineTransform();
-         //at.rotate(radians, width / 2.0, height / 2.0);
-         //at.translate((width - original.getWidth()) / 2.0,
-         //             (height - original.getHeight()) / 2.0);
-         //op = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
-
-         //return op.filter(original, null);
       }
+#else
+      protected static WriteableBitmap rotateImage(WriteableBitmap original, float degrees)
+      {
+         if (degrees == 0.0f)
+         {
+            return original;
+         }
+
+         int width = original.PixelWidth;
+         int height = original.PixelHeight;
+         int full = Math.Max(width, height);
+
+         Image tempImage2 = new Image();
+         tempImage2.Width = full;
+         tempImage2.Height = full;
+         tempImage2.Source = original;
+
+         // New bitmap has swapped width/height
+         WriteableBitmap newRotated = new WriteableBitmap(height, width);
+
+
+         TransformGroup transformGroup = new TransformGroup();
+
+         // Rotate around centre
+         RotateTransform rotate = new RotateTransform();
+         rotate.Angle = degrees;
+         rotate.CenterX = full / 2;
+         rotate.CenterY = full / 2;
+         transformGroup.Children.Add(rotate);
+
+         // and transform back to top left corner of new image
+         TranslateTransform translate = new TranslateTransform();
+         translate.X = -(full - height) / 2;
+         translate.Y = -(full - width) / 2;
+         transformGroup.Children.Add(translate);
+
+         newRotated.Render(tempImage2, transformGroup);
+         newRotated.Invalidate();
+
+         return newRotated;
+      }
+#endif
    }
 }

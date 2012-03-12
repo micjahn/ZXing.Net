@@ -16,9 +16,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
+#if !SILVERLIGHT
+using System.Drawing;
+#else
+using System.Windows.Media.Imaging;
+#endif
 using NUnit.Framework;
 using ZXing.Test;
 
@@ -81,7 +85,12 @@ namespace ZXing.Common.Test
             var absPath = Path.GetFullPath(testImage);
             Console.WriteLine("Starting {0}", absPath);
 
-            var image = (Bitmap)Bitmap.FromFile(testImage);
+#if !SILVERLIGHT
+            var image = new Bitmap(Image.FromFile(testImage));
+#else
+            var image = new WriteableBitmap(0, 0);
+            image.SetSource(File.OpenRead(testImage));
+#endif
             for (int x = 0; x < testResults.Count; x++)
             {
                TestResult testResult = testResults[x];
@@ -128,12 +137,16 @@ namespace ZXing.Common.Test
       /// <param name="rotationInDegrees">The amount of rotation to apply</param>
       /// <returns>true if nothing found, false if a non-existant barcode was detected</returns>
       /// </summary>
+#if !SILVERLIGHT
       private bool checkForFalsePositives(Bitmap image, float rotationInDegrees)
+#else
+      private bool checkForFalsePositives(WriteableBitmap image, float rotationInDegrees)
+#endif
       {
-         Bitmap rotatedImage = rotateImage(image, rotationInDegrees);
-         LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
-         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-         Result result = getReader().decode(bitmap);
+         var rotatedImage = rotateImage(image, rotationInDegrees);
+         var source = new BufferedImageLuminanceSource(rotatedImage);
+         var bitmap = new BinaryBitmap(new HybridBinarizer(source));
+         var result = getReader().decode(bitmap);
          if (result != null)
          {
             Console.WriteLine("Found false positive: '{0}' with format '{1}' (rotation: {2})\n",
@@ -142,7 +155,7 @@ namespace ZXing.Common.Test
          }
 
          // Try "try harder" getMode
-         IDictionary<DecodeHintType, Object> hints = new Dictionary<DecodeHintType, Object>();
+         var hints = new Dictionary<DecodeHintType, Object>();
          hints[DecodeHintType.TRY_HARDER] = true;
          result = getReader().decode(bitmap, hints);
          if (result != null)

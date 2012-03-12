@@ -25,7 +25,11 @@
  */
 
 using System;
+#if !SILVERLIGHT
 using System.Drawing;
+#else
+using System.Windows.Media.Imaging;
+#endif
 using System.IO;
 
 using NUnit.Framework;
@@ -243,7 +247,12 @@ namespace ZXing.OneD.RSS.Expanded.Test
             path = Path.Combine("..\\..\\..\\Source", path);
          }
 
-         var image = (Bitmap)Bitmap.FromFile(path);
+#if !SILVERLIGHT
+         var image = new Bitmap(Image.FromFile(path));
+#else
+         var image = new WriteableBitmap(0, 0);
+         image.SetSource(File.OpenRead(path));
+#endif
          BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
          int rowNumber = binaryMap.Height / 2;
          BitArray row = binaryMap.getBlackRow(rowNumber, null);

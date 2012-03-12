@@ -570,7 +570,7 @@ namespace ZXing.QrCode.Internal.Test
       {
          try
          {
-            return Encoding.GetEncoding("Shift_JIS").GetString(bytes);
+            return Encoding.GetEncoding("Shift_JIS").GetString(bytes, 0, bytes.Length);
          }
          catch (ArgumentException uee)
          {

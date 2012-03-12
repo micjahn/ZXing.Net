@@ -21,6 +21,7 @@ using ZXing.Common.Test;
 using ZXing.Datamatrix.Test;
 using ZXing.OneD.Test;
 using ZXing.PDF417.Test;
+using ZXing.QrCode.Test;
 
 namespace ZXing.Test
 {
@@ -66,11 +67,11 @@ namespace ZXing.Test
                                                            new UPCEBlackBox3ReflectiveTestCase(),
                                                            new PDF417BlackBox1TestCase(),
                                                            new PDF417BlackBox2TestCase(),
-                                                           //new QRCodeBlackBox1TestCase(),
-                                                           //new QRCodeBlackBox2TestCase(),
-                                                           //new QRCodeBlackBox3TestCase(),
-                                                           //new QRCodeBlackBox4TestCase(),
-                                                           //new QRCodeBlackBox5TestCase()
+                                                           new QRCodeBlackBox1TestCase(),
+                                                           new QRCodeBlackBox2TestCase(),
+                                                           new QRCodeBlackBox3TestCase(),
+                                                           new QRCodeBlackBox4TestCase(),
+                                                           new QRCodeBlackBox5TestCase()
                                                         };
 
       [Test]
