@@ -13,15 +13,6 @@ namespace ZXing
    public interface IBarcodeReader
    {
       /// <summary>
-      /// Gets or sets the reader which should be used to find and decode the barcode.
-      /// If null then MultiFormatReader is used
-      /// </summary>
-      /// <value>
-      /// The reader.
-      /// </value>
-      Reader Reader { get; set; }
-
-      /// <summary>
       /// Gets or sets a flag which cause a deeper look into the bitmap
       /// </summary>
       /// <value>
@@ -36,35 +27,6 @@ namespace ZXing
       /// The result point callback.
       /// </value>
       ResultPointCallback ResultPointCallback { get; set; }
-
-#if !SILVERLIGHT
-      /// <summary>
-      /// Optional: Gets or sets the function to create a luminance source object for a bitmap.
-      /// If null then RGBLuminanceSource is used
-      /// </summary>
-      /// <value>
-      /// The function to create a luminance source object.
-      /// </value>
-      Func<Bitmap, LuminanceSource> CreateLuminanceSource { get; set; }
-#else
-      /// <summary>
-      /// Optional: Gets or sets the function to create a luminance source object for a bitmap.
-      /// If null then RGBLuminanceSource is used
-      /// </summary>
-      /// <value>
-      /// The function to create a luminance source object.
-      /// </value>
-      Func<WriteableBitmap, LuminanceSource> CreateLuminanceSource { get; set; }
-#endif
-
-      /// <summary>
-      /// Optional: Gets or sets the function to create a binarizer object for a luminance source.
-      /// If null then HybridBinarizer is used
-      /// </summary>
-      /// <value>
-      /// The function to create a binarizer object.
-      /// </value>
-      Func<LuminanceSource, Binarizer> CreateBinarizer { get; set; }
 
 #if !SILVERLIGHT
       /// <summary>

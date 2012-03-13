@@ -26,14 +26,13 @@ namespace ZXing
          (luminanceSource) => new HybridBinarizer(luminanceSource);
 
       private Reader reader;
-      private MultiFormatReader defaultReader;
       private readonly IDictionary<DecodeHintType, object> hints;
 #if !SILVERLIGHT
       private Func<Bitmap, LuminanceSource> createLuminanceSource;
 #else
-      private Func<WriteableBitmap, LuminanceSource> createLuminanceSource;
+      private readonly Func<WriteableBitmap, LuminanceSource> createLuminanceSource;
 #endif
-      private Func<LuminanceSource, Binarizer> createBinarizer;
+      private readonly Func<LuminanceSource, Binarizer> createBinarizer;
       private bool usePreviousState;
 
       /// <summary>
@@ -47,11 +46,7 @@ namespace ZXing
       {
          get
          {
-            return reader ?? (reader = defaultReader = new MultiFormatReader());
-         }
-         set
-         {
-            reader = value;
+            return reader ?? (reader = new MultiFormatReader());
          }
       }
 
@@ -143,10 +138,6 @@ namespace ZXing
          {
             return createLuminanceSource ?? defaultCreateLuminanceSource;
          }
-         set
-         {
-            createLuminanceSource = value;
-         }
       }
 
       /// <summary>
@@ -162,17 +153,37 @@ namespace ZXing
          {
             return createBinarizer ?? defaultCreateBinarizer;
          }
-         set
-         {
-            createBinarizer = value;
-         }
       }
 
       /// <summary>
       /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
       /// </summary>
       public BarcodeReader()
+         : this(new MultiFormatReader(), defaultCreateLuminanceSource, defaultCreateBinarizer)
       {
+      }
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+      /// </summary>
+      /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
+      /// If null then MultiFormatReader is used</param>
+      /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
+      /// If null then RGBLuminanceSource is used</param>
+      /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
+      /// If null then HybridBinarizer is used</param>
+      public BarcodeReader(Reader reader,
+#if !SILVERLIGHT
+         Func<Bitmap, LuminanceSource> createLuminanceSource,
+#else
+         Func<WriteableBitmap, LuminanceSource> createLuminanceSource,
+#endif
+         Func<LuminanceSource, Binarizer> createBinarizer
+         )
+      {
+         this.reader = reader;
+         this.createLuminanceSource = createLuminanceSource;
+         this.createBinarizer = createBinarizer;
          hints = new Dictionary<DecodeHintType, object>();
          usePreviousState = false;
       }
@@ -200,10 +211,11 @@ namespace ZXing
          var luminanceSource = CreateLuminanceSource(barcodeBitmap);
          var binarizer = CreateBinarizer(luminanceSource);
          var binaryBitmap = new BinaryBitmap(binarizer);
+         var multiformatReader = Reader as MultiFormatReader;
 
-         if (usePreviousState && ReferenceEquals(Reader, defaultReader))
+         if (usePreviousState && multiformatReader != null)
          {
-            result = defaultReader.decodeWithState(binaryBitmap);
+            result = multiformatReader.decodeWithState(binaryBitmap);
          }
          else
          {
