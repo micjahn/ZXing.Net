@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="SilverlightDemo.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300" d:DesignWidth="400" xmlns:sdk="http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk">
+
+    <Grid x:Name="LayoutRoot" Background="White">
+      <sdk:TabControl Height="300" HorizontalAlignment="Left" Name="tabControl1" VerticalAlignment="Top" Width="400">
+         <sdk:TabItem Header="Decoder" Name="tabDecoder">
+            <Grid>
+               <Grid Height="257" HorizontalAlignment="Left" Margin="6,6,0,0" Name="grid2" VerticalAlignment="Top" Width="382">
+                  <Grid.ColumnDefinitions>
+                     <ColumnDefinition Width="188*" />
+                     <ColumnDefinition Width="194*" />
+                  </Grid.ColumnDefinitions>
+                  <Image Height="257" HorizontalAlignment="Left" Name="imgDecoderBarcode" Stretch="None" VerticalAlignment="Top" Width="188" />
+               </Grid>
+               <Grid Height="257" HorizontalAlignment="Left" Margin="194,6,0,0" Name="grid3" VerticalAlignment="Top" Width="194">
+                  <Grid.RowDefinitions>
+                     <RowDefinition Height="29" />
+                     <RowDefinition Height="29" />
+                     <RowDefinition Height="*" />
+                  </Grid.RowDefinitions>
+                  <Button Content="Open" Height="23" HorizontalAlignment="Left" Margin="6,6,0,0" Name="btnDecoderOpen" VerticalAlignment="Top" Width="75" Click="btnDecoderOpen_Click" />
+                  <Button Content="Decode" Height="23" HorizontalAlignment="Left" Margin="113,6,0,0" Name="btnDecoderDecode" VerticalAlignment="Top" Width="75" Click="btnDecoderDecode_Click" />
+                  <TextBox Grid.Row="1" Height="23" HorizontalAlignment="Left" Margin="6,6,0,0" Name="txtDecoderType" VerticalAlignment="Top" Width="182" />
+                  <TextBox Grid.Row="2" Height="187" HorizontalAlignment="Left" Margin="6,6,0,0" Name="txtDecoderContent" VerticalAlignment="Top" Width="182" TextWrapping="Wrap" />
+               </Grid>
+            </Grid>
+         </sdk:TabItem>
+         <sdk:TabItem Header="Encoder" Name="tabEncoder">
+            <Grid>
+               <Grid Height="263" HorizontalAlignment="Left" Name="grid1" VerticalAlignment="Top" Width="388">
+                  <Grid.ColumnDefinitions>
+                     <ColumnDefinition Width="188*" />
+                     <ColumnDefinition Width="200*" />
+                  </Grid.ColumnDefinitions>
+                  <Image Height="263" HorizontalAlignment="Left" Name="imgEncoderBarcode" Stretch="None" VerticalAlignment="Top" Width="188" />
+               </Grid>
+               <StackPanel Height="263" HorizontalAlignment="Left" Margin="188,0,0,0" Name="stackPanel1" VerticalAlignment="Top" Width="200">
+                  <ComboBox Height="23" Name="cmbEncoderType" Width="197" />
+                  <TextBox Height="213" Name="txtEncoderContent" Width="197" TextWrapping="Wrap" />
+                  <Button Content="Encode" Height="23" Name="btnEncoderEncode" Width="75" Click="btnEncoderEncode_Click" />
+               </StackPanel>
+            </Grid>
+         </sdk:TabItem>
+      </sdk:TabControl>
+   </Grid>
+</UserControl>
