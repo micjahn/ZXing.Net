@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
-#if !(WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4)
+#if !(WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5)
 using System.Runtime.Serialization.Formatters;
 #endif
 using System.Security.Permissions;
@@ -14,7 +14,7 @@ namespace BigIntegerLibrary
     /// .NET 2.0 class for handling of very large integers, up to 10240 binary digits or
     /// approximately (safe to use) 3000 decimal digits.
    /// </summary>
-#if !(WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4)
+#if !(WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5)
     [Serializable, CLSCompliant(true)]
     public sealed class BigInteger : ISerializable, 
 #else
@@ -199,7 +199,7 @@ namespace BigIntegerLibrary
             }
         }
 
-#if !(WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4)
+#if !(WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5)
         /// <summary>
         /// Constructor deserializing a BigInteger.
         /// </summary>
@@ -227,7 +227,7 @@ namespace BigIntegerLibrary
 
         #region Public Methods
 
-#if !(WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4)
+#if !(WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5)
         /// <summary>
         /// BigInteger serializing method, which should not be called manually.
         /// </summary>

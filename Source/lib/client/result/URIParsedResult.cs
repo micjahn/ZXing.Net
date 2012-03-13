@@ -26,10 +26,10 @@ namespace ZXing.Client.Result
    public sealed class URIParsedResult : ParsedResult
    {
       private static Regex USER_IN_HOST = new Regex(":/*([^/@]+)@[^/]+"
-#if !(SILVERLIGHT4)
+#if !(SILVERLIGHT4 || SILVERLIGHT5)
          ,RegexOptions.Compiled);
 #else
-         );
+);
 #endif
 
       private String uri;

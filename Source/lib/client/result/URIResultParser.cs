@@ -35,19 +35,19 @@ namespace ZXing.Client.Result
           "[a-zA-Z0-9]{2,}:(/)*" + // protocol
           "[a-zA-Z0-9\\-]+(\\.[a-zA-Z0-9\\-]+)*" + // host name elements
           PATTERN_END
-#if !(SILVERLIGHT4)
+#if !(SILVERLIGHT4 || SILVERLIGHT5)
          , RegexOptions.Compiled);
 #else
-         );
+);
 #endif
 
       private static readonly Regex URL_WITHOUT_PROTOCOL_PATTERN = new Regex(
           "([a-zA-Z0-9\\-]+\\.)+[a-zA-Z0-9\\-]{2,}" + // host name elements
           PATTERN_END
-#if !(SILVERLIGHT4)
+#if !(SILVERLIGHT4 || SILVERLIGHT5)
          , RegexOptions.Compiled);
 #else
-         );
+);
 #endif
 
       override public ParsedResult parse(ZXing.Result result)

@@ -32,7 +32,7 @@ namespace ZXing.Client.Result
    /// </author>
    sealed class VCardResultParser : ResultParser
    {
-#if SILVERLIGHT4
+#if SILVERLIGHT4 || SILVERLIGHT5
       private static readonly Regex BEGIN_VCARD = new Regex("BEGIN:VCARD", RegexOptions.IgnoreCase);
       private static readonly Regex VCARD_LIKE_DATE = new Regex("\\d{4}-?\\d{2}-?\\d{2}");
       private static readonly Regex CR_LF_SPACE_TAB = new Regex("\r\n[ \t]");
@@ -294,7 +294,7 @@ namespace ZXing.Client.Result
             String fragment;
             if (charset == null)
             {
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4)
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5)
                fragment = Encoding.UTF8.GetString(fragmentBytes, 0, fragmentBytes.Length);
 #else
                fragment = Encoding.Default.GetString(fragmentBytes);
@@ -309,7 +309,7 @@ namespace ZXing.Client.Result
                catch (Exception )
                {
                   // Yikes, well try anyway:
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4)
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5)
                   fragment = Encoding.UTF8.GetString(fragmentBytes, 0, fragmentBytes.Length);
 #else
                   fragment = Encoding.Default.GetString(fragmentBytes);

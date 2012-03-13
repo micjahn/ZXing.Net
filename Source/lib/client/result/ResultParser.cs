@@ -58,16 +58,16 @@ namespace ZXing.Client.Result
                                                  new EmailAddressResultParser(),
                                               };
 
-#if SILVERLIGHT4
-      private static Regex DIGITS = new Regex("\\d*");
-      private static Regex ALPHANUM = new Regex("[a-zA-Z0-9]*");
-      private static Regex AMPERSAND = new Regex("&");
-      private static Regex EQUALS = new Regex("=");
+#if SILVERLIGHT4 || SILVERLIGHT5
+      private static readonly Regex DIGITS = new Regex("\\d*");
+      private static readonly Regex ALPHANUM = new Regex("[a-zA-Z0-9]*");
+      private static readonly Regex AMPERSAND = new Regex("&");
+      private static readonly Regex EQUALS = new Regex("=");
 #else
-      private static Regex DIGITS = new Regex("\\d*", RegexOptions.Compiled);
-      private static Regex ALPHANUM = new Regex("[a-zA-Z0-9]*", RegexOptions.Compiled);
-      private static Regex AMPERSAND = new Regex("&", RegexOptions.Compiled);
-      private static Regex EQUALS = new Regex("=", RegexOptions.Compiled);
+      private static readonly Regex DIGITS = new Regex("\\d*", RegexOptions.Compiled);
+      private static readonly Regex ALPHANUM = new Regex("[a-zA-Z0-9]*", RegexOptions.Compiled);
+      private static readonly Regex AMPERSAND = new Regex("&", RegexOptions.Compiled);
+      private static readonly Regex EQUALS = new Regex("=", RegexOptions.Compiled);
 #endif
 
       /// <summary>

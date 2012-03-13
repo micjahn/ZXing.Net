@@ -26,7 +26,7 @@ MKDIR "%DEPLOYMENT_DIR%" >NUL: 2>&1
 DEL /F "%DEPLOYMENT_DIR%\%FILENAME_BINARY%" >NUL: 2>&1
 
 CD "%BINARY_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" net2.0 net4.0 sl4 wp7.0 wp7.1
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" net2.0 net4.0 sl4 sl5 wp7.0 wp7.1
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DEMO_BINARY%" Clients
 CD "%CURRENT_DIR%"
 

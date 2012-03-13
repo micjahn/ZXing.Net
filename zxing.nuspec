@@ -11,9 +11,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ZXing (pronounced "zebra crossing") is an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.
 	
-This is a refreshed port of the csharp ZXing port created by Suraj Supekar at revision 1202 in the SVN repository.
+This port of the java library started with the csharp ZXing port created by Suraj Supekar at revision 1202 in the SVN repository.
+But most of the parts are manually new ported from java. There are many tweaks and speed improvements included.
 
-It is now compatible with .Net 2.0, .Net 4.0, Silverlight 4, Windows Phone 7.0 and Windows Phone 7.1</description>
+It is now compatible with .Net 2.0, .Net 4.0, Silverlight 4, Silverlight 5, Windows Phone 7.0 and Windows Phone 7.1</description>
     <summary>ZXing (pronounced "zebra crossing") is an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.</summary>
     <releaseNotes>* sync with rev. 2196 of the java version
 * important fix for RGBLuminanceSource
@@ -21,20 +22,23 @@ It is now compatible with .Net 2.0, .Net 4.0, Silverlight 4, Windows Phone 7.0 a
     <tags>ZXing barcode scanning 1D 2D UPC-A UPC-E EAN-8 EAN-13 QR ITF Codabar RSS-14 Data Matrix PDF 417 PDF417 Aztec</tags>
   </metadata>
   <files>
-    <file src="Build\Release\net2.0\zxing.dll" target="lib/net20\zxing.dll" />
-    <file src="Build\Release\net2.0\zxing.pdb" target="lib/net20\zxing.pdb" />
-    <file src="Build\Release\net2.0\zxing.XML" target="lib/net20\zxing.XML" />
-    <file src="Build\Release\net4.0\zxing.dll" target="lib/net40\zxing.dll" />
-    <file src="Build\Release\net4.0\zxing.pdb" target="lib/net40\zxing.pdb" />
-    <file src="Build\Release\net4.0\zxing.XML" target="lib/net40\zxing.XML" />
-    <file src="Build\Release\wp7.0\zxing.wp7.0.dll" target="lib/sl3-wp\zxing.wp7.0.dll" />
-    <file src="Build\Release\wp7.0\zxing.wp7.0.pdb" target="lib/sl3-wp\zxing.wp7.0.pdb" />
-    <file src="Build\Release\wp7.0\zxing.wp7.0.XML" target="lib/sl3-wp\zxing.wp7.0.XML" />
-    <file src="Build\Release\sl4\zxing.sl4.dll" target="lib/sl4\zxing.sl4.dll" />
-    <file src="Build\Release\sl4\zxing.sl4.pdb" target="lib/sl4\zxing.sl4.pdb" />
-    <file src="Build\Release\sl4\zxing.sl4.XML" target="lib/sl4\zxing.sl4.XML" />
-    <file src="Build\Release\wp7.1\zxing.wp7.1.dll" target="lib/sl4-wp71\zxing.wp7.1.dll" />
-    <file src="Build\Release\wp7.1\zxing.wp7.1.pdb" target="lib/sl4-wp71\zxing.wp7.1.pdb" />
-    <file src="Build\Release\wp7.1\zxing.wp7.1.XML" target="lib/sl4-wp71\zxing.wp7.1.XML" />
+    <file src="Build\Release\net2.0\zxing.dll" target="lib/net20/zxing.dll" />
+    <file src="Build\Release\net2.0\zxing.pdb" target="lib/net20/zxing.pdb" />
+    <file src="Build\Release\net2.0\zxing.XML" target="lib/net20/zxing.XML" />
+    <file src="Build\Release\net4.0\zxing.dll" target="lib/net40/zxing.dll" />
+    <file src="Build\Release\net4.0\zxing.pdb" target="lib/net40/zxing.pdb" />
+    <file src="Build\Release\net4.0\zxing.XML" target="lib/net40/zxing.XML" />
+    <file src="Build\Release\wp7.0\zxing.wp7.0.dll" target="lib/sl3-wp/zxing.wp7.0.dll" />
+    <file src="Build\Release\wp7.0\zxing.wp7.0.pdb" target="lib/sl3-wp/zxing.wp7.0.pdb" />
+    <file src="Build\Release\wp7.0\zxing.wp7.0.XML" target="lib/sl3-wp/zxing.wp7.0.XML" />
+    <file src="Build\Release\sl4\zxing.sl4.dll" target="lib/sl4/zxing.sl4.dll" />
+    <file src="Build\Release\sl4\zxing.sl4.pdb" target="lib/sl4/zxing.sl4.pdb" />
+    <file src="Build\Release\sl4\zxing.sl4.XML" target="lib/sl4/zxing.sl4.XML" />
+    <file src="Build\Release\sl5\zxing.sl5.dll" target="lib/sl5/zxing.sl5.dll" />
+    <file src="Build\Release\sl5\zxing.sl5.pdb" target="lib/sl5/zxing.sl5.pdb" />
+    <file src="Build\Release\sl5\zxing.sl5.XML" target="lib/sl5/zxing.sl5.XML" />
+    <file src="Build\Release\wp7.1\zxing.wp7.1.dll" target="lib/sl4-wp71/zxing.wp7.1.dll" />
+    <file src="Build\Release\wp7.1\zxing.wp7.1.pdb" target="lib/sl4-wp71/zxing.wp7.1.pdb" />
+    <file src="Build\Release\wp7.1\zxing.wp7.1.XML" target="lib/sl4-wp71/zxing.wp7.1.XML" />
   </files>
 </package>

@@ -27,7 +27,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsPhoneDemo", "Clients
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.sl4.test", "Source\test\src\zxing.sl4.test.csproj", "{903D3C02-924C-4117-BB2B-91FAB4C87B7A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.sl5", "Source\lib\zxing.sl5.csproj", "{A3D48B9C-42A0-4FC8-BB58-D368F239DEBF}"
+EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -71,6 +77,10 @@ Global
 		{903D3C02-924C-4117-BB2B-91FAB4C87B7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{903D3C02-924C-4117-BB2B-91FAB4C87B7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{903D3C02-924C-4117-BB2B-91FAB4C87B7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3D48B9C-42A0-4FC8-BB58-D368F239DEBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3D48B9C-42A0-4FC8-BB58-D368F239DEBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3D48B9C-42A0-4FC8-BB58-D368F239DEBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3D48B9C-42A0-4FC8-BB58-D368F239DEBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

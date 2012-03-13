@@ -643,7 +643,7 @@ namespace ZXing.Datamatrix.Internal
          byteSegments.Add(sbytes);
          try
          {
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4)
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5)
             result.Append(Encoding.GetEncoding("ISO8859-1").GetString(bytes, 0, bytes.Length));
 #else
             result.Append(Encoding.GetEncoding("ISO8859-1").GetString(bytes));
