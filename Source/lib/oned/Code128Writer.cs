@@ -136,7 +136,7 @@ namespace ZXing.OneD
                         position++;
                         break;
                      default:
-                        patternIndex = Int32.Parse(contents.Substring(position, position + 2));
+                        patternIndex = Int32.Parse(contents.Substring(position, 2));
                         position += 2;
                         break;
                   }
