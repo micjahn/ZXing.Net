@@ -435,17 +435,19 @@ namespace ZXing.Common
          try
          {
             var pixels = new byte[bmpData.Stride*height];
+            var padding = bmpData.Stride - (3 * width);
+            var index = 0;
 
             for (int y = 0; y < height - emptyArea; y++)
             {
-               var offset = y*bmpData.Stride;
                for (var x = 0; x < width; x++)
                {
                   var color = this[x, y] ? BLACK : WHITE;
-                  pixels[offset + 3 * x] = color;
-                  pixels[offset + 3 * x + 1] = color;
-                  pixels[offset + 3 * x + 2] = color;
+                  pixels[index++] = color;
+                  pixels[index++] = color;
+                  pixels[index++] = color;
                }
+               index += padding;
             }
             for (int y = (height - emptyArea) * bmpData.Stride; y < pixels.Length; y++)
             {
