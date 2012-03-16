@@ -494,7 +494,7 @@ namespace ZXing.PDF417.Internal
          {
             tmp.Length = 0;
             int len = Math.Min(44, count - idx);
-            String part = '1' + msg.Substring(startpos + idx, startpos + idx + len);
+            String part = '1' + msg.Substring(startpos + idx, len);
             BigInteger bigint = BigInteger.Parse(part);
             do
             {
@@ -520,7 +520,7 @@ namespace ZXing.PDF417.Internal
          {
             tmp.Length = 0;
             int len = Math.Min(44, count - idx);
-            String part = '1' + msg.Substring(startpos + idx, startpos + idx + len);
+            String part = '1' + msg.Substring(startpos + idx, len);
             BigInteger bigint = BigInteger.Parse(part);
             do
             {
