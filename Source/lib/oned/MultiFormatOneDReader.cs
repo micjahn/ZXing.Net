@@ -15,6 +15,7 @@
  */
 
 using System.Collections.Generic;
+
 using ZXing.Common;
 using ZXing.OneD.RSS;
 using ZXing.OneD.RSS.Expanded;
@@ -27,7 +28,7 @@ namespace ZXing.OneD
    /// </summary>
    public sealed class MultiFormatOneDReader : OneDReader
    {
-      private OneDReader[] readers;
+      private readonly IList<OneDReader> readers;
 
       public MultiFormatOneDReader(IDictionary<DecodeHintType, object> hints)
       {
@@ -35,7 +36,7 @@ namespace ZXing.OneD
              (IList<BarcodeFormat>)hints[DecodeHintType.POSSIBLE_FORMATS];
          bool useCode39CheckDigit = hints != null && hints.ContainsKey(DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT) &&
              hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != null;
-         var readers = new List<OneDReader>();
+         this.readers = new List<OneDReader>();
          if (possibleFormats != null)
          {
             if (possibleFormats.Contains(BarcodeFormat.EAN_13) ||
@@ -85,7 +86,6 @@ namespace ZXing.OneD
             readers.Add(new RSS14Reader());
             readers.Add(new RSSExpandedReader());
          }
-         this.readers = readers.ToArray();
       }
 
       override public Result decodeRow(int rowNumber,

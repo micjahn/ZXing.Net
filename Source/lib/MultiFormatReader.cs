@@ -199,6 +199,7 @@ namespace ZXing
             for (var index = 0; index < readers.Count; index++)
             {
                var reader = readers[index];
+               reader.reset();
                var result = reader.decode(image, hints);
                if (result != null)
                {

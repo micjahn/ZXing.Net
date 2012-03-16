@@ -59,13 +59,9 @@ namespace ZXing.OneD.RSS
                               IDictionary<DecodeHintType, object> hints)
       {
          Pair leftPair = decodePair(row, false, rowNumber, hints);
-         if (leftPair == null)
-            return null;
          addOrTally(possibleLeftPairs, leftPair);
          row.reverse();
          Pair rightPair = decodePair(row, true, rowNumber, hints);
-         if (rightPair == null)
-            return null;
          addOrTally(possibleRightPairs, rightPair);
          row.reverse();
          foreach (Pair left in possibleLeftPairs)

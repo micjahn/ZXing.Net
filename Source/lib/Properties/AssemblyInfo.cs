@@ -25,7 +25,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("zxing.net for windows phone 7.1")]
 #endif
 [assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing rev. 2221)")]
-[assembly: AssemblyCompany("ZXing.Net Developement")]
+[assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyProduct("ZXing.Net")]
 [assembly: AssemblyCopyright("Copyright © 2012")]
 [assembly: AssemblyTrademark("")]
