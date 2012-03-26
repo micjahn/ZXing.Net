@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections.Generic;
+
 using ZXing.Common;
 using ZXing.Multi.QrCode.Internal;
 using ZXing.QrCode;
@@ -24,9 +24,6 @@ namespace ZXing.Multi.QrCode
 {
    /// <summary>
    /// This implementation can detect and decode multiple QR Codes in an image.
-   ///
-   /// <author>Sean Owen</author>
-   /// <author>Hannes Erven</author>
    /// </summary>
    public sealed class QRCodeMultiReader : QRCodeReader, MultipleBarcodeReader
    {
@@ -39,37 +36,29 @@ namespace ZXing.Multi.QrCode
 
       public Result[] decodeMultiple(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
       {
-         List<Result> results = new List<Result>();
-         DetectorResult[] detectorResults = new MultiDetector(image.BlackMatrix).detectMulti(hints);
+         var results = new List<Result>();
+         var detectorResults = new MultiDetector(image.BlackMatrix).detectMulti(hints);
          foreach (DetectorResult detectorResult in detectorResults)
          {
-            DecoderResult decoderResult = getDecoder().decode(detectorResult.Bits, hints);
+            var decoderResult = getDecoder().decode(detectorResult.Bits, hints);
             if (decoderResult == null)
                continue;
 
-            ResultPoint[] points = detectorResult.Points;
-            Result result = new Result(decoderResult.Text, decoderResult.RawBytes, points,
-                                       BarcodeFormat.QR_CODE);
-            IList<sbyte[]> byteSegments = decoderResult.ByteSegments;
+            var points = detectorResult.Points;
+            var result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.QR_CODE);
+            var byteSegments = decoderResult.ByteSegments;
             if (byteSegments != null)
             {
                result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);
             }
-            String ecLevel = decoderResult.ECLevel;
+            var ecLevel = decoderResult.ECLevel;
             if (ecLevel != null)
             {
                result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
             }
             results.Add(result);
          }
-         if (results.Count == 0)
-         {
-            return EMPTY_RESULT_ARRAY;
-         }
-         else
-         {
-            return results.ToArray();
-         }
+         return results.Count == 0 ? EMPTY_RESULT_ARRAY : results.ToArray();
       }
    }
 }

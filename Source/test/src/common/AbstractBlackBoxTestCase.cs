@@ -167,37 +167,43 @@ namespace ZXing.Common.Test
                var testResult = testResults[x];
                float rotation = testResult.Rotation;
                var rotatedImage = rotateImage(image, rotation);
-               LuminanceSource source = new BufferedImageLuminanceSource(rotatedImage);
+               LuminanceSource source = new RGBLuminanceSource(rotatedImage);
                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
                try
                {
                   if (decode(bitmap, rotation, expectedText, expectedMetadata, false))
                   {
                      passedCounts[x]++;
+                     Console.WriteLine("   without try-hard ... ok.");
                   }
                   else
                   {
                      misreadCounts[x]++;
+                     Console.WriteLine("   without try-hard ... fail.");
                   }
                }
                catch (ReaderException re)
                {
                   // continue
+                  Console.WriteLine("   without try-hard ... fail (exc).");
                }
                try
                {
                   if (decode(bitmap, rotation, expectedText, expectedMetadata, true))
                   {
                      tryHarderCounts[x]++;
+                     Console.WriteLine("   with try-hard ... ok.");
                   }
                   else
                   {
                      tryHaderMisreadCounts[x]++;
+                     Console.WriteLine("   with try-hard ... fail.");
                   }
                }
                catch (ReaderException re)
                {
                   // continue
+                  Console.WriteLine("   with try-hard ... fail (exc).");
                }
             }
          }

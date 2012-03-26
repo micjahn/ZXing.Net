@@ -93,7 +93,6 @@
     </Compile>
     <Compile Include="aztec\AztecBlackBox1TestCase.cs" />
     <Compile Include="aztec\AztecBlackBox2TestCase.cs" />
-    <Compile Include="BufferedImageLuminanceSource.Silverlight.cs" />
     <Compile Include="client\result\AddressBookParsedResultTestCase.cs" />
     <Compile Include="client\result\CalendarParsedResultTestCase.cs" />
     <Compile Include="client\result\EmailAddressParsedResultTestCase.cs" />

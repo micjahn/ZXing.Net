@@ -97,7 +97,12 @@ namespace ZXing
       //luminances = Red.Imaging.Filters.CropArea(d, W, H, Region);
    }
 
-   public RGBLuminanceSource(System.Windows.Media.Imaging.WriteableBitmap d, int W, int H)
+    public RGBLuminanceSource(System.Windows.Media.Imaging.WriteableBitmap d)
+        : this(d, d.PixelWidth, d.PixelHeight)
+    {
+
+    }
+    public RGBLuminanceSource(System.Windows.Media.Imaging.WriteableBitmap d, int W, int H)
         : base(W, H)
     {
         int width = __width = W;
@@ -134,6 +139,11 @@ namespace ZXing
          __Region = Region;
          __isRegionSelect = true;
          //luminances = Red.Imaging.Filters.CropArea(d, W, H, Region);
+      }
+
+      public RGBLuminanceSource(Bitmap d)
+         : this(d, d.Width, d.Height)
+      {
       }
 
       public RGBLuminanceSource(Bitmap d, int W, int H)

@@ -253,7 +253,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
          var image = new WriteableBitmap(0, 0);
          image.SetSource(File.OpenRead(path));
 #endif
-         BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BufferedImageLuminanceSource(image)));
+         BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new RGBLuminanceSource(image)));
          int rowNumber = binaryMap.Height / 2;
          BitArray row = binaryMap.getBlackRow(rowNumber, null);
 

@@ -144,7 +144,7 @@ namespace ZXing.Common.Test
 #endif
       {
          var rotatedImage = rotateImage(image, rotationInDegrees);
-         var source = new BufferedImageLuminanceSource(rotatedImage);
+         var source = new RGBLuminanceSource(rotatedImage);
          var bitmap = new BinaryBitmap(new HybridBinarizer(source));
          var result = getReader().decode(bitmap);
          if (result != null)
