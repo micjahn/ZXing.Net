@@ -264,7 +264,7 @@ namespace ZXing.OneD
          bool isNextShifted = false;
 
          var result = new StringBuilder(20);
-         var rawCodes = new List<sbyte>(20);
+         var rawCodes = new List<byte>(20);
 
          int lastStart = startPatternInfo[0];
          int nextStart = startPatternInfo[1];
@@ -288,7 +288,7 @@ namespace ZXing.OneD
             if (!decodeCode(row, counters, nextStart, out code))
                return null;
 
-            rawCodes.Add((sbyte)code);
+            rawCodes.Add((byte)code);
 
             // Remember whether the last code was printable or not (excluding CODE_STOP)
             if (code != CODE_STOP)
@@ -485,7 +485,7 @@ namespace ZXing.OneD
          float right = (nextStart + lastStart) / 2.0f;
 
          int rawCodesSize = rawCodes.Count;
-         sbyte[] rawBytes = new sbyte[rawCodesSize];
+         var rawBytes = new byte[rawCodesSize];
          for (int i = 0; i < rawCodesSize; i++)
          {
             rawBytes[i] = rawCodes[i];
@@ -494,10 +494,10 @@ namespace ZXing.OneD
          return new Result(
             result.ToString(),
             rawBytes,
-            new ResultPoint[]
+            new []
                {
-                  new ResultPoint(left, (float) rowNumber),
-                  new ResultPoint(right, (float) rowNumber)
+                  new ResultPoint(left, rowNumber),
+                  new ResultPoint(right, rowNumber)
                },
             BarcodeFormat.CODE_128);
       }

@@ -82,7 +82,7 @@ namespace ZXing.QrCode.Internal
          ErrorCorrectionLevel ecLevel = formatinfo.ErrorCorrectionLevel;
 
          // Read codewords
-         sbyte[] codewords = parser.readCodewords();
+         byte[] codewords = parser.readCodewords();
          if (codewords == null)
             return null;
          // Separate into data blocks
@@ -94,13 +94,13 @@ namespace ZXing.QrCode.Internal
          {
             totalBytes += dataBlock.NumDataCodewords;
          }
-         sbyte[] resultBytes = new sbyte[totalBytes];
+         byte[] resultBytes = new byte[totalBytes];
          int resultOffset = 0;
 
          // Error-correct and copy data blocks together into a stream of bytes
          foreach (var dataBlock in dataBlocks)
          {
-            sbyte[] codewordBytes = dataBlock.Codewords;
+            byte[] codewordBytes = dataBlock.Codewords;
             int numDataCodewords = dataBlock.NumDataCodewords;
             if (!correctErrors(codewordBytes, numDataCodewords))
                return null;
@@ -122,7 +122,7 @@ namespace ZXing.QrCode.Internal
       /// </param>
       /// <param name="numDataCodewords">number of codewords that are data bytes
       /// </param>
-      private bool correctErrors(sbyte[] codewordBytes, int numDataCodewords)
+      private bool correctErrors(byte[] codewordBytes, int numDataCodewords)
       {
          int numCodewords = codewordBytes.Length;
          // First read into an array of ints
@@ -140,7 +140,7 @@ namespace ZXing.QrCode.Internal
          // We don't care about errors in the error-correction codewords
          for (int i = 0; i < numDataCodewords; i++)
          {
-            codewordBytes[i] = (sbyte)codewordsInts[i];
+            codewordBytes[i] = (byte)codewordsInts[i];
          }
 
          return true;

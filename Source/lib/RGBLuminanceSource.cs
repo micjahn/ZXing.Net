@@ -10,12 +10,11 @@ namespace ZXing
 {
    public class RGBLuminanceSource : LuminanceSource
    {
-
-      private sbyte[] luminances;
+      private byte[] luminances;
       private bool isRotated = false;
       private bool __isRegionSelect = false;
 #if SILVERLIGHT
-   private System.Windows.Rect __Region;
+      private System.Windows.Rect __Region;
 #else
       private Rectangle __Region;
 #endif
@@ -54,7 +53,7 @@ namespace ZXing
          int height = H;
          // In order to measure pure decoding speed, we convert the entire image to a greyscale array
          // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
-         luminances = new sbyte[width * height];
+         luminances = new byte[width * height];
          for (int y = 0; y < height; y++)
          {
             int offset = y * width;
@@ -66,12 +65,12 @@ namespace ZXing
                if (r == g && g == b)
                {
                   // Image is already greyscale, so pick any channel.
-                  luminances[offset + x] = (sbyte)r;
+                  luminances[offset + x] = (byte)r;
                }
                else
                {
                   // Calculate luminance cheaply, favoring green.
-                  luminances[offset + x] = (sbyte)((r + g + g + b) >> 2);
+                  luminances[offset + x] = (byte)((r + g + g + b) >> 2);
                }
             }
          }
@@ -81,21 +80,21 @@ namespace ZXing
       {
          __width = W;
          __height = H;
-         luminances = new sbyte[W * H];
+         luminances = new byte[W * H];
          Buffer.BlockCopy(d, 0, luminances, 0, W * H);
       }
 
 #if SILVERLIGHT
 
-   public RGBLuminanceSource(byte[] d, int W, int H, bool Is8Bit, System.Windows.Rect Region)
-    : base(W, H)
-   {
-      __width = (int)Region.Width;
-      __height = (int)Region.Height;
-      __Region = Region;
-      __isRegionSelect = true;
-      //luminances = Red.Imaging.Filters.CropArea(d, W, H, Region);
-   }
+      public RGBLuminanceSource(byte[] d, int W, int H, bool Is8Bit, System.Windows.Rect Region)
+        : base(W, H)
+      {
+         __width = (int)Region.Width;
+         __height = (int)Region.Height;
+         __Region = Region;
+         __isRegionSelect = true;
+         //luminances = Red.Imaging.Filters.CropArea(d, W, H, Region);
+      }
 
     public RGBLuminanceSource(System.Windows.Media.Imaging.WriteableBitmap d)
         : this(d, d.PixelWidth, d.PixelHeight)
@@ -109,7 +108,7 @@ namespace ZXing
         int height = __height = H;
         // In order to measure pure decoding speed, we convert the entire image to a greyscale array
         // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
-        luminances = new sbyte[width * height];
+        luminances = new byte[width * height];
         //if (format == PixelFormat.Format8bppIndexed)
         {
             System.Windows.Media.Color c;
@@ -123,7 +122,7 @@ namespace ZXing
                           (byte)((srcPixel >> 0x10) & 0xff),
                           (byte)((srcPixel >> 8) & 0xff),
                           (byte)(srcPixel & 0xff));
-                    luminances[offset + x] = (sbyte) (0.3*c.R + 0.59*c.G + 0.11*c.B);
+                    luminances[offset + x] = (byte) (0.3*c.R + 0.59*c.G + 0.11*c.B);
                 }
             }
         }
@@ -153,7 +152,7 @@ namespace ZXing
          int height = __height = H;
          // In order to measure pure decoding speed, we convert the entire image to a greyscale array
          // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
-         luminances = new sbyte[width * height];
+         luminances = new byte[width * height];
           
          // The underlying raster of image consists of bytes with the luminance values
          var data = d.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, d.PixelFormat);
@@ -172,7 +171,7 @@ namespace ZXing
                   for (int x = 0; x < width; x++)
                   {
                      c = d.GetPixel(x, y);
-                     luminances[offset + x] = (sbyte) (0.3*c.R + 0.59*c.G + 0.11*c.B);
+                     luminances[offset + x] = (byte)(0.3*c.R + 0.59*c.G + 0.11*c.B);
                   }
                }
             }
@@ -183,13 +182,13 @@ namespace ZXing
                var ptrInBitmap = data.Scan0;
 
                // prepare palette for 1 and 8 bit indexed bitmaps
-               var luminancePalette = new sbyte[d.Palette.Entries.Length];
+               var luminancePalette = new byte[d.Palette.Entries.Length];
                for (var index = 0; index < d.Palette.Entries.Length; index++)
                {
                   var color = d.Palette.Entries[index];
-                  luminancePalette[index] = (sbyte) (0.3*color.R +
-                                                     0.59*color.G +
-                                                     0.11*color.B);
+                  luminancePalette[index] = (byte) (0.3*color.R +
+                                                    0.59*color.G +
+                                                    0.11*color.B);
                }
 
                for (int y = 0; y < height; y++)
@@ -224,9 +223,9 @@ namespace ZXing
                      case 4:
                         for (int x = 0; x < width; x++)
                         {
-                           var luminance = (sbyte) (0.3*buffer[x*pixelWidth] +
-                                                    0.59*buffer[x*pixelWidth + 1] +
-                                                    0.11*buffer[x*pixelWidth + 2]);
+                           var luminance = (byte) (0.3*buffer[x*pixelWidth] +
+                                                   0.59*buffer[x*pixelWidth + 1] +
+                                                   0.11*buffer[x*pixelWidth + 2]);
                            luminances[offset + x] = luminance;
                         }
                         break;
@@ -244,17 +243,17 @@ namespace ZXing
 
 #endif
 
-      override public sbyte[] getRow(int y, sbyte[] row)
+      override public byte[] getRow(int y, byte[] row)
       {
          if (isRotated == false)
          {
             int width = Width;
             if (row == null || row.Length < width)
             {
-               row = new sbyte[width];
+               row = new byte[width];
             }
             for (int i = 0; i < width; i++)
-               row[i] = (sbyte)(luminances[y * width + i] - 128);
+               row[i] = (byte)(luminances[y * width + i] - 128);
             return row;
          }
          else
@@ -263,14 +262,14 @@ namespace ZXing
             int height = __height;
             if (row == null || row.Length < height)
             {
-               row = new sbyte[height];
+               row = new byte[height];
             }
             for (int i = 0; i < height; i++)
-               row[i] = (sbyte)(luminances[i * width + y] - 128);
+               row[i] = (byte)(luminances[i * width + y] - 128);
             return row;
          }
       }
-      public override sbyte[] Matrix
+      public override byte[] Matrix
       {
          get { return luminances; }
       }

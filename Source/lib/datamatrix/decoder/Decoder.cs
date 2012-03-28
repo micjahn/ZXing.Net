@@ -77,7 +77,7 @@ namespace ZXing.Datamatrix.Internal
             return null;
 
          // Read codewords
-         sbyte[] codewords = parser.readCodewords();
+         byte[] codewords = parser.readCodewords();
          if (codewords == null)
             return null;
          // Separate into data blocks
@@ -91,13 +91,13 @@ namespace ZXing.Datamatrix.Internal
          {
             totalBytes += dataBlocks[i].NumDataCodewords;
          }
-         sbyte[] resultBytes = new sbyte[totalBytes];
+         byte[] resultBytes = new byte[totalBytes];
 
          // Error-correct and copy data blocks together into a stream of bytes
          for (int j = 0; j < dataBlocksCount; j++)
          {
             DataBlock dataBlock = dataBlocks[j];
-            sbyte[] codewordBytes = dataBlock.Codewords;
+            byte[] codewordBytes = dataBlock.Codewords;
             int numDataCodewords = dataBlock.NumDataCodewords;
             if (!correctErrors(codewordBytes, numDataCodewords))
                return null;
@@ -118,9 +118,8 @@ namespace ZXing.Datamatrix.Internal
       ///
       /// <param name="codewordBytes">data and error correction codewords</param>
       /// <param name="numDataCodewords">number of codewords that are data bytes</param>
-      /// <exception cref="ChecksumException">if error correction fails</exception>
       /// </summary>
-      private bool correctErrors(sbyte[] codewordBytes, int numDataCodewords)
+      private bool correctErrors(byte[] codewordBytes, int numDataCodewords)
       {
          int numCodewords = codewordBytes.Length;
          // First read into an array of ints
@@ -137,7 +136,7 @@ namespace ZXing.Datamatrix.Internal
          // We don't care about errors in the error-correction codewords
          for (int i = 0; i < numDataCodewords; i++)
          {
-            codewordBytes[i] = (sbyte)codewordsInts[i];
+            codewordBytes[i] = (byte)codewordsInts[i];
          }
 
          return true;

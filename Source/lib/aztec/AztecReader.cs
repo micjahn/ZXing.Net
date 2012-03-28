@@ -80,7 +80,7 @@ namespace ZXing.Aztec
 
          Result result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.AZTEC);
 
-         IList<sbyte[]> byteSegments = decoderResult.ByteSegments;
+         IList<byte[]> byteSegments = decoderResult.ByteSegments;
          if (byteSegments != null)
          {
             result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);

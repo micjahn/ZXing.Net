@@ -49,13 +49,13 @@ namespace ZXing.Maxicode.Internal
                                   IDictionary<DecodeHintType, object> hints)
       {
          BitMatrixParser parser = new BitMatrixParser(bits);
-         sbyte[] codewords = parser.readCodewords();
+         byte[] codewords = parser.readCodewords();
 
          if (!correctErrors(codewords, 0, 10, 10, ALL))
             return null;
 
          int mode = codewords[0] & 0x0F;
-         sbyte[] datawords;
+         byte[] datawords;
          switch (mode)
          {
             case 2:
@@ -65,14 +65,14 @@ namespace ZXing.Maxicode.Internal
                   return null;
                if (!correctErrors(codewords, 20, 84, 40, ODD))
                   return null;
-               datawords = new sbyte[94];
+               datawords = new byte[94];
                break;
             case 5:
                if (!correctErrors(codewords, 20, 68, 56, EVEN))
                   return null;
                if (!correctErrors(codewords, 20, 68, 56, ODD))
                   return null;
-               datawords = new sbyte[78];
+               datawords = new byte[78];
                break;
             default:
                return null;
@@ -84,7 +84,7 @@ namespace ZXing.Maxicode.Internal
          return DecodedBitStreamParser.decode(datawords, mode);
       }
 
-      private bool correctErrors(sbyte[] codewordBytes,
+      private bool correctErrors(byte[] codewordBytes,
                                  int start,
                                  int dataCodewords,
                                  int ecCodewords,
@@ -114,7 +114,7 @@ namespace ZXing.Maxicode.Internal
          {
             if ((mode == ALL) || (i % 2 == (mode - 1)))
             {
-               codewordBytes[i + start] = (sbyte)codewordsInts[i / divisor];
+               codewordBytes[i + start] = (byte)codewordsInts[i / divisor];
             }
          }
 

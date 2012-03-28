@@ -202,7 +202,7 @@ namespace ZXing.QrCode.Test
          //  The real solution is to implement Kanji mode, in which case the golden file will be wrong again
          /*
          compareToGoldenFile(
-             new String(new sbyte[] {(byte)0x83, 0x65, (byte)0x83, 0x58, (byte)0x83, 0x67}, "Shift_JIS"),
+             new String(new byte[] {(byte)0x83, 0x65, (byte)0x83, 0x58, (byte)0x83, 0x67}, "Shift_JIS"),
              ErrorCorrectionLevel.H, 145,
              "renderer-test-03.png");
          */

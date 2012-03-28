@@ -23,31 +23,33 @@ namespace ZXing.Common.Test
    [TestFixture]
    public class StringUtilsTestCase
    {
-
       [Test]
       public void testShortShiftJIS_1()
       {
          // ÈáëÈ≠ö
-         doTest(new sbyte[] { -117 /*0x8b*/, -32 /*0xe0*/, -117 /*0x8b*/, -101 /*0x9b*/, }, "SJIS");
+         doTest(new byte[] {0x8b, 0xe0, 0x8b, 0x9b,}, "SJIS");
       }
 
       [Test]
       public void testShortISO88591_1()
       {
          // b√•d
-         doTest(new sbyte[] { 0x62, -27 /*0xe5*/, 0x64, }, "ISO-8859-1");
+         doTest(new byte[] {0x62, 0xe5, 0x64,}, "ISO-8859-1");
       }
 
       [Test]
       public void testMixedShiftJIS_1()
       {
          // Hello Èáë!
-         doTest(new sbyte[] {  0x48,  0x65,  0x6c,  0x6c,  0x6f,
-                         0x20,  -117 /*0x8b*/, -32 /*0xe0*/,  0x21, },
+         doTest(new byte[]
+                   {
+                      0x48, 0x65, 0x6c, 0x6c, 0x6f,
+                      0x20, 0x8b, 0xe0, 0x21,
+                   },
                 "SJIS");
       }
 
-      private static void doTest(sbyte[] bytes, String charsetName)
+      private static void doTest(byte[] bytes, String charsetName)
       {
          var charset = Encoding.GetEncoding(charsetName);
          String guessedName = StringUtils.guessEncoding(bytes, null);

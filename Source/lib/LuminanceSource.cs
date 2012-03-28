@@ -31,8 +31,8 @@ namespace ZXing
    /// </author>
    public abstract class LuminanceSource
    {
-      private int width;
-      private int height;
+      private readonly int width;
+      private readonly int height;
 
       protected LuminanceSource(int width, int height)
       {
@@ -54,7 +54,7 @@ namespace ZXing
       /// </param>
       /// <returns> An array containing the luminance data.
       /// </returns>
-      public abstract sbyte[] getRow(int y, sbyte[] row);
+      public abstract byte[] getRow(int y, byte[] row);
 
       /// <summary> Fetches luminance data for the underlying bitmap. Values should be fetched using:
       /// int luminance = array[y * width + x] & 0xff;
@@ -64,7 +64,7 @@ namespace ZXing
       /// larger than width * height bytes on some platforms. Do not modify the contents
       /// of the result.
       /// </returns>
-      public abstract sbyte[] Matrix { get; }
+      public abstract byte[] Matrix { get; }
 
       /// <returns> The width of the bitmap.</returns>
       virtual public int Width
@@ -135,7 +135,7 @@ namespace ZXing
 
       override public String ToString()
       {
-         var row = new sbyte[width];
+         var row = new byte[width];
          var result = new StringBuilder(height * (width + 1));
          for (int y = 0; y < height; y++)
          {

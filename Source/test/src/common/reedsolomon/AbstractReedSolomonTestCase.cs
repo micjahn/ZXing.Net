@@ -57,7 +57,7 @@ namespace ZXing.Common.ReedSolomon.Test
 
       internal static Random getRandom()
       {
-         //return new SecureRandom(new sbyte[] { (byte)0xDE, (byte)0xAD, (byte)0xBE, (byte)0xEF });
+         //return new SecureRandom(new byte[] { (byte)0xDE, (byte)0xAD, (byte)0xBE, (byte)0xEF });
          return new Random((int)DateTime.Now.Ticks);
       }
 

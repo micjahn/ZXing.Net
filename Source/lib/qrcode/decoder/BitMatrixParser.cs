@@ -170,7 +170,7 @@ namespace ZXing.QrCode.Internal
       /// <returns> bytes encoded within the QR Code
       /// </returns>
       /// <throws>  ReaderException if the exact number of bytes expected is not read </throws>
-      internal sbyte[] readCodewords()
+      internal byte[] readCodewords()
       {
          FormatInformation formatInfo = readFormatInformation();
          if (formatInfo == null)
@@ -188,7 +188,7 @@ namespace ZXing.QrCode.Internal
          BitMatrix functionPattern = version.buildFunctionPattern();
 
          bool readingUp = true;
-         sbyte[] result = new sbyte[version.TotalCodewords];
+         byte[] result = new byte[version.TotalCodewords];
          int resultOffset = 0;
          int currentByte = 0;
          int bitsRead = 0;
@@ -220,7 +220,7 @@ namespace ZXing.QrCode.Internal
                      // If we've made a whole byte, save it off
                      if (bitsRead == 8)
                      {
-                        result[resultOffset++] = (sbyte)currentByte;
+                        result[resultOffset++] = (byte)currentByte;
                         bitsRead = 0;
                         currentByte = 0;
                      }

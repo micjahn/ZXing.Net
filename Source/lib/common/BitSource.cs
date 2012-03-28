@@ -29,14 +29,14 @@ namespace ZXing.Common
    /// </author>
    public sealed class BitSource
    {
-      private sbyte[] bytes;
+      private byte[] bytes;
       private int byteOffset;
       private int bitOffset;
 
       /// <param name="bytes">bytes from which this will read bits. Bits will be read from the first byte first.
       /// Bits are read within a byte from most-significant to least-significant bit.
       /// </param>
-      public BitSource(sbyte[] bytes)
+      public BitSource(byte[] bytes)
       {
          this.bytes = bytes;
       }

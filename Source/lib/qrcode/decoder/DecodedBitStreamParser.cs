@@ -48,7 +48,7 @@ namespace ZXing.QrCode.Internal
       {
       }
 
-      internal static DecoderResult decode(sbyte[] bytes,
+      internal static DecoderResult decode(byte[] bytes,
                                   Version version,
                                   ErrorCorrectionLevel ecLevel,
                                   IDictionary<DecodeHintType, object> hints)
@@ -57,7 +57,7 @@ namespace ZXing.QrCode.Internal
          var result = new StringBuilder(50);
          CharacterSetECI currentCharacterSetECI = null;
          bool fc1InEffect = false;
-         var byteSegments = new List<sbyte[]>(1);
+         var byteSegments = new List<byte[]>(1);
          Mode mode;
          do
          {
@@ -173,7 +173,7 @@ namespace ZXing.QrCode.Internal
 
          // Each character will require 2 bytes. Read the characters as 2-byte pairs
          // and decode as GB2312 afterwards
-         sbyte[] buffer = new sbyte[2 * count];
+         byte[] buffer = new byte[2 * count];
          int offset = 0;
          while (count > 0)
          {
@@ -190,15 +190,15 @@ namespace ZXing.QrCode.Internal
                // In the 0xB0A1 to 0xFAFE range
                assembledTwoBytes += 0x0A6A1;
             }
-            buffer[offset] = (sbyte)((assembledTwoBytes >> 8) & 0xFF);
-            buffer[offset + 1] = (sbyte)(assembledTwoBytes & 0xFF);
+            buffer[offset] = (byte)((assembledTwoBytes >> 8) & 0xFF);
+            buffer[offset + 1] = (byte)(assembledTwoBytes & 0xFF);
             offset += 2;
             count--;
          }
 
          try
          {
-            result.Append(Encoding.GetEncoding(StringUtils.GB2312).GetString(SupportClass.ToByteArray(buffer), 0, buffer.Length));
+            result.Append(Encoding.GetEncoding(StringUtils.GB2312).GetString(buffer, 0, buffer.Length));
          }
          catch (Exception)
          {
@@ -220,7 +220,7 @@ namespace ZXing.QrCode.Internal
 
          // Each character will require 2 bytes. Read the characters as 2-byte pairs
          // and decode as Shift_JIS afterwards
-         sbyte[] buffer = new sbyte[2 * count];
+         byte[] buffer = new byte[2 * count];
          int offset = 0;
          while (count > 0)
          {
@@ -237,15 +237,15 @@ namespace ZXing.QrCode.Internal
                // In the 0xE040 to 0xEBBF range
                assembledTwoBytes += 0x0C140;
             }
-            buffer[offset] = (sbyte)(assembledTwoBytes >> 8);
-            buffer[offset + 1] = (sbyte)assembledTwoBytes;
+            buffer[offset] = (byte)(assembledTwoBytes >> 8);
+            buffer[offset + 1] = (byte)assembledTwoBytes;
             offset += 2;
             count--;
          }
          // Shift_JIS may not be supported in some environments:
          try
          {
-            result.Append(Encoding.GetEncoding(StringUtils.SHIFT_JIS).GetString(SupportClass.ToByteArray(buffer), 0, buffer.Length));
+            result.Append(Encoding.GetEncoding(StringUtils.SHIFT_JIS).GetString(buffer, 0, buffer.Length));
          }
          catch (Exception)
          {
@@ -258,7 +258,7 @@ namespace ZXing.QrCode.Internal
                                             StringBuilder result,
                                             int count,
                                             CharacterSetECI currentCharacterSetECI,
-                                            IList<sbyte[]> byteSegments,
+                                            IList<byte[]> byteSegments,
                                             IDictionary<DecodeHintType, object> hints)
       {
          // Don't crash trying to read more bits than we have available.
@@ -267,10 +267,10 @@ namespace ZXing.QrCode.Internal
             return false;
          }
 
-         sbyte[] readBytes = new sbyte[count];
+         byte[] readBytes = new byte[count];
          for (int i = 0; i < count; i++)
          {
-            readBytes[i] = (sbyte)bits.readBits(8);
+            readBytes[i] = (byte)bits.readBits(8);
          }
          String encoding;
          if (currentCharacterSetECI == null)
@@ -288,7 +288,7 @@ namespace ZXing.QrCode.Internal
          }
          try
          {
-            result.Append(Encoding.GetEncoding(encoding).GetString(SupportClass.ToByteArray(readBytes), 0, readBytes.Length));
+            result.Append(Encoding.GetEncoding(encoding).GetString(readBytes, 0, readBytes.Length));
          }
          catch (Exception)
          {

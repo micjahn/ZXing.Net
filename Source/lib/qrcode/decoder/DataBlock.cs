@@ -14,8 +14,6 @@
 * limitations under the License.
 */
 
-using System;
-
 namespace ZXing.QrCode.Internal
 {
    /// <summary> <p>Encapsulates a block of data within a QR Code. QR Codes may split their data into
@@ -27,12 +25,12 @@ namespace ZXing.QrCode.Internal
    /// </author>
    /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
    /// </author>
-   sealed class DataBlock
+   internal sealed class DataBlock
    {
-      private int numDataCodewords;
-      private sbyte[] codewords;
+      private readonly int numDataCodewords;
+      private readonly byte[] codewords;
 
-      private DataBlock(int numDataCodewords, sbyte[] codewords)
+      private DataBlock(int numDataCodewords, byte[] codewords)
       {
          this.numDataCodewords = numDataCodewords;
          this.codewords = codewords;
@@ -52,7 +50,7 @@ namespace ZXing.QrCode.Internal
       /// <returns> {@link DataBlock}s containing original bytes, "de-interleaved" from representation in the
       /// QR Code
       /// </returns>
-      internal static DataBlock[] getDataBlocks(sbyte[] rawCodewords, Version version, ErrorCorrectionLevel ecLevel)
+      internal static DataBlock[] getDataBlocks(byte[] rawCodewords, Version version, ErrorCorrectionLevel ecLevel)
       {
 
          if (rawCodewords.Length != version.TotalCodewords)
@@ -81,7 +79,7 @@ namespace ZXing.QrCode.Internal
             {
                int numDataCodewords = ecBlock.DataCodewords;
                int numBlockCodewords = ecBlocks.ECCodewordsPerBlock + numDataCodewords;
-               result[numResultBlocks++] = new DataBlock(numDataCodewords, new sbyte[numBlockCodewords]);
+               result[numResultBlocks++] = new DataBlock(numDataCodewords, new byte[numBlockCodewords]);
             }
          }
 
@@ -137,7 +135,7 @@ namespace ZXing.QrCode.Internal
          }
       }
 
-      internal sbyte[] Codewords
+      internal byte[] Codewords
       {
          get
          {

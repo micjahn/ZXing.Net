@@ -49,7 +49,7 @@ namespace ZXing.Common
       /// <returns>name of guessed encoding; at the moment will only guess one of:
       /// {@link #SHIFT_JIS}, {@link #UTF8}, {@link #ISO88591}, or the platform
       /// default encoding if none of these can possibly be correct</returns>
-      public static String guessEncoding(sbyte[] bytes, IDictionary<DecodeHintType, object> hints)
+      public static String guessEncoding(byte[] bytes, IDictionary<DecodeHintType, object> hints)
       {
          if (hints != null && hints.ContainsKey(DecodeHintType.CHARACTER_SET))
          {
@@ -84,9 +84,9 @@ namespace ZXing.Common
          int isoHighOther = 0;
 
          bool utf8bom = bytes.Length > 3 &&
-             bytes[0] == (sbyte)-17 /* 0xEF */ &&
-             bytes[1] == (sbyte)-69 /* 0xBB */ &&
-             bytes[2] == (sbyte)-65 /* 0xBF */;
+             bytes[0] == 0xEF &&
+             bytes[1] == 0xBB &&
+             bytes[2] == 0xBF;
 
          for (int i = 0;
               i < length && (canBeISO88591 || canBeShiftJIS || canBeUTF8);

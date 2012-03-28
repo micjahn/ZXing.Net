@@ -27,7 +27,7 @@ namespace ZXing.Common.Test
       [Test]
       public void testSource()
       {
-         sbyte[] bytes = { (sbyte)1, (sbyte)2, (sbyte)3, (sbyte)4, (sbyte)5 };
+         byte[] bytes = {1, 2, 3, 4, 5};
          BitSource source = new BitSource(bytes);
          Assert.AreEqual(40, source.available());
          Assert.AreEqual(0, source.readBits(1));

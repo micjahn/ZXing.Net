@@ -30,8 +30,10 @@ namespace ZXing.Datamatrix.Internal.Test
       public void testAsciiStandardDecode()
       {
          // ASCII characters 0-127 are encoded as the value + 1
-         sbyte[] bytes = {(sbyte) ('a' + 1), (sbyte) ('b' + 1), (sbyte) ('c' + 1),
-                    (sbyte) ('A' + 1), (sbyte) ('B' + 1), (sbyte) ('C' + 1)};
+         byte[] bytes = {
+                           ('a' + 1), ('b' + 1), ('c' + 1),
+                           ('A' + 1), ('B' + 1), ('C' + 1)
+                        };
          String decodedString = DecodedBitStreamParser.decode(bytes).Text;
          Assert.AreEqual("abcABC", decodedString);
       }
@@ -40,8 +42,10 @@ namespace ZXing.Datamatrix.Internal.Test
       public void testAsciiDoubleDigitDecode()
       {
          // ASCII double digit (00 - 99) Numeric Value + 130
-         sbyte[] bytes = {(sbyte)       -126 , (sbyte) (-125),
-                    (sbyte) (-28), (sbyte) (-27)};
+         byte[] bytes = {
+                           130, (1 + 130),
+                           (98 + 130), (99 + 130)
+                        };
          String decodedString = DecodedBitStreamParser.decode(bytes).Text;
          Assert.AreEqual("00019899", decodedString);
       }

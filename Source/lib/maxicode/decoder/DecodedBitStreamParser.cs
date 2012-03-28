@@ -28,7 +28,7 @@ namespace ZXing.Maxicode.Internal
    /// <author>mike32767</author>
    /// <author>Manuel Kasten</author>
    /// </summary>
-   internal sealed class DecodedBitStreamParser
+   internal static class DecodedBitStreamParser
    {
       private const char SHIFTA = '\uFFF0';
       private const char SHIFTB = '\uFFF1';
@@ -58,11 +58,7 @@ namespace ZXing.Maxicode.Internal
                                  "\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u0009\n\u000B\u000C\r\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F\u0020\u0021\"\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F\u0030\u0031\u0032\u0033\u0034\u0035\u0036\u0037\u0038\u0039\u003A\u003B\u003C\u003D\u003E\u003F"
                               };
 
-      private DecodedBitStreamParser()
-      {
-      }
-
-      internal static DecoderResult decode(sbyte[] bytes, int mode)
+      internal static DecoderResult decode(byte[] bytes, int mode)
       {
          StringBuilder result = new StringBuilder(144);
          switch (mode)
@@ -103,13 +99,13 @@ namespace ZXing.Maxicode.Internal
          return new DecoderResult(bytes, result.ToString(), null, mode.ToString());
       }
 
-      private static int getBit(int bit, sbyte[] bytes)
+      private static int getBit(int bit, byte[] bytes)
       {
          bit--;
          return (bytes[bit / 6] & (1 << (5 - (bit % 6)))) == 0 ? 0 : 1;
       }
 
-      private static int getInt(sbyte[] bytes, sbyte[] x)
+      private static int getInt(byte[] bytes, byte[] x)
       {
          int val = 0;
          for (int i = 0; i < x.Length; i++)
@@ -119,43 +115,43 @@ namespace ZXing.Maxicode.Internal
          return val;
       }
 
-      private static int getCountry(sbyte[] bytes)
+      private static int getCountry(byte[] bytes)
       {
-         return getInt(bytes, new sbyte[] { 53, 54, 43, 44, 45, 46, 47, 48, 37, 38 });
+         return getInt(bytes, new byte[] { 53, 54, 43, 44, 45, 46, 47, 48, 37, 38 });
       }
 
-      private static int getServiceClass(sbyte[] bytes)
+      private static int getServiceClass(byte[] bytes)
       {
-         return getInt(bytes, new sbyte[] { 55, 56, 57, 58, 59, 60, 49, 50, 51, 52 });
+         return getInt(bytes, new byte[] { 55, 56, 57, 58, 59, 60, 49, 50, 51, 52 });
       }
 
-      private static int getPostCode2Length(sbyte[] bytes)
+      private static int getPostCode2Length(byte[] bytes)
       {
-         return getInt(bytes, new sbyte[] { 39, 40, 41, 42, 31, 32 });
+         return getInt(bytes, new byte[] { 39, 40, 41, 42, 31, 32 });
       }
 
-      private static int getPostCode2(sbyte[] bytes)
+      private static int getPostCode2(byte[] bytes)
       {
-         return getInt(bytes, new sbyte[] {33, 34, 35, 36, 25, 26, 27, 28, 29, 30, 19,
+         return getInt(bytes, new byte[] {33, 34, 35, 36, 25, 26, 27, 28, 29, 30, 19,
         20, 21, 22, 23, 24, 13, 14, 15, 16, 17, 18, 7, 8, 9, 10, 11, 12, 1, 2});
       }
 
-      private static String getPostCode3(sbyte[] bytes)
+      private static String getPostCode3(byte[] bytes)
       {
          return new String(
             new char[]
                {
-                  SETS[0][getInt(bytes, new sbyte[] {39, 40, 41, 42, 31, 32})],
-                  SETS[0][getInt(bytes, new sbyte[] {33, 34, 35, 36, 25, 26})],
-                  SETS[0][getInt(bytes, new sbyte[] {27, 28, 29, 30, 19, 20})],
-                  SETS[0][getInt(bytes, new sbyte[] {21, 22, 23, 24, 13, 14})],
-                  SETS[0][getInt(bytes, new sbyte[] {15, 16, 17, 18, 7, 8})],
-                  SETS[0][getInt(bytes, new sbyte[] {9, 10, 11, 12, 1, 2})],
+                  SETS[0][getInt(bytes, new byte[] {39, 40, 41, 42, 31, 32})],
+                  SETS[0][getInt(bytes, new byte[] {33, 34, 35, 36, 25, 26})],
+                  SETS[0][getInt(bytes, new byte[] {27, 28, 29, 30, 19, 20})],
+                  SETS[0][getInt(bytes, new byte[] {21, 22, 23, 24, 13, 14})],
+                  SETS[0][getInt(bytes, new byte[] {15, 16, 17, 18, 7, 8})],
+                  SETS[0][getInt(bytes, new byte[] {9, 10, 11, 12, 1, 2})],
                }
             );
       }
 
-      private static String getMessage(sbyte[] bytes, int start, int len)
+      private static String getMessage(byte[] bytes, int start, int len)
       {
          StringBuilder sb = new StringBuilder();
          int shift = -1;

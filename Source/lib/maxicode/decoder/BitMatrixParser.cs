@@ -71,9 +71,9 @@ namespace ZXing.Maxicode.Internal
          this.bitMatrix = bitMatrix;
       }
 
-      internal sbyte[] readCodewords()
+      internal byte[] readCodewords()
       {
-         sbyte[] result = new sbyte[144];
+         byte[] result = new byte[144];
          int height = bitMatrix.Height;
          int width = bitMatrix.Width;
          for (int y = 0; y < height; y++)
@@ -84,7 +84,7 @@ namespace ZXing.Maxicode.Internal
                int bit = bitnrRow[x];
                if (bit >= 0 && bitMatrix[x, y])
                {
-                  result[bit / 6] |= (sbyte)(1 << (5 - (bit % 6)));
+                  result[bit / 6] |= (byte)(1 << (5 - (bit % 6)));
                }
             }
          }

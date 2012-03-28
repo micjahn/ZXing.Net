@@ -72,7 +72,7 @@ namespace ZXing.QrCode
             return null;
 
          Result result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.QR_CODE);
-         IList<sbyte[]> byteSegments = decoderResult.ByteSegments;
+         IList<byte[]> byteSegments = decoderResult.ByteSegments;
          if (byteSegments != null)
          {
             result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);

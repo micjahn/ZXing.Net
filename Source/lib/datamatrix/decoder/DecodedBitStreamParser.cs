@@ -74,12 +74,12 @@ namespace ZXing.Datamatrix.Internal
                                                        '|', '}', '~', (char) 127
                                                     };
 
-      internal static DecoderResult decode(sbyte[] bytes)
+      internal static DecoderResult decode(byte[] bytes)
       {
          BitSource bits = new BitSource(bytes);
          StringBuilder result = new StringBuilder(100);
          StringBuilder resultTrailer = new StringBuilder(0);
-         List<sbyte[]> byteSegments = new List<sbyte[]>(1);
+         List<byte[]> byteSegments = new List<byte[]>(1);
          Mode mode = Mode.ASCII_ENCODE;
          do
          {
@@ -602,7 +602,7 @@ namespace ZXing.Datamatrix.Internal
       /// </summary>
       private static bool decodeBase256Segment(BitSource bits,
                                                StringBuilder result,
-                                               IList<sbyte[]> byteSegments)
+                                               IList<byte[]> byteSegments)
       {
          // Figure out how long the Base 256 Segment is.
          int codewordPosition = 1 + bits.ByteOffset; // position is 1-indexed
@@ -628,7 +628,6 @@ namespace ZXing.Datamatrix.Internal
          }
 
          byte[] bytes = new byte[count];
-         sbyte[] sbytes = new sbyte[count];
          for (int i = 0; i < count; i++)
          {
             // Have seen this particular error in the wild, such as at
@@ -638,9 +637,8 @@ namespace ZXing.Datamatrix.Internal
                return false;
             }
             bytes[i] = (byte)unrandomize255State(bits.readBits(8), codewordPosition++);
-            sbytes[i] = (sbyte)bytes[i];
          }
-         byteSegments.Add(sbytes);
+         byteSegments.Add(bytes);
          try
          {
 #if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5)

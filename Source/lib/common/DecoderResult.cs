@@ -16,70 +16,34 @@
 
 using System;
 using System.Collections.Generic;
-using ErrorCorrectionLevel = ZXing.QrCode.Internal.ErrorCorrectionLevel;
 
 namespace ZXing.Common
 {
-
-   /// <summary> <p>Encapsulates the result of decoding a matrix of bits. This typically
+   /// <summary>
+   /// Encapsulates the result of decoding a matrix of bits. This typically
    /// applies to 2D barcode formats. For now it contains the raw bytes obtained,
-   /// as well as a String interpretation of those bytes, if applicable.</p>
-   /// 
+   /// as well as a String interpretation of those bytes, if applicable.
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
    public sealed class DecoderResult
    {
-      private sbyte[] rawBytes;
-      private String text;
-      private IList<sbyte[]> byteSegments;
-      private String ecLevel;
+      public byte[] RawBytes { get; private set; }
 
-      public sbyte[] RawBytes
-      {
-         get
-         {
-            return rawBytes;
-         }
+      public String Text { get; private set; }
 
-      }
-      public String Text
-      {
-         get
-         {
-            return text;
-         }
+      public IList<byte[]> ByteSegments { get; private set; }
 
-      }
-      public IList<sbyte[]> ByteSegments
-      {
-         get
-         {
-            return byteSegments;
-         }
+      public String ECLevel { get; private set; }
 
-      }
-      public String ECLevel
-      {
-         get
-         {
-            return ecLevel;
-         }
-
-      }
-
-      public DecoderResult(sbyte[] rawBytes, String text, IList<sbyte[]> byteSegments, String ecLevel)
+      public DecoderResult(byte[] rawBytes, String text, IList<byte[]> byteSegments, String ecLevel)
       {
          if (rawBytes == null && text == null)
          {
             throw new ArgumentException();
          }
-         this.rawBytes = rawBytes;
-         this.text = text;
-         this.byteSegments = byteSegments;
-         this.ecLevel = ecLevel;
+         RawBytes = rawBytes;
+         Text = text;
+         ByteSegments = byteSegments;
+         ECLevel = ecLevel;
       }
    }
 }

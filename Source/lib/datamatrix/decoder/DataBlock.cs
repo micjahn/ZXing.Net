@@ -28,9 +28,9 @@ namespace ZXing.Datamatrix.Internal
    sealed class DataBlock
    {
       private readonly int numDataCodewords;
-      private readonly sbyte[] codewords;
+      private readonly byte[] codewords;
 
-      private DataBlock(int numDataCodewords, sbyte[] codewords)
+      private DataBlock(int numDataCodewords, byte[] codewords)
       {
          this.numDataCodewords = numDataCodewords;
          this.codewords = codewords;
@@ -46,7 +46,7 @@ namespace ZXing.Datamatrix.Internal
       /// <returns>DataBlocks containing original bytes, "de-interleaved" from representation in the</returns>
       ///         Data Matrix Code
       /// </summary>
-      internal static DataBlock[] getDataBlocks(sbyte[] rawCodewords,
+      internal static DataBlock[] getDataBlocks(byte[] rawCodewords,
                                        Version version)
       {
          // Figure out the number and size of data blocks used by this version
@@ -69,7 +69,7 @@ namespace ZXing.Datamatrix.Internal
             {
                int numDataCodewords = ecBlock.DataCodewords;
                int numBlockCodewords = ecBlocks.ECCodewords + numDataCodewords;
-               result[numResultBlocks++] = new DataBlock(numDataCodewords, new sbyte[numBlockCodewords]);
+               result[numResultBlocks++] = new DataBlock(numDataCodewords, new byte[numBlockCodewords]);
             }
          }
 
@@ -124,7 +124,7 @@ namespace ZXing.Datamatrix.Internal
          get { return numDataCodewords; }
       }
 
-      internal sbyte[] Codewords
+      internal byte[] Codewords
       {
          get { return codewords; }
       }

@@ -76,7 +76,7 @@ namespace ZXing.Common
             LuminanceSource source = LuminanceSource;
             if (source.Width >= MINIMUM_DIMENSION && source.Height >= MINIMUM_DIMENSION)
             {
-               sbyte[] luminances = source.Matrix;
+               byte[] luminances = source.Matrix;
                int width = source.Width;
                int height = source.Height;
 
@@ -107,7 +107,7 @@ namespace ZXing.Common
       // For each 8x8 block in the image, calculate the average black point using a 5x5 grid
       // of the blocks around it. Also handles the corner cases (fractional blocks are computed based
       // on the last 8 pixels in the row/column which are also used in the previous block).
-      private static void calculateThresholdForBlock(sbyte[] luminances, int subWidth, int subHeight, int width, int height, int[][] blackPoints, BitMatrix matrix)
+      private static void calculateThresholdForBlock(byte[] luminances, int subWidth, int subHeight, int width, int height, int[][] blackPoints, BitMatrix matrix)
       {
          for (int y = 0; y < subHeight; y++)
          {
@@ -144,7 +144,7 @@ namespace ZXing.Common
       }
 
       // Applies a single threshold to an 8x8 block of pixels.
-      private static void threshold8x8Block(sbyte[] luminances, int xoffset, int yoffset, int threshold, int stride, BitMatrix matrix)
+      private static void threshold8x8Block(byte[] luminances, int xoffset, int yoffset, int threshold, int stride, BitMatrix matrix)
       {
          int offset = (yoffset * stride) + xoffset;
          for (int y = 0; y < BLOCK_SIZE; y++, offset += stride)
@@ -161,7 +161,7 @@ namespace ZXing.Common
       // Calculates a single black point for each 8x8 block of pixels and saves it away.
       // See the following thread for a discussion of this algorithm:
       // http://groups.google.com/group/zxing/browse_thread/thread/d06efa2c35a7ddc0
-      private static int[][] calculateBlackPoints(sbyte[] luminances, int subWidth, int subHeight, int width, int height)
+      private static int[][] calculateBlackPoints(byte[] luminances, int subWidth, int subHeight, int width, int height)
       {
          int[][] blackPoints = new int[subHeight][];
          for (int i = 0; i < subHeight; i++)

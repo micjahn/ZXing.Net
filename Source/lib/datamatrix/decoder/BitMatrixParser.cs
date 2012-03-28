@@ -15,7 +15,7 @@
  */
 
 using System;
-using System.Collections.Generic;
+
 using ZXing.Common;
 
 namespace ZXing.Datamatrix.Internal
@@ -80,9 +80,9 @@ namespace ZXing.Datamatrix.Internal
       /// <returns>bytes encoded within the Data Matrix Code</returns>
       /// <exception cref="FormatException">if the exact number of bytes expected is not read</exception>
       /// </summary>
-      internal sbyte[] readCodewords()
+      internal byte[] readCodewords()
       {
-         sbyte[] result = new sbyte[version.getTotalCodewords()];
+         byte[] result = new byte[version.getTotalCodewords()];
          int resultOffset = 0;
 
          int row = 4;
@@ -102,28 +102,28 @@ namespace ZXing.Datamatrix.Internal
             // Check the four corner cases
             if ((row == numRows) && (column == 0) && !corner1Read)
             {
-               result[resultOffset++] = (sbyte)readCorner1(numRows, numColumns);
+               result[resultOffset++] = (byte)readCorner1(numRows, numColumns);
                row -= 2;
                column += 2;
                corner1Read = true;
             }
             else if ((row == numRows - 2) && (column == 0) && ((numColumns & 0x03) != 0) && !corner2Read)
             {
-               result[resultOffset++] = (sbyte)readCorner2(numRows, numColumns);
+               result[resultOffset++] = (byte)readCorner2(numRows, numColumns);
                row -= 2;
                column += 2;
                corner2Read = true;
             }
             else if ((row == numRows + 4) && (column == 2) && ((numColumns & 0x07) == 0) && !corner3Read)
             {
-               result[resultOffset++] = (sbyte)readCorner3(numRows, numColumns);
+               result[resultOffset++] = (byte)readCorner3(numRows, numColumns);
                row -= 2;
                column += 2;
                corner3Read = true;
             }
             else if ((row == numRows - 2) && (column == 0) && ((numColumns & 0x07) == 4) && !corner4Read)
             {
-               result[resultOffset++] = (sbyte)readCorner4(numRows, numColumns);
+               result[resultOffset++] = (byte)readCorner4(numRows, numColumns);
                row -= 2;
                column += 2;
                corner4Read = true;
@@ -135,7 +135,7 @@ namespace ZXing.Datamatrix.Internal
                {
                   if ((row < numRows) && (column >= 0) && !readMappingMatrix[column, row])
                   {
-                     result[resultOffset++] = (sbyte)readUtah(row, column, numRows, numColumns);
+                     result[resultOffset++] = (byte)readUtah(row, column, numRows, numColumns);
                   }
                   row -= 2;
                   column += 2;
@@ -148,7 +148,7 @@ namespace ZXing.Datamatrix.Internal
                {
                   if ((row >= 0) && (column < numColumns) && !readMappingMatrix[column, row])
                   {
-                     result[resultOffset++] = (sbyte)readUtah(row, column, numRows, numColumns);
+                     result[resultOffset++] = (byte)readUtah(row, column, numRows, numColumns);
                   }
                   row += 2;
                   column -= 2;

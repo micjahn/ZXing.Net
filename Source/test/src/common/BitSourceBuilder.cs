@@ -61,19 +61,13 @@ namespace ZXing.Common.Test
          }
       }
 
-      public sbyte[] toByteArray()
+      public byte[] toByteArray()
       {
          if (bitsLeftInNextByte < 8)
          {
             write(0, bitsLeftInNextByte);
          }
-         var result = new sbyte[output.Length];
-         var tmpResult = output.ToArray();
-         for (var idx = 0; idx < result.Length; idx++)
-         {
-            result[idx] = (sbyte)tmpResult[idx];
-         }
-         return result;
+         return output.ToArray();
       }
    }
 }

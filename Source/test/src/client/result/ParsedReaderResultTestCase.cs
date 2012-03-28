@@ -302,7 +302,7 @@ namespace ZXing.Client.Result.Test
       /*
       [Test]
       public void testNDEFText() {
-        doTestResult(new sbyte[] {(byte)0xD1,(byte)0x01,(byte)0x05,(byte)0x54,
+        doTestResult(new byte[] {(byte)0xD1,(byte)0x01,(byte)0x05,(byte)0x54,
                                  (byte)0x02,(byte)0x65,(byte)0x6E,(byte)0x68,
                                  (byte)0x69},
                      ParsedResultType.TEXT);
@@ -310,7 +310,7 @@ namespace ZXing.Client.Result.Test
 
       [Test]
       public void testNDEFURI() {
-        doTestResult(new sbyte[] {(byte)0xD1,(byte)0x01,(byte)0x08,(byte)0x55,
+        doTestResult(new byte[] {(byte)0xD1,(byte)0x01,(byte)0x08,(byte)0x55,
                                  (byte)0x01,(byte)0x6E,(byte)0x66,(byte)0x63,
                                  (byte)0x2E,(byte)0x63,(byte)0x6F,(byte)0x6D},
                      ParsedResultType.URI);
@@ -318,7 +318,7 @@ namespace ZXing.Client.Result.Test
 
       [Test]
       public void testNDEFSmartPoster() {
-        doTestResult(new sbyte[] {(byte)0xD1,(byte)0x02,(byte)0x2F,(byte)0x53,
+        doTestResult(new byte[] {(byte)0xD1,(byte)0x02,(byte)0x2F,(byte)0x53,
                                  (byte)0x70,(byte)0x91,(byte)0x01,(byte)0x0E,
                                  (byte)0x55,(byte)0x01,(byte)0x6E,(byte)0x66,
                                  (byte)0x63,(byte)0x2D,(byte)0x66,(byte)0x6F,

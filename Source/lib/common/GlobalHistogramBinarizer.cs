@@ -33,16 +33,16 @@ namespace ZXing.Common
    public class GlobalHistogramBinarizer : Binarizer
    {
       private const int LUMINANCE_BITS = 5;
-      private static readonly int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
-      private static readonly int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
+      private const int LUMINANCE_SHIFT = 8 - LUMINANCE_BITS;
+      private const int LUMINANCE_BUCKETS = 1 << LUMINANCE_BITS;
 
-      private sbyte[] luminances;
-      private int[] buckets;
+      private byte[] luminances;
+      private readonly int[] buckets;
 
       public GlobalHistogramBinarizer(LuminanceSource source)
          : base(source)
       {
-         luminances = new sbyte[0];
+         luminances = new byte[0];
          buckets = new int[LUMINANCE_BUCKETS];
       }
 
@@ -61,7 +61,7 @@ namespace ZXing.Common
          }
 
          initArrays(width);
-         sbyte[] localLuminances = source.getRow(y, luminances);
+         byte[] localLuminances = source.getRow(y, luminances);
          int[] localBuckets = buckets;
          for (int x = 0; x < width; x++)
          {
@@ -93,7 +93,7 @@ namespace ZXing.Common
          get
          {
             LuminanceSource source = LuminanceSource;
-            sbyte[] localLuminances;
+            byte[] localLuminances;
 
             int width = source.Width;
             int height = source.Height;
@@ -146,7 +146,7 @@ namespace ZXing.Common
       {
          if (luminances.Length < luminanceSize)
          {
-            luminances = new sbyte[luminanceSize];
+            luminances = new byte[luminanceSize];
          }
          for (int x = 0; x < LUMINANCE_BUCKETS; x++)
          {
