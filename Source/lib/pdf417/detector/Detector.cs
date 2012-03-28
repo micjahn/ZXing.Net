@@ -30,9 +30,11 @@ namespace ZXing.PDF417.Internal
    /// </summary>
    public sealed class Detector
    {
-      private const int MAX_AVG_VARIANCE = (int)((1 << 8) * 0.42f);
-      private const int MAX_INDIVIDUAL_VARIANCE = (int)((1 << 8) * 0.8f);
-      private const int SKEW_THRESHOLD = 2;
+      private const int INTEGER_MATH_SHIFT = 8;
+      private const int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
+      private const int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
+      private const int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8f);
+      private const int SKEW_THRESHOLD = 3;
 
       // B S B S B S B S Bar/Space pattern
       // 11111111 0 1 0 1 0 1 000
@@ -76,12 +78,14 @@ namespace ZXing.PDF417.Internal
          // Fetch the 1 bit matrix once up front.
          BitMatrix matrix = image.BlackMatrix;
 
+         bool tryHarder = hints != null && hints.ContainsKey(DecodeHintType.TRY_HARDER);
+
          // Try to find the vertices assuming the image is upright.
-         ResultPoint[] vertices = findVertices(matrix);
+         ResultPoint[] vertices = findVertices(matrix, tryHarder);
          if (vertices == null)
          {
             // Maybe the image is rotated 180 degrees?
-            vertices = findVertices180(matrix);
+            vertices = findVertices180(matrix, tryHarder);
             if (vertices != null)
             {
                correctCodeWordVertices(vertices, true);
@@ -111,8 +115,7 @@ namespace ZXing.PDF417.Internal
          }
 
          // Deskew and sample image.
-         BitMatrix bits = sampleGrid(matrix, vertices[4], vertices[5],
-             vertices[6], vertices[7], dimension);
+         BitMatrix bits = sampleGrid(matrix, vertices[4], vertices[5], vertices[6], vertices[7], dimension);
          if (bits == null)
             return null;
          return new DetectorResult(bits, new ResultPoint[]
@@ -124,8 +127,6 @@ namespace ZXing.PDF417.Internal
       /// <summary>
       /// Locate the vertices and the codewords area of a black blob using the Start
       /// and Stop patterns as locators.
-      /// TODO: Scanning every row is very expensive. We should only do this for TRY_HARDER.
-      ///
       /// <param name="matrix">the scanned barcode image.</param>
       /// <returns>an array containing the vertices:</returns>
       ///           vertices[0] x, y top left barcode
@@ -137,7 +138,7 @@ namespace ZXing.PDF417.Internal
       ///           vertices[6] x, y top right codeword area
       ///           vertices[7] x, y bottom right codeword area
       /// </summary>
-      private static ResultPoint[] findVertices(BitMatrix matrix)
+      private static ResultPoint[] findVertices(BitMatrix matrix, bool tryHarder)
       {
          int height = matrix.Height;
          int width = matrix.Width;
@@ -147,8 +148,10 @@ namespace ZXing.PDF417.Internal
 
          int[] counters = new int[START_PATTERN.Length];
 
+         int rowStep = Math.Max(1, height >> (tryHarder ? 9 : 7));
+
          // Top Left
-         for (int i = 0; i < height; i++)
+         for (int i = 0; i < height; i += rowStep)
          {
             int[] loc = findGuardPattern(matrix, 0, i, width, false, START_PATTERN, counters);
             if (loc != null)
@@ -163,7 +166,7 @@ namespace ZXing.PDF417.Internal
          if (found)
          { // Found the Top Left vertex
             found = false;
-            for (int i = height - 1; i > 0; i--)
+            for (int i = height - 1; i > 0; i -= rowStep)
             {
                int[] loc = findGuardPattern(matrix, 0, i, width, false, START_PATTERN, counters);
                if (loc != null)
@@ -182,7 +185,7 @@ namespace ZXing.PDF417.Internal
          if (found)
          { // Found the Bottom Left vertex
             found = false;
-            for (int i = 0; i < height; i++)
+            for (int i = 0; i < height; i += rowStep)
             {
                int[] loc = findGuardPattern(matrix, 0, i, width, false, STOP_PATTERN, counters);
                if (loc != null)
@@ -198,7 +201,7 @@ namespace ZXing.PDF417.Internal
          if (found)
          { // Found the Top right vertex
             found = false;
-            for (int i = height - 1; i > 0; i--)
+            for (int i = height - 1; i > 0; i -= rowStep)
             {
                int[] loc = findGuardPattern(matrix, 0, i, width, false, STOP_PATTERN, counters);
                if (loc != null)
@@ -219,8 +222,6 @@ namespace ZXing.PDF417.Internal
       /// degrees and if it locates the start and stop patterns at it will re-map
       /// the vertices for a 0 degree rotation.
       /// TODO: Change assumption about barcode location.
-      /// TODO: Scanning every row is very expensive. We should only do this for TRY_HARDER.
-      ///
       /// <param name="matrix">the scanned barcode image.</param>
       /// <returns>an array containing the vertices:</returns>
       ///           vertices[0] x, y top left barcode
@@ -232,7 +233,7 @@ namespace ZXing.PDF417.Internal
       ///           vertices[6] x, y top right codeword area
       ///           vertices[7] x, y bottom right codeword area
       /// </summary>
-      private static ResultPoint[] findVertices180(BitMatrix matrix)
+      private static ResultPoint[] findVertices180(BitMatrix matrix, bool tryHarder)
       {
          int height = matrix.Height;
          int width = matrix.Width;
@@ -243,8 +244,10 @@ namespace ZXing.PDF417.Internal
 
          int[] counters = new int[START_PATTERN_REVERSE.Length];
 
+         int rowStep = Math.Max(1, height >> (tryHarder ? 9 : 7));
+
          // Top Left
-         for (int i = height - 1; i > 0; i--)
+         for (int i = height - 1; i > 0; i -= rowStep)
          {
             int[] loc = findGuardPattern(matrix, halfWidth, i, halfWidth, true, START_PATTERN_REVERSE, counters);
             if (loc != null)
@@ -259,7 +262,7 @@ namespace ZXing.PDF417.Internal
          if (found)
          { // Found the Top Left vertex
             found = false;
-            for (int i = 0; i < height; i++)
+            for (int i = 0; i < height; i += rowStep)
             {
                int[] loc = findGuardPattern(matrix, halfWidth, i, halfWidth, true, START_PATTERN_REVERSE, counters);
                if (loc != null)
@@ -278,7 +281,7 @@ namespace ZXing.PDF417.Internal
          if (found)
          { // Found the Bottom Left vertex
             found = false;
-            for (int i = height - 1; i > 0; i--)
+            for (int i = height - 1; i > 0; i -= rowStep)
             {
                int[] loc = findGuardPattern(matrix, 0, i, halfWidth, false, STOP_PATTERN_REVERSE, counters);
                if (loc != null)
@@ -294,7 +297,7 @@ namespace ZXing.PDF417.Internal
          if (found)
          { // Found the Top Right vertex
             found = false;
-            for (int i = 0; i < height; i++)
+            for (int i = 0; i < height; i += rowStep)
             {
                int[] loc = findGuardPattern(matrix, 0, i, halfWidth, false, STOP_PATTERN_REVERSE, counters);
                if (loc != null)
@@ -319,7 +322,16 @@ namespace ZXing.PDF417.Internal
       /// </summary>
       private static void correctCodeWordVertices(ResultPoint[] vertices, bool upsideDown)
       {
-         float skew = vertices[4].Y - vertices[6].Y;
+         float v0x = vertices[0].X;
+         float v0y = vertices[0].Y;
+         float v2x = vertices[2].X;
+         float v2y = vertices[2].Y;
+         float v4x = vertices[4].X;
+         float v4y = vertices[4].Y;
+         float v6x = vertices[6].X;
+         float v6y = vertices[6].Y;
+
+         float skew = v4y - v6y;
          if (upsideDown)
          {
             skew = -skew;
@@ -327,23 +339,32 @@ namespace ZXing.PDF417.Internal
          if (skew > SKEW_THRESHOLD)
          {
             // Fix v4
-            float length = vertices[4].X - vertices[0].X;
-            float deltax = vertices[6].X - vertices[0].X;
-            float deltay = vertices[6].Y - vertices[0].Y;
-            float correction = length * deltay / deltax;
-            vertices[4] = new ResultPoint(vertices[4].X, vertices[4].Y + correction);
+            float deltax = v6x - v0x;
+            float deltay = v6y - v0y;
+            float delta2 = deltax*deltax + deltay*deltay;
+            float correction = (v4x - v0x)*deltax/delta2;
+            vertices[4] = new ResultPoint(v0x + correction*deltax, v0y + correction*deltay);
          }
          else if (-skew > SKEW_THRESHOLD)
          {
             // Fix v6
-            float length = vertices[2].X - vertices[6].X;
-            float deltax = vertices[2].X - vertices[4].X;
-            float deltay = vertices[2].Y - vertices[4].Y;
-            float correction = length * deltay / deltax;
-            vertices[6] = new ResultPoint(vertices[6].X, vertices[6].Y - correction);
+            float deltax = v2x - v4x;
+            float deltay = v2y - v4y;
+            float delta2 = deltax*deltax + deltay*deltay;
+            float correction = (v2x - v6x)*deltax/delta2;
+            vertices[6] = new ResultPoint(v2x - correction*deltax, v2y - correction*deltay);
          }
 
-         skew = vertices[7].Y - vertices[5].Y;
+         float v1x = vertices[1].X;
+         float v1y = vertices[1].Y;
+         float v3x = vertices[3].X;
+         float v3y = vertices[3].Y;
+         float v5x = vertices[5].X;
+         float v5y = vertices[5].Y;
+         float v7x = vertices[7].X;
+         float v7y = vertices[7].Y;
+
+         skew = v7y - v5y;
          if (upsideDown)
          {
             skew = -skew;
@@ -351,20 +372,20 @@ namespace ZXing.PDF417.Internal
          if (skew > SKEW_THRESHOLD)
          {
             // Fix v5
-            float length = vertices[5].X - vertices[1].X;
-            float deltax = vertices[7].X - vertices[1].X;
-            float deltay = vertices[7].Y - vertices[1].Y;
-            float correction = length * deltay / deltax;
-            vertices[5] = new ResultPoint(vertices[5].X, vertices[5].Y + correction);
+            float deltax = v7x - v1x;
+            float deltay = v7y - v1y;
+            float delta2 = deltax*deltax + deltay*deltay;
+            float correction = (v5x - v1x)*deltax/delta2;
+            vertices[5] = new ResultPoint(v1x + correction*deltax, v1y + correction*deltay);
          }
          else if (-skew > SKEW_THRESHOLD)
          {
             // Fix v7
-            float length = vertices[3].X - vertices[7].X;
-            float deltax = vertices[3].X - vertices[5].X;
-            float deltay = vertices[3].Y - vertices[5].Y;
-            float correction = length * deltay / deltax;
-            vertices[7] = new ResultPoint(vertices[7].X, vertices[7].Y - correction);
+            float deltax = v3x - v5x;
+            float deltay = v3y - v5y;
+            float delta2 = deltax*deltax + deltay*deltay;
+            float correction = (v3x - v7x)*deltax/delta2;
+            vertices[7] = new ResultPoint(v3x - correction*deltax, v3y - correction*deltay);
          }
       }
 
@@ -549,13 +570,13 @@ namespace ZXing.PDF417.Internal
          // We're going to fake floating-point math in integers. We just need to use more bits.
          // Scale up patternLength so that intermediate values below like scaledCounter will have
          // more "significant digits".
-         int unitBarWidth = (total << 8) / patternLength;
+         int unitBarWidth = (total << INTEGER_MATH_SHIFT) / patternLength;
          maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> 8;
 
          int totalVariance = 0;
          for (int x = 0; x < numCounters; x++)
          {
-            int counter = counters[x] << 8;
+            int counter = counters[x] << INTEGER_MATH_SHIFT;
             int scaledPattern = pattern[x] * unitBarWidth;
             int variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
             if (variance > maxIndividualVariance)
