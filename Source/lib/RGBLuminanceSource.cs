@@ -122,7 +122,7 @@ namespace ZXing
                           (byte)((srcPixel >> 0x10) & 0xff),
                           (byte)((srcPixel >> 8) & 0xff),
                           (byte)(srcPixel & 0xff));
-                    luminances[offset + x] = (byte) (0.3*c.R + 0.59*c.G + 0.11*c.B);
+                    luminances[offset + x] = (byte) (0.3*c.R + 0.59*c.G + 0.11*c.B + 0.01);
                 }
             }
         }
@@ -171,7 +171,7 @@ namespace ZXing
                   for (int x = 0; x < width; x++)
                   {
                      c = d.GetPixel(x, y);
-                     luminances[offset + x] = (byte)(0.3*c.R + 0.59*c.G + 0.11*c.B);
+                     luminances[offset + x] = (byte)(0.3*c.R + 0.59*c.G + 0.11*c.B + 0.01);
                   }
                }
             }
@@ -188,7 +188,7 @@ namespace ZXing
                   var color = d.Palette.Entries[index];
                   luminancePalette[index] = (byte) (0.3*color.R +
                                                     0.59*color.G +
-                                                    0.11*color.B);
+                                                    0.11*color.B + 0.01);
                }
 
                for (int y = 0; y < height; y++)
@@ -225,7 +225,7 @@ namespace ZXing
                         {
                            var luminance = (byte) (0.3*buffer[x*pixelWidth] +
                                                    0.59*buffer[x*pixelWidth + 1] +
-                                                   0.11*buffer[x*pixelWidth + 2]);
+                                                   0.11*buffer[x*pixelWidth + 2] + 0.01);
                            luminances[offset + x] = luminance;
                         }
                         break;
