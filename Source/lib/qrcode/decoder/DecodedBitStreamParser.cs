@@ -329,6 +329,10 @@ namespace ZXing.QrCode.Internal
          if (count == 1)
          {
             // special case: one character left
+            if (bits.available() < 6)
+            {
+               return false;
+            }
             result.Append(toAlphaNumericChar(bits.readBits(6)));
          }
 
