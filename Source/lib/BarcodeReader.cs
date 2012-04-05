@@ -207,21 +207,30 @@ namespace ZXing
          if (barcodeBitmap == null)
             throw new ArgumentNullException("barcodeBitmap");
 
-         Result result;
+         var result = default(Result);
          var luminanceSource = CreateLuminanceSource(barcodeBitmap);
          var binarizer = CreateBinarizer(luminanceSource);
          var binaryBitmap = new BinaryBitmap(binarizer);
          var multiformatReader = Reader as MultiFormatReader;
 
-         if (usePreviousState && multiformatReader != null)
+         for (var rotationCount = 0; rotationCount < 4; rotationCount++)
          {
-            result = multiformatReader.decodeWithState(binaryBitmap);
+            if (usePreviousState && multiformatReader != null)
+            {
+               result = multiformatReader.decodeWithState(binaryBitmap);
+            }
+            else
+            {
+               result = Reader.decode(binaryBitmap, hints);
+               usePreviousState = true;
+            }
+            
+            if (result != null ||
+                !luminanceSource.RotateSupported)
+               break;
+            binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource.rotateCounterClockwise()));
          }
-         else
-         {
-            result = Reader.decode(binaryBitmap, hints);
-            usePreviousState = true;
-         }
+
          return result;
       }
    }

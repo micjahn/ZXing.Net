@@ -10,8 +10,9 @@ namespace ZXing
 {
    public class RGBLuminanceSource : LuminanceSource
    {
+      private int __height;
+      private int __width;
       private byte[] luminances;
-      private bool isRotated = false;
       private bool __isRegionSelect = false;
 #if SILVERLIGHT
       private System.Windows.Rect __Region;
@@ -23,10 +24,7 @@ namespace ZXing
       {
          get
          {
-            if (!isRotated)
-               return __height;
-            else
-               return __width;
+            return __height;
          }
 
       }
@@ -34,15 +32,10 @@ namespace ZXing
       {
          get
          {
-            if (!isRotated)
-               return __width;
-            else
-               return __height;
+            return __width;
          }
 
       }
-      private int __height;
-      private int __width;
 
       public RGBLuminanceSource(byte[] d, int W, int H)
          : base(W, H)
@@ -245,30 +238,16 @@ namespace ZXing
 
       override public byte[] getRow(int y, byte[] row)
       {
-         if (isRotated == false)
+         int width = Width;
+         if (row == null || row.Length < width)
          {
-            int width = Width;
-            if (row == null || row.Length < width)
-            {
-               row = new byte[width];
-            }
-            for (int i = 0; i < width; i++)
-               row[i] = (byte)(luminances[y * width + i] - 128);
-            return row;
+            row = new byte[width];
          }
-         else
-         {
-            int width = __width;
-            int height = __height;
-            if (row == null || row.Length < height)
-            {
-               row = new byte[height];
-            }
-            for (int i = 0; i < height; i++)
-               row[i] = (byte)(luminances[i * width + y] - 128);
-            return row;
-         }
+         for (int i = 0; i < width; i++)
+            row[i] = (byte)(luminances[y * width + i] - 128);
+         return row;
       }
+
       public override byte[] Matrix
       {
          get { return luminances; }
@@ -276,9 +255,24 @@ namespace ZXing
 
       public override LuminanceSource rotateCounterClockwise()
       {
-         isRotated = true;
+         var rotatedLuminances = new byte[__width * __height];
+         var newWidth = __height;
+         var newHeight = __width;
+         for (var yold = 0; yold < __height; yold++)
+         {
+            for (var xold = 0; xold < __width; xold++)
+            {
+               var ynew = xold;
+               var xnew = newWidth - yold - 1;
+               rotatedLuminances[ynew * newWidth + xnew] = luminances[yold * __width + xold];
+            }
+         }
+         luminances = rotatedLuminances;
+         __height = newHeight;
+         __width = newWidth;
          return this;
       }
+
       public override bool RotateSupported
       {
          get
