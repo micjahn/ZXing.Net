@@ -36,7 +36,7 @@ namespace ZXing.Common
       public static String GB2312 = "GB2312";
       private const String EUC_JP = "EUC-JP";
       private const String UTF8 = "UTF-8";
-      private const String ISO88591 = "ISO8859-1";
+      private const String ISO88591 = "ISO-8859-1";
       private static readonly bool ASSUME_SHIFT_JIS =
          String.Compare(SHIFT_JIS, PLATFORM_DEFAULT_ENCODING, StringComparison.OrdinalIgnoreCase) == 0 ||
          String.Compare(EUC_JP, PLATFORM_DEFAULT_ENCODING, StringComparison.OrdinalIgnoreCase) == 0;
