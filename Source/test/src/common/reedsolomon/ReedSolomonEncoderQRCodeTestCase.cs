@@ -45,29 +45,30 @@ namespace ZXing.Common.ReedSolomon.Test
       [Test]
       public void testQRCodeVersusDecoder()
       {
-         Random random = getRandom();
-         ReedSolomonEncoder encoder = new ReedSolomonEncoder(GenericGF.QR_CODE_FIELD_256);
-         ReedSolomonDecoder decoder = new ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
-         for (int i = 0; i < 100; i++)
+         var random = getRandom();
+         var encoder = new ReedSolomonEncoder(GenericGF.QR_CODE_FIELD_256);
+         var decoder = new ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
+         for (var i = 0; i < 100; i++)
          {
-            int size = 1 + random.Next(1000);
-            int[] toEncode = new int[size];
-            int ecBytes = 1 + random.Next(2 * (1 + size / 8));
+            var size = 2 + random.Next(254);
+            var toEncode = new int[size];
+            var ecBytes = 1 + random.Next(2 * (1 + size / 8));
             ecBytes = Math.Min(ecBytes, size - 1);
-            int dataBytes = size - ecBytes;
+            var dataBytes = size - ecBytes;
             for (int j = 0; j < dataBytes; j++)
             {
                toEncode[j] = random.Next(256);
             }
-            int[] original = new int[dataBytes];
+            var original = new int[dataBytes];
             Array.Copy(toEncode, 0, original, 0, dataBytes);
             encoder.encode(toEncode, ecBytes);
+            corrupt(toEncode, ecBytes / 2, random);
             Assert.IsTrue(decoder.decode(toEncode, ecBytes));
             assertArraysEqual(original, 0, toEncode, 0, dataBytes);
          }
       }
 
-      private void assertArraysEqual(int[] original, int index, int[] toEncode, int index2, int length)
+      private static void assertArraysEqual(int[] original, int index, int[] toEncode, int index2, int length)
       {
          for (var x = index; x < length; x++)
          {
