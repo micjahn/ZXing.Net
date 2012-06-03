@@ -333,10 +333,6 @@ namespace ZXing.PDF417.Internal
                      else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE)
                      {
                         result.Append((char)byteCompactionData[i]);
-                        // the pdf417 specs say we have to return to the last latched
-                        // sub-mode. But I checked different encoder implementations and
-                        // all of them return to alpha sub-mode after Shift-to-Byte
-                        subMode = Mode.ALPHA;
                      }
                      else if (subModeCh == TEXT_COMPACTION_MODE_LATCH)
                      {
@@ -451,10 +447,6 @@ namespace ZXing.PDF417.Internal
                         // PS before Shift-to-Byte is used as a padding character, 
                         // see 5.4.2.4 of the specification
                         result.Append((char)byteCompactionData[i]);
-                        // the pdf417 specs say we have to return to the last latched
-                        // sub-mode. But I checked different encoder implementations and
-                        // all of them return to alpha sub-mode after Shift-to-Byte
-                        subMode = Mode.ALPHA;
                      }
                      else if (subModeCh == TEXT_COMPACTION_MODE_LATCH)
                      {
