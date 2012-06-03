@@ -302,7 +302,7 @@ namespace ZXing.Datamatrix.Internal
 
          ResultPoint c1 = new ResultPoint(topRight.X + corr * cos, topRight.Y + corr * sin);
 
-         corr = distance(bottomLeft, bottomRight) / (float)dimension;
+         corr = distance(bottomLeft, topLeft) / (float)dimension;
          norm = distance(bottomRight, topRight);
          cos = (topRight.X - bottomRight.X) / norm;
          sin = (topRight.Y - bottomRight.Y) / norm;
