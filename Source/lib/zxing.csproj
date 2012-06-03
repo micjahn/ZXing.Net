@@ -161,6 +161,7 @@
     <Compile Include="client\result\WifiResultParser.cs" />
     <Compile Include="common\BitArray.cs" />
     <Compile Include="common\BitMatrix.cs" />
+    <Compile Include="common\BitMatrix.Drawing.cs" />
     <Compile Include="common\BitSource.cs" />
     <Compile Include="common\CharacterSetECI.cs" />
     <Compile Include="common\Collections.cs" />
@@ -300,6 +301,7 @@
     <Compile Include="ResultPoint.cs" />
     <Compile Include="ResultPointCallback.cs" />
     <Compile Include="RGBLuminanceSource.cs" />
+    <Compile Include="RGBLuminanceSource.Drawing.cs" />
     <Compile Include="SupportClass.cs" />
     <Compile Include="Writer.cs" />
     <Compile Include="WriterException.cs" />

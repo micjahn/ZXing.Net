@@ -15,18 +15,6 @@
 */
 
 using System;
-#if !SILVERLIGHT
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
-#else
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-#endif
-
-using ZXing.OneD;
 
 namespace ZXing.Common
 {
@@ -49,7 +37,7 @@ namespace ZXing.Common
    /// </author>
    /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
    /// </author>
-   public sealed class BitMatrix
+   public sealed partial class BitMatrix
    {
       private readonly int width;
       private readonly int height;
@@ -401,163 +389,5 @@ namespace ZXing.Common
          }
          return result.ToString();
       }
-
-#if !SILVERLIGHT
-
-      public Bitmap ToBitmap()
-      {
-         return ToBitmap(BarcodeFormat.EAN_8, null);
-      }
-
-      /// <summary>
-      /// Converts this ByteMatrix to a black and white bitmap.
-      /// </summary>
-      /// <returns>A black and white bitmap converted from this ByteMatrix.</returns>
-      public Bitmap ToBitmap(BarcodeFormat format, String content)
-      {
-         const byte BLACK = 0;
-         const byte WHITE = 255;
-         int width = Width;
-         int height = Height;
-         bool outputContent = !String.IsNullOrEmpty(content) && (format == BarcodeFormat.CODE_39 ||
-                                                                 format == BarcodeFormat.CODE_128 ||
-                                                                 format == BarcodeFormat.EAN_13 ||
-                                                                 format == BarcodeFormat.EAN_8 ||
-                                                                 format == BarcodeFormat.CODABAR ||
-                                                                 format == BarcodeFormat.ITF ||
-                                                                 format == BarcodeFormat.UPC_A);
-         int emptyArea = outputContent ? 16 : 0;
-
-         // create the bitmap and lock the bits because we need the stride
-         // which is the width of the image and possible padding bytes
-         var bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
-         var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, bmp.PixelFormat);
-         try
-         {
-            var pixels = new byte[bmpData.Stride*height];
-            var padding = bmpData.Stride - (3 * width);
-            var index = 0;
-
-            for (int y = 0; y < height - emptyArea; y++)
-            {
-               for (var x = 0; x < width; x++)
-               {
-                  var color = this[x, y] ? BLACK : WHITE;
-                  pixels[index++] = color;
-                  pixels[index++] = color;
-                  pixels[index++] = color;
-               }
-               index += padding;
-            }
-            for (int y = (height - emptyArea) * bmpData.Stride; y < pixels.Length; y++)
-            {
-               pixels[y] = WHITE;
-            }
-
-            //Copy the data from the byte array into BitmapData.Scan0
-            Marshal.Copy(pixels, 0, bmpData.Scan0, pixels.Length);
-         }
-         finally
-         {
-            //Unlock the pixels
-            bmp.UnlockBits(bmpData);
-         }
-
-         if (outputContent)
-         {
-            switch (format)
-            {
-               case BarcodeFormat.EAN_8:
-                  if (content.Length < 8)
-                     content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-                  content = content.Insert(4, "   ");
-                  break;
-               case BarcodeFormat.EAN_13:
-                  if (content.Length < 13)
-                     content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-                  content = content.Insert(7, "   ");
-                  content = content.Insert(1, "   ");
-                  break;
-            }
-            var font = new Font("Arial", 10, FontStyle.Regular);
-            using (var g = Graphics.FromImage(bmp))
-            {
-               var drawFormat = new StringFormat {Alignment = StringAlignment.Center};
-               g.DrawString(content, font, Brushes.Black, width / 2, height - 14, drawFormat);
-            }
-         }
-
-         return bmp;
-      }
-#else
-      
-      public WriteableBitmap ToBitmap()
-      {
-         return ToBitmap(BarcodeFormat.EAN_8, null);
-      }
-
-      /// <summary>
-      /// Converts this ByteMatrix to a black and white bitmap.
-      /// </summary>
-      /// <returns>A black and white bitmap converted from this ByteMatrix.</returns>
-      public WriteableBitmap ToBitmap(BarcodeFormat format, String content)
-      {
-         const int BLACK = 0x00FF0000 << 8;
-         const int WHITE = int.MaxValue;
-         int width = Width;
-         int height = Height;
-         bool outputContent = !String.IsNullOrEmpty(content) && (format == BarcodeFormat.CODE_39 ||
-                                                                 format == BarcodeFormat.CODE_128 ||
-                                                                 format == BarcodeFormat.EAN_13 ||
-                                                                 format == BarcodeFormat.EAN_8 ||
-                                                                 format == BarcodeFormat.CODABAR ||
-                                                                 format == BarcodeFormat.ITF ||
-                                                                 format == BarcodeFormat.UPC_A);
-         int emptyArea = outputContent ? 16 : 0;
-
-         // create the bitmap and lock the bits because we need the stride
-         // which is the width of the image and possible padding bytes
-         var bmp = new WriteableBitmap(width, height);
-         var pixels = bmp.Pixels;
-
-         for (int y = 0; y < height - emptyArea; y++)
-         {
-            var offset = y * width;
-            for (var x = 0; x < width; x++)
-            {
-               var color = this[x, y] ? BLACK : WHITE;
-               pixels[offset + x] = color;
-            }
-         }
-         bmp.Invalidate();
-
-         if (outputContent)
-         {
-            switch (format)
-            {
-               case BarcodeFormat.EAN_8:
-                  if (content.Length < 8)
-                     content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-                  content = content.Insert(4, "   ");
-                  break;
-               case BarcodeFormat.EAN_13:
-                  if (content.Length < 13)
-                     content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-                  content = content.Insert(7, "   ");
-                  content = content.Insert(1, "   ");
-                  break;
-            }
-            /* doesn't correctly work at the moment
-             * renders at the wrong position
-            var txt1 = new TextBlock {Text = content, FontSize = 10, Foreground = new SolidColorBrush(Colors.Black)};
-            bmp.Render(txt1, new RotateTransform { Angle = 0, CenterX = width / 2, CenterY = height - 14});
-            bmp.Invalidate();
-             * */
-         }
-
-         return bmp;
-      }
-
-#endif
    }
 }

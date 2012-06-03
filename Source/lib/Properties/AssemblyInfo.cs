@@ -6,8 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-#if NET20
+#if NET20 && !UNITY
 [assembly: AssemblyTitle("zxing.net for .net 2.0")]
+#endif
+#if NET20 && UNITY
+[assembly: AssemblyTitle("zxing.net for .net 2.0 and unity (w/o System.Drawing)")]
 #endif
 #if NET40
 [assembly: AssemblyTitle("zxing.net for .net 4.0")]

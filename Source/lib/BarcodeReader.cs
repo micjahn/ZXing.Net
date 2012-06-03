@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 #if !SILVERLIGHT
+#if !UNITY
 using System.Drawing;
+#endif
 #else
 using System.Windows.Media.Imaging;
 #endif
@@ -16,8 +18,13 @@ namespace ZXing
    public class BarcodeReader : IBarcodeReader
    {
 #if !SILVERLIGHT
+#if !UNITY
       private static readonly Func<Bitmap, LuminanceSource> defaultCreateLuminanceSource =
          (bitmap) => new RGBLuminanceSource(bitmap, bitmap.Width, bitmap.Height);
+#else
+      private static readonly Func<byte[], int, int, LuminanceSource> defaultCreateLuminanceSource =
+         (rawRGB, width, height) => new RGBLuminanceSource(rawRGB, width, height);
+#endif
 #else
       private static readonly Func<WriteableBitmap, LuminanceSource> defaultCreateLuminanceSource =
          (bitmap) => new RGBLuminanceSource(bitmap, bitmap.PixelWidth, bitmap.PixelHeight);
@@ -28,7 +35,11 @@ namespace ZXing
       private Reader reader;
       private readonly IDictionary<DecodeHintType, object> hints;
 #if !SILVERLIGHT
+#if !UNITY
       private Func<Bitmap, LuminanceSource> createLuminanceSource;
+#else
+      private Func<byte[], int, int, LuminanceSource> createLuminanceSource;
+#endif
 #else
       private readonly Func<WriteableBitmap, LuminanceSource> createLuminanceSource;
 #endif
@@ -115,6 +126,7 @@ namespace ZXing
       }
 
 #if !SILVERLIGHT
+#if !UNITY
       /// <summary>
       /// Optional: Gets or sets the function to create a luminance source object for a bitmap.
       /// If null then RGBLuminanceSource is used
@@ -123,6 +135,16 @@ namespace ZXing
       /// The function to create a luminance source object.
       /// </value>
       public Func<Bitmap, LuminanceSource> CreateLuminanceSource
+#else
+      /// <summary>
+      /// Optional: Gets or sets the function to create a luminance source object for a bitmap.
+      /// If null then RGBLuminanceSource is used
+      /// </summary>
+      /// <value>
+      /// The function to create a luminance source object.
+      /// </value>
+      public Func<byte[], int, int, LuminanceSource> CreateLuminanceSource
+#endif
 #else
       /// <summary>
       /// Optional: Gets or sets the function to create a luminance source object for a bitmap.
@@ -174,7 +196,11 @@ namespace ZXing
       /// If null then HybridBinarizer is used</param>
       public BarcodeReader(Reader reader,
 #if !SILVERLIGHT
+#if !UNITY
          Func<Bitmap, LuminanceSource> createLuminanceSource,
+#else
+         Func<byte[], int, int, LuminanceSource> createLuminanceSource,
+#endif
 #else
          Func<WriteableBitmap, LuminanceSource> createLuminanceSource,
 #endif
@@ -189,6 +215,7 @@ namespace ZXing
       }
 
 #if !SILVERLIGHT
+#if !UNITY
       /// <summary>
       /// Decodes the specified barcode bitmap.
       /// </summary>
@@ -199,16 +226,37 @@ namespace ZXing
       /// <summary>
       /// Decodes the specified barcode bitmap.
       /// </summary>
+      /// <param name="rawRGB">raw bytes of the image in RGB order</param>
+      /// <param name="width"></param>
+      /// <param name="height"></param>
+      /// <returns>
+      /// the result data or null
+      /// </returns>
+      public Result Decode(byte[] rawRGB, int width, int height)
+#endif
+#else
+      /// <summary>
+      /// Decodes the specified barcode bitmap.
+      /// </summary>
       /// <param name="barcodeBitmap">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
       public Result Decode(WriteableBitmap barcodeBitmap)
 #endif
       {
+#if !UNITY
          if (barcodeBitmap == null)
             throw new ArgumentNullException("barcodeBitmap");
+#else
+         if (rawRGB == null)
+            throw new ArgumentNullException("rawRGB");
+#endif
 
          var result = default(Result);
+#if !UNITY
          var luminanceSource = CreateLuminanceSource(barcodeBitmap);
+#else
+         var luminanceSource = CreateLuminanceSource(rawRGB, width, height);
+#endif
          var binarizer = CreateBinarizer(luminanceSource);
          var binaryBitmap = new BinaryBitmap(binarizer);
          var multiformatReader = Reader as MultiFormatReader;

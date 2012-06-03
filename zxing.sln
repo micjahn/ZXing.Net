@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.sl5", "Source\lib\zxi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilverlightDemo", "Clients\SilverlightDemo\SilverlightDemo.csproj", "{D8A028A3-AA45-4292-9834-FD1037CEA3E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.unity", "Source\lib\zxing.unity.csproj", "{FD386CF5-E9CD-442C-A44C-B7D996E68CCC}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -87,6 +89,10 @@ Global
 		{D8A028A3-AA45-4292-9834-FD1037CEA3E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8A028A3-AA45-4292-9834-FD1037CEA3E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8A028A3-AA45-4292-9834-FD1037CEA3E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD386CF5-E9CD-442C-A44C-B7D996E68CCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD386CF5-E9CD-442C-A44C-B7D996E68CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD386CF5-E9CD-442C-A44C-B7D996E68CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD386CF5-E9CD-442C-A44C-B7D996E68CCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
