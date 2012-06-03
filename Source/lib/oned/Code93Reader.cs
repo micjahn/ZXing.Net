@@ -164,9 +164,9 @@ namespace ZXing.OneD
       {
          int max = counters.Length;
          int sum = 0;
-         for (int i = 0; i < max; i++)
+         foreach (var counter in counters)
          {
-            sum += counters[i];
+            sum += counter;
          }
          int pattern = 0;
          for (int i = 0; i < max; i++)

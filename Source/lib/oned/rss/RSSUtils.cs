@@ -72,9 +72,9 @@ namespace ZXing.OneD.RSS
       {
          int elements = widths.Length;
          int n = 0;
-         for (int i = 0; i < elements; i++)
+         foreach (var width in widths)
          {
-            n += widths[i];
+            n += width;
          }
          int val = 0;
          int narrowMask = 0;

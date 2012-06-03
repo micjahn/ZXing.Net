@@ -87,9 +87,9 @@ namespace ZXing.Datamatrix.Internal
 
          // Count total number of data bytes
          int totalBytes = 0;
-         for (int i = 0; i < dataBlocksCount; i++)
+         foreach (var db in dataBlocks)
          {
-            totalBytes += dataBlocks[i].NumDataCodewords;
+            totalBytes += db.NumDataCodewords;
          }
          byte[] resultBytes = new byte[totalBytes];
 

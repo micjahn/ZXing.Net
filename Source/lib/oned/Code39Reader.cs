@@ -241,9 +241,8 @@ namespace ZXing.OneD
          do
          {
             int minCounter = Int32.MaxValue;
-            for (int i = 0; i < numCounters; i++)
+            foreach (var counter in counters)
             {
-               int counter = counters[i];
                if (counter < minCounter && counter > maxNarrowCounter)
                {
                   minCounter = counter;

@@ -129,9 +129,9 @@ namespace ZXing.Common.ReedSolomon
          if (a == 1)
          {
             // Just the sum of the coefficients
-            for (int i = 0; i < size; i++)
+            foreach (var coefficient in coefficients)
             {
-               result = GenericGF.addOrSubtract(result, coefficients[i]);
+               result = GenericGF.addOrSubtract(result, coefficient);
             }
             return result;
          }

@@ -87,7 +87,7 @@ namespace ZXing.QrCode.Internal.Test
       }
 
       [Test]
-      public void testToString()
+      public void testToString1()
       {
          {
             var qrCode = new QRCode();
@@ -105,64 +105,67 @@ namespace ZXing.QrCode.Internal.Test
                                     ">>\n";
             Assert.AreEqual(expected, qrCode.ToString());
          }
+      }
+
+      [Test]
+      public void testToString2()
+      {
+         const string expected = "<<\n" +
+                                 " mode: BYTE\n" +
+                                 " ecLevel: H\n" +
+                                 " version: 1\n" +
+                                 " matrixWidth: 21\n" +
+                                 " maskPattern: 3\n" +
+                                 " numTotalBytes: 26\n" +
+                                 " numDataBytes: 9\n" +
+                                 " numECBytes: 17\n" +
+                                 " numRSBlocks: 1\n" +
+                                 " matrix:\n" +
+                                 " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+                                 " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+                                 " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+                                 " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+                                 " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+                                 " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+                                 " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+                                 " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+                                 " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+                                 " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+                                 " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+                                 " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+                                 " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+                                 " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+                                 " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+                                 " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+                                 " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+                                 " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+                                 " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+                                 " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
+                                 " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
+                                 ">>\n";
+         var qrCode = new QRCode
+                         {
+                            Mode = Mode.BYTE,
+                            ECLevel = ErrorCorrectionLevel.H,
+                            Version = 1,
+                            MatrixWidth = 21,
+                            MaskPattern = 3,
+                            NumTotalBytes = 26,
+                            NumDataBytes = 9,
+                            NumECBytes = 17,
+                            NumRSBlocks = 1
+                         };
+         var matrix = new ByteMatrix(21, 21);
+         for (int y = 0; y < 21; ++y)
          {
-            const string expected = "<<\n" +
-                                    " mode: BYTE\n" +
-                                    " ecLevel: H\n" +
-                                    " version: 1\n" +
-                                    " matrixWidth: 21\n" +
-                                    " maskPattern: 3\n" +
-                                    " numTotalBytes: 26\n" +
-                                    " numDataBytes: 9\n" +
-                                    " numECBytes: 17\n" +
-                                    " numRSBlocks: 1\n" +
-                                    " matrix:\n" +
-                                    " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-                                    " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-                                    " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-                                    " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-                                    " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-                                    " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-                                    " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-                                    " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-                                    " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-                                    " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-                                    " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-                                    " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-                                    " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-                                    " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-                                    " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-                                    " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-                                    " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-                                    " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-                                    " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-                                    " 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1\n" +
-                                    " 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\n" +
-                                    ">>\n";
-            var qrCode = new QRCode
-                            {
-                               Mode = Mode.BYTE,
-                               ECLevel = ErrorCorrectionLevel.H,
-                               Version = 1,
-                               MatrixWidth = 21,
-                               MaskPattern = 3,
-                               NumTotalBytes = 26,
-                               NumDataBytes = 9,
-                               NumECBytes = 17,
-                               NumRSBlocks = 1
-                            };
-            var matrix = new ByteMatrix(21, 21);
-            for (int y = 0; y < 21; ++y)
+            for (int x = 0; x < 21; ++x)
             {
-               for (int x = 0; x < 21; ++x)
-               {
-                  matrix.set(x, y, (y + x) % 2 == 1);
-               }
+               matrix.set(x, y, (y + x) % 2 == 1);
             }
-            qrCode.Matrix = matrix;
-            Assert.IsTrue(qrCode.Valid);
-            Assert.AreEqual(expected, qrCode.ToString());
          }
+         qrCode.Matrix = matrix;
+         Assert.IsTrue(qrCode.Valid);
+         Assert.AreEqual(expected, qrCode.ToString());
       }
 
       [Test]

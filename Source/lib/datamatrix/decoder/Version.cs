@@ -111,13 +111,8 @@ namespace ZXing.Datamatrix.Internal
             return null;
          }
 
-         // TODO(bbrown): This is doing a linear search through the array of versions.
-         // If we interleave the rectangular versions with the square versions we could
-         // do a binary search.
-         int numVersions = VERSIONS.Length;
-         for (int i = 0; i < numVersions; ++i)
+         foreach (var version in VERSIONS)
          {
-            Version version = VERSIONS[i];
             if (version.symbolSizeRows == numRows && version.symbolSizeColumns == numColumns)
             {
                return version;
