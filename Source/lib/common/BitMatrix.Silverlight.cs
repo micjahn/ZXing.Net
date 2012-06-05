@@ -35,7 +35,7 @@ namespace ZXing.Common
       public WriteableBitmap ToBitmap(BarcodeFormat format, String content)
       {
          const int BLACK = 0x00FF0000 << 8;
-         const int WHITE = int.MaxValue;
+         const int WHITE = (int)0x00FFFFFF << 8 | 0xFF;
          int width = Width;
          int height = Height;
          bool outputContent = !String.IsNullOrEmpty(content) && (format == BarcodeFormat.CODE_39 ||
