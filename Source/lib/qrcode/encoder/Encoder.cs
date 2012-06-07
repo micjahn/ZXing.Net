@@ -29,24 +29,20 @@ namespace ZXing.QrCode.Internal
    /// </author>
    /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
    /// </author>
-   public sealed class Encoder
+   public static class Encoder
    {
 
       // The original table is defined in the table 5 of JISX0510:2004 (p.19).
-      private static int[] ALPHANUMERIC_TABLE = {
-      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  // 0x00-0x0f
-      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  // 0x10-0x1f
-      36, -1, -1, -1, 37, 38, -1, -1, -1, -1, 39, 40, -1, 41, 42, 43,  // 0x20-0x2f
-      0,   1,  2,  3,  4,  5,  6,  7,  8,  9, 44, -1, -1, -1, -1, -1,  // 0x30-0x3f
-      -1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,  // 0x40-0x4f
-      25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1,  // 0x50-0x5f
-  };
+      private static readonly int[] ALPHANUMERIC_TABLE = {
+         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  // 0x00-0x0f
+         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  // 0x10-0x1f
+         36, -1, -1, -1, 37, 38, -1, -1, -1, -1, 39, 40, -1, 41, 42, 43,  // 0x20-0x2f
+         0,   1,  2,  3,  4,  5,  6,  7,  8,  9, 44, -1, -1, -1, -1, -1,  // 0x30-0x3f
+         -1, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,  // 0x40-0x4f
+         25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1,  // 0x50-0x5f
+      };
 
       internal static String DEFAULT_BYTE_MODE_ENCODING = "ISO-8859-1";
-
-      private Encoder()
-      {
-      }
 
       // The mask penalty calculation is complicated.  See Table 21 of JISX0510:2004 (p.45) for details.
       // Basically it applies four rules and summate all penalties.
@@ -91,27 +87,27 @@ namespace ZXing.QrCode.Internal
          // Step 1: Choose the mode (encoding).
          Mode mode = chooseMode(content, encoding);
 
-         // Step 2: Append "bytes" into "dataBits" in appropriate encoding.
          BitArray dataBits = new BitArray();
+
+         // Step 1.5: Append ECI message if applicable
+         if (mode == Mode.BYTE && !DEFAULT_BYTE_MODE_ENCODING.Equals(encoding))
+         {
+            CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding);
+            if (eci != null)
+            {
+               appendECI(eci, dataBits);
+            }
+         }
+         
+         // Step 2: Append "bytes" into "dataBits" in appropriate encoding.
          appendBytes(content, mode, dataBits, encoding);
+
          // Step 3: Initialize QR code that can contain "dataBits".
          int numInputBits = dataBits.Size;
          initQRCode(numInputBits, ecLevel, mode, qrCode);
 
          // Step 4: Build another bit vector that contains header and data.
          BitArray headerAndDataBits = new BitArray();
-
-         // Step 4.5: Append ECI message if applicable
-         if (mode == Mode.BYTE && !DEFAULT_BYTE_MODE_ENCODING.Equals(encoding))
-         {
-
-            CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding);
-            if (eci != null)
-            {
-
-               appendECI(eci, headerAndDataBits);
-            }
-         }
 
          appendModeInfo(mode, headerAndDataBits);
 
