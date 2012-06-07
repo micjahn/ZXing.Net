@@ -215,6 +215,8 @@
     <Compile Include="oned\rss\RSSUtils.cs" />
     <Compile Include="oned\UPCAReader.cs" />
     <Compile Include="oned\UPCAWriter.cs" />
+    <Compile Include="oned\UPCEANExtension2Support.cs" />
+    <Compile Include="oned\UPCEANExtension5Support.cs" />
     <Compile Include="oned\UPCEANExtensionSupport.cs" />
     <Compile Include="oned\UPCEANReader.cs" />
     <Compile Include="oned\UPCEANWriter.cs" />
