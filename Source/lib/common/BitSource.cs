@@ -14,6 +14,8 @@
 * limitations under the License.
 */
 
+using System;
+
 namespace ZXing.Common
 {
    /// <summary> <p>This provides an easy abstraction to read bits at a time from a sequence of bytes, where the
@@ -29,7 +31,7 @@ namespace ZXing.Common
    /// </author>
    public sealed class BitSource
    {
-      private byte[] bytes;
+      private readonly byte[] bytes;
       private int byteOffset;
       private int bitOffset;
 
@@ -54,12 +56,12 @@ namespace ZXing.Common
       /// <returns> int representing the bits read. The bits will appear as the least-significant
       /// bits of the int
       /// </returns>
-      /// <throws>  IllegalArgumentException if numBits isn't in [1,32] </throws>
+      /// <exception cref="ArgumentException">if numBits isn't in [1,32] or more than is available</exception>
       public int readBits(int numBits)
       {
-         if (numBits < 1 || numBits > 32)
+         if (numBits < 1 || numBits > 32 || numBits > available())
          {
-            throw new System.ArgumentException();
+            throw new ArgumentException(numBits.ToString(), "numBits");
          }
 
          int result = 0;
