@@ -219,6 +219,10 @@ namespace ZXing.OneD
             char c = encoded[i];
             if (c >= 'a' && c <= 'd')
             {
+               if (i >= length - 1)
+               {
+                  return null;
+               }
                char next = encoded[i + 1];
                char decodedChar = '\0';
                switch (c)
