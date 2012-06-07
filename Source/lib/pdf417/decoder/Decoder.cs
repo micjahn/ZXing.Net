@@ -85,7 +85,7 @@ namespace ZXing.PDF417.Internal
          int numECCodewords = 1 << (ecLevel + 1);
          int[] erasures = parser.getErasures();
 
-         if (!correctErrors(codewords, erasures.Length, numECCodewords))
+         if (!correctErrors(codewords, erasures, numECCodewords))
             return null;
          if (!verifyCodewordCount(codewords, numECCodewords))
             return null;
@@ -137,16 +137,16 @@ namespace ZXing.PDF417.Internal
       /// <param name="codewords">data and error correction codewords</param>
       /// </summary>
       private bool correctErrors(int[] codewords,
-                                 int numErasures,
+                                 int[] erasures,
                                  int numECCodewords)
       {
-         if (numErasures > numECCodewords/2 + MAX_ERRORS ||
+         if (erasures.Length > numECCodewords / 2 + MAX_ERRORS ||
              numECCodewords < 0 || numECCodewords > MAX_EC_CODEWORDS)
          {
             // Too many errors or EC Codewords is corrupted
             return false;
          }
-         return errorCorrection.decode(codewords, numECCodewords);
+         return errorCorrection.decode(codewords, numECCodewords, erasures);
       }
    }
 }

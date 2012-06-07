@@ -128,7 +128,12 @@ public sealed class ErrorCorrectionTestCase : AbstractErrorCorrectionTestCase
 
    private bool checkDecode(int[] received)
    {
-      if (!ec.decode(received, ECC_BYTES))
+      return checkDecode(received, new int[0]);
+   }
+
+   private bool checkDecode(int[] received, int[] erasures)
+   {
+      if (!ec.decode(received, ECC_BYTES, erasures))
          return false;
       
       for (int i = 0; i < PDF417_TEST.Length; i++)

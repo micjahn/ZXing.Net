@@ -34,7 +34,7 @@ namespace ZXing.PDF417.Internal.EC
          this.field = ModulusGF.PDF417_GF;
       }
 
-      public bool decode(int[] received, int numECCodewords)
+      public bool decode(int[] received, int numECCodewords, int[] erasures)
       {
          ModulusPoly poly = new ModulusPoly(field, received);
          int[] S = new int[numECCodewords];
@@ -50,20 +50,34 @@ namespace ZXing.PDF417.Internal.EC
          }
          if (error)
          {
+            ModulusPoly knownErrors = field.getOne();
+            foreach (int erasure in erasures)
+            {
+               int b = field.exp(received.Length - 1 - erasure);
+               // Add (1 - bx) term:
+               ModulusPoly term = new ModulusPoly(field, new int[] { field.subtract(0, b), 1 });
+               knownErrors = knownErrors.multiply(term);
+            }
+
             ModulusPoly syndrome = new ModulusPoly(field, S);
-            ErrorCorrection ec = new ErrorCorrection();
+            syndrome = syndrome.multiply(knownErrors);
+
             ModulusPoly[] sigmaOmega =
-                ec.runEuclideanAlgorithm(field.buildMonomial(numECCodewords, 1), syndrome, numECCodewords);
+                runEuclideanAlgorithm(field.buildMonomial(numECCodewords, 1), syndrome, numECCodewords);
             if (sigmaOmega == null)
                return false;
             ModulusPoly sigma = sigmaOmega[0];
             ModulusPoly omega = sigmaOmega[1];
-            int[] errorLocations = ec.findErrorLocations(sigma);
+
+            sigma = sigma.multiply(knownErrors);
+
+            int[] errorLocations = findErrorLocations(sigma);
             if (errorLocations == null)
                return false;
-            int[] errorMagnitudes = ec.findErrorMagnitudes(omega, sigma, errorLocations);
+            int[] errorMagnitudes = findErrorMagnitudes(omega, sigma, errorLocations);
             if (errorMagnitudes == null)
                return false;
+
             for (int i = 0; i < errorLocations.Length; i++)
             {
                int position = received.Length - 1 - field.log(errorLocations[i]);
