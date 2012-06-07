@@ -74,7 +74,7 @@ namespace ZXing.Client.Result
          List<List<String>> emails = matchVCardPrefixedField("EMAIL", rawText, true, false);
          List<String> note = matchSingleVCardPrefixedField("NOTE", rawText, false, false);
          List<List<String>> addresses = matchVCardPrefixedField("ADR", rawText, true, true);
-         List<String> org = matchSingleVCardPrefixedField("ORG", rawText, true, false);
+         List<String> org = matchSingleVCardPrefixedField("ORG", rawText, true, true);
          List<String> birthday = matchSingleVCardPrefixedField("BDAY", rawText, true, false);
          if (birthday != null && !isLikeVCardDate(birthday[0]))
          {
