@@ -38,7 +38,6 @@ namespace ZXing.OneD
 
       internal Result decodeRow(int rowNumber, BitArray row, int[] extensionStartRange)
       {
-
          StringBuilder result = decodeRowStringBuffer;
          result.Length = 0;
          int end = decodeMiddle(row, extensionStartRange, result);
