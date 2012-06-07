@@ -120,8 +120,6 @@ namespace ZXing.Common.ReedSolomon
 
          GenericGFPoly rLast = a;
          GenericGFPoly r = b;
-         GenericGFPoly sLast = field.One;
-         GenericGFPoly s = field.Zero;
          GenericGFPoly tLast = field.Zero;
          GenericGFPoly t = field.One;
 
@@ -129,10 +127,8 @@ namespace ZXing.Common.ReedSolomon
          while (r.Degree >= R / 2)
          {
             GenericGFPoly rLastLast = rLast;
-            GenericGFPoly sLastLast = sLast;
             GenericGFPoly tLastLast = tLast;
             rLast = r;
-            sLast = s;
             tLast = t;
 
             // Divide rLastLast by rLast, with quotient in q and remainder in r
@@ -154,7 +150,6 @@ namespace ZXing.Common.ReedSolomon
                r = r.addOrSubtract(rLast.multiplyByMonomial(degreeDiff, scale));
             }
 
-            s = q.multiply(sLast).addOrSubtract(sLastLast);
             t = q.multiply(tLast).addOrSubtract(tLastLast);
          }
 

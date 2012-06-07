@@ -60,7 +60,7 @@ namespace ZXing.PDF417.Internal.EC
             }
 
             ModulusPoly syndrome = new ModulusPoly(field, S);
-            syndrome = syndrome.multiply(knownErrors);
+            //syndrome = syndrome.multiply(knownErrors);
 
             ModulusPoly[] sigmaOmega =
                 runEuclideanAlgorithm(field.buildMonomial(numECCodewords, 1), syndrome, numECCodewords);
@@ -69,7 +69,7 @@ namespace ZXing.PDF417.Internal.EC
             ModulusPoly sigma = sigmaOmega[0];
             ModulusPoly omega = sigmaOmega[1];
 
-            sigma = sigma.multiply(knownErrors);
+            //sigma = sigma.multiply(knownErrors);
 
             int[] errorLocations = findErrorLocations(sigma);
             if (errorLocations == null)
@@ -104,8 +104,6 @@ namespace ZXing.PDF417.Internal.EC
 
          ModulusPoly rLast = a;
          ModulusPoly r = b;
-         ModulusPoly sLast = field.getOne();
-         ModulusPoly s = field.getZero();
          ModulusPoly tLast = field.getZero();
          ModulusPoly t = field.getOne();
 
@@ -113,10 +111,8 @@ namespace ZXing.PDF417.Internal.EC
          while (r.Degree >= R / 2)
          {
             ModulusPoly rLastLast = rLast;
-            ModulusPoly sLastLast = sLast;
             ModulusPoly tLastLast = tLast;
             rLast = r;
-            sLast = s;
             tLast = t;
 
             // Divide rLastLast by rLast, with quotient in q and remainder in r
@@ -137,7 +133,6 @@ namespace ZXing.PDF417.Internal.EC
                r = r.subtract(rLast.multiplyByMonomial(degreeDiff, scale));
             }
 
-            s = q.multiply(sLast).subtract(sLastLast).negative();
             t = q.multiply(tLast).subtract(tLastLast).negative();
          }
 

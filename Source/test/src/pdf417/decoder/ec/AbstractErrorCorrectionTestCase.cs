@@ -18,68 +18,71 @@ using System;
 
 using NUnit.Framework;
 
-/// <summary>
-/// @author Sean Owen
-/// </summary>
-public abstract class AbstractErrorCorrectionTestCase
+namespace ZXing.PDF417.Internal.Test
 {
-   public static void corrupt(int[] received, int howMany, Random random)
+   /// <summary>
+   /// @author Sean Owen
+   /// </summary>
+   public abstract class AbstractErrorCorrectionTestCase
    {
-      var corrupted = new System.Collections.BitArray(received.Length);
-      // BitSet corrupted = new BitSet(received.Length);
-      for (int j = 0; j < howMany; j++)
+      public static void corrupt(int[] received, int howMany, Random random)
       {
-         int location = random.Next(received.Length);
-         if (corrupted[location])
+         var corrupted = new System.Collections.BitArray(received.Length);
+         // BitSet corrupted = new BitSet(received.Length);
+         for (int j = 0; j < howMany; j++)
          {
-            j--;
-         }
-         else
-         {
-            corrupted[location] = true;
-            received[location] = random.Next(929);
+            int location = random.Next(received.Length);
+            if (corrupted[location])
+            {
+               j--;
+            }
+            else
+            {
+               corrupted[location] = true;
+               received[location] = random.Next(929);
+            }
          }
       }
-   }
 
-   public static int[] erase(int[] received, int howMany, Random random)
-   {
-      var erased = new System.Collections.BitArray(received.Length);
-      // BitSet erased = new BitSet(received.Length);
-      int[] erasures = new int[howMany];
-      int erasureOffset = 0;
-      for (int j = 0; j < howMany; j++)
+      public static int[] erase(int[] received, int howMany, Random random)
       {
-         int location = random.Next(received.Length);
-         if (erased[location])
+         var erased = new System.Collections.BitArray(received.Length);
+         // BitSet erased = new BitSet(received.Length);
+         int[] erasures = new int[howMany];
+         int erasureOffset = 0;
+         for (int j = 0; j < howMany; j++)
          {
-            j--;
+            int location = random.Next(received.Length);
+            if (erased[location])
+            {
+               j--;
+            }
+            else
+            {
+               erased[location] = true;
+               received[location] = 0;
+               erasures[erasureOffset++] = location;
+            }
          }
-         else
-         {
-            erased[location] = true;
-            received[location] = 0;
-            erasures[erasureOffset++] = location;
-         }
+         return erasures;
       }
-      return erasures;
-   }
 
-   public static Random getRandom()
-   {
-      return new Random((int)DateTime.Now.Ticks);
-      // return new SecureRandom(new byte[] { (byte)0xDE, (byte)0xAD, (byte)0xBE, (byte)0xEF });
-   }
-
-   public static void assertArraysEqual(int[] expected,
-                                 int expectedOffset,
-                                 int[] actual,
-                                 int actualOffset,
-                                 int length)
-   {
-      for (int i = 0; i < length; i++)
+      public static Random getRandom()
       {
-         Assert.AreEqual(expected[expectedOffset + i], actual[actualOffset + i]);
+         return new Random((int)DateTime.Now.Ticks);
+         // return new SecureRandom(new byte[] { (byte)0xDE, (byte)0xAD, (byte)0xBE, (byte)0xEF });
+      }
+
+      public static void assertArraysEqual(int[] expected,
+                                    int expectedOffset,
+                                    int[] actual,
+                                    int actualOffset,
+                                    int length)
+      {
+         for (int i = 0; i < length; i++)
+         {
+            Assert.AreEqual(expected[expectedOffset + i], actual[actualOffset + i]);
+         }
       }
    }
 }

@@ -19,25 +19,27 @@ using NUnit.Framework;
 
 using ZXing.PDF417.Internal.EC;
 
-/// <summary>
-/// @author Sean Owen
-/// </summary>
-public sealed class ErrorCorrectionTestCase : AbstractErrorCorrectionTestCase
+namespace ZXing.PDF417.Internal.Test
 {
+   /// <summary>
+   /// @author Sean Owen
+   /// </summary>
+   public sealed class ErrorCorrectionTestCase : AbstractErrorCorrectionTestCase
+   {
 
-   /** See ISO 15438, Annex Q */
-   //private static final int[] PDF417_TEST =
-   //    { 5, 453, 178, 121, 239 };
-   //private static final int[] PDF417_TEST_WITH_EC =
-   //    { 5, 453, 178, 121, 239, 452, 327, 657, 619 };
+      /** See ISO 15438, Annex Q */
+      //private static final int[] PDF417_TEST =
+      //    { 5, 453, 178, 121, 239 };
+      //private static final int[] PDF417_TEST_WITH_EC =
+      //    { 5, 453, 178, 121, 239, 452, 327, 657, 619 };
 
-   private static readonly int[] PDF417_TEST =
+      private static readonly int[] PDF417_TEST =
       { 48,901, 56,141,627,856,330, 69,244,900,
        852,169,843,895,852,895,913,154,845,778,
        387, 89,869,901,219,474,543,650,169,201,
          9,160, 35, 70,900,900,900,900,900,900,
        900,900,900,900,900,900,900,900};
-   private static readonly int[] PDF417_TEST_WITH_EC =
+      private static readonly int[] PDF417_TEST_WITH_EC =
       { 48,901, 56,141,627,856,330, 69,244,900,
        852,169,843,895,852,895,913,154,845,778,
        387, 89,869,901,219,474,543,650,169,201,
@@ -50,98 +52,99 @@ public sealed class ErrorCorrectionTestCase : AbstractErrorCorrectionTestCase
        882,536,322,317,273,194,917,237,420,859,
        340,115,222,808,866,836,417,121,833,459,
         64,159};
-   private static readonly int ECC_BYTES = PDF417_TEST_WITH_EC.Length - PDF417_TEST.Length;
-   // Example is EC level 1 (s=1). The number of erasures (l) and substitutions (f) must obey:
-   // l + 2f <= 2^(s+1) - 3
-   private const int EC_LEVEL = 5;
-   private const int ERROR_LIMIT = (1 << (EC_LEVEL + 1)) - 3;
-   private const int MAX_ERRORS = ERROR_LIMIT / 2;
-   //private static final int MAX_ERASURES = ERROR_LIMIT;
+      private static readonly int ECC_BYTES = PDF417_TEST_WITH_EC.Length - PDF417_TEST.Length;
+      // Example is EC level 1 (s=1). The number of erasures (l) and substitutions (f) must obey:
+      // l + 2f <= 2^(s+1) - 3
+      private const int EC_LEVEL = 5;
+      private const int ERROR_LIMIT = (1 << (EC_LEVEL + 1)) - 3;
+      private const int MAX_ERRORS = ERROR_LIMIT / 2;
+      //private static final int MAX_ERASURES = ERROR_LIMIT;
 
-   private readonly ErrorCorrection ec = new ErrorCorrection();
+      private readonly ErrorCorrection ec = new ErrorCorrection();
 
-   [Test]
-   public void testNoError()
-   {
-      int[] received = (int[])PDF417_TEST_WITH_EC.Clone();
-      // no errors
-      checkDecode(received);
-   }
-
-   [Test]
-   public void testOneError()
-   {
-      Random random = getRandom();
-      for (int i = 0; i < PDF417_TEST_WITH_EC.Length; i++)
+      [Test]
+      public void testNoError()
       {
          int[] received = (int[])PDF417_TEST_WITH_EC.Clone();
-         received[i] = random.Next(256);
+         // no errors
          checkDecode(received);
       }
-   }
 
-   [Test]
-   public void testMaxErrors()
-   {
-      Random random = getRandom();
-      foreach (int test in PDF417_TEST)
-      { // # iterations is kind of arbitrary
-         int[] received = (int[])PDF417_TEST_WITH_EC.Clone();
-         corrupt(received, MAX_ERRORS, random);
-         checkDecode(received);
-      }
-   }
-
-   [Test]
-   public void testTooManyErrors()
-   {
-      int[] received = (int[])PDF417_TEST_WITH_EC.Clone();
-      Random random = getRandom();
-      corrupt(received, MAX_ERRORS + 3, random); // +3 since the algo can actually correct 2 more than it should here
-      Assert.IsFalse(checkDecode(received));
-   }
-
-   /*
-   @Test
-   public void testMaxErasures() throws ChecksumException {
-     Random random = getRandom();
-     for (int test : PDF417_TEST) { // # iterations is kind of arbitrary
-       int[] received = PDF417_TEST_WITH_EC.clone();
-       int[] erasures = erase(received, MAX_ERASURES, random);
-       checkDecode(received, erasures);
-     }
-   }
-
-   @Test
-   public void testTooManyErasures() {
-     Random random = getRandom();
-     int[] received = PDF417_TEST_WITH_EC.clone();
-     int[] erasures = erase(received, MAX_ERASURES + 1, random);
-     try {
-       checkDecode(received, erasures);
-       fail("Should not have decoded");
-     } catch (ChecksumException ce) {
-       // good
-     }
-   }
-    */
-
-   private bool checkDecode(int[] received)
-   {
-      return checkDecode(received, new int[0]);
-   }
-
-   private bool checkDecode(int[] received, int[] erasures)
-   {
-      if (!ec.decode(received, ECC_BYTES, erasures))
-         return false;
-      
-      for (int i = 0; i < PDF417_TEST.Length; i++)
+      [Test]
+      public void testOneError()
       {
-         if (received[i] != PDF417_TEST[i])
+         Random random = getRandom();
+         for (int i = 0; i < PDF417_TEST_WITH_EC.Length; i++)
+         {
+            int[] received = (int[])PDF417_TEST_WITH_EC.Clone();
+            received[i] = random.Next(256);
+            checkDecode(received);
+         }
+      }
+
+      [Test]
+      public void testMaxErrors()
+      {
+         Random random = getRandom();
+         foreach (int test in PDF417_TEST)
+         { // # iterations is kind of arbitrary
+            int[] received = (int[])PDF417_TEST_WITH_EC.Clone();
+            corrupt(received, MAX_ERRORS, random);
+            checkDecode(received);
+         }
+      }
+
+      [Test]
+      public void testTooManyErrors()
+      {
+         int[] received = (int[])PDF417_TEST_WITH_EC.Clone();
+         Random random = getRandom();
+         corrupt(received, MAX_ERRORS + 3, random); // +3 since the algo can actually correct 2 more than it should here
+         Assert.IsFalse(checkDecode(received));
+      }
+
+      /*
+      @Test
+      public void testMaxErasures() throws ChecksumException {
+        Random random = getRandom();
+        for (int test : PDF417_TEST) { // # iterations is kind of arbitrary
+          int[] received = PDF417_TEST_WITH_EC.clone();
+          int[] erasures = erase(received, MAX_ERASURES, random);
+          checkDecode(received, erasures);
+        }
+      }
+
+      @Test
+      public void testTooManyErasures() {
+        Random random = getRandom();
+        int[] received = PDF417_TEST_WITH_EC.clone();
+        int[] erasures = erase(received, MAX_ERASURES + 1, random);
+        try {
+          checkDecode(received, erasures);
+          fail("Should not have decoded");
+        } catch (ChecksumException ce) {
+          // good
+        }
+      }
+       */
+
+      private bool checkDecode(int[] received)
+      {
+         return checkDecode(received, new int[0]);
+      }
+
+      private bool checkDecode(int[] received, int[] erasures)
+      {
+         if (!ec.decode(received, ECC_BYTES, erasures))
             return false;
-      }
 
-      return true;
+         for (int i = 0; i < PDF417_TEST.Length; i++)
+         {
+            if (received[i] != PDF417_TEST[i])
+               return false;
+         }
+
+         return true;
+      }
    }
 }
