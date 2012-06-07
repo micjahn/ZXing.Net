@@ -226,6 +226,7 @@ namespace ZXing.Client.Result
             {
                //value = URLDecoder.decode(value, "UTF-8");
                value = urlDecode(value);
+               result[key] = value;
             }
             catch (Exception uee)
             {
