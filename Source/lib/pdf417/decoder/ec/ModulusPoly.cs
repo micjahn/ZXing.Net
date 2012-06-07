@@ -88,7 +88,7 @@ namespace ZXing.PDF417.Internal.EC
       /// </summary>
       /// <value>true if this polynomial is the monomial "0"
       /// </value>
-      bool isZero
+      internal bool isZero
       {
          get { return coefficients[0] == 0; }
       }
@@ -239,7 +239,7 @@ namespace ZXing.PDF417.Internal.EC
          return new ModulusPoly(field, product);
       }
 
-      ModulusPoly multiplyByMonomial(int degree, int coefficient)
+      internal ModulusPoly multiplyByMonomial(int degree, int coefficient)
       {
          if (degree < 0)
          {
