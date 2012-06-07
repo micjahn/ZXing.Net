@@ -422,10 +422,6 @@ namespace ZXing.PDF417.Internal
                      {
                         subMode = Mode.ALPHA;
                      }
-                     else
-                     {
-                        // is this even possible?
-                     }
                   }
                   break;
 

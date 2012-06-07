@@ -453,7 +453,7 @@ namespace ZXing.Datamatrix.Internal
       /// <summary>
       /// Simply encapsulates two points and a number of transitions between them.
       /// </summary>
-      private class ResultPointsAndTransitions
+      private sealed class ResultPointsAndTransitions
       {
          public ResultPoint From { get; private set; }
          public ResultPoint To { get; private set; }
@@ -475,7 +475,7 @@ namespace ZXing.Datamatrix.Internal
       /// <summary>
       /// Orders ResultPointsAndTransitions by number of transitions, ascending.
       /// </summary>
-      private class ResultPointsAndTransitionsComparator : IComparer<ResultPointsAndTransitions>
+      private sealed class ResultPointsAndTransitionsComparator : IComparer<ResultPointsAndTransitions>
       {
          public int Compare(ResultPointsAndTransitions o1, ResultPointsAndTransitions o2)
          {

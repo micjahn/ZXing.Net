@@ -657,7 +657,7 @@ namespace ZXing.Aztec.Internal
          return new Point(x, y);
       }
 
-      internal class Point
+      internal sealed class Point
       {
          public int x;
          public int y;

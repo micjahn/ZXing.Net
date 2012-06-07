@@ -47,32 +47,32 @@ namespace ZXing.Datamatrix.Internal
       /// See ISO 16022:2006, Annex C Table C.1
       /// The C40 Basic Character Set (*'s used for placeholders for the shift values)
       /// </summary>
-      private static char[] C40_BASIC_SET_CHARS = {
-                                                     '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                                                     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-                                                     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-                                                  };
+      private static readonly char[] C40_BASIC_SET_CHARS = {
+                                                              '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                                                              'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+                                                              'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+                                                           };
 
-      private static char[] C40_SHIFT2_SET_CHARS = {
-                                                      '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.',
-                                                      '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_'
-                                                   };
+      private static readonly char[] C40_SHIFT2_SET_CHARS = {
+                                                               '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.',
+                                                               '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_'
+                                                            };
 
       /// <summary>
       /// See ISO 16022:2006, Annex C Table C.2
       /// The Text Basic Character Set (*'s used for placeholders for the shift values)
       /// </summary>
-      private static char[] TEXT_BASIC_SET_CHARS = {
-                                                      '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                                                      'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-                                                      'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
-                                                   };
+      private static readonly char[] TEXT_BASIC_SET_CHARS = {
+                                                               '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                                                               'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+                                                               'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+                                                            };
 
-      private static char[] TEXT_SHIFT3_SET_CHARS = {
-                                                       '\'', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-                                                       'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{',
-                                                       '|', '}', '~', (char) 127
-                                                    };
+      private static readonly char[] TEXT_SHIFT3_SET_CHARS = {
+                                                                '\'', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+                                                                'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{',
+                                                                '|', '}', '~', (char) 127
+                                                             };
 
       internal static DecoderResult decode(byte[] bytes)
       {
@@ -226,11 +226,7 @@ namespace ZXing.Datamatrix.Internal
             else if (oneByte >= 242)
             {  // Not to be used in ASCII encodation
                // ... but work around encoders that end with 254, latch back to ASCII
-               if (oneByte == 254 && bits.available() == 0)
-               {
-                  // Ignore
-               }
-               else
+               if (oneByte != 254 || bits.available() != 0)
                {
                   return false;
                }

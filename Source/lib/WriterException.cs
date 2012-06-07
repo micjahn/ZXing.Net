@@ -32,10 +32,15 @@ namespace ZXing
 		public WriterException()
 		{
 		}
-		
-		public WriterException(String message)
+
+      public WriterException(String message)
          :base(message)
 		{
 		}
-	}
+
+      public WriterException(String message, Exception innerExc)
+         : base(message, innerExc)
+      {
+      }
+   }
 }

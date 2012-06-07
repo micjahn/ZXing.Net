@@ -647,7 +647,7 @@ namespace ZXing.QrCode.Internal
          }
          catch (Exception uee)
          {
-            throw new WriterException(uee.ToString());
+            throw new WriterException(uee.Message, uee);
          }
          foreach (byte b in bytes)
          {
@@ -664,7 +664,7 @@ namespace ZXing.QrCode.Internal
          }
          catch (Exception uee)
          {
-            throw new WriterException(uee.ToString());
+            throw new WriterException(uee.Message, uee);
          }
          int length = bytes.Length;
          for (int i = 0; i < length; i += 2)

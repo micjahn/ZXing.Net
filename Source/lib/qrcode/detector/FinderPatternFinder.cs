@@ -655,16 +655,18 @@ namespace ZXing.QrCode.Internal
                    };
       }
 
-      /**
-       * <p>Orders by furthest from average</p>
-       */
-      private class FurthestFromAverageComparator : IComparer<FinderPattern>
+      /// <summary>
+      /// Orders by furthest from average
+      /// </summary>
+      private sealed class FurthestFromAverageComparator : IComparer<FinderPattern>
       {
-         private float average;
+         private readonly float average;
+
          public FurthestFromAverageComparator(float f)
          {
             average = f;
          }
+
          public int Compare(FinderPattern x, FinderPattern y)
          {
             float dA = Math.Abs(y.EstimatedModuleSize - average);
@@ -674,13 +676,15 @@ namespace ZXing.QrCode.Internal
       }
 
       /// <summary> <p>Orders by {@link FinderPattern#getCount()}, descending.</p></summary>
-      private class CenterComparator : IComparer<FinderPattern>
+      private sealed class CenterComparator : IComparer<FinderPattern>
       {
-         private float average;
+         private readonly float average;
+
          public CenterComparator(float f)
          {
             average = f;
          }
+
          public int Compare(FinderPattern x, FinderPattern y)
          {
             if (y.Count == x.Count)
@@ -689,10 +693,7 @@ namespace ZXing.QrCode.Internal
                float dB = Math.Abs(x.EstimatedModuleSize - average);
                return dA < dB ? 1 : dA == dB ? 0 : -1;
             }
-            else
-            {
-               return y.Count - x.Count;
-            }
+            return y.Count - x.Count;
          }
       }
    }
