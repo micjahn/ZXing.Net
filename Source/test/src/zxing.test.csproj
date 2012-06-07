@@ -143,6 +143,8 @@
     <Compile Include="oned\UPCEBlackBox1TestCase.cs" />
     <Compile Include="oned\UPCEBlackBox2TestCase.cs" />
     <Compile Include="oned\UPCEBlackBox3ReflectiveTestCase.cs" />
+    <Compile Include="pdf417\decoder\ec\AbstractErrorCorrectionTestCase.cs" />
+    <Compile Include="pdf417\decoder\ec\ErrorCorrectionTestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox1TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox2TestCase.cs" />
     <Compile Include="pdf417\PDF417DecodedBitStreamParserTestCase.cs" />
