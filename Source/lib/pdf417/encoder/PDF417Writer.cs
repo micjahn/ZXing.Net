@@ -91,7 +91,7 @@ namespace ZXing.PDF417.Internal
          IDictionary<EncodeHintType, Object> hints = new Dictionary<EncodeHintType, Object>();
          hints[EncodeHintType.PDF417_COMPACT] = compact;
          hints[EncodeHintType.PDF417_COMPACTION] = compaction;
-         hints[EncodeHintType.PDF417_DIMENSIONS] = new Dimensions(maxCols, minCols, maxRows, minRows);
+         hints[EncodeHintType.PDF417_DIMENSIONS] = new Dimensions(minCols, maxCols, minRows, maxRows);
          return encode(contents, format, width, height, hints);
       }
 
