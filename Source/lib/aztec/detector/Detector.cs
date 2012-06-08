@@ -185,21 +185,21 @@ namespace ZXing.Aztec.Internal
          int dy = bullEyeCornerPoints[0].y - bullEyeCornerPoints[2].y;
          dy += dy > 0 ? 1 : -1;
 
-         int targetcx = round(bullEyeCornerPoints[2].x - ratio * dx);
-         int targetcy = round(bullEyeCornerPoints[2].y - ratio * dy);
+         int targetcx = MathUtils.round(bullEyeCornerPoints[2].x - ratio * dx);
+         int targetcy = MathUtils.round(bullEyeCornerPoints[2].y - ratio * dy);
 
-         int targetax = round(bullEyeCornerPoints[0].x + ratio * dx);
-         int targetay = round(bullEyeCornerPoints[0].y + ratio * dy);
+         int targetax = MathUtils.round(bullEyeCornerPoints[0].x + ratio * dx);
+         int targetay = MathUtils.round(bullEyeCornerPoints[0].y + ratio * dy);
 
          dx = bullEyeCornerPoints[1].x - bullEyeCornerPoints[3].x;
          dx += dx > 0 ? 1 : -1;
          dy = bullEyeCornerPoints[1].y - bullEyeCornerPoints[3].y;
          dy += dy > 0 ? 1 : -1;
 
-         int targetdx = round(bullEyeCornerPoints[3].x - ratio * dx);
-         int targetdy = round(bullEyeCornerPoints[3].y - ratio * dy);
-         int targetbx = round(bullEyeCornerPoints[1].x + ratio * dx);
-         int targetby = round(bullEyeCornerPoints[1].y + ratio * dy);
+         int targetdx = MathUtils.round(bullEyeCornerPoints[3].x - ratio * dx);
+         int targetdy = MathUtils.round(bullEyeCornerPoints[3].y - ratio * dy);
+         int targetbx = MathUtils.round(bullEyeCornerPoints[1].x + ratio * dx);
+         int targetby = MathUtils.round(bullEyeCornerPoints[1].y + ratio * dy);
 
          if (!isValid(targetax, targetay) || !isValid(targetbx, targetby) || !isValid(targetcx, targetcy) || !isValid(targetdx, targetdy))
          {
@@ -318,18 +318,18 @@ namespace ZXing.Aztec.Internal
 
          int dx = pina.x - pinc.x;
          int dy = pina.y - pinc.y;
-         int targetcx = round(pinc.x - ratio * dx);
-         int targetcy = round(pinc.y - ratio * dy);
-         int targetax = round(pina.x + ratio * dx);
-         int targetay = round(pina.y + ratio * dy);
+         int targetcx = MathUtils.round(pinc.x - ratio * dx);
+         int targetcy = MathUtils.round(pinc.y - ratio * dy);
+         int targetax = MathUtils.round(pina.x + ratio * dx);
+         int targetay = MathUtils.round(pina.y + ratio * dy);
 
          dx = pinb.x - pind.x;
          dy = pinb.y - pind.y;
 
-         int targetdx = round(pind.x - ratio * dx);
-         int targetdy = round(pind.y - ratio * dy);
-         int targetbx = round(pinb.x + ratio * dx);
-         int targetby = round(pinb.y + ratio * dy);
+         int targetdx = MathUtils.round(pind.x - ratio * dx);
+         int targetdy = MathUtils.round(pind.y - ratio * dy);
+         int targetbx = MathUtils.round(pinb.x + ratio * dx);
+         int targetby = MathUtils.round(pinb.y + ratio * dy);
 
          if (!isValid(targetax, targetay) || !isValid(targetbx, targetby)
              || !isValid(targetcx, targetcy) || !isValid(targetdx, targetdy))
@@ -383,8 +383,8 @@ namespace ZXing.Aztec.Internal
          }
 
          //Compute the center of the rectangle
-         cx = round((pointA.X + pointD.X + pointB.X + pointC.X) / 4);
-         cy = round((pointA.Y + pointD.Y + pointB.Y + pointC.Y) / 4);
+         cx = MathUtils.round((pointA.X + pointD.X + pointB.X + pointC.X) / 4);
+         cy = MathUtils.round((pointA.Y + pointD.Y + pointB.Y + pointC.Y) / 4);
 
          // Redetermine the white rectangle starting from previously computed center.
          // This will ensure that we end up with a white rectangle in center bull's eye
@@ -408,8 +408,8 @@ namespace ZXing.Aztec.Internal
          }
 
          // Recompute the center of the rectangle
-         cx = round((pointA.X + pointD.X + pointB.X + pointC.X) / 4);
-         cy = round((pointA.Y + pointD.Y + pointB.Y + pointC.Y) / 4);
+         cx = MathUtils.round((pointA.X + pointD.X + pointB.X + pointC.X) / 4);
+         cy = MathUtils.round((pointA.Y + pointD.Y + pointB.Y + pointC.Y) / 4);
 
          return new Point(cx, cy);
       }
@@ -529,7 +529,7 @@ namespace ZXing.Aztec.Internal
 
          for (int i = 0; i < size; i++)
          {
-            res[i] = image[round(px), round(py)];
+            res[i] = image[MathUtils.round(px), MathUtils.round(py)];
             px += dx;
             py += dy;
          }
@@ -602,7 +602,7 @@ namespace ZXing.Aztec.Internal
          {
             px += dx;
             py += dy;
-            if (image[round(px), round(py)] != colorModel)
+            if (image[MathUtils.round(px), MathUtils.round(py)] != colorModel)
             {
                error++;
             }
@@ -679,21 +679,10 @@ namespace ZXing.Aztec.Internal
          return x >= 0 && x < image.Width && y > 0 && y < image.Height;
       }
 
-      /**
-       * Ends up being a bit faster than round(). This merely rounds its
-       * argument to the nearest int, where x.5 rounds up.
-       */
-      private static int round(float d)
-      {
-         return (int)(d + 0.5f);
-      }
-
       // L2 distance
       private static float distance(Point a, Point b)
       {
-         return (float)Math.Sqrt((a.x - b.x)
-             * (a.x - b.x) + (a.y - b.y)
-             * (a.y - b.y));
+         return MathUtils.distance(a.x, a.y, b.x, b.y);
       }
    }
 }

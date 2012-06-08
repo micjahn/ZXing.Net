@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 
 using ZXing.Common;
+using ZXing.Common.Detector;
 
 namespace ZXing.PDF417.Internal
 {
@@ -432,8 +433,8 @@ namespace ZXing.PDF417.Internal
                                           ResultPoint bottomRight,
                                           float moduleWidth)
       {
-         int topRowDimension = round(ResultPoint.distance(topLeft, topRight) / moduleWidth);
-         int bottomRowDimension = round(ResultPoint.distance(bottomLeft, bottomRight) / moduleWidth);
+         int topRowDimension = MathUtils.round(ResultPoint.distance(topLeft, topRight) / moduleWidth);
+         int bottomRowDimension = MathUtils.round(ResultPoint.distance(bottomLeft, bottomRight) / moduleWidth);
          return ((((topRowDimension + bottomRowDimension) >> 1) + 8) / 17) * 17;
       }
 
@@ -468,15 +469,6 @@ namespace ZXing.PDF417.Internal
              bottomRight.Y, // p3FromY
              bottomLeft.X, // p4FromX
              bottomLeft.Y); // p4FromY
-      }
-
-      /// <summary>
-      /// Ends up being a bit faster than Math.round(). This merely rounds its
-      /// argument to the nearest int, where x.5 rounds up.
-      /// </summary>
-      private static int round(float d)
-      {
-         return (int)(d + 0.5f);
       }
 
       /// <summary>

@@ -27,16 +27,16 @@ namespace ZXing.Common.Detector
    /// <author>David Olivier</author>
    public sealed class WhiteRectangleDetector
    {
-      private static int INIT_SIZE = 30;
-      private static int CORR = 1;
+      private const int INIT_SIZE = 30;
+      private const int CORR = 1;
 
-      private BitMatrix image;
-      private int height;
-      private int width;
-      private int leftInit;
-      private int rightInit;
-      private int downInit;
-      private int upInit;
+      private readonly BitMatrix image;
+      private readonly int height;
+      private readonly int width;
+      private readonly int leftInit;
+      private readonly int rightInit;
+      private readonly int downInit;
+      private readonly int upInit;
 
       /// <summary>
       /// Initializes a new instance of the <see cref="WhiteRectangleDetector"/> class.
@@ -273,40 +273,22 @@ namespace ZXing.Common.Detector
          }
       }
 
-      /// <summary>
-      /// Ends up being a bit faster than Math.round(). This merely rounds its
-      /// argument to the nearest int, where x.5 rounds up.
-      /// </summary>
-      /// <param name="d">The d.</param>
-      /// <returns></returns>
-      private static int round(float d)
-      {
-         return (int)(d + 0.5f);
-      }
-
       private ResultPoint getBlackPointOnSegment(float aX, float aY, float bX, float bY)
       {
-         int dist = distanceL2(aX, aY, bX, bY);
+         int dist = MathUtils.round(MathUtils.distance(aX, aY, bX, bY));
          float xStep = (bX - aX) / dist;
          float yStep = (bY - aY) / dist;
 
          for (int i = 0; i < dist; i++)
          {
-            int x = round(aX + i * xStep);
-            int y = round(aY + i * yStep);
+            int x = MathUtils.round(aX + i * xStep);
+            int y = MathUtils.round(aY + i * yStep);
             if (image[x, y])
             {
                return new ResultPoint(x, y);
             }
          }
          return null;
-      }
-
-      private static int distanceL2(float aX, float aY, float bX, float bY)
-      {
-         float xDiff = aX - bX;
-         float yDiff = aY - bY;
-         return round((float)Math.Sqrt(xDiff * xDiff + yDiff * yDiff));
       }
 
       /// <summary>

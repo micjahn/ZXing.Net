@@ -99,6 +99,7 @@
     <Compile Include="common\DecoderResult.cs" />
     <Compile Include="common\DefaultGridSampler.cs" />
     <Compile Include="common\DetectorResult.cs" />
+    <Compile Include="common\detector\MathUtils.cs" />
     <Compile Include="common\detector\MonochromeRectangleDetector.cs" />
     <Compile Include="common\detector\WhiteRectangleDetector.cs" />
     <Compile Include="common\ECI.cs" />

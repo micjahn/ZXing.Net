@@ -16,6 +16,8 @@
 
 using System;
 
+using ZXing.Common.Detector;
+
 namespace ZXing
 {
    /// <summary>
@@ -173,10 +175,7 @@ namespace ZXing
       /// </returns>
       public static float distance(ResultPoint pattern1, ResultPoint pattern2)
       {
-         float xDiff = pattern1.X - pattern2.X;
-         float yDiff = pattern1.Y - pattern2.Y;
-
-         return (float)Math.Sqrt(xDiff * xDiff + yDiff * yDiff);
+         return MathUtils.distance(pattern1.x, pattern1.y, pattern2.x, pattern2.y);
       }
 
       /// <summary>

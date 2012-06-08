@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 
 using ZXing.Common;
+using ZXing.Common.Detector;
 
 namespace ZXing.QrCode.Internal
 {
@@ -173,7 +174,7 @@ namespace ZXing.QrCode.Internal
          }
 
          return PerspectiveTransform.quadrilateralToQuadrilateral(
-            3.5f, 
+            3.5f,
             3.5f,
             dimMinusThree,
             3.5f,
@@ -181,12 +182,12 @@ namespace ZXing.QrCode.Internal
             sourceBottomRightY,
             3.5f,
             dimMinusThree,
-            topLeft.X, 
+            topLeft.X,
             topLeft.Y,
-            topRight.X, 
+            topRight.X,
             topRight.Y,
-            bottomRightX, 
-            bottomRightY, 
+            bottomRightX,
+            bottomRightY,
             bottomLeft.X,
             bottomLeft.Y);
       }
@@ -202,8 +203,8 @@ namespace ZXing.QrCode.Internal
       /// </summary>
       private static bool computeDimension(ResultPoint topLeft, ResultPoint topRight, ResultPoint bottomLeft, float moduleSize, out int dimension)
       {
-         int tltrCentersDimension = round(ResultPoint.distance(topLeft, topRight) / moduleSize);
-         int tlblCentersDimension = round(ResultPoint.distance(topLeft, bottomLeft) / moduleSize);
+         int tltrCentersDimension = MathUtils.round(ResultPoint.distance(topLeft, topRight) / moduleSize);
+         int tlblCentersDimension = MathUtils.round(ResultPoint.distance(topLeft, bottomLeft) / moduleSize);
          dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
          switch (dimension & 0x03)
          {
@@ -344,9 +345,7 @@ namespace ZXing.QrCode.Internal
             {
                if (state == 2)
                {
-                  int diffX = x - fromX;
-                  int diffY = y - fromY;
-                  return (float)Math.Sqrt(diffX * diffX + diffY * diffY);
+                  return MathUtils.distance(x, y, fromX, fromY);
                }
                state++;
             }
@@ -368,9 +367,7 @@ namespace ZXing.QrCode.Internal
          // small approximation; (toX+xStep,toY+yStep) might be really correct. Ignore this.
          if (state == 2)
          {
-            int diffX = toX + xstep - fromX;
-            int diffY = toY - fromY;
-            return (float)Math.Sqrt(diffX * diffX + diffY * diffY);
+            return MathUtils.distance(toX + xstep, toY, fromX, fromY);
          }
          // else we didn't find even black-white-black; no estimate is really possible
          return Single.NaN;
@@ -408,24 +405,15 @@ namespace ZXing.QrCode.Internal
          int alignmentAreaBottomY = Math.Min(image.Height - 1, estAlignmentY + allowance);
 
          var alignmentFinder = new AlignmentPatternFinder(
-            image, 
-            alignmentAreaLeftX, 
+            image,
+            alignmentAreaLeftX,
             alignmentAreaTopY,
-            alignmentAreaRightX - alignmentAreaLeftX, 
+            alignmentAreaRightX - alignmentAreaLeftX,
             alignmentAreaBottomY - alignmentAreaTopY,
-            overallEstModuleSize, 
+            overallEstModuleSize,
             resultPointCallback);
 
          return alignmentFinder.find();
-      }
-
-      /// <summary> Ends up being a bit faster than Math.round(). This merely rounds its argument to the nearest int,
-      /// where x.5 rounds up.
-      /// </summary>
-      private static int round(float d)
-      {
-         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-         return (int)(d + 0.5f);
       }
    }
 }

@@ -335,21 +335,10 @@ namespace ZXing.Datamatrix.Internal
          return p.X >= 0 && p.X < image.Width && p.Y > 0 && p.Y < image.Height;
       }
 
-      /// <summary>
-      /// Ends up being a bit faster than Math.round(). This merely rounds its
-      /// argument to the nearest int, where x.5 rounds up.
-      /// </summary>
-      private static int round(float d)
-      {
-         return (int)(d + 0.5f);
-      }
-
       // L2 distance
       private static int distance(ResultPoint a, ResultPoint b)
       {
-         return round((float)Math.Sqrt((a.X - b.X)
-             * (a.X - b.X) + (a.Y - b.Y)
-             * (a.Y - b.Y)));
+         return MathUtils.round(ResultPoint.distance(a, b));
       }
 
       /// <summary>
