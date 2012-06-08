@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections.Generic;
-
 namespace ZXing.PDF417.Internal
 {
-
-public enum Compaction {
-  
-  AUTO,
-  TEXT,
-  BYTE,
-  NUMERIC
-
-}
+   public enum Compaction
+   {
+      AUTO,
+      TEXT,
+      BYTE,
+      NUMERIC
+   }
 }

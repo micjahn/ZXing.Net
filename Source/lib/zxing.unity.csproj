@@ -201,6 +201,7 @@
     <Compile Include="pdf417\encoder\BarcodeMatrix.cs" />
     <Compile Include="pdf417\encoder\BarcodeRow.cs" />
     <Compile Include="pdf417\encoder\Compaction.cs" />
+    <Compile Include="pdf417\encoder\Dimensions.cs" />
     <Compile Include="pdf417\encoder\PDF417.cs" />
     <Compile Include="pdf417\encoder\PDF417ErrorCorrection.cs" />
     <Compile Include="pdf417\encoder\PDF417HighLevelEncoder.cs" />

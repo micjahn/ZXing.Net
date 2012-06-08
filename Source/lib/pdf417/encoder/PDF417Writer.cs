@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 ZXing authors
+ * Copyright 2012 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,58 +16,22 @@
 
 using System;
 using System.Collections.Generic;
+
 using ZXing.Common;
 
 namespace ZXing.PDF417.Internal
 {
    /// <summary>
    /// <author>Jacob Haynes</author>
+   /// <author>qwandor@google.com (Andrew Walbran)</author>
    /// </summary>
    public sealed class PDF417Writer : Writer
    {
-
       public BitMatrix encode(String contents,
                               BarcodeFormat format,
                               int width,
                               int height,
                               IDictionary<EncodeHintType, object> hints)
-      {
-         return encode(contents, format, width, height);
-      }
-
-      public BitMatrix encode(String contents,
-                              BarcodeFormat format,
-                              int width,
-                              int height)
-      {
-         PDF417 encoder = initializeEncoder(format, false);
-         return bitMatrixFromEncoder(encoder, contents, width, height);
-      }
-
-      public BitMatrix encode(String contents,
-                              BarcodeFormat format,
-                              bool compact,
-                              int width,
-                              int height,
-                              int minCols,
-                              int maxCols,
-                              int minRows,
-                              int maxRows,
-                              Compaction compaction)
-      {
-         PDF417 encoder = initializeEncoder(format, compact);
-
-         // Set options: dimensions and byte compaction
-         encoder.setDimensions(maxCols, minCols, maxRows, minRows);
-         encoder.setCompaction(compaction);
-
-         return bitMatrixFromEncoder(encoder, contents, width, height);
-      }
-
-      /// <summary>
-      /// Initializes the encoder based on the format (whether it's compact or not)
-      /// </summary>
-      private static PDF417 initializeEncoder(BarcodeFormat format, bool compact)
       {
          if (format != BarcodeFormat.PDF_417)
          {
@@ -75,8 +39,60 @@ namespace ZXing.PDF417.Internal
          }
 
          PDF417 encoder = new PDF417();
-         encoder.setCompact(compact);
-         return encoder;
+
+         if (hints != null)
+         {
+            if (hints.ContainsKey(EncodeHintType.PDF417_COMPACT))
+            {
+               encoder.setCompact((Boolean)hints[EncodeHintType.PDF417_COMPACT]);
+            }
+            if (hints.ContainsKey(EncodeHintType.PDF417_COMPACTION))
+            {
+               encoder.setCompaction((Compaction)hints[EncodeHintType.PDF417_COMPACTION]);
+            }
+            if (hints.ContainsKey(EncodeHintType.PDF417_DIMENSIONS))
+            {
+               Dimensions dimensions = (Dimensions)hints[EncodeHintType.PDF417_DIMENSIONS];
+               encoder.setDimensions(dimensions.MaxCols,
+                                     dimensions.MinCols,
+                                     dimensions.MaxRows,
+                                     dimensions.MinRows);
+            }
+         }
+
+         return bitMatrixFromEncoder(encoder, contents, width, height);
+      }
+
+      public BitMatrix encode(String contents,
+                              BarcodeFormat format,
+                              int width,
+                              int height)
+      {
+         return encode(contents, format, width, height, null);
+      }
+
+      /// <summary>
+      /// Use {@link #encode(String, BarcodeFormat, int, int, Map)} instead, with hints to
+      /// specify the encoding options.
+      /// </summary>
+      /// <returns></returns>
+      [Obsolete]
+      public BitMatrix encode(String contents,
+                               BarcodeFormat format,
+                               bool compact,
+                               int width,
+                               int height,
+                               int minCols,
+                               int maxCols,
+                               int minRows,
+                               int maxRows,
+                               Compaction compaction)
+      {
+         IDictionary<EncodeHintType, Object> hints = new Dictionary<EncodeHintType, Object>();
+         hints[EncodeHintType.PDF417_COMPACT] = compact;
+         hints[EncodeHintType.PDF417_COMPACTION] = compaction;
+         hints[EncodeHintType.PDF417_DIMENSIONS] = new Dimensions(maxCols, minCols, maxRows, minRows);
+         return encode(contents, format, width, height, hints);
       }
 
       /// <summary>
@@ -87,11 +103,11 @@ namespace ZXing.PDF417.Internal
                                                     int width,
                                                     int height)
       {
-         int errorCorrectionLevel = 2;
+         const int errorCorrectionLevel = 2;
          encoder.generateBarcodeLogic(contents, errorCorrectionLevel);
 
-         int lineThickness = 2;
-         int aspectRatio = 4;
+         const int lineThickness = 2;
+         const int aspectRatio = 4;
          sbyte[][] originalScale = encoder.BarcodeMatrix.getScaledMatrix(lineThickness, aspectRatio * lineThickness);
          bool rotated = false;
          if ((height > width) ^ (originalScale[0].Length < originalScale.Length))
@@ -134,10 +150,10 @@ namespace ZXing.PDF417.Internal
       /// </summary>
       private static BitMatrix bitMatrixFrombitArray(sbyte[][] input)
       {
-         //Creates a small whitespace boarder around the barcode
-         int whiteSpace = 30;
+         //Creates a small whitespace border around the barcode
+         const int whiteSpace = 30;
 
-         //Creates the bitmatrix with extra space for whtespace
+         //Creates the bitmatrix with extra space for whitespace
          BitMatrix output = new BitMatrix(input.Length + 2 * whiteSpace, input[0].Length + 2 * whiteSpace);
          output.clear();
          for (int ii = 0; ii < input.Length; ii++)
@@ -174,6 +190,5 @@ namespace ZXing.PDF417.Internal
          }
          return temp;
       }
-
    }
 }
