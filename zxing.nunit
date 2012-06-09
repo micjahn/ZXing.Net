@@ -3,5 +3,7 @@
   <Config name="Debug" binpathtype="Auto">
     <assembly path="Build\Debug\test\zxing.test.dll" />
   </Config>
-  <Config name="Release" binpathtype="Auto" />
+  <Config name="Release" binpathtype="Auto">
+    <assembly path="Build\Release\test\zxing.test.dll" />
+  </Config>
 </NUnitProject>
