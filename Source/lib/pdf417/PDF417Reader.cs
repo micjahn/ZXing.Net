@@ -60,7 +60,7 @@ namespace ZXing.PDF417
          else
          {
             DetectorResult detectorResult = new Detector(image).detect();
-            if (detectorResult == null)
+            if (detectorResult == null || detectorResult.Bits == null)
                return null;
             decoderResult = decoder.decode(detectorResult.Bits);
             points = detectorResult.Points;
