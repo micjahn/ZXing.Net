@@ -207,9 +207,9 @@ namespace ZXing
          Func<LuminanceSource, Binarizer> createBinarizer
          )
       {
-         this.reader = reader;
-         this.createLuminanceSource = createLuminanceSource;
-         this.createBinarizer = createBinarizer;
+         this.reader = reader ?? new MultiFormatReader();
+         this.createLuminanceSource = createLuminanceSource ?? defaultCreateLuminanceSource;
+         this.createBinarizer = createBinarizer ?? defaultCreateBinarizer;
          hints = new Dictionary<DecodeHintType, object>();
          usePreviousState = false;
       }
