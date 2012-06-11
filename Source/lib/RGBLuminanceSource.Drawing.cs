@@ -5,36 +5,22 @@ using System.Runtime.InteropServices;
 
 namespace ZXing
 {
-   public partial class RGBLuminanceSource : LuminanceSource
+   public partial class RGBLuminanceSource
    {
-      private Rectangle __Region;
-
-      public RGBLuminanceSource(byte[] d, int W, int H, bool Is8Bit, Rectangle Region)
-         : base(W, H)
-      {
-         __width = Region.Width;
-         __height = Region.Height;
-         __Region = Region;
-         __isRegionSelect = true;
-         //luminances = Red.Imaging.Filters.CropArea(d, W, H, Region);
-      }
-
-      public RGBLuminanceSource(Bitmap d)
-         : this(d, d.Width, d.Height)
+      public RGBLuminanceSource(Bitmap bitmap)
+         : this(bitmap, bitmap.Width, bitmap.Height)
       {
       }
 
-      public RGBLuminanceSource(Bitmap d, int W, int H)
-         : base(W, H)
+      public RGBLuminanceSource(Bitmap bitmap, int width, int height)
+         : base(width, height)
       {
-         int width = __width = W;
-         int height = __height = H;
          // In order to measure pure decoding speed, we convert the entire image to a greyscale array
          // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
          luminances = new byte[width * height];
 
          // The underlying raster of image consists of bytes with the luminance values
-         var data = d.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, d.PixelFormat);
+         var data = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
          try
          {
             var stride = Math.Abs(data.Stride);
@@ -49,7 +35,7 @@ namespace ZXing
                   int offset = y * width;
                   for (int x = 0; x < width; x++)
                   {
-                     c = d.GetPixel(x, y);
+                     c = bitmap.GetPixel(x, y);
                      luminances[offset + x] = (byte)(0.3 * c.R + 0.59 * c.G + 0.11 * c.B + 0.01);
                   }
                }
@@ -61,10 +47,10 @@ namespace ZXing
                var ptrInBitmap = data.Scan0;
 
                // prepare palette for 1 and 8 bit indexed bitmaps
-               var luminancePalette = new byte[d.Palette.Entries.Length];
-               for (var index = 0; index < d.Palette.Entries.Length; index++)
+               var luminancePalette = new byte[bitmap.Palette.Entries.Length];
+               for (var index = 0; index < bitmap.Palette.Entries.Length; index++)
                {
-                  var color = d.Palette.Entries[index];
+                  var color = bitmap.Palette.Entries[index];
                   luminancePalette[index] = (byte)(0.3 * color.R +
                                                     0.59 * color.G +
                                                     0.11 * color.B + 0.01);
@@ -116,7 +102,7 @@ namespace ZXing
          }
          finally
          {
-            d.UnlockBits(data);
+            bitmap.UnlockBits(data);
          }
       }
    }

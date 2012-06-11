@@ -31,8 +31,8 @@ namespace ZXing
    /// </author>
    public abstract class LuminanceSource
    {
-      private readonly int width;
-      private readonly int height;
+      private int width;
+      private int height;
 
       protected LuminanceSource(int width, int height)
       {
@@ -73,7 +73,10 @@ namespace ZXing
          {
             return width;
          }
-
+         protected set
+         {
+            width = value;
+         }
       }
 
       /// <returns> The height of the bitmap.</returns>
@@ -83,7 +86,10 @@ namespace ZXing
          {
             return height;
          }
-
+         protected set
+         {
+            height = value;
+         }
       }
 
       /// <returns> Whether this subclass supports cropping.</returns>
