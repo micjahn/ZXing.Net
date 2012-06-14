@@ -64,12 +64,18 @@ namespace WindowsFormsDemo
          var fileName = txtBarcodeImageFile.Text;
          if (!File.Exists(fileName))
          {
-            MessageBox.Show(this, String.Format("File not found: {0}", fileName), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, String.Format("File not found: {0}", fileName), "Error", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
             return;
          }
 
+         Decode((Bitmap) Bitmap.FromFile(fileName));
+      }
+
+      private void Decode(Bitmap image)
+      {
          var timerStart = DateTime.Now.Ticks;
-         var image = (Bitmap)Bitmap.FromFile(fileName);
+
          barcodeReader.TryHarder = false;
          resultPoints.Clear();
          var result = barcodeReader.Decode(image);
@@ -186,6 +192,16 @@ namespace WindowsFormsDemo
             }
             var bmp = (Bitmap) picEncodedBarCode.Image;
             bmp.Save(fileName, ImageFormat.Png);
+         }
+      }
+
+      private void btnEncodeDecode_Click(object sender, EventArgs e)
+      {
+         if (picEncodedBarCode.Image != null)
+         {
+            tabCtrlMain.SelectedTab = tabPageDecoder;
+            picBarcode.Image = picEncodedBarCode.Image;
+            Decode((Bitmap)picEncodedBarCode.Image);
          }
       }
    }
