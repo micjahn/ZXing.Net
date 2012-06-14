@@ -150,22 +150,23 @@ namespace ZXing.PDF417.Internal
       /// </summary>
       private static BitMatrix bitMatrixFrombitArray(sbyte[][] input)
       {
-         //Creates a small whitespace border around the barcode
+         // Creates a small whitespace border around the barcode
          const int whiteSpace = 30;
 
-         //Creates the bitmatrix with extra space for whitespace
-         BitMatrix output = new BitMatrix(input.Length + 2 * whiteSpace, input[0].Length + 2 * whiteSpace);
-         output.clear();
-         for (int ii = 0; ii < input.Length; ii++)
+         // Creates the bitmatrix with extra space for whitespace
+         var output = new BitMatrix(input[0].Length + 2 * whiteSpace, input.Length + 2 * whiteSpace);
+         var yOutput = output.Height - whiteSpace;
+         for (int y = 0; y < input.Length; y++)
          {
-            for (int jj = 0; jj < input[0].Length; jj++)
+            for (int x = 0; x < input[0].Length; x++)
             {
                // Zero is white in the bytematrix
-               if (input[ii][jj] == 1)
+               if (input[y][x] == 1)
                {
-                  output[ii + whiteSpace, jj + whiteSpace] = true;
+                  output[x + whiteSpace, yOutput] = true;
                }
             }
+            yOutput--;
          }
          return output;
       }
