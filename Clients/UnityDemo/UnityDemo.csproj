@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\Build\Debug\Clients\UnityDemo\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,7 +26,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\Build\Release\Clients\UnityDemo\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -41,8 +41,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BarcodeCam.cs" />
-    <Compile Include="Color32LuminanceSource.cs" />
+    <Compile Include="Assets\BarcodeCam.cs" />
+    <Compile Include="Assets\Color32LuminanceSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -50,6 +50,42 @@
       <Project>{FD386CF5-E9CD-442C-A44C-B7D996E68CCC}</Project>
       <Name>zxing.unity</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\UnityDemo.unity" />
+    <None Include="Library\AnnotationManager" />
+    <None Include="Library\assetDatabase3" />
+    <None Include="Library\AssetImportState" />
+    <None Include="Library\AssetServerCacheV3" />
+    <None Include="Library\AssetVersioning.db" />
+    <None Include="Library\BuildPlayer.prefs" />
+    <None Include="Library\BuildSettings.asset" />
+    <None Include="Library\EditorUserBuildSettings.asset" />
+    <None Include="Library\EditorUserSettings.asset" />
+    <None Include="Library\expandedItems" />
+    <None Include="Library\guidmapper" />
+    <None Include="Library\InspectorExpandedItems.asset" />
+    <None Include="Library\MonoManager.asset" />
+    <None Include="Library\ProjectSettings.asset" />
+    <None Include="Library\ScriptMapper" />
+    <None Include="ProjectSettings\AudioManager.asset" />
+    <None Include="ProjectSettings\DynamicsManager.asset" />
+    <None Include="ProjectSettings\EditorBuildSettings.asset" />
+    <None Include="ProjectSettings\EditorSettings.asset" />
+    <None Include="ProjectSettings\InputManager.asset" />
+    <None Include="ProjectSettings\NavMeshLayers.asset" />
+    <None Include="ProjectSettings\NetworkManager.asset" />
+    <None Include="ProjectSettings\ProjectSettings.asset" />
+    <None Include="ProjectSettings\QualitySettings.asset" />
+    <None Include="ProjectSettings\TagManager.asset" />
+    <None Include="ProjectSettings\TimeManager.asset" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\zxing.unity.dll" />
+    <Content Include="Library\FailedAssetImports.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Library\ScriptAssemblies\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
