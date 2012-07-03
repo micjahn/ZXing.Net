@@ -44,6 +44,7 @@ namespace ZXing.Client.Result
                                                  new VCardResultParser(),
                                                  new BizcardResultParser(),
                                                  new VEventResultParser(),
+                                                 new EmailAddressResultParser(),
                                                  new SMTPResultParser(),
                                                  new TelResultParser(),
                                                  new SMSMMSResultParser(),
@@ -54,8 +55,7 @@ namespace ZXing.Client.Result
                                                  new URIResultParser(),
                                                  new ISBNResultParser(),
                                                  new ProductResultParser(),
-                                                 new ExpandedProductResultParser(),
-                                                 new EmailAddressResultParser(),
+                                                 new ExpandedProductResultParser()
                                               };
 
 #if SILVERLIGHT4 || SILVERLIGHT5
