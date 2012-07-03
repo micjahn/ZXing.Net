@@ -100,12 +100,6 @@ namespace ZXing.Client.Result
             // Found a colon, but it looks like it is after the host, so the protocol is still missing
             uri = "http://" + uri;
          }
-         else
-         {
-            // Lowercase protocol to avoid problems
-            //uri = uri.Substring(0, protocolEnd).ToLower() + uri.Substring(protocolEnd);
-            uri = uri.Substring(0, protocolEnd) + uri.Substring(protocolEnd);
-         }
          return uri;
       }
 
