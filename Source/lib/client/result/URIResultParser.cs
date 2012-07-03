@@ -28,24 +28,19 @@ namespace ZXing.Client.Result
    /// </author>
    sealed class URIResultParser : ResultParser
    {
-      private const String PATTERN_END =
-          "(:\\d{1,5})?" + // maybe port
-          "(/|\\?|$)"; // query, path or nothing
-      private static readonly Regex URL_WITH_PROTOCOL_PATTERN = new Regex(
-          "[a-zA-Z0-9]{2,}:(/)*" + // protocol
-          "[a-zA-Z0-9\\-]+(\\.[a-zA-Z0-9\\-]+)*" + // host name elements
-          PATTERN_END
+      private const String ALPHANUM_PART = "[a-zA-Z0-9\\-]";
+      private static readonly Regex URL_WITH_PROTOCOL_PATTERN = new Regex("[a-zA-Z0-9]{2,}:"
 #if !(SILVERLIGHT4 || SILVERLIGHT5)
-         , RegexOptions.Compiled);
+, RegexOptions.Compiled);
 #else
 );
 #endif
-
       private static readonly Regex URL_WITHOUT_PROTOCOL_PATTERN = new Regex(
-          "([a-zA-Z0-9\\-]+\\.)+[a-zA-Z0-9\\-]{2,}" + // host name elements
-          PATTERN_END
+           "(" + ALPHANUM_PART + "+\\.)+" + ALPHANUM_PART + "{2,}" + // host name elements
+           "(:\\d{1,5})?" + // maybe port
+           "(/|\\?|$)" // query, path or nothing
 #if !(SILVERLIGHT4 || SILVERLIGHT5)
-         , RegexOptions.Compiled);
+              , RegexOptions.Compiled);
 #else
 );
 #endif
@@ -53,11 +48,11 @@ namespace ZXing.Client.Result
       override public ParsedResult parse(ZXing.Result result)
       {
          String rawText = result.Text;
-         // We specifically handle the odd "URL" scheme here for simplicity
-         if (rawText.StartsWith("URL:"))
+         // We specifically handle the odd "URL" scheme here for simplicity and add "URI" for fun
+         // Assume anything starting this way really means to be a URI
+         if (rawText.StartsWith("URL:") || rawText.StartsWith("URI:"))
          {
-
-            rawText = rawText.Substring(4);
+            return new URIParsedResult(rawText.Substring(4).Trim(), null);
          }
          rawText = rawText.Trim();
          return isBasicallyValidURI(rawText) ? new URIParsedResult(rawText, null) : null;
