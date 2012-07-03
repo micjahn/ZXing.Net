@@ -130,13 +130,24 @@ namespace ZXing
       }
 
       /// <summary>
-      /// Returns a new object with rotated image data. Only callable if isRotateSupported() is true.
+      /// Returns a new object with rotated image data by 90 degrees counterclockwise.
+      /// Only callable if {@link #isRotateSupported()} is true.
       /// </summary>
       /// <returns> A rotated version of this object.
       /// </returns>
       public virtual LuminanceSource rotateCounterClockwise()
       {
          throw new NotSupportedException("This luminance source does not support rotation.");
+      }
+
+      /// <summary>
+      /// Returns a new object with rotated image data by 45 degrees counterclockwise.
+      /// Only callable if {@link #isRotateSupported()} is true.
+      /// </summary>
+      /// <returns>A rotated version of this object.</returns>
+      public virtual LuminanceSource rotateCounterClockwise45()
+      {
+         throw new NotSupportedException("This luminance source does not support rotation by 45 degrees.");
       }
 
       override public String ToString()

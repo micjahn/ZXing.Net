@@ -72,6 +72,12 @@ namespace ZXing
          return this;
       }
 
+      public override LuminanceSource rotateCounterClockwise45()
+      {
+         // TODO: implement a good 45 degrees rotation without lost of information
+         return base.rotateCounterClockwise45();
+      }
+
       public override bool RotateSupported
       {
          get

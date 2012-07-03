@@ -148,14 +148,26 @@ namespace ZXing
 
       }
 
-      /// <summary> Returns a new object with rotated image data. Only callable if isRotateSupported() is true.
-      /// 
+      /// <summary>
+      /// Returns a new object with rotated image data by 90 degrees counterclockwise.
+      /// Only callable if {@link #isRotateSupported()} is true.
       /// </summary>
       /// <returns> A rotated version of this object.
       /// </returns>
       public BinaryBitmap rotateCounterClockwise()
       {
          var newSource = binarizer.LuminanceSource.rotateCounterClockwise();
+         return new BinaryBitmap(binarizer.createBinarizer(newSource));
+      }
+
+      /// <summary>
+      /// Returns a new object with rotated image data by 45 degrees counterclockwise.
+      /// Only callable if {@link #isRotateSupported()} is true.
+      /// </summary>
+      /// <returns>A rotated version of this object.</returns>
+      public BinaryBitmap rotateCounterClockwise45()
+      {
+         LuminanceSource newSource = binarizer.LuminanceSource.rotateCounterClockwise45();
          return new BinaryBitmap(binarizer.createBinarizer(newSource));
       }
    }
