@@ -25,15 +25,15 @@ namespace ZXing.Client.Result
    /// </author>
    public sealed class URIParsedResult : ParsedResult
    {
-      private static Regex USER_IN_HOST = new Regex(":/*([^/@]+)@[^/]+"
+      private static readonly Regex USER_IN_HOST = new Regex(":/*([^/@]+)@[^/]+"
 #if !(SILVERLIGHT4 || SILVERLIGHT5)
          ,RegexOptions.Compiled);
 #else
 );
 #endif
 
-      private String uri;
-      private String title;
+      private readonly String uri;
+      private readonly String title;
 
       public String URI
       {
@@ -41,16 +41,16 @@ namespace ZXing.Client.Result
          {
             return uri;
          }
-
       }
+
       public String Title
       {
          get
          {
             return title;
          }
-
       }
+
       /// <returns> true if the URI contains suspicious patterns that may suggest it intends to
       /// mislead the user about its true nature. At the moment this looks for the presence
       /// of user/password syntax in the host/authority portion of a URI which may be used
@@ -75,7 +75,6 @@ namespace ZXing.Client.Result
             maybeAppend(uri, result);
             return result.ToString();
          }
-
       }
 
       public URIParsedResult(String uri, String title)
@@ -104,7 +103,8 @@ namespace ZXing.Client.Result
          else
          {
             // Lowercase protocol to avoid problems
-            uri = uri.Substring(0, protocolEnd).ToLower() + uri.Substring(protocolEnd);
+            //uri = uri.Substring(0, protocolEnd).ToLower() + uri.Substring(protocolEnd);
+            uri = uri.Substring(0, protocolEnd) + uri.Substring(protocolEnd);
          }
          return uri;
       }
