@@ -15,7 +15,8 @@
  */
 
 using System;
-
+using System.Globalization;
+using System.Threading;
 using NUnit.Framework;
 
 namespace ZXing.Client.Result.Test
@@ -32,12 +33,13 @@ namespace ZXing.Client.Result.Test
 
       private const string DATE_TIME_FORMAT = "yyyyMMdd'T'HHmmss'Z'";
 
-      //[SetUp]
-      //public void SetUp()
-      //{
-      //   Locale.setDefault(Locale.ENGLISH);
-      //   TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
-      //}
+      [SetUp]
+      public void SetUp()
+      {
+         // Locale.setDefault(Locale.ENGLISH);
+         // TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+         Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+      }
 
       [Test]
       public void testStartEnd()
@@ -118,7 +120,31 @@ namespace ZXing.Client.Result.Test
              "DTSTART:20080504T123456Z\r\n" +
              "GEO:-12.345;-45.678\r\n" +
              "END:VEVENT\r\nEND:VCALENDAR",
-             null, null, null, "20080504T123456Z", null, null, -12.345, -45.678);
+             null, null, null, "20080504T123456Z", null, null, null, -12.345, -45.678);
+      }
+
+      [Test]
+      public void testOrganizer()
+      {
+         doTest(
+             "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
+             "DTSTART:20080504T123456Z\r\n" +
+             "ORGANIZER:mailto:bob@example.org\r\n" +
+             "END:VEVENT\r\nEND:VCALENDAR",
+             null, null, null, "20080504T123456Z", null, "bob@example.org", null, Double.NaN, Double.NaN);
+      }
+
+      [Test]
+      public void testAttendees()
+      {
+         doTest(
+             "BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\n" +
+             "DTSTART:20080504T123456Z\r\n" +
+             "ATTENDEE:mailto:bob@example.org\r\n" +
+             "ATTENDEE:mailto:alice@example.org\r\n" +
+             "END:VEVENT\r\nEND:VCALENDAR",
+             null, null, null, "20080504T123456Z", null, null,
+             new String[] { "bob@example.org", "alice@example.org" }, Double.NaN, Double.NaN);
       }
 
       [Test]
@@ -163,7 +189,7 @@ namespace ZXing.Client.Result.Test
                                  String startString,
                                  String endString)
       {
-         doTest(contents, description, summary, location, startString, endString, null, Double.NaN, Double.NaN);
+         doTest(contents, description, summary, location, startString, endString, null, null, Double.NaN, Double.NaN);
       }
 
       private static void doTest(String contents,
@@ -172,7 +198,8 @@ namespace ZXing.Client.Result.Test
                                  String location,
                                  String startString,
                                  String endString,
-                                 String attendee,
+                                 String organizer,
+                                 String[] attendees,
                                  double latitude,
                                  double longitude)
       {
@@ -185,7 +212,9 @@ namespace ZXing.Client.Result.Test
          Assert.AreEqual(location, calResult.Location);
          Assert.AreEqual(startString, calResult.Start.ToString(DATE_TIME_FORMAT));
          Assert.AreEqual(endString, calResult.End == null ? null : calResult.End.Value.ToString(DATE_TIME_FORMAT));
-         Assert.AreEqual(attendee, calResult.Attendee);
+         Assert.AreEqual(organizer, calResult.Organizer);
+         Assert.IsTrue((attendees == null && calResult.Attendees == null) ||
+                    Equals(attendees, calResult.Attendees));
          assertEqualOrNaN(latitude, calResult.Latitude);
          assertEqualOrNaN(longitude, calResult.Longitude);
       }
@@ -200,6 +229,23 @@ namespace ZXing.Client.Result.Test
          {
             Assert.AreEqual(expected, actual, EPSILON);
          }
+      }
+
+      private static bool Equals(string[] left, string[] right)
+      {
+         if (left == null && right != null)
+            return false;
+         if (left != null && right == null)
+            return false;
+         if (left.Length != right.Length)
+            return false;
+
+         for (var i = 0; i < left.Length; i++)
+         {
+            if (!left[i].Equals(right[i]))
+               return false;
+         }
+         return true;
       }
    }
 }

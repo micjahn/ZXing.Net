@@ -49,7 +49,8 @@ namespace ZXing.Client.Result
       private readonly DateTime? end;
       private readonly bool endAllDay;
       private readonly String location;
-      private readonly String attendee;
+      private readonly String organizer;
+      private readonly String[] attendees;
       private readonly String description;
       private readonly double latitude;
       private readonly double longitude;
@@ -58,7 +59,8 @@ namespace ZXing.Client.Result
                                   String startString,
                                   String endString,
                                   String location,
-                                  String attendee,
+                                  String organizer,
+                                  String[] attendees,
                                   String description,
                                   double latitude,
                                   double longitude)
@@ -77,7 +79,8 @@ namespace ZXing.Client.Result
          this.startAllDay = startString.Length == 8;
          this.endAllDay = endString != null && endString.Length == 8;
          this.location = location;
-         this.attendee = attendee;
+         this.organizer = organizer;
+         this.attendees = attendees;
          this.description = description;
          this.latitude = latitude;
          this.longitude = longitude;
@@ -127,9 +130,14 @@ namespace ZXing.Client.Result
          get { return location; }
       }
 
-      public String Attendee
+      public String Organizer
       {
-         get { return attendee; }
+         get { return organizer; }
+      }
+
+      public String[] Attendees
+      {
+         get { return attendees; }
       }
 
       public String Description
@@ -156,7 +164,8 @@ namespace ZXing.Client.Result
             maybeAppend(format(startAllDay, start), result);
             maybeAppend(format(endAllDay, end), result);
             maybeAppend(location, result);
-            maybeAppend(attendee, result);
+            maybeAppend(organizer, result);
+            maybeAppend(attendees, result);
             maybeAppend(description, result);
             return result.ToString();
          }

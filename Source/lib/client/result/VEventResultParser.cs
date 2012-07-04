@@ -15,14 +15,14 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace ZXing.Client.Result
 {
-
-   /// <summary> Partially implements the iCalendar format's "VEVENT" format for specifying a
+   /// <summary>
+   /// Partially implements the iCalendar format's "VEVENT" format for specifying a
    /// calendar event. See RFC 2445. This supports SUMMARY, DTSTART and DTEND fields.
-   /// 
    /// </summary>
    /// <author>  Sean Owen
    /// </author>
@@ -51,6 +51,16 @@ namespace ZXing.Client.Result
          }
          String end = matchSingleVCardPrefixedField("DTEND", rawText, true);
          String location = matchSingleVCardPrefixedField("LOCATION", rawText, true);
+         String organizer = stripMailto(matchSingleVCardPrefixedField("ORGANIZER", rawText, true));
+
+         String[] attendees = matchVCardPrefixedField("ATTENDEE", rawText, true);
+         if (attendees != null)
+         {
+            for (int i = 0; i < attendees.Length; i++)
+            {
+               attendees[i] = stripMailto(attendees[i]);
+            }
+         }
          String description = matchSingleVCardPrefixedField("DESCRIPTION", rawText, true);
 
          String geoString = matchSingleVCardPrefixedField("GEO", rawText, true);
@@ -72,7 +82,15 @@ namespace ZXing.Client.Result
 
          try
          {
-            return new CalendarParsedResult(summary, start, end, location, null, description, latitude, longitude);
+            return new CalendarParsedResult(summary,
+                                            start,
+                                            end,
+                                            location,
+                                            organizer,
+                                            attendees,
+                                            description,
+                                            latitude,
+                                            longitude);
          }
          catch (ArgumentException )
          {
@@ -86,6 +104,31 @@ namespace ZXing.Client.Result
       {
          var values = VCardResultParser.matchSingleVCardPrefixedField(prefix, rawText, trim, false);
          return values == null || values.Count == 0 ? null : values[0];
+      }
+
+      private static String[] matchVCardPrefixedField(String prefix, String rawText, bool trim)
+      {
+         List<List<String>> values = VCardResultParser.matchVCardPrefixedField(prefix, rawText, trim, false);
+         if (values == null || values.Count == 0)
+         {
+            return null;
+         }
+         int size = values.Count;
+         String[] result = new String[size];
+         for (int i = 0; i < size; i++)
+         {
+            result[i] = values[i][0];
+         }
+         return result;
+      }
+
+      private static String stripMailto(String s)
+      {
+         if (s != null && (s.StartsWith("mailto:") || s.StartsWith("MAILTO:")))
+         {
+            s = s.Substring(7);
+         }
+         return s;
       }
    }
 }

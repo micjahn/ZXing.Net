@@ -99,10 +99,10 @@ namespace ZXing.Client.Result
                                             toPrimaryValue(url));
       }
 
-      private static List<List<String>> matchVCardPrefixedField(String prefix,
-                                                                String rawText,
-                                                                bool trim,
-                                                                bool parseFieldDivider)
+      public static List<List<String>> matchVCardPrefixedField(String prefix,
+                                                        String rawText,
+                                                        bool trim,
+                                                        bool parseFieldDivider)
       {
          List<List<String>> matches = null;
          int i = 0;
