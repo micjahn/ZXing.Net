@@ -28,8 +28,16 @@ namespace ZXing.Client.Result.Test
    [TestFixture]
    public sealed class CalendarParsedResultTestCase
    {
+      private const double EPSILON = 0.0000000001;
 
-      private static double EPSILON = 0.0000000001;
+      private const string DATE_TIME_FORMAT = "yyyyMMdd'T'HHmmss'Z'";
+
+      //[SetUp]
+      //public void SetUp()
+      //{
+      //   Locale.setDefault(Locale.ENGLISH);
+      //   TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+      //}
 
       [Test]
       public void testStartEnd()
@@ -134,8 +142,8 @@ namespace ZXing.Client.Result.Test
                 "Meeting with a friend\nlook at homepage first\n\n\n  \n",
                 "Summary line",
                 "Location, with, escaped, commas",
-                "20111110T110000",
-                "20111110T120000");
+                "20111110T110000Z",
+                "20111110T120000Z");
       }
 
       [Test]
@@ -145,25 +153,25 @@ namespace ZXing.Client.Result.Test
                 "DTSTART;VALUE=DATE:20111110\n" +
                 "DTEND;VALUE=DATE:20111110\n" +
                 "END:VEVENT",
-                null, null, null, "20111110", "20111110");
+                null, null, null, "20111110T000000Z", "20111110T000000Z");
       }
 
       private static void doTest(String contents,
                                  String description,
                                  String summary,
                                  String location,
-                                 String start,
-                                 String end)
+                                 String startString,
+                                 String endString)
       {
-         doTest(contents, description, summary, location, start, end, null, Double.NaN, Double.NaN);
+         doTest(contents, description, summary, location, startString, endString, null, Double.NaN, Double.NaN);
       }
 
       private static void doTest(String contents,
                                  String description,
                                  String summary,
                                  String location,
-                                 String start,
-                                 String end,
+                                 String startString,
+                                 String endString,
                                  String attendee,
                                  double latitude,
                                  double longitude)
@@ -175,8 +183,8 @@ namespace ZXing.Client.Result.Test
          Assert.AreEqual(description, calResult.Description);
          Assert.AreEqual(summary, calResult.Summary);
          Assert.AreEqual(location, calResult.Location);
-         Assert.AreEqual(start, calResult.Start);
-         Assert.AreEqual(end, calResult.End);
+         Assert.AreEqual(startString, calResult.Start.ToString(DATE_TIME_FORMAT));
+         Assert.AreEqual(endString, calResult.End == null ? null : calResult.End.Value.ToString(DATE_TIME_FORMAT));
          Assert.AreEqual(attendee, calResult.Attendee);
          assertEqualOrNaN(latitude, calResult.Latitude);
          assertEqualOrNaN(longitude, calResult.Longitude);
