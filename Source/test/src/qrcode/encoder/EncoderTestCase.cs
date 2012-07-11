@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 using NUnit.Framework;
@@ -94,20 +95,13 @@ namespace ZXing.QrCode.Internal.Test
       [Test]
       public void testEncode()
       {
-         QRCode qrCode = new QRCode();
-         Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, qrCode);
-         // The following is a valid QR Code that can be read by cell phones.
+         QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H);
          String expected =
            "<<\n" +
            " mode: ALPHANUMERIC\n" +
            " ecLevel: H\n" +
            " version: 1\n" +
-           " matrixWidth: 21\n" +
            " maskPattern: 0\n" +
-           " numTotalBytes: 26\n" +
-           " numDataBytes: 9\n" +
-           " numECBytes: 17\n" +
-           " numRSBlocks: 1\n" +
            " matrix:\n" +
            " 1 1 1 1 1 1 1 0 1 1 1 1 0 0 1 1 1 1 1 1 1\n" +
            " 1 0 0 0 0 0 1 0 0 1 1 1 0 0 1 0 0 0 0 0 1\n" +
@@ -135,6 +129,44 @@ namespace ZXing.QrCode.Internal.Test
       }
 
       [Test]
+      public void testSimpleUTF8ECI()
+      {
+         var hints = new Dictionary<EncodeHintType, Object>();
+         hints[EncodeHintType.CHARACTER_SET] = "UTF-8";
+         QRCode qrCode = Encoder.encode("hello", ErrorCorrectionLevel.H, hints);
+         String expected =
+            "<<\n" +
+            " mode: BYTE\n" +
+            " ecLevel: H\n" +
+            " version: 1\n" +
+            " maskPattern: 3\n" +
+            " matrix:\n" +
+            " 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1 1\n" +
+            " 1 0 0 0 0 0 1 0 0 0 1 0 1 0 1 0 0 0 0 0 1\n" +
+            " 1 0 1 1 1 0 1 0 0 1 0 1 0 0 1 0 1 1 1 0 1\n" +
+            " 1 0 1 1 1 0 1 0 0 1 1 0 1 0 1 0 1 1 1 0 1\n" +
+            " 1 0 1 1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 0 1\n" +
+            " 1 0 0 0 0 0 1 0 0 0 0 0 1 0 1 0 0 0 0 0 1\n" +
+            " 1 1 1 1 1 1 1 0 1 0 1 0 1 0 1 1 1 1 1 1 1\n" +
+            " 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0\n" +
+            " 0 0 1 1 0 0 1 1 1 1 0 0 0 1 1 0 1 0 0 0 0\n" +
+            " 0 0 1 1 1 0 0 0 0 0 1 1 0 0 0 1 0 1 1 1 0\n" +
+            " 0 1 0 1 0 1 1 1 0 1 0 1 0 0 0 0 0 1 1 1 1\n" +
+            " 1 1 0 0 1 0 0 1 1 0 0 1 1 1 1 0 1 0 1 1 0\n" +
+            " 0 0 0 0 1 0 1 1 1 1 0 0 0 0 0 1 0 0 1 0 0\n" +
+            " 0 0 0 0 0 0 0 0 1 1 1 1 0 0 1 1 1 0 0 0 1\n" +
+            " 1 1 1 1 1 1 1 0 1 1 1 0 1 0 1 1 0 0 1 0 0\n" +
+            " 1 0 0 0 0 0 1 0 0 0 1 0 0 1 1 1 1 1 1 0 1\n" +
+            " 1 0 1 1 1 0 1 0 0 1 0 0 0 0 1 1 0 0 0 0 0\n" +
+            " 1 0 1 1 1 0 1 0 1 1 1 0 1 0 0 0 1 1 0 0 0\n" +
+            " 1 0 1 1 1 0 1 0 1 1 0 0 0 1 0 0 1 0 0 0 0\n" +
+            " 1 0 0 0 0 0 1 0 0 0 0 1 1 0 1 0 1 0 1 1 0\n" +
+            " 1 1 1 1 1 1 1 0 0 1 0 1 1 1 0 1 1 0 0 0 0\n" +
+            ">>\n";
+         Assert.AreEqual(expected, qrCode.ToString());
+      }
+
+      [Test]
       public void testAppendModeInfo()
       {
          BitArray bits = new BitArray();
@@ -148,7 +180,7 @@ namespace ZXing.QrCode.Internal.Test
          {
             BitArray bits = new BitArray();
             Encoder.appendLengthInfo(1,  // 1 letter (1/1).
-                                     1,  // version 1.
+                                     Version.getVersionForNumber(1),
                                      Mode.NUMERIC,
                                      bits);
             Assert.AreEqual(" ........ .X", bits.ToString());  // 10 bits.
@@ -156,7 +188,7 @@ namespace ZXing.QrCode.Internal.Test
          {
             BitArray bits = new BitArray();
             Encoder.appendLengthInfo(2,  // 2 letters (2/1).
-                                     10,  // version 10.
+                                     Version.getVersionForNumber(10),
                                      Mode.ALPHANUMERIC,
                                      bits);
             Assert.AreEqual(" ........ .X.", bits.ToString());  // 11 bits.
@@ -164,7 +196,7 @@ namespace ZXing.QrCode.Internal.Test
          {
             BitArray bits = new BitArray();
             Encoder.appendLengthInfo(255,  // 255 letter (255/1).
-                                     27,  // version 27.
+                                     Version.getVersionForNumber(27),
                                      Mode.BYTE,
                                      bits);
             Assert.AreEqual(" ........ XXXXXXXX", bits.ToString());  // 16 bits.
@@ -172,7 +204,7 @@ namespace ZXing.QrCode.Internal.Test
          {
             BitArray bits = new BitArray();
             Encoder.appendLengthInfo(512,  // 512 letters (1024/2).
-                                     40,  // version 40.
+                                     Version.getVersionForNumber(40),
                                      Mode.KANJI,
                                      bits);
             Assert.AreEqual(" ..X..... ....", bits.ToString());  // 12 bits.
@@ -315,15 +347,14 @@ namespace ZXing.QrCode.Internal.Test
             {
                @in.appendBits(dataByte, 8);
             }
-            BitArray @out = new BitArray();
-            Encoder.interleaveWithECBytes(@in, 26, 9, 1, @out);
+            BitArray @out = Encoder.interleaveWithECBytes(@in, 26, 9, 1);
             byte[] expected = {
-          // Data bytes.
-          32, 65, 205, 69, 41, 220, 46, 128, 236,
-          // Error correction bytes.
-          42, 159, 74, 221, 244, 169, 239, 150, 138, 70,
-          237, 85, 224, 96, 74, 219, 61,
-      };
+                                 // Data bytes.
+                                 32, 65, 205, 69, 41, 220, 46, 128, 236,
+                                 // Error correction bytes.
+                                 42, 159, 74, 221, 244, 169, 239, 150, 138, 70,
+                                 237, 85, 224, 96, 74, 219, 61,
+                              };
             Assert.AreEqual(expected.Length, @out.SizeInBytes);
             byte[] outArray = new byte[expected.Length];
             @out.toBytes(0, outArray, 0, expected.Length);
@@ -336,37 +367,36 @@ namespace ZXing.QrCode.Internal.Test
          // Numbers are from http://www.swetake.com/qr/qr8.html
          {
             byte[] dataBytes = {
-          67, 70, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166, 182,
-          198, 214, 230, 247, 7, 23, 39, 55, 71, 87, 103, 119, 135,
-          151, 166, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166,
-          182, 198, 214, 230, 247, 7, 23, 39, 55, 71, 87, 103, 119,
-          135, 151, 160, 236, 17, 236, 17, 236, 17, 236,
-          17
-      };
+                                  67, 70, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166, 182,
+                                  198, 214, 230, 247, 7, 23, 39, 55, 71, 87, 103, 119, 135,
+                                  151, 166, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166,
+                                  182, 198, 214, 230, 247, 7, 23, 39, 55, 71, 87, 103, 119,
+                                  135, 151, 160, 236, 17, 236, 17, 236, 17, 236,
+                                  17
+                               };
             BitArray @in = new BitArray();
             foreach (byte dataByte in dataBytes)
             {
                @in.appendBits(dataByte, 8);
             }
-            BitArray @out = new BitArray();
-            Encoder.interleaveWithECBytes(@in, 134, 62, 4, @out);
+            BitArray @out = Encoder.interleaveWithECBytes(@in, 134, 62, 4);
             byte[] expected = {
-          // Data bytes.
-          67, 230, 54, 55, 70, 247, 70, 71, 22, 7, 86, 87, 38, 23, 102, 103, 54, 39,
-          118, 119, 70, 55, 134, 135, 86, 71, 150, 151, 102, 87, 166,
-          160, 118, 103, 182, 236, 134, 119, 198, 17, 150,
-          135, 214, 236, 166, 151, 230, 17, 182,
-          166, 247, 236, 198, 22, 7, 17, 214, 38, 23, 236, 39,
-          17,
-          // Error correction bytes.
-          175, 155, 245, 236, 80, 146, 56, 74, 155, 165,
-          133, 142, 64, 183, 132, 13, 178, 54, 132, 108, 45,
-          113, 53, 50, 214, 98, 193, 152, 233, 147, 50, 71, 65,
-          190, 82, 51, 209, 199, 171, 54, 12, 112, 57, 113, 155, 117,
-          211, 164, 117, 30, 158, 225, 31, 190, 242, 38,
-          140, 61, 179, 154, 214, 138, 147, 87, 27, 96, 77, 47,
-          187, 49, 156, 214,
-      };
+                                 // Data bytes.
+                                 67, 230, 54, 55, 70, 247, 70, 71, 22, 7, 86, 87, 38, 23, 102, 103, 54, 39,
+                                 118, 119, 70, 55, 134, 135, 86, 71, 150, 151, 102, 87, 166,
+                                 160, 118, 103, 182, 236, 134, 119, 198, 17, 150,
+                                 135, 214, 236, 166, 151, 230, 17, 182,
+                                 166, 247, 236, 198, 22, 7, 17, 214, 38, 23, 236, 39,
+                                 17,
+                                 // Error correction bytes.
+                                 175, 155, 245, 236, 80, 146, 56, 74, 155, 165,
+                                 133, 142, 64, 183, 132, 13, 178, 54, 132, 108, 45,
+                                 113, 53, 50, 214, 98, 193, 152, 233, 147, 50, 71, 65,
+                                 190, 82, 51, 209, 199, 171, 54, 12, 112, 57, 113, 155, 117,
+                                 211, 164, 117, 30, 158, 225, 31, 190, 242, 38,
+                                 140, 61, 179, 154, 214, 138, 147, 87, 27, 96, 77, 47,
+                                 187, 49, 156, 214,
+                              };
             Assert.AreEqual(expected.Length, @out.SizeInBytes);
             byte[] outArray = new byte[expected.Length];
             @out.toBytes(0, outArray, 0, expected.Length);
@@ -562,8 +592,7 @@ namespace ZXing.QrCode.Internal.Test
          {
             builder.Append('0');
          }
-         QRCode qrCode = new QRCode();
-         Encoder.encode(builder.ToString(), ErrorCorrectionLevel.L, qrCode);
+         Encoder.encode(builder.ToString(), ErrorCorrectionLevel.L);
       }
 
       private static String shiftJISString(byte[] bytes)

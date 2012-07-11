@@ -15,244 +15,54 @@
 */
 
 using System;
-using ZXing.QrCode.Internal;
+using System.Text;
 
 namespace ZXing.QrCode.Internal
 {
-   /// <author>  satorux@google.com (Satoru Takabayashi) - creator
-   /// </author>
-   /// <author>  dswitkin@google.com (Daniel Switkin) - ported from C++
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>satorux@google.com (Satoru Takabayashi) - creator</author>
+   /// <author>dswitkin@google.com (Daniel Switkin) - ported from C++</author>
    public sealed class QRCode
    {
-      public const int NUM_MASK_PATTERNS = 8;
-
-      private Mode mode;
-      private ErrorCorrectionLevel ecLevel;
-      private int version;
-      private int matrixWidth;
-      private int maskPattern;
-      private int numTotalBytes;
-      private int numDataBytes;
-      private int numECBytes;
-      private int numRSBlocks;
-      private ByteMatrix matrix;
+      public static int NUM_MASK_PATTERNS = 8;
 
       public QRCode()
       {
-         mode = null;
-         ecLevel = null;
-         version = -1;
-         matrixWidth = -1;
-         maskPattern = -1;
-         numTotalBytes = -1;
-         numDataBytes = -1;
-         numECBytes = -1;
-         numRSBlocks = -1;
-         matrix = null;
+         MaskPattern = -1;
       }
 
-      public Mode Mode
-      {
-         // Mode of the QR Code.
-         get
-         {
-            return mode;
-         }
-         set
-         {
-            mode = value;
-         }
-      }
+      public Mode Mode { get; set; }
 
-      public ErrorCorrectionLevel ECLevel
-      {
-         // Error correction level of the QR Code.
-         get
-         {
-            return ecLevel;
-         }
-         set
-         {
-            ecLevel = value;
-         }
-      }
+      public ErrorCorrectionLevel ECLevel { get; set; }
 
-      public int Version
-      {
-         // Version of the QR Code.  The bigger size, the bigger version.
-         get
-         {
-            return version;
-         }
-         set
-         {
-            version = value;
-         }
-      }
+      public Version Version { get; set; }
 
-      public int MatrixWidth
-      {
-         // ByteMatrix width of the QR Code.
-         get
-         {
-            return matrixWidth;
-         }
-         set
-         {
-            matrixWidth = value;
-         }
-      }
-      public int MaskPattern
-      {
-         // Mask pattern of the QR Code.
-         get
-         {
-            return maskPattern;
-         }
-         set
-         {
-            maskPattern = value;
-         }
-      }
+      public int MaskPattern { get; set; }
 
-      public int NumTotalBytes
-      {
-         // Number of total bytes in the QR Code.
-         get
-         {
-            return numTotalBytes;
-         }
-         set
-         {
-            numTotalBytes = value;
-         }
-      }
+      public ByteMatrix Matrix { get; set; }
 
-      public int NumDataBytes
-      {
-         // Number of data bytes in the QR Code.
-         get
-         {
-            return numDataBytes;
-         }
-         set
-         {
-            numDataBytes = value;
-         }
-      }
-
-      public int NumECBytes
-      {
-         // Number of error correction bytes in the QR Code.
-         get
-         {
-            return numECBytes;
-         }
-         set
-         {
-            numECBytes = value;
-         }
-      }
-
-      public int NumRSBlocks
-      {
-         // Number of Reedsolomon blocks in the QR Code.
-         get
-         {
-            return numRSBlocks;
-         }
-         set
-         {
-            numRSBlocks = value;
-         }
-      }
-
-      public ByteMatrix Matrix
-      {
-         // ByteMatrix data of the QR Code.
-         get
-         {
-            return matrix;
-         }
-         // This takes ownership of the 2D array.
-         set
-         {
-            matrix = value;
-         }
-      }
-
-
-      // Return the value of the module (cell) pointed by "x" and "y" in the matrix of the QR Code. They
-      // call cells in the matrix "modules". 1 represents a black cell, and 0 represents a white cell.
-      public int at(int x, int y)
-      {
-         // The value must be zero or one.
-         int value_Renamed = matrix[x, y];
-         if (!(value_Renamed == 0 || value_Renamed == 1))
-         {
-            // this is really like an assert... not sure what better exception to use?
-            throw new System.SystemException("Bad value");
-         }
-         return value_Renamed;
-      }
-
-      public bool Valid
-      {
-         // Checks all the member variables are set properly. Returns true on success. Otherwise, returns
-         // false.
-         get
-         {
-            return mode != null &&
-               ecLevel != null &&
-               version != -1 && 
-               matrixWidth != -1 &&
-               maskPattern != -1 &&
-               numTotalBytes != -1 && 
-               numDataBytes != -1 && 
-               numECBytes != -1 && 
-               numRSBlocks != -1 && 
-               isValidMaskPattern(maskPattern) && 
-               numTotalBytes == numDataBytes + numECBytes && 
-               matrix != null &&
-               matrixWidth == matrix.Width && 
-               matrix.Width == matrix.Height; // Must be square.
-         }
-      }
-
-      // Return debug String.
       public override String ToString()
       {
-         System.Text.StringBuilder result = new System.Text.StringBuilder(200);
+         var result = new StringBuilder(200);
          result.Append("<<\n");
          result.Append(" mode: ");
-         result.Append(mode);
+         result.Append(Mode);
          result.Append("\n ecLevel: ");
-         result.Append(ecLevel);
+         result.Append(ECLevel);
          result.Append("\n version: ");
-         result.Append(version);
-         result.Append("\n matrixWidth: ");
-         result.Append(matrixWidth);
+         if (Version == null)
+            result.Append("null");
+         else
+            result.Append(Version);
          result.Append("\n maskPattern: ");
-         result.Append(maskPattern);
-         result.Append("\n numTotalBytes: ");
-         result.Append(numTotalBytes);
-         result.Append("\n numDataBytes: ");
-         result.Append(numDataBytes);
-         result.Append("\n numECBytes: ");
-         result.Append(numECBytes);
-         result.Append("\n numRSBlocks: ");
-         result.Append(numRSBlocks);
-         if (matrix == null)
+         result.Append(MaskPattern);
+         if (Matrix == null)
          {
             result.Append("\n matrix: null\n");
          }
          else
          {
             result.Append("\n matrix:\n");
-            result.Append(matrix.ToString());
+            result.Append(Matrix.ToString());
          }
          result.Append(">>\n");
          return result.ToString();

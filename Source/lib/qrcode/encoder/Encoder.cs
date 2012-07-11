@@ -48,93 +48,111 @@ namespace ZXing.QrCode.Internal
       // Basically it applies four rules and summate all penalties.
       private static int calculateMaskPenalty(ByteMatrix matrix)
       {
-
-         int penalty = 0;
-         penalty += MaskUtil.applyMaskPenaltyRule1(matrix);
-         penalty += MaskUtil.applyMaskPenaltyRule2(matrix);
-         penalty += MaskUtil.applyMaskPenaltyRule3(matrix);
-         penalty += MaskUtil.applyMaskPenaltyRule4(matrix);
-         return penalty;
+         return MaskUtil.applyMaskPenaltyRule1(matrix)
+                 + MaskUtil.applyMaskPenaltyRule2(matrix)
+                 + MaskUtil.applyMaskPenaltyRule3(matrix)
+                 + MaskUtil.applyMaskPenaltyRule4(matrix);
       }
 
-      /**
-       *  Encode "bytes" with the error correction level "ecLevel". The encoding mode will be chosen
-       * internally by chooseMode(). On success, store the result in "qrCode".
-       *
-       * We recommend you to use QRCode.EC_LEVEL_L (the lowest level) for
-       * "getECLevel" since our primary use is to show QR code on desktop screens. We don't need very
-       * strong error correction for this purpose.
-       *
-       * Note that there is no way to encode bytes in MODE_KANJI. We might want to add EncodeWithMode()
-       * with which clients can specify the encoding mode. For now, we don't need the functionality.
-       */
-      public static void encode(String content, ErrorCorrectionLevel ecLevel, QRCode qrCode)
+      /// <summary>
+      /// Encode "bytes" with the error correction level "ecLevel". The encoding mode will be chosen
+      /// internally by chooseMode(). On success, store the result in "qrCode".
+      /// We recommend you to use QRCode.EC_LEVEL_L (the lowest level) for
+      /// "getECLevel" since our primary use is to show QR code on desktop screens. We don't need very
+      /// strong error correction for this purpose.
+      /// Note that there is no way to encode bytes in MODE_KANJI. We might want to add EncodeWithMode()
+      /// with which clients can specify the encoding mode. For now, we don't need the functionality.
+      /// </summary>
+      /// <param name="content">The content.</param>
+      /// <param name="ecLevel">The ec level.</param>
+      /// <param name="qrCode">The qr code.</param>
+      public static QRCode encode(String content, ErrorCorrectionLevel ecLevel)
       {
-         encode(content, ecLevel, null, qrCode);
+         return encode(content, ecLevel, null);
       }
 
-      public static void encode(String content,
+      public static QRCode encode(String content,
                                 ErrorCorrectionLevel ecLevel,
-                                IDictionary<EncodeHintType, object> hints,
-                                QRCode qrCode)
+                                IDictionary<EncodeHintType, object> hints)
       {
+         // Determine what character encoding has been specified by the caller, if any
          String encoding = hints == null || !hints.ContainsKey(EncodeHintType.CHARACTER_SET) ? null : (String)hints[EncodeHintType.CHARACTER_SET];
          if (encoding == null)
          {
             encoding = DEFAULT_BYTE_MODE_ENCODING;
          }
 
-         // Step 1: Choose the mode (encoding).
+         // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
+         // multiple modes / segments even if that were more efficient. Twould be nice.
          Mode mode = chooseMode(content, encoding);
 
-         BitArray dataBits = new BitArray();
+         // This will store the header information, like mode and
+         // length, as well as "header" segments like an ECI segment.
+         BitArray headerBits = new BitArray();
 
-         // Step 1.5: Append ECI message if applicable
+         // Append ECI segment if applicable
          if (mode == Mode.BYTE && !DEFAULT_BYTE_MODE_ENCODING.Equals(encoding))
          {
             CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding);
             if (eci != null)
             {
-               appendECI(eci, dataBits);
+               appendECI(eci, headerBits);
             }
          }
-         
-         // Step 2: Append "bytes" into "dataBits" in appropriate encoding.
+
+         // (With ECI in place,) Write the mode marker
+         appendModeInfo(mode, headerBits);
+
+         // Collect data within the main segment, separately, to count its size if needed. Don't add it to
+         // main payload yet.
+         BitArray dataBits = new BitArray();
          appendBytes(content, mode, dataBits, encoding);
 
-         // Step 3: Initialize QR code that can contain "dataBits".
-         int numInputBits = dataBits.Size;
-         initQRCode(numInputBits, ecLevel, mode, qrCode);
+         // Hard part: need to know version to know how many bits length takes. But need to know how many
+         // bits it takes to know version. To pick version size assume length takes maximum bits
+         int bitsNeeded = headerBits.Size
+             + mode.getCharacterCountBits(Version.getVersionForNumber(40))
+             + dataBits.Size;
+         Version version = chooseVersion(bitsNeeded, ecLevel);
 
-         // Step 4: Build another bit vector that contains header and data.
          BitArray headerAndDataBits = new BitArray();
-
-         appendModeInfo(mode, headerAndDataBits);
-
+         headerAndDataBits.appendBitArray(headerBits);
+         // Find "length" of main segment and write it
          int numLetters = mode == Mode.BYTE ? dataBits.SizeInBytes : content.Length;
-         appendLengthInfo(numLetters, qrCode.Version, mode, headerAndDataBits);
+         appendLengthInfo(numLetters, version, mode, headerAndDataBits);
+         // Put data together into the overall payload
          headerAndDataBits.appendBitArray(dataBits);
 
-         // Step 5: Terminate the bits properly.
-         terminateBits(qrCode.NumDataBytes, headerAndDataBits);
+         Version.ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);
+         int numDataBytes = version.TotalCodewords - ecBlocks.TotalECCodewords;
 
-         // Step 6: Interleave data bits with error correction code.
-         BitArray finalBits = new BitArray();
-         interleaveWithECBytes(headerAndDataBits, qrCode.NumTotalBytes, qrCode.NumDataBytes,
-             qrCode.NumRSBlocks, finalBits);
+         // Terminate the bits properly.
+         terminateBits(numDataBytes, headerAndDataBits);
 
-         // Step 7: Choose the mask pattern and set to "qrCode".
-         ByteMatrix matrix = new ByteMatrix(qrCode.MatrixWidth, qrCode.MatrixWidth);
-         qrCode.MaskPattern = chooseMaskPattern(finalBits, ecLevel, qrCode.Version, matrix);
+         // Interleave data bits with error correction code.
+         BitArray finalBits = interleaveWithECBytes(headerAndDataBits,
+                                                    version.TotalCodewords,
+                                                    numDataBytes,
+                                                    ecBlocks.NumBlocks);
 
-         // Step 8.  Build the matrix and set it to "qrCode".
-         MatrixUtil.buildMatrix(finalBits, ecLevel, qrCode.Version, qrCode.MaskPattern, matrix);
+         QRCode qrCode = new QRCode
+                            {
+                               ECLevel = ecLevel, 
+                               Mode = mode,
+                               Version = version
+                            };
+
+         //  Choose the mask pattern and set to "qrCode".
+         int dimension = version.DimensionForVersion;
+         ByteMatrix matrix = new ByteMatrix(dimension, dimension);
+         int maskPattern = chooseMaskPattern(finalBits, ecLevel, version, matrix);
+         qrCode.MaskPattern = maskPattern;
+
+         // Build the matrix and set it to "qrCode".
+         MatrixUtil.buildMatrix(finalBits, ecLevel, version, maskPattern, matrix);
          qrCode.Matrix = matrix;
-         // Step 9.  Make sure we have a valid QR Code.
-         if (!qrCode.Valid)
-         {
-            throw new WriterException("Invalid QR code: " + qrCode.ToString());
-         }
+
+         return qrCode;
       }
 
       /**
@@ -231,7 +249,7 @@ namespace ZXing.QrCode.Internal
 
       private static int chooseMaskPattern(BitArray bits,
                                            ErrorCorrectionLevel ecLevel,
-                                           int version,
+                                           Version version,
                                            ByteMatrix matrix)
       {
          int minPenalty = Int32.MaxValue;  // Lower penalty is better.
@@ -252,61 +270,26 @@ namespace ZXing.QrCode.Internal
          return bestMaskPattern;
       }
 
-      /**
-       * Initialize "qrCode" according to "numInputBits", "ecLevel", and "mode". On success,
-       * modify "qrCode".
-       */
-      private static void initQRCode(int numInputBits,
-                                     ErrorCorrectionLevel ecLevel,
-                                     Mode mode,
-                                     QRCode qrCode)
+      private static Version chooseVersion(int numInputBits, ErrorCorrectionLevel ecLevel)
       {
-         qrCode.ECLevel = ecLevel;
-         qrCode.Mode = mode;
-
          // In the following comments, we use numbers of Version 7-H.
          for (int versionNum = 1; versionNum <= 40; versionNum++)
          {
-
-            var version = Internal.Version.getVersionForNumber(versionNum);
+            Version version = Version.getVersionForNumber(versionNum);
             // numBytes = 196
             int numBytes = version.TotalCodewords;
             // getNumECBytes = 130
-            var ecBlocks = version.getECBlocksForLevel(ecLevel);
+            Version.ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);
             int numEcBytes = ecBlocks.TotalECCodewords;
-            // getNumRSBlocks = 5
-            int numRSBlocks = ecBlocks.NumBlocks;
             // getNumDataBytes = 196 - 130 = 66
             int numDataBytes = numBytes - numEcBytes;
-            // We want to choose the smallest version which can contain data of "numInputBytes" + some
-            // extra bits for the header (mode info and length info). The header can be three bytes
-            // (precisely 4 + 16 bits) at most.
-            if (numDataBytes >= getTotalInputBytes(numInputBits, version, mode))
+            int totalInputBytes = (numInputBits + 7) / 8;
+            if (numDataBytes >= totalInputBytes)
             {
-
-               // Yay, we found the proper rs block info!
-               qrCode.Version = versionNum;
-               qrCode.NumTotalBytes = numBytes;
-               qrCode.NumDataBytes = numDataBytes;
-               qrCode.NumRSBlocks = numRSBlocks;
-               // getNumECBytes = 196 - 66 = 130
-               qrCode.NumECBytes = numEcBytes;
-               // matrix width = 21 + 6 * 4 = 45
-               qrCode.MatrixWidth = version.DimensionForVersion;
-               return;
+               return version;
             }
          }
-         throw new WriterException("Cannot find proper rs block info (input data too big?)");
-      }
-
-      private static int getTotalInputBytes(int numInputBits, Internal.Version version, Mode mode)
-      {
-         int modeInfoBits = 4;
-         int charCountBits = mode.getCharacterCountBits(version);
-         int headerBits = modeInfoBits + charCountBits;
-         int totalBits = numInputBits + headerBits;
-
-         return (totalBits + 7) / 8;
+         throw new WriterException("Data too big");
       }
 
       /**
@@ -418,18 +401,20 @@ namespace ZXing.QrCode.Internal
          }
       }
 
-      /**
-       * Interleave "bits" with corresponding error correction bytes. On success, store the result in
-       * "result". The interleave rule is complicated. See 8.6 of JISX0510:2004 (p.37) for details.
-       */
-
-      internal static void interleaveWithECBytes(BitArray bits,
-                                        int numTotalBytes,
-                                        int numDataBytes,
-                                        int numRSBlocks,
-                                        BitArray result)
+      /// <summary>
+      /// Interleave "bits" with corresponding error correction bytes. On success, store the result in
+      /// "result". The interleave rule is complicated. See 8.6 of JISX0510:2004 (p.37) for details.
+      /// </summary>
+      /// <param name="bits">The bits.</param>
+      /// <param name="numTotalBytes">The num total bytes.</param>
+      /// <param name="numDataBytes">The num data bytes.</param>
+      /// <param name="numRSBlocks">The num RS blocks.</param>
+      /// <returns></returns>
+      internal static BitArray interleaveWithECBytes(BitArray bits,
+                                             int numTotalBytes,
+                                             int numDataBytes,
+                                             int numRSBlocks)
       {
-
          // "bits" must have "getNumDataBytes" bytes of data.
          if (bits.SizeInBytes != numDataBytes)
          {
@@ -471,6 +456,8 @@ namespace ZXing.QrCode.Internal
             throw new WriterException("Data bytes does not match offset");
          }
 
+         BitArray result = new BitArray();
+
          // First, place data blocks.
          for (int i = 0; i < maxNumDataBytes; ++i)
          {
@@ -500,6 +487,8 @@ namespace ZXing.QrCode.Internal
             throw new WriterException("Interleaving error: " + numTotalBytes + " and " +
                 result.SizeInBytes + " differ.");
          }
+
+         return result;
       }
 
       internal static byte[] generateECBytes(byte[] dataBytes, int numEcBytesInBlock)
@@ -522,34 +511,41 @@ namespace ZXing.QrCode.Internal
          return ecBytes;
       }
 
-      /**
-       * Append mode info. On success, store the result in "bits".
-       */
-
+      /// <summary>
+      /// Append mode info. On success, store the result in "bits".
+      /// </summary>
+      /// <param name="mode">The mode.</param>
+      /// <param name="bits">The bits.</param>
       internal static void appendModeInfo(Mode mode, BitArray bits)
       {
          bits.appendBits(mode.Bits, 4);
       }
 
 
-      /**
-       * Append length info. On success, store the result in "bits".
-       */
-
-      internal static void appendLengthInfo(int numLetters, int version, Mode mode, BitArray bits)
+      /// <summary>
+      /// Append length info. On success, store the result in "bits".
+      /// </summary>
+      /// <param name="numLetters">The num letters.</param>
+      /// <param name="version">The version.</param>
+      /// <param name="mode">The mode.</param>
+      /// <param name="bits">The bits.</param>
+      internal static void appendLengthInfo(int numLetters, Version version, Mode mode, BitArray bits)
       {
-         int numBits = mode.getCharacterCountBits(Internal.Version.getVersionForNumber(version));
-         if (numLetters > ((1 << numBits) - 1))
+         int numBits = mode.getCharacterCountBits(version);
+         if (numLetters >= (1 << numBits))
          {
-            throw new WriterException(numLetters + "is bigger than" + ((1 << numBits) - 1));
+            throw new WriterException(numLetters + " is bigger than " + ((1 << numBits) - 1));
          }
          bits.appendBits(numLetters, numBits);
       }
 
-      /**
-       * Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
-       */
-
+      /// <summary>
+      /// Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
+      /// </summary>
+      /// <param name="content">The content.</param>
+      /// <param name="mode">The mode.</param>
+      /// <param name="bits">The bits.</param>
+      /// <param name="encoding">The encoding.</param>
       internal static void appendBytes(String content,
                               Mode mode,
                               BitArray bits,

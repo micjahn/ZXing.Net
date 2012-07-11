@@ -68,8 +68,7 @@ namespace ZXing.QrCode
             }
          }
 
-         QRCode code = new QRCode();
-         Encoder.encode(contents, errorCorrectionLevel, hints, code);
+         QRCode code = Encoder.encode(contents, errorCorrectionLevel, hints);
          return renderResult(code, width, height);
       }
 

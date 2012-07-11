@@ -17,8 +17,8 @@
 using System;
 
 using NUnit.Framework;
+
 using ZXing.Common;
-using ZXing.QrCode.Internal;
 
 namespace ZXing.QrCode.Internal.Test
 {
@@ -87,7 +87,7 @@ namespace ZXing.QrCode.Internal.Test
               " 1 1 1 1 1 1 1 0                          \n";
             ByteMatrix matrix = new ByteMatrix(21, 21);
             MatrixUtil.clearMatrix(matrix);
-            MatrixUtil.embedBasicPatterns(1, matrix);
+            MatrixUtil.embedBasicPatterns(Version.getVersionForNumber(1), matrix);
             Assert.AreEqual(expected, matrix.ToString());
          }
          {
@@ -121,7 +121,7 @@ namespace ZXing.QrCode.Internal.Test
               " 1 1 1 1 1 1 1 0                                  \n";
             ByteMatrix matrix = new ByteMatrix(25, 25);
             MatrixUtil.clearMatrix(matrix);
-            MatrixUtil.embedBasicPatterns(2, matrix);
+            MatrixUtil.embedBasicPatterns(Version.getVersionForNumber(2), matrix);
             Assert.AreEqual(expected, matrix.ToString());
          }
       }
@@ -188,7 +188,7 @@ namespace ZXing.QrCode.Internal.Test
          // since 45x45 matrix is too big to depict.
          ByteMatrix matrix = new ByteMatrix(21, 21);
          MatrixUtil.clearMatrix(matrix);
-         MatrixUtil.maybeEmbedVersionInfo(7, matrix);
+         MatrixUtil.maybeEmbedVersionInfo(Version.getVersionForNumber(7), matrix);
          Assert.AreEqual(expected, matrix.ToString());
       }
 
@@ -221,7 +221,7 @@ namespace ZXing.QrCode.Internal.Test
          BitArray bits = new BitArray();
          ByteMatrix matrix = new ByteMatrix(21, 21);
          MatrixUtil.clearMatrix(matrix);
-         MatrixUtil.embedBasicPatterns(1, matrix);
+         MatrixUtil.embedBasicPatterns(Version.getVersionForNumber(1), matrix);
          MatrixUtil.embedDataBits(bits, -1, matrix);
          Assert.AreEqual(expected, matrix.ToString());
       }
@@ -263,7 +263,7 @@ namespace ZXing.QrCode.Internal.Test
          ByteMatrix matrix = new ByteMatrix(21, 21);
          MatrixUtil.buildMatrix(bits,
                                 ErrorCorrectionLevel.H,
-                                1,  // Version 1
+                                Version.getVersionForNumber(1),  // Version 1
                                 3,  // Mask pattern 3
                                 matrix);
          Assert.AreEqual(expected, matrix.ToString());
@@ -307,7 +307,7 @@ namespace ZXing.QrCode.Internal.Test
       {
          // From Appendix D in JISX0510:2004 (p 68)
          BitArray bits = new BitArray();
-         MatrixUtil.makeVersionInfoBits(7, bits);
+         MatrixUtil.makeVersionInfoBits(Version.getVersionForNumber(7), bits);
          Assert.AreEqual(" ...XXXXX ..X..X.X ..", bits.ToString());
       }
 

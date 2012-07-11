@@ -28,19 +28,90 @@ namespace ZXing.QrCode.Internal
    /// </author>
    public static class MatrixUtil
    {
-      private static readonly int[][] POSITION_DETECTION_PATTERN = new int[][] { new int[] { 1, 1, 1, 1, 1, 1, 1 }, new int[] { 1, 0, 0, 0, 0, 0, 1 }, new int[] { 1, 0, 1, 1, 1, 0, 1 }, new int[] { 1, 0, 1, 1, 1, 0, 1 }, new int[] { 1, 0, 1, 1, 1, 0, 1 }, new int[] { 1, 0, 0, 0, 0, 0, 1 }, new int[] { 1, 1, 1, 1, 1, 1, 1 } };
+      private static readonly int[][] POSITION_DETECTION_PATTERN = new int[][]
+                                                                      {
+                                                                         new int[] { 1, 1, 1, 1, 1, 1, 1 }, 
+                                                                         new int[] { 1, 0, 0, 0, 0, 0, 1 }, 
+                                                                         new int[] { 1, 0, 1, 1, 1, 0, 1 }, 
+                                                                         new int[] { 1, 0, 1, 1, 1, 0, 1 }, 
+                                                                         new int[] { 1, 0, 1, 1, 1, 0, 1 }, 
+                                                                         new int[] { 1, 0, 0, 0, 0, 0, 1 }, 
+                                                                         new int[] { 1, 1, 1, 1, 1, 1, 1 }
+                                                                      };
 
-      private static readonly int[][] HORIZONTAL_SEPARATION_PATTERN = new int[][] { new int[] { 0, 0, 0, 0, 0, 0, 0, 0 } };
-
-      private static readonly int[][] VERTICAL_SEPARATION_PATTERN = new int[][] { new int[] { 0 }, new int[] { 0 }, new int[] { 0 }, new int[] { 0 }, new int[] { 0 }, new int[] { 0 }, new int[] { 0 } };
-
-      private static readonly int[][] POSITION_ADJUSTMENT_PATTERN = new int[][] { new int[] { 1, 1, 1, 1, 1 }, new int[] { 1, 0, 0, 0, 1 }, new int[] { 1, 0, 1, 0, 1 }, new int[] { 1, 0, 0, 0, 1 }, new int[] { 1, 1, 1, 1, 1 } };
+      private static readonly int[][] POSITION_ADJUSTMENT_PATTERN = new int[][]
+                                                                       {
+                                                                          new int[] { 1, 1, 1, 1, 1 }, 
+                                                                          new int[] { 1, 0, 0, 0, 1 }, 
+                                                                          new int[] { 1, 0, 1, 0, 1 }, 
+                                                                          new int[] { 1, 0, 0, 0, 1 }, 
+                                                                          new int[] { 1, 1, 1, 1, 1 }
+                                                                       };
 
       // From Appendix E. Table 1, JIS0510X:2004 (p 71). The table was double-checked by komatsu.
-      private static readonly int[][] POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE = new int[][] { new int[] { -1, -1, -1, -1, -1, -1, -1 }, new int[] { 6, 18, -1, -1, -1, -1, -1 }, new int[] { 6, 22, -1, -1, -1, -1, -1 }, new int[] { 6, 26, -1, -1, -1, -1, -1 }, new int[] { 6, 30, -1, -1, -1, -1, -1 }, new int[] { 6, 34, -1, -1, -1, -1, -1 }, new int[] { 6, 22, 38, -1, -1, -1, -1 }, new int[] { 6, 24, 42, -1, -1, -1, -1 }, new int[] { 6, 26, 46, -1, -1, -1, -1 }, new int[] { 6, 28, 50, -1, -1, -1, -1 }, new int[] { 6, 30, 54, -1, -1, -1, -1 }, new int[] { 6, 32, 58, -1, -1, -1, -1 }, new int[] { 6, 34, 62, -1, -1, -1, -1 }, new int[] { 6, 26, 46, 66, -1, -1, -1 }, new int[] { 6, 26, 48, 70, -1, -1, -1 }, new int[] { 6, 26, 50, 74, -1, -1, -1 }, new int[] { 6, 30, 54, 78, -1, -1, -1 }, new int[] { 6, 30, 56, 82, -1, -1, -1 }, new int[] { 6, 30, 58, 86, -1, -1, -1 }, new int[] { 6, 34, 62, 90, -1, -1, -1 }, new int[] { 6, 28, 50, 72, 94, -1, -1 }, new int[] { 6, 26, 50, 74, 98, -1, -1 }, new int[] { 6, 30, 54, 78, 102, -1, -1 }, new int[] { 6, 28, 54, 80, 106, -1, -1 }, new int[] { 6, 32, 58, 84, 110, -1, -1 }, new int[] { 6, 30, 58, 86, 114, -1, -1 }, new int[] { 6, 34, 62, 90, 118, -1, -1 }, new int[] { 6, 26, 50, 74, 98, 122, -1 }, new int[] { 6, 30, 54, 78, 102, 126, -1 }, new int[] { 6, 26, 52, 78, 104, 130, -1 }, new int[] { 6, 30, 56, 82, 108, 134, -1 }, new int[] { 6, 34, 60, 86, 112, 138, -1 }, new int[] { 6, 30, 58, 86, 114, 142, -1 }, new int[] { 6, 34, 62, 90, 118, 146, -1 }, new int[] { 6, 30, 54, 78, 102, 126, 150 }, new int[] { 6, 24, 50, 76, 102, 128, 154 }, new int[] { 6, 28, 54, 80, 106, 132, 158 }, new int[] { 6, 32, 58, 84, 110, 136, 162 }, new int[] { 6, 26, 54, 82, 110, 138, 166 }, new int[] { 6, 30, 58, 86, 114, 142, 170 } };
+      private static readonly int[][] POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE = new int[][]
+                                                                                        {
+                                                                                           new int[] { -1, -1, -1, -1, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 18, -1, -1, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 22, -1, -1, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 26, -1, -1, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 30, -1, -1, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 34, -1, -1, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 22, 38, -1, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 24, 42, -1, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 26, 46, -1, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 28, 50, -1, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 30, 54, -1, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 32, 58, -1, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 34, 62, -1, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 26, 46, 66, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 26, 48, 70, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 26, 50, 74, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 30, 54, 78, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 30, 56, 82, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 30, 58, 86, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 34, 62, 90, -1, -1, -1 }, 
+                                                                                           new int[] { 6, 28, 50, 72, 94, -1, -1 }, 
+                                                                                           new int[] { 6, 26, 50, 74, 98, -1, -1 }, 
+                                                                                           new int[] { 6, 30, 54, 78, 102, -1, -1 }, 
+                                                                                           new int[] { 6, 28, 54, 80, 106, -1, -1 }, 
+                                                                                           new int[] { 6, 32, 58, 84, 110, -1, -1 }, 
+                                                                                           new int[] { 6, 30, 58, 86, 114, -1, -1 }, 
+                                                                                           new int[] { 6, 34, 62, 90, 118, -1, -1 }, 
+                                                                                           new int[] { 6, 26, 50, 74, 98, 122, -1 }, 
+                                                                                           new int[] { 6, 30, 54, 78, 102, 126, -1 },
+                                                                                           new int[] { 6, 26, 52, 78, 104, 130, -1 }, 
+                                                                                           new int[] { 6, 30, 56, 82, 108, 134, -1 }, 
+                                                                                           new int[] { 6, 34, 60, 86, 112, 138, -1 },
+                                                                                           new int[] { 6, 30, 58, 86, 114, 142, -1 },
+                                                                                           new int[] { 6, 34, 62, 90, 118, 146, -1 }, 
+                                                                                           new int[] { 6, 30, 54, 78, 102, 126, 150 },
+                                                                                           new int[] { 6, 24, 50, 76, 102, 128, 154 }, 
+                                                                                           new int[] { 6, 28, 54, 80, 106, 132, 158 }, 
+                                                                                           new int[] { 6, 32, 58, 84, 110, 136, 162 }, 
+                                                                                           new int[] { 6, 26, 54, 82, 110, 138, 166 }, 
+                                                                                           new int[] { 6, 30, 58, 86, 114, 142, 170 }
+                                                                                        };
 
       // Type info cells at the left top corner.
-      private static readonly int[][] TYPE_INFO_COORDINATES = new int[][] { new int[] { 8, 0 }, new int[] { 8, 1 }, new int[] { 8, 2 }, new int[] { 8, 3 }, new int[] { 8, 4 }, new int[] { 8, 5 }, new int[] { 8, 7 }, new int[] { 8, 8 }, new int[] { 7, 8 }, new int[] { 5, 8 }, new int[] { 4, 8 }, new int[] { 3, 8 }, new int[] { 2, 8 }, new int[] { 1, 8 }, new int[] { 0, 8 } };
+      private static readonly int[][] TYPE_INFO_COORDINATES = new int[][]
+                                                                 {
+                                                                    new int[] { 8, 0 }, 
+                                                                    new int[] { 8, 1 }, 
+                                                                    new int[] { 8, 2 }, 
+                                                                    new int[] { 8, 3 }, 
+                                                                    new int[] { 8, 4 }, 
+                                                                    new int[] { 8, 5 }, 
+                                                                    new int[] { 8, 7 }, 
+                                                                    new int[] { 8, 8 }, 
+                                                                    new int[] { 7, 8 }, 
+                                                                    new int[] { 5, 8 }, 
+                                                                    new int[] { 4, 8 }, 
+                                                                    new int[] { 3, 8 }, 
+                                                                    new int[] { 2, 8 }, 
+                                                                    new int[] { 1, 8 }, 
+                                                                    new int[] { 0, 8 }
+                                                                 };
 
       // From Appendix D in JISX0510:2004 (p. 67)
       private const int VERSION_INFO_POLY = 0x1f25; // 1 1111 0010 0101
@@ -60,7 +131,7 @@ namespace ZXing.QrCode.Internal
 
       // Build 2D matrix of QR Code from "dataBits" with "ecLevel", "version" and "getMaskPattern". On
       // success, store the result in "matrix" and return true.
-      public static void buildMatrix(BitArray dataBits, ErrorCorrectionLevel ecLevel, int version, int maskPattern, ByteMatrix matrix)
+      public static void buildMatrix(BitArray dataBits, ErrorCorrectionLevel ecLevel, Version version, int maskPattern, ByteMatrix matrix)
       {
          clearMatrix(matrix);
          embedBasicPatterns(version, matrix);
@@ -78,7 +149,7 @@ namespace ZXing.QrCode.Internal
       // - Timing patterns
       // - Dark dot at the left bottom corner
       // - Position adjustment patterns, if need be
-      public static void embedBasicPatterns(int version, ByteMatrix matrix)
+      public static void embedBasicPatterns(Version version, ByteMatrix matrix)
       {
          // Let's get started with embedding big squares at corners.
          embedPositionDetectionPatternsAndSeparators(matrix);
@@ -127,9 +198,9 @@ namespace ZXing.QrCode.Internal
 
       // Embed version information if need be. On success, modify the matrix and return true.
       // See 8.10 of JISX0510:2004 (p.47) for how to embed version information.
-      public static void maybeEmbedVersionInfo(int version, ByteMatrix matrix)
+      public static void maybeEmbedVersionInfo(Version version, ByteMatrix matrix)
       {
-         if (version < 7)
+         if (version.VersionNumber < 7)
          {
             // Version info is necessary if version >= 7.
             return; // Don't need version info.
@@ -300,10 +371,10 @@ namespace ZXing.QrCode.Internal
 
       // Make bit vector of version information. On success, store the result in "bits" and return true.
       // See 8.10 of JISX0510:2004 (p.45) for details.
-      public static void makeVersionInfoBits(int version, BitArray bits)
+      public static void makeVersionInfoBits(Version version, BitArray bits)
       {
-         bits.appendBits(version, 6);
-         int bchCode = calculateBCHCode(version, VERSION_INFO_POLY);
+         bits.appendBits(version.VersionNumber, 6);
+         int bchCode = calculateBCHCode(version.VersionNumber, VERSION_INFO_POLY);
          bits.appendBits(bchCode, 12);
 
          if (bits.Size != 18)
@@ -319,12 +390,6 @@ namespace ZXing.QrCode.Internal
          return value_Renamed == -1;
       }
 
-      // Check if "value" is valid.
-      private static bool isValidValue(int value_Renamed)
-      {
-         return (value_Renamed == -1 || value_Renamed == 0 || value_Renamed == 1); // Dark (black).
-      }
-
       private static void embedTimingPatterns(ByteMatrix matrix)
       {
          // -8 is for skipping position detection patterns (size 7), and two horizontal/vertical
@@ -333,19 +398,11 @@ namespace ZXing.QrCode.Internal
          {
             int bit = (i + 1) % 2;
             // Horizontal line.
-            if (!isValidValue(matrix[i, 6]))
-            {
-               throw new WriterException();
-            }
             if (isEmpty(matrix[i, 6]))
             {
                matrix[i, 6] = bit;
             }
             // Vertical line.
-            if (!isValidValue(matrix[6, i]))
-            {
-               throw new WriterException();
-            }
             if (isEmpty(matrix[6, i]))
             {
                matrix[6, i] = bit;
@@ -365,35 +422,25 @@ namespace ZXing.QrCode.Internal
 
       private static void embedHorizontalSeparationPattern(int xStart, int yStart, ByteMatrix matrix)
       {
-         // We know the width and height.
-         if (HORIZONTAL_SEPARATION_PATTERN[0].Length != 8 || HORIZONTAL_SEPARATION_PATTERN.Length != 1)
-         {
-            throw new WriterException("Bad horizontal separation pattern");
-         }
          for (int x = 0; x < 8; ++x)
          {
             if (!isEmpty(matrix[xStart + x, yStart]))
             {
                throw new WriterException();
             }
-            matrix[xStart + x, yStart] = HORIZONTAL_SEPARATION_PATTERN[0][x];
+            matrix[xStart + x, yStart] = 0;
          }
       }
 
       private static void embedVerticalSeparationPattern(int xStart, int yStart, ByteMatrix matrix)
       {
-         // We know the width and height.
-         if (VERTICAL_SEPARATION_PATTERN[0].Length != 1 || VERTICAL_SEPARATION_PATTERN.Length != 7)
-         {
-            throw new WriterException("Bad vertical separation pattern");
-         }
          for (int y = 0; y < 7; ++y)
          {
             if (!isEmpty(matrix[xStart, yStart + y]))
             {
                throw new WriterException();
             }
-            matrix[xStart, yStart + y] = VERTICAL_SEPARATION_PATTERN[y][0];
+            matrix[xStart, yStart + y] = 0;
          }
       }
 
@@ -402,19 +449,10 @@ namespace ZXing.QrCode.Internal
       // C/C++. We should live with the fact.
       private static void embedPositionAdjustmentPattern(int xStart, int yStart, ByteMatrix matrix)
       {
-         // We know the width and height.
-         if (POSITION_ADJUSTMENT_PATTERN[0].Length != 5 || POSITION_ADJUSTMENT_PATTERN.Length != 5)
-         {
-            throw new WriterException("Bad position adjustment");
-         }
          for (int y = 0; y < 5; ++y)
          {
             for (int x = 0; x < 5; ++x)
             {
-               if (!isEmpty(matrix[xStart + x, yStart + y]))
-               {
-                  throw new WriterException();
-               }
                matrix[xStart + x, yStart + y] = POSITION_ADJUSTMENT_PATTERN[y][x];
             }
          }
@@ -422,19 +460,10 @@ namespace ZXing.QrCode.Internal
 
       private static void embedPositionDetectionPattern(int xStart, int yStart, ByteMatrix matrix)
       {
-         // We know the width and height.
-         if (POSITION_DETECTION_PATTERN[0].Length != 7 || POSITION_DETECTION_PATTERN.Length != 7)
-         {
-            throw new WriterException("Bad position detection pattern");
-         }
          for (int y = 0; y < 7; ++y)
          {
             for (int x = 0; x < 7; ++x)
             {
-               if (!isEmpty(matrix[xStart + x, yStart + y]))
-               {
-                  throw new WriterException();
-               }
                matrix[xStart + x, yStart + y] = POSITION_DETECTION_PATTERN[y][x];
             }
          }
@@ -453,7 +482,7 @@ namespace ZXing.QrCode.Internal
          embedPositionDetectionPattern(0, matrix.Width - pdpWidth, matrix);
 
          // Embed horizontal separation patterns around the squares.
-         int hspWidth = HORIZONTAL_SEPARATION_PATTERN[0].Length;
+         const int hspWidth = 8;
          // Left top corner.
          embedHorizontalSeparationPattern(0, hspWidth - 1, matrix);
          // Right top corner.
@@ -462,7 +491,7 @@ namespace ZXing.QrCode.Internal
          embedHorizontalSeparationPattern(0, matrix.Width - hspWidth, matrix);
 
          // Embed vertical separation patterns around the squares.
-         int vspSize = VERTICAL_SEPARATION_PATTERN.Length;
+         const int vspSize = 7;
          // Left top corner.
          embedVerticalSeparationPattern(vspSize, 0, matrix);
          // Right top corner.
@@ -472,14 +501,14 @@ namespace ZXing.QrCode.Internal
       }
 
       // Embed position adjustment patterns if need be.
-      private static void maybeEmbedPositionAdjustmentPatterns(int version, ByteMatrix matrix)
+      private static void maybeEmbedPositionAdjustmentPatterns(Version version, ByteMatrix matrix)
       {
-         if (version < 2)
+         if (version.VersionNumber < 2)
          {
             // The patterns appear if version >= 2
             return;
          }
-         int index = version - 1;
+         int index = version.VersionNumber - 1;
          int[] coordinates = POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index];
          int numCoordinates = POSITION_ADJUSTMENT_PATTERN_COORDINATE_TABLE[index].Length;
          for (int i = 0; i < numCoordinates; ++i)
