@@ -248,15 +248,9 @@ namespace ZXing.PDF417.Internal
                int cw = getCodeword(symbol);
                if (ecLevel < 0)
                {
-                  switch (rowNumber%3)
+                  if (rowNumber % 3 == 1)
                   {
-                     case 0:
-                        break;
-                     case 1:
-                        leftColumnECData = cw;
-                        break;
-                     case 2:
-                        break;
+                     leftColumnECData = cw;
                   }
                }
             }
@@ -272,20 +266,13 @@ namespace ZXing.PDF417.Internal
             --next;
             if (ecLevel < 0)
             {
-               switch (rowNumber%3)
+               if (rowNumber%3 == 2)
                {
-                  case 0:
-                     break;
-                  case 1:
-                     break;
-                  case 2:
-                     rightColumnECData = codewords[next];
-                     if (rightColumnECData == leftColumnECData
-                         && leftColumnECData != 0)
-                     {
-                        ecLevel = ((rightColumnECData%30) - rows%3)/3;
-                     }
-                     break;
+                  rightColumnECData = codewords[next];
+                  if (rightColumnECData == leftColumnECData && leftColumnECData != 0)
+                  {
+                     ecLevel = ((rightColumnECData%30) - rows%3)/3;
+                  }
                }
             }
             codewords[next] = 0;

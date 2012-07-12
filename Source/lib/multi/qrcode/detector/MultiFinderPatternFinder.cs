@@ -60,13 +60,13 @@ namespace ZXing.Multi.QrCode.Internal
       /// to the same code if they differ less than DIFF_MODSIZE_CUTOFF pixels/module in their
       /// estimated modules sizes.
       /// </summary>
-      private static float DIFF_MODSIZE_CUTOFF = 0.5f;
+      private const float DIFF_MODSIZE_CUTOFF = 0.5f;
 
 
       /// <summary>
       /// A comparator that orders FinderPatterns by their estimated module size.
       /// </summary>
-      private class ModuleSizeComparator : IComparer<FinderPattern>
+      private sealed class ModuleSizeComparator : IComparer<FinderPattern>
       {
          public int Compare(FinderPattern center1, FinderPattern center2)
          {
@@ -112,13 +112,15 @@ namespace ZXing.Multi.QrCode.Internal
           */
          if (size == 3)
          {
-            return new FinderPattern[][]{
-          new FinderPattern[]{
-              possibleCenters[0],
-              possibleCenters[1],
-              possibleCenters[2]
-          }
-      };
+            return new FinderPattern[][]
+                      {
+                         new FinderPattern[]
+                            {
+                               possibleCenters[0],
+                               possibleCenters[1],
+                               possibleCenters[2]
+                            }
+                      };
          }
 
          // Sort by estimated module size to speed up the upcoming checks

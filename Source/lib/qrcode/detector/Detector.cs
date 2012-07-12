@@ -151,7 +151,7 @@ namespace ZXing.QrCode.Internal
          return new DetectorResult(bits, points);
       }
 
-      public virtual PerspectiveTransform createTransform(ResultPoint topLeft, ResultPoint topRight, ResultPoint bottomLeft, ResultPoint alignmentPattern, int dimension)
+      private static PerspectiveTransform createTransform(ResultPoint topLeft, ResultPoint topRight, ResultPoint bottomLeft, ResultPoint alignmentPattern, int dimension)
       {
          //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
          float dimMinusThree = (float)dimension - 3.5f;
@@ -388,7 +388,7 @@ namespace ZXing.QrCode.Internal
       /// </param>
       /// <returns> {@link AlignmentPattern} if found, or null otherwise
       /// </returns>
-      private AlignmentPattern findAlignmentInRegion(float overallEstModuleSize, int estAlignmentX, int estAlignmentY, float allowanceFactor)
+      protected AlignmentPattern findAlignmentInRegion(float overallEstModuleSize, int estAlignmentX, int estAlignmentY, float allowanceFactor)
       {
          // Look for an alignment pattern (3 modules in size) around where it
          // should be

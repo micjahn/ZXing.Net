@@ -23,7 +23,7 @@ namespace ZXing.OneD
    /// This class renders CodaBar as <see cref="BitMatrix" />.
    /// </summary>
    /// <author>dsbnatut@gmail.com (Kazuki Nishiura)</author>
-   public class CodaBarWriter : OneDimensionalCodeWriter
+   public sealed class CodaBarWriter : OneDimensionalCodeWriter
    {
       public CodaBarWriter()
          : base(20)

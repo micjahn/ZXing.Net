@@ -410,12 +410,8 @@ namespace ZXing.OneD.RSS.Expanded
          else
          {
             // If pattern number is even, the pattern is reversed, so we need to locate element 1 *after* the current block.
-
             start = startEnd[0];
-
-            int firstElementStart = row.getNextUnset(startEnd[1] + 1);
-
-            end = firstElementStart;
+            end = row.getNextUnset(startEnd[1] + 1);
             firstCounter = end - startEnd[1];
          }
 

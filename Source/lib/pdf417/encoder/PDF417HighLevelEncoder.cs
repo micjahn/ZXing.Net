@@ -34,7 +34,6 @@ namespace ZXing.PDF417.Internal
    /// </summary>
    sealed class PDF417HighLevelEncoder
    {
-
       /// <summary>
       /// code for Text compaction
       /// </summary>
@@ -98,19 +97,21 @@ namespace ZXing.PDF417.Internal
       /// <summary>
       /// Raw code table for text compaction Mixed sub-mode
       /// </summary>
-      private static sbyte[] TEXT_MIXED_RAW = {
-      48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 38, 13, 9, 44, 58,
-      35, 45, 46, 36, 47, 43, 37, 42, 61, 94, 0, 32, 0, 0, 0};
+      private static readonly sbyte[] TEXT_MIXED_RAW = {
+                                                          48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 38, 13, 9, 44, 58,
+                                                          35, 45, 46, 36, 47, 43, 37, 42, 61, 94, 0, 32, 0, 0, 0
+                                                       };
 
       /// <summary>
       /// Raw code table for text compaction: Punctuation sub-mode
       /// </summary>
-      private static sbyte[] TEXT_PUNCTUATION_RAW = {
-      59, 60, 62, 64, 91, 92, 93, 95, 96, 126, 33, 13, 9, 44, 58,
-      10, 45, 46, 36, 47, 34, 124, 42, 40, 41, 63, 123, 125, 39, 0};
+      private static readonly sbyte[] TEXT_PUNCTUATION_RAW = {
+                                                                59, 60, 62, 64, 91, 92, 93, 95, 96, 126, 33, 13, 9, 44, 58,
+                                                                10, 45, 46, 36, 47, 34, 124, 42, 40, 41, 63, 123, 125, 39, 0
+                                                             };
 
-      private static sbyte[] MIXED = new sbyte[128];
-      private static sbyte[] PUNCTUATION = new sbyte[128];
+      private static readonly sbyte[] MIXED = new sbyte[128];
+      private static readonly sbyte[] PUNCTUATION = new sbyte[128];
 
       private PDF417HighLevelEncoder()
       {
@@ -170,7 +171,6 @@ namespace ZXing.PDF417.Internal
 
          int len = msg.Length;
          int p = 0;
-         int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
          int textSubMode = SUBMODE_ALPHA;
 
          // User selected encoding mode
@@ -181,20 +181,19 @@ namespace ZXing.PDF417.Internal
          }
          else if (compaction == Compaction.BYTE)
          {
-            encodingMode = BYTE_COMPACTION;
             bytes = getBytesForMessage(msg);
-            encodeBinary(bytes, p, bytes.Length, encodingMode, sb);
+            encodeBinary(bytes, p, bytes.Length, BYTE_COMPACTION, sb);
 
          }
          else if (compaction == Compaction.NUMERIC)
          {
-            encodingMode = NUMERIC_COMPACTION;
             sb.Append((char)LATCH_TO_NUMERIC);
             encodeNumeric(msg, p, len, sb);
 
          }
          else
          {
+            int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
             while (p < len)
             {
                int n = determineConsecutiveDigitCount(msg, p);

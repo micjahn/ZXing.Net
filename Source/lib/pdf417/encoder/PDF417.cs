@@ -517,7 +517,7 @@ namespace ZXing.PDF417.Internal
                                                  }
                                            };
 
-      public static float PREFERRED_RATIO = 3.0f;
+      private const float PREFERRED_RATIO = 3.0f;
       private const float DEFAULT_MODULE_WIDTH = 0.357f; //1px in mm
       private const float HEIGHT = 2.0f; //mm
 

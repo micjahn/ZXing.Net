@@ -293,7 +293,7 @@ namespace ZXing.OneD
       /// <returns>start/end horizontal offset of guard pattern, as an array of two ints</returns>
       /// <exception cref="NotFoundException">if pattern is not found</exception>
       /// </summary>
-      static int[] findGuardPattern(BitArray row,
+      internal static int[] findGuardPattern(BitArray row,
                                     int rowOffset,
                                     bool whiteFirst,
                                     int[] pattern,
