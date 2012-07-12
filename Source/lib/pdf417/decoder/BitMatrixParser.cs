@@ -28,16 +28,16 @@ namespace ZXing.PDF417.Internal
    /// </summary>
    sealed class BitMatrixParser
    {
-      private static int[] NO_ERRORS = new int[0];
+      private static readonly int[] NO_ERRORS = new int[0];
 
-      private static int MAX_ROW_DIFFERENCE = 6;
-      private static int MAX_ROWS = 90;
+      private const int MAX_ROW_DIFFERENCE = 6;
+      private const int MAX_ROWS = 90;
       //private static int MAX_COLUMNS = 30;
       // Maximum Codewords (Data + Error)
-      private static int MAX_CW_CAPACITY = 929;
-      private static int MODULES_IN_SYMBOL = 17;
+      private const int MAX_CW_CAPACITY = 929;
+      private const int MODULES_IN_SYMBOL = 17;
 
-      private BitMatrix bitMatrix;
+      private readonly BitMatrix bitMatrix;
       private int rows = 0;
       //private int columns = 0;
 
@@ -113,9 +113,9 @@ namespace ZXing.PDF417.Internal
                // that are more or less the same
                matchingConsecutiveScans++;
                // Height of a row is a multiple of the module size in pixels
-               // Usually at least 3 times the module size
-               if (matchingConsecutiveScans >= moduleWidth * 2)
-               { // MGMG
+               // It's supposed to be >= 3x module width, but, accept anything >= 2x
+               if ((matchingConsecutiveScans + 1) >= 2.0f * moduleWidth)
+               {
                   // We have some previous matches as well as a match here
                   // Set processing a unique row.
                   rowInProgress = true;
