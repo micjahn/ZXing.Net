@@ -498,6 +498,7 @@ namespace ZXing.PDF417.Internal
                    nextCode == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
                    nextCode == MACRO_PDF417_TERMINATOR)
                {
+                  codeIndex--;
                   end = true;
                }
                else
