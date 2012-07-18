@@ -54,37 +54,42 @@ namespace ZXing.QrCode
 
          if (width < 0 || height < 0)
          {
-            throw new ArgumentException("Requested dimensions are too small: " + width + 'x' +
-                height);
+            throw new ArgumentException("Requested dimensions are too small: " + width + 'x' + height);
          }
 
-         ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.L;
+         var errorCorrectionLevel = ErrorCorrectionLevel.L;
+         int quietZone = QUIET_ZONE_SIZE;
          if (hints != null)
          {
-            ErrorCorrectionLevel requestedECLevel = (ErrorCorrectionLevel)hints[EncodeHintType.ERROR_CORRECTION];
+            var requestedECLevel = (ErrorCorrectionLevel)hints[EncodeHintType.ERROR_CORRECTION];
             if (requestedECLevel != null)
             {
                errorCorrectionLevel = requestedECLevel;
             }
+            var quietZoneInt = hints.ContainsKey(EncodeHintType.MARGIN) ? (int)hints[EncodeHintType.MARGIN] : (int?)null;
+            if (quietZoneInt != null)
+            {
+               quietZone = quietZoneInt.Value;
+            }
          }
 
-         QRCode code = Encoder.encode(contents, errorCorrectionLevel, hints);
-         return renderResult(code, width, height);
+         var code = Encoder.encode(contents, errorCorrectionLevel, hints);
+         return renderResult(code, width, height, quietZone);
       }
 
       // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
       // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
-      private static BitMatrix renderResult(QRCode code, int width, int height)
+      private static BitMatrix renderResult(QRCode code, int width, int height, int quietZone)
       {
-         Internal.ByteMatrix input = code.Matrix;
+         var input = code.Matrix;
          if (input == null)
          {
             throw new InvalidOperationException();
          }
          int inputWidth = input.Width;
          int inputHeight = input.Height;
-         int qrWidth = inputWidth + (QUIET_ZONE_SIZE << 1);
-         int qrHeight = inputHeight + (QUIET_ZONE_SIZE << 1);
+         int qrWidth = inputWidth + (quietZone << 1);
+         int qrHeight = inputHeight + (quietZone << 1);
          int outputWidth = Math.Max(width, qrWidth);
          int outputHeight = Math.Max(height, qrHeight);
 
@@ -96,7 +101,7 @@ namespace ZXing.QrCode
          int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
          int topPadding = (outputHeight - (inputHeight * multiple)) / 2;
 
-         BitMatrix output = new BitMatrix(outputWidth, outputHeight);
+         var output = new BitMatrix(outputWidth, outputHeight);
 
          for (int inputY = 0, outputY = topPadding; inputY < inputHeight; inputY++, outputY += multiple)
          {

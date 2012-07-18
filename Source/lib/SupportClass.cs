@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace ZXing
 {
@@ -117,10 +118,8 @@ namespace ZXing
       /// <returns>An array of chars</returns>
       public static void GetCharsFromString(System.String sourceString, int sourceStart, int sourceEnd, char[] destinationArray, int destinationStart)
       {
-         int sourceCounter;
-         int destinationCounter;
-         sourceCounter = sourceStart;
-         destinationCounter = destinationStart;
+         int sourceCounter = sourceStart;
+         int destinationCounter = destinationStart;
          while (sourceCounter < sourceEnd)
          {
             destinationArray[destinationCounter] = (char)sourceString[sourceCounter];
@@ -167,6 +166,24 @@ namespace ZXing
          var result = new String[strings.Count];
          strings.CopyTo(result, 0);
          return result;
+      }
+
+      public static string Join<T>(string separator, IEnumerable<T> values)
+      {
+         var builder = new StringBuilder();
+         separator = separator ?? String.Empty;
+         if (values != null)
+         {
+            foreach (var value in values)
+            {
+               builder.Append(value);
+               builder.Append(separator);
+            }
+            if (builder.Length > 0)
+               builder.Length -= separator.Length;
+         }
+
+         return builder.ToString();
       }
    }
 }

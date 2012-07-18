@@ -38,6 +38,13 @@ namespace ZXing
       CHARACTER_SET,
 
       /// <summary>
+      /// Specifies margin, in pixels, to use when generating the barcode. The meaning can vary
+      /// by format; for example it controls margin before and after the barcode horizontally for
+      /// most 1D formats. (Type {@link Integer}).
+      /// </summary>
+      MARGIN,
+
+      /// <summary>
       /// Specifies whether to use compact mode for PDF417 (type {@link Boolean}).
       /// </summary>
       PDF417_COMPACT,

@@ -25,7 +25,7 @@ namespace ZXing.OneD
    /// 
    /// <author>erik.barbara@gmail.com (Erik Barbara)</author>
    /// </summary>
-   public sealed class Code39Writer : UPCEANWriter
+   public sealed class Code39Writer : OneDimensionalCodeWriter
    {
       public override BitMatrix encode(String contents,
                               BarcodeFormat format,
@@ -40,7 +40,7 @@ namespace ZXing.OneD
          return base.encode(contents, format, width, height, hints);
       }
 
-      override public sbyte[] encode(String contents)
+      override public bool[] encode(String contents)
       {
          int length = contents.Length;
          if (length > 80)
@@ -66,21 +66,21 @@ namespace ZXing.OneD
                codeWidth += width;
             }
          }
-         sbyte[] result = new sbyte[codeWidth];
+         var result = new bool[codeWidth];
          toIntArray(Code39Reader.CHARACTER_ENCODINGS[39], widths);
-         int pos = appendPattern(result, 0, widths, 1);
+         int pos = appendPattern(result, 0, widths, true);
          int[] narrowWhite = { 1 };
-         pos += appendPattern(result, pos, narrowWhite, 0);
+         pos += appendPattern(result, pos, narrowWhite, false);
          //append next character to bytematrix
          for (int i = length - 1; i >= 0; i--)
          {
             int indexInString = Code39Reader.ALPHABET_STRING.IndexOf(contents[i]);
             toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
-            pos += appendPattern(result, pos, widths, 1);
-            pos += appendPattern(result, pos, narrowWhite, 0);
+            pos += appendPattern(result, pos, widths, true);
+            pos += appendPattern(result, pos, narrowWhite, false);
          }
          toIntArray(Code39Reader.CHARACTER_ENCODINGS[39], widths);
-         pos += appendPattern(result, pos, widths, 1);
+         pos += appendPattern(result, pos, widths, true);
          return result;
       }
 

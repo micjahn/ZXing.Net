@@ -25,9 +25,13 @@ namespace ZXing.OneD
    /// </summary>
    public abstract class UPCEANWriter : OneDimensionalCodeWriter
    {
-      protected UPCEANWriter()
-         : base(UPCEANReader.START_END_PATTERN.Length << 1)
+      public override int DefaultMargin
       {
+         get
+         {
+            // Use a different default more appropriate for UPC/EAN
+            return UPCEANReader.START_END_PATTERN.Length;
+         }
       }
    }
 }

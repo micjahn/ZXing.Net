@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using ZXing.Common;
 
 namespace ZXing.OneD
@@ -27,13 +28,6 @@ namespace ZXing.OneD
    /// </summary>
    public abstract class OneDimensionalCodeWriter : Writer
    {
-      private readonly int sidesMargin;
-
-      protected OneDimensionalCodeWriter(int sidesMargin)
-      {
-         this.sidesMargin = sidesMargin;
-      }
-
       public BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
       {
          return encode(contents, format, width, height, null);
@@ -60,17 +54,27 @@ namespace ZXing.OneD
          if (width < 0 || height < 0)
          {
             throw new ArgumentException("Negative size is not allowed. Input: "
-                                                   + width + 'x' + height);
+                                        + width + 'x' + height);
          }
 
-         sbyte[] code = encode(contents);
-         return renderResult(code, width, height);
+         int sidesMargin = DefaultMargin;
+         if (hints != null)
+         {
+            var sidesMarginInt = hints.ContainsKey(EncodeHintType.MARGIN) ? (int)hints[EncodeHintType.MARGIN] : (int?)null;
+            if (sidesMarginInt != null)
+            {
+               sidesMargin = sidesMarginInt.Value;
+            }
+         }
+
+         var code = encode(contents);
+         return renderResult(code, width, height, sidesMargin);
       }
 
       /// <summary>
       /// <returns>a byte array of horizontal pixels (0 = white, 1 = black)</returns>
       /// </summary>
-      private BitMatrix renderResult(sbyte[] code, int width, int height)
+      private static BitMatrix renderResult(bool[] code, int width, int height, int sidesMargin)
       {
          int inputWidth = code.Length;
          // Add quiet zone on both sides.
@@ -84,7 +88,7 @@ namespace ZXing.OneD
          BitMatrix output = new BitMatrix(outputWidth, outputHeight);
          for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple)
          {
-            if (code[inputX] == 1)
+            if (code[inputX])
             {
                output.setRegion(outputX, 0, multiple, outputHeight);
             }
@@ -96,39 +100,42 @@ namespace ZXing.OneD
       /// <summary>
       /// Appends the given pattern to the target array starting at pos.
       ///
-      /// <param name="startColor">starting color - 0 for white, 1 for black</param>
+      /// <param name="startColor">starting color - false for white, true for black</param>
       /// <returns>the number of elements added to target.</returns>
       /// </summary>
-      protected static int appendPattern(sbyte[] target, int pos, int[] pattern, int startColor)
+      protected static int appendPattern(bool[] target, int pos, int[] pattern, bool startColor)
       {
-         if (startColor != 0 && startColor != 1)
-         {
-            throw new ArgumentException(
-                "startColor must be either 0 or 1, but got: " + startColor);
-         }
-
-         var color = (sbyte)startColor;
+         bool color = startColor;
          int numAdded = 0;
          foreach (int len in pattern)
          {
             for (int j = 0; j < len; j++)
             {
-               target[pos] = color;
-               pos += 1;
-               numAdded += 1;
+               target[pos++] = color;
             }
-            color ^= 1; // flip color after each segment
+            numAdded += len;
+            color = !color; // flip color after each segment
          }
          return numAdded;
+      }
+
+      virtual public int DefaultMargin
+      {
+         get
+         {
+            // CodaBar spec requires a side margin to be more than ten times wider than narrow space.
+            // This seems like a decent idea for a default for all formats.
+            return 10;
+         }
       }
 
       /// <summary>
       /// Encode the contents to byte array expression of one-dimensional barcode.
       /// Start code and end code should be included in result, and side margins should not be included.
       ///
-      /// <returns>a byte array of horizontal pixels (0 = white, 1 = black)</returns>
+      /// <returns>a {@code boolean[]} of horizontal pixels (false = white, true = black)</returns>
       /// </summary>
-      public abstract sbyte[] encode(String contents);
+      public abstract bool[] encode(String contents);
 
       public static String CalculateChecksumDigitModulo10(String contents)
       {

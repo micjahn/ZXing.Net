@@ -27,7 +27,7 @@ namespace ZXing.OneD
    /// </summary>
    public sealed class EAN8Writer : UPCEANWriter
    {
-      private static int CODE_WIDTH = 3 + // start guard
+      private const int CODE_WIDTH = 3 + // start guard
           (7 * 4) + // left bars
           5 + // middle guard
           (7 * 4) + // right bars
@@ -48,8 +48,12 @@ namespace ZXing.OneD
          return base.encode(contents, format, width, height, hints);
       }
 
-      /// <summary> @return a byte array of horizontal pixels (0 = white, 1 = black)</summary>
-      override public sbyte[] encode(String contents)
+      /// <summary>
+      /// </summary>
+      /// <returns>
+      /// a byte array of horizontal pixels (false = white, true = black)
+      /// </returns>
+      override public bool[] encode(String contents)
       {
          if (contents.Length < 7 || contents.Length > 8)
          {
@@ -64,25 +68,25 @@ namespace ZXing.OneD
          if (contents.Length == 7)
             contents = CalculateChecksumDigitModulo10(contents);
 
-         sbyte[] result = new sbyte[CODE_WIDTH];
+         var result = new bool[CODE_WIDTH];
          int pos = 0;
 
-         pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, 1);
+         pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);
 
          for (int i = 0; i <= 3; i++)
          {
             int digit = Int32.Parse(contents.Substring(i, 1));
-            pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], 0);
+            pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], false);
          }
 
-         pos += appendPattern(result, pos, UPCEANReader.MIDDLE_PATTERN, 0);
+         pos += appendPattern(result, pos, UPCEANReader.MIDDLE_PATTERN, false);
 
          for (int i = 4; i <= 7; i++)
          {
             int digit = Int32.Parse(contents.Substring(i, 1));
-            pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], 1);
+            pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], true);
          }
-         pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, 1);
+         pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);
 
          return result;
       }

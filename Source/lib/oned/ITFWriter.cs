@@ -25,8 +25,11 @@ namespace ZXing.OneD
    /// 
    /// <author>erik.barbara@gmail.com (Erik Barbara)</author>
    /// </summary>
-   public sealed class ITFWriter : UPCEANWriter
+   public sealed class ITFWriter : OneDimensionalCodeWriter
    {
+      private static readonly int[] START_PATTERN = {1, 1, 1, 1};
+      private static readonly int[] END_PATTERN = {3, 1, 1};
+
       public override BitMatrix encode(String contents,
                               BarcodeFormat format,
                               int width,
@@ -41,7 +44,7 @@ namespace ZXing.OneD
          return base.encode(contents, format, width, height, hints);
       }
 
-      override public sbyte[] encode(String contents)
+      override public bool[] encode(String contents)
       {
          int length = contents.Length;
          if (length % 2 != 0)
@@ -59,9 +62,8 @@ namespace ZXing.OneD
                throw new ArgumentException("Requested contents should only contain digits, but got '" + contents[i] + "'");
          }
 
-         sbyte[] result = new sbyte[9 + 9 * length];
-         int[] start = { 1, 1, 1, 1 };
-         int pos = appendPattern(result, 0, start, 1);
+         var result = new bool[9 + 9 * length];
+         int pos = appendPattern(result, 0, START_PATTERN, true);
          for (int i = 0; i < length; i += 2)
          {
             int one = Convert.ToInt32(contents[i].ToString(), 10);
@@ -72,10 +74,9 @@ namespace ZXing.OneD
                encoding[(j << 1)] = ITFReader.PATTERNS[one][j];
                encoding[(j << 1) + 1] = ITFReader.PATTERNS[two][j];
             }
-            pos += appendPattern(result, pos, encoding, 1);
+            pos += appendPattern(result, pos, encoding, true);
          }
-         int[] end = { 3, 1, 1 };
-         appendPattern(result, pos, end, 1);
+         appendPattern(result, pos, END_PATTERN, true);
 
          return result;
       }

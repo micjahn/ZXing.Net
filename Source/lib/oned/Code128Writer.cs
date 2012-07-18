@@ -25,13 +25,13 @@ namespace ZXing.OneD
    /// 
    /// <author>erik.barbara@gmail.com (Erik Barbara)</author>
    /// </summary>
-   public sealed class Code128Writer : UPCEANWriter
+   public sealed class Code128Writer : OneDimensionalCodeWriter
    {
-      private static int CODE_START_B = 104;
-      private static int CODE_START_C = 105;
-      private static int CODE_CODE_B = 100;
-      private static int CODE_CODE_C = 99;
-      private static int CODE_STOP = 106;
+      private const int CODE_START_B = 104;
+      private const int CODE_START_C = 105;
+      private const int CODE_CODE_B = 100;
+      private const int CODE_CODE_C = 99;
+      private const int CODE_STOP = 106;
 
       // Dummy characters used to specify control characters in input
       private const char ESCAPE_FNC_1 = '\u00f1';
@@ -39,10 +39,10 @@ namespace ZXing.OneD
       private const char ESCAPE_FNC_3 = '\u00f3';
       private const char ESCAPE_FNC_4 = '\u00f4';
 
-      private static int CODE_FNC_1 = 102;   // Code A, Code B, Code C
-      private static int CODE_FNC_2 = 97;    // Code A, Code B
-      private static int CODE_FNC_3 = 96;    // Code A, Code B
-      private static int CODE_FNC_4_B = 100; // Code B
+      private const int CODE_FNC_1 = 102;   // Code A, Code B, Code C
+      private const int CODE_FNC_2 = 97;    // Code A, Code B
+      private const int CODE_FNC_3 = 96;    // Code A, Code B
+      private const int CODE_FNC_4_B = 100; // Code B
 
       public override BitMatrix encode(String contents,
                               BarcodeFormat format,
@@ -57,7 +57,7 @@ namespace ZXing.OneD
          return base.encode(contents, format, width, height, hints);
       }
 
-      override public sbyte[] encode(String contents)
+      override public bool[] encode(String contents)
       {
          int length = contents.Length;
          // Check length
@@ -196,11 +196,11 @@ namespace ZXing.OneD
          }
 
          // Compute result
-         sbyte[] result = new sbyte[codeWidth];
+         var result = new bool[codeWidth];
          int pos = 0;
          foreach (int[] pattern in patterns)
          {
-            pos += appendPattern(result, pos, pattern, 1);
+            pos += appendPattern(result, pos, pattern, true);
          }
 
          return result;
