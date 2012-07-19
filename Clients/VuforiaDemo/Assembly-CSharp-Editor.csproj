@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+	<ProductVersion>10.0.20506</ProductVersion>
+	<SchemaVersion>2.0</SchemaVersion>
+	<ProjectGuid>{4FA8B654-EF3F-4A9E-EAF9-32321553A75F}</ProjectGuid>
+	<OutputType>Library</OutputType>
+	<AppDesignerFolder>Properties</AppDesignerFolder>
+	<RootNamespace></RootNamespace>
+	<AssemblyName>Assembly-CSharp-Editor</AssemblyName>
+	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+	<FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+	<DebugSymbols>true</DebugSymbols>
+	<DebugType>full</DebugType>
+	<Optimize>false</Optimize>
+	<OutputPath>Temp\bin\Debug\</OutputPath>
+	<DefineConstants>DEBUG;TRACE;UNITY_3_5_2;UNITY_3_5;UNITY_EDITOR;ENABLE_PROFILER;UNITY_STANDALONE_WIN;ENABLE_GENERICS;ENABLE_DUCK_TYPING;ENABLE_TERRAIN;ENABLE_MOVIES;ENABLE_WEBCAM;ENABLE_MICROPHONE;ENABLE_NETWORK;ENABLE_CLOTH;ENABLE_WWW;ENABLE_SUBSTANCE</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+	<DebugType>pdbonly</DebugType>
+	<Optimize>true</Optimize>
+	<OutputPath>Temp\bin\Release\</OutputPath>
+	<DefineConstants>TRACE</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+	<Reference Include="System" />
+    <Reference Include="System.XML" />
+	<Reference Include="System.Core" />
+	<Reference Include="UnityEngine">
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	</Reference>
+	<Reference Include="UnityEditor">
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	</Reference>
+  </ItemGroup>
+  <ItemGroup>
+     <Compile Include="Assets\Editor\QCAR\Scripts\AccessorFactory.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\ConfigData.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\ConfigDataManager.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\ConfigParser.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\DataSetLoadEditor.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\DataSetToTrackableMenu.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\ImageTargetAccessor.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\ImageTargetEditor.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\MarkerAccessor.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\MarkerEditor.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\MultiTargetAccessor.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\MultiTargetEditor.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\QCARHelpMenu.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\QCARUtilities.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\SceneManager.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\TargetDataPostprocessor.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\TrackableAccessor.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\TrackerEditor.cs" />
+     <Compile Include="Assets\Editor\QCAR\Scripts\VirtualButtonEditor.cs" />
+     <None Include="Assets\License_Readme.txt" />
+     <None Include="Assets\license.txt" />
+     <None Include="Assets\Qualcomm Augmented Reality\Shaders\DepthMask.shader" />
+ <Reference Include="zxing.unity">
+ <HintPath>Assets\zxing.unity.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{B9D660B9-16CF-1E3E-891E-37E445159E3C}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+    <ProjectReference Include="Assembly-CSharp.csproj">
+      <Project>{8E323F52-A31D-DC70-09E7-8F9A5BFFE17A}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+	   Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  
+</Project>
