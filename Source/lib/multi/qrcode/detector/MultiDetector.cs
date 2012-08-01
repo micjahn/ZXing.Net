@@ -29,7 +29,7 @@ namespace ZXing.Multi.QrCode.Internal
    /// </summary>
    public sealed class MultiDetector : Detector
    {
-      private static DetectorResult[] EMPTY_DETECTOR_RESULTS = new DetectorResult[0];
+      private static readonly DetectorResult[] EMPTY_DETECTOR_RESULTS = new DetectorResult[0];
 
       public MultiDetector(BitMatrix image)
          : base(image)
@@ -40,7 +40,7 @@ namespace ZXing.Multi.QrCode.Internal
       {
          BitMatrix image = Image;
          ResultPointCallback resultPointCallback =
-             hints == null ? null : (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
+             hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK) ? null : (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
          MultiFinderPatternFinder finder = new MultiFinderPatternFinder(image, resultPointCallback);
          FinderPatternInfo[] infos = finder.findMulti(hints);
 

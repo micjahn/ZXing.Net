@@ -27,6 +27,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 #endif
 using NUnit.Framework;
+using ZXing.Multi;
 using ZXing.Test;
 
 namespace ZXing.Common.Test
@@ -287,37 +288,84 @@ namespace ZXing.Common.Test
             hints[DecodeHintType.TRY_HARDER] = true;
          }
 
-         Result result = barcodeReader.decode(source, hints);
-         if (result == null)
-            throw ReaderException.Instance;
-
-         if (expectedFormat != result.BarcodeFormat)
+         var multiReader = barcodeReader as MultipleBarcodeReader;
+         if (multiReader != null)
          {
-            Console.WriteLine("Format mismatch: expected '{0}' but got '{1}'{2}\n",
-                              expectedFormat, result.BarcodeFormat, suffix);
-            return false;
-         }
-
-         String resultText = result.Text;
-         if (!expectedText.Equals(resultText))
-         {
-            Console.WriteLine("Content mismatch: expected '{0}' but got '{1}'{2}\n",
-                              expectedText, resultText, suffix);
-            return false;
-         }
-
-         IDictionary<ResultMetadataType, object> resultMetadata = result.ResultMetadata;
-         foreach (var metadatum in expectedMetadata)
-         {
-            ResultMetadataType key;
-            ResultMetadataType.TryParse(metadatum.Key, out key);
-            Object expectedValue = metadatum.Value;
-            Object actualValue = resultMetadata == null ? null : resultMetadata[key];
-            if (!expectedValue.Equals(actualValue))
+            var expectedResults = expectedText.Split(new [] { Environment.NewLine }, StringSplitOptions.None);
+            var results = multiReader.decodeMultiple(source, hints);
+            if (expectedResults.Length != results.Length)
             {
-               Console.WriteLine("Metadata mismatch for key '{0}': expected '{1}' but got '{2}'\n",
-                                key, expectedValue, actualValue);
+               Console.WriteLine("Count mismatch: expected '{0}' results but got '{1}'\n",
+                  expectedResults.Length, results.Length);
                return false;
+            }
+            for (var index = 0; index < expectedResults.Length; index++)
+            {
+               var expectedResult = expectedResults[index];
+               var result = results[index];
+               if (expectedFormat != result.BarcodeFormat)
+               {
+                  Console.WriteLine("Format mismatch: expected '{0}' but got '{1}'{2}\n",
+                                    expectedFormat, result.BarcodeFormat, suffix);
+                  return false;
+               }
+               String resultText = result.Text;
+               if (!expectedResult.Equals(resultText))
+               {
+                  Console.WriteLine("Content mismatch: expected '{0}' but got '{1}'{2}\n",
+                                    expectedResult, resultText, suffix);
+                  return false;
+               }
+               IDictionary<ResultMetadataType, object> resultMetadata = result.ResultMetadata;
+               foreach (var metadatum in expectedMetadata)
+               {
+                  ResultMetadataType key;
+                  ResultMetadataType.TryParse(metadatum.Key, out key);
+                  Object expectedValue = metadatum.Value;
+                  Object actualValue = resultMetadata == null ? null : resultMetadata[key];
+                  if (!expectedValue.Equals(actualValue))
+                  {
+                     Console.WriteLine("Metadata mismatch for key '{0}': expected '{1}' but got '{2}'\n",
+                                       key, expectedValue, actualValue);
+                     return false;
+                  }
+               }
+            }
+         }
+         else
+         {
+            Result result = barcodeReader.decode(source, hints);
+            if (result == null)
+               throw ReaderException.Instance;
+
+            if (expectedFormat != result.BarcodeFormat)
+            {
+               Console.WriteLine("Format mismatch: expected '{0}' but got '{1}'{2}\n",
+                                 expectedFormat, result.BarcodeFormat, suffix);
+               return false;
+            }
+
+            String resultText = result.Text;
+            if (!expectedText.Equals(resultText))
+            {
+               Console.WriteLine("Content mismatch: expected '{0}' but got '{1}'{2}\n",
+                                 expectedText, resultText, suffix);
+               return false;
+            }
+
+            IDictionary<ResultMetadataType, object> resultMetadata = result.ResultMetadata;
+            foreach (var metadatum in expectedMetadata)
+            {
+               ResultMetadataType key;
+               ResultMetadataType.TryParse(metadatum.Key, out key);
+               Object expectedValue = metadatum.Value;
+               Object actualValue = resultMetadata == null ? null : resultMetadata[key];
+               if (!expectedValue.Equals(actualValue))
+               {
+                  Console.WriteLine("Metadata mismatch for key '{0}': expected '{1}' but got '{2}'\n",
+                                    key, expectedValue, actualValue);
+                  return false;
+               }
             }
          }
 

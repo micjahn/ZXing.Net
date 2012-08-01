@@ -47,8 +47,7 @@ namespace ZXing
       private bool usePreviousState;
 
       /// <summary>
-      /// Gets or sets the reader which should be used to find and decode the barcode.
-      /// If null then MultiFormatReader is used
+      /// Gets the reader which should be used to find and decode the barcode.
       /// </summary>
       /// <value>
       /// The reader.

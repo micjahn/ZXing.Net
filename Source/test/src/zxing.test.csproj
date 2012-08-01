@@ -89,6 +89,7 @@
     <Compile Include="datamatrix\DataMatrixBlackBox1TestCase.cs" />
     <Compile Include="datamatrix\DataMatrixBlackBox2TestCase.cs" />
     <Compile Include="datamatrix\decoder\DecodedBitStreamParserTestCase.cs" />
+    <Compile Include="multi\qrcode\MultiQRCodeBlackBox1TestCase.cs" />
     <Compile Include="negative\FalsePositives2BlackBoxTestCase.cs" />
     <Compile Include="negative\FalsePositivesBlackBoxTestCase.cs" />
     <Compile Include="negative\PartialBlackBoxTestCase.cs" />
@@ -180,6 +181,7 @@
       <Name>zxing</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
