@@ -403,7 +403,7 @@ namespace ZXing.Client.Result
                int start = 0;
                int end;
                int componentIndex = 0;
-               while ((end = name.IndexOf(';', start)) > 0)
+               while (componentIndex < components.Length - 1 && (end = name.IndexOf(';', start)) > 0)
                {
                   components[componentIndex] = name.Substring(start, end - start);
 
