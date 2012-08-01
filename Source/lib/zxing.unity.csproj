@@ -210,6 +210,7 @@
     <Compile Include="pdf417\encoder\PDF417HighLevelEncoder.cs" />
     <Compile Include="pdf417\encoder\PDF417Writer.cs" />
     <Compile Include="pdf417\PDF417Reader.cs" />
+    <Compile Include="PlanarYUVLuminanceSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="qrcode\decoder\BitMatrixParser.cs" />
     <Compile Include="qrcode\decoder\DataBlock.cs" />
