@@ -21,15 +21,21 @@ namespace WindowsFormsDemo
       {
          InitializeComponent();
          barcodeReader = new BarcodeReader
-         {
-            ResultPointCallback = (point) =>
-                                     {
-                                        if (point == null)
-                                           resultPoints.Clear();
-                                        else
-                                           resultPoints.Add(point);
-                                     }
-         };
+                            {
+                               ResultPointCallback = (point) =>
+                                                        {
+                                                           if (point == null)
+                                                              resultPoints.Clear();
+                                                           else
+                                                              resultPoints.Add(point);
+                                                        },
+                               ResultFound = (result) =>
+                                                {
+                                                   txtType.Text = result.BarcodeFormat.ToString();
+                                                   txtContent.Text = result.Text;
+                                                }
+
+                            };
          resultPoints = new List<ResultPoint>();
       }
 
@@ -88,11 +94,6 @@ namespace WindowsFormsDemo
          if (result == null)
          {
             txtContent.Text = "No barcode recognized";
-         }
-         else
-         {
-            txtType.Text = result.BarcodeFormat.ToString();
-            txtContent.Text = result.Text;
          }
          labDuration.Text = new TimeSpan(timerStop - timerStart).Milliseconds.ToString("0 ms");
 
