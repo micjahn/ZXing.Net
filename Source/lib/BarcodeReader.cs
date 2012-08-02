@@ -124,6 +124,104 @@ namespace ZXing
          }
       }
 
+      /// <summary>
+      /// Specifies what character encoding to use when decoding, where applicable (type String)
+      /// </summary>
+      /// <value>
+      /// The character set.
+      /// </value>
+      public string CharacterSet
+      {
+         get
+         {
+            if (hints.ContainsKey(DecodeHintType.CHARACTER_SET))
+               return (string)hints[DecodeHintType.CHARACTER_SET];
+            return null;
+         }
+         set
+         {
+            if (value != null)
+            {
+               hints[DecodeHintType.CHARACTER_SET] = value;
+               usePreviousState = false;
+            }
+            else
+            {
+               if (hints.ContainsKey(DecodeHintType.CHARACTER_SET))
+               {
+                  hints.Remove(DecodeHintType.CHARACTER_SET);
+                  usePreviousState = false;
+               }
+            }
+         }
+      }
+
+      /// <summary>
+      /// Image is a pure monochrome image of a barcode. Doesn't matter what it maps to;
+      /// use {@link Boolean#TRUE}.
+      /// </summary>
+      /// <value>
+      ///   <c>true</c> if monochrome image of a barcode; otherwise, <c>false</c>.
+      /// </value>
+      public bool PureBarcode
+      {
+         get
+         {
+            if (hints.ContainsKey(DecodeHintType.PURE_BARCODE))
+               return (bool)hints[DecodeHintType.PURE_BARCODE];
+            return false;
+         }
+         set
+         {
+            if (value)
+            {
+               hints[DecodeHintType.PURE_BARCODE] = true;
+               usePreviousState = false;
+            }
+            else
+            {
+               if (hints.ContainsKey(DecodeHintType.PURE_BARCODE))
+               {
+                  hints.Remove(DecodeHintType.PURE_BARCODE);
+                  usePreviousState = false;
+               }
+            }
+         }
+      }
+
+      /// <summary>
+      /// Image is known to be of one of a few possible formats.
+      /// Maps to a {@link java.util.List} of {@link BarcodeFormat}s.
+      /// </summary>
+      /// <value>
+      /// The possible formats.
+      /// </value>
+      public IList<BarcodeFormat> PossibleFormats
+      {
+         get
+         {
+            if (hints.ContainsKey(DecodeHintType.POSSIBLE_FORMATS))
+               return (IList<BarcodeFormat>)hints[DecodeHintType.POSSIBLE_FORMATS];
+            return null;
+         }
+         set
+         {
+            if (value != null)
+            {
+               hints[DecodeHintType.POSSIBLE_FORMATS] = value;
+               usePreviousState = false;
+            }
+            else
+            {
+               if (hints.ContainsKey(DecodeHintType.POSSIBLE_FORMATS))
+               {
+                  hints.Remove(DecodeHintType.POSSIBLE_FORMATS);
+                  usePreviousState = false;
+               }
+            }
+         }
+      }
+
 #if !SILVERLIGHT
 #if !UNITY
       /// <summary>
