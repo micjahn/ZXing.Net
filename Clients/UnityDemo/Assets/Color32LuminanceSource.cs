@@ -20,19 +20,37 @@ using ZXing;
 
 namespace UnityDemo
 {
+   /// <summary>
+   /// Calculates the luminance values based upon the Color32 structure
+   /// </summary>
    public class Color32LuminanceSource : BaseLuminanceSource
    {
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Color32LuminanceSource"/> class.
+      /// </summary>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
       public Color32LuminanceSource(int width, int height)
          : base(width, height)
       {
       }
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Color32LuminanceSource"/> class.
+      /// </summary>
+      /// <param name="color32s">The color32s.</param>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
       public Color32LuminanceSource(Color32[] color32s, int width, int height)
          : base(width, height)
       {
          SetPixels(color32s);
       }
 
+      /// <summary>
+      /// Sets the pixels.
+      /// </summary>
+      /// <param name="color32s">The color32s.</param>
       public void SetPixels(Color32[] color32s)
       {
          var z = 0;
@@ -51,6 +69,19 @@ namespace UnityDemo
                   color32.b) >> 2);
             }
          }
+      }
+
+      /// <summary>
+      /// Should create a new luminance source with the right class type.
+      /// The method is used in methods crop and rotate.
+      /// </summary>
+      /// <param name="newLuminances">The new luminances.</param>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      /// <returns></returns>
+      protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
+      {
+         return new Color32LuminanceSource(width, height) { luminances = newLuminances };
       }
    }
 }

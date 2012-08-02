@@ -16,8 +16,27 @@
 
 namespace ZXing
 {
+   /// <summary>
+   /// 
+   /// </summary>
    public class RGB565LuminanceSource :BaseLuminanceSource
    {
+      /// <summary>
+      /// Initializes a new instance of the <see cref="RGB565LuminanceSource"/> class.
+      /// </summary>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      protected RGB565LuminanceSource(int width, int height)
+         : base(width, height)
+      {
+      }
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="RGB565LuminanceSource"/> class.
+      /// </summary>
+      /// <param name="rgb565RawData">The RGB565 raw data.</param>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
       public RGB565LuminanceSource(byte[] rgb565RawData, int width, int height)
          : base(width, height)
       {
@@ -38,6 +57,19 @@ namespace ZXing
 
             luminances[luminanceIndex++] = (byte)((r + g + g + b) >> 2);
          }
+      }
+
+      /// <summary>
+      /// Should create a new luminance source with the right class type.
+      /// The method is used in methods crop and rotate.
+      /// </summary>
+      /// <param name="newLuminances">The new luminances.</param>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      /// <returns></returns>
+      protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
+      {
+         return new RGB565LuminanceSource(width, height) { luminances = newLuminances };
       }
    }
 }

@@ -16,8 +16,27 @@
 
 namespace ZXing
 {
+   /// <summary>
+   /// 
+   /// </summary>
    public partial class RGBLuminanceSource : BaseLuminanceSource
    {
+      /// <summary>
+      /// Initializes a new instance of the <see cref="RGBLuminanceSource"/> class.
+      /// </summary>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      protected RGBLuminanceSource(int width, int height)
+         : base(width, height)
+      {
+      }
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="RGBLuminanceSource"/> class.
+      /// </summary>
+      /// <param name="rgbRawBytes">The RGB raw bytes.</param>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
       public RGBLuminanceSource(byte[] rgbRawBytes, int width, int height)
          : base(width, height)
       {
@@ -46,9 +65,29 @@ namespace ZXing
          }
       }
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="RGBLuminanceSource"/> class.
+      /// </summary>
+      /// <param name="luminanceArray">The luminance array.</param>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      /// <param name="is8Bit">if set to <c>true</c> [is8 bit].</param>
       public RGBLuminanceSource(byte[] luminanceArray, int width, int height, bool is8Bit)
          : base(luminanceArray, width, height)
       {
+      }
+
+      /// <summary>
+      /// Should create a new luminance source with the right class type.
+      /// The method is used in methods crop and rotate.
+      /// </summary>
+      /// <param name="newLuminances">The new luminances.</param>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      /// <returns></returns>
+      protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
+      {
+         return new RGBLuminanceSource(width, height) { luminances = newLuminances };
       }
    }
 }

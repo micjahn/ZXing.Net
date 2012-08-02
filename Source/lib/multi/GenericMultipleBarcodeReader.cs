@@ -35,7 +35,7 @@ namespace ZXing.Multi
    /// </author>
    /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
    /// </author>
-   public sealed class GenericMultipleBarcodeReader : MultipleBarcodeReader
+   public sealed class GenericMultipleBarcodeReader : MultipleBarcodeReader, Reader
    {
       private const int MIN_DIMENSION_TO_RECUR = 30;
 
@@ -159,6 +159,21 @@ namespace ZXing.Multi
             newResultPoints[i] = new ResultPoint(oldPoint.X + xOffset, oldPoint.Y + yOffset);
          }
          return new Result(result.Text, result.RawBytes, newResultPoints, result.BarcodeFormat);
+      }
+
+      public Result decode(BinaryBitmap image)
+      {
+         return _delegate.decode(image);
+      }
+
+      public Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
+      {
+         return _delegate.decode(image, hints);
+      }
+
+      public void reset()
+      {
+         _delegate.reset();
       }
    }
 }

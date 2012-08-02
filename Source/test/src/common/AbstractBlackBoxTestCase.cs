@@ -293,16 +293,17 @@ namespace ZXing.Common.Test
          {
             var expectedResults = expectedText.Split(new [] { Environment.NewLine }, StringSplitOptions.None);
             var results = multiReader.decodeMultiple(source, hints);
+            if (results == null)
+               throw ReaderException.Instance;
+
             if (expectedResults.Length != results.Length)
             {
                Console.WriteLine("Count mismatch: expected '{0}' results but got '{1}'\n",
                   expectedResults.Length, results.Length);
-               return false;
+               throw ReaderException.Instance;
             }
-            for (var index = 0; index < expectedResults.Length; index++)
+            foreach (var result in results)
             {
-               var expectedResult = expectedResults[index];
-               var result = results[index];
                if (expectedFormat != result.BarcodeFormat)
                {
                   Console.WriteLine("Format mismatch: expected '{0}' but got '{1}'{2}\n",
@@ -310,25 +311,37 @@ namespace ZXing.Common.Test
                   return false;
                }
                String resultText = result.Text;
-               if (!expectedResult.Equals(resultText))
+               bool found = false;
+               foreach (var expectedResult in expectedResults)
                {
-                  Console.WriteLine("Content mismatch: expected '{0}' but got '{1}'{2}\n",
-                                    expectedResult, resultText, suffix);
+                  if (expectedResult.Equals(resultText))
+                  {
+                     found = true;
+                     break;
+                  }
+               }
+               if (!found)
+               {
+                  Console.WriteLine("Content was not expected: '{0}'\n", resultText);
                   return false;
                }
-               IDictionary<ResultMetadataType, object> resultMetadata = result.ResultMetadata;
-               foreach (var metadatum in expectedMetadata)
+            }
+            foreach (var expectedResult in expectedResults)
+            {
+               bool found = false;
+               foreach (var result in results)
                {
-                  ResultMetadataType key;
-                  ResultMetadataType.TryParse(metadatum.Key, out key);
-                  Object expectedValue = metadatum.Value;
-                  Object actualValue = resultMetadata == null ? null : resultMetadata[key];
-                  if (!expectedValue.Equals(actualValue))
+                  String resultText = result.Text;
+                  if (expectedResult.Equals(resultText))
                   {
-                     Console.WriteLine("Metadata mismatch for key '{0}': expected '{1}' but got '{2}'\n",
-                                       key, expectedValue, actualValue);
-                     return false;
+                     found = true;
+                     break;
                   }
+               }
+               if (!found)
+               {
+                  Console.WriteLine("Content was expected but not found: '{0}'\n", expectedResult);
+                  return false;
                }
             }
          }
