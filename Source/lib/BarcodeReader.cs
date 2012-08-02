@@ -362,8 +362,9 @@ namespace ZXing
          var binarizer = CreateBinarizer(luminanceSource);
          var binaryBitmap = new BinaryBitmap(binarizer);
          var multiformatReader = Reader as MultiFormatReader;
+         var rotationCount = 0;
 
-         for (var rotationCount = 0; rotationCount < 4; rotationCount++)
+         for (; rotationCount < 4; rotationCount++)
          {
             if (usePreviousState && multiformatReader != null)
             {
@@ -381,8 +382,20 @@ namespace ZXing
             binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource.rotateCounterClockwise()));
          }
 
-         if (result != null && ResultFound != null)
-            ResultFound(result);
+         if (result != null)
+         {
+            if (result.ResultMetadata == null)
+            {
+               result.putMetadata(ResultMetadataType.ORIENTATION, rotationCount*90);
+            }
+            else if (!result.ResultMetadata.ContainsKey(ResultMetadataType.ORIENTATION))
+            {
+               result.ResultMetadata[ResultMetadataType.ORIENTATION] = rotationCount*90;
+            }
+
+            if (ResultFound != null)
+               ResultFound(result);
+         }
 
          return result;
       }
