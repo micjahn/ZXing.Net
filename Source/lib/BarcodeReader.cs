@@ -222,6 +222,11 @@ namespace ZXing
          }
       }
 
+      /// <summary>
+      /// action is executed if a result was found via decode
+      /// </summary>
+      public Action<Result> ResultFound;
+
 #if !SILVERLIGHT
 #if !UNITY
       /// <summary>
@@ -375,6 +380,9 @@ namespace ZXing
                break;
             binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource.rotateCounterClockwise()));
          }
+
+         if (result != null && ResultFound != null)
+            ResultFound(result);
 
          return result;
       }
