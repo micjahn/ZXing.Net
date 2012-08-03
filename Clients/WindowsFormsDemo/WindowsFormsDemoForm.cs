@@ -20,22 +20,19 @@ namespace WindowsFormsDemo
       public WindowsFormsDemoForm()
       {
          InitializeComponent();
-         barcodeReader = new BarcodeReader
-                            {
-                               ResultPointCallback = (point) =>
-                                                        {
-                                                           if (point == null)
-                                                              resultPoints.Clear();
-                                                           else
-                                                              resultPoints.Add(point);
-                                                        },
-                               ResultFound = (result) =>
-                                                {
-                                                   txtType.Text = result.BarcodeFormat.ToString();
-                                                   txtContent.Text = result.Text;
-                                                }
-
-                            };
+         barcodeReader = new BarcodeReader();
+         barcodeReader.ResultPointFound += point =>
+                                              {
+                                                 if (point == null)
+                                                    resultPoints.Clear();
+                                                 else
+                                                    resultPoints.Add(point);
+                                              };
+         barcodeReader.ResultFound += result =>
+                                         {
+                                            txtType.Text = result.BarcodeFormat.ToString();
+                                            txtContent.Text = result.Text;
+                                         };
          resultPoints = new List<ResultPoint>();
       }
 

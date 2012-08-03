@@ -61,6 +61,44 @@ namespace ZXing
       }
 
       /// <summary>
+      /// Gets or sets a method which is called if an important point is found
+      /// </summary>
+      /// <value>
+      /// The result point callback.
+      /// </value>
+      public event Action<ResultPoint> ResultPointFound
+      {
+         add
+         {
+            if (!hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK))
+            {
+               ResultPointCallback callback = resultPoint =>
+                                                 {
+                                                    if (explicitResultPointFound != null)
+                                                       explicitResultPointFound(resultPoint);
+                                                 };
+               hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK] = callback;
+            }
+            explicitResultPointFound += value;
+            usePreviousState = false;
+         }
+         remove
+         {
+            explicitResultPointFound -= value;
+            if (explicitResultPointFound == null)
+               hints.Remove(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
+            usePreviousState = false;
+         }
+      }
+
+      private event Action<ResultPoint> explicitResultPointFound;
+
+      /// <summary>
+      /// event is executed if a result was found via decode
+      /// </summary>
+      public event Action<Result> ResultFound;
+
+      /// <summary>
       /// Gets or sets a flag which cause a deeper look into the bitmap
       /// </summary>
       /// <value>
@@ -86,70 +124,6 @@ namespace ZXing
                if (hints.ContainsKey(DecodeHintType.TRY_HARDER))
                {
                   hints.Remove(DecodeHintType.TRY_HARDER);
-                  usePreviousState = false;
-               }
-            }
-         }
-      }
-
-      /// <summary>
-      /// Gets or sets a method which is called if an important point is found
-      /// </summary>
-      /// <value>
-      /// The result point callback.
-      /// </value>
-      public ResultPointCallback ResultPointCallback
-      {
-         get
-         {
-            if (hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK))
-               return (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
-            return null;
-         }
-         set
-         {
-            if (value != null)
-            {
-               hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK] = value;
-               usePreviousState = false;
-            }
-            else
-            {
-               if (hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK))
-               {
-                  hints.Remove(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
-                  usePreviousState = false;
-               }
-            }
-         }
-      }
-
-      /// <summary>
-      /// Specifies what character encoding to use when decoding, where applicable (type String)
-      /// </summary>
-      /// <value>
-      /// The character set.
-      /// </value>
-      public string CharacterSet
-      {
-         get
-         {
-            if (hints.ContainsKey(DecodeHintType.CHARACTER_SET))
-               return (string)hints[DecodeHintType.CHARACTER_SET];
-            return null;
-         }
-         set
-         {
-            if (value != null)
-            {
-               hints[DecodeHintType.CHARACTER_SET] = value;
-               usePreviousState = false;
-            }
-            else
-            {
-               if (hints.ContainsKey(DecodeHintType.CHARACTER_SET))
-               {
-                  hints.Remove(DecodeHintType.CHARACTER_SET);
                   usePreviousState = false;
                }
             }
@@ -190,6 +164,38 @@ namespace ZXing
       }
 
       /// <summary>
+      /// Specifies what character encoding to use when decoding, where applicable (type String)
+      /// </summary>
+      /// <value>
+      /// The character set.
+      /// </value>
+      public string CharacterSet
+      {
+         get
+         {
+            if (hints.ContainsKey(DecodeHintType.CHARACTER_SET))
+               return (string)hints[DecodeHintType.CHARACTER_SET];
+            return null;
+         }
+         set
+         {
+            if (value != null)
+            {
+               hints[DecodeHintType.CHARACTER_SET] = value;
+               usePreviousState = false;
+            }
+            else
+            {
+               if (hints.ContainsKey(DecodeHintType.CHARACTER_SET))
+               {
+                  hints.Remove(DecodeHintType.CHARACTER_SET);
+                  usePreviousState = false;
+               }
+            }
+         }
+      }
+
+      /// <summary>
       /// Image is known to be of one of a few possible formats.
       /// Maps to a {@link java.util.List} of {@link BarcodeFormat}s.
       /// </summary>
@@ -221,11 +227,6 @@ namespace ZXing
             }
          }
       }
-
-      /// <summary>
-      /// action is executed if a result was found via decode
-      /// </summary>
-      public Action<Result> ResultFound;
 
 #if !SILVERLIGHT
 #if !UNITY
