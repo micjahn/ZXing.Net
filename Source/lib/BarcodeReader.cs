@@ -392,6 +392,11 @@ namespace ZXing
             {
                result.ResultMetadata[ResultMetadataType.ORIENTATION] = rotationCount*90;
             }
+            else
+            {
+               // perhaps the core decoder rotates the image already (can happen if TryHarder is specified)
+               result.ResultMetadata[ResultMetadataType.ORIENTATION] = ((int)(result.ResultMetadata[ResultMetadataType.ORIENTATION]) + rotationCount * 90) % 360;
+            }
 
             if (ResultFound != null)
                ResultFound(result);
