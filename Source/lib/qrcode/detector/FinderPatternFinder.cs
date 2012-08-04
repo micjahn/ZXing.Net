@@ -37,11 +37,11 @@ namespace ZXing.QrCode.Internal
       protected internal const int MAX_MODULES = 57; // support up to version 10 for mobile clients
       private const int INTEGER_MATH_SHIFT = 8;
 
-      private BitMatrix image;
+      private readonly BitMatrix image;
       private List<FinderPattern> possibleCenters;
       private bool hasSkipped;
-      private int[] crossCheckStateCount;
-      private ResultPointCallback resultPointCallback;
+      private readonly int[] crossCheckStateCount;
+      private readonly ResultPointCallback resultPointCallback;
 
       /// <summary> <p>Creates a finder that will search the image for three finder patterns.</p>
       /// 
@@ -226,10 +226,12 @@ namespace ZXing.QrCode.Internal
       /// <summary> Given a count of black/white/black/white/black pixels just seen and an end position,
       /// figures the location of the center of this run.
       /// </summary>
-      private static float centerFromEnd(int[] stateCount, int end)
+      private static float? centerFromEnd(int[] stateCount, int end)
       {
-         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-         return (float)(end - stateCount[4] - stateCount[3]) - stateCount[2] / 2.0f;
+         var result = (end - stateCount[4] - stateCount[3]) - stateCount[2] / 2.0f;
+         if (Single.IsNaN(result))
+            return null;
+         return result;
       }
 
       /// <param name="stateCount">count of black/white/black/white/black pixels just read
@@ -276,24 +278,21 @@ namespace ZXing.QrCode.Internal
          }
       }
 
-      /// <summary> <p>After a horizontal scan finds a potential finder pattern, this method
+      /// <summary>
+      ///   <p>After a horizontal scan finds a potential finder pattern, this method
       /// "cross-checks" by scanning down vertically through the center of the possible
       /// finder pattern to see if the same proportion is detected.</p>
-      /// 
       /// </summary>
-      /// <param name="startI">row where a finder pattern was detected
-      /// </param>
-      /// <param name="centerJ">center of the section that appears to cross a finder pattern
-      /// </param>
+      /// <param name="startI">row where a finder pattern was detected</param>
+      /// <param name="centerJ">center of the section that appears to cross a finder pattern</param>
       /// <param name="maxCount">maximum reasonable number of modules that should be
-      /// observed in any reading state, based on the results of the horizontal scan
-      /// </param>
-      /// <returns> vertical center of finder pattern, or {@link Float#NaN} if not found
+      /// observed in any reading state, based on the results of the horizontal scan</param>
+      /// <param name="originalStateCountTotal">The original state count total.</param>
+      /// <returns>
+      /// vertical center of finder pattern, or null if not found
       /// </returns>
-      private float crossCheckVertical(int startI, int centerJ, int maxCount, int originalStateCountTotal)
+      private float? crossCheckVertical(int startI, int centerJ, int maxCount, int originalStateCountTotal)
       {
-         BitMatrix image = this.image;
-
          int maxI = image.Height;
          int[] stateCount = CrossCheckStateCount;
 
@@ -306,7 +305,7 @@ namespace ZXing.QrCode.Internal
          }
          if (i < 0)
          {
-            return System.Single.NaN;
+            return null;
          }
          while (i >= 0 && !image[centerJ, i] && stateCount[1] <= maxCount)
          {
@@ -316,7 +315,7 @@ namespace ZXing.QrCode.Internal
          // If already too many modules in this state or ran off the edge:
          if (i < 0 || stateCount[1] > maxCount)
          {
-            return System.Single.NaN;
+            return null;
          }
          while (i >= 0 && image[centerJ, i] && stateCount[0] <= maxCount)
          {
@@ -325,7 +324,7 @@ namespace ZXing.QrCode.Internal
          }
          if (stateCount[0] > maxCount)
          {
-            return System.Single.NaN;
+            return null;
          }
 
          // Now also count down from center
@@ -337,7 +336,7 @@ namespace ZXing.QrCode.Internal
          }
          if (i == maxI)
          {
-            return System.Single.NaN;
+            return null;
          }
          while (i < maxI && !image[centerJ, i] && stateCount[3] < maxCount)
          {
@@ -346,7 +345,7 @@ namespace ZXing.QrCode.Internal
          }
          if (i == maxI || stateCount[3] >= maxCount)
          {
-            return System.Single.NaN;
+            return null;
          }
          while (i < maxI && image[centerJ, i] && stateCount[4] < maxCount)
          {
@@ -355,28 +354,26 @@ namespace ZXing.QrCode.Internal
          }
          if (stateCount[4] >= maxCount)
          {
-            return System.Single.NaN;
+            return null;
          }
 
          // If we found a finder-pattern-like section, but its size is more than 40% different than
          // the original, assume it's a false positive
          int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
-         if (5 * System.Math.Abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal)
+         if (5 * Math.Abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal)
          {
-            return System.Single.NaN;
+            return null;
          }
 
-         return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : System.Single.NaN;
+         return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : null;
       }
 
       /// <summary> <p>Like {@link #crossCheckVertical(int, int, int, int)}, and in fact is basically identical,
       /// except it reads horizontally instead of vertically. This is used to cross-cross
       /// check a vertical cross check and locate the real center of the alignment pattern.</p>
       /// </summary>
-      private float crossCheckHorizontal(int startJ, int centerI, int maxCount, int originalStateCountTotal)
+      private float? crossCheckHorizontal(int startJ, int centerI, int maxCount, int originalStateCountTotal)
       {
-         BitMatrix image = this.image;
-
          int maxJ = image.Width;
          int[] stateCount = CrossCheckStateCount;
 
@@ -388,7 +385,7 @@ namespace ZXing.QrCode.Internal
          }
          if (j < 0)
          {
-            return System.Single.NaN;
+            return null;
          }
          while (j >= 0 && !image[j, centerI] && stateCount[1] <= maxCount)
          {
@@ -397,7 +394,7 @@ namespace ZXing.QrCode.Internal
          }
          if (j < 0 || stateCount[1] > maxCount)
          {
-            return System.Single.NaN;
+            return null;
          }
          while (j >= 0 && image[j, centerI] && stateCount[0] <= maxCount)
          {
@@ -406,7 +403,7 @@ namespace ZXing.QrCode.Internal
          }
          if (stateCount[0] > maxCount)
          {
-            return System.Single.NaN;
+            return null;
          }
 
          j = startJ + 1;
@@ -417,7 +414,7 @@ namespace ZXing.QrCode.Internal
          }
          if (j == maxJ)
          {
-            return System.Single.NaN;
+            return null;
          }
          while (j < maxJ && !image[j, centerI] && stateCount[3] < maxCount)
          {
@@ -426,7 +423,7 @@ namespace ZXing.QrCode.Internal
          }
          if (j == maxJ || stateCount[3] >= maxCount)
          {
-            return System.Single.NaN;
+            return null;
          }
          while (j < maxJ && image[j, centerI] && stateCount[4] < maxCount)
          {
@@ -435,18 +432,18 @@ namespace ZXing.QrCode.Internal
          }
          if (stateCount[4] >= maxCount)
          {
-            return System.Single.NaN;
+            return null;
          }
 
          // If we found a finder-pattern-like section, but its size is significantly different than
          // the original, assume it's a false positive
          int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
-         if (5 * System.Math.Abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal)
+         if (5 * Math.Abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal)
          {
-            return System.Single.NaN;
+            return null;
          }
 
-         return foundPatternCross(stateCount) ? centerFromEnd(stateCount, j) : System.Single.NaN;
+         return foundPatternCross(stateCount) ? centerFromEnd(stateCount, j) : null;
       }
 
       /// <summary> <p>This is called when a horizontal scan finds a possible alignment pattern. It will
@@ -454,7 +451,7 @@ namespace ZXing.QrCode.Internal
       /// with another horizontal scan. This is needed primarily to locate the real horizontal
       /// center of the pattern in cases of extreme skew.</p>
       /// 
-      /// <p>If that succeeds the finder pattern location is added to a list that tracks
+      /// If that succeeds the finder pattern location is added to a list that tracks
       /// the number of times each location has been nearly-matched as a finder pattern.
       /// Each additional find is more evidence that the location is in fact a finder
       /// pattern center
@@ -472,24 +469,26 @@ namespace ZXing.QrCode.Internal
       {
          int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] +
              stateCount[4];
-         float centerJ = centerFromEnd(stateCount, j);
-         float centerI = crossCheckVertical(i, (int)centerJ, stateCount[2], stateCountTotal);
-         if (!Single.IsNaN(centerI))
+         float? centerJ = centerFromEnd(stateCount, j);
+         if (centerJ == null)
+            return false;
+         float? centerI = crossCheckVertical(i, (int)centerJ.Value, stateCount[2], stateCountTotal);
+         if (centerI != null)
          {
             // Re-cross check
-            centerJ = crossCheckHorizontal((int)centerJ, (int)centerI, stateCount[2], stateCountTotal);
-            if (!Single.IsNaN(centerJ))
+            centerJ = crossCheckHorizontal((int)centerJ.Value, (int)centerI.Value, stateCount[2], stateCountTotal);
+            if (centerJ != null)
             {
                float estimatedModuleSize = stateCountTotal / 7.0f;
                bool found = false;
                for (int index = 0; index < possibleCenters.Count; index++)
                {
-                  FinderPattern center = possibleCenters[index];
+                  var center = possibleCenters[index];
                   // Look for about the same center and module size:
-                  if (center.aboutEquals(estimatedModuleSize, centerI, centerJ))
+                  if (center.aboutEquals(estimatedModuleSize, centerI.Value, centerJ.Value))
                   {
                      possibleCenters.RemoveAt(index);
-                     possibleCenters.Insert(index, center.combineEstimate(centerI, centerJ, estimatedModuleSize));
+                     possibleCenters.Insert(index, center.combineEstimate(centerI.Value, centerJ.Value, estimatedModuleSize));
 
                      found = true;
                      break;
@@ -497,7 +496,7 @@ namespace ZXing.QrCode.Internal
                }
                if (!found)
                {
-                  FinderPattern point = new FinderPattern(centerJ, centerI, estimatedModuleSize);
+                  var point = new FinderPattern(centerJ.Value, centerI.Value, estimatedModuleSize);
 
                   possibleCenters.Add(point);
                   if (resultPointCallback != null)
@@ -511,7 +510,6 @@ namespace ZXing.QrCode.Internal
          }
          return false;
       }
-
 
       /// <returns> number of rows we could safely skip during scanning, based on the first
       /// two finder patterns that have been located. In some cases their position will
@@ -575,13 +573,12 @@ namespace ZXing.QrCode.Internal
          // and that we need to keep looking. We detect this by asking if the estimated module sizes
          // vary too much. We arbitrarily say that when the total deviation from average exceeds
          // 5% of the total module size estimates, it's too much.
-         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-         float average = totalModuleSize / (float)max;
+         float average = totalModuleSize / max;
          float totalDeviation = 0.0f;
          for (int i = 0; i < max; i++)
          {
-            FinderPattern pattern = (FinderPattern)possibleCenters[i];
-            totalDeviation += System.Math.Abs(pattern.EstimatedModuleSize - average);
+            var pattern = possibleCenters[i];
+            totalDeviation += Math.Abs(pattern.EstimatedModuleSize - average);
          }
          return totalDeviation <= 0.05f * totalModuleSize;
       }
@@ -611,7 +608,7 @@ namespace ZXing.QrCode.Internal
                totalModuleSize += size;
                square += size * size;
             }
-            float average = totalModuleSize / (float)startSize;
+            float average = totalModuleSize / startSize;
             float stdDev = (float)Math.Sqrt(square / startSize - average * average);
 
             possibleCenters.Sort(new FurthestFromAverageComparator(average));
@@ -639,7 +636,7 @@ namespace ZXing.QrCode.Internal
                totalModuleSize += possibleCenter.EstimatedModuleSize;
             }
 
-            float average = totalModuleSize / (float)possibleCenters.Count;
+            float average = totalModuleSize / possibleCenters.Count;
 
             possibleCenters.Sort(new CenterComparator(average));
 
