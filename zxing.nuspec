@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.7.0.0</version>
+    <version>0.8.0.0</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <licenseUrl>http://zxingnet.codeplex.com/license</licenseUrl>
@@ -16,8 +16,9 @@ But most of the parts are manually new ported from java. There are many tweaks a
 
 It is now compatible with .Net 2.0, .Net 4.0, Silverlight 4, Silverlight 5, Windows Phone 7.0 and Windows Phone 7.1</description>
     <summary>ZXing (pronounced "zebra crossing") is an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.</summary>
-    <releaseNotes>* sync with rev. 2295 of the java version
-* better decoding of PDF-417 barcodes</releaseNotes>
+    <releaseNotes>* sync with rev. 2367 of the java version
+* improved API
+* many other improvements and fixes</releaseNotes>
     <tags>ZXing barcode scanning 1D 2D UPC-A UPC-E EAN-8 EAN-13 QR ITF Codabar RSS-14 Data Matrix PDF 417 PDF417 Aztec</tags>
   </metadata>
   <files>
