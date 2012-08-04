@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using ZXing.Common;
 
 namespace ZXing.QrCode.Internal
@@ -29,7 +30,7 @@ namespace ZXing.QrCode.Internal
    /// pasted and stripped down here for maximum performance but does unfortunately duplicate
    /// some code.</p>
    /// 
-   /// <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.
+   /// <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.</p>
    /// 
    /// </summary>
    /// <author>  Sean Owen
@@ -178,10 +179,12 @@ namespace ZXing.QrCode.Internal
       /// <summary> Given a count of black/white/black pixels just seen and an end position,
       /// figures the location of the center of this black/white/black run.
       /// </summary>
-      private static float centerFromEnd(int[] stateCount, int end)
+      private static float? centerFromEnd(int[] stateCount, int end)
       {
-         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-         return (float)(end - stateCount[2]) - stateCount[1] / 2.0f;
+         var result = (end - stateCount[2]) - stateCount[1] / 2.0f;
+         if (Single.IsNaN(result))
+            return null;
+         return result;
       }
 
       /// <param name="stateCount">count of black/white/black pixels just read
@@ -191,11 +194,10 @@ namespace ZXing.QrCode.Internal
       /// </returns>
       private bool foundPatternCross(int[] stateCount)
       {
-         float moduleSize = this.moduleSize;
          float maxVariance = moduleSize / 2.0f;
          for (int i = 0; i < 3; i++)
          {
-            if (System.Math.Abs(moduleSize - stateCount[i]) >= maxVariance)
+            if (Math.Abs(moduleSize - stateCount[i]) >= maxVariance)
             {
                return false;
             }
@@ -203,24 +205,21 @@ namespace ZXing.QrCode.Internal
          return true;
       }
 
-      /// <summary> <p>After a horizontal scan finds a potential alignment pattern, this method
+      /// <summary>
+      ///   <p>After a horizontal scan finds a potential alignment pattern, this method
       /// "cross-checks" by scanning down vertically through the center of the possible
       /// alignment pattern to see if the same proportion is detected.</p>
-      /// 
       /// </summary>
-      /// <param name="startI">row where an alignment pattern was detected
-      /// </param>
-      /// <param name="centerJ">center of the section that appears to cross an alignment pattern
-      /// </param>
+      /// <param name="startI">row where an alignment pattern was detected</param>
+      /// <param name="centerJ">center of the section that appears to cross an alignment pattern</param>
       /// <param name="maxCount">maximum reasonable number of modules that should be
-      /// observed in any reading state, based on the results of the horizontal scan
-      /// </param>
-      /// <returns> vertical center of alignment pattern, or {@link Float#NaN} if not found
+      /// observed in any reading state, based on the results of the horizontal scan</param>
+      /// <param name="originalStateCountTotal">The original state count total.</param>
+      /// <returns>
+      /// vertical center of alignment pattern, or null if not found
       /// </returns>
-      private float crossCheckVertical(int startI, int centerJ, int maxCount, int originalStateCountTotal)
+      private float? crossCheckVertical(int startI, int centerJ, int maxCount, int originalStateCountTotal)
       {
-         BitMatrix image = this.image;
-
          int maxI = image.Height;
          int[] stateCount = crossCheckStateCount;
          stateCount[0] = 0;
@@ -237,7 +236,7 @@ namespace ZXing.QrCode.Internal
          // If already too many modules in this state or ran off the edge:
          if (i < 0 || stateCount[1] > maxCount)
          {
-            return System.Single.NaN;
+            return null;
          }
          while (i >= 0 && !image[centerJ, i] && stateCount[0] <= maxCount)
          {
@@ -246,7 +245,7 @@ namespace ZXing.QrCode.Internal
          }
          if (stateCount[0] > maxCount)
          {
-            return System.Single.NaN;
+            return null;
          }
 
          // Now also count down from center
@@ -258,7 +257,7 @@ namespace ZXing.QrCode.Internal
          }
          if (i == maxI || stateCount[1] > maxCount)
          {
-            return System.Single.NaN;
+            return null;
          }
          while (i < maxI && !image[centerJ, i] && stateCount[2] <= maxCount)
          {
@@ -267,16 +266,16 @@ namespace ZXing.QrCode.Internal
          }
          if (stateCount[2] > maxCount)
          {
-            return System.Single.NaN;
+            return null;
          }
 
          int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
-         if (5 * System.Math.Abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal)
+         if (5 * Math.Abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal)
          {
-            return System.Single.NaN;
+            return null;
          }
 
-         return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : System.Single.NaN;
+         return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : null;
       }
 
       /// <summary> <p>This is called when a horizontal scan finds a possible alignment pattern. It will
@@ -296,24 +295,23 @@ namespace ZXing.QrCode.Internal
       private AlignmentPattern handlePossibleCenter(int[] stateCount, int i, int j)
       {
          int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2];
-         float centerJ = centerFromEnd(stateCount, j);
-         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-         float centerI = crossCheckVertical(i, (int)centerJ, 2 * stateCount[1], stateCountTotal);
-         if (!System.Single.IsNaN(centerI))
+         float? centerJ = centerFromEnd(stateCount, j);
+         if (centerJ == null)
+            return null;
+         float? centerI = crossCheckVertical(i, (int)centerJ, 2 * stateCount[1], stateCountTotal);
+         if (centerI != null)
          {
-            //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-            float estimatedModuleSize = (float)(stateCount[0] + stateCount[1] + stateCount[2]) / 3.0f;
-            int max = possibleCenters.Count;
+            float estimatedModuleSize = (stateCount[0] + stateCount[1] + stateCount[2]) / 3.0f;
             foreach (var center in possibleCenters)
             {
                // Look for about the same center and module size:
-               if (center.aboutEquals(estimatedModuleSize, centerI, centerJ))
+               if (center.aboutEquals(estimatedModuleSize, centerI.Value, centerJ.Value))
                {
-                  return center.combineEstimate(centerI, centerJ, estimatedModuleSize);
+                  return center.combineEstimate(centerI.Value, centerJ.Value, estimatedModuleSize);
                }
             }
             // Hadn't found this before; save it
-            var point = new AlignmentPattern(centerJ, centerI, estimatedModuleSize);
+            var point = new AlignmentPattern(centerJ.Value, centerI.Value, estimatedModuleSize);
             possibleCenters.Add(point);
             if (resultPointCallback != null)
             {
