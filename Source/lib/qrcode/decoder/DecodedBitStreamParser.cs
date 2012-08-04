@@ -61,11 +61,9 @@ namespace ZXing.QrCode.Internal
          Mode mode;
          do
          {
-
             // While still another segment to read...
             if (bits.available() < 4)
             {
-
                // OK, assume we're done. Really, a TERMINATOR mode should have been recorded here
                mode = Mode.TERMINATOR;
             }
@@ -89,6 +87,10 @@ namespace ZXing.QrCode.Internal
                }
                else if (mode == Mode.STRUCTURED_APPEND)
                {
+                  if (bits.available() < 16)
+                  {
+                     return null;
+                  }
                   // not really supported; all we do is ignore it
                   // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
                   bits.readBits(16);
