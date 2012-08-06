@@ -100,6 +100,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -107,9 +108,11 @@
       <Name>System.Drawing</Name>
     </Reference>
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml">
       <Name>System.Xml</Name>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BarcodeFormat.cs" />
@@ -309,6 +312,7 @@
     <Compile Include="RGB565LuminanceSource.cs" />
     <Compile Include="RGBLuminanceSource.cs" />
     <Compile Include="RGBLuminanceSource.Drawing.cs" />
+    <Compile Include="RGBLuminanceSource.Presentation.cs" />
     <Compile Include="SupportClass.cs" />
     <Compile Include="Writer.cs" />
     <Compile Include="WriterException.cs" />
