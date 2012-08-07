@@ -149,7 +149,7 @@ namespace WindowsFormsDemo
          var bitmap = wCam.GetCurrentImage();
          if (bitmap == null)
             return;
-         var imageSource = new RGBLuminanceSource(bitmap, bitmap.Width, bitmap.Height);
+         var imageSource = new RGBLuminanceSource(bitmap);
          var binarizer = new HybridBinarizer(imageSource);
          var binaryBitmap = new BinaryBitmap(binarizer);
          var reader = new MultiFormatReader();

@@ -17,7 +17,7 @@
 namespace ZXing
 {
    /// <summary>
-   /// 
+   /// Luminance source class which support different formats of images.
    /// </summary>
    public partial class RGBLuminanceSource : BaseLuminanceSource
    {
@@ -33,6 +33,7 @@ namespace ZXing
 
       /// <summary>
       /// Initializes a new instance of the <see cref="RGBLuminanceSource"/> class.
+      /// It supports a byte array with 3 bytes per pixel (RGB24).
       /// </summary>
       /// <param name="rgbRawBytes">The RGB raw bytes.</param>
       /// <param name="width">The width.</param>
@@ -41,7 +42,6 @@ namespace ZXing
          : base(width, height)
       {
          // In order to measure pure decoding speed, we convert the entire image to a greyscale array
-         // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
          luminances = new byte[width * height];
          for (int y = 0; y < height; y++)
          {
@@ -67,6 +67,8 @@ namespace ZXing
 
       /// <summary>
       /// Initializes a new instance of the <see cref="RGBLuminanceSource"/> class.
+      /// It supports a byte array with 1 byte per pixel (Gray8).
+      /// That means the whole array consists of the luminance values (grayscale).
       /// </summary>
       /// <param name="luminanceArray">The luminance array.</param>
       /// <param name="width">The width.</param>

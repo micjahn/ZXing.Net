@@ -19,15 +19,12 @@ namespace ZXing
    public partial class RGBLuminanceSource
    {
       public RGBLuminanceSource(System.Windows.Media.Imaging.WriteableBitmap writeableBitmap)
-         : this(writeableBitmap, writeableBitmap.PixelWidth, writeableBitmap.PixelHeight)
+         : base(writeableBitmap.PixelWidth, writeableBitmap.PixelHeight)
       {
-      }
+         var height = writeableBitmap.PixelHeight;
+         var width = writeableBitmap.PixelWidth;
 
-      public RGBLuminanceSource(System.Windows.Media.Imaging.WriteableBitmap writeableBitmap, int width, int height)
-         : base(width, height)
-      {
          // In order to measure pure decoding speed, we convert the entire image to a greyscale array
-         // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
          luminances = new byte[width * height];
          System.Windows.Media.Color c;
          for (int y = 0; y < height; y++)
