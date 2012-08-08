@@ -18,35 +18,16 @@ using System;
 
 namespace ZXing.Client.Result
 {
-   /// <author>  jbreiden@google.com (Jeff Breidenbach)
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>jbreiden@google.com (Jeff Breidenbach)</author>
    public sealed class ISBNParsedResult : ParsedResult
    {
-      private String isbn;
-
-      internal ISBNParsedResult(System.String isbn)
+      internal ISBNParsedResult(String isbn)
          : base(ParsedResultType.ISBN)
       {
-         this.isbn = isbn;
+         ISBN = isbn;
+         displayResult = isbn;
       }
 
-      public String ISBN
-      {
-         get
-         {
-            return isbn;
-         }
-
-      }
-
-      override public String DisplayResult
-      {
-         get
-         {
-            return isbn;
-         }
-      }
+      public String ISBN { get; private set; }
    }
 }

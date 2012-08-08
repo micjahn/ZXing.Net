@@ -39,21 +39,21 @@ namespace ZXing.Client.Result
       public static String KILOGRAM = "KG";
       public static String POUND = "LB";
 
-      private String productID;
-      private String sscc;
-      private String lotNumber;
-      private String productionDate;
-      private String packagingDate;
-      private String bestBeforeDate;
-      private String expirationDate;
-      private String weight;
-      private String weightType;
-      private String weightIncrement;
-      private String price;
-      private String priceIncrement;
-      private String priceCurrency;
+      private readonly String productID;
+      private readonly String sscc;
+      private readonly String lotNumber;
+      private readonly String productionDate;
+      private readonly String packagingDate;
+      private readonly String bestBeforeDate;
+      private readonly String expirationDate;
+      private readonly String weight;
+      private readonly String weightType;
+      private readonly String weightIncrement;
+      private readonly String price;
+      private readonly String priceIncrement;
+      private readonly String priceCurrency;
       // For AIS that not exist in this object
-      private IDictionary<String, String> uncommonAIs;
+      private readonly IDictionary<String, String> uncommonAIs;
 
       public ExpandedProductParsedResult(String productID,
                                          String sscc,
@@ -85,6 +85,8 @@ namespace ZXing.Client.Result
          this.priceIncrement = priceIncrement;
          this.priceCurrency = priceCurrency;
          this.uncommonAIs = uncommonAIs;
+
+         displayResult = productID;
       }
 
       override public bool Equals(Object o)
@@ -224,16 +226,6 @@ namespace ZXing.Client.Result
       public IDictionary<String, String> UncommonAIs
       {
          get { return uncommonAIs; }
-      }
-
-      override public String DisplayResult
-      {
-         get { return productID; }
-      }
-
-      public override string ToString()
-      {
-         return DisplayResult;
       }
    }
 }

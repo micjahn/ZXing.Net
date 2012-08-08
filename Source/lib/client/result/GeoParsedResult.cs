@@ -20,125 +20,97 @@ using System.Text;
 
 namespace ZXing.Client.Result
 {
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public sealed class GeoParsedResult : ParsedResult
    {
-      private double latitude;
-      private double longitude;
-      private double altitude;
-      private String query;
-
       internal GeoParsedResult(double latitude, double longitude, double altitude, String query)
          : base(ParsedResultType.GEO)
       {
-         this.latitude = latitude;
-         this.longitude = longitude;
-         this.altitude = altitude;
-         this.query = query;
-      }
-
-      public String getGeoURI()
-      {
-         var result = new StringBuilder();
-         result.Append("geo:");
-         result.Append(latitude);
-         result.Append(',');
-         result.Append(longitude);
-         if (altitude > 0)
-         {
-            result.Append(',');
-            result.Append(altitude);
-         }
-         if (query != null)
-         {
-            result.Append('?');
-            result.Append(query);
-         }
-         return result.ToString();
+         Latitude = latitude;
+         Longitude = longitude;
+         Altitude = altitude;
+         Query = query;
+         GeoURI = getGeoURI();
+         GoogleMapsURI = getGoogleMapsURI();
+         displayResult = getDisplayResult();
       }
 
       /// <returns> latitude in degrees
       /// </returns>
-      public double Latitude
-      {
-         get
-         {
-            return latitude;
-         }
-      }
+      public double Latitude { get; private set; }
 
       /// <returns> longitude in degrees
       /// </returns>
-      public double Longitude
-      {
-         get
-         {
-            return longitude;
-         }
-      }
+      public double Longitude { get; private set; }
 
       /// <returns> altitude in meters. If not specified, in the geo URI, returns 0.0
       /// </returns>
-      public double Altitude
-      {
-         get
-         {
-            return altitude;
-         }
-      }
+      public double Altitude { get; private set; }
 
       /// <return> query string associated with geo URI or null if none exists</return>
-      public String Query
-      {
-         get
-         {
-            return query;
-         }
-      }
+      public String Query { get; private set; }
 
-      override public String DisplayResult
-      {
-         get
-         {
-            var result = new StringBuilder(20);
-            result.AppendFormat(CultureInfo.InvariantCulture, "{0:0.0###########}", latitude);
-            result.Append(", ");
-            result.AppendFormat(CultureInfo.InvariantCulture, "{0:0.0###########}", longitude);
-            if (altitude > 0.0)
-            {
-               result.Append(", ");
-               result.AppendFormat(CultureInfo.InvariantCulture, "{0:0.0###########}", altitude);
-               result.Append('m');
-            }
-            if (query != null)
-            {
-               result.Append(" (");
-               result.Append(query);
-               result.Append(')');
-            }
-            return result.ToString();
-         }
-      }
-
+      public String GeoURI { get; private set; }
+      
       /// <returns> a URI link to Google Maps which display the point on the Earth described
       /// by this instance, and sets the zoom level in a way that roughly reflects the
       /// altitude, if specified
       /// </returns>
-      public String getGoogleMapsURI()
+      public String GoogleMapsURI { get; private set; }
+
+      private String getDisplayResult()
+      {
+         var result = new StringBuilder(20);
+         result.AppendFormat(CultureInfo.InvariantCulture, "{0:0.0###########}", Latitude);
+         result.Append(", ");
+         result.AppendFormat(CultureInfo.InvariantCulture, "{0:0.0###########}", Longitude);
+         if (Altitude > 0.0)
+         {
+            result.Append(", ");
+            result.AppendFormat(CultureInfo.InvariantCulture, "{0:0.0###########}", Altitude);
+            result.Append('m');
+         }
+         if (Query != null)
+         {
+            result.Append(" (");
+            result.Append(Query);
+            result.Append(')');
+         }
+         return result.ToString();
+      }
+
+      private String getGeoURI()
+      {
+         var result = new StringBuilder();
+         result.Append("geo:");
+         result.Append(Latitude);
+         result.Append(',');
+         result.Append(Longitude);
+         if (Altitude > 0)
+         {
+            result.Append(',');
+            result.Append(Altitude);
+         }
+         if (Query != null)
+         {
+            result.Append('?');
+            result.Append(Query);
+         }
+         return result.ToString();
+      }
+
+      private String getGoogleMapsURI()
       {
          var result = new StringBuilder(50);
          result.Append("http://maps.google.com/?ll=");
-         result.Append(latitude);
+         result.Append(Latitude);
          result.Append(',');
-         result.Append(longitude);
-         if (altitude > 0.0f)
+         result.Append(Longitude);
+         if (Altitude > 0.0f)
          {
             // Map altitude to zoom level, cleverly. Roughly, zoom level 19 is like a
             // view from 1000ft, 18 is like 2000ft, 17 like 4000ft, and so on.
-            double altitudeInFeet = altitude * 3.28;
+            double altitudeInFeet = Altitude * 3.28;
             int altitudeInKFeet = (int)(altitudeInFeet / 1000.0);
             // No Math.log() available here, so compute log base 2 the old fashioned way
             // Here logBaseTwo will take on a value between 0 and 18 actually

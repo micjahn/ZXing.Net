@@ -19,26 +19,23 @@ using System.Text;
 
 namespace ZXing.Client.Result
 {
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public sealed class AddressBookParsedResult : ParsedResult
    {
-      private String[] names;
-      private String pronunciation;
-      private String[] phoneNumbers;
-      private String[] phoneTypes;
-      private String[] emails;
-      private String[] emailTypes;
-      private String instantMessenger;
-      private String note;
-      private String[] addresses;
-      private String[] addressTypes;
-      private String org;
-      private String birthday;
-      private String title;
-      private String url;
+      private readonly String[] names;
+      private readonly String pronunciation;
+      private readonly String[] phoneNumbers;
+      private readonly String[] phoneTypes;
+      private readonly String[] emails;
+      private readonly String[] emailTypes;
+      private readonly String instantMessenger;
+      private readonly String note;
+      private readonly String[] addresses;
+      private readonly String[] addressTypes;
+      private readonly String org;
+      private readonly String birthday;
+      private readonly String title;
+      private readonly String url;
 
       public AddressBookParsedResult(String[] names,
                                      String pronunciation,
@@ -70,6 +67,8 @@ namespace ZXing.Client.Result
          this.birthday = birthday;
          this.title = title;
          this.url = url;
+
+         displayResult = getDisplayResult();
       }
 
       public String[] Names
@@ -154,24 +153,21 @@ namespace ZXing.Client.Result
          get { return birthday; }
       }
 
-      override public String DisplayResult
+      private String getDisplayResult()
       {
-         get
-         {
-            var result = new StringBuilder(100);
-            maybeAppend(names, result);
-            maybeAppend(pronunciation, result);
-            maybeAppend(title, result);
-            maybeAppend(org, result);
-            maybeAppend(addresses, result);
-            maybeAppend(phoneNumbers, result);
-            maybeAppend(emails, result);
-            maybeAppend(instantMessenger, result);
-            maybeAppend(url, result);
-            maybeAppend(birthday, result);
-            maybeAppend(note, result);
-            return result.ToString();
-         }
+         var result = new StringBuilder(100);
+         maybeAppend(names, result);
+         maybeAppend(pronunciation, result);
+         maybeAppend(title, result);
+         maybeAppend(org, result);
+         maybeAppend(addresses, result);
+         maybeAppend(phoneNumbers, result);
+         maybeAppend(emails, result);
+         maybeAppend(instantMessenger, result);
+         maybeAppend(url, result);
+         maybeAppend(birthday, result);
+         maybeAppend(note, result);
+         return result.ToString();
       }
    }
 }

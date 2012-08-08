@@ -18,38 +18,22 @@ using System;
 
 namespace ZXing.Client.Result
 {
-   /// <summary> A simple result type encapsulating a string that has no further
-   /// interpretation.
+   /// <summary>
+   /// A simple result type encapsulating a string that has no further interpretation.
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public sealed class TextParsedResult : ParsedResult
    {
-      private String text;
-      private String language;
-
       public TextParsedResult(String text, String language)
          : base(ParsedResultType.TEXT)
       {
-         this.text = text;
-         this.language = language;
+         Text = text;
+         Language = language;
+         displayResult = text;
       }
 
-      public String Text
-      {
-         get { return text; }
-      }
+      public String Text { get; private set; }
 
-      public String Language
-      {
-         get { return language; }
-      }
-
-      override public String DisplayResult
-      {
-         get { return text; }
-      }
+      public String Language { get; private set; }
    }
 }

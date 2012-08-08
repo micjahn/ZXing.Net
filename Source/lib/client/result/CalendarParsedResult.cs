@@ -84,6 +84,16 @@ namespace ZXing.Client.Result
          this.description = description;
          this.latitude = latitude;
          this.longitude = longitude;
+
+         var result = new StringBuilder(100);
+         maybeAppend(summary, result);
+         maybeAppend(format(startAllDay, start), result);
+         maybeAppend(format(endAllDay, end), result);
+         maybeAppend(location, result);
+         maybeAppend(organizer, result);
+         maybeAppend(attendees, result);
+         maybeAppend(description, result);
+         displayResult = result.ToString();
       }
 
       public String Summary
@@ -153,22 +163,6 @@ namespace ZXing.Client.Result
       public double Longitude
       {
          get { return longitude; }
-      }
-
-      public override String DisplayResult
-      {
-         get
-         {
-            var result = new StringBuilder(100);
-            maybeAppend(summary, result);
-            maybeAppend(format(startAllDay, start), result);
-            maybeAppend(format(endAllDay, end), result);
-            maybeAppend(location, result);
-            maybeAppend(organizer, result);
-            maybeAppend(attendees, result);
-            maybeAppend(description, result);
-            return result.ToString();
-         }
       }
 
       /// <summary>

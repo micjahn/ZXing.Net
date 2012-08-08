@@ -19,27 +19,15 @@ using System.Text;
 
 namespace ZXing.Client.Result
 {
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public sealed class SMSParsedResult : ParsedResult
    {
-      private String[] numbers;
-      private String[] vias;
-      private String subject;
-      private String body;
-
       public SMSParsedResult(String number,
                              String via,
                              String subject,
                              String body)
-         : base(ParsedResultType.SMS)
+         : this(new[] { number }, new[] { via }, subject, body)
       {
-         this.numbers = new [] { number };
-         this.vias = new [] { via };
-         this.subject = subject;
-         this.body = body;
       }
 
       public SMSParsedResult(String[] numbers,
@@ -48,18 +36,25 @@ namespace ZXing.Client.Result
                              String body)
          : base(ParsedResultType.SMS)
       {
-         this.numbers = numbers;
-         this.vias = vias;
-         this.subject = subject;
-         this.body = body;
+         Numbers = numbers;
+         Vias = vias;
+         Subject = subject;
+         Body = body;
+         SMSURI = getSMSURI();
+
+         var result = new StringBuilder(100);
+         maybeAppend(Numbers, result);
+         maybeAppend(Subject, result);
+         maybeAppend(Body, result);
+         displayResult = result.ToString();
       }
 
-      public String getSMSURI()
+      private String getSMSURI()
       {
          var result = new StringBuilder();
          result.Append("sms:");
          bool first = true;
-         for (int i = 0; i < numbers.Length; i++)
+         for (int i = 0; i < Numbers.Length; i++)
          {
             if (first)
             {
@@ -69,22 +64,22 @@ namespace ZXing.Client.Result
             {
                result.Append(',');
             }
-            result.Append(numbers[i]);
-            if (vias != null && vias[i] != null)
+            result.Append(Numbers[i]);
+            if (Vias != null && Vias[i] != null)
             {
                result.Append(";via=");
-               result.Append(vias[i]);
+               result.Append(Vias[i]);
             }
          }
-         bool hasBody = body != null;
-         bool hasSubject = subject != null;
+         bool hasBody = Body != null;
+         bool hasSubject = Subject != null;
          if (hasBody || hasSubject)
          {
             result.Append('?');
             if (hasBody)
             {
                result.Append("body=");
-               result.Append(body);
+               result.Append(Body);
             }
             if (hasSubject)
             {
@@ -93,58 +88,20 @@ namespace ZXing.Client.Result
                   result.Append('&');
                }
                result.Append("subject=");
-               result.Append(subject);
+               result.Append(Subject);
             }
          }
          return result.ToString();
       }
 
-      public String[] Numbers
-      {
-         get
-         {
-            return numbers;
-         }
+      public String[] Numbers { get; private set; }
 
-      }
+      public String[] Vias { get; private set; }
 
-      public String[] Vias
-      {
-         get
-         {
-            return vias;
-         }
+      public String Subject { get; private set; }
 
-      }
+      public String Body { get; private set; }
 
-      public String Subject
-      {
-         get
-         {
-            return subject;
-         }
-
-      }
-
-      public String Body
-      {
-         get
-         {
-            return body;
-         }
-
-      }
-
-      override public String DisplayResult
-      {
-         get
-         {
-            var result = new StringBuilder(100);
-            maybeAppend(numbers, result);
-            maybeAppend(subject, result);
-            maybeAppend(body, result);
-            return result.ToString();
-         }
-      }
+      public String SMSURI { get; private set; }
    }
 }

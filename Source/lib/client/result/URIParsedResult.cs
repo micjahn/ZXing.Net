@@ -19,10 +19,7 @@ using System.Text.RegularExpressions;
 
 namespace ZXing.Client.Result
 {
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public sealed class URIParsedResult : ParsedResult
    {
       private static readonly Regex USER_IN_HOST = new Regex(":/*([^/@]+)@[^/]+"
@@ -32,24 +29,9 @@ namespace ZXing.Client.Result
 );
 #endif
 
-      private readonly String uri;
-      private readonly String title;
+      public String URI { get; private set; }
 
-      public String URI
-      {
-         get
-         {
-            return uri;
-         }
-      }
-
-      public String Title
-      {
-         get
-         {
-            return title;
-         }
-      }
+      public String Title { get; private set; }
 
       /// <returns> true if the URI contains suspicious patterns that may suggest it intends to
       /// mislead the user about its true nature. At the moment this looks for the presence
@@ -58,30 +40,19 @@ namespace ZXing.Client.Result
       /// http://yourbank.com@phisher.com  This URI connects to phisher.com but may appear
       /// to connect to yourbank.com at first glance.
       /// </returns>
-      public bool PossiblyMaliciousURI
-      {
-         get
-         {
-            return USER_IN_HOST.Match(uri).Success;
-         }
-      }
-
-      override public String DisplayResult
-      {
-         get
-         {
-            var result = new System.Text.StringBuilder(30);
-            maybeAppend(title, result);
-            maybeAppend(uri, result);
-            return result.ToString();
-         }
-      }
+      public bool PossiblyMaliciousURI { get; private set; }
 
       public URIParsedResult(String uri, String title)
          : base(ParsedResultType.URI)
       {
-         this.uri = massageURI(uri);
-         this.title = title;
+         URI = massageURI(uri);
+         Title = title;
+         PossiblyMaliciousURI = USER_IN_HOST.Match(URI).Success;
+
+         var result = new System.Text.StringBuilder(30);
+         maybeAppend(Title, result);
+         maybeAppend(URI, result);
+         displayResult = result.ToString();
       }
 
       /// <summary> Transforms a string that represents a URI into something more proper, by adding or canonicalizing
@@ -105,7 +76,6 @@ namespace ZXing.Client.Result
 
       private static bool isColonFollowedByPortNumber(String uri, int protocolEnd)
       {
-         //UPGRADE_WARNING: Method 'java.lang.String.indexOf' was converted to 'System.String.IndexOf' which may throw an exception. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1101'"
          int nextSlash = uri.IndexOf('/', protocolEnd + 1);
          if (nextSlash < 0)
          {

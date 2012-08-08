@@ -18,15 +18,9 @@ using System;
 
 namespace ZXing.Client.Result
 {
-   /// <author>  dswitkin@google.com (Daniel Switkin)
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>dswitkin@google.com (Daniel Switkin)</author>
    public sealed class ProductParsedResult : ParsedResult
    {
-      private String productID;
-      private String normalizedProductID;
-
       internal ProductParsedResult(String productID)
          : this(productID, productID)
       {
@@ -35,32 +29,13 @@ namespace ZXing.Client.Result
       internal ProductParsedResult(String productID, String normalizedProductID)
          : base(ParsedResultType.PRODUCT)
       {
-         this.productID = productID;
-         this.normalizedProductID = normalizedProductID;
+         ProductID = productID;
+         NormalizedProductID = normalizedProductID;
+         displayResult = productID;
       }
 
-      public String ProductID
-      {
-         get
-         {
-            return productID;
-         }
-      }
+      public String ProductID { get; private set; }
 
-      public String NormalizedProductID
-      {
-         get
-         {
-            return normalizedProductID;
-         }
-      }
-
-      override public String DisplayResult
-      {
-         get
-         {
-            return productID;
-         }
-      }
+      public String NormalizedProductID { get; private set; }
    }
 }

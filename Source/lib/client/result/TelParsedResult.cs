@@ -18,57 +18,26 @@ using System;
 
 namespace ZXing.Client.Result
 {
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public sealed class TelParsedResult : ParsedResult
    {
-      private String number;
-      private String telURI;
-      private String title;
-
       public TelParsedResult(String number, String telURI, String title)
          : base(ParsedResultType.TEL)
       {
-         this.number = number;
-         this.telURI = telURI;
-         this.title = title;
+         Number = number;
+         TelURI = telURI;
+         Title = title;
+
+         var result = new System.Text.StringBuilder(20);
+         maybeAppend(number, result);
+         maybeAppend(title, result);
+         displayResult = result.ToString();
       }
 
-      public String Number
-      {
-         get
-         {
-            return number;
-         }
+      public String Number { get; private set; }
 
-      }
-      public String TelURI
-      {
-         get
-         {
-            return telURI;
-         }
+      public String TelURI { get; private set; }
 
-      }
-      public String Title
-      {
-         get
-         {
-            return title;
-         }
-
-      }
-      override public String DisplayResult
-      {
-         get
-         {
-            var result = new System.Text.StringBuilder(20);
-            maybeAppend(number, result);
-            maybeAppend(title, result);
-            return result.ToString();
-         }
-      }
+      public String Title { get; private set; }
    }
 }

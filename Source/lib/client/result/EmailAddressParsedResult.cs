@@ -19,10 +19,7 @@ using System.Text;
 
 namespace ZXing.Client.Result
 {
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public sealed class EmailAddressParsedResult : ParsedResult
    {
       public String EmailAddress { get; private set; }
@@ -37,19 +34,12 @@ namespace ZXing.Client.Result
          Subject = subject;
          Body = body;
          MailtoURI = mailtoURI;
-      }
 
-      override public String DisplayResult
-      {
-         get
-         {
-            var result = new StringBuilder(30);
-            maybeAppend(EmailAddress, result);
-            maybeAppend(Subject, result);
-            maybeAppend(Body, result);
-            return result.ToString();
-         }
-
+         var result = new StringBuilder(30);
+         maybeAppend(EmailAddress, result);
+         maybeAppend(Subject, result);
+         maybeAppend(Body, result);
+         displayResult = result.ToString();
       }
    }
 }
