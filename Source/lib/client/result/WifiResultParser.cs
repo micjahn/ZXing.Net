@@ -19,36 +19,33 @@ using System;
 namespace ZXing.Client.Result
 {
    /// <summary>
-   /// Parses a WIFI configuration string.  Strings will be of the form:
-   /// WIFI:T:WPA;S:mynetwork;P:mypass;;
-   /// The fields can come in any order, and there should be tests to see
-   /// if we can parse them all correctly.
+   /// <p>Parses a WIFI configuration string. Strings will be of the form:</p>
+   /// <p>{@code WIFI:T:[network type];S:[network SSID];P:[network password];H:[hidden?];;}</p>
+   /// <p>The fields can appear in any order. Only "S:" is required.</p>
    /// </summary>
    /// <author>Vikram Aggarwal</author>
+   /// <author>Sean Owen</author>
    public class WifiResultParser : ResultParser
    {
       override public ParsedResult parse(ZXing.Result result)
       {
-         String rawText = result.Text;
+         var rawText = result.Text;
          if (!rawText.StartsWith("WIFI:"))
          {
             return null;
          }
-         // Don't remove leading or trailing whitespace
-         bool trim = false;
-         String ssid = matchSinglePrefixedField("S:", rawText, ';', trim);
+         var ssid = matchSinglePrefixedField("S:", rawText, ';', false);
          if (string.IsNullOrEmpty(ssid))
          {
             return null;
          }
-         String pass = matchSinglePrefixedField("P:", rawText, ';', trim);
-         String type = matchSinglePrefixedField("T:", rawText, ';', trim);
-         if (type == null)
-         {
-            type = "nopass";
-         }
+         var pass = matchSinglePrefixedField("P:", rawText, ';', false);
+         var type = matchSinglePrefixedField("T:", rawText, ';', false) ?? "nopass";
 
-         return new WifiParsedResult(type, ssid, pass);
+         bool hidden;
+         Boolean.TryParse(matchSinglePrefixedField("B:", rawText, ';', false), out hidden);
+
+         return new WifiParsedResult(type, ssid, pass, hidden);
       }
    }
 }

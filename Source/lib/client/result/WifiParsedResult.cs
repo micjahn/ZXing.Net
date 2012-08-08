@@ -19,48 +19,39 @@ using System.Text;
 
 namespace ZXing.Client.Result
 {
-   /**
-    * @author Vikram Aggarwal
-    */
+   /// <summary>
+   /// 
+   /// </summary>
+   /// <author>Vikram Aggarwal</author>
    public class WifiParsedResult : ParsedResult
    {
-      private String ssid;
-      private String networkEncryption;
-      private String password;
-
       public WifiParsedResult(String networkEncryption, String ssid, String password)
+         : this(networkEncryption, ssid, password, false)
+      {
+      }
+
+      public WifiParsedResult(String networkEncryption, String ssid, String password, bool hidden)
          : base(ParsedResultType.WIFI)
       {
-         this.ssid = ssid;
-         this.networkEncryption = networkEncryption;
-         this.password = password;
+         Ssid = ssid;
+         NetworkEncryption = networkEncryption;
+         Password = password;
+         Hidden = hidden;
+
+         var result = new StringBuilder(80);
+         maybeAppend(Ssid, result);
+         maybeAppend(NetworkEncryption, result);
+         maybeAppend(Password, result);
+         maybeAppend(hidden.ToString(), result);
+         displayResult = result.ToString();
       }
 
-      public String Ssid
-      {
-         get { return ssid; }
-      }
+      public String Ssid { get; private set; }
 
-      public String NetworkEncryption
-      {
-         get { return networkEncryption; }
-      }
+      public String NetworkEncryption { get; private set; }
 
-      public String Password
-      {
-         get { return password; }
-      }
+      public String Password { get; private set; }
 
-      override public String DisplayResult
-      {
-         get
-         {
-            var result = new StringBuilder(80);
-            maybeAppend(ssid, result);
-            maybeAppend(networkEncryption, result);
-            maybeAppend(password, result);
-            return result.ToString();
-         }
-      }
+      public bool Hidden { get; private set; }
    }
 }
