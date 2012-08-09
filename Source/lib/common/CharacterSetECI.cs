@@ -19,17 +19,18 @@ using System.Collections.Generic;
 
 namespace ZXing.Common
 {
-
    /// <summary> Encapsulates a Character Set ECI, according to "Extended Channel Interpretations" 5.3.1.1
    /// of ISO 18004.
    /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public sealed class CharacterSetECI : ECI
    {
+      internal static readonly IDictionary<int, CharacterSetECI> VALUE_TO_ECI;
+      internal static readonly IDictionary<string, CharacterSetECI> NAME_TO_ECI;
+
+      private readonly String encodingName;
+
       public String EncodingName
       {
          get
@@ -39,50 +40,45 @@ namespace ZXing.Common
 
       }
 
-      private static IDictionary<int, CharacterSetECI> VALUE_TO_ECI;
-      private static IDictionary<string, CharacterSetECI> NAME_TO_ECI;
-
       static CharacterSetECI()
       {
          VALUE_TO_ECI = new Dictionary<int, CharacterSetECI>();
          NAME_TO_ECI = new Dictionary<string, CharacterSetECI>();
          // TODO figure out if these values are even right!
          addCharacterSet(0, "CP437");
-         addCharacterSet(1, new[] { "ISO8859_1", "ISO-8859-1" });
+         addCharacterSet(1, new[] { "ISO-8859-1", "ISO8859_1" });
          addCharacterSet(2, "CP437");
-         addCharacterSet(3, new[] { "ISO8859_1", "ISO-8859-1" });
-         addCharacterSet(4, "ISO8859_2");
-         addCharacterSet(5, "ISO8859_3");
-         addCharacterSet(6, "ISO8859_4");
-         addCharacterSet(7, "ISO8859_5");
-         addCharacterSet(8, "ISO8859_6");
-         addCharacterSet(9, "ISO8859_7");
-         addCharacterSet(10, "ISO8859_8");
-         addCharacterSet(11, "ISO8859_9");
-         addCharacterSet(12, "ISO8859_10");
-         addCharacterSet(13, "ISO8859_11");
-         addCharacterSet(15, "ISO8859_13");
-         addCharacterSet(16, "ISO8859_14");
-         addCharacterSet(17, "ISO8859_15");
-         addCharacterSet(18, "ISO8859_16");
+         addCharacterSet(3, new[] { "ISO-8859-1", "ISO8859_1" });
+         addCharacterSet(4, new[] { "ISO-8859-2", "ISO8859_2" });
+         addCharacterSet(5, new[] { "ISO-8859-3", "ISO8859_3" });
+         addCharacterSet(6, new[] { "ISO-8859-4", "ISO8859_4" });
+         addCharacterSet(7, new[] { "ISO-8859-5", "ISO8859_5" });
+         addCharacterSet(8, new[] { "ISO-8859-6", "ISO8859_6" });
+         addCharacterSet(9, new[] { "ISO-8859-7", "ISO8859_7" });
+         addCharacterSet(10, new[] { "ISO-8859-8", "ISO8859_8" });
+         addCharacterSet(11, new[] { "ISO-8859-9", "ISO8859_9" });
+         addCharacterSet(12, new[] { "ISO-8859-4", "ISO-8859-10", "ISO8859_10" }); // use ISO-8859-4 because ISO-8859-16 isn't supported
+         addCharacterSet(13, new[] { "ISO-8859-11", "ISO8859_11" });
+         addCharacterSet(15, new[] { "ISO-8859-13", "ISO8859_13" });
+         addCharacterSet(16, new[] { "ISO-8859-1", "ISO-8859-14", "ISO8859_14" }); // use ISO-8859-1 because ISO-8859-16 isn't supported
+         addCharacterSet(17, new[] { "ISO-8859-15", "ISO8859_15" });
+         addCharacterSet(18, new[] { "ISO-8859-3", "ISO-8859-16", "ISO8859_16" }); // use ISO-8859-3 because ISO-8859-16 isn't supported
          addCharacterSet(20, new[] { "SJIS", "Shift_JIS" });
-         addCharacterSet(21, new[] { "CP1250", "windows-1250" });
-         addCharacterSet(22, new[] { "CP1251", "windows-1251" });
-         addCharacterSet(23, new[] { "CP1252", "windows-1252" });
-         addCharacterSet(24, new[] { "CP1256", "windows-1256" });
+         addCharacterSet(21, new[] { "windows-1250", "CP1250" });
+         addCharacterSet(22, new[] { "windows-1251", "CP1251" });
+         addCharacterSet(23, new[] { "windows-1252", "CP1252" });
+         addCharacterSet(24, new[] { "windows-1256", "CP1256" });
          addCharacterSet(25, new[] { "UTF-16BE", "UnicodeBig" });
-         addCharacterSet(26, new[] { "UTF8", "UTF-8" });
+         addCharacterSet(26, new[] { "UTF-8", "UTF8" });
          addCharacterSet(27, "US-ASCII");
          addCharacterSet(170, "US-ASCII");
          addCharacterSet(28, "BIG5");
          addCharacterSet(29, new[] { "GB18030", "GB2312", "EUC_CN", "GBK" });
-         addCharacterSet(30, new[] { "EUC_KR", "EUC-KR" });
+         addCharacterSet(30, new[] { "EUC-KR", "EUC_KR" });
       }
 
-      private String encodingName;
-
-      private CharacterSetECI(int value_Renamed, String encodingName)
-         : base(value_Renamed)
+      private CharacterSetECI(int value, String encodingName)
+         : base(value)
       {
          this.encodingName = encodingName;
       }
