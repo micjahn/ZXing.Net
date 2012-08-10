@@ -168,7 +168,6 @@
     <Compile Include="common\BitMatrix.Drawing.cs" />
     <Compile Include="common\BitSource.cs" />
     <Compile Include="common\CharacterSetECI.cs" />
-    <Compile Include="common\Collections.cs" />
     <Compile Include="common\DecoderResult.cs" />
     <Compile Include="common\DefaultGridSampler.cs" />
     <Compile Include="common\DetectorResult.cs" />

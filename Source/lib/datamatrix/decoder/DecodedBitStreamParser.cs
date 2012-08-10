@@ -558,7 +558,6 @@ namespace ZXing.Datamatrix.Internal
       /// </summary>
       private static bool decodeEdifactSegment(BitSource bits, StringBuilder result)
       {
-         bool unlatch = false;
          do
          {
             // If there is only two or less bytes left then it will be encoded as ASCII
@@ -574,21 +573,22 @@ namespace ZXing.Datamatrix.Internal
                // Check for the unlatch character
                if (edifactValue == 0x1F)
                {  // 011111
-                  unlatch = true;
-                  // If we encounter the unlatch code then continue reading because the Codeword triple
-                  // is padded with 0's
+                  // Read rest of byte, which should be 0, and stop
+                  int bitsLeft = 8 - bits.BitOffset;
+                  if (bitsLeft != 8)
+                  {
+                     bits.readBits(bitsLeft);
+                  }
+                  return true;
                }
 
-               if (!unlatch)
-               {
-                  if ((edifactValue & 0x20) == 0)
-                  {  // no 1 in the leading (6th) bit
-                     edifactValue |= 0x40;  // Add a leading 01 to the 6 bit binary value
-                  }
-                  result.Append((char)edifactValue);
+               if ((edifactValue & 0x20) == 0)
+               {  // no 1 in the leading (6th) bit
+                  edifactValue |= 0x40;  // Add a leading 01 to the 6 bit binary value
                }
+               result.Append((char)edifactValue);
             }
-         } while (!unlatch && bits.available() > 0);
+         } while (bits.available() > 0);
 
          return true;
       }
