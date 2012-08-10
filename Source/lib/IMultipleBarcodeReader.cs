@@ -27,9 +27,9 @@ using System.Windows.Media.Imaging;
 namespace ZXing
 {
    /// <summary>
-   /// Interface for a smart class to decode the barcode inside a bitmap object
+   /// Interface for a smart class to decode multiple barcodes inside a bitmap object
    /// </summary>
-   public interface IBarcodeReader
+   public interface IMultipleBarcodeReader
    {
       /// <summary>
       /// event is executed when a result point was found
@@ -82,14 +82,14 @@ namespace ZXing
       /// </summary>
       /// <param name="barcodeBitmap">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
-      Result Decode(Bitmap barcodeBitmap);
+      Result[] DecodeMultiple(Bitmap barcodeBitmap);
 #else
       /// <summary>
       /// Decodes the specified barcode bitmap.
       /// </summary>
       /// <param name="barcodeBitmap">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
-      Result Decode(byte[] rawRGB, int width, int height);
+      Result[] DecodeMultiple(byte[] rawRGB, int width, int height);
 #endif
 #else
       /// <summary>
@@ -97,7 +97,7 @@ namespace ZXing
       /// </summary>
       /// <param name="barcodeBitmap">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
-      Result Decode(WriteableBitmap barcodeBitmap);
+      Result[] DecodeMultiple(WriteableBitmap barcodeBitmap);
 #endif
    }
 }

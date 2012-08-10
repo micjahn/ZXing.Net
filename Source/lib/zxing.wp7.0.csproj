@@ -111,10 +111,7 @@
     <Compile Include="common\BitMatrix.cs" />
     <Compile Include="common\BitMatrix.Silverlight.cs" />
     <Compile Include="common\BitSource.cs" />
-    <Compile Include="common\ByteArray.cs" />
-    <Compile Include="common\ByteMatrix.cs" />
     <Compile Include="common\CharacterSetECI.cs" />
-    <Compile Include="common\Collections.cs" />
     <Compile Include="common\DecoderResult.cs" />
     <Compile Include="common\DefaultGridSampler.cs" />
     <Compile Include="common\DetectorResult.cs" />
@@ -142,6 +139,7 @@
     <Compile Include="EncodeHintType.cs" />
     <Compile Include="FormatException.cs" />
     <Compile Include="IBarcodeReader.cs" />
+    <Compile Include="IMultipleBarcodeReader.cs" />
     <Compile Include="LuminanceSource.cs" />
     <Compile Include="maxicode\decoder\BitMatrixParser.cs" />
     <Compile Include="maxicode\decoder\DecodedBitStreamParser.cs" />

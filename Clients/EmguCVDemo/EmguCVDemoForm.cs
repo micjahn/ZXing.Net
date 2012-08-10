@@ -70,13 +70,16 @@ namespace EmguCVDemo
          var image = capture.QueryFrame();
          if (image != null)
          {
-            bimap = image.ToBitmap();
-            pictureBox1.Image = bimap;
-            var result = reader.Decode(bimap);
-            if (result != null)
+            using(image)
             {
-               txtContentWebCam.Text = result.Text;
-               txtTypeWebCam.Text = result.BarcodeFormat.ToString();
+               bimap = image.ToBitmap();
+               pictureBox1.Image = bimap;
+               var result = reader.Decode(bimap);
+               if (result != null)
+               {
+                  txtContentWebCam.Text = result.Text;
+                  txtTypeWebCam.Text = result.BarcodeFormat.ToString();
+               }
             }
          }
          var timerStop = DateTime.Now.Ticks;

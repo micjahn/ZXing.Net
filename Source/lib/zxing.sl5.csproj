@@ -124,10 +124,7 @@
     <Compile Include="common\BitMatrix.cs" />
     <Compile Include="common\BitMatrix.Silverlight.cs" />
     <Compile Include="common\BitSource.cs" />
-    <Compile Include="common\ByteArray.cs" />
-    <Compile Include="common\ByteMatrix.cs" />
     <Compile Include="common\CharacterSetECI.cs" />
-    <Compile Include="common\Collections.cs" />
     <Compile Include="common\DecoderResult.cs" />
     <Compile Include="common\DefaultGridSampler.cs" />
     <Compile Include="common\DetectorResult.cs" />
@@ -155,6 +152,7 @@
     <Compile Include="EncodeHintType.cs" />
     <Compile Include="FormatException.cs" />
     <Compile Include="IBarcodeReader.cs" />
+    <Compile Include="IMultipleBarcodeReader.cs" />
     <Compile Include="LuminanceSource.cs" />
     <Compile Include="maxicode\decoder\BitMatrixParser.cs" />
     <Compile Include="maxicode\decoder\DecodedBitStreamParser.cs" />
@@ -272,7 +270,6 @@
     <Compile Include="ResultPointCallback.cs" />
     <Compile Include="RGB565LuminanceSource.cs" />
     <Compile Include="RGBLuminanceSource.cs" />
-    <Compile Include="RGBLuminanceSource.Presentation.cs" />
     <Compile Include="RGBLuminanceSource.Silverlight.cs" />
     <Compile Include="silverlight\SerializableAttribute.cs" />
     <Compile Include="SupportClass.cs" />

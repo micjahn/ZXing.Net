@@ -69,7 +69,7 @@ namespace WindowsPhoneDemo
       {
          // scanning for a barcode
          var bmp = (WriteableBitmap) e.Argument;
-         var imageSource = new RGBLuminanceSource(bmp, bmp.PixelWidth, bmp.PixelHeight);
+         var imageSource = new RGBLuminanceSource(bmp);
          var binarizer = new HybridBinarizer(imageSource);
          var binaryBitmap = new BinaryBitmap(binarizer);
          var reader = new MultiFormatReader();

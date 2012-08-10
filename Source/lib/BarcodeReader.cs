@@ -15,19 +15,19 @@ namespace ZXing
    /// <summary>
    /// A smart class to decode the barcode inside a bitmap object
    /// </summary>
-   public class BarcodeReader : IBarcodeReader
+   public class BarcodeReader : IBarcodeReader, IMultipleBarcodeReader
    {
 #if !SILVERLIGHT
 #if !UNITY
       private static readonly Func<Bitmap, LuminanceSource> defaultCreateLuminanceSource =
-         (bitmap) => new RGBLuminanceSource(bitmap, bitmap.Width, bitmap.Height);
+         (bitmap) => new RGBLuminanceSource(bitmap);
 #else
       private static readonly Func<byte[], int, int, LuminanceSource> defaultCreateLuminanceSource =
          (rawRGB, width, height) => new RGBLuminanceSource(rawRGB, width, height);
 #endif
 #else
       private static readonly Func<WriteableBitmap, LuminanceSource> defaultCreateLuminanceSource =
-         (bitmap) => new RGBLuminanceSource(bitmap, bitmap.PixelWidth, bitmap.PixelHeight);
+         (bitmap) => new RGBLuminanceSource(bitmap);
 #endif
       private static readonly Func<LuminanceSource, Binarizer> defaultCreateBinarizer =
          (luminanceSource) => new HybridBinarizer(luminanceSource);
@@ -404,6 +404,39 @@ namespace ZXing
          }
 
          return result;
+      }
+
+
+#if !SILVERLIGHT
+#if !UNITY
+      /// <summary>
+      /// Decodes the specified barcode bitmap.
+      /// </summary>
+      /// <param name="barcodeBitmap">The barcode bitmap.</param>
+      /// <returns>the result data or null</returns>
+      public Result[] DecodeMultiple(Bitmap barcodeBitmap)
+#else
+      /// <summary>
+      /// Decodes the specified barcode bitmap.
+      /// </summary>
+      /// <param name="rawRGB">raw bytes of the image in RGB order</param>
+      /// <param name="width"></param>
+      /// <param name="height"></param>
+      /// <returns>
+      /// the result data or null
+      /// </returns>
+      public Result[] DecodeMultiple(byte[] rawRGB, int width, int height)
+#endif
+#else
+      /// <summary>
+      /// Decodes the specified barcode bitmap.
+      /// </summary>
+      /// <param name="barcodeBitmap">The barcode bitmap.</param>
+      /// <returns>the result data or null</returns>
+      public Result[] DecodeMultiple(WriteableBitmap barcodeBitmap)
+#endif
+      {
+         throw new NotImplementedException();
       }
    }
 }

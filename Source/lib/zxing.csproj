@@ -195,6 +195,9 @@
     <Compile Include="EncodeHintType.cs" />
     <Compile Include="FormatException.cs" />
     <Compile Include="IBarcodeReader.cs" />
+    <Compile Include="IMultipleBarcodeReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="LuminanceSource.cs" />
     <Compile Include="maxicode\decoder\BitMatrixParser.cs" />
     <Compile Include="maxicode\decoder\DecodedBitStreamParser.cs" />
