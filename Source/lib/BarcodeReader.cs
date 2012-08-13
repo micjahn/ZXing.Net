@@ -9,6 +9,8 @@ using System.Windows.Media.Imaging;
 #endif
 
 using ZXing.Common;
+using ZXing.Multi;
+using ZXing.Multi.QrCode;
 
 namespace ZXing
 {
@@ -36,9 +38,9 @@ namespace ZXing
       private readonly IDictionary<DecodeHintType, object> hints;
 #if !SILVERLIGHT
 #if !UNITY
-      private Func<Bitmap, LuminanceSource> createLuminanceSource;
+      private readonly Func<Bitmap, LuminanceSource> createLuminanceSource;
 #else
-      private Func<byte[], int, int, LuminanceSource> createLuminanceSource;
+      private readonly Func<byte[], int, int, LuminanceSource> createLuminanceSource;
 #endif
 #else
       private readonly Func<WriteableBitmap, LuminanceSource> createLuminanceSource;
@@ -448,7 +450,75 @@ namespace ZXing
       public Result[] DecodeMultiple(WriteableBitmap barcodeBitmap)
 #endif
       {
-         throw new NotImplementedException();
+#if !UNITY
+         if (barcodeBitmap == null)
+            throw new ArgumentNullException("barcodeBitmap");
+#else
+         if (rawRGB == null)
+            throw new ArgumentNullException("rawRGB");
+#endif
+
+         var results = default(Result[]);
+#if !UNITY
+         var luminanceSource = CreateLuminanceSource(barcodeBitmap);
+#else
+         var luminanceSource = CreateLuminanceSource(rawRGB, width, height);
+#endif
+         var binarizer = CreateBinarizer(luminanceSource);
+         var binaryBitmap = new BinaryBitmap(binarizer);
+         var rotationCount = 0;
+         var rotationMaxCount = AutoRotate ? 4 : 1;
+         MultipleBarcodeReader multiReader = null;
+
+         var formats = PossibleFormats;
+         if (formats != null &&
+             formats.Count == 1 &&
+             formats.Contains(BarcodeFormat.QR_CODE))
+         {
+            multiReader = new QRCodeMultiReader();
+         }
+         else
+         {
+            multiReader = new GenericMultipleBarcodeReader(Reader);
+         }
+
+         for (; rotationCount < rotationMaxCount; rotationCount++)
+         {
+            results = multiReader.decodeMultiple(binaryBitmap, hints);
+
+            if (results != null ||
+                !luminanceSource.RotateSupported ||
+                !AutoRotate)
+               break;
+
+            binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource.rotateCounterClockwise()));
+         }
+
+         if (results != null)
+         {
+            foreach (var result in results)
+            {
+               if (result.ResultMetadata == null)
+               {
+                  result.putMetadata(ResultMetadataType.ORIENTATION, rotationCount*90);
+               }
+               else if (!result.ResultMetadata.ContainsKey(ResultMetadataType.ORIENTATION))
+               {
+                  result.ResultMetadata[ResultMetadataType.ORIENTATION] = rotationCount*90;
+               }
+               else
+               {
+                  // perhaps the core decoder rotates the image already (can happen if TryHarder is specified)
+                  result.ResultMetadata[ResultMetadataType.ORIENTATION] =
+                     ((int) (result.ResultMetadata[ResultMetadataType.ORIENTATION]) + rotationCount*90)%360;
+               }
+
+               if (ResultFound != null)
+                  ResultFound(result);
+            }
+         }
+
+         return results;
       }
    }
 }
