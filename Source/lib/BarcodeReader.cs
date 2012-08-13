@@ -228,6 +228,15 @@ namespace ZXing
          }
       }
 
+      /// <summary>
+      /// Gets or sets a value indicating whether the image should be automatically rotated.
+      /// Rotation is supported for 90, 180 and 270 degrees
+      /// </summary>
+      /// <value>
+      ///   <c>true</c> if image should be rotated; otherwise, <c>false</c>.
+      /// </value>
+      public bool AutoRotate { get; set; }
+
 #if !SILVERLIGHT
 #if !UNITY
       /// <summary>
@@ -364,8 +373,9 @@ namespace ZXing
          var binaryBitmap = new BinaryBitmap(binarizer);
          var multiformatReader = Reader as MultiFormatReader;
          var rotationCount = 0;
+         var rotationMaxCount = AutoRotate ? 4 : 1;
 
-         for (; rotationCount < 4; rotationCount++)
+         for (; rotationCount < rotationMaxCount; rotationCount++)
          {
             if (usePreviousState && multiformatReader != null)
             {
@@ -378,8 +388,10 @@ namespace ZXing
             }
             
             if (result != null ||
-                !luminanceSource.RotateSupported)
+                !luminanceSource.RotateSupported ||
+                !AutoRotate)
                break;
+
             binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource.rotateCounterClockwise()));
          }
 
