@@ -214,7 +214,6 @@ namespace ZXing.Aztec.Internal
                {
                   if (endIndex - startIndex < 8)
                   {
-                     end = true;
                      break;
                   }
                   code = readCode(correctedBits, startIndex, 8);
@@ -233,7 +232,6 @@ namespace ZXing.Aztec.Internal
 
                   if (endIndex - startIndex < size)
                   {
-                     end = true;
                      break;
                   }
 
