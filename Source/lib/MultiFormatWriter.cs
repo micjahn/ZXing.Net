@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 using ZXing.Common;
 using ZXing.OneD;
-using ZXing.PDF417.Internal;
+using ZXing.PDF417;
 using ZXing.QrCode;
 
 namespace ZXing

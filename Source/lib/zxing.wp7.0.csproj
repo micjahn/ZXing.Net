@@ -60,6 +60,8 @@
     <Compile Include="BarcodeFormat.cs" />
     <Compile Include="BarcodeReader.cs" />
     <Compile Include="BarcodeReaderGeneric.cs" />
+    <Compile Include="BarcodeWriter.cs" />
+    <Compile Include="BarcodeWriterGeneric.cs" />
     <Compile Include="BaseLuminanceSource.cs" />
     <Compile Include="Binarizer.cs" />
     <Compile Include="BinaryBitmap.cs" />
@@ -120,6 +122,7 @@
     <Compile Include="common\detector\MonochromeRectangleDetector.cs" />
     <Compile Include="common\detector\WhiteRectangleDetector.cs" />
     <Compile Include="common\ECI.cs" />
+    <Compile Include="common\EncodingOptions.cs" />
     <Compile Include="common\GlobalHistogramBinarizer.cs" />
     <Compile Include="common\GridSampler.cs" />
     <Compile Include="common\HybridBinarizer.cs" />
@@ -141,6 +144,8 @@
     <Compile Include="FormatException.cs" />
     <Compile Include="IBarcodeReader.cs" />
     <Compile Include="IBarcodeReaderGeneric.cs" />
+    <Compile Include="IBarcodeWriter.cs" />
+    <Compile Include="IBarcodeWriterGeneric.cs" />
     <Compile Include="IMultipleBarcodeReader.cs" />
     <Compile Include="IMultipleBarcodeReaderGeneric.cs" />
     <Compile Include="LuminanceSource.cs" />
@@ -223,10 +228,11 @@
     <Compile Include="pdf417\encoder\Compaction.cs" />
     <Compile Include="pdf417\encoder\Dimensions.cs" />
     <Compile Include="pdf417\encoder\PDF417.cs" />
+    <Compile Include="pdf417\encoder\PDF417EncodingOptions.cs" />
     <Compile Include="pdf417\encoder\PDF417ErrorCorrection.cs" />
     <Compile Include="pdf417\encoder\PDF417HighLevelEncoder.cs" />
-    <Compile Include="pdf417\encoder\PDF417Writer.cs" />
     <Compile Include="pdf417\PDF417Reader.cs" />
+    <Compile Include="pdf417\PDF417Writer.cs" />
     <Compile Include="PlanarYUVLuminanceSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="qrcode\decoder\BitMatrixParser.cs" />
@@ -250,10 +256,13 @@
     <Compile Include="qrcode\encoder\MaskUtil.cs" />
     <Compile Include="qrcode\encoder\MatrixUtil.cs" />
     <Compile Include="qrcode\encoder\QRCode.cs" />
+    <Compile Include="qrcode\encoder\QrCodeEncodingOptions.cs" />
     <Compile Include="qrcode\QRCodeReader.cs" />
     <Compile Include="qrcode\QRCodeWriter.cs" />
     <Compile Include="Reader.cs" />
     <Compile Include="ReaderException.cs" />
+    <Compile Include="renderer\IBarcodeRenderer.cs" />
+    <Compile Include="renderer\WriteableBitmapRenderer.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="ResultMetadataType.cs" />
     <Compile Include="ResultPoint.cs" />
@@ -261,6 +270,7 @@
     <Compile Include="RGB565LuminanceSource.cs" />
     <Compile Include="RGBLuminanceSource.cs" />
     <Compile Include="RGBLuminanceSource.Silverlight.cs" />
+    <Compile Include="silverlight\BrowsableAttribute.cs" />
     <Compile Include="silverlight\SerializableAttribute.cs" />
     <Compile Include="SupportClass.cs" />
     <Compile Include="Writer.cs" />

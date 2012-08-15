@@ -61,7 +61,7 @@ namespace ZXing.QrCode
          int quietZone = QUIET_ZONE_SIZE;
          if (hints != null)
          {
-            var requestedECLevel = (ErrorCorrectionLevel)hints[EncodeHintType.ERROR_CORRECTION];
+            var requestedECLevel = hints.ContainsKey(EncodeHintType.ERROR_CORRECTION) ? (ErrorCorrectionLevel)hints[EncodeHintType.ERROR_CORRECTION] : null;
             if (requestedECLevel != null)
             {
                errorCorrectionLevel = requestedECLevel;

@@ -18,6 +18,9 @@ using System;
 
 namespace ZXing
 {
+   /// <summary>
+   /// Attribute is only for compatibility issues
+   /// </summary>
    internal class SerializableAttribute : Attribute
    {
    }

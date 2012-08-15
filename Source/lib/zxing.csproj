@@ -118,6 +118,8 @@
     <Compile Include="BarcodeFormat.cs" />
     <Compile Include="BarcodeReader.cs" />
     <Compile Include="BarcodeReaderGeneric.cs" />
+    <Compile Include="BarcodeWriter.cs" />
+    <Compile Include="BarcodeWriterGeneric.cs" />
     <Compile Include="BaseLuminanceSource.cs" />
     <Compile Include="Binarizer.cs" />
     <Compile Include="BinaryBitmap.cs" />
@@ -176,6 +178,7 @@
     <Compile Include="common\detector\MonochromeRectangleDetector.cs" />
     <Compile Include="common\detector\WhiteRectangleDetector.cs" />
     <Compile Include="common\ECI.cs" />
+    <Compile Include="common\EncodingOptions.cs" />
     <Compile Include="common\GlobalHistogramBinarizer.cs" />
     <Compile Include="common\GridSampler.cs" />
     <Compile Include="common\HybridBinarizer.cs" />
@@ -196,6 +199,12 @@
     <Compile Include="FormatException.cs" />
     <Compile Include="IBarcodeReader.cs" />
     <Compile Include="IBarcodeReaderGeneric.cs" />
+    <Compile Include="pdf417\encoder\PDF417EncodingOptions.cs" />
+    <Compile Include="qrcode\encoder\QrCodeEncodingOptions.cs" />
+    <Compile Include="renderer\BitmapRenderer.cs" />
+    <Compile Include="renderer\IBarcodeRenderer.cs" />
+    <Compile Include="IBarcodeWriter.cs" />
+    <Compile Include="IBarcodeWriterGeneric.cs" />
     <Compile Include="IMultipleBarcodeReader.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -281,7 +290,7 @@
     <Compile Include="pdf417\encoder\PDF417.cs" />
     <Compile Include="pdf417\encoder\PDF417ErrorCorrection.cs" />
     <Compile Include="pdf417\encoder\PDF417HighLevelEncoder.cs" />
-    <Compile Include="pdf417\encoder\PDF417Writer.cs" />
+    <Compile Include="pdf417\PDF417Writer.cs" />
     <Compile Include="pdf417\PDF417Reader.cs" />
     <Compile Include="PlanarYUVLuminanceSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

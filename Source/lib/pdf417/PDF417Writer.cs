@@ -18,8 +18,9 @@ using System;
 using System.Collections.Generic;
 
 using ZXing.Common;
+using ZXing.PDF417.Internal;
 
-namespace ZXing.PDF417.Internal
+namespace ZXing.PDF417
 {
    /// <summary>
    /// <author>Jacob Haynes</author>
@@ -38,7 +39,7 @@ namespace ZXing.PDF417.Internal
             throw new ArgumentException("Can only encode PDF_417, but got " + format);
          }
 
-         PDF417 encoder = new PDF417();
+         var encoder = new Internal.PDF417();
 
          if (hints != null)
          {
@@ -98,7 +99,7 @@ namespace ZXing.PDF417.Internal
       /// <summary>
       /// Takes encoder, accounts for width/height, and retrieves bit matrix
       /// </summary>
-      private static BitMatrix bitMatrixFromEncoder(PDF417 encoder,
+      private static BitMatrix bitMatrixFromEncoder(Internal.PDF417 encoder,
                                                     String contents,
                                                     int width,
                                                     int height)
