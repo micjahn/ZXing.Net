@@ -14,11 +14,23 @@
 * limitations under the License.
 */
 
+using System.Windows.Media.Imaging;
+
 namespace ZXing
 {
-   public partial class RGBLuminanceSource
+   public partial class BitmapLuminanceSource : BaseLuminanceSource
    {
-      public RGBLuminanceSource(System.Windows.Media.Imaging.WriteableBitmap writeableBitmap)
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BitmapLuminanceSource"/> class.
+      /// </summary>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      protected BitmapLuminanceSource(int width, int height)
+         : base(width, height)
+      {
+      }
+
+      public BitmapLuminanceSource(WriteableBitmap writeableBitmap)
          : base(writeableBitmap.PixelWidth, writeableBitmap.PixelHeight)
       {
          var height = writeableBitmap.PixelHeight;
@@ -40,6 +52,19 @@ namespace ZXing
                luminances[offset + x] = (byte)(0.3 * c.R + 0.59 * c.G + 0.11 * c.B + 0.01);
             }
          }
+      }
+
+      /// <summary>
+      /// Should create a new luminance source with the right class type.
+      /// The method is used in methods crop and rotate.
+      /// </summary>
+      /// <param name="newLuminances">The new luminances.</param>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      /// <returns></returns>
+      protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
+      {
+         return new BitmapLuminanceSource(width, height) { luminances = newLuminances };
       }
    }
 }

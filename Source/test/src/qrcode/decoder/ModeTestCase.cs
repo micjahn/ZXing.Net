@@ -39,7 +39,7 @@ namespace ZXing.QrCode.Internal.Test
             Mode.forBits(0x10);
             throw new AssertionException("Should have thrown an exception");
          }
-         catch (ArgumentException iae)
+         catch (ArgumentException )
          {
             // good
          }

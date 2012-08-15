@@ -168,7 +168,7 @@ namespace ZXing.Common.Test
                var testResult = testResults[x];
                float rotation = testResult.Rotation;
                var rotatedImage = rotateImage(image, rotation);
-               LuminanceSource source = new RGBLuminanceSource(rotatedImage);
+               LuminanceSource source = new BitmapLuminanceSource(rotatedImage);
                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
                try
                {
@@ -183,7 +183,7 @@ namespace ZXing.Common.Test
                      Console.WriteLine("   without try-hard ... fail.");
                   }
                }
-               catch (ReaderException re)
+               catch (ReaderException )
                {
                   // continue
                   Console.WriteLine("   without try-hard ... fail (exc).");
@@ -201,7 +201,7 @@ namespace ZXing.Common.Test
                      Console.WriteLine("   with try-hard ... fail.");
                   }
                }
-               catch (ReaderException re)
+               catch (ReaderException )
                {
                   // continue
                   Console.WriteLine("   with try-hard ... fail (exc).");

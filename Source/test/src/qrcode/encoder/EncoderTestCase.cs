@@ -232,7 +232,7 @@ namespace ZXing.QrCode.Internal.Test
             {
                Encoder.appendBytes("a", Mode.ALPHANUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
             }
-            catch (WriterException we)
+            catch (WriterException )
             {
                // good
             }
@@ -476,7 +476,7 @@ namespace ZXing.QrCode.Internal.Test
             {
                Encoder.appendAlphanumericBytes("abc", bits);
             }
-            catch (WriterException we)
+            catch (WriterException )
             {
                // good
             }

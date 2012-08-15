@@ -34,7 +34,7 @@ namespace ZXing.QrCode.Internal.Test
             Version.getVersionForNumber(0);
             throw new AssertionException("Should have thrown an exception");
          }
-         catch (ArgumentException iae)
+         catch (ArgumentException )
          {
             // good
          }

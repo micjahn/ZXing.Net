@@ -60,6 +60,7 @@
     <Compile Include="BaseLuminanceSource.cs" />
     <Compile Include="Binarizer.cs" />
     <Compile Include="BinaryBitmap.cs" />
+    <Compile Include="BitmapLuminanceSource.cs" />
     <Compile Include="client\result\AbstractDoCoMoResultParser.cs" />
     <Compile Include="client\result\AddressBookAUResultParser.cs" />
     <Compile Include="client\result\AddressBookDoCoMoResultParser.cs" />
@@ -268,7 +269,6 @@
     <Compile Include="ResultPointCallback.cs" />
     <Compile Include="RGB565LuminanceSource.cs" />
     <Compile Include="RGBLuminanceSource.cs" />
-    <Compile Include="RGBLuminanceSource.Drawing.cs" />
     <Compile Include="SupportClass.cs" />
     <Compile Include="Writer.cs" />
     <Compile Include="WriterException.cs" />

@@ -33,7 +33,7 @@ namespace ZXing
    public class BarcodeReader : BarcodeReaderGeneric<Bitmap>, IBarcodeReader
    {
       private static readonly Func<Bitmap, LuminanceSource> defaultCreateLuminanceSource =
-         (bitmap) => new RGBLuminanceSource(bitmap);
+         (bitmap) => new BitmapLuminanceSource(bitmap);
 #else
    public class BarcodeReader : BarcodeReaderGeneric<byte[]>, IBarcodeReader
    {
@@ -44,7 +44,7 @@ namespace ZXing
    public class BarcodeReader : BarcodeReaderGeneric<WriteableBitmap>, IBarcodeReader
    {
       private static readonly Func<WriteableBitmap, LuminanceSource> defaultCreateLuminanceSource =
-         (bitmap) => new RGBLuminanceSource(bitmap);
+         (bitmap) => new BitmapLuminanceSource(bitmap);
 #endif
 
       /// <summary>

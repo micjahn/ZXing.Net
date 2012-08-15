@@ -57,7 +57,7 @@ namespace ZXing.Test
             BitmapSource bitmapImage = new BitmapImage(new Uri(samplePicRelPath, UriKind.RelativeOrAbsolute));
             if (bitmapImage.Format != pixelFormat)
                bitmapImage = new FormatConvertedBitmap(bitmapImage, pixelFormat, null, 0);
-            var rgbLuminanceSource = new RGBLuminanceSource(bitmapImage);
+            var rgbLuminanceSource = new BitmapSourceLuminanceSource(bitmapImage);
             var rgbLuminanceSourceResult = rgbLuminanceSource.ToString();
             Assert.That(samplePicRelResult.Equals(rgbLuminanceSourceResult));
          }
@@ -73,7 +73,7 @@ namespace ZXing.Test
 
          var rgb565LuminanceSource = new RGB565LuminanceSource(bytes, bitmapImage.PixelWidth, bitmapImage.PixelHeight);
 
-         var rgbLuminanceSource = new RGBLuminanceSource(bitmapImage);
+         var rgbLuminanceSource = new BitmapSourceLuminanceSource(bitmapImage);
 
          Assert.AreEqual(rgbLuminanceSource.ToString(), rgb565LuminanceSource.ToString());
       }

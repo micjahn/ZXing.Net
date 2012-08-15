@@ -135,7 +135,7 @@ namespace ZXing.OneD
                if (row == null)
                   continue;
             }
-            catch (NotFoundException nfe)
+            catch (NotFoundException )
             {
                continue;
             }

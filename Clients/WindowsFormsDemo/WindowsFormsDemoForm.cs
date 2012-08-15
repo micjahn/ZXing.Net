@@ -165,11 +165,8 @@ namespace WindowsFormsDemo
          var bitmap = wCam.GetCurrentImage();
          if (bitmap == null)
             return;
-         var imageSource = new RGBLuminanceSource(bitmap);
-         var binarizer = new HybridBinarizer(imageSource);
-         var binaryBitmap = new BinaryBitmap(binarizer);
-         var reader = new MultiFormatReader();
-         var result = reader.decode(binaryBitmap);
+         var reader = new BarcodeReader();
+         var result = reader.Decode(bitmap);
          if (result != null)
          {
             txtTypeWebCam.Text = result.BarcodeFormat.ToString();

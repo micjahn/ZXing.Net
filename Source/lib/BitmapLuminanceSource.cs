@@ -21,14 +21,24 @@ using System.Runtime.InteropServices;
 
 namespace ZXing
 {
-   public partial class RGBLuminanceSource
+   public partial class BitmapLuminanceSource : BaseLuminanceSource
    {
       /// <summary>
-      /// Initializes a new instance of the <see cref="RGBLuminanceSource"/> class
+      /// Initializes a new instance of the <see cref="BitmapLuminanceSource"/> class.
+      /// </summary>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      protected BitmapLuminanceSource(int width, int height)
+         : base(width, height)
+      {
+      }
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BitmapLuminanceSource"/> class
       /// with the image of a Bitmap instance
       /// </summary>
       /// <param name="bitmap">The bitmap.</param>
-      public RGBLuminanceSource(Bitmap bitmap)
+      public BitmapLuminanceSource(Bitmap bitmap)
          : base(bitmap.Width, bitmap.Height)
       {
          var height = bitmap.Height;
@@ -122,6 +132,19 @@ namespace ZXing
          {
             bitmap.UnlockBits(data);
          }
+      }
+
+      /// <summary>
+      /// Should create a new luminance source with the right class type.
+      /// The method is used in methods crop and rotate.
+      /// </summary>
+      /// <param name="newLuminances">The new luminances.</param>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      /// <returns></returns>
+      protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
+      {
+         return new BitmapLuminanceSource(width, height) { luminances = newLuminances };
       }
    }
 }

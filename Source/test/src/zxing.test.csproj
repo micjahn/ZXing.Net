@@ -187,6 +187,10 @@
       <Project>{6431CF13-7A7B-4602-B96A-47CDA6F0B008}</Project>
       <Name>zxing</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\lib\zxing.presentation.csproj">
+      <Project>{EA513204-63F3-4C50-992D-08FF430B6F70}</Project>
+      <Name>zxing.presentation</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

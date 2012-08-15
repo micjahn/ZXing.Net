@@ -66,7 +66,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
          var image = new WriteableBitmap(0, 0);
          image.SetSource(File.OpenRead(path));
 #endif
-         BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new RGBLuminanceSource(image)));
+         BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BitmapLuminanceSource(image)));
          int rowNumber = binaryMap.Height / 2;
          BitArray row = binaryMap.getBlackRow(rowNumber, null);
          List<ExpandedPair> previousPairs = new List<ExpandedPair>();
@@ -114,7 +114,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
          var image = new WriteableBitmap(0, 0);
          image.SetSource(File.OpenRead(path));
 #endif
-         BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new RGBLuminanceSource(image)));
+         BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BitmapLuminanceSource(image)));
          int rowNumber = binaryMap.Height / 2;
          BitArray row = binaryMap.getBlackRow(rowNumber, null);
          List<ExpandedPair> previousPairs = new List<ExpandedPair>();
@@ -152,7 +152,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
          var image = new WriteableBitmap(0, 0);
          image.SetSource(File.OpenRead(path));
 #endif
-         BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new RGBLuminanceSource(image)));
+         BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BitmapLuminanceSource(image)));
          BitArray row = binaryMap.getBlackRow(binaryMap.Height / 2, null);
 
          int[] startEnd = { 145, 243 };//image pixels where the A1 pattern starts (at 124) and ends (at 214)
@@ -186,7 +186,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
          var image = new WriteableBitmap(0, 0);
          image.SetSource(File.OpenRead(path));
 #endif
-         BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new RGBLuminanceSource(image)));
+         BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BitmapLuminanceSource(image)));
          BitArray row = binaryMap.getBlackRow(binaryMap.Height / 2, null);
 
          int[] startEnd = { 145, 243 };//image pixels where the A1 pattern starts (at 124) and ends (at 214)
