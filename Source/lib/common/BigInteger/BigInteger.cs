@@ -16,10 +16,10 @@ namespace BigIntegerLibrary
    /// </summary>
 #if !(WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5)
     [Serializable, CLSCompliant(true)]
-    public sealed class BigInteger : ISerializable, 
+    internal sealed class BigInteger : ISerializable, 
 #else
     [CLSCompliant(true)]
-    public sealed class BigInteger :  
+    internal sealed class BigInteger :  
 #endif
        IEquatable<BigInteger>, IComparable, IComparable<BigInteger>
     {

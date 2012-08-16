@@ -20,7 +20,7 @@ namespace System.ComponentModel
    /// Attribute is only for compatibility issues
    /// </summary>
    [AttributeUsage(AttributeTargets.All)]
-   public sealed class BrowsableAttribute : Attribute
+   internal sealed class BrowsableAttribute : Attribute
    {
       public BrowsableAttribute(bool browsable)
       {

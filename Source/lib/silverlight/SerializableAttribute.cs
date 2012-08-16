@@ -21,6 +21,7 @@ namespace ZXing
    /// <summary>
    /// Attribute is only for compatibility issues
    /// </summary>
+   [AttributeUsage(AttributeTargets.Class | AttributeTargets.Delegate | AttributeTargets.Enum | AttributeTargets.Struct, Inherited = false)]
    internal class SerializableAttribute : Attribute
    {
    }
