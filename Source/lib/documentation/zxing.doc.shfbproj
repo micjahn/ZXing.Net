@@ -15,7 +15,7 @@
     <RootNamespace>zxing.doc</RootNamespace>
     <Name>zxing.doc</Name>
     <!-- SHFB properties -->
-    <OutputPath>.\Help\</OutputPath>
+    <OutputPath>..\..\..\Build\Release\Documentation\net4.0\</OutputPath>
     <HtmlHelpName>zxing.net</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>

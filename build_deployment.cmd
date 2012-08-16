@@ -9,6 +9,7 @@ SET BINARY_DIR=%BUILD_DIR%\Release
 SET FILENAME_BINARY=%DEPLOYMENT_DIR%\ZXing.Net.%VERSION%.zip
 SET FILENAME_DEMO_BINARY=%DEPLOYMENT_DIR%\ZXing.Net.DemoClients.%VERSION%.zip
 SET FILENAME_SOURCE=%DEPLOYMENT_DIR%\ZXing.Net.Source.%VERSION%.zip
+SET FILENAME_DOCUMENTATION=%DEPLOYMENT_DIR%\ZXing.Net.Documentation.%VERSION%.zip
 SET ZIP_TOOL=%CD%\3rdparty\zip\7za.exe
 SET SVN_EXPORT_DIR=%DEPLOYMENT_DIR%\Source
 SET SVN_URL=https://zxingnet.svn.codeplex.com/svn/trunk
@@ -37,6 +38,7 @@ REM ****************************************************************************
 CD "%BINARY_DIR%"
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" net2.0 net4.0 unity sl4 sl5 wp7.0 wp7.1
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DEMO_BINARY%" Clients
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DOCUMENTATION%" Documentation
 CD "%CURRENT_DIR%"
 
 ECHO.
@@ -67,6 +69,7 @@ MKDIR "%SVN_EXPORT_DIR%\Clients" >NUL: 2>&1
 "%SVN_TOOL%" export --force "%SVN_URL%/Source/lib" "%SVN_EXPORT_DIR%\Source\lib"
 "%SVN_TOOL%" export --force "%SVN_URL%/Source/test/src" "%SVN_EXPORT_DIR%\Source\test\src"
 "%SVN_TOOL%" export --force "%SVN_URL%/Clients" "%SVN_EXPORT_DIR%\Clients"
+"%SVN_TOOL%" export --force "%SVN_URL%/Documentation" "%SVN_EXPORT_DIR%\Documentation"
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.sln" "%SVN_EXPORT_DIR%"
 
 CD "%SVN_EXPORT_DIR%"
