@@ -39,7 +39,7 @@ namespace ZXing.Client.Result
          maybeAppend(EmailAddress, result);
          maybeAppend(Subject, result);
          maybeAppend(Body, result);
-         displayResult = result.ToString();
+         displayResultValue = result.ToString();
       }
    }
 }

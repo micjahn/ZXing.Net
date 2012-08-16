@@ -16,11 +16,25 @@
 
 namespace ZXing.OneD.RSS
 {
+   /// <summary>
+   /// 
+   /// </summary>
    public class DataCharacter
    {
+      /// <summary>
+      /// Gets the value.
+      /// </summary>
       public int Value { get; private set; }
+      /// <summary>
+      /// Gets the checksum portion.
+      /// </summary>
       public int ChecksumPortion { get; private set; }
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="DataCharacter"/> class.
+      /// </summary>
+      /// <param name="value">The value.</param>
+      /// <param name="checksumPortion">The checksum portion.</param>
       public DataCharacter(int value, int checksumPortion)
       {
          Value = value;

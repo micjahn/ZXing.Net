@@ -19,62 +19,94 @@ using System.Text;
 
 namespace ZXing.QrCode.Internal
 {
-   /**
-    * A class which wraps a 2D array of bytes. The default usage is signed. If you want to use it as a
-    * unsigned container, it's up to you to do byteValue & 0xff at each location.
-    *
-    * JAVAPORT: The original code was a 2D array of ints, but since it only ever gets assigned
-    * -1, 0, and 1, I'm going to use less memory and go with bytes.
-    *
-    * @author dswitkin@google.com (Daniel Switkin)
-    */
+   /// <summary>
+   /// A class which wraps a 2D array of bytes. The default usage is signed. If you want to use it as a
+   /// unsigned container, it's up to you to do byteValue & 0xff at each location.
+   /// 
+   /// JAVAPORT: The original code was a 2D array of ints, but since it only ever gets assigned
+   /// 0, 1 and 2 I'm going to use less memory and go with bytes.
+   /// </summary>
+   /// <author>dswitkin@google.com (Daniel Switkin)</author>
    public sealed class ByteMatrix
    {
-      private sbyte[][] bytes;
-      private int width;
-      private int height;
+      private readonly byte[][] bytes;
+      private readonly int width;
+      private readonly int height;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="ByteMatrix"/> class.
+      /// </summary>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
       public ByteMatrix(int width, int height)
       {
-         bytes = new sbyte[height][];
+         bytes = new byte[height][];
          for (var i = 0; i < height; i++)
-            bytes[i] = new sbyte[width];
+            bytes[i] = new byte[width];
          this.width = width;
          this.height = height;
       }
 
+      /// <summary>
+      /// Gets the height.
+      /// </summary>
       public int Height
       {
          get { return height; }
       }
 
+      /// <summary>
+      /// Gets the width.
+      /// </summary>
       public int Width
       {
          get { return width; }
       }
 
+      /// <summary>
+      /// Gets or sets the <see cref="System.Int32"/> with the specified x.
+      /// </summary>
       public int this[int x, int y]
       {
          get { return bytes[y][x]; }
-         set { bytes[y][x] = (sbyte)value; }
+         set { bytes[y][x] = (byte)value; }
       }
 
-      public sbyte[][] Array
+      /// <summary>
+      /// Gets the array.
+      /// </summary>
+      public byte[][] Array
       {
          get { return bytes; }
       }
 
-      public void set(int x, int y, sbyte value)
+      /// <summary>
+      /// Sets the specified x.
+      /// </summary>
+      /// <param name="x">The x.</param>
+      /// <param name="y">The y.</param>
+      /// <param name="value">The value.</param>
+      public void set(int x, int y, byte value)
       {
          bytes[y][x] = value;
       }
 
+      /// <summary>
+      /// Sets the specified x.
+      /// </summary>
+      /// <param name="x">The x.</param>
+      /// <param name="y">The y.</param>
+      /// <param name="value">if set to <c>true</c> [value].</param>
       public void set(int x, int y, bool value)
       {
-         bytes[y][x] = (sbyte)(value ? 1 : 0);
+         bytes[y][x] = (byte)(value ? 1 : 0);
       }
 
-      public void clear(sbyte value)
+      /// <summary>
+      /// Clears the specified value.
+      /// </summary>
+      /// <param name="value">The value.</param>
+      public void clear(byte value)
       {
          for (int y = 0; y < height; ++y)
          {
@@ -85,6 +117,12 @@ namespace ZXing.QrCode.Internal
          }
       }
 
+      /// <summary>
+      /// Returns a <see cref="System.String"/> that represents this instance.
+      /// </summary>
+      /// <returns>
+      /// A <see cref="System.String"/> that represents this instance.
+      /// </returns>
       override public String ToString()
       {
          var result = new StringBuilder(2 * width * height + 2);

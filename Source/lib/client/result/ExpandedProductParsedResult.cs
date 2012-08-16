@@ -86,7 +86,7 @@ namespace ZXing.Client.Result
          this.priceCurrency = priceCurrency;
          this.uncommonAIs = uncommonAIs;
 
-         displayResult = productID;
+         displayResultValue = productID;
       }
 
       override public bool Equals(Object o)

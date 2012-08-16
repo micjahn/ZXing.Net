@@ -16,25 +16,29 @@
 
 using System;
 using System.Collections.Generic;
+
 using ZXing.Common;
 
 namespace ZXing.QrCode.Internal
 {
-   /// <summary> <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square
+   /// <summary>
+   /// <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square
    /// markers at three corners of a QR Code.</p>
    /// 
    /// <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.
-   /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public class FinderPatternFinder
    {
       private const int CENTER_QUORUM = 2;
-      protected internal const int MIN_SKIP = 3; // 1 pixel/module times 3 modules/center
-      protected internal const int MAX_MODULES = 57; // support up to version 10 for mobile clients
+      /// <summary>
+      /// 1 pixel/module times 3 modules/center
+      /// </summary>
+      protected internal const int MIN_SKIP = 3; 
+      /// <summary>
+      /// support up to version 10 for mobile clients
+      /// </summary>
+      protected internal const int MAX_MODULES = 57;
       private const int INTEGER_MATH_SHIFT = 8;
 
       private readonly BitMatrix image;
@@ -43,16 +47,20 @@ namespace ZXing.QrCode.Internal
       private readonly int[] crossCheckStateCount;
       private readonly ResultPointCallback resultPointCallback;
 
-      /// <summary> <p>Creates a finder that will search the image for three finder patterns.</p>
-      /// 
+      /// <summary>
+      /// <p>Creates a finder that will search the image for three finder patterns.</p>
       /// </summary>
-      /// <param name="image">image to search
-      /// </param>
+      /// <param name="image">image to search</param>
       public FinderPatternFinder(BitMatrix image)
          : this(image, null)
       {
       }
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="FinderPatternFinder"/> class.
+      /// </summary>
+      /// <param name="image">The image.</param>
+      /// <param name="resultPointCallback">The result point callback.</param>
       public FinderPatternFinder(BitMatrix image, ResultPointCallback resultPointCallback)
       {
          this.image = image;
@@ -61,6 +69,9 @@ namespace ZXing.QrCode.Internal
          this.resultPointCallback = resultPointCallback;
       }
 
+      /// <summary>
+      /// Gets the image.
+      /// </summary>
       virtual protected internal BitMatrix Image
       {
          get
@@ -69,6 +80,9 @@ namespace ZXing.QrCode.Internal
          }
       }
 
+      /// <summary>
+      /// Gets the possible centers.
+      /// </summary>
       virtual protected internal List<FinderPattern> PossibleCenters
       {
          get

@@ -27,6 +27,13 @@ namespace ZXing.PDF417.Internal
       private readonly int minRows;
       private readonly int maxRows;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Dimensions"/> class.
+      /// </summary>
+      /// <param name="minCols">The min cols.</param>
+      /// <param name="maxCols">The max cols.</param>
+      /// <param name="minRows">The min rows.</param>
+      /// <param name="maxRows">The max rows.</param>
       public Dimensions(int minCols, int maxCols, int minRows, int maxRows)
       {
          this.minCols = minCols;
@@ -35,21 +42,33 @@ namespace ZXing.PDF417.Internal
          this.maxRows = maxRows;
       }
 
+      /// <summary>
+      /// Gets the min cols.
+      /// </summary>
       public int MinCols
       {
          get { return minCols; }
       }
 
+      /// <summary>
+      /// Gets the max cols.
+      /// </summary>
       public int MaxCols
       {
          get { return maxCols; }
       }
 
+      /// <summary>
+      /// Gets the min rows.
+      /// </summary>
       public int MinRows
       {
          get { return minRows; }
       }
 
+      /// <summary>
+      /// Gets the max rows.
+      /// </summary>
       public int MaxRows
       {
          get { return maxRows; }

@@ -18,14 +18,11 @@ using System;
 
 namespace ZXing.QrCode.Internal
 {
-   /// <summary> <p>See ISO 18004:2006, 6.5.1. This enum encapsulates the four error correction levels
+   /// <summary>
+   /// <p>See ISO 18004:2006, 6.5.1. This enum encapsulates the four error correction levels
    /// defined by the QR code standard.</p>
-   /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public sealed class ErrorCorrectionLevel
    {
       /// <summary> L = ~7% correction</summary>
@@ -39,7 +36,7 @@ namespace ZXing.QrCode.Internal
 
       private static readonly ErrorCorrectionLevel[] FOR_BITS = new [] { M, L, H, Q };
       
-      private int bits;
+      private readonly int bits;
 
       private ErrorCorrectionLevel(int ordinal, int bits, String name)
       {
@@ -48,6 +45,9 @@ namespace ZXing.QrCode.Internal
          this.name = name;
       }
 
+      /// <summary>
+      /// Gets the bits.
+      /// </summary>
       public int Bits
       {
          get
@@ -56,6 +56,9 @@ namespace ZXing.QrCode.Internal
          }
       }
 
+      /// <summary>
+      /// Gets the name.
+      /// </summary>
       public String Name
       {
          get
@@ -64,24 +67,35 @@ namespace ZXing.QrCode.Internal
          }
       }
 
-      //UPGRADE_NOTE: Final was removed from the declaration of 'ordinal '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-      private int ordinal_Renamed_Field;
-      //UPGRADE_NOTE: Final was removed from the declaration of 'name '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-      private System.String name;
+      private readonly int ordinal_Renamed_Field;
+      private readonly String name;
 
+      /// <summary>
+      /// Ordinals this instance.
+      /// </summary>
+      /// <returns></returns>
       public int ordinal()
       {
          return ordinal_Renamed_Field;
       }
 
+      /// <summary>
+      /// Returns a <see cref="System.String"/> that represents this instance.
+      /// </summary>
+      /// <returns>
+      /// A <see cref="System.String"/> that represents this instance.
+      /// </returns>
       public override String ToString()
       {
          return name;
       }
 
-      /// <param name="bits">int containing the two bits encoding a QR Code's error correction level
-      /// </param>
-      /// <returns> {@link ErrorCorrectionLevel} representing the encoded error correction level
+      /// <summary>
+      /// Fors the bits.
+      /// </summary>
+      /// <param name="bits">int containing the two bits encoding a QR Code's error correction level</param>
+      /// <returns>
+      ///   <see cref="ErrorCorrectionLevel"/> representing the encoded error correction level
       /// </returns>
       public static ErrorCorrectionLevel forBits(int bits)
       {

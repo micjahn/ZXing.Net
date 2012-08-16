@@ -33,6 +33,10 @@ namespace ZXing.QrCode
 
       private readonly Decoder decoder = new Decoder();
 
+      /// <summary>
+      /// Gets the decoder.
+      /// </summary>
+      /// <returns></returns>
       protected Decoder getDecoder()
       {
          return decoder;
@@ -48,6 +52,18 @@ namespace ZXing.QrCode
          return decode(image, null);
       }
 
+      /// <summary>
+      /// Locates and decodes a barcode in some format within an image. This method also accepts
+      /// hints, each possibly associated to some data, which may help the implementation decode.
+      /// </summary>
+      /// <param name="image">image of barcode to decode</param>
+      /// <param name="hints">passed as a <see cref="IDictionary{TKey, TValue}"/> from <see cref="DecodeHintType"/>
+      /// to arbitrary data. The
+      /// meaning of the data depends upon the hint type. The implementation may or may not do
+      /// anything with these hints.</param>
+      /// <returns>
+      /// String which the barcode encodes
+      /// </returns>
       public Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
       {
          DecoderResult decoderResult;
@@ -85,6 +101,10 @@ namespace ZXing.QrCode
          return result;
       }
 
+      /// <summary>
+      /// Resets any internal state the implementation has after a decode, to prepare it
+      /// for reuse.
+      /// </summary>
       public void reset()
       {
          // do nothing
@@ -95,9 +115,9 @@ namespace ZXing.QrCode
       /// which contains only an unrotated, unskewed, image of a code, with some white border
       /// around it. This is a specialized method that works exceptionally fast in this special
       /// case.
-      ///
-      /// @see com.google.zxing.pdf417.PDF417Reader#extractPureBits(BitMatrix)
-      /// @see com.google.zxing.datamatrix.DataMatrixReader#extractPureBits(BitMatrix)
+      /// 
+      /// <seealso cref="ZXing.PDF417.PDF417Reader.extractPureBits(BitMatrix)" />
+      /// <seealso cref="ZXing.Datamatrix.DataMatrixReader.extractPureBits(BitMatrix)" />
       /// </summary>
       private static BitMatrix extractPureBits(BitMatrix image)
       {

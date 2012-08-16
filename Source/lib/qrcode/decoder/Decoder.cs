@@ -21,30 +21,33 @@ using ZXing.Common.ReedSolomon;
 
 namespace ZXing.QrCode.Internal
 {
-   /// <summary> <p>The main class which implements QR Code decoding -- as opposed to locating and extracting
+   /// <summary>
+   ///   <p>The main class which implements QR Code decoding -- as opposed to locating and extracting
    /// the QR Code from an image.</p>
-   /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
+   /// <author>
+   /// Sean Owen
    /// </author>
    public sealed class Decoder
    {
-      private ReedSolomonDecoder rsDecoder;
+      private readonly ReedSolomonDecoder rsDecoder;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Decoder"/> class.
+      /// </summary>
       public Decoder()
       {
          rsDecoder = new ReedSolomonDecoder(GenericGF.QR_CODE_FIELD_256);
       }
 
-      /// <summary> <p>Convenience method that can decode a QR Code represented as a 2D array of booleans.
+      /// <summary>
+      ///   <p>Convenience method that can decode a QR Code represented as a 2D array of booleans.
       /// "true" is taken to mean a black module.</p>
-      /// 
       /// </summary>
-      /// <param name="image">booleans representing white/black QR Code modules
-      /// </param>
-      /// <returns> text and bytes encoded within the QR Code
+      /// <param name="image">booleans representing white/black QR Code modules</param>
+      /// <param name="hints">The hints.</param>
+      /// <returns>
+      /// text and bytes encoded within the QR Code
       /// </returns>
       public DecoderResult decode(bool[][] image, IDictionary<DecodeHintType, object> hints)
       {
@@ -60,12 +63,13 @@ namespace ZXing.QrCode.Internal
          return decode(bits, hints);
       }
 
-      /// <summary> <p>Decodes a QR Code represented as a {@link BitMatrix}. A 1 or "true" is taken to mean a black module.</p>
-      /// 
+      /// <summary>
+      ///   <p>Decodes a QR Code represented as a {@link BitMatrix}. A 1 or "true" is taken to mean a black module.</p>
       /// </summary>
-      /// <param name="bits">booleans representing white/black QR Code modules
-      /// </param>
-      /// <returns> text and bytes encoded within the QR Code
+      /// <param name="bits">booleans representing white/black QR Code modules</param>
+      /// <param name="hints">The hints.</param>
+      /// <returns>
+      /// text and bytes encoded within the QR Code
       /// </returns>
       public DecoderResult decode(BitMatrix bits, IDictionary<DecodeHintType, object> hints)
       {
@@ -114,14 +118,13 @@ namespace ZXing.QrCode.Internal
          return DecodedBitStreamParser.decode(resultBytes, version, ecLevel, hints);
       }
 
-      /// <summary> <p>Given data and error-correction codewords received, possibly corrupted by errors, attempts to
+      /// <summary>
+      ///   <p>Given data and error-correction codewords received, possibly corrupted by errors, attempts to
       /// correct the errors in-place using Reed-Solomon error correction.</p>
-      /// 
       /// </summary>
-      /// <param name="codewordBytes">data and error correction codewords
-      /// </param>
-      /// <param name="numDataCodewords">number of codewords that are data bytes
-      /// </param>
+      /// <param name="codewordBytes">data and error correction codewords</param>
+      /// <param name="numDataCodewords">number of codewords that are data bytes</param>
+      /// <returns></returns>
       private bool correctErrors(byte[] codewordBytes, int numDataCodewords)
       {
          int numCodewords = codewordBytes.Length;

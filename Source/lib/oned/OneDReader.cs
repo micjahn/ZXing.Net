@@ -23,21 +23,45 @@ namespace ZXing.OneD
    /// <summary>
    /// Encapsulates functionality and implementation that is common to all families
    /// of one-dimensional barcodes.
-   ///
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// <author>Sean Owen</author>
    /// </summary>
    public abstract class OneDReader : Reader
    {
+      /// <summary>
+      /// 
+      /// </summary>
       protected static int INTEGER_MATH_SHIFT = 8;
+      /// <summary>
+      /// 
+      /// </summary>
       protected static int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
+      /// <summary>
+      /// Locates and decodes a barcode in some format within an image.
+      /// </summary>
+      /// <param name="image">image of barcode to decode</param>
+      /// <returns>
+      /// String which the barcode encodes
+      /// </returns>
       public Result decode(BinaryBitmap image)
       {
          return decode(image, null);
       }
 
-      // Note that we don't try rotation without the try harder flag, even if rotation was supported.
+      /// <summary>
+      /// Locates and decodes a barcode in some format within an image. This method also accepts
+      /// hints, each possibly associated to some data, which may help the implementation decode.
+      /// Note that we don't try rotation without the try harder flag, even if rotation was supported.
+      /// </summary>
+      /// <param name="image">image of barcode to decode</param>
+      /// <param name="hints">passed as a <see cref="IDictionary{TKey, TValue}"/> from <see cref="DecodeHintType"/>
+      /// to arbitrary data. The
+      /// meaning of the data depends upon the hint type. The implementation may or may not do
+      /// anything with these hints.</param>
+      /// <returns>
+      /// String which the barcode encodes
+      /// </returns>
       virtual public Result decode(BinaryBitmap image,
                            IDictionary<DecodeHintType, object> hints)
       {
@@ -76,6 +100,10 @@ namespace ZXing.OneD
          return result;
       }
 
+      /// <summary>
+      /// Resets any internal state the implementation has after a decode, to prepare it
+      /// for reuse.
+      /// </summary>
       virtual public void reset()
       {
          // do nothing
@@ -244,6 +272,13 @@ namespace ZXing.OneD
          return (counterPosition == numCounters || (counterPosition == numCounters - 1 && i == end));
       }
 
+      /// <summary>
+      /// Records the pattern in reverse.
+      /// </summary>
+      /// <param name="row">The row.</param>
+      /// <param name="start">The start.</param>
+      /// <param name="counters">The counters.</param>
+      /// <returns></returns>
       protected static bool recordPatternInReverse(BitArray row, int start, int[] counters)
       {
          // This could be more efficient I guess

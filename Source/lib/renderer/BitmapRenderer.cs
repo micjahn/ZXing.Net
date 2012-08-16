@@ -24,14 +24,36 @@ using ZXing.OneD;
 
 namespace ZXing.Rendering
 {
+   /// <summary>
+   /// Renders a <see cref="BitMatrix" /> to a <see cref="Bitmap" /> image
+   /// </summary>
    public class BitmapRenderer : IBarcodeRenderer<Bitmap>
    {
+      /// <summary>
+      /// Gets or sets the foreground color.
+      /// </summary>
+      /// <value>The foreground color.</value>
       public Color Foreground { get; set; }
+
+      /// <summary>
+      /// Gets or sets the background color.
+      /// </summary>
+      /// <value>The background color.</value>
       public Color Background { get; set; }
+
+      /// <summary>
+      /// Gets or sets the text font.
+      /// </summary>
+      /// <value>
+      /// The text font.
+      /// </value>
       public Font TextFont { get; set; }
 
       private static readonly Font DefaultTextFont = new Font("Arial", 10, FontStyle.Regular);
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BitmapRenderer"/> class.
+      /// </summary>
       public BitmapRenderer()
       {
          Foreground = Color.Black;
@@ -39,11 +61,26 @@ namespace ZXing.Rendering
          TextFont = DefaultTextFont;
       }
 
+      /// <summary>
+      /// Renders the specified matrix.
+      /// </summary>
+      /// <param name="matrix">The matrix.</param>
+      /// <param name="format">The format.</param>
+      /// <param name="content">The content.</param>
+      /// <returns></returns>
       public Bitmap Render(BitMatrix matrix, BarcodeFormat format, string content)
       {
          return Render(matrix, format, content, null);
       }
 
+      /// <summary>
+      /// Renders the specified matrix.
+      /// </summary>
+      /// <param name="matrix">The matrix.</param>
+      /// <param name="format">The format.</param>
+      /// <param name="content">The content.</param>
+      /// <param name="options">The options.</param>
+      /// <returns></returns>
       virtual public Bitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
       {
          int width = matrix.Width;

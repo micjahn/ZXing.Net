@@ -16,17 +16,17 @@
 
 using System;
 using System.Text;
+
 using ZXing.Common;
 
 namespace ZXing.OneD
 {
    /// <summary>
-   /// <p>Implements decoding of the UPC-E format.</p>
-   /// <p/>
-   /// <p><a href="http://www.barcodeisland.com/upce.phtml">This</a>is a great reference for
+   ///   <p>Implements decoding of the UPC-E format.</p>
+   ///   <p/>
+   ///   <p><a href="http://www.barcodeisland.com/upce.phtml">This</a>is a great reference for
    /// UPC-E information.</p>
-   ///
-   /// <author>Sean Owen</author>
+   ///   <author>Sean Owen</author>
    /// </summary>
    public sealed class UPCEReader : UPCEANReader
    {
@@ -48,11 +48,21 @@ namespace ZXing.OneD
 
       private readonly int[] decodeMiddleCounters;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="UPCEReader"/> class.
+      /// </summary>
       public UPCEReader()
       {
          decodeMiddleCounters = new int[4];
       }
 
+      /// <summary>
+      /// Decodes the middle.
+      /// </summary>
+      /// <param name="row">The row.</param>
+      /// <param name="startRange">The start range.</param>
+      /// <param name="result">The result.</param>
+      /// <returns></returns>
       override internal protected int decodeMiddle(BitArray row, int[] startRange, StringBuilder result)
       {
          int[] counters = decodeMiddleCounters;
@@ -87,16 +97,33 @@ namespace ZXing.OneD
          return rowOffset;
       }
 
+      /// <summary>
+      /// Decodes the end.
+      /// </summary>
+      /// <param name="row">The row.</param>
+      /// <param name="endStart">The end start.</param>
+      /// <returns></returns>
       override protected int[] decodeEnd(BitArray row, int endStart)
       {
          return findGuardPattern(row, endStart, true, MIDDLE_END_PATTERN);
       }
 
+      /// <summary>
+      ///   <returns>see checkStandardUPCEANChecksum(String)</returns>
+      /// </summary>
+      /// <param name="s"></param>
+      /// <returns></returns>
       override protected bool checkChecksum(String s)
       {
          return base.checkChecksum(convertUPCEtoUPCA(s));
       }
 
+      /// <summary>
+      /// Determines the num sys and check digit.
+      /// </summary>
+      /// <param name="resultString">The result string.</param>
+      /// <param name="lgPatternFound">The lg pattern found.</param>
+      /// <returns></returns>
       private static bool determineNumSysAndCheckDigit(StringBuilder resultString, int lgPatternFound)
       {
 
@@ -115,6 +142,10 @@ namespace ZXing.OneD
          return false;
       }
 
+      /// <summary>
+      /// Get the format of this decoder.
+      /// <returns>The 1D format.</returns>
+      /// </summary>
       override internal BarcodeFormat BarcodeFormat
       {
          get { return BarcodeFormat.UPC_E; }
@@ -161,6 +192,5 @@ namespace ZXing.OneD
          result.Append(upce[7]);
          return result.ToString();
       }
-
    }
 }

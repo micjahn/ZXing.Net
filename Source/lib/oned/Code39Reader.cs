@@ -22,9 +22,8 @@ using ZXing.Common;
 namespace ZXing.OneD
 {
    /// <summary>
-   /// <p>Decodes Code 39 barcodes. This does not support "Full ASCII Code 39" yet.</p>
-   ///
-   /// <author>Sean Owen</author>
+   ///   <p>Decodes Code 39 barcodes. This does not support "Full ASCII Code 39" yet.</p>
+   /// 	<author>Sean Owen</author>
    /// @see Code93Reader
    /// </summary>
    public sealed class Code39Reader : OneDReader
@@ -89,6 +88,19 @@ namespace ZXing.OneD
          this.extendedMode = extendedMode;
       }
 
+      /// <summary>
+      ///   <p>Attempts to decode a one-dimensional barcode format given a single row of
+      /// an image.</p>
+      ///   <param name="rowNumber">row number from top of the row</param>
+      ///   <param name="row">the black/white pixel data of the row</param>
+      ///   <param name="hints">decode hints</param>
+      ///   <returns><see cref="Result"/>containing encoded string and start/end of barcode</returns>
+      ///   <exception cref="NotFoundException">if an error occurs or barcode cannot be found</exception>
+      /// </summary>
+      /// <param name="rowNumber"></param>
+      /// <param name="row"></param>
+      /// <param name="hints"></param>
+      /// <returns></returns>
       override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
          int[] counters = new int[9];

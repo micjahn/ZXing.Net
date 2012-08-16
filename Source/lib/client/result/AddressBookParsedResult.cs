@@ -68,7 +68,7 @@ namespace ZXing.Client.Result
          this.title = title;
          this.url = url;
 
-         displayResult = getDisplayResult();
+         displayResultValue = getDisplayResult();
       }
 
       public String[] Names

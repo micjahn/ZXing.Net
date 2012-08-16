@@ -29,11 +29,22 @@ namespace ZXing.Multi.QrCode
    {
       private static readonly Result[] EMPTY_RESULT_ARRAY = new Result[0];
 
+      /// <summary>
+      /// Decodes the multiple.
+      /// </summary>
+      /// <param name="image">The image.</param>
+      /// <returns></returns>
       public Result[] decodeMultiple(BinaryBitmap image)
       {
          return decodeMultiple(image, null);
       }
 
+      /// <summary>
+      /// Decodes the multiple.
+      /// </summary>
+      /// <param name="image">The image.</param>
+      /// <param name="hints">The hints.</param>
+      /// <returns></returns>
       public Result[] decodeMultiple(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
       {
          var results = new List<Result>();

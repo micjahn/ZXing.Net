@@ -24,18 +24,66 @@ using ZXing.OneD;
 
 namespace ZXing.Rendering
 {
+   /// <summary>
+   /// Renders a <see cref="BitMatrix" /> to a <see cref="WriteableBitmap" />
+   /// </summary>
    public class WriteableBitmapRenderer : IBarcodeRenderer<WriteableBitmap>
    {
+      /// <summary>
+      /// Gets or sets the foreground color.
+      /// </summary>
+      /// <value>
+      /// The foreground color.
+      /// </value>
       public Color Foreground { get; set; }
+      /// <summary>
+      /// Gets or sets the background color.
+      /// </summary>
+      /// <value>
+      /// The background color.
+      /// </value>
       public Color Background { get; set; }
+      /// <summary>
+      /// Gets or sets the font family.
+      /// </summary>
+      /// <value>
+      /// The font family.
+      /// </value>
       public FontFamily FontFamily { get; set; }
+      /// <summary>
+      /// Gets or sets the size of the font.
+      /// </summary>
+      /// <value>
+      /// The size of the font.
+      /// </value>
       public double FontSize { get; set; }
+      /// <summary>
+      /// Gets or sets the font stretch.
+      /// </summary>
+      /// <value>
+      /// The font stretch.
+      /// </value>
       public FontStretch FontStretch { get; set; }
+      /// <summary>
+      /// Gets or sets the font style.
+      /// </summary>
+      /// <value>
+      /// The font style.
+      /// </value>
       public FontStyle FontStyle { get; set; }
+      /// <summary>
+      /// Gets or sets the font weight.
+      /// </summary>
+      /// <value>
+      /// The font weight.
+      /// </value>
       public FontWeight FontWeight { get; set; }
 
       private static readonly FontFamily DefaultFontFamily = new FontFamily("Arial");
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="WriteableBitmapRenderer"/> class.
+      /// </summary>
       public WriteableBitmapRenderer()
       {
          Foreground = Colors.Black;
@@ -47,11 +95,26 @@ namespace ZXing.Rendering
          FontWeight = FontWeights.Normal;
       }
 
+      /// <summary>
+      /// Renders the specified matrix.
+      /// </summary>
+      /// <param name="matrix">The matrix.</param>
+      /// <param name="format">The format.</param>
+      /// <param name="content">The content.</param>
+      /// <returns></returns>
       public WriteableBitmap Render(BitMatrix matrix, BarcodeFormat format, string content)
       {
          return Render(matrix, format, content, null);
       }
 
+      /// <summary>
+      /// Renders the specified matrix.
+      /// </summary>
+      /// <param name="matrix">The matrix.</param>
+      /// <param name="format">The format.</param>
+      /// <param name="content">The content.</param>
+      /// <param name="options">The options.</param>
+      /// <returns></returns>
       virtual public WriteableBitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
       {
          int foreground = Foreground.A << 24 | Foreground.B << 16 | Foreground.G << 8 | Foreground.R;

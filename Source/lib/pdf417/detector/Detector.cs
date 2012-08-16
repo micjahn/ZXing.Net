@@ -53,6 +53,10 @@ namespace ZXing.PDF417.Internal
 
       private readonly BinaryBitmap image;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Detector"/> class.
+      /// </summary>
+      /// <param name="image">The image.</param>
       public Detector(BinaryBitmap image)
       {
          this.image = image;

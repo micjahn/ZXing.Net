@@ -43,7 +43,7 @@ namespace ZXing.Client.Result
          maybeAppend(NetworkEncryption, result);
          maybeAppend(Password, result);
          maybeAppend(hidden.ToString(), result);
-         displayResult = result.ToString();
+         displayResultValue = result.ToString();
       }
 
       public String Ssid { get; private set; }

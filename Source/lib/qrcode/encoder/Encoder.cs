@@ -17,18 +17,16 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
 using ZXing.Common;
 using ZXing.Common.ReedSolomon;
-using ZXing.QrCode.Internal;
 
 namespace ZXing.QrCode.Internal
 {
-   /// <author>  satorux@google.com (Satoru Takabayashi) - creator
-   /// </author>
-   /// <author>  dswitkin@google.com (Daniel Switkin) - ported from C++
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <summary>
+   /// </summary>
+   /// <author>satorux@google.com (Satoru Takabayashi) - creator</author>
+   /// <author>dswitkin@google.com (Daniel Switkin) - ported from C++</author>
    public static class Encoder
    {
 
@@ -65,12 +63,18 @@ namespace ZXing.QrCode.Internal
       /// </summary>
       /// <param name="content">The content.</param>
       /// <param name="ecLevel">The ec level.</param>
-      /// <param name="qrCode">The qr code.</param>
       public static QRCode encode(String content, ErrorCorrectionLevel ecLevel)
       {
          return encode(content, ecLevel, null);
       }
 
+      /// <summary>
+      /// Encodes the specified content.
+      /// </summary>
+      /// <param name="content">The content.</param>
+      /// <param name="ecLevel">The ec level.</param>
+      /// <param name="hints">The hints.</param>
+      /// <returns></returns>
       public static QRCode encode(String content,
                                 ErrorCorrectionLevel ecLevel,
                                 IDictionary<EncodeHintType, object> hints)
@@ -160,11 +164,12 @@ namespace ZXing.QrCode.Internal
          return qrCode;
       }
 
-      /**
-       * @return the code point of the table used in alphanumeric mode or
-       *  -1 if there is no corresponding code in the table.
-       */
-
+      /// <summary>
+      /// Gets the alphanumeric code.
+      /// </summary>
+      /// <param name="code">The code.</param>
+      /// <returns>the code point of the table used in alphanumeric mode or
+      /// -1 if there is no corresponding code in the table.</returns>
       internal static int getAlphanumericCode(int code)
       {
          if (code < ALPHANUMERIC_TABLE.Length)
@@ -174,15 +179,23 @@ namespace ZXing.QrCode.Internal
          return -1;
       }
 
+      /// <summary>
+      /// Chooses the mode.
+      /// </summary>
+      /// <param name="content">The content.</param>
+      /// <returns></returns>
       public static Mode chooseMode(String content)
       {
          return chooseMode(content, null);
       }
 
-      /**
-       * Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
-       * if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
-       */
+      /// <summary>
+      /// Choose the best mode by examining the content. Note that 'encoding' is used as a hint;
+      /// if it is Shift_JIS, and the input is only double-byte Kanji, then we return {@link Mode#KANJI}.
+      /// </summary>
+      /// <param name="content">The content.</param>
+      /// <param name="encoding">The encoding.</param>
+      /// <returns></returns>
       private static Mode chooseMode(String content, String encoding)
       {
          if ("Shift_JIS".Equals(encoding))
@@ -297,10 +310,11 @@ namespace ZXing.QrCode.Internal
          throw new WriterException("Data too big");
       }
 
-      /**
-       * Terminate bits as described in 8.4.8 and 8.4.9 of JISX0510:2004 (p.24).
-       */
-
+      /// <summary>
+      /// Terminate bits as described in 8.4.8 and 8.4.9 of JISX0510:2004 (p.24).
+      /// </summary>
+      /// <param name="numDataBytes">The num data bytes.</param>
+      /// <param name="bits">The bits.</param>
       internal static void terminateBits(int numDataBytes, BitArray bits)
       {
          int capacity = numDataBytes << 3;
@@ -335,12 +349,17 @@ namespace ZXing.QrCode.Internal
          }
       }
 
-      /**
-       * Get number of data bytes and number of error correction bytes for block id "blockID". Store
-       * the result in "numDataBytesInBlock", and "numECBytesInBlock". See table 12 in 8.5.1 of
-       * JISX0510:2004 (p.30)
-       */
-
+      /// <summary>
+      /// Get number of data bytes and number of error correction bytes for block id "blockID". Store
+      /// the result in "numDataBytesInBlock", and "numECBytesInBlock". See table 12 in 8.5.1 of
+      /// JISX0510:2004 (p.30)
+      /// </summary>
+      /// <param name="numTotalBytes">The num total bytes.</param>
+      /// <param name="numDataBytes">The num data bytes.</param>
+      /// <param name="numRSBlocks">The num RS blocks.</param>
+      /// <param name="blockID">The block ID.</param>
+      /// <param name="numDataBytesInBlock">The num data bytes in block.</param>
+      /// <param name="numECBytesInBlock">The num EC bytes in block.</param>
       internal static void getNumDataBytesAndNumECBytesForBlockID(int numTotalBytes,
                                                          int numDataBytes,
                                                          int numRSBlocks,

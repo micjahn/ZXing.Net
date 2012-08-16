@@ -16,24 +16,32 @@
 
 namespace ZXing.PDF417.Internal.EC
 {
-   /**
-    * <p>PDF417 error correction implementation.</p>
-    *
-    * <p>This <a href="http://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction#Example">example</a>
-    * is quite useful in understanding the algorithm.</p>
-    *
-    * @author Sean Owen
-    * @see com.google.zxing.common.reedsolomon.ReedSolomonDecoder
-    */
+   /// <summary>
+   /// <p>PDF417 error correction implementation.</p>
+   /// <p>This <a href="http://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction#Example">example</a>
+   /// is quite useful in understanding the algorithm.</p>
+   /// <author>Sean Owen</author>
+   /// <see cref="ZXing.Common.ReedSolomon.ReedSolomonDecoder" />
+   /// </summary>
    public sealed class ErrorCorrection
    {
       private readonly ModulusGF field;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="ErrorCorrection"/> class.
+      /// </summary>
       public ErrorCorrection()
       {
          this.field = ModulusGF.PDF417_GF;
       }
 
+      /// <summary>
+      /// Decodes the specified received.
+      /// </summary>
+      /// <param name="received">The received.</param>
+      /// <param name="numECCodewords">The num EC codewords.</param>
+      /// <param name="erasures">The erasures.</param>
+      /// <returns></returns>
       public bool decode(int[] received, int numECCodewords, int[] erasures)
       {
          ModulusPoly poly = new ModulusPoly(field, received);

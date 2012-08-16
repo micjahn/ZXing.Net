@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using ZXing.Common;
 using ZXing.OneD.RSS.Expanded.Decoders;
 
@@ -84,17 +85,17 @@ namespace ZXing.OneD.RSS.Expanded
       private const int FINDER_PAT_F = 5;
 
       private static readonly int[][] FINDER_PATTERN_SEQUENCES = {
-    new[] { FINDER_PAT_A, FINDER_PAT_A },
-    new[] { FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B },
-    new[] { FINDER_PAT_A, FINDER_PAT_C, FINDER_PAT_B, FINDER_PAT_D },
-    new[] { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_C },
-    new[] { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_F },
-    new[] { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
-    new[] { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D },
-    new[] { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E },
-    new[] { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
-    new[] { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
-  };
+         new[] { FINDER_PAT_A, FINDER_PAT_A },
+         new[] { FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B },
+         new[] { FINDER_PAT_A, FINDER_PAT_C, FINDER_PAT_B, FINDER_PAT_D },
+         new[] { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_C },
+         new[] { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_F },
+         new[] { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
+         new[] { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D },
+         new[] { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E },
+         new[] { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
+         new[] { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
+      };
 
       private static readonly int LONGEST_SEQUENCE_SIZE = FINDER_PATTERN_SEQUENCES[FINDER_PATTERN_SEQUENCES.Length - 1].Length;
 
@@ -106,6 +107,19 @@ namespace ZXing.OneD.RSS.Expanded
 
       internal List<ExpandedPair> Pairs { get { return pairs; } }
 
+      /// <summary>
+      ///   <p>Attempts to decode a one-dimensional barcode format given a single row of
+      /// an image.</p>
+      ///   <param name="rowNumber">row number from top of the row</param>
+      ///   <param name="row">the black/white pixel data of the row</param>
+      ///   <param name="hints">decode hints</param>
+      ///   <returns><see cref="Result"/>containing encoded string and start/end of barcode</returns>
+      ///   <exception cref="NotFoundException">if an error occurs or barcode cannot be found</exception>
+      /// </summary>
+      /// <param name="rowNumber"></param>
+      /// <param name="row"></param>
+      /// <param name="hints"></param>
+      /// <returns></returns>
       override public Result decodeRow(int rowNumber,
                               BitArray row,
                               IDictionary<DecodeHintType, object> hints)
@@ -116,6 +130,9 @@ namespace ZXing.OneD.RSS.Expanded
          return constructResult(pairs);
       }
 
+      /// <summary>
+      /// Resets this instance.
+      /// </summary>
       public override void reset()
       {
          pairs.Clear();

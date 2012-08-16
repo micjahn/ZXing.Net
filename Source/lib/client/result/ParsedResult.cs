@@ -34,10 +34,10 @@ namespace ZXing.Client.Result
    /// </author>
    public abstract class ParsedResult
    {
-      protected string displayResult;
+      protected string displayResultValue;
 
       public virtual ParsedResultType Type { get; private set; }
-      public virtual String DisplayResult { get { return displayResult; } }
+      public virtual String DisplayResult { get { return displayResultValue; } }
 
       protected ParsedResult(ParsedResultType type)
       {

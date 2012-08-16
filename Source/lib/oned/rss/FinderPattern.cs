@@ -16,12 +16,32 @@
 
 namespace ZXing.OneD.RSS
 {
+   /// <summary>
+   /// 
+   /// </summary>
    public sealed class FinderPattern
    {
+      /// <summary>
+      /// Gets the value.
+      /// </summary>
       public int Value { get; private set; }
+      /// <summary>
+      /// Gets the start end.
+      /// </summary>
       public int[] StartEnd { get; private set; }
+      /// <summary>
+      /// Gets the result points.
+      /// </summary>
       public ResultPoint[] ResultPoints { get; private set; }
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="FinderPattern"/> class.
+      /// </summary>
+      /// <param name="value">The value.</param>
+      /// <param name="startEnd">The start end.</param>
+      /// <param name="start">The start.</param>
+      /// <param name="end">The end.</param>
+      /// <param name="rowNumber">The row number.</param>
       public FinderPattern(int value, int[] startEnd, int start, int end, int rowNumber)
       {
          Value = value;

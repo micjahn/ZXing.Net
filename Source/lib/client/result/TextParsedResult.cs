@@ -29,7 +29,7 @@ namespace ZXing.Client.Result
       {
          Text = text;
          Language = language;
-         displayResult = text;
+         displayResultValue = text;
       }
 
       public String Text { get; private set; }

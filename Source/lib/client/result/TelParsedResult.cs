@@ -31,7 +31,7 @@ namespace ZXing.Client.Result
          var result = new System.Text.StringBuilder(20);
          maybeAppend(number, result);
          maybeAppend(title, result);
-         displayResult = result.ToString();
+         displayResultValue = result.ToString();
       }
 
       public String Number { get; private set; }

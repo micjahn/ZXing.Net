@@ -53,7 +53,7 @@ namespace ZXing.QrCode.Internal
       public static int applyMaskPenaltyRule2(ByteMatrix matrix)
       {
          int penalty = 0;
-         sbyte[][] array = matrix.Array;
+         var array = matrix.Array;
          int width = matrix.Width;
          int height = matrix.Height;
          for (int y = 0; y < height - 1; y++)
@@ -80,7 +80,7 @@ namespace ZXing.QrCode.Internal
       public static int applyMaskPenaltyRule3(ByteMatrix matrix)
       {
          int penalty = 0;
-         sbyte[][] array = matrix.Array;
+         var array = matrix.Array;
          int width = matrix.Width;
          int height = matrix.Height;
          for (int y = 0; y < height; y++)
@@ -144,12 +144,12 @@ namespace ZXing.QrCode.Internal
       public static int applyMaskPenaltyRule4(ByteMatrix matrix)
       {
          int numDarkCells = 0;
-         sbyte[][] array = matrix.Array;
+         var array = matrix.Array;
          int width = matrix.Width;
          int height = matrix.Height;
          for (int y = 0; y < height; y++)
          {
-            sbyte[] arrayY = array[y];
+            var arrayY = array[y];
             for (int x = 0; x < width; x++)
             {
                if (arrayY[x] == 1)
@@ -232,7 +232,7 @@ namespace ZXing.QrCode.Internal
          int penalty = 0;
          int iLimit = isHorizontal ? matrix.Height : matrix.Width;
          int jLimit = isHorizontal ? matrix.Width : matrix.Height;
-         sbyte[][] array = matrix.Array;
+         var array = matrix.Array;
          for (int i = 0; i < iLimit; i++)
          {
             int numSameBitCells = 0;

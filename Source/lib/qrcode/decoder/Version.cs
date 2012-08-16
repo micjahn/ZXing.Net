@@ -15,17 +15,15 @@
 */
 
 using System;
+
 using ZXing.Common;
 
 namespace ZXing.QrCode.Internal
 {
-   /// <summary> See ISO 18004:2006 Annex D
-   /// 
+   /// <summary>
+   /// See ISO 18004:2006 Annex D
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public sealed class Version
    {
       /// <summary> See ISO 18004:2006 Annex D.
@@ -44,10 +42,10 @@ namespace ZXing.QrCode.Internal
 
       private static readonly Version[] VERSIONS = buildVersions();
 
-      private int versionNumber;
-      private int[] alignmentPatternCenters;
-      private ECBlocks[] ecBlocks;
-      private int totalCodewords;
+      private readonly int versionNumber;
+      private readonly int[] alignmentPatternCenters;
+      private readonly ECBlocks[] ecBlocks;
+      private readonly int totalCodewords;
 
       private Version(int versionNumber, int[] alignmentPatternCenters, params ECBlocks[] ecBlocks)
       {
@@ -64,6 +62,9 @@ namespace ZXing.QrCode.Internal
          this.totalCodewords = total;
       }
 
+      /// <summary>
+      /// Gets the version number.
+      /// </summary>
       public int VersionNumber
       {
          get
@@ -72,6 +73,10 @@ namespace ZXing.QrCode.Internal
          }
 
       }
+
+      /// <summary>
+      /// Gets the alignment pattern centers.
+      /// </summary>
       public int[] AlignmentPatternCenters
       {
          get
@@ -80,6 +85,10 @@ namespace ZXing.QrCode.Internal
          }
 
       }
+
+      /// <summary>
+      /// Gets the total codewords.
+      /// </summary>
       public int TotalCodewords
       {
          get
@@ -88,6 +97,10 @@ namespace ZXing.QrCode.Internal
          }
 
       }
+
+      /// <summary>
+      /// Gets the dimension for version.
+      /// </summary>
       public int DimensionForVersion
       {
          get
@@ -97,6 +110,11 @@ namespace ZXing.QrCode.Internal
 
       }
 
+      /// <summary>
+      /// Gets the EC blocks for level.
+      /// </summary>
+      /// <param name="ecLevel">The ec level.</param>
+      /// <returns></returns>
       public ECBlocks getECBlocksForLevel(ErrorCorrectionLevel ecLevel)
       {
          return ecBlocks[ecLevel.ordinal()];
@@ -107,9 +125,7 @@ namespace ZXing.QrCode.Internal
       /// </summary>
       /// <param name="dimension">dimension in modules
       /// </param>
-      /// <returns> {@link Version} for a QR Code of that dimension
-      /// </returns>
-      /// <throws>  ReaderException if dimension is not 1 mod 4 </throws>
+      /// <returns><see cref="Version" /> for a QR Code of that dimension or null</returns>
       public static Version getProvisionalVersionForDimension(int dimension)
       {
          if (dimension % 4 != 1)
@@ -126,6 +142,11 @@ namespace ZXing.QrCode.Internal
          }
       }
 
+      /// <summary>
+      /// Gets the version for number.
+      /// </summary>
+      /// <param name="versionNumber">The version number.</param>
+      /// <returns></returns>
       public static Version getVersionForNumber(int versionNumber)
       {
          if (versionNumber < 1 || versionNumber > 40)
@@ -218,8 +239,8 @@ namespace ZXing.QrCode.Internal
       /// </summary>
       public sealed class ECBlocks
       {
-         private int ecCodewordsPerBlock;
-         private ECB[] ecBlocks;
+         private readonly int ecCodewordsPerBlock;
+         private readonly ECB[] ecBlocks;
 
          internal ECBlocks(int ecCodewordsPerBlock, params ECB[] ecBlocks)
          {
@@ -227,6 +248,9 @@ namespace ZXing.QrCode.Internal
             this.ecBlocks = ecBlocks;
          }
 
+         /// <summary>
+         /// Gets the EC codewords per block.
+         /// </summary>
          public int ECCodewordsPerBlock
          {
             get
@@ -235,6 +259,9 @@ namespace ZXing.QrCode.Internal
             }
          }
 
+         /// <summary>
+         /// Gets the num blocks.
+         /// </summary>
          public int NumBlocks
          {
             get
@@ -248,6 +275,9 @@ namespace ZXing.QrCode.Internal
             }
          }
 
+         /// <summary>
+         /// Gets the total EC codewords.
+         /// </summary>
          public int TotalECCodewords
          {
             get
@@ -256,6 +286,10 @@ namespace ZXing.QrCode.Internal
             }
          }
 
+         /// <summary>
+         /// Gets the EC blocks.
+         /// </summary>
+         /// <returns></returns>
          public ECB[] getECBlocks()
          {
             return ecBlocks;
@@ -268,8 +302,8 @@ namespace ZXing.QrCode.Internal
       /// </summary>
       public sealed class ECB
       {
-         private int count;
-         private int dataCodewords;
+         private readonly int count;
+         private readonly int dataCodewords;
 
          internal ECB(int count, int dataCodewords)
          {
@@ -277,6 +311,9 @@ namespace ZXing.QrCode.Internal
             this.dataCodewords = dataCodewords;
          }
 
+         /// <summary>
+         /// Gets the count.
+         /// </summary>
          public int Count
          {
             get
@@ -285,6 +322,9 @@ namespace ZXing.QrCode.Internal
             }
 
          }
+         /// <summary>
+         /// Gets the data codewords.
+         /// </summary>
          public int DataCodewords
          {
             get
@@ -295,6 +335,12 @@ namespace ZXing.QrCode.Internal
          }
       }
 
+      /// <summary>
+      /// Returns a <see cref="System.String"/> that represents this instance.
+      /// </summary>
+      /// <returns>
+      /// A <see cref="System.String"/> that represents this instance.
+      /// </returns>
       public override String ToString()
       {
          return Convert.ToString(versionNumber);

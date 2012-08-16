@@ -30,6 +30,10 @@ namespace ZXing.OneD
    {
       private readonly IList<OneDReader> readers;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="MultiFormatOneDReader"/> class.
+      /// </summary>
+      /// <param name="hints">The hints.</param>
       public MultiFormatOneDReader(IDictionary<DecodeHintType, object> hints)
       {
          var possibleFormats = hints == null || !hints.ContainsKey(DecodeHintType.POSSIBLE_FORMATS) ? null :
@@ -88,6 +92,19 @@ namespace ZXing.OneD
          }
       }
 
+      /// <summary>
+      ///   <p>Attempts to decode a one-dimensional barcode format given a single row of
+      /// an image.</p>
+      ///   <param name="rowNumber">row number from top of the row</param>
+      ///   <param name="row">the black/white pixel data of the row</param>
+      ///   <param name="hints">decode hints</param>
+      ///   <returns><see cref="Result"/>containing encoded string and start/end of barcode</returns>
+      ///   <exception cref="NotFoundException">if an error occurs or barcode cannot be found</exception>
+      /// </summary>
+      /// <param name="rowNumber"></param>
+      /// <param name="row"></param>
+      /// <param name="hints"></param>
+      /// <returns></returns>
       override public Result decodeRow(int rowNumber,
                               BitArray row,
                               IDictionary<DecodeHintType, object> hints)
@@ -102,6 +119,10 @@ namespace ZXing.OneD
          return null;
       }
 
+      /// <summary>
+      /// Resets any internal state the implementation has after a decode, to prepare it
+      /// for reuse.
+      /// </summary>
       public override void reset()
       {
          foreach (Reader reader in readers)

@@ -21,12 +21,24 @@ using ZXing.Common;
 namespace ZXing.OneD
 {
    /// <summary>
-   /// This object renders a CODE39 code as a <see cref="BitMatrix" />.
-   /// 
+   /// This object renders a CODE39 code as a <see cref="BitMatrix"/>.
    /// <author>erik.barbara@gmail.com (Erik Barbara)</author>
    /// </summary>
    public sealed class Code39Writer : OneDimensionalCodeWriter
    {
+      /// <summary>
+      /// Encode the contents following specified format.
+      /// {@code width} and {@code height} are required size. This method may return bigger size
+      /// {@code BitMatrix} when specified size is too small. The user can set both {@code width} and
+      /// {@code height} to zero to get minimum size barcode. If negative value is set to {@code width}
+      /// or {@code height}, {@code IllegalArgumentException} is thrown.
+      /// </summary>
+      /// <param name="contents"></param>
+      /// <param name="format"></param>
+      /// <param name="width"></param>
+      /// <param name="height"></param>
+      /// <param name="hints"></param>
+      /// <returns></returns>
       public override BitMatrix encode(String contents,
                               BarcodeFormat format,
                               int width,
@@ -40,6 +52,13 @@ namespace ZXing.OneD
          return base.encode(contents, format, width, height, hints);
       }
 
+      /// <summary>
+      /// Encode the contents to byte array expression of one-dimensional barcode.
+      /// Start code and end code should be included in result, and side margins should not be included.
+      /// <returns>a {@code boolean[]} of horizontal pixels (false = white, true = black)</returns>
+      /// </summary>
+      /// <param name="contents"></param>
+      /// <returns></returns>
       override public bool[] encode(String contents)
       {
          int length = contents.Length;

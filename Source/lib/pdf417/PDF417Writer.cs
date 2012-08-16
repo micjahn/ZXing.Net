@@ -28,6 +28,16 @@ namespace ZXing.PDF417
    /// </summary>
    public sealed class PDF417Writer : Writer
    {
+      /// <summary>
+      /// </summary>
+      /// <param name="contents">The contents to encode in the barcode</param>
+      /// <param name="format">The barcode format to generate</param>
+      /// <param name="width">The preferred width in pixels</param>
+      /// <param name="height">The preferred height in pixels</param>
+      /// <param name="hints">Additional parameters to supply to the encoder</param>
+      /// <returns>
+      /// The generated barcode as a Matrix of unsigned bytes (0 == black, 255 == white)
+      /// </returns>
       public BitMatrix encode(String contents,
                               BarcodeFormat format,
                               int width,
@@ -64,6 +74,16 @@ namespace ZXing.PDF417
          return bitMatrixFromEncoder(encoder, contents, width, height);
       }
 
+      /// <summary>
+      /// Encode a barcode using the default settings.
+      /// </summary>
+      /// <param name="contents">The contents to encode in the barcode</param>
+      /// <param name="format">The barcode format to generate</param>
+      /// <param name="width">The preferred width in pixels</param>
+      /// <param name="height">The preferred height in pixels</param>
+      /// <returns>
+      /// The generated barcode as a Matrix of unsigned bytes (0 == black, 255 == white)
+      /// </returns>
       public BitMatrix encode(String contents,
                               BarcodeFormat format,
                               int width,
@@ -73,7 +93,7 @@ namespace ZXing.PDF417
       }
 
       /// <summary>
-      /// Use {@link #encode(String, BarcodeFormat, int, int, Map)} instead, with hints to
+      /// Use <see cref="encode(String, BarcodeFormat, int, int, IDictionary{TKey, TValue})" /> instead, with hints to
       /// specify the encoding options.
       /// </summary>
       /// <returns></returns>

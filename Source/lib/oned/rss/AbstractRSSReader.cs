@@ -18,6 +18,9 @@ using System;
 
 namespace ZXing.OneD.RSS
 {
+   /// <summary>
+   /// 
+   /// </summary>
    public abstract class AbstractRSSReader : OneDReader
    {
       private static readonly int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.2f);
@@ -33,6 +36,9 @@ namespace ZXing.OneD.RSS
       private readonly int[] oddCounts;
       private readonly int[] evenCounts;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="AbstractRSSReader"/> class.
+      /// </summary>
       protected AbstractRSSReader()
       {
          decodeFinderCounters = new int[4];
@@ -43,36 +49,67 @@ namespace ZXing.OneD.RSS
          evenCounts = new int[dataCharacterCounters.Length / 2];
       }
 
+      /// <summary>
+      /// Gets the decode finder counters.
+      /// </summary>
+      /// <returns></returns>
       protected int[] getDecodeFinderCounters()
       {
          return decodeFinderCounters;
       }
 
+      /// <summary>
+      /// Gets the data character counters.
+      /// </summary>
+      /// <returns></returns>
       protected int[] getDataCharacterCounters()
       {
          return dataCharacterCounters;
       }
 
+      /// <summary>
+      /// Gets the odd rounding errors.
+      /// </summary>
+      /// <returns></returns>
       protected float[] getOddRoundingErrors()
       {
          return oddRoundingErrors;
       }
 
+      /// <summary>
+      /// Gets the even rounding errors.
+      /// </summary>
+      /// <returns></returns>
       protected float[] getEvenRoundingErrors()
       {
          return evenRoundingErrors;
       }
 
+      /// <summary>
+      /// Gets the odd counts.
+      /// </summary>
+      /// <returns></returns>
       protected int[] getOddCounts()
       {
          return oddCounts;
       }
 
+      /// <summary>
+      /// Gets the even counts.
+      /// </summary>
+      /// <returns></returns>
       protected int[] getEvenCounts()
       {
          return evenCounts;
       }
 
+      /// <summary>
+      /// Parses the finder value.
+      /// </summary>
+      /// <param name="counters">The counters.</param>
+      /// <param name="finderPatterns">The finder patterns.</param>
+      /// <param name="value">The value.</param>
+      /// <returns></returns>
       protected static bool parseFinderValue(int[] counters,
                                             int[][] finderPatterns,
                                             out int value)
@@ -88,6 +125,11 @@ namespace ZXing.OneD.RSS
          return false;
       }
 
+      /// <summary>
+      /// Counts the specified array.
+      /// </summary>
+      /// <param name="array">The array.</param>
+      /// <returns></returns>
       protected static int count(int[] array)
       {
          int count = 0;
@@ -98,6 +140,11 @@ namespace ZXing.OneD.RSS
          return count;
       }
 
+      /// <summary>
+      /// Increments the specified array.
+      /// </summary>
+      /// <param name="array">The array.</param>
+      /// <param name="errors">The errors.</param>
       protected static void increment(int[] array, float[] errors)
       {
          int index = 0;
@@ -113,6 +160,11 @@ namespace ZXing.OneD.RSS
          array[index]++;
       }
 
+      /// <summary>
+      /// Decrements the specified array.
+      /// </summary>
+      /// <param name="array">The array.</param>
+      /// <param name="errors">The errors.</param>
       protected static void decrement(int[] array, float[] errors)
       {
          int index = 0;
@@ -128,6 +180,13 @@ namespace ZXing.OneD.RSS
          array[index]--;
       }
 
+      /// <summary>
+      /// Determines whether [is finder pattern] [the specified counters].
+      /// </summary>
+      /// <param name="counters">The counters.</param>
+      /// <returns>
+      ///   <c>true</c> if [is finder pattern] [the specified counters]; otherwise, <c>false</c>.
+      /// </returns>
       protected static bool isFinderPattern(int[] counters)
       {
          int firstTwoSum = counters[0] + counters[1];

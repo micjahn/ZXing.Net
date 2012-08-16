@@ -18,16 +18,16 @@ using System;
 
 namespace ZXing.QrCode.Internal
 {
-   /// <summary> <p>See ISO 18004:2006, 6.4.1, Tables 2 and 3. This enum encapsulates the various modes in which
+   /// <summary>
+   /// <p>See ISO 18004:2006, 6.4.1, Tables 2 and 3. This enum encapsulates the various modes in which
    /// data can be encoded to bits in the QR code standard.</p>
-   /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public sealed class Mode
    {
+      /// <summary>
+      /// Gets the name.
+      /// </summary>
       public String Name
       {
          get
@@ -38,24 +38,48 @@ namespace ZXing.QrCode.Internal
 
       // No, we can't use an enum here. J2ME doesn't support it.
 
+      /// <summary>
+      /// 
+      /// </summary>
       public static readonly Mode TERMINATOR = new Mode(new int[] { 0, 0, 0 }, 0x00, "TERMINATOR"); // Not really a mode...
+      /// <summary>
+      /// 
+      /// </summary>
       public static readonly Mode NUMERIC = new Mode(new int[] { 10, 12, 14 }, 0x01, "NUMERIC");
+      /// <summary>
+      /// 
+      /// </summary>
       public static readonly Mode ALPHANUMERIC = new Mode(new int[] { 9, 11, 13 }, 0x02, "ALPHANUMERIC");
+      /// <summary>
+      /// 
+      /// </summary>
       public static readonly Mode STRUCTURED_APPEND = new Mode(new int[] { 0, 0, 0 }, 0x03, "STRUCTURED_APPEND"); // Not supported
+      /// <summary>
+      /// 
+      /// </summary>
       public static readonly Mode BYTE = new Mode(new int[] { 8, 16, 16 }, 0x04, "BYTE");
+      /// <summary>
+      /// 
+      /// </summary>
       public static readonly Mode ECI = new Mode(null, 0x07, "ECI"); // character counts don't apply
+      /// <summary>
+      /// 
+      /// </summary>
       public static readonly Mode KANJI = new Mode(new int[] { 8, 10, 12 }, 0x08, "KANJI");
+      /// <summary>
+      /// 
+      /// </summary>
       public static readonly Mode FNC1_FIRST_POSITION = new Mode(null, 0x05, "FNC1_FIRST_POSITION");
+      /// <summary>
+      /// 
+      /// </summary>
       public static readonly Mode FNC1_SECOND_POSITION = new Mode(null, 0x09, "FNC1_SECOND_POSITION");
       /// <summary>See GBT 18284-2000; "Hanzi" is a transliteration of this mode name.</summary>
       public static readonly Mode HANZI = new Mode(new int[] { 8, 10, 12 }, 0x0D, "HANZI");
 
-      //UPGRADE_NOTE: Final was removed from the declaration of 'characterCountBitsForVersions '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-      private int[] characterCountBitsForVersions;
-      //UPGRADE_NOTE: Final was removed from the declaration of 'bits '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-      private int bits;
-      //UPGRADE_NOTE: Final was removed from the declaration of 'name '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-      private System.String name;
+      private readonly int[] characterCountBitsForVersions;
+      private readonly int bits;
+      private readonly String name;
 
       private Mode(int[] characterCountBitsForVersions, int bits, System.String name)
       {
@@ -64,11 +88,14 @@ namespace ZXing.QrCode.Internal
          this.name = name;
       }
 
-      /// <param name="bits">four bits encoding a QR Code data mode
-      /// </param>
-      /// <returns> {@link Mode} encoded by these bits
+      /// <summary>
+      /// Fors the bits.
+      /// </summary>
+      /// <param name="bits">four bits encoding a QR Code data mode</param>
+      /// <returns>
+      ///   <see cref="Mode"/> encoded by these bits
       /// </returns>
-      /// <throws>  IllegalArgumentException if bits do not correspond to a known mode </throws>
+      /// <exception cref="ArgumentException">if bits do not correspond to a known mode</exception>
       public static Mode forBits(int bits)
       {
          switch (bits)
@@ -95,8 +122,7 @@ namespace ZXing.QrCode.Internal
                // 0xD is defined in GBT 18284-2000, may not be supported in foreign country
                return HANZI;
             default:
-               throw new System.ArgumentException();
-
+               throw new ArgumentException();
          }
       }
 
@@ -109,7 +135,7 @@ namespace ZXing.QrCode.Internal
       {
          if (characterCountBitsForVersions == null)
          {
-            throw new System.ArgumentException("Character count doesn't apply to this mode");
+            throw new ArgumentException("Character count doesn't apply to this mode");
          }
          int number = version.VersionNumber;
          int offset;
@@ -128,6 +154,9 @@ namespace ZXing.QrCode.Internal
          return characterCountBitsForVersions[offset];
       }
 
+      /// <summary>
+      /// Gets the bits.
+      /// </summary>
       public int Bits
       {
          get
@@ -135,7 +164,13 @@ namespace ZXing.QrCode.Internal
             return bits;
          }
       }
-      
+
+      /// <summary>
+      /// Returns a <see cref="System.String"/> that represents this instance.
+      /// </summary>
+      /// <returns>
+      /// A <see cref="System.String"/> that represents this instance.
+      /// </returns>
       public override String ToString()
       {
          return name;

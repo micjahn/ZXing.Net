@@ -13,18 +13,16 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-using System;
+
 using ZXing.Common;
-using ZXing.QrCode.Internal;
 
 namespace ZXing.QrCode.Internal
 {
-
-   /// <author>  satorux@google.com (Satoru Takabayashi) - creator
-   /// </author>
-   /// <author>  dswitkin@google.com (Daniel Switkin) - ported from C++
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
+   /// <summary>
+   /// 
+   /// </summary>
+   /// <author>
+   /// satorux@google.com (Satoru Takabayashi) - creator
    /// </author>
    public static class MatrixUtil
    {
@@ -120,17 +118,27 @@ namespace ZXing.QrCode.Internal
       private const int TYPE_INFO_POLY = 0x537;
       private const int TYPE_INFO_MASK_PATTERN = 0x5412;
 
-      // Set all cells to -1.  -1 means that the cell is empty (not set yet).
-      //
-      // JAVAPORT: We shouldn't need to do this at all. The code should be rewritten to begin encoding
-      // with the ByteMatrix initialized all to zero.
+      /// <summary>
+      /// Set all cells to 2.  2 means that the cell is empty (not set yet).
+      ///
+      /// JAVAPORT: We shouldn't need to do this at all. The code should be rewritten to begin encoding
+      /// with the ByteMatrix initialized all to zero.
+      /// </summary>
+      /// <param name="matrix">The matrix.</param>
       public static void clearMatrix(ByteMatrix matrix)
       {
-         matrix.clear(-1);
+         matrix.clear(2);
       }
 
-      // Build 2D matrix of QR Code from "dataBits" with "ecLevel", "version" and "getMaskPattern". On
-      // success, store the result in "matrix" and return true.
+      /// <summary>
+      /// Build 2D matrix of QR Code from "dataBits" with "ecLevel", "version" and "getMaskPattern". On
+      /// success, store the result in "matrix" and return true.
+      /// </summary>
+      /// <param name="dataBits">The data bits.</param>
+      /// <param name="ecLevel">The ec level.</param>
+      /// <param name="version">The version.</param>
+      /// <param name="maskPattern">The mask pattern.</param>
+      /// <param name="matrix">The matrix.</param>
       public static void buildMatrix(BitArray dataBits, ErrorCorrectionLevel ecLevel, Version version, int maskPattern, ByteMatrix matrix)
       {
          clearMatrix(matrix);
@@ -143,12 +151,16 @@ namespace ZXing.QrCode.Internal
          embedDataBits(dataBits, maskPattern, matrix);
       }
 
-      // Embed basic patterns. On success, modify the matrix and return true.
-      // The basic patterns are:
-      // - Position detection patterns
-      // - Timing patterns
-      // - Dark dot at the left bottom corner
-      // - Position adjustment patterns, if need be
+      /// <summary>
+      /// Embed basic patterns. On success, modify the matrix and return true.
+      /// The basic patterns are:
+      /// - Position detection patterns
+      /// - Timing patterns
+      /// - Dark dot at the left bottom corner
+      /// - Position adjustment patterns, if need be
+      /// </summary>
+      /// <param name="version">The version.</param>
+      /// <param name="matrix">The matrix.</param>
       public static void embedBasicPatterns(Version version, ByteMatrix matrix)
       {
          // Let's get started with embedding big squares at corners.
@@ -162,7 +174,12 @@ namespace ZXing.QrCode.Internal
          embedTimingPatterns(matrix);
       }
 
-      // Embed type information. On success, modify the matrix.
+      /// <summary>
+      /// Embed type information. On success, modify the matrix.
+      /// </summary>
+      /// <param name="ecLevel">The ec level.</param>
+      /// <param name="maskPattern">The mask pattern.</param>
+      /// <param name="matrix">The matrix.</param>
       public static void embedTypeInfo(ErrorCorrectionLevel ecLevel, int maskPattern, ByteMatrix matrix)
       {
          BitArray typeInfoBits = new BitArray();
@@ -196,8 +213,12 @@ namespace ZXing.QrCode.Internal
          }
       }
 
-      // Embed version information if need be. On success, modify the matrix and return true.
-      // See 8.10 of JISX0510:2004 (p.47) for how to embed version information.
+      /// <summary>
+      /// Embed version information if need be. On success, modify the matrix and return true.
+      /// See 8.10 of JISX0510:2004 (p.47) for how to embed version information.
+      /// </summary>
+      /// <param name="version">The version.</param>
+      /// <param name="matrix">The matrix.</param>
       public static void maybeEmbedVersionInfo(Version version, ByteMatrix matrix)
       {
          if (version.VersionNumber < 7)
@@ -224,9 +245,14 @@ namespace ZXing.QrCode.Internal
          }
       }
 
-      // Embed "dataBits" using "getMaskPattern". On success, modify the matrix and return true.
-      // For debugging purposes, it skips masking process if "getMaskPattern" is -1.
-      // See 8.7 of JISX0510:2004 (p.38) for how to embed data bits.
+      /// <summary>
+      /// Embed "dataBits" using "getMaskPattern". On success, modify the matrix and return true.
+      /// For debugging purposes, it skips masking process if "getMaskPattern" is -1.
+      /// See 8.7 of JISX0510:2004 (p.38) for how to embed data bits.
+      /// </summary>
+      /// <param name="dataBits">The data bits.</param>
+      /// <param name="maskPattern">The mask pattern.</param>
+      /// <param name="matrix">The matrix.</param>
       public static void embedDataBits(BitArray dataBits, int maskPattern, ByteMatrix matrix)
       {
          int bitIndex = 0;
@@ -287,11 +313,15 @@ namespace ZXing.QrCode.Internal
          }
       }
 
-      // Return the position of the most significant bit set (to one) in the "value". The most
-      // significant bit is position 32. If there is no bit set, return 0. Examples:
-      // - findMSBSet(0) => 0
-      // - findMSBSet(1) => 1
-      // - findMSBSet(255) => 8
+      /// <summary>
+      /// Return the position of the most significant bit set (to one) in the "value". The most
+      /// significant bit is position 32. If there is no bit set, return 0. Examples:
+      /// - findMSBSet(0) => 0
+      /// - findMSBSet(1) => 1
+      /// - findMSBSet(255) => 8
+      /// </summary>
+      /// <param name="value_Renamed">The value_ renamed.</param>
+      /// <returns></returns>
       public static int findMSBSet(int value_Renamed)
       {
          int numDigits = 0;
@@ -303,49 +333,59 @@ namespace ZXing.QrCode.Internal
          return numDigits;
       }
 
-      // Calculate BCH (Bose-Chaudhuri-Hocquenghem) code for "value" using polynomial "poly". The BCH
-      // code is used for encoding type information and version information.
-      // Example: Calculation of version information of 7.
-      // f(x) is created from 7.
-      //   - 7 = 000111 in 6 bits
-      //   - f(x) = x^2 + x^2 + x^1
-      // g(x) is given by the standard (p. 67)
-      //   - g(x) = x^12 + x^11 + x^10 + x^9 + x^8 + x^5 + x^2 + 1
-      // Multiply f(x) by x^(18 - 6)
-      //   - f'(x) = f(x) * x^(18 - 6)
-      //   - f'(x) = x^14 + x^13 + x^12
-      // Calculate the remainder of f'(x) / g(x)
-      //         x^2
-      //         __________________________________________________
-      //   g(x) )x^14 + x^13 + x^12
-      //         x^14 + x^13 + x^12 + x^11 + x^10 + x^7 + x^4 + x^2
-      //         --------------------------------------------------
-      //                              x^11 + x^10 + x^7 + x^4 + x^2
-      //
-      // The remainder is x^11 + x^10 + x^7 + x^4 + x^2
-      // Encode it in binary: 110010010100
-      // The return value is 0xc94 (1100 1001 0100)
-      //
-      // Since all coefficients in the polynomials are 1 or 0, we can do the calculation by bit
-      // operations. We don't care if cofficients are positive or negative.
-      public static int calculateBCHCode(int value_Renamed, int poly)
+      /// <summary>
+      /// Calculate BCH (Bose-Chaudhuri-Hocquenghem) code for "value" using polynomial "poly". The BCH
+      /// code is used for encoding type information and version information.
+      /// Example: Calculation of version information of 7.
+      /// f(x) is created from 7.
+      ///   - 7 = 000111 in 6 bits
+      ///   - f(x) = x^2 + x^2 + x^1
+      /// g(x) is given by the standard (p. 67)
+      ///   - g(x) = x^12 + x^11 + x^10 + x^9 + x^8 + x^5 + x^2 + 1
+      /// Multiply f(x) by x^(18 - 6)
+      ///   - f'(x) = f(x) * x^(18 - 6)
+      ///   - f'(x) = x^14 + x^13 + x^12
+      /// Calculate the remainder of f'(x) / g(x)
+      ///         x^2
+      ///         __________________________________________________
+      ///   g(x) )x^14 + x^13 + x^12
+      ///         x^14 + x^13 + x^12 + x^11 + x^10 + x^7 + x^4 + x^2
+      ///         --------------------------------------------------
+      ///                              x^11 + x^10 + x^7 + x^4 + x^2
+      ///
+      /// The remainder is x^11 + x^10 + x^7 + x^4 + x^2
+      /// Encode it in binary: 110010010100
+      /// The return value is 0xc94 (1100 1001 0100)
+      ///
+      /// Since all coefficients in the polynomials are 1 or 0, we can do the calculation by bit
+      /// operations. We don't care if cofficients are positive or negative.
+      /// </summary>
+      /// <param name="value">The value.</param>
+      /// <param name="poly">The poly.</param>
+      /// <returns></returns>
+      public static int calculateBCHCode(int value, int poly)
       {
          // If poly is "1 1111 0010 0101" (version info poly), msbSetInPoly is 13. We'll subtract 1
          // from 13 to make it 12.
          int msbSetInPoly = findMSBSet(poly);
-         value_Renamed <<= msbSetInPoly - 1;
+         value <<= msbSetInPoly - 1;
          // Do the division business using exclusive-or operations.
-         while (findMSBSet(value_Renamed) >= msbSetInPoly)
+         while (findMSBSet(value) >= msbSetInPoly)
          {
-            value_Renamed ^= poly << (findMSBSet(value_Renamed) - msbSetInPoly);
+            value ^= poly << (findMSBSet(value) - msbSetInPoly);
          }
          // Now the "value" is the remainder (i.e. the BCH code)
-         return value_Renamed;
+         return value;
       }
 
-      // Make bit vector of type information. On success, store the result in "bits" and return true.
-      // Encode error correction level and mask pattern. See 8.9 of
-      // JISX0510:2004 (p.45) for details.
+      /// <summary>
+      /// Make bit vector of type information. On success, store the result in "bits" and return true.
+      /// Encode error correction level and mask pattern. See 8.9 of
+      /// JISX0510:2004 (p.45) for details.
+      /// </summary>
+      /// <param name="ecLevel">The ec level.</param>
+      /// <param name="maskPattern">The mask pattern.</param>
+      /// <param name="bits">The bits.</param>
       public static void makeTypeInfoBits(ErrorCorrectionLevel ecLevel, int maskPattern, BitArray bits)
       {
          if (!QRCode.isValidMaskPattern(maskPattern))
@@ -369,8 +409,12 @@ namespace ZXing.QrCode.Internal
          }
       }
 
-      // Make bit vector of version information. On success, store the result in "bits" and return true.
-      // See 8.10 of JISX0510:2004 (p.45) for details.
+      /// <summary>
+      /// Make bit vector of version information. On success, store the result in "bits" and return true.
+      /// See 8.10 of JISX0510:2004 (p.45) for details.
+      /// </summary>
+      /// <param name="version">The version.</param>
+      /// <param name="bits">The bits.</param>
       public static void makeVersionInfoBits(Version version, BitArray bits)
       {
          bits.appendBits(version.VersionNumber, 6);
@@ -384,10 +428,16 @@ namespace ZXing.QrCode.Internal
          }
       }
 
-      // Check if "value" is empty.
-      private static bool isEmpty(int value_Renamed)
+      /// <summary>
+      /// Check if "value" is empty.
+      /// </summary>
+      /// <param name="value">The value.</param>
+      /// <returns>
+      ///   <c>true</c> if the specified value is empty; otherwise, <c>false</c>.
+      /// </returns>
+      private static bool isEmpty(int value)
       {
-         return value_Renamed == -1;
+         return value == 2;
       }
 
       private static void embedTimingPatterns(ByteMatrix matrix)
@@ -410,7 +460,10 @@ namespace ZXing.QrCode.Internal
          }
       }
 
-      // Embed the lonely dark dot at left bottom corner. JISX0510:2004 (p.46)
+      /// <summary>
+      /// Embed the lonely dark dot at left bottom corner. JISX0510:2004 (p.46)
+      /// </summary>
+      /// <param name="matrix">The matrix.</param>
       private static void embedDarkDotAtLeftBottomCorner(ByteMatrix matrix)
       {
          if (matrix[8, matrix.Height - 8] == 0)
@@ -444,9 +497,14 @@ namespace ZXing.QrCode.Internal
          }
       }
 
-      // Note that we cannot unify the function with embedPositionDetectionPattern() despite they are
-      // almost identical, since we cannot write a function that takes 2D arrays in different sizes in
-      // C/C++. We should live with the fact.
+      /// <summary>
+      /// Note that we cannot unify the function with embedPositionDetectionPattern() despite they are
+      /// almost identical, since we cannot write a function that takes 2D arrays in different sizes in
+      /// C/C++. We should live with the fact.
+      /// </summary>
+      /// <param name="xStart">The x start.</param>
+      /// <param name="yStart">The y start.</param>
+      /// <param name="matrix">The matrix.</param>
       private static void embedPositionAdjustmentPattern(int xStart, int yStart, ByteMatrix matrix)
       {
          for (int y = 0; y < 5; ++y)
@@ -469,7 +527,10 @@ namespace ZXing.QrCode.Internal
          }
       }
 
-      // Embed position detection patterns and surrounding vertical/horizontal separators.
+      /// <summary>
+      /// Embed position detection patterns and surrounding vertical/horizontal separators.
+      /// </summary>
+      /// <param name="matrix">The matrix.</param>
       private static void embedPositionDetectionPatternsAndSeparators(ByteMatrix matrix)
       {
          // Embed three big squares at corners.
@@ -500,7 +561,11 @@ namespace ZXing.QrCode.Internal
          embedVerticalSeparationPattern(vspSize, matrix.Height - vspSize, matrix);
       }
 
-      // Embed position adjustment patterns if need be.
+      /// <summary>
+      /// Embed position adjustment patterns if need be.
+      /// </summary>
+      /// <param name="version">The version.</param>
+      /// <param name="matrix">The matrix.</param>
       private static void maybeEmbedPositionAdjustmentPatterns(Version version, ByteMatrix matrix)
       {
          if (version.VersionNumber < 2)

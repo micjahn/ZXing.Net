@@ -21,6 +21,9 @@ using ZXing.QrCode.Internal;
 
 namespace ZXing.QrCode
 {
+   /// <summary>
+   /// The class holds the available options for the QrCodeWriter
+   /// </summary>
    [Serializable]
    public class QrCodeEncodingOptions : EncodingOptions
    {

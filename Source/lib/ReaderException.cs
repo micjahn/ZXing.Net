@@ -18,36 +18,22 @@ using System;
 
 namespace ZXing
 {
-	/// <summary> The general exception class throw when something goes wrong during decoding of a barcode.
+	/// <summary>
+	/// The general exception class throw when something goes wrong during decoding of a barcode.
 	/// This includes, but is not limited to, failing checksums / error correction algorithms, being
 	/// unable to locate finder timing patterns, and so on.
-	/// 
 	/// </summary>
-	/// <author>  Sean Owen
-	/// </author>
-	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-	/// </author>
+	/// <author>Sean Owen</author>
 	[Serializable]
 	public class ReaderException : Exception
 	{
+      /// <summary>
+      /// Gets the instance.
+      /// </summary>
 		public static ReaderException Instance
 		{
 			get
 			{
-				//    Exception e = new Exception();
-				//    // Take the stack frame before this one.
-				//    StackTraceElement stack = e.getStackTrace()[1];
-				//    String key = stack.getClassName() + "." + stack.getMethodName() + "(), line " +
-				//        stack.getLineNumber();
-				//    if (throwers.containsKey(key)) {
-				//      Integer value = throwers.get(key);
-				//      value++;
-				//      throwers.put(key, value);
-				//    } else {
-				//      throwers.put(key, 1);
-				//    }
-				//    exceptionCount++;
-				
 				return instance;
 			}
 			
@@ -73,41 +59,13 @@ namespace ZXing
 		// 3. Change core to build as Java 1.5 temporarily
 		//  private static int exceptionCount = 0;
 		//  private static Map<String,Integer> throwers = new HashMap<String,Integer>(32);
-		
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="ReaderException"/> class.
+      /// </summary>
 		protected ReaderException()
 		{
 			// do nothing
-		}
-		
-		//  public static int getExceptionCountAndReset() {
-		//    int temp = exceptionCount;
-		//    exceptionCount = 0;
-		//    return temp;
-		//  }
-		//
-		//  public static String getThrowersAndReset() {
-		//    StringBuilder builder = new StringBuilder(1024);
-		//    Object[] keys = throwers.keySet().toArray();
-		//    for (int x = 0; x < keys.length; x++) {
-		//      String key = (String) keys[x];
-		//      Integer value = throwers.get(key);
-		//      builder.append(key);
-		//      builder.append(": ");
-		//      builder.append(value);
-		//      builder.append("\n");
-		//    }
-		//    throwers.clear();
-		//    return builder.toString();
-		//  }
-		
-		// Prevent stack traces from being taken
-		// srowen says: huh, my IDE is saying this is not an override. native methods can't be overridden?
-		// This, at least, does not hurt. Because we use a singleton pattern here, it doesn't matter anyhow.
-		//UPGRADE_NOTE: Exception 'java.lang.Throwable' was converted to 'System.Exception' which has different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1100'"
-		//UPGRADE_NOTE: The equivalent of method 'java.lang.Throwable.fillInStackTrace' is not an override method. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1143'"
-		public System.Exception fillInStackTrace()
-		{
-			return null;
 		}
 	}
 }

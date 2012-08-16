@@ -35,8 +35,8 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
    /// </summary>
    public abstract class AbstractExpandedDecoder
    {
-      private BitArray information;
-      private GeneralAppIdDecoder generalDecoder;
+      private readonly BitArray information;
+      private readonly GeneralAppIdDecoder generalDecoder;
 
       internal AbstractExpandedDecoder(BitArray information)
       {
@@ -44,6 +44,10 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
          this.generalDecoder = new GeneralAppIdDecoder(information);
       }
 
+      /// <summary>
+      /// Gets the information.
+      /// </summary>
+      /// <returns></returns>
       protected BitArray getInformation()
       {
          return information;
@@ -54,8 +58,17 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
          return generalDecoder;
       }
 
+      /// <summary>
+      /// Parses the information.
+      /// </summary>
+      /// <returns></returns>
       public abstract String parseInformation();
 
+      /// <summary>
+      /// Creates the decoder.
+      /// </summary>
+      /// <param name="information">The information.</param>
+      /// <returns></returns>
       public static AbstractExpandedDecoder createDecoder(BitArray information)
       {
          if (information[1])
@@ -97,6 +110,5 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
 
          throw new InvalidOperationException("unknown decoder: " + information);
       }
-
    }
 }

@@ -21,11 +21,14 @@ using ZXing.PDF417.Internal;
 
 namespace ZXing.PDF417
 {
+   /// <summary>
+   /// The class holds the available options for the <see cref="PDF417Writer" />
+   /// </summary>
    [Serializable]
    public class PDF417EncodingOptions : EncodingOptions
    {
       /// <summary>
-      /// Specifies whether to use compact mode for PDF417 (type {@link Boolean}).
+      /// Specifies whether to use compact mode for PDF417 (type <see cref="bool" />).
       /// </summary>
       public bool Compact
       {
@@ -45,7 +48,7 @@ namespace ZXing.PDF417
 
       /// <summary>
       /// Specifies what compaction mode to use for PDF417 (type
-      /// {@link com.google.zxing.pdf417.encoder.Compaction Compaction}).
+      /// <see cref="Compaction" />).
       /// </summary>
       public Compaction Compaction
       {
@@ -65,7 +68,7 @@ namespace ZXing.PDF417
 
       /// <summary>
       /// Specifies the minimum and maximum number of rows and columns for PDF417 (type
-      /// {@link com.google.zxing.pdf417.encoder.Dimensions Dimensions}).
+      /// <see cref="Dimensions" />).
       /// </summary>
       public Dimensions Dimensions
       {

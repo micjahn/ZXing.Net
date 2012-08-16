@@ -52,7 +52,7 @@ namespace ZXing.Client.Result
          var result = new System.Text.StringBuilder(30);
          maybeAppend(Title, result);
          maybeAppend(URI, result);
-         displayResult = result.ToString();
+         displayResultValue = result.ToString();
       }
 
       /// <summary> Transforms a string that represents a URI into something more proper, by adding or canonicalizing

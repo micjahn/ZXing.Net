@@ -31,25 +31,34 @@ namespace ZXing.Multi.QrCode.Internal
    {
       private static readonly DetectorResult[] EMPTY_DETECTOR_RESULTS = new DetectorResult[0];
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="MultiDetector"/> class.
+      /// </summary>
+      /// <param name="image">The image.</param>
       public MultiDetector(BitMatrix image)
          : base(image)
       {
       }
 
+      /// <summary>
+      /// Detects the multi.
+      /// </summary>
+      /// <param name="hints">The hints.</param>
+      /// <returns></returns>
       public DetectorResult[] detectMulti(IDictionary<DecodeHintType, object> hints)
       {
-         BitMatrix image = Image;
-         ResultPointCallback resultPointCallback =
+         var image = Image;
+         var resultPointCallback =
              hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK) ? null : (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
-         MultiFinderPatternFinder finder = new MultiFinderPatternFinder(image, resultPointCallback);
-         FinderPatternInfo[] infos = finder.findMulti(hints);
+         var finder = new MultiFinderPatternFinder(image, resultPointCallback);
+         var infos = finder.findMulti(hints);
 
          if (infos.Length == 0)
          {
-            throw NotFoundException.Instance;
+            return EMPTY_DETECTOR_RESULTS;
          }
 
-         List<DetectorResult> result = new List<DetectorResult>();
+         var result = new List<DetectorResult>();
          foreach (FinderPatternInfo info in infos)
          {
             var oneResult = processFinderPatternInfo(info);
@@ -65,6 +74,5 @@ namespace ZXing.Multi.QrCode.Internal
             return result.ToArray();
          }
       }
-
    }
 }

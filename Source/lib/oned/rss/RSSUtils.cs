@@ -16,9 +16,20 @@
 
 namespace ZXing.OneD.RSS
 {
-   /// <summary> Adapted from listings in ISO/IEC 24724 Appendix B and Appendix G.</summary>
+   /// <summary>
+   /// Adapted from listings in ISO/IEC 24724 Appendix B and Appendix G.
+   /// </summary>
    public static class RSSUtils
    {
+      /// <summary>
+      /// Gets the RS swidths.
+      /// </summary>
+      /// <param name="val">The val.</param>
+      /// <param name="n">The n.</param>
+      /// <param name="elements">The elements.</param>
+      /// <param name="maxWidth">Width of the max.</param>
+      /// <param name="noNarrow">if set to <c>true</c> [no narrow].</param>
+      /// <returns></returns>
       public static int[] getRSSwidths(int val, int n, int elements, int maxWidth, bool noNarrow)
       {
          int[] widths = new int[elements];
@@ -68,6 +79,13 @@ namespace ZXing.OneD.RSS
          return widths;
       }
 
+      /// <summary>
+      /// Gets the RS svalue.
+      /// </summary>
+      /// <param name="widths">The widths.</param>
+      /// <param name="maxWidth">Width of the max.</param>
+      /// <param name="noNarrow">if set to <c>true</c> [no narrow].</param>
+      /// <returns></returns>
       public static int getRSSvalue(int[] widths, int maxWidth, bool noNarrow)
       {
          int elements = widths.Length;

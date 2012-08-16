@@ -44,6 +44,18 @@ namespace ZXing.PDF417
          return decode(image, null);
       }
 
+      /// <summary>
+      /// Locates and decodes a barcode in some format within an image. This method also accepts
+      /// hints, each possibly associated to some data, which may help the implementation decode.
+      /// </summary>
+      /// <param name="image">image of barcode to decode</param>
+      /// <param name="hints">passed as a <see cref="IDictionary{TKey, TValue}"/> from <see cref="DecodeHintType"/>
+      /// to arbitrary data. The
+      /// meaning of the data depends upon the hint type. The implementation may or may not do
+      /// anything with these hints.</param>
+      /// <returns>
+      /// String which the barcode encodes
+      /// </returns>
       public Result decode(BinaryBitmap image,
                            IDictionary<DecodeHintType, object> hints)
       {
@@ -72,6 +84,10 @@ namespace ZXing.PDF417
              BarcodeFormat.PDF_417);
       }
 
+      /// <summary>
+      /// Resets any internal state the implementation has after a decode, to prepare it
+      /// for reuse.
+      /// </summary>
       public void reset()
       {
          // do nothing
@@ -83,8 +99,8 @@ namespace ZXing.PDF417
       /// around it. This is a specialized method that works exceptionally fast in this special
       /// case.
       ///
-      /// @see com.google.zxing.qrcode.QRCodeReader#extractPureBits(BitMatrix)
-      /// @see com.google.zxing.datamatrix.DataMatrixReader#extractPureBits(BitMatrix)
+      /// <see cref="QrCode.QRCodeReader.extractPureBits(BitMatrix)" />
+      /// <see cref="Datamatrix.DataMatrixReader.extractPureBits(BitMatrix)" />
       /// </summary>
       private static BitMatrix extractPureBits(BitMatrix image)
       {

@@ -25,7 +25,7 @@ namespace ZXing.Client.Result
          : base(ParsedResultType.ISBN)
       {
          ISBN = isbn;
-         displayResult = isbn;
+         displayResultValue = isbn;
       }
 
       public String ISBN { get; private set; }

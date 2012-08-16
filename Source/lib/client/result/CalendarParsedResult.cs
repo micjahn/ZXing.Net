@@ -93,7 +93,7 @@ namespace ZXing.Client.Result
          maybeAppend(organizer, result);
          maybeAppend(attendees, result);
          maybeAppend(description, result);
-         displayResult = result.ToString();
+         displayResultValue = result.ToString();
       }
 
       public String Summary

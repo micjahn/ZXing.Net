@@ -14,43 +14,52 @@
 * limitations under the License.
 */
 
-using System;
 using System.Collections.Generic;
 
 namespace ZXing.Multi
 {
-   /// <summary> <p>Attempts to locate multiple barcodes in an image by repeatedly decoding portion of the image.
+   /// <summary>
+   ///   <p>Attempts to locate multiple barcodes in an image by repeatedly decoding portion of the image.
    /// After one barcode is found, the areas left, above, right and below the barcode's
    /// {@link com.google.zxing.ResultPoint}s are scanned, recursively.</p>
-   /// 
-   /// <p>A caller may want to also employ {@link ByQuadrantReader} when attempting to find multiple
+   ///   <p>A caller may want to also employ {@link ByQuadrantReader} when attempting to find multiple
    /// 2D barcodes, like QR Codes, in an image, where the presence of multiple barcodes might prevent
    /// detecting any one of them.</p>
-   /// 
-   /// <p>That is, instead of passing a {@link Reader} a caller might pass
-   /// <code>new ByQuadrantReader(reader)</code>.</p>
-   /// 
+   ///   <p>That is, instead of passing a {@link Reader} a caller might pass
+   ///   <code>new ByQuadrantReader(reader)</code>.</p>
+   ///   <author>Sean Owen</author>
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
    public sealed class GenericMultipleBarcodeReader : MultipleBarcodeReader, Reader
    {
       private const int MIN_DIMENSION_TO_RECUR = 30;
 
-      private Reader _delegate;
+      private readonly Reader _delegate;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="GenericMultipleBarcodeReader"/> class.
+      /// </summary>
+      /// <param name="delegate">The @delegate.</param>
       public GenericMultipleBarcodeReader(Reader @delegate)
       {
          this._delegate = @delegate;
       }
 
+      /// <summary>
+      /// Decodes the multiple.
+      /// </summary>
+      /// <param name="image">The image.</param>
+      /// <returns></returns>
       public Result[] decodeMultiple(BinaryBitmap image)
       {
          return decodeMultiple(image, null);
       }
 
+      /// <summary>
+      /// Decodes the multiple.
+      /// </summary>
+      /// <param name="image">The image.</param>
+      /// <param name="hints">The hints.</param>
+      /// <returns></returns>
       public Result[] decodeMultiple(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
       {
          var results = new List<Result>();
@@ -161,16 +170,39 @@ namespace ZXing.Multi
          return new Result(result.Text, result.RawBytes, newResultPoints, result.BarcodeFormat);
       }
 
+      /// <summary>
+      /// Locates and decodes a barcode in some format within an image.
+      /// </summary>
+      /// <param name="image">image of barcode to decode</param>
+      /// <returns>
+      /// String which the barcode encodes
+      /// </returns>
       public Result decode(BinaryBitmap image)
       {
          return _delegate.decode(image);
       }
 
+      /// <summary>
+      /// Locates and decodes a barcode in some format within an image. This method also accepts
+      /// hints, each possibly associated to some data, which may help the implementation decode.
+      /// </summary>
+      /// <param name="image">image of barcode to decode</param>
+      /// <param name="hints">passed as a <see cref="IDictionary{TKey, TValue}"/> from <see cref="DecodeHintType"/>
+      /// to arbitrary data. The
+      /// meaning of the data depends upon the hint type. The implementation may or may not do
+      /// anything with these hints.</param>
+      /// <returns>
+      /// String which the barcode encodes
+      /// </returns>
       public Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
       {
          return _delegate.decode(image, hints);
       }
 
+      /// <summary>
+      /// Resets any internal state the implementation has after a decode, to prepare it
+      /// for reuse.
+      /// </summary>
       public void reset()
       {
          _delegate.reset();

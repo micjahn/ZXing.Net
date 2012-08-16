@@ -23,12 +23,11 @@ using ZXing.Common;
 namespace ZXing.OneD
 {
    /// <summary>
-   /// <p>Encapsulates functionality and implementation that is common to UPC and EAN families
+   ///   <p>Encapsulates functionality and implementation that is common to UPC and EAN families
    /// of one-dimensional barcodes.</p>
-   ///
-   /// <author>dswitkin@google.com (Daniel Switkin)</author>
-   /// <author>Sean Owen</author>
-   /// <author>alasdair@google.com (Alasdair Mackintosh)</author>
+   ///   <author>dswitkin@google.com (Daniel Switkin)</author>
+   ///   <author>Sean Owen</author>
+   ///   <author>alasdair@google.com (Alasdair Mackintosh)</author>
    /// </summary>
    public abstract class UPCEANReader : OneDReader
    {
@@ -90,6 +89,9 @@ namespace ZXing.OneD
       private readonly UPCEANExtensionSupport extensionReader;
       private readonly EANManufacturerOrgSupport eanManSupport;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="UPCEANReader"/> class.
+      /// </summary>
       protected UPCEANReader()
       {
          decodeRowStringBuffer = new StringBuilder(20);
@@ -124,6 +126,19 @@ namespace ZXing.OneD
          return startRange;
       }
 
+      /// <summary>
+      ///   <p>Attempts to decode a one-dimensional barcode format given a single row of
+      /// an image.</p>
+      ///   <param name="rowNumber">row number from top of the row</param>
+      ///   <param name="row">the black/white pixel data of the row</param>
+      ///   <param name="hints">decode hints</param>
+      ///   <returns><see cref="Result"/>containing encoded string and start/end of barcode</returns>
+      ///   <exception cref="NotFoundException">if an error occurs or barcode cannot be found</exception>
+      /// </summary>
+      /// <param name="rowNumber"></param>
+      /// <param name="row"></param>
+      /// <param name="hints"></param>
+      /// <returns></returns>
       override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
          return decodeRow(rowNumber, row, findStartGuardPattern(row), hints);
@@ -269,6 +284,12 @@ namespace ZXing.OneD
          return sum % 10 == 0;
       }
 
+      /// <summary>
+      /// Decodes the end.
+      /// </summary>
+      /// <param name="row">The row.</param>
+      /// <param name="endStart">The end start.</param>
+      /// <returns></returns>
       virtual protected int[] decodeEnd(BitArray row, int endStart)
       {
          return findGuardPattern(row, endStart, false, START_END_PATTERN);

@@ -22,24 +22,28 @@ using ZXing.Common.Detector;
 
 namespace ZXing.QrCode.Internal
 {
-   /// <summary> <p>Encapsulates logic that can detect a QR Code in an image, even if the QR Code
+   /// <summary>
+   /// <p>Encapsulates logic that can detect a QR Code in an image, even if the QR Code
    /// is rotated or skewed, or partially obscured.</p>
-   /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public class Detector
    {
-      private BitMatrix image;
+      private readonly BitMatrix image;
       private ResultPointCallback resultPointCallback;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Detector"/> class.
+      /// </summary>
+      /// <param name="image">The image.</param>
       public Detector(BitMatrix image)
       {
          this.image = image;
       }
 
+      /// <summary>
+      /// Gets the image.
+      /// </summary>
       virtual protected internal BitMatrix Image
       {
          get
@@ -48,6 +52,9 @@ namespace ZXing.QrCode.Internal
          }
       }
 
+      /// <summary>
+      /// Gets the result point callback.
+      /// </summary>
       virtual protected internal ResultPointCallback ResultPointCallback
       {
          get
@@ -56,22 +63,23 @@ namespace ZXing.QrCode.Internal
          }
       }
 
-      /// <summary> <p>Detects a QR Code in an image, simply.</p>
-      /// 
+      /// <summary>
+      ///   <p>Detects a QR Code in an image, simply.</p>
       /// </summary>
-      /// <returns> {@link DetectorResult} encapsulating results of detecting a QR Code
+      /// <returns>
+      ///   <see cref="DetectorResult"/> encapsulating results of detecting a QR Code
       /// </returns>
       public virtual DetectorResult detect()
       {
          return detect(null);
       }
 
-      /// <summary> <p>Detects a QR Code in an image, simply.</p>
-      /// 
+      /// <summary>
+      ///   <p>Detects a QR Code in an image, simply.</p>
       /// </summary>
-      /// <param name="hints">optional hints to detector
-      /// </param>
-      /// <returns> {@link DetectorResult} encapsulating results of detecting a QR Code
+      /// <param name="hints">optional hints to detector</param>
+      /// <returns>
+      ///   <see cref="DetectorResult"/> encapsulating results of detecting a QR Code
       /// </returns>
       public virtual DetectorResult detect(IDictionary<DecodeHintType, object> hints)
       {
@@ -85,6 +93,11 @@ namespace ZXing.QrCode.Internal
          return processFinderPatternInfo(info);
       }
 
+      /// <summary>
+      /// Processes the finder pattern info.
+      /// </summary>
+      /// <param name="info">The info.</param>
+      /// <returns></returns>
       protected internal virtual DetectorResult processFinderPatternInfo(FinderPatternInfo info)
       {
          FinderPattern topLeft = info.TopLeft;
@@ -256,7 +269,7 @@ namespace ZXing.QrCode.Internal
 
       /// <summary> See {@link #sizeOfBlackWhiteBlackRun(int, int, int, int)}; computes the total width of
       /// a finder pattern by looking for a black-white-black run from the center in the direction
-      /// of another point (another finder pattern center), and in the opposite direction too.</p>
+      /// of another point (another finder pattern center), and in the opposite direction too.
       /// </summary>
       private float sizeOfBlackWhiteBlackRunBothWays(int fromX, int fromY, int toX, int toY)
       {
@@ -374,19 +387,16 @@ namespace ZXing.QrCode.Internal
 
       }
 
-      /// <summary> <p>Attempts to locate an alignment pattern in a limited region of the image, which is
+      /// <summary>
+      ///   <p>Attempts to locate an alignment pattern in a limited region of the image, which is
       /// guessed to contain it. This method uses {@link AlignmentPattern}.</p>
-      /// 
       /// </summary>
-      /// <param name="overallEstModuleSize">estimated module size so far
-      /// </param>
-      /// <param name="estAlignmentX">x coordinate of center of area probably containing alignment pattern
-      /// </param>
-      /// <param name="estAlignmentY">y coordinate of above
-      /// </param>
-      /// <param name="allowanceFactor">number of pixels in all directions to search from the center
-      /// </param>
-      /// <returns> {@link AlignmentPattern} if found, or null otherwise
+      /// <param name="overallEstModuleSize">estimated module size so far</param>
+      /// <param name="estAlignmentX">x coordinate of center of area probably containing alignment pattern</param>
+      /// <param name="estAlignmentY">y coordinate of above</param>
+      /// <param name="allowanceFactor">number of pixels in all directions to search from the center</param>
+      /// <returns>
+      ///   <see cref="AlignmentPattern"/> if found, or null otherwise
       /// </returns>
       protected AlignmentPattern findAlignmentInRegion(float overallEstModuleSize, int estAlignmentX, int estAlignmentY, float allowanceFactor)
       {

@@ -13,7 +13,9 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 using System;
+
 namespace ZXing.QrCode.Internal
 {
 
@@ -74,15 +76,15 @@ namespace ZXing.QrCode.Internal
       private static readonly int[] BITS_SET_IN_HALF_BYTE = new [] 
          { 0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4 };
 
-      private ErrorCorrectionLevel errorCorrectionLevel;
-      private sbyte dataMask;
+      private readonly ErrorCorrectionLevel errorCorrectionLevel;
+      private readonly byte dataMask;
 
       private FormatInformation(int formatInfo)
       {
          // Bits 3,4
          errorCorrectionLevel = ErrorCorrectionLevel.forBits((formatInfo >> 3) & 0x03);
          // Bottom 3 bits
-         dataMask = (sbyte)(formatInfo & 0x07);
+         dataMask = (byte)(formatInfo & 0x07);
       }
 
       internal static int numBitsDiffering(int a, int b)
@@ -169,7 +171,7 @@ namespace ZXing.QrCode.Internal
          }
       }
 
-      internal sbyte DataMask
+      internal byte DataMask
       {
          get
          {

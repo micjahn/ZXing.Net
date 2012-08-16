@@ -21,8 +21,7 @@ using ZXing.Common;
 namespace ZXing.OneD
 {
    /// <summary>
-   /// This object renders an EAN8 code as a <see cref="BitMatrix" />.
-   ///
+   /// This object renders an EAN8 code as a <see cref="BitMatrix"/>.
    /// <author>aripollak@gmail.com (Ari Pollak)</author>
    /// </summary>
    public sealed class EAN8Writer : UPCEANWriter
@@ -33,6 +32,19 @@ namespace ZXing.OneD
           (7 * 4) + // right bars
           3; // end guard
 
+      /// <summary>
+      /// Encode the contents following specified format.
+      /// {@code width} and {@code height} are required size. This method may return bigger size
+      /// {@code BitMatrix} when specified size is too small. The user can set both {@code width} and
+      /// {@code height} to zero to get minimum size barcode. If negative value is set to {@code width}
+      /// or {@code height}, {@code IllegalArgumentException} is thrown.
+      /// </summary>
+      /// <param name="contents"></param>
+      /// <param name="format"></param>
+      /// <param name="width"></param>
+      /// <param name="height"></param>
+      /// <param name="hints"></param>
+      /// <returns></returns>
       public override BitMatrix encode(String contents,
                               BarcodeFormat format,
                               int width,

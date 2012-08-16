@@ -22,12 +22,21 @@ using ZXing.Common;
 namespace ZXing.OneD
 {
    /// <summary>
-   /// <p>Encapsulates functionality and implementation that is common to one-dimensional barcodes.</p>
-   ///
-   /// <author>dsbnatut@gmail.com (Kazuki Nishiura)</author>
+   ///   <p>Encapsulates functionality and implementation that is common to one-dimensional barcodes.</p>
+   ///   <author>dsbnatut@gmail.com (Kazuki Nishiura)</author>
    /// </summary>
    public abstract class OneDimensionalCodeWriter : Writer
    {
+      /// <summary>
+      /// Encode a barcode using the default settings.
+      /// </summary>
+      /// <param name="contents">The contents to encode in the barcode</param>
+      /// <param name="format">The barcode format to generate</param>
+      /// <param name="width">The preferred width in pixels</param>
+      /// <param name="height">The preferred height in pixels</param>
+      /// <returns>
+      /// The generated barcode as a Matrix of unsigned bytes (0 == black, 255 == white)
+      /// </returns>
       public BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
       {
          return encode(contents, format, width, height, null);
@@ -119,6 +128,9 @@ namespace ZXing.OneD
          return numAdded;
       }
 
+      /// <summary>
+      /// Gets the default margin.
+      /// </summary>
       virtual public int DefaultMargin
       {
          get
@@ -137,6 +149,11 @@ namespace ZXing.OneD
       /// </summary>
       public abstract bool[] encode(String contents);
 
+      /// <summary>
+      /// Calculates the checksum digit modulo10.
+      /// </summary>
+      /// <param name="contents">The contents.</param>
+      /// <returns></returns>
       public static String CalculateChecksumDigitModulo10(String contents)
       {
          var oddsum = 0;

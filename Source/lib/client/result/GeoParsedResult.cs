@@ -32,7 +32,7 @@ namespace ZXing.Client.Result
          Query = query;
          GeoURI = getGeoURI();
          GoogleMapsURI = getGoogleMapsURI();
-         displayResult = getDisplayResult();
+         displayResultValue = getDisplayResult();
       }
 
       /// <returns> latitude in degrees

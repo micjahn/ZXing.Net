@@ -18,19 +18,15 @@ using System;
 
 namespace ZXing.QrCode.Internal
 {
-
-   /// <summary> <p>Encapsulates a finder pattern, which are the three square patterns found in
+   /// <summary>
+   /// <p>Encapsulates a finder pattern, which are the three square patterns found in
    /// the corners of QR Codes. It also encapsulates a count of similar finder patterns,
    /// as a convenience to the finder's bookkeeping.</p>
-   /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public sealed class FinderPattern : ResultPoint
    {
-      private float estimatedModuleSize;
+      private readonly float estimatedModuleSize;
       private int count;
 
       internal FinderPattern(float posX, float posY, float estimatedModuleSize)
@@ -47,6 +43,12 @@ namespace ZXing.QrCode.Internal
          this.count = count;
       }
 
+      /// <summary>
+      /// Gets the size of the estimated module.
+      /// </summary>
+      /// <value>
+      /// The size of the estimated module.
+      /// </value>
       public float EstimatedModuleSize
       {
          get

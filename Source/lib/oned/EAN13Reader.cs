@@ -61,13 +61,26 @@ namespace ZXing.OneD
                                                       0x00, 0x0B, 0x0D, 0xE, 0x13, 0x19, 0x1C, 0x15, 0x16, 0x1A
                                                    };
 
-      private int[] decodeMiddleCounters;
+      private readonly int[] decodeMiddleCounters;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="EAN13Reader"/> class.
+      /// </summary>
       public EAN13Reader()
       {
          decodeMiddleCounters = new int[4];
       }
 
+      /// <summary>
+      /// Subclasses override this to decode the portion of a barcode between the start
+      /// and end guard patterns.
+      /// </summary>
+      /// <param name="row">row of black/white values to search</param>
+      /// <param name="startRange">start/end offset of start guard pattern</param>
+      /// <param name="resultString"><see cref="StringBuilder"/>to append decoded chars to</param>
+      /// <returns>
+      /// horizontal offset of first pixel after the "middle" that was decoded or -1 if decoding could not complete successfully
+      /// </returns>
       override protected internal int decodeMiddle(BitArray row,
                                  int[] startRange,
                                  StringBuilder resultString)
@@ -121,6 +134,10 @@ namespace ZXing.OneD
          return rowOffset;
       }
 
+      /// <summary>
+      /// Get the format of this decoder.
+      /// <returns>The 1D format.</returns>
+      /// </summary>
       override internal BarcodeFormat BarcodeFormat
       {
          get { return BarcodeFormat.EAN_13; }
