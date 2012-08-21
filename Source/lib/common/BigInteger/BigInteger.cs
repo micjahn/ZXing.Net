@@ -15,10 +15,9 @@ namespace BigIntegerLibrary
     /// approximately (safe to use) 3000 decimal digits.
    /// </summary>
 #if !(WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5)
-    [Serializable, CLSCompliant(true)]
+    [Serializable]
     internal sealed class BigInteger : ISerializable, 
 #else
-    [CLSCompliant(true)]
     internal sealed class BigInteger :  
 #endif
        IEquatable<BigInteger>, IComparable, IComparable<BigInteger>

@@ -82,7 +82,7 @@ namespace CommandLineDecoder
                      }
                   }
                }
-               catch (IOException e)
+               catch (IOException )
                {
                }
             }
@@ -95,7 +95,7 @@ namespace CommandLineDecoder
                      successful++;
                   }
                }
-               catch (Exception e)
+               catch (Exception )
                {
                }
             }
@@ -193,7 +193,7 @@ namespace CommandLineDecoder
             }
             return result;
          }
-         catch (NotFoundException nfe)
+         catch (NotFoundException )
          {
             Console.Out.WriteLine(uri + ": No barcode found");
             return null;
@@ -265,7 +265,7 @@ namespace CommandLineDecoder
                Console.Out.WriteLine(uri + ": No barcode found");
             }
          }
-         catch (NotFoundException nfe)
+         catch (NotFoundException )
          {
             Console.Out.WriteLine(uri + ": No barcode found");
          }
@@ -328,7 +328,7 @@ namespace CommandLineDecoder
             {
                row = bitmap.getBlackRow(y, row);
             }
-            catch (NotFoundException nfe)
+            catch (NotFoundException )
             {
                // If fetching the row failed, draw a red line and keep going.
                for (int x = 0; x < width; x++)
@@ -357,7 +357,7 @@ namespace CommandLineDecoder
                }
             }
          }
-         catch (NotFoundException nfe)
+         catch (NotFoundException )
          {
          }
 
