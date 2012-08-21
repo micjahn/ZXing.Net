@@ -32,6 +32,7 @@ namespace WindowsFormsDemo
       private Timer webCamTimer;
       private readonly IBarcodeReader barcodeReader;
       private readonly IList<ResultPoint> resultPoints;
+      private EncodingOptions EncodingOptions { get; set; }
 
       public WindowsFormsDemoForm()
       {
@@ -181,7 +182,7 @@ namespace WindowsFormsDemo
             var writer = new BarcodeWriter
                             {
                                Format = (BarcodeFormat) cmbEncoderType.SelectedItem,
-                               Options = new EncodingOptions
+                               Options = EncodingOptions ?? new EncodingOptions
                                   {
                                      Height = picEncodedBarCode.Height,
                                      Width = picEncodedBarCode.Width
@@ -220,6 +221,55 @@ namespace WindowsFormsDemo
             tabCtrlMain.SelectedTab = tabPageDecoder;
             picBarcode.Image = picEncodedBarCode.Image;
             Decode((Bitmap)picEncodedBarCode.Image);
+         }
+      }
+
+      private void btnEncodeOptions_Click(object sender, EventArgs e)
+      {
+         if (cmbEncoderType.SelectedItem == null)
+         {
+            MessageBox.Show(this, "Please select a barcode format first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+         }
+         try
+         {
+            EncodingOptions options;
+            switch ((BarcodeFormat)cmbEncoderType.SelectedItem)
+            {
+               case BarcodeFormat.QR_CODE:
+                  options = new ZXing.QrCode.QrCodeEncodingOptions
+                             {
+                                Height = picEncodedBarCode.Height,
+                                Width = picEncodedBarCode.Width
+                             };
+                  break;
+               case BarcodeFormat.PDF_417:
+                  options = new ZXing.PDF417.PDF417EncodingOptions
+                             {
+                                Height = picEncodedBarCode.Height,
+                                Width = picEncodedBarCode.Width
+                             };
+                  break;
+               default:
+                  options = new EncodingOptions
+                             {
+                                Height = picEncodedBarCode.Height,
+                                Width = picEncodedBarCode.Width
+                             };
+                  break;
+            }
+            var dlg = new EncodingOptionsForm
+                         {
+                            Options = options
+                         };
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+               EncodingOptions = dlg.Options;
+            }
+         }
+         catch (Exception exc)
+         {
+            MessageBox.Show(this, exc.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
          }
       }
    }

@@ -81,6 +81,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EncodingOptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EncodingOptionsForm.Designer.cs">
+      <DependentUpon>EncodingOptionsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="WebCam.cs" />
     <Compile Include="WindowsFormsDemoForm.cs">
       <SubType>Form</SubType>
@@ -90,6 +96,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="EncodingOptionsForm.resx">
+      <DependentUpon>EncodingOptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="WindowsFormsDemoForm.resx">
       <DependentUpon>WindowsFormsDemoForm.cs</DependentUpon>
     </EmbeddedResource>

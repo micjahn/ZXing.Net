@@ -42,6 +42,7 @@
          this.picBarcode = new System.Windows.Forms.PictureBox();
          this.btnSelectBarcodeImageFileForDecoding = new System.Windows.Forms.Button();
          this.tabPageEncoder = new System.Windows.Forms.TabPage();
+         this.btnEncodeDecode = new System.Windows.Forms.Button();
          this.btnEncoderSave = new System.Windows.Forms.Button();
          this.btnEncode = new System.Windows.Forms.Button();
          this.txtEncoderContent = new System.Windows.Forms.TextBox();
@@ -56,7 +57,7 @@
          this.txtContentWebCam = new System.Windows.Forms.TextBox();
          this.txtTypeWebCam = new System.Windows.Forms.TextBox();
          this.picWebCam = new System.Windows.Forms.PictureBox();
-         this.btnEncodeDecode = new System.Windows.Forms.Button();
+         this.btnEncodeOptions = new System.Windows.Forms.Button();
          this.tabCtrlMain.SuspendLayout();
          this.tabPageDecoder.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.picBarcode)).BeginInit();
@@ -213,6 +214,7 @@
          // 
          // tabPageEncoder
          // 
+         this.tabPageEncoder.Controls.Add(this.btnEncodeOptions);
          this.tabPageEncoder.Controls.Add(this.btnEncodeDecode);
          this.tabPageEncoder.Controls.Add(this.btnEncoderSave);
          this.tabPageEncoder.Controls.Add(this.btnEncode);
@@ -228,6 +230,17 @@
          this.tabPageEncoder.TabIndex = 1;
          this.tabPageEncoder.Text = "Encoder";
          this.tabPageEncoder.UseVisualStyleBackColor = true;
+         // 
+         // btnEncodeDecode
+         // 
+         this.btnEncodeDecode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+         this.btnEncodeDecode.Location = new System.Drawing.Point(3, 224);
+         this.btnEncodeDecode.Name = "btnEncodeDecode";
+         this.btnEncodeDecode.Size = new System.Drawing.Size(107, 23);
+         this.btnEncodeDecode.TabIndex = 16;
+         this.btnEncodeDecode.Text = "Decode";
+         this.btnEncodeDecode.UseVisualStyleBackColor = true;
+         this.btnEncodeDecode.Click += new System.EventHandler(this.btnEncodeDecode_Click);
          // 
          // btnEncoderSave
          // 
@@ -381,16 +394,16 @@
          this.picWebCam.TabIndex = 8;
          this.picWebCam.TabStop = false;
          // 
-         // btnEncodeDecode
+         // btnEncodeOptions
          // 
-         this.btnEncodeDecode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-         this.btnEncodeDecode.Location = new System.Drawing.Point(3, 224);
-         this.btnEncodeDecode.Name = "btnEncodeDecode";
-         this.btnEncodeDecode.Size = new System.Drawing.Size(107, 23);
-         this.btnEncodeDecode.TabIndex = 16;
-         this.btnEncodeDecode.Text = "Decode";
-         this.btnEncodeDecode.UseVisualStyleBackColor = true;
-         this.btnEncodeDecode.Click += new System.EventHandler(this.btnEncodeDecode_Click);
+         this.btnEncodeOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+         this.btnEncodeOptions.Location = new System.Drawing.Point(127, 224);
+         this.btnEncodeOptions.Name = "btnEncodeOptions";
+         this.btnEncodeOptions.Size = new System.Drawing.Size(107, 23);
+         this.btnEncodeOptions.TabIndex = 17;
+         this.btnEncodeOptions.Text = "Options";
+         this.btnEncodeOptions.UseVisualStyleBackColor = true;
+         this.btnEncodeOptions.Click += new System.EventHandler(this.btnEncodeOptions_Click);
          // 
          // WindowsFormsDemoForm
          // 
@@ -448,6 +461,7 @@
       private System.Windows.Forms.PictureBox picEncodedBarCode;
       private System.Windows.Forms.Button btnEncoderSave;
       private System.Windows.Forms.Button btnEncodeDecode;
+      private System.Windows.Forms.Button btnEncodeOptions;
    }
 }
 
