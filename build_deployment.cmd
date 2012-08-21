@@ -36,7 +36,7 @@ REM building archives for binaries
 REM ***************************************************************************************
 
 CD "%BINARY_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" net2.0 net4.0 unity sl4 sl5 wp7.0 wp7.1
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" net2.0 net4.0 unity sl4 sl5 wp7.0 wp7.1 -xr!Documentation
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DEMO_BINARY%" Clients
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DOCUMENTATION%" Documentation
 CD "%CURRENT_DIR%"

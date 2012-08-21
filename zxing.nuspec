@@ -16,8 +16,8 @@ But most of the parts are manually new ported from java. There are many tweaks a
 
 It is now compatible with .Net 2.0, .Net 4.0, Silverlight 4, Silverlight 5, Windows Phone 7.0 and Windows Phone 7.1</description>
     <summary>ZXing (pronounced "zebra crossing") is an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.</summary>
-    <releaseNotes>* sync with rev. 2367 of the java version
-* improved API
+    <releaseNotes>* sync with rev. 2393 of the java version
+* improved API, direct support for multiple barcode decoding, wrapper for barcode generating
 * many other improvements and fixes</releaseNotes>
     <tags>ZXing barcode scanning 1D 2D UPC-A UPC-E EAN-8 EAN-13 QR ITF Codabar RSS-14 Data Matrix PDF 417 PDF417 Aztec</tags>
   </metadata>
@@ -28,6 +28,9 @@ It is now compatible with .Net 2.0, .Net 4.0, Silverlight 4, Silverlight 5, Wind
     <file src="Build\Release\net4.0\zxing.dll" target="lib/net40/zxing.dll" />
     <file src="Build\Release\net4.0\zxing.pdb" target="lib/net40/zxing.pdb" />
     <file src="Build\Release\net4.0\zxing.XML" target="lib/net40/zxing.XML" />
+    <file src="Build\Release\net4.0\zxing.dll" target="lib/net40/zxing.presentation.dll" />
+    <file src="Build\Release\net4.0\zxing.pdb" target="lib/net40/zxing.presentation.pdb" />
+    <file src="Build\Release\net4.0\zxing.XML" target="lib/net40/zxing.presentation.XML" />
     <file src="Build\Release\wp7.0\zxing.wp7.0.dll" target="lib/sl3-wp/zxing.wp7.0.dll" />
     <file src="Build\Release\wp7.0\zxing.wp7.0.pdb" target="lib/sl3-wp/zxing.wp7.0.pdb" />
     <file src="Build\Release\wp7.0\zxing.wp7.0.XML" target="lib/sl3-wp/zxing.wp7.0.XML" />
