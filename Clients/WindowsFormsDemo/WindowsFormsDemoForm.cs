@@ -31,12 +31,12 @@ namespace WindowsFormsDemo
       private WebCam wCam;
       private Timer webCamTimer;
       private readonly IBarcodeReader barcodeReader;
-      private IList<ResultPoint> resultPoints;
+      private readonly IList<ResultPoint> resultPoints;
 
       public WindowsFormsDemoForm()
       {
          InitializeComponent();
-         barcodeReader = new BarcodeReader();
+         barcodeReader = new BarcodeReader {AutoRotate = true};
          barcodeReader.ResultPointFound += point =>
                                               {
                                                  if (point == null)
