@@ -246,6 +246,8 @@ namespace ZXing.Datamatrix.Internal
 
          float corr = distance(bottomLeft, bottomRight) / (float)dimensionTop;
          int norm = distance(topLeft, topRight);
+         if (norm == 0)
+            return null;
          float cos = (topRight.X - topLeft.X) / norm;
          float sin = (topRight.Y - topLeft.Y) / norm;
 
@@ -253,6 +255,8 @@ namespace ZXing.Datamatrix.Internal
 
          corr = distance(bottomLeft, topLeft) / (float)dimensionRight;
          norm = distance(bottomRight, topRight);
+         if (norm == 0)
+            return null;
          cos = (topRight.X - bottomRight.X) / norm;
          sin = (topRight.Y - bottomRight.Y) / norm;
 
@@ -297,6 +301,8 @@ namespace ZXing.Datamatrix.Internal
 
          float corr = distance(bottomLeft, bottomRight) / (float)dimension;
          int norm = distance(topLeft, topRight);
+         if (norm == 0)
+            return null;
          float cos = (topRight.X - topLeft.X) / norm;
          float sin = (topRight.Y - topLeft.Y) / norm;
 
@@ -304,6 +310,8 @@ namespace ZXing.Datamatrix.Internal
 
          corr = distance(bottomLeft, topLeft) / (float)dimension;
          norm = distance(bottomRight, topRight);
+         if (norm == 0)
+            return null;
          cos = (topRight.X - bottomRight.X) / norm;
          sin = (topRight.Y - bottomRight.Y) / norm;
 
