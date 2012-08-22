@@ -28,9 +28,9 @@ It is now compatible with .Net 2.0, .Net 4.0, Silverlight 4, Silverlight 5, Wind
     <file src="Build\Release\net4.0\zxing.dll" target="lib/net40/zxing.dll" />
     <file src="Build\Release\net4.0\zxing.pdb" target="lib/net40/zxing.pdb" />
     <file src="Build\Release\net4.0\zxing.XML" target="lib/net40/zxing.XML" />
-    <file src="Build\Release\net4.0\zxing.dll" target="lib/net40/zxing.presentation.dll" />
-    <file src="Build\Release\net4.0\zxing.pdb" target="lib/net40/zxing.presentation.pdb" />
-    <file src="Build\Release\net4.0\zxing.XML" target="lib/net40/zxing.presentation.XML" />
+    <file src="Build\Release\net4.0\zxing.presentation.dll" target="lib/net40/zxing.presentation.dll" />
+    <file src="Build\Release\net4.0\zxing.presentation.pdb" target="lib/net40/zxing.presentation.pdb" />
+    <file src="Build\Release\net4.0\zxing.presentation.XML" target="lib/net40/zxing.presentation.XML" />
     <file src="Build\Release\wp7.0\zxing.wp7.0.dll" target="lib/sl3-wp/zxing.wp7.0.dll" />
     <file src="Build\Release\wp7.0\zxing.wp7.0.pdb" target="lib/sl3-wp/zxing.wp7.0.pdb" />
     <file src="Build\Release\wp7.0\zxing.wp7.0.XML" target="lib/sl3-wp/zxing.wp7.0.XML" />
