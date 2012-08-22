@@ -1,0 +1,12 @@
+AForge.NET Framework
+http://www.aforgenet.com/framework
+==================================
+
+License agreement
+
+The framework is provided under LGPL v.3 license, which exact definition
+may be found in lgpl-3.0.txt file provided with the framework or on the
+next web page: http://www.gnu.org/licenses/lgpl.html
+
+Copyright © AForge.NET, 2006-2012
+contacts@aforgenet.com
