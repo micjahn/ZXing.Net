@@ -65,15 +65,24 @@ MKDIR "%SVN_EXPORT_DIR%\Source\lib" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\Source\test" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\Source\test\src" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\Clients" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\3rdparty" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\3rdparty\EmguCV" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\3rdparty\NUnit.NET" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\3rdparty\NUnit.Silverlight" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\3rdparty\Unity" >NUL: 2>&1
 
 "%SVN_TOOL%" export --force "%SVN_URL%/Source/lib" "%SVN_EXPORT_DIR%\Source\lib"
 "%SVN_TOOL%" export --force "%SVN_URL%/Source/test/src" "%SVN_EXPORT_DIR%\Source\test\src"
 "%SVN_TOOL%" export --force "%SVN_URL%/Clients" "%SVN_EXPORT_DIR%\Clients"
-"%SVN_TOOL%" export --force "%SVN_URL%/Documentation" "%SVN_EXPORT_DIR%\Documentation"
+"%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/EmguCV" "%SVN_EXPORT_DIR%\3rdparty\EmguCV"
+"%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/NUnit.NET" "%SVN_EXPORT_DIR%\3rdparty\NUnit.NET"
+"%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/NUnit.Silverlight" "%SVN_EXPORT_DIR%\3rdparty\NUnit.Silverlight"
+"%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/Unity" "%SVN_EXPORT_DIR%\3rdparty\Unity"
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.sln" "%SVN_EXPORT_DIR%"
+"%SVN_TOOL%" export --force "%SVN_URL%/zxing.nunit" "%SVN_EXPORT_DIR%"
 
 CD "%SVN_EXPORT_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Source\lib\*.* Source\test\src\*.* Clients\*.* zxing.sln
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Source\lib\*.* Source\test\src\*.* Clients\*.* 3rdparty\*.* zxing.sln zxing.nunit
 CD "%CURRENT_DIR%"
 
 RMDIR /S /Q "%SVN_EXPORT_DIR%" >NUL: 2>&1
