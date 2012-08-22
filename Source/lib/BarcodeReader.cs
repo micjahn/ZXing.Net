@@ -15,10 +15,12 @@
  */
 
 using System;
-#if !SILVERLIGHT
+#if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
 using System.Drawing;
 #endif
+#elif NETFX_CORE
+using Windows.UI.Xaml.Media.Imaging;
 #else
 using System.Windows.Media.Imaging;
 #endif
@@ -28,7 +30,7 @@ namespace ZXing
    /// <summary>
    /// A smart class to decode the barcode inside a bitmap object
    /// </summary>
-#if !SILVERLIGHT
+#if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
    public class BarcodeReader : BarcodeReaderGeneric<Bitmap>, IBarcodeReader
    {
@@ -41,7 +43,7 @@ namespace ZXing
          (rawRGB, width, height) => new RGBLuminanceSource(rawRGB, width, height);
 #endif
 #else
-   public class BarcodeReader : BarcodeReaderGeneric<WriteableBitmap>, IBarcodeReader
+    public class BarcodeReader : BarcodeReaderGeneric<WriteableBitmap>, IBarcodeReader
    {
       private static readonly Func<WriteableBitmap, LuminanceSource> defaultCreateLuminanceSource =
          (bitmap) => new BitmapLuminanceSource(bitmap);
@@ -65,7 +67,7 @@ namespace ZXing
       /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
       /// If null then HybridBinarizer is used</param>
       public BarcodeReader(Reader reader,
-#if !SILVERLIGHT
+#if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
          Func<Bitmap, LuminanceSource> createLuminanceSource,
 #else

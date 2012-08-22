@@ -32,7 +32,7 @@ namespace ZXing.Client.Result
    sealed class EmailDoCoMoResultParser : AbstractDoCoMoResultParser
    {
       private static Regex ATEXT_ALPHANUMERIC = new Regex("^[a-zA-Z0-9@.!#$%&'*+\\-/=?^_`{|}~]+$"
-#if !(SILVERLIGHT4 || SILVERLIGHT5)
+#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE)
          , RegexOptions.Compiled);
 #else
 );

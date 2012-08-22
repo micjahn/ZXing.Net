@@ -19,7 +19,7 @@
  */
 
 using System;
-#if NET40
+#if NET40 || NET45 || NETFX_CORE
 using System.Numerics;
 #else
 using BigIntegerLibrary;
@@ -484,7 +484,7 @@ namespace ZXing.PDF417.Internal
 
       private static void encodeNumeric(String msg, int startpos, int count, StringBuilder sb)
       {
-#if NET40
+#if NET40 || NET45 || NETFX_CORE
          int idx = 0;
          StringBuilder tmp = new StringBuilder(count / 3 + 1);
          BigInteger num900 = new BigInteger(900);

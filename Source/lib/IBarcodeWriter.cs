@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-#if !SILVERLIGHT
+#if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
 using System.Drawing;
 #endif
+#elif NETFX_CORE
+using Windows.UI.Xaml.Media.Imaging;
 #else
 using System.Windows.Media.Imaging;
 #endif
@@ -38,7 +40,7 @@ namespace ZXing
       /// <returns></returns>
       BitMatrix Encode(string contents);
 
-#if !SILVERLIGHT
+#if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
       /// <summary>
       /// Creates a visual representation of the contents

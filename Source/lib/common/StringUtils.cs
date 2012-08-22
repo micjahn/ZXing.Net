@@ -27,7 +27,7 @@ namespace ZXing.Common
    /// <author>Alex Dupre</author>
    public static class StringUtils
    {
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5)
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE)
       private static String PLATFORM_DEFAULT_ENCODING = "UTF-8";
 #else
       private static String PLATFORM_DEFAULT_ENCODING = Encoding.Default.WebName;

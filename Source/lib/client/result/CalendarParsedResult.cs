@@ -25,7 +25,7 @@ namespace ZXing.Client.Result
    public sealed class CalendarParsedResult : ParsedResult
    {
       private static readonly Regex DATE_TIME = new Regex("[0-9]{8}(T[0-9]{6}Z?)?"
-#if !(SILVERLIGHT4 || SILVERLIGHT5)
+#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE)
 , RegexOptions.Compiled);
 #else
 );

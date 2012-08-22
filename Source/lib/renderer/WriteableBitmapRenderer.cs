@@ -16,8 +16,14 @@
 
 using System;
 using System.Windows;
+#if NETFX_CORE
+using Windows.UI;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
+#else
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+#endif
 
 using ZXing.Common;
 using ZXing.OneD;
@@ -57,6 +63,8 @@ namespace ZXing.Rendering
       /// The size of the font.
       /// </value>
       public double FontSize { get; set; }
+
+#if !NETFX_CORE
       /// <summary>
       /// Gets or sets the font stretch.
       /// </summary>
@@ -78,6 +86,7 @@ namespace ZXing.Rendering
       /// The font weight.
       /// </value>
       public FontWeight FontWeight { get; set; }
+#endif
 
       private static readonly FontFamily DefaultFontFamily = new FontFamily("Arial");
 
@@ -90,9 +99,11 @@ namespace ZXing.Rendering
          Background = Colors.White;
          FontFamily = DefaultFontFamily;
          FontSize = 10.0;
+#if !NETFX_CORE
          FontStretch = FontStretches.Normal;
          FontStyle = FontStyles.Normal;
          FontWeight = FontWeights.Normal;
+#endif
       }
 
       /// <summary>

@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-#if !SILVERLIGHT
+#if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
 using System.Drawing;
 #endif
+#elif NETFX_CORE
+using Windows.UI.Xaml.Media.Imaging;
 #else
 using System.Windows.Media.Imaging;
 #endif
@@ -26,7 +28,7 @@ using ZXing.Rendering;
 
 namespace ZXing
 {
-#if !SILVERLIGHT
+#if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
    public class BarcodeWriter : BarcodeWriterGeneric<Bitmap>, IBarcodeWriter
    {

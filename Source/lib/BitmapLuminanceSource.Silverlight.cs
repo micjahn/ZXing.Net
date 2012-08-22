@@ -14,7 +14,13 @@
 * limitations under the License.
 */
 
+#if NETFX_CORE
+using Windows.UI;
+using Windows.UI.Xaml.Media.Imaging;
+#else
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
+#endif
 
 namespace ZXing
 {
@@ -38,14 +44,14 @@ namespace ZXing
 
          // In order to measure pure decoding speed, we convert the entire image to a greyscale array
          luminances = new byte[width * height];
-         System.Windows.Media.Color c;
+         Color c;
          for (int y = 0; y < height; y++)
          {
             int offset = y * width;
             for (int x = 0; x < width; x++)
             {
                int srcPixel = writeableBitmap.Pixels[x + offset];
-               c = System.Windows.Media.Color.FromArgb((byte)((srcPixel >> 0x18) & 0xff),
+               c = Color.FromArgb((byte)((srcPixel >> 0x18) & 0xff),
                      (byte)((srcPixel >> 0x10) & 0xff),
                      (byte)((srcPixel >> 8) & 0xff),
                      (byte)(srcPixel & 0xff));

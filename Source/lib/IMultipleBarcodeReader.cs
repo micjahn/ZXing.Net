@@ -16,10 +16,12 @@
 
 using System;
 using System.Collections.Generic;
-#if !SILVERLIGHT
+#if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
 using System.Drawing;
 #endif
+#elif NETFX_CORE
+using Windows.UI.Xaml.Media.Imaging;
 #else
 using System.Windows.Media.Imaging;
 #endif
@@ -75,7 +77,7 @@ namespace ZXing
       /// </value>
       IList<BarcodeFormat> PossibleFormats { get; set; }
 
-#if !SILVERLIGHT
+#if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
       /// <summary>
       /// Decodes the specified barcode bitmap.

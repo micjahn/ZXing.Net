@@ -76,7 +76,7 @@ namespace ZXing.Common
          {
             if (width != height)
             {
-               throw new System.SystemException("Can't call getDimension() on a non-square matrix");
+               throw new System.ArgumentException("Can't call getDimension() on a non-square matrix");
             }
             return width;
          }
