@@ -1,4 +1,20 @@
-﻿using System;
+﻿/*
+ * Copyright 2012 ZXing.Net authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -8,7 +24,6 @@ using Microsoft.Devices;
 using Microsoft.Phone.Tasks;
 
 using ZXing;
-using ZXing.Common;
 
 namespace WindowsPhoneDemo
 {
@@ -19,8 +34,9 @@ namespace WindowsPhoneDemo
 
       private DispatcherTimer timer;
       private PhotoCameraLuminanceSource luminance;
-      private Reader reader;
+      private IBarcodeReader reader;
       private PhotoCamera photoCamera;
+      private readonly WriteableBitmap dummyBitmap = new WriteableBitmap(1, 1);
 
       // Konstruktor
       public MainPage()
@@ -40,11 +56,7 @@ namespace WindowsPhoneDemo
          var uri = new Uri("/images/35.png", UriKind.Relative);
          var imgSource = new BitmapImage(uri);
          BarcodeImage.Source = imgSource;
-         imgSource.ImageOpened += (s, e) =>
-                                     {
-                                        var bmp = (BitmapImage) s;
-                                        scannerWorker.RunWorkerAsync(new WriteableBitmap(bmp));
-                                     };
+         imgSource.ImageOpened += (s, e) => scannerWorker.RunWorkerAsync(new WriteableBitmap((BitmapImage) s));
       }
 
       void scannerWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -68,9 +80,7 @@ namespace WindowsPhoneDemo
       static void scannerWorker_DoWork(object sender, DoWorkEventArgs e)
       {
          // scanning for a barcode
-         var bmp = (WriteableBitmap) e.Argument;
-         var reader = new BarcodeReader();
-         e.Result = reader.Decode(bmp);
+         e.Result = new BarcodeReader().Decode((WriteableBitmap) e.Argument);
       }
 
       private void ProcessImage(PhotoResult e)
@@ -136,8 +146,10 @@ namespace WindowsPhoneDemo
          Dispatcher.BeginInvoke(() =>
          {
             previewTransform.Rotation = photoCamera.Orientation;
-            reader = new MultiFormatReader();
+            // create a luminance source which gets its values directly from the camera
+            // the instance is returned directly to the reader
             luminance = new PhotoCameraLuminanceSource(width, height);
+            reader = new BarcodeReader(null, bmp => luminance, null);
          });
       }
 
@@ -147,9 +159,8 @@ namespace WindowsPhoneDemo
             return;
 
          photoCamera.GetPreviewBufferY(luminance.PreviewBufferY);
-         var binarizer = new HybridBinarizer(luminance);
-         var binBitmap = new BinaryBitmap(binarizer);
-         var result = reader.decode(binBitmap);
+         // use a dummy writeable bitmap because the luminance values are written directly to the luminance buffer
+         var result = reader.Decode(dummyBitmap);
          Dispatcher.BeginInvoke(() => DisplayResult(result));
       }
 
