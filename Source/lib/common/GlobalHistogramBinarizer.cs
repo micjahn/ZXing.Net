@@ -23,13 +23,9 @@ namespace ZXing.Common
    /// 
    /// Faster mobile devices and all desktop applications should probably use HybridBinarizer instead.
    /// 
+   /// <author>dswitkin@google.com (Daniel Switkin)</author>
+   /// <author>Sean Owen</author>
    /// </summary>
-   /// <author>  dswitkin@google.com (Daniel Switkin)
-   /// </author>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
    public class GlobalHistogramBinarizer : Binarizer
    {
       private const int LUMINANCE_BITS = 5;
@@ -40,6 +36,10 @@ namespace ZXing.Common
       private byte[] luminances;
       private readonly int[] buckets;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="GlobalHistogramBinarizer"/> class.
+      /// </summary>
+      /// <param name="source">The source.</param>
       public GlobalHistogramBinarizer(LuminanceSource source)
          : base(source)
       {
@@ -47,7 +47,12 @@ namespace ZXing.Common
          buckets = new int[LUMINANCE_BUCKETS];
       }
 
-      // Applies simple sharpening to the row data to improve performance of the 1D Readers.
+      /// <summary>
+      /// Applies simple sharpening to the row data to improve performance of the 1D Readers.
+      /// </summary>
+      /// <param name="y"></param>
+      /// <param name="row"></param>
+      /// <returns></returns>
       public override BitArray getBlackRow(int y, BitArray row)
       {
          LuminanceSource source = LuminanceSource;
@@ -66,18 +71,18 @@ namespace ZXing.Common
          int[] localBuckets = buckets;
          for (int x = 0; x < width; x++)
          {
-            int pixel = (localLuminances[x] + 128) & 0xff;
+            int pixel = localLuminances[x] & 0xff;
             localBuckets[pixel >> LUMINANCE_SHIFT]++;
          }
          int blackPoint;
          if (!estimateBlackPoint(localBuckets, out blackPoint))
             return null;
 
-         int left = (localLuminances[0] + 128) & 0xff;
-         int center = (localLuminances[1] + 128) & 0xff;
+         int left = localLuminances[0] & 0xff;
+         int center = localLuminances[1] & 0xff;
          for (int x = 1; x < width - 1; x++)
          {
-            int right = (localLuminances[x + 1] + 128) & 0xff;
+            int right = localLuminances[x + 1] & 0xff;
             // A simple -1 4 -1 box filter with a weight of 2.
             int luminance = ((center << 2) - left - right) >> 1;
             row[x] = (luminance < blackPoint);
@@ -87,10 +92,11 @@ namespace ZXing.Common
          return row;
       }
 
+      /// <summary>
+      /// Does not sharpen the data, as this call is intended to only be used by 2D Readers.
+      /// </summary>
       override public BitMatrix BlackMatrix
       {
-         // Does not sharpen the data, as this call is intended to only be used by 2D Readers.
-
          get
          {
             LuminanceSource source = LuminanceSource;
@@ -135,9 +141,17 @@ namespace ZXing.Common
 
             return matrix;
          }
-
       }
 
+      /// <summary>
+      /// Creates a new object with the same type as this Binarizer implementation, but with pristine
+      /// state. This is needed because Binarizer implementations may be stateful, e.g. keeping a cache
+      /// of 1 bit data. See Effective Java for why we can't use Java's clone() method.
+      /// </summary>
+      /// <param name="source">The LuminanceSource this Binarizer will operate on.</param>
+      /// <returns>
+      /// A new concrete Binarizer implementation object.
+      /// </returns>
       public override Binarizer createBinarizer(LuminanceSource source)
       {
          return new GlobalHistogramBinarizer(source);

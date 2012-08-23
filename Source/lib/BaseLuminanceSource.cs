@@ -55,8 +55,7 @@ namespace ZXing
 
       /// <summary>
       /// Fetches one row of luminance data from the underlying platform's bitmap. Values range from
-      /// 0 (black) to 255 (white). Because Java does not have an unsigned byte type, callers will have
-      /// to bitwise and with 0xff for each value. It is preferable for implementations of this method
+      /// 0 (black) to 255 (white). It is preferable for implementations of this method
       /// to only fetch this row rather than the whole image, since no 2D Readers may be installed and
       /// getMatrix() may never be called.
       /// </summary>
@@ -74,7 +73,7 @@ namespace ZXing
             row = new byte[width];
          }
          for (int i = 0; i < width; i++)
-            row[i] = (byte)(luminances[y * width + i] - 128);
+            row[i] = luminances[y * width + i];
          return row;
       }
 
