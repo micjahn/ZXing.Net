@@ -128,8 +128,6 @@ namespace ZXing.Rendering
       /// <returns></returns>
       virtual public WriteableBitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
       {
-         int foreground = Foreground.A << 24 | Foreground.B << 16 | Foreground.G << 8 | Foreground.R;
-         int background = Background.A << 24 | Background.B << 16 | Background.G << 8 | Background.R;
          int width = matrix.Width;
          int height = matrix.Height;
          bool outputContent = !String.IsNullOrEmpty(content) && (format == BarcodeFormat.CODE_39 ||
@@ -141,6 +139,28 @@ namespace ZXing.Rendering
                                                                  format == BarcodeFormat.UPC_A);
          int emptyArea = outputContent ? 16 : 0;
 
+#if NETFX_CORE
+         var foreground = new byte[] { Foreground.A, Foreground.B, Foreground.G, Foreground.R };
+         var background = new byte[] { Background.A, Background.B, Background.G, Background.R };
+         var bmp = new WriteableBitmap(width, height);
+         var length = width * height;
+
+         // Copy data back
+         using (var stream = System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.AsStream(bmp.PixelBuffer))
+         {
+            for (int y = 0; y < height - emptyArea; y++)
+            {
+               for (var x = 0; x < width; x++)
+               {
+                  var color = matrix[x, y] ? foreground : background;
+                  stream.Write(color, 0, 4);
+               }
+            }
+         }
+         bmp.Invalidate();
+#else
+         int foreground = Foreground.A << 24 | Foreground.B << 16 | Foreground.G << 8 | Foreground.R;
+         int background = Background.A << 24 | Background.B << 16 | Background.G << 8 | Background.R;
          var bmp = new WriteableBitmap(width, height);
          var pixels = bmp.Pixels;
          var index = 0;
@@ -154,6 +174,7 @@ namespace ZXing.Rendering
             }
          }
          bmp.Invalidate();
+#endif
 
          if (outputContent)
          {
