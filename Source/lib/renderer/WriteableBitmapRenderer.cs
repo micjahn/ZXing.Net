@@ -140,8 +140,8 @@ namespace ZXing.Rendering
          int emptyArea = outputContent ? 16 : 0;
 
 #if NETFX_CORE
-         var foreground = new byte[] { Foreground.A, Foreground.B, Foreground.G, Foreground.R };
-         var background = new byte[] { Background.A, Background.B, Background.G, Background.R };
+         var foreground = new byte[] { Foreground.B, Foreground.G, Foreground.R, Foreground.A };
+         var background = new byte[] { Background.B, Background.G, Background.R, Background.A };
          var bmp = new WriteableBitmap(width, height);
          var length = width * height;
 
