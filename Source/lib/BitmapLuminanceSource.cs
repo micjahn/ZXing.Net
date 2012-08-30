@@ -113,12 +113,29 @@ namespace ZXing
                         }
                         break;
                      case 3:
-                     case 4:
                         for (int x = 0; x < width; x++)
                         {
                            var luminance = (byte)(0.3 * buffer[x * pixelWidth] +
                                                    0.59 * buffer[x * pixelWidth + 1] +
                                                    0.11 * buffer[x * pixelWidth + 2] + 0.01);
+                           luminances[offset + x] = luminance;
+                        }
+                        break;
+                     case 4:
+                        // with alpha channel; some barcodes are completely black if you
+                        // only look at the r, g and b channel but the alpha channel controls
+                        // the view
+                        for (int x = 0; x < width; x++)
+                        {
+                           var luminance = (byte)(0.3 * buffer[x * pixelWidth] +
+                                                   0.59 * buffer[x * pixelWidth + 1] +
+                                                   0.11 * buffer[x * pixelWidth + 2] + 0.01);
+
+                           // calculating the resulting luminance based upon a white background
+                           // var alpha = buffer[x * pixelWidth + 3] / 255.0;
+                           // luminance = (byte)(luminance * alpha + 255 * (1 - alpha));
+                           var alpha = buffer[x * pixelWidth + 3];
+                           luminance = (byte)(((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8));
                            luminances[offset + x] = luminance;
                         }
                         break;

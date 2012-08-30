@@ -47,8 +47,10 @@ namespace ZXing
          {
             case "Bgr24":
             case "Bgr32":
-            case "Bgra32":
                CalculateLuminanceBGR(bitmap);
+               break;
+            case "Bgra32":
+               CalculateLuminanceBGRA(bitmap);
                break;
             case "Rgb24":
                CalculateLuminanceRGB(bitmap);
@@ -115,6 +117,37 @@ namespace ZXing
                var r = buffer[curX + 2];
                luminances[luminanceIndex] = (byte)
                   (0.3 * r + 0.59 * g + 0.11 * b + 0.01);
+               luminanceIndex++;
+            }
+            rect.Y++;
+         }
+      }
+
+      private void CalculateLuminanceBGRA(BitmapSource bitmap)
+      {
+         var width = bitmap.PixelWidth;
+         var height = bitmap.PixelHeight;
+         var stepX = (bitmap.Format.BitsPerPixel + 7) / 8;
+         var bufferSize = width * stepX;
+         var buffer = new byte[bufferSize];
+         var rect = new Int32Rect(0, 0, width, 1);
+         var luminanceIndex = 0;
+
+         luminances = new byte[width * height];
+
+         for (var curY = 0; curY < height; curY++)
+         {
+            bitmap.CopyPixels(rect, buffer, bufferSize, 0);
+            for (var curX = 0; curX < bufferSize; curX += stepX)
+            {
+               var b = buffer[curX];
+               var g = buffer[curX + 1];
+               var r = buffer[curX + 2];
+               var luminance = (byte)
+                  (0.3 * r + 0.59 * g + 0.11 * b + 0.01);
+               var alpha = buffer[curX + 3];
+               luminance = (byte)(((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8));
+               luminances[luminanceIndex] = luminance;
                luminanceIndex++;
             }
             rect.Y++;
