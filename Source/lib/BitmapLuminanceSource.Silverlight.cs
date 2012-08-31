@@ -41,23 +41,24 @@ namespace ZXing
       {
          var height = writeableBitmap.PixelHeight;
          var width = writeableBitmap.PixelWidth;
+         var stride = width * 4;
          // In order to measure pure decoding speed, we convert the entire image to a greyscale array
          luminances = new byte[width * height];
          Color c;
 
 #if NETFX_CORE
-         var data = System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.ToArray(writeableBitmap.PixelBuffer);
+         var data = System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.ToArray(writeableBitmap.PixelBuffer, 0, (int)writeableBitmap.PixelBuffer.Length);
          for (int y = 0; y < height; y++)
          {
-            int offset = y * width;
-            for (int x = 0; x < width; x+=4)
+            int offset = y * stride;
+            for (int x = 0, xl = 0; x < stride; x += 4, xl++)
             {
                c = Color.FromArgb(
                   data[x + offset], 
                   data[x + offset + 1], 
                   data[x + offset + 2], 
                   data[x + offset + 3]);
-               luminances[offset + x] = (byte)(0.3 * c.R + 0.59 * c.G + 0.11 * c.B + 0.01);
+               luminances[y * width + xl] = (byte)(0.3 * c.R + 0.59 * c.G + 0.11 * c.B + 0.01);
             }
          }
 #else
