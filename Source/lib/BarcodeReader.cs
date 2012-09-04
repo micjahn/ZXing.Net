@@ -32,7 +32,7 @@ namespace ZXing
    /// </summary>
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
-   public class BarcodeReader : BarcodeReaderGeneric<Bitmap>, IBarcodeReader
+   public class BarcodeReader : BarcodeReaderGeneric<Bitmap>, IBarcodeReader, IMultipleBarcodeReader
    {
       private static readonly Func<Bitmap, LuminanceSource> defaultCreateLuminanceSource =
          (bitmap) => new BitmapLuminanceSource(bitmap);
