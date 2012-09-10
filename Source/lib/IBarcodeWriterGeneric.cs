@@ -18,10 +18,17 @@ using ZXing.Common;
 
 namespace ZXing
 {
+#if !WINDOWS_PHONE
    /// <summary>
    /// Interface for a smart class to encode some content into a barcode
    /// </summary>
    public interface IBarcodeWriterGeneric<out TOutput>
+#else
+   /// <summary>
+   /// Interface for a smart class to encode some content into a barcode
+   /// </summary>
+   public interface IBarcodeWriterGeneric<TOutput>
+#endif
    {
       /// <summary>
       /// Encodes the specified contents.

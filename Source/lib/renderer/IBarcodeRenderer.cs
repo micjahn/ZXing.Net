@@ -18,10 +18,17 @@ using ZXing.Common;
 
 namespace ZXing.Rendering
 {
+#if !WINDOWS_PHONE
    /// <summary>
    /// Interface for a class to convert a BitMatrix to an output image format
    /// </summary>
    public interface IBarcodeRenderer<out TOutput>
+#else
+   /// <summary>
+   /// Interface for a class to convert a BitMatrix to an output image format
+   /// </summary>
+   public interface IBarcodeRenderer<TOutput>
+#endif
    {
       /// <summary>
       /// Renders the specified matrix to its graphically representation

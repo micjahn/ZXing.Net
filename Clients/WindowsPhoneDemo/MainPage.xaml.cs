@@ -52,6 +52,14 @@ namespace WindowsPhoneDemo
          scannerWorker.DoWork += scannerWorker_DoWork;
          scannerWorker.RunWorkerCompleted += scannerWorker_RunWorkerCompleted;
 
+         foreach (var x in typeof(BarcodeFormat).GetFields())
+         {
+            if (x.IsLiteral)
+            {
+               BarcodeType.Items.Add(x.GetValue(null));
+            }
+         }
+
          // open the default barcode which should be displayed when the app starts
          var uri = new Uri("/images/35.png", UriKind.Relative);
          var imgSource = new BitmapImage(uri);
@@ -168,14 +176,27 @@ namespace WindowsPhoneDemo
       {
          if (result != null)
          {
-            BarcodeType.Text = result.BarcodeFormat.ToString();
+            BarcodeType.SelectedItem = result.BarcodeFormat;
             BarcodeContent.Text = result.Text;
          }
          else
          {
-            BarcodeType.Text = String.Empty;
+            BarcodeType.SelectedItem = null;
             BarcodeContent.Text = "No barcode found.";
          }
+      }
+
+      private void GenerateButton_Click(object sender, RoutedEventArgs e)
+      {
+         if (BarcodeType.SelectedItem == null)
+            return;
+
+         IBarcodeWriter writer = new BarcodeWriter
+                                    {
+                                       Format = (BarcodeFormat) BarcodeType.SelectedItem
+                                    };
+         var bmp = writer.Write(BarcodeContent.Text);
+         BarcodeImage.Source = bmp;
       }
    }
 }

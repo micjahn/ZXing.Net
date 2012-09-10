@@ -42,14 +42,16 @@
             <Grid.ColumnDefinitions>
                <ColumnDefinition Width="*" />
                <ColumnDefinition Width="*" />
+               <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button x:Name="OpenImageButton" Content="Open" Click="OpenImageButton_Click" FontSize="26" FontWeight="ExtraBold" Height="75" />
             <Button x:Name="CameraButton" Content="Camera" Click="CameraButton_Click" FontSize="26" FontWeight="ExtraBold" Height="75" Grid.Column="2" />
+            <Button x:Name="GenerateButton" Content="Generate" Height="71" Width="160" Grid.Column="1" Margin="0,2" Click="GenerateButton_Click" />
          </Grid>
          <TextBlock x:Name="BarcodeTypeLabel" Text="Barcode Type" FontSize="26" FontWeight="ExtraBold" />
-         <TextBlock x:Name="BarcodeType" FontSize="26" MinHeight="60" />
+         <ListBox Height="100" Name="BarcodeType" Width="460" />
          <TextBlock x:Name="BarcodeTypeContent" Text="Barcode Content" FontSize="26" FontWeight="ExtraBold" />
-         <TextBlock x:Name="BarcodeContent" FontSize="26" MinHeight="200" TextWrapping="Wrap" />
+         <TextBox x:Name="BarcodeContent" FontSize="26" MinHeight="200" TextWrapping="Wrap" />
       </StackPanel>
 
    </Grid>

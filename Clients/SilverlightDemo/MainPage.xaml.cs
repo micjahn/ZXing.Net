@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 using ZXing;
+using ZXing.Common;
 
 namespace SilverlightDemo
 {
@@ -73,9 +74,16 @@ namespace SilverlightDemo
       {
          try
          {
-            var encoder = new MultiFormatWriter();
-            var bitMatrix = encoder.encode(txtEncoderContent.Text, (BarcodeFormat)cmbEncoderType.SelectedItem, (int)imgEncoderBarcode.Width, (int)imgEncoderBarcode.Height);
-            imgEncoderBarcode.Source = bitMatrix.ToBitmap((BarcodeFormat)cmbEncoderType.SelectedItem, txtEncoderContent.Text);
+            var writer = new BarcodeWriter
+                            {
+                               Format = (BarcodeFormat) cmbEncoderType.SelectedItem,
+                               Options = new EncodingOptions
+                                            {
+                                               Width = (int) imgEncoderBarcode.Width,
+                                               Height = (int) imgEncoderBarcode.Height
+                                            }
+                            };
+            imgEncoderBarcode.Source = writer.Write(txtEncoderContent.Text);
          }
          catch (Exception exc)
          {
