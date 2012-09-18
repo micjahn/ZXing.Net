@@ -50,13 +50,18 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\lib\silverlight\BigInteger.cs">
+      <Link>BigInteger.cs</Link>
+    </Compile>
     <Compile Include="AllPositiveBlackBoxTester.cs" />
     <Compile Include="aztec\AztecBlackBox1TestCase.cs" />
     <Compile Include="aztec\AztecBlackBox2TestCase.cs" />
+    <Compile Include="BigIntegerTests.cs" />
     <Compile Include="client\result\AddressBookParsedResultTestCase.cs" />
     <Compile Include="client\result\CalendarParsedResultTestCase.cs" />
     <Compile Include="client\result\EmailAddressParsedResultTestCase.cs" />

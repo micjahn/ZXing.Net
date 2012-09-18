@@ -17,7 +17,7 @@
 using System;
 using System.Text;
 
-#if NET40 || NET45 || NETFX_CORE
+#if SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NETFX_CORE
 using System.Numerics;
 #else
 using BigIntegerLibrary;
@@ -74,12 +74,12 @@ namespace ZXing.PDF417.Internal
                                                       '=', '^'
                                                    };
 
-#if NET40 || NET45 || NETFX_CORE
+#if SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NETFX_CORE
       /// <summary>
       /// Table containing values for the exponent of 900.
       /// This is used in the numeric compaction decode algorithm.
       /// </summary>
-      private static BigInteger[] EXP900;
+      private static readonly BigInteger[] EXP900;
       static DecodedBitStreamParser()
       {
          EXP900 = new BigInteger[16];
@@ -96,7 +96,7 @@ namespace ZXing.PDF417.Internal
       /// Table containing values for the exponent of 900.
       /// This is used in the numeric compaction decode algorithm.
       /// </summary>
-      private static BigInteger[] EXP900;
+      private static readonly BigInteger[] EXP900;
       static DecodedBitStreamParser()
       {
          EXP900 = new BigInteger[16];
@@ -678,7 +678,7 @@ namespace ZXing.PDF417.Internal
       /// </summary>
       private static String decodeBase900toBase10(int[] codewords, int count)
       {
-#if NET40 || NET45 || NETFX_CORE
+#if SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NETFX_CORE
          BigInteger result = BigInteger.Zero;
          for (int i = 0; i < count; i++)
          {

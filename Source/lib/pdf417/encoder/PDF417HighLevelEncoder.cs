@@ -19,7 +19,7 @@
  */
 
 using System;
-#if NET40 || NET45 || NETFX_CORE
+#if SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NETFX_CORE
 using System.Numerics;
 #else
 using BigIntegerLibrary;
@@ -484,7 +484,7 @@ namespace ZXing.PDF417.Internal
 
       private static void encodeNumeric(String msg, int startpos, int count, StringBuilder sb)
       {
-#if NET40 || NET45 || NETFX_CORE
+#if SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NETFX_CORE
          int idx = 0;
          StringBuilder tmp = new StringBuilder(count / 3 + 1);
          BigInteger num900 = new BigInteger(900);
@@ -494,7 +494,11 @@ namespace ZXing.PDF417.Internal
             tmp.Length = 0;
             int len = Math.Min(44, count - idx);
             String part = '1' + msg.Substring(startpos + idx, len);
+#if SILVERLIGHT4 || SILVERLIGHT5
+            BigInteger bigint = BigIntegerExtensions.Parse(part);
+#else
             BigInteger bigint = BigInteger.Parse(part);
+#endif
             do
             {
                // TODO: not sure if 10 is right 
