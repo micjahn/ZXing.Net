@@ -10,7 +10,6 @@ public class BarcodeCam : MonoBehaviour
    private Thread qrThread;
 
    private Color32[] c;
-   private byte[] dummy = new byte[0];
    private int W, H;
       
    private Rect screenRect;
@@ -65,16 +64,16 @@ public class BarcodeCam : MonoBehaviour
 
    void Update()
    {
-      c = camTexture.GetPixels32();
+      if (c == null)
+      {
+         c = camTexture.GetPixels32();
+      }
    }
 
    void DecodeQR()
    {
       // create a reader with a custom luminance source
-      var barcodeReader = new BarcodeReader(
-         null,
-         (rawRGB, width, height) => new Color32LuminanceSource(c, width, height),
-         null);
+      var barcodeReader = new Color32BarcodeReader {AutoRotate = false, TryHarder = false};
 
       while (true)
       {
@@ -83,10 +82,14 @@ public class BarcodeCam : MonoBehaviour
 
          try
          {
-            // data for decoding is injected via Color32LuminanceSource above
-            var result = barcodeReader.Decode(dummy, W, H);
+            // decode the current frame
+            var result = barcodeReader.Decode(c, W, H);
             if (result != null)
                print(result.Text);
+
+            // Sleep a little bit and set the signal to get the next frame
+            Thread.Sleep(200);
+            c = null;
          }
          catch
          {

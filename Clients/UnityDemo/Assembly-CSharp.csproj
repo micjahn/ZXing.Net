@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\BarcodeCam.cs" />
+     <Compile Include="Assets\Color32BarcodeReader.cs" />
      <Compile Include="Assets\Color32LuminanceSource.cs" />
  <Reference Include="zxing.unity">
  <HintPath>Assets\zxing.unity.dll</HintPath>

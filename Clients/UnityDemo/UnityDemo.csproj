@@ -54,17 +54,15 @@
     <Reference Include="UnityEngine">
       <HintPath>..\..\3rdparty\Unity\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="zxing.unity">
+      <HintPath>Assets\zxing.unity.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\BarcodeCam.cs" />
+    <Compile Include="Assets\Color32BarcodeReader.cs" />
     <Compile Include="Assets\Color32LuminanceSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Source\lib\zxing.unity.csproj">
-      <Project>{FD386CF5-E9CD-442C-A44C-B7D996E68CCC}</Project>
-      <Name>zxing.unity</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\UnityDemo.unity" />
