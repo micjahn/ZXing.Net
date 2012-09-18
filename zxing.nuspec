@@ -25,6 +25,9 @@ It is now compatible with .Net 2.0, .Net 4.0, Silverlight 4, Silverlight 5, Wind
     <file src="Build\Release\net2.0\zxing.dll" target="lib/net20/zxing.dll" />
     <file src="Build\Release\net2.0\zxing.pdb" target="lib/net20/zxing.pdb" />
     <file src="Build\Release\net2.0\zxing.XML" target="lib/net20/zxing.XML" />
+    <file src="Build\Release\net3.5\zxing.dll" target="lib/net35/zxing.dll" />
+    <file src="Build\Release\net3.5\zxing.pdb" target="lib/net35/zxing.pdb" />
+    <file src="Build\Release\net3.5\zxing.XML" target="lib/net35/zxing.XML" />
     <file src="Build\Release\net4.0\zxing.dll" target="lib/net40/zxing.dll" />
     <file src="Build\Release\net4.0\zxing.pdb" target="lib/net40/zxing.pdb" />
     <file src="Build\Release\net4.0\zxing.XML" target="lib/net40/zxing.XML" />
