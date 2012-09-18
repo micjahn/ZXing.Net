@@ -7,19 +7,19 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9ab81466-791f-46b2-ae88-55d4759de821}</ProjectGuid>
+    <ProjectGuid>{0ddd7a5d-c54a-4841-8555-7940db210df7}</ProjectGuid>
     <SHFBSchemaVersion>1.9.3.0</SHFBSchemaVersion>
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
          Studio adds them anyway -->
-    <AssemblyName>zxing.unity.doc</AssemblyName>
-    <RootNamespace>zxing.unity.doc</RootNamespace>
-    <Name>zxing.unity.doc</Name>
+    <AssemblyName>zxing.net3.5.doc</AssemblyName>
+    <RootNamespace>zxing.net3.5.doc</RootNamespace>
+    <Name>zxing.net3.5.doc</Name>
     <!-- SHFB properties -->
-    <OutputPath>..\..\..\Build\Release\Documentation\unity\</OutputPath>
-    <HtmlHelpName>zxing.unity</HtmlHelpName>
+    <OutputPath>..\..\..\Build\Release\Documentation\net3.5\</OutputPath>
+    <HtmlHelpName>zxing.net3.5</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\zxing.unity.csproj" xmlns="" />
+      <DocumentationSource sourceFile="..\zxing.net3.5.csproj" xmlns="" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>AllMessages</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
@@ -59,9 +59,9 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\lib\zxing.unity.csproj">
-      <Name>zxing.unity</Name>
-      <Project>{fd386cf5-e9cd-442c-a44c-b7d996e68ccc}</Project>
+    <ProjectReference Include="..\..\lib\zxing.net3.5.csproj">
+      <Name>zxing.net3.5</Name>
+      <Project>{41b69545-aab6-42a6-96a0-6f6817e654a3}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

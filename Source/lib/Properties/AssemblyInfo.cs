@@ -10,8 +10,11 @@ using System.Runtime.InteropServices;
 #if NET20 && !UNITY
 [assembly: AssemblyTitle("zxing.net for .net 2.0")]
 #endif
-#if NET20 && UNITY
-[assembly: AssemblyTitle("zxing.net for .net 2.0 and unity (w/o System.Drawing)")]
+#if NET35 && !UNITY
+[assembly: AssemblyTitle("zxing.net for .net 3.5")]
+#endif
+#if NET35 && UNITY
+[assembly: AssemblyTitle("zxing.net for .net 3.5 and unity (w/o System.Drawing)")]
 #endif
 #if NET40
 [assembly: AssemblyTitle("zxing.net for .net 4.0")]
