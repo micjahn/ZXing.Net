@@ -37,13 +37,13 @@ namespace ZXing
       private static readonly Func<Bitmap, LuminanceSource> defaultCreateLuminanceSource =
          (bitmap) => new BitmapLuminanceSource(bitmap);
 #else
-   public class BarcodeReader : BarcodeReaderGeneric<byte[]>, IBarcodeReader
+   public class BarcodeReader : BarcodeReaderGeneric<byte[]>, IBarcodeReader, IMultipleBarcodeReader
    {
       private static readonly Func<byte[], int, int, LuminanceSource> defaultCreateLuminanceSource =
          (rawRGB, width, height) => new RGBLuminanceSource(rawRGB, width, height);
 #endif
 #else
-    public class BarcodeReader : BarcodeReaderGeneric<WriteableBitmap>, IBarcodeReader
+    public class BarcodeReader : BarcodeReaderGeneric<WriteableBitmap>, IBarcodeReader, IMultipleBarcodeReader
    {
       private static readonly Func<WriteableBitmap, LuminanceSource> defaultCreateLuminanceSource =
          (bitmap) => new BitmapLuminanceSource(bitmap);
