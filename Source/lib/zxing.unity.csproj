@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ZXing</RootNamespace>
     <AssemblyName>zxing.unity</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\Build\Debug\unity\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET20,UNITY</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET35,UNITY</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -27,7 +27,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\Build\Release\unity\</OutputPath>
-    <DefineConstants>TRACE;NET20,UNITY</DefineConstants>
+    <DefineConstants>TRACE;NET35,UNITY</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\Build\Release\unity\zxing.unity.xml</DocumentationFile>
@@ -40,7 +40,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release with Documentation|AnyCPU'">
     <OutputPath>..\..\Build\Release\unity\</OutputPath>
-    <DefineConstants>TRACE;NET20,UNITY</DefineConstants>
+    <DefineConstants>TRACE;NET35,UNITY</DefineConstants>
     <DocumentationFile>..\..\Build\Release\unity\zxing.unity.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -161,7 +161,6 @@
     <Compile Include="multi\qrcode\detector\MultiDetector.cs" />
     <Compile Include="multi\qrcode\detector\MultiFinderPatternFinder.cs" />
     <Compile Include="multi\qrcode\QRCodeMultiReader.cs" />
-    <Compile Include="net2.0\Func.cs" />
     <Compile Include="net2.0\TimeZoneInfo.cs" />
     <Compile Include="NotFoundException.cs" />
     <Compile Include="oned\CodaBarReader.cs" />

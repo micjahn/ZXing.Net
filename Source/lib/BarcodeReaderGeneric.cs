@@ -46,7 +46,7 @@ namespace ZXing
 #if !UNITY
       private readonly Func<T, LuminanceSource> createLuminanceSource;
 #else
-      private readonly Func<byte[], int, int, LuminanceSource> createLuminanceSource;
+      private readonly Func<T, int, int, LuminanceSource> createLuminanceSource;
 #endif
 #else
       private readonly Func<WriteableBitmap, LuminanceSource> createLuminanceSource;
@@ -263,7 +263,7 @@ namespace ZXing
       /// <value>
       /// The function to create a luminance source object.
       /// </value>
-      protected Func<byte[], int, int, LuminanceSource> CreateLuminanceSource
+      protected Func<T, int, int, LuminanceSource> CreateLuminanceSource
 #endif
 #else
       /// <summary>
@@ -319,7 +319,7 @@ namespace ZXing
 #if !UNITY
          Func<T, LuminanceSource> createLuminanceSource,
 #else
-         Func<byte[], int, int, LuminanceSource> createLuminanceSource,
+         Func<T, int, int, LuminanceSource> createLuminanceSource,
 #endif
 #else
          Func<WriteableBitmap, LuminanceSource> createLuminanceSource,
@@ -352,7 +352,7 @@ namespace ZXing
       /// <returns>
       /// the result data or null
       /// </returns>
-      public Result Decode(byte[] rawRGB, int width, int height)
+      public Result Decode(T rawRGB, int width, int height)
 #endif
 #else
       /// <summary>
@@ -450,7 +450,7 @@ namespace ZXing
       /// <returns>
       /// the result data or null
       /// </returns>
-      public Result[] DecodeMultiple(byte[] rawRGB, int width, int height)
+      public Result[] DecodeMultiple(T rawRGB, int width, int height)
 #endif
 #else
       /// <summary>

@@ -91,7 +91,7 @@ namespace ZXing
       /// </summary>
       /// <param name="barcodeBitmap">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
-      Result Decode(byte[] rawRGB, int width, int height);
+      Result Decode(T rawRGB, int width, int height);
 #endif
 #else
       /// <summary>
