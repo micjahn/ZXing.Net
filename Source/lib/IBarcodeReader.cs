@@ -80,6 +80,13 @@ namespace ZXing
       /// </value>
       IList<BarcodeFormat> PossibleFormats { get; set; }
 
+      /// <summary>
+      /// Decodes the specified barcode bitmap which is given by a generic byte array with the order RGB24.
+      /// </summary>
+      /// <param name="rawRGB">The image as RGB24 array.</param>
+      /// <returns>the result data or null</returns>
+      Result Decode(byte[] rawRGB, int width, int height);
+
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
       /// <summary>
@@ -95,13 +102,6 @@ namespace ZXing
       /// <param name="rawColor32">The image as Color32 array.</param>
       /// <returns>the result data or null</returns>
       Result Decode(Color32[] rawColor32, int width, int height);
-      
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="rawRGB">The image as RGB24 array.</param>
-      /// <returns>the result data or null</returns>
-      Result Decode(byte[] rawRGB, int width, int height);
 #endif
 #else
       /// <summary>

@@ -17,6 +17,8 @@
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
 using System.Drawing;
+#else
+using UnityEngine;
 #endif
 #elif NETFX_CORE
 using Windows.UI.Xaml.Media.Imaging;
@@ -50,7 +52,7 @@ namespace ZXing
       /// <summary>
       /// Creates a visual representation of the contents
       /// </summary>
-      byte[] Write(string contents);
+      Color32[] Write(string contents);
 #endif
 #else
       /// <summary>

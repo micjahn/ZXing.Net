@@ -16,15 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-#if !(SILVERLIGHT || NETFX_CORE)
-#if !UNITY
-using System.Drawing;
-#endif
-#elif NETFX_CORE
-using Windows.UI.Xaml.Media.Imaging;
-#else
-using System.Windows.Media.Imaging;
-#endif
 
 namespace ZXing
 {
@@ -77,7 +68,13 @@ namespace ZXing
       /// </value>
       IList<BarcodeFormat> PossibleFormats { get; set; }
 
-#if !SILVERLIGHT
+      /// <summary>
+      /// Decodes the specified barcode bitmap which is given by a generic byte array with the order RGB24.
+      /// </summary>
+      /// <param name="rawRGB">The barcode bitmap.</param>
+      /// <returns>the result data or null</returns>
+      Result Decode(byte[] rawRGB, int width, int height);
+
 #if !UNITY
       /// <summary>
       /// Decodes the specified barcode bitmap.
@@ -89,17 +86,9 @@ namespace ZXing
       /// <summary>
       /// Decodes the specified barcode bitmap.
       /// </summary>
-      /// <param name="barcodeBitmap">The barcode bitmap.</param>
+      /// <param name="rawRGB">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
       Result Decode(T rawRGB, int width, int height);
-#endif
-#else
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="barcodeBitmap">The barcode bitmap.</param>
-      /// <returns>the result data or null</returns>
-      Result Decode(WriteableBitmap barcodeBitmap);
 #endif
    }
 }

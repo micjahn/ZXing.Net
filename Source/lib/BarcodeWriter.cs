@@ -17,6 +17,8 @@
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
 using System.Drawing;
+#else
+using UnityEngine;
 #endif
 #elif NETFX_CORE
 using Windows.UI.Xaml.Media.Imaging;
@@ -30,26 +32,43 @@ namespace ZXing
 {
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
+   /// <summary>
+   /// A smart class to encode some content to a barcode image
+   /// </summary>
    public class BarcodeWriter : BarcodeWriterGeneric<Bitmap>, IBarcodeWriter
    {
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+      /// </summary>
       public BarcodeWriter()
       {
          Renderer = new BitmapRenderer();
       }
    }
 #else
-   public class BarcodeWriter : BarcodeWriterGeneric<byte[]>, IBarcodeWriter
+   /// <summary>
+   /// A smart class to encode some content to a barcode image
+   /// </summary>
+   public class BarcodeWriter : BarcodeWriterGeneric<Color32[]>, IBarcodeWriter
    {
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+      /// </summary>
       public BarcodeWriter()
       {
-         // TODO:
-         // Renderer = new BitmapRenderer();
+         Renderer = new Color32Renderer();
       }
    }
 #endif
 #else
+   /// <summary>
+   /// A smart class to encode some content to a barcode image
+   /// </summary>
    public class BarcodeWriter : BarcodeWriterGeneric<WriteableBitmap>, IBarcodeWriter
    {
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+      /// </summary>
       public BarcodeWriter()
       {
          Renderer = new WriteableBitmapRenderer();

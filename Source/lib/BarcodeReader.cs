@@ -18,6 +18,8 @@ using System;
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
 using System.Drawing;
+#else
+using UnityEngine;
 #endif
 #elif NETFX_CORE
 using Windows.UI.Xaml.Media.Imaging;
@@ -37,13 +39,13 @@ namespace ZXing
       private static readonly Func<Bitmap, LuminanceSource> defaultCreateLuminanceSource =
          (bitmap) => new BitmapLuminanceSource(bitmap);
 #else
-   public class BarcodeReader : BarcodeReaderGeneric<byte[]>, IBarcodeReader, IMultipleBarcodeReader
+   public class BarcodeReader : BarcodeReaderGeneric<Color32[]>, IBarcodeReader, IMultipleBarcodeReader
    {
-      private static readonly Func<byte[], int, int, LuminanceSource> defaultCreateLuminanceSource =
-         (rawRGB, width, height) => new RGBLuminanceSource(rawRGB, width, height);
+      private static readonly Func<Color32[], int, int, LuminanceSource> defaultCreateLuminanceSource =
+         (rawColor32, width, height) => new Color32LuminanceSource(rawColor32, width, height);
 #endif
 #else
-    public class BarcodeReader : BarcodeReaderGeneric<WriteableBitmap>, IBarcodeReader, IMultipleBarcodeReader
+   public class BarcodeReader : BarcodeReaderGeneric<WriteableBitmap>, IBarcodeReader, IMultipleBarcodeReader
    {
       private static readonly Func<WriteableBitmap, LuminanceSource> defaultCreateLuminanceSource =
          (bitmap) => new BitmapLuminanceSource(bitmap);
@@ -71,7 +73,7 @@ namespace ZXing
 #if !UNITY
          Func<Bitmap, LuminanceSource> createLuminanceSource,
 #else
-         Func<byte[], int, int, LuminanceSource> createLuminanceSource,
+         Func<Color32[], int, int, LuminanceSource> createLuminanceSource,
 #endif
 #else
          Func<WriteableBitmap, LuminanceSource> createLuminanceSource,

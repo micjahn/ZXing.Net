@@ -77,7 +77,13 @@ namespace ZXing
       /// </value>
       IList<BarcodeFormat> PossibleFormats { get; set; }
 
-#if !SILVERLIGHT
+      /// <summary>
+      /// Decodes the specified barcode bitmap which is given by a generic byte array with the order RGB24.
+      /// </summary>
+      /// <param name="rawRGB">The barcode bitmap.</param>
+      /// <returns>the result data or null</returns>
+      Result[] DecodeMultiple(byte[] rawRGB, int width, int height);
+
 #if !UNITY
       /// <summary>
       /// Decodes the specified barcode bitmap.
@@ -89,17 +95,9 @@ namespace ZXing
       /// <summary>
       /// Decodes the specified barcode bitmap.
       /// </summary>
-      /// <param name="barcodeBitmap">The barcode bitmap.</param>
+      /// <param name="rawRGB">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
       Result[] DecodeMultiple(T rawRGB, int width, int height);
-#endif
-#else
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="barcodeBitmap">The barcode bitmap.</param>
-      /// <returns>the result data or null</returns>
-      Result[] DecodeMultiple(WriteableBitmap barcodeBitmap);
 #endif
    }
 }
