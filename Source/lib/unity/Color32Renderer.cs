@@ -19,16 +19,16 @@ using UnityEngine;
 using ZXing.Common;
 using ZXing.Rendering;
 
-namespace UnityDemo
+namespace ZXing
 {
    class Color32Renderer : IBarcodeRenderer<Color32[]>
    {
-      public Color32[] Render(BitMatrix matrix, ZXing.BarcodeFormat format, string content)
+      public Color32[] Render(BitMatrix matrix, BarcodeFormat format, string content)
       {
          return Render(matrix, format, content, null);
       }
 
-      public Color32[] Render(BitMatrix matrix, ZXing.BarcodeFormat format, string content, EncodingOptions options)
+      public Color32[] Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
       {
          var result = new Color32[matrix.Width * matrix.Height];
          var offset = matrix.Height - 1;

@@ -16,7 +16,6 @@
 
 using System.Threading;
 
-using UnityDemo;
 using UnityEngine;
 
 using ZXing;
@@ -112,7 +111,7 @@ public class BarcodeCam : MonoBehaviour
    void DecodeQR()
    {
       // create a reader with a custom luminance source
-      var barcodeReader = new Color32BarcodeReader {AutoRotate = false, TryHarder = false};
+      var barcodeReader = new BarcodeReader {AutoRotate = false, TryHarder = false};
 
       while (true)
       {
@@ -142,7 +141,7 @@ public class BarcodeCam : MonoBehaviour
 
    private static Color32[] Encode(string textForEncoding, int width, int height)
    {
-      var writer = new Color32BarcodeWriter
+      var writer = new BarcodeWriter
       {
          Format = BarcodeFormat.QR_CODE,
          Options = new QrCodeEncodingOptions

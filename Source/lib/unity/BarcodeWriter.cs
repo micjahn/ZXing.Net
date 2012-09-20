@@ -16,13 +16,18 @@
 
 using UnityEngine;
 
-using ZXing;
-
-namespace UnityDemo
+namespace ZXing
 {
-   public class Color32BarcodeWriter : BarcodeWriterGeneric<Color32[]>
+   /// <summary>
+   /// A class for generating and rendering barcodes of different formats.
+   /// As output of the rendering stage you will get a Color32 array.
+   /// </summary>
+   public class BarcodeWriter : BarcodeWriterGeneric<Color32[]>
    {
-      public Color32BarcodeWriter()
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.
+      /// </summary>
+      public BarcodeWriter()
       {
          Renderer = new Color32Renderer();
       }

@@ -16,9 +16,7 @@
 
 using UnityEngine;
 
-using ZXing;
-
-namespace UnityDemo
+namespace ZXing
 {
    /// <summary>
    /// Calculates the luminance values based upon the Color32 structure

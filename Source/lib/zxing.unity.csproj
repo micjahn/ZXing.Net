@@ -33,7 +33,7 @@
     <DocumentationFile>..\..\Build\Release\unity\zxing.unity.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\..\Key\private.snk</AssemblyOriginatorKeyFile>
@@ -41,6 +41,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\3rdparty\Unity\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="aztec\AztecDetectorResult.cs" />
@@ -48,9 +52,7 @@
     <Compile Include="aztec\decoder\Decoder.cs" />
     <Compile Include="aztec\detector\Detector.cs" />
     <Compile Include="BarcodeFormat.cs" />
-    <Compile Include="BarcodeReader.cs" />
     <Compile Include="BarcodeReaderGeneric.cs" />
-    <Compile Include="BarcodeWriter.cs" />
     <Compile Include="BarcodeWriterGeneric.cs" />
     <Compile Include="BaseLuminanceSource.cs" />
     <Compile Include="Binarizer.cs" />
@@ -252,6 +254,10 @@
     <Compile Include="RGB565LuminanceSource.cs" />
     <Compile Include="RGBLuminanceSource.cs" />
     <Compile Include="SupportClass.cs" />
+    <Compile Include="unity\BarcodeReader.cs" />
+    <Compile Include="unity\BarcodeWriter.cs" />
+    <Compile Include="unity\Color32LuminanceSource.cs" />
+    <Compile Include="unity\Color32Renderer.cs" />
     <Compile Include="Writer.cs" />
     <Compile Include="WriterException.cs" />
   </ItemGroup>

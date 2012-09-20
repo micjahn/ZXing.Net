@@ -18,21 +18,28 @@ using System;
 
 using UnityEngine;
 
-using ZXing;
-
-namespace UnityDemo
+namespace ZXing
 {
    /// <summary>
    /// a barcode reader which uses the Color32LuminanceSource by default
    /// </summary>
-   public class Color32BarcodeReader : BarcodeReaderGeneric<Color32[]>
+   public class BarcodeReader : BarcodeReaderGeneric<Color32[]>
    {
-      public Color32BarcodeReader()
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+      /// </summary>
+      public BarcodeReader()
          : base(null, (rawColor32, width, height) => new Color32LuminanceSource(rawColor32, width, height), null)
       {
       }
-      
-      public Color32BarcodeReader(Reader reader,
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+      /// </summary>
+      /// <param name="reader">The reader.</param>
+      /// <param name="createLuminanceSource">The create luminance source.</param>
+      /// <param name="createBinarizer">The create binarizer.</param>
+      public BarcodeReader(Reader reader,
          Func<Color32[], int, int, LuminanceSource> createLuminanceSource,
          Func<LuminanceSource, Binarizer> createBinarizer)
          : base(reader, createLuminanceSource ?? ((rawColor32, width, height) => new Color32LuminanceSource(rawColor32, width, height)), createBinarizer)
