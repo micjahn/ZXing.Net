@@ -16,9 +16,12 @@
 
 using System;
 using System.Collections.Generic;
+
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
 using System.Drawing;
+#else
+using UnityEngine;
 #endif
 #elif NETFX_CORE
 using Windows.UI.Xaml.Media.Imaging;
@@ -89,7 +92,14 @@ namespace ZXing
       /// <summary>
       /// Decodes the specified barcode bitmap.
       /// </summary>
-      /// <param name="barcodeBitmap">The barcode bitmap.</param>
+      /// <param name="rawColor32">The image as Color32 array.</param>
+      /// <returns>the result data or null</returns>
+      Result[] DecodeMultiple(Color32[] rawColor32, int width, int height);
+
+      /// <summary>
+      /// Decodes the specified barcode bitmap.
+      /// </summary>
+      /// <param name="rawRGB">The image as RGB24 array.</param>
       /// <returns>the result data or null</returns>
       Result[] DecodeMultiple(byte[] rawRGB, int width, int height);
 #endif

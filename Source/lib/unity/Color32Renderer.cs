@@ -21,13 +21,31 @@ using ZXing.Rendering;
 
 namespace ZXing
 {
-   class Color32Renderer : IBarcodeRenderer<Color32[]>
+   /// <summary>
+   /// a barcode renderer which returns a Color32 array
+   /// </summary>
+   public class Color32Renderer : IBarcodeRenderer<Color32[]>
    {
+      /// <summary>
+      /// Renders the specified matrix.
+      /// </summary>
+      /// <param name="matrix">The matrix.</param>
+      /// <param name="format">The format.</param>
+      /// <param name="content">The content.</param>
+      /// <returns></returns>
       public Color32[] Render(BitMatrix matrix, BarcodeFormat format, string content)
       {
          return Render(matrix, format, content, null);
       }
 
+      /// <summary>
+      /// Renders the specified matrix.
+      /// </summary>
+      /// <param name="matrix">The matrix.</param>
+      /// <param name="format">The format.</param>
+      /// <param name="content">The content.</param>
+      /// <param name="options">The options.</param>
+      /// <returns></returns>
       public Color32[] Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
       {
          var result = new Color32[matrix.Width * matrix.Height];

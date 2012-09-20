@@ -23,7 +23,7 @@ namespace ZXing
    /// <summary>
    /// a barcode reader which uses the Color32LuminanceSource by default
    /// </summary>
-   public class BarcodeReader : BarcodeReaderGeneric<Color32[]>
+   public class BarcodeReader : BarcodeReaderGeneric<Color32[]>, IBarcodeReader, IMultipleBarcodeReader
    {
       /// <summary>
       /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
@@ -44,6 +44,53 @@ namespace ZXing
          Func<LuminanceSource, Binarizer> createBinarizer)
          : base(reader, createLuminanceSource ?? ((rawColor32, width, height) => new Color32LuminanceSource(rawColor32, width, height)), createBinarizer)
       {
+      }
+
+      /// <summary>
+      /// Decodes the specified barcode bitmap.
+      /// </summary>
+      /// <param name="rawRGB">The image as RGB24 array.</param>
+      /// <param name="width"></param>
+      /// <param name="height"></param>
+      /// <returns>
+      /// the result data or null
+      /// </returns>
+      public Result Decode(byte[] rawRGB, int width, int height)
+      {
+         return CreateBarcodeReader().Decode(rawRGB, width, height);
+      }
+
+      /// <summary>
+      /// Decodes the specified barcode bitmap.
+      /// </summary>
+      /// <param name="rawRGB">The image as RGB24 array.</param>
+      /// <param name="width"></param>
+      /// <param name="height"></param>
+      /// <returns>
+      /// the result data or null
+      /// </returns>
+      public Result[] DecodeMultiple(byte[] rawRGB, int width, int height)
+      {
+         return CreateBarcodeReader().DecodeMultiple(rawRGB, width, height);
+      }
+
+      private BarcodeReaderGeneric<byte[]> CreateBarcodeReader()
+      {
+         var rgbBarcodeReader = new BarcodeReaderGeneric<byte[]>(
+            Reader,
+            (_rawRGB, _width, _height) => new RGBLuminanceSource(_rawRGB, _width, _height),
+            CreateBinarizer)
+         {
+            AutoRotate = AutoRotate,
+            CharacterSet = CharacterSet,
+            PossibleFormats = PossibleFormats,
+            PureBarcode = PureBarcode,
+            TryHarder = TryHarder
+         };
+         rgbBarcodeReader.ResultFound += OnResultFound;
+         rgbBarcodeReader.ResultPointFound += OnResultPointFound;
+
+         return rgbBarcodeReader;
       }
    }
 }

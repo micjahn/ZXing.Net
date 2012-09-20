@@ -80,11 +80,7 @@ namespace ZXing
          {
             if (!hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK))
             {
-               ResultPointCallback callback = resultPoint =>
-               {
-                  if (explicitResultPointFound != null)
-                     explicitResultPointFound(resultPoint);
-               };
+               var callback = new ResultPointCallback(OnResultPointFound);
                hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK] = callback;
             }
             explicitResultPointFound += value;
@@ -424,8 +420,7 @@ namespace ZXing
                result.ResultMetadata[ResultMetadataType.ORIENTATION] = ((int)(result.ResultMetadata[ResultMetadataType.ORIENTATION]) + rotationCount * 90) % 360;
             }
 
-            if (ResultFound != null)
-               ResultFound(result);
+            OnResultFound(result);
          }
 
          return result;
@@ -527,13 +522,39 @@ namespace ZXing
                   result.ResultMetadata[ResultMetadataType.ORIENTATION] =
                      ((int)(result.ResultMetadata[ResultMetadataType.ORIENTATION]) + rotationCount * 90) % 360;
                }
-
-               if (ResultFound != null)
-                  ResultFound(result);
             }
+
+            OnResultsFound(results);
          }
 
          return results;
+      }
+
+      protected void OnResultsFound(IEnumerable<Result> results)
+      {
+         if (ResultFound != null)
+         {
+            foreach (var result in results)
+            {
+               ResultFound(result);
+            }
+         }
+      }
+
+      protected void OnResultFound(Result result)
+      {
+         if (ResultFound != null)
+         {
+            ResultFound(result);
+         }
+      }
+
+      protected void OnResultPointFound(ResultPoint resultPoint)
+      {
+         if (explicitResultPointFound != null)
+         {
+            explicitResultPointFound(resultPoint);
+         }
       }
    }
 }
