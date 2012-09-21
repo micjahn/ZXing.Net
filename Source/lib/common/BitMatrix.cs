@@ -385,7 +385,11 @@ namespace ZXing.Common
             {
                result.Append(this[x, y] ? "X" : " ");
             }
+#if WindowsCE
+            result.Append("\r\n");
+#else
             result.AppendLine("");
+#endif
          }
          return result.ToString();
       }

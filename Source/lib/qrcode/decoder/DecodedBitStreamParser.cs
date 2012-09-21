@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
 using ZXing.Common;
 
 namespace ZXing.QrCode.Internal
@@ -25,28 +26,20 @@ namespace ZXing.QrCode.Internal
    /// in one QR Code. This class decodes the bits back into text.</p>
    /// 
    /// <p>See ISO 18004:2006, 6.4.3 - 6.4.7</p>
-   /// 
+   /// <author>Sean Owen</author>
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
-   sealed class DecodedBitStreamParser
+   internal static class DecodedBitStreamParser
    {
       /// <summary>
       /// See ISO 18004:2006, 6.4.4 Table 5
       /// </summary>
-      private static char[] ALPHANUMERIC_CHARS = {
-      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
-      'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-      'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-      ' ', '$', '%', '*', '+', '-', '.', '/', ':'
-  };
-      private static int GB2312_SUBSET = 1;
-
-      private DecodedBitStreamParser()
-      {
-      }
+      private static readonly char[] ALPHANUMERIC_CHARS = {
+                                                             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
+                                                             'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+                                                             'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+                                                             ' ', '$', '%', '*', '+', '-', '.', '/', ':'
+                                                          };
+      private const int GB2312_SUBSET = 1;
 
       internal static DecoderResult decode(byte[] bytes,
                                   Version version,
@@ -153,16 +146,24 @@ namespace ZXing.QrCode.Internal
             }
          } while (mode != Mode.TERMINATOR);
 
+#if WindowsCE
+         var resultString = result.ToString().Replace("\n", "\r\n");
+#else
          var resultString = result.ToString().Replace("\r\n", "\n").Replace("\n", Environment.NewLine);
+#endif
          return new DecoderResult(bytes,
                                   resultString,
                                   byteSegments.Count == 0 ? null : byteSegments,
                                   ecLevel == null ? null : ecLevel.ToString());
       }
 
-      /**
-       * See specification GBT 18284-2000
-       */
+      /// <summary>
+      /// See specification GBT 18284-2000
+      /// </summary>
+      /// <param name="bits">The bits.</param>
+      /// <param name="result">The result.</param>
+      /// <param name="count">The count.</param>
+      /// <returns></returns>
       private static bool decodeHanziSegment(BitSource bits,
                                              StringBuilder result,
                                              int count)
@@ -371,7 +372,6 @@ namespace ZXing.QrCode.Internal
          // Read three digits at a time
          while (count >= 3)
          {
-
             // Each 10 bits encodes three digits
             if (bits.available() < 10)
             {
@@ -390,7 +390,6 @@ namespace ZXing.QrCode.Internal
          }
          if (count == 2)
          {
-
             // Two digits left over to read, encoded in 7 bits
             if (bits.available() < 7)
             {
@@ -427,20 +426,17 @@ namespace ZXing.QrCode.Internal
          int firstByte = bits.readBits(8);
          if ((firstByte & 0x80) == 0)
          {
-
             // just one byte
             return firstByte & 0x7F;
          }
          if ((firstByte & 0xC0) == 0x80)
          {
-
             // two bytes
             int secondByte = bits.readBits(8);
             return ((firstByte & 0x3F) << 8) | secondByte;
          }
          if ((firstByte & 0xE0) == 0xC0)
          {
-
             // three bytes
             int secondThirdBytes = bits.readBits(16);
             return ((firstByte & 0x1F) << 16) | secondThirdBytes;

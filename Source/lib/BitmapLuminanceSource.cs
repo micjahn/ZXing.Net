@@ -48,7 +48,11 @@ namespace ZXing
          luminances = new byte[width * height];
 
          // The underlying raster of image consists of bytes with the luminance values
+#if WindowsCE
+         var data = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+#else
          var data = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+#endif
          try
          {
             var stride = Math.Abs(data.Stride);
@@ -74,6 +78,7 @@ namespace ZXing
                var buffer = new byte[stride];
                var ptrInBitmap = data.Scan0;
 
+#if !WindowsCE
                // prepare palette for 1 and 8 bit indexed bitmaps
                var luminancePalette = new byte[bitmap.Palette.Entries.Length];
                for (var index = 0; index < bitmap.Palette.Entries.Length; index++)
@@ -83,6 +88,7 @@ namespace ZXing
                                                     0.59 * color.G +
                                                     0.11 * color.B + 0.01);
                }
+#endif
 
                for (int y = 0; y < height; y++)
                {
@@ -96,6 +102,7 @@ namespace ZXing
                   var offset = y * width;
                   switch (pixelWidth)
                   {
+#if !WindowsCE
                      case 0:
                         for (int x = 0; x * 8 < width; x++)
                         {
@@ -112,6 +119,7 @@ namespace ZXing
                            luminances[offset + x] = luminancePalette[buffer[x]];
                         }
                         break;
+#endif
                      case 3:
                         for (int x = 0; x < width; x++)
                         {

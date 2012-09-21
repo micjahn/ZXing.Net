@@ -115,7 +115,7 @@ namespace ZXing
          if (toString == null)
          {
             var result = new System.Text.StringBuilder(25);
-            result.AppendFormat("({0}, {1})", x, y);
+            result.AppendFormat(System.Globalization.CultureInfo.CurrentUICulture, "({0}, {1})", x, y);
             toString = result.ToString();
          }
          return toString;

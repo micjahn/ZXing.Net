@@ -42,8 +42,12 @@ namespace ZXing.Client.Result
          var pass = matchSinglePrefixedField("P:", rawText, ';', false);
          var type = matchSinglePrefixedField("T:", rawText, ';', false) ?? "nopass";
 
-         bool hidden;
+         bool hidden = false;
+#if WindowsCE
+         try { hidden = Boolean.Parse(matchSinglePrefixedField("B:", rawText, ';', false)); } catch { }
+#else
          Boolean.TryParse(matchSinglePrefixedField("B:", rawText, ';', false), out hidden);
+#endif
 
          return new WifiParsedResult(type, ssid, pass, hidden);
       }

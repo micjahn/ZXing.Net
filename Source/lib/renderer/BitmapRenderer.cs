@@ -29,6 +29,10 @@ namespace ZXing.Rendering
    /// </summary>
    public class BitmapRenderer : IBarcodeRenderer<Bitmap>
    {
+#if WindowsCE
+      private static Brush Black = new SolidBrush(Color.Black);
+#endif
+
       /// <summary>
       /// Gets or sets the foreground color.
       /// </summary>
@@ -97,7 +101,7 @@ namespace ZXing.Rendering
          // create the bitmap and lock the bits because we need the stride
          // which is the width of the image and possible padding bytes
          var bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
-         var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, bmp.PixelFormat);
+         var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
          try
          {
             var pixels = new byte[bmpData.Stride*height];
@@ -157,7 +161,11 @@ namespace ZXing.Rendering
             using (var g = Graphics.FromImage(bmp))
             {
                var drawFormat = new StringFormat {Alignment = StringAlignment.Center};
+#if WindowsCE
+               g.DrawString(content, font, Black, width / 2, height - 14, drawFormat);
+#else
                g.DrawString(content, font, Brushes.Black, width/2, height - 14, drawFormat);
+#endif
             }
          }
 

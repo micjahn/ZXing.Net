@@ -50,7 +50,9 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 
 [assembly: AssemblyVersion("0.8.0.0")]
+#if !WindowsCE
 [assembly: AssemblyFileVersion("0.8.0.0")]
+#endif
 
 [assembly: CLSCompliant(true)]
 

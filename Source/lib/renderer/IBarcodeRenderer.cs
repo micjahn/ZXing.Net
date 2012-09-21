@@ -18,7 +18,7 @@ using ZXing.Common;
 
 namespace ZXing.Rendering
 {
-#if !WINDOWS_PHONE
+#if !(WINDOWS_PHONE || WindowsCE)
    /// <summary>
    /// Interface for a class to convert a BitMatrix to an output image format
    /// </summary>
