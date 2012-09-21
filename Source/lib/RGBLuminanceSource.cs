@@ -14,6 +14,8 @@
 * limitations under the License.
 */
 
+using System;
+
 namespace ZXing
 {
    /// <summary>
@@ -21,6 +23,45 @@ namespace ZXing
    /// </summary>
    public partial class RGBLuminanceSource : BaseLuminanceSource
    {
+      /// <summary>
+      /// enumeration of supported bitmap format which the RGBLuminanceSource can process
+      /// </summary>
+      public enum BitmapFormat
+      {
+         /// <summary>
+         /// grayscale array, the byte array is a luminance array with 1 byte per pixel
+         /// </summary>
+         Gray8,
+         /// <summary>
+         /// 3 byte per pixel with the channels red, green and blue
+         /// </summary>
+         RGB24,
+         /// <summary>
+         /// 4 byte per pixel with the channels red, green and blue
+         /// </summary>
+         RGB32,
+         /// <summary>
+         /// 4 byte per pixel with the channels alpha, red, green and blue
+         /// </summary>
+         ARGB32,
+         /// <summary>
+         /// 3 byte per pixel with the channels blue, green and red
+         /// </summary>
+         BGR24,
+         /// <summary>
+         /// 4 byte per pixel with the channels blue, green and red
+         /// </summary>
+         BGR32,
+         /// <summary>
+         /// 4 byte per pixel with the channels blue, green, red and alpha
+         /// </summary>
+         BGRA32,
+         /// <summary>
+         /// 2 byte per pixel, 5 bit red, 6 bits green and 5 bits blue
+         /// </summary>
+         RGB565
+      }
+
       /// <summary>
       /// Initializes a new instance of the <see cref="RGBLuminanceSource"/> class.
       /// </summary>
@@ -39,30 +80,8 @@ namespace ZXing
       /// <param name="width">The width.</param>
       /// <param name="height">The height.</param>
       public RGBLuminanceSource(byte[] rgbRawBytes, int width, int height)
-         : base(width, height)
+         : this(rgbRawBytes, width, height, BitmapFormat.RGB24)
       {
-         // In order to measure pure decoding speed, we convert the entire image to a greyscale array
-         luminances = new byte[width * height];
-         for (int y = 0; y < height; y++)
-         {
-            int offset = y * width;
-            for (int x = 0; x < width; x++)
-            {
-               int r = rgbRawBytes[offset * 3 + x * 3];
-               int g = rgbRawBytes[offset * 3 + x * 3 + 1];
-               int b = rgbRawBytes[offset * 3 + x * 3 + 2];
-               if (r == g && g == b)
-               {
-                  // Image is already greyscale, so pick any channel.
-                  luminances[offset + x] = (byte)r;
-               }
-               else
-               {
-                  // Calculate luminance cheaply, favoring green.
-                  luminances[offset + x] = (byte)((r + g + g + b) >> 2);
-               }
-            }
-         }
       }
 
       /// <summary>
@@ -74,9 +93,23 @@ namespace ZXing
       /// <param name="width">The width.</param>
       /// <param name="height">The height.</param>
       /// <param name="is8Bit">if set to <c>true</c> [is8 bit].</param>
+      [Obsolete("Use RGBLuminanceSource(luminanceArray, width, height, BitmapFormat.Gray8)")]
       public RGBLuminanceSource(byte[] luminanceArray, int width, int height, bool is8Bit)
-         : base(luminanceArray, width, height)
+         : this(luminanceArray, width, height, BitmapFormat.Gray8)
       {
+      }
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="RGBLuminanceSource"/> class.
+      /// It supports a byte array with 3 bytes per pixel (RGB24).
+      /// </summary>
+      /// <param name="rgbRawBytes">The RGB raw bytes.</param>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      public RGBLuminanceSource(byte[] rgbRawBytes, int width, int height, BitmapFormat bitmapFormat)
+         : base(width, height)
+      {
+         CalculateLuminance(rgbRawBytes, bitmapFormat);
       }
 
       /// <summary>
@@ -90,6 +123,97 @@ namespace ZXing
       protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
       {
          return new RGBLuminanceSource(width, height) { luminances = newLuminances };
+      }
+
+      private void CalculateLuminance(byte[] rgbRawBytes, BitmapFormat bitmapFormat)
+      {
+         switch (bitmapFormat)
+         {
+            case BitmapFormat.Gray8:
+               Buffer.BlockCopy(rgbRawBytes, 0, luminances, 0, rgbRawBytes.Length < luminances.Length ? rgbRawBytes.Length : luminances.Length);
+               break;
+            case BitmapFormat.RGB24:
+            case BitmapFormat.BGR24:
+               CalculateLuminanceRGB24(rgbRawBytes);
+               break;
+            case BitmapFormat.RGB32:
+            case BitmapFormat.BGR32:
+               CalculateLuminanceRGB32(rgbRawBytes);
+               break;
+            case BitmapFormat.ARGB32:
+            case BitmapFormat.BGRA32:
+               CalculateLuminanceARGB32(rgbRawBytes);
+               break;
+            case BitmapFormat.RGB565:
+               CalculateLuminanceRGB565(rgbRawBytes);
+               break;
+            default:
+               throw new ArgumentException("The bitmap format isn't supported.", bitmapFormat.ToString());
+         }
+      }
+
+      private void CalculateLuminanceRGB565(byte[] rgb565RawData)
+      {
+         var luminanceIndex = 0;
+         for (var index = 0; index < rgb565RawData.Length; index += 2, luminanceIndex++)
+         {
+            var byte1 = rgb565RawData[index];
+            var byte2 = rgb565RawData[index + 1];
+
+            var b5 = byte1 & 0x1F;
+            var g5 = (((byte1 & 0xE0) >> 5) | ((byte2 & 0x03) << 3)) & 0x1F;
+            var r5 = (byte2 >> 2) & 0x1F;
+            var r8 = (r5 * 527 + 23) >> 6;
+            var g8 = (g5 * 527 + 23) >> 6;
+            var b8 = (b5 * 527 + 23) >> 6;
+
+            // cheap, not fully accurate conversion
+            //var pixel = (byte2 << 8) | byte1;
+            //b8 = (((pixel) & 0x001F) << 3);
+            //g8 = (((pixel) & 0x07E0) >> 2) & 0xFF;
+            //r8 = (((pixel) & 0xF800) >> 8);
+
+            luminances[luminanceIndex] = (byte)(0.3 * r8 + 0.59 * g8 + 0.11 * b8 + 0.01);
+         }
+      }
+
+      private void CalculateLuminanceRGB24(byte[] rgbRawBytes)
+      {
+         for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length; luminanceIndex++)
+         {
+            // Calculate luminance cheaply, favoring green.
+            int r = rgbRawBytes[rgbIndex++];
+            int g = rgbRawBytes[rgbIndex++];
+            int b = rgbRawBytes[rgbIndex++];
+            luminances[luminanceIndex] = (byte)((r + g + g + b) >> 2);
+         }
+      }
+
+      private void CalculateLuminanceRGB32(byte[] rgbRawBytes)
+      {
+         for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length; luminanceIndex++)
+         {
+            // Calculate luminance cheaply, favoring green.
+            int r = rgbRawBytes[rgbIndex++];
+            int g = rgbRawBytes[rgbIndex++];
+            int b = rgbRawBytes[rgbIndex++];
+            rgbIndex++;
+            luminances[luminanceIndex] = (byte)((r + g + g + b) >> 2);
+         }
+      }
+
+      private void CalculateLuminanceARGB32(byte[] rgbRawBytes)
+      {
+         for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length; luminanceIndex++)
+         {
+            // Calculate luminance cheaply, favoring green.
+            var r = rgbRawBytes[rgbIndex++];
+            var g = rgbRawBytes[rgbIndex++];
+            var b = rgbRawBytes[rgbIndex++];
+            var alpha = rgbRawBytes[rgbIndex++];
+            var luminance = (byte)((r + g + g + b) >> 2);
+            luminances[luminanceIndex] = (byte)(((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8));
+         }
       }
    }
 }
