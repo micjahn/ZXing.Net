@@ -31,8 +31,12 @@ namespace ZXing
       private static readonly Func<LuminanceSource, Binarizer> defaultCreateBinarizer =
          (luminanceSource) => new HybridBinarizer(luminanceSource);
 
+      private static readonly Func<byte[], int, int, LuminanceSource> defaultCreateRGBLuminanceSource =
+         (rawBytes, width, height) => new RGBLuminanceSource(rawBytes, width, height);
+
       private Reader reader;
       private readonly IDictionary<DecodeHintType, object> hints;
+      private readonly Func<byte[], int, int, LuminanceSource> createRGBLuminanceSource;
 #if !UNITY
       private readonly Func<T, LuminanceSource> createLuminanceSource;
 #else
@@ -283,7 +287,7 @@ namespace ZXing
       /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
       /// If null then MultiFormatReader is used</param>
       /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
-      /// If null then RGBLuminanceSource is used</param>
+      /// If null, an exception is thrown when Decode is called</param>
       /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
       /// If null then HybridBinarizer is used</param>
       public BarcodeReaderGeneric(Reader reader,
@@ -298,6 +302,35 @@ namespace ZXing
          this.reader = reader ?? new MultiFormatReader();
          this.createLuminanceSource = createLuminanceSource;
          this.createBinarizer = createBinarizer ?? defaultCreateBinarizer;
+         hints = new Dictionary<DecodeHintType, object>();
+         usePreviousState = false;
+      }
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BarcodeReaderGeneric&lt;T&gt;"/> class.
+      /// </summary>
+      /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
+      /// If null then MultiFormatReader is used</param>
+      /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
+      /// If null, an exception is thrown when Decode is called</param>
+      /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
+      /// If null then HybridBinarizer is used</param>
+      /// <param name="createRGBLuminanceSource">Sets the function to create a luminance source object for a rgb array.
+      /// If null the RGBLuminanceSource is used. The handler is only called when Decode with a byte[] array is called.</param>
+      public BarcodeReaderGeneric(Reader reader,
+#if !UNITY
+         Func<T, LuminanceSource> createLuminanceSource,
+#else
+         Func<T, int, int, LuminanceSource> createLuminanceSource,
+#endif
+         Func<LuminanceSource, Binarizer> createBinarizer,
+         Func<byte[], int, int, LuminanceSource> createRGBLuminanceSource
+         )
+      {
+         this.reader = reader ?? new MultiFormatReader();
+         this.createLuminanceSource = createLuminanceSource;
+         this.createBinarizer = createBinarizer ?? defaultCreateBinarizer;
+         this.createRGBLuminanceSource = createRGBLuminanceSource ?? defaultCreateRGBLuminanceSource;
          hints = new Dictionary<DecodeHintType, object>();
          usePreviousState = false;
       }
@@ -335,12 +368,18 @@ namespace ZXing
             throw new ArgumentNullException("rawRGB");
 #endif
 
-         var result = default(Result);
 #if !UNITY
          var luminanceSource = CreateLuminanceSource(barcodeBitmap);
 #else
          var luminanceSource = CreateLuminanceSource(rawRGB, width, height);
 #endif
+
+         return Decode(luminanceSource);
+      }
+
+      virtual protected Result Decode(LuminanceSource luminanceSource)
+      {
+         var result = default(Result);
          var binarizer = CreateBinarizer(luminanceSource);
          var binaryBitmap = new BinaryBitmap(binarizer);
          var multiformatReader = Reader as MultiFormatReader;
@@ -421,12 +460,18 @@ namespace ZXing
             throw new ArgumentNullException("rawRGB");
 #endif
 
-         var results = default(Result[]);
 #if !UNITY
          var luminanceSource = CreateLuminanceSource(barcodeBitmap);
 #else
          var luminanceSource = CreateLuminanceSource(rawRGB, width, height);
 #endif
+
+         return DecodeMultiple(luminanceSource);
+      }
+
+      virtual protected Result[] DecodeMultiple(LuminanceSource luminanceSource)
+      {
+         var results = default(Result[]);
          var binarizer = CreateBinarizer(luminanceSource);
          var binaryBitmap = new BinaryBitmap(binarizer);
          var rotationCount = 0;
@@ -521,11 +566,12 @@ namespace ZXing
       /// </returns>
       public Result Decode(byte[] rawRGB, int width, int height)
       {
-#if !UNITY
-         return CreateBarcodeReader(width, height).Decode(rawRGB);
-#else
-         return CreateBarcodeReader().Decode(rawRGB, width, height);
-#endif
+         if (rawRGB == null)
+            throw new ArgumentNullException("rawRGB");
+         
+         var luminanceSource = createRGBLuminanceSource(rawRGB, width, height);
+
+         return Decode(luminanceSource);
       }
 
       /// <summary>
@@ -539,38 +585,12 @@ namespace ZXing
       /// </returns>
       public Result[] DecodeMultiple(byte[] rawRGB, int width, int height)
       {
-#if !UNITY
-         return CreateBarcodeReader(width, height).DecodeMultiple(rawRGB);
-#else
-         return CreateBarcodeReader().DecodeMultiple(rawRGB, width, height);
-#endif
-      }
+         if (rawRGB == null)
+            throw new ArgumentNullException("rawRGB");
+         
+         var luminanceSource = createRGBLuminanceSource(rawRGB, width, height);
 
-#if !UNITY
-      private BarcodeReaderGeneric<byte[]> CreateBarcodeReader(int width, int height)
-#else
-      private BarcodeReaderGeneric<byte[]> CreateBarcodeReader()
-#endif
-      {
-         var rgbBarcodeReader = new BarcodeReaderGeneric<byte[]>(
-            Reader,
-#if !UNITY
-            rawRGB => new RGBLuminanceSource(rawRGB, width, height),
-#else
-            (rawRGB, width, height) => new RGBLuminanceSource(rawRGB, width, height),
-#endif
-            CreateBinarizer)
-         {
-            AutoRotate = AutoRotate,
-            CharacterSet = CharacterSet,
-            PossibleFormats = PossibleFormats,
-            PureBarcode = PureBarcode,
-            TryHarder = TryHarder
-         };
-         rgbBarcodeReader.ResultFound += OnResultFound;
-         rgbBarcodeReader.ResultPointFound += OnResultPointFound;
-
-         return rgbBarcodeReader;
+         return DecodeMultiple(luminanceSource);
       }
    }
 }

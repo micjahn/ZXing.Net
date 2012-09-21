@@ -65,7 +65,7 @@ namespace ZXing
       /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
       /// If null then MultiFormatReader is used</param>
       /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
-      /// If null then RGBLuminanceSource is used</param>
+      /// If null, an exception is thrown when Decode is called</param>
       /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
       /// If null then HybridBinarizer is used</param>
       public BarcodeReader(Reader reader,
@@ -81,6 +81,32 @@ namespace ZXing
          Func<LuminanceSource, Binarizer> createBinarizer
          )
          : base(reader, createLuminanceSource, createBinarizer)
+      {
+      }
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+      /// </summary>
+      /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
+      /// If null then MultiFormatReader is used</param>
+      /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
+      /// If null, an exception is thrown when Decode is called</param>
+      /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
+      /// If null then HybridBinarizer is used</param>
+      public BarcodeReader(Reader reader,
+#if !(SILVERLIGHT || NETFX_CORE)
+#if !UNITY
+         Func<Bitmap, LuminanceSource> createLuminanceSource,
+#else
+         Func<Color32[], int, int, LuminanceSource> createLuminanceSource,
+#endif
+#else
+         Func<WriteableBitmap, LuminanceSource> createLuminanceSource,
+#endif
+         Func<LuminanceSource, Binarizer> createBinarizer,
+         Func<byte[], int, int, LuminanceSource> createRGBLuminanceSource
+         )
+         : base(reader, createLuminanceSource, createBinarizer, createRGBLuminanceSource)
       {
       }
    }
