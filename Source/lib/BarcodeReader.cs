@@ -104,7 +104,7 @@ namespace ZXing
          Func<WriteableBitmap, LuminanceSource> createLuminanceSource,
 #endif
          Func<LuminanceSource, Binarizer> createBinarizer,
-         Func<byte[], int, int, LuminanceSource> createRGBLuminanceSource
+         Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource
          )
          : base(reader, createLuminanceSource, createBinarizer, createRGBLuminanceSource)
       {

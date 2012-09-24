@@ -29,6 +29,10 @@ namespace ZXing
       public enum BitmapFormat
       {
          /// <summary>
+         /// format of the byte[] isn't known. RGBLuminanceSource tries to determine the best possible value
+         /// </summary>
+         Unknown,
+         /// <summary>
          /// grayscale array, the byte array is a luminance array with 1 byte per pixel
          /// </summary>
          Gray8,
@@ -106,6 +110,7 @@ namespace ZXing
       /// <param name="rgbRawBytes">The RGB raw bytes.</param>
       /// <param name="width">The width.</param>
       /// <param name="height">The height.</param>
+      /// <param name="bitmapFormat">The bitmap format.</param>
       public RGBLuminanceSource(byte[] rgbRawBytes, int width, int height, BitmapFormat bitmapFormat)
          : base(width, height)
       {
@@ -125,8 +130,32 @@ namespace ZXing
          return new RGBLuminanceSource(width, height) { luminances = newLuminances };
       }
 
+      private static BitmapFormat DetermineBitmapFormat(byte[] rgbRawBytes, int width, int height)
+      {
+         var square = width*height;
+         var byteperpixel = rgbRawBytes.Length/square;
+
+         switch (byteperpixel)
+         {
+            case 1:
+               return BitmapFormat.Gray8;
+            case 2:
+               return BitmapFormat.RGB565;
+            case 3:
+               return BitmapFormat.RGB24;
+            case 4:
+               return BitmapFormat.RGB32;
+            default:
+               throw new ArgumentException("The bitmap format could not be determined. Please specify the correct value.");
+         }
+      }
+
       private void CalculateLuminance(byte[] rgbRawBytes, BitmapFormat bitmapFormat)
       {
+         if (bitmapFormat == BitmapFormat.Unknown)
+         {
+            bitmapFormat = DetermineBitmapFormat(rgbRawBytes, Width, Height);
+         }
          switch (bitmapFormat)
          {
             case BitmapFormat.Gray8:

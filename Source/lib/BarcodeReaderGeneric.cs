@@ -31,12 +31,12 @@ namespace ZXing
       private static readonly Func<LuminanceSource, Binarizer> defaultCreateBinarizer =
          (luminanceSource) => new HybridBinarizer(luminanceSource);
 
-      private static readonly Func<byte[], int, int, LuminanceSource> defaultCreateRGBLuminanceSource =
-         (rawBytes, width, height) => new RGBLuminanceSource(rawBytes, width, height);
+      private static readonly Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> defaultCreateRGBLuminanceSource =
+         (rawBytes, width, height, format) => new RGBLuminanceSource(rawBytes, width, height, format);
 
       private Reader reader;
       private readonly IDictionary<DecodeHintType, object> hints;
-      private readonly Func<byte[], int, int, LuminanceSource> createRGBLuminanceSource;
+      private readonly Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource;
 #if !UNITY
       private readonly Func<T, LuminanceSource> createLuminanceSource;
 #else
@@ -126,8 +126,7 @@ namespace ZXing
       }
 
       /// <summary>
-      /// Image is a pure monochrome image of a barcode. Doesn't matter what it maps to;
-      /// use {@link Boolean#TRUE}.
+      /// Image is a pure monochrome image of a barcode.
       /// </summary>
       /// <value>
       ///   <c>true</c> if monochrome image of a barcode; otherwise, <c>false</c>.
@@ -324,7 +323,7 @@ namespace ZXing
          Func<T, int, int, LuminanceSource> createLuminanceSource,
 #endif
          Func<LuminanceSource, Binarizer> createBinarizer,
-         Func<byte[], int, int, LuminanceSource> createRGBLuminanceSource
+         Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource
          )
       {
          this.reader = reader ?? new MultiFormatReader();
@@ -558,18 +557,19 @@ namespace ZXing
       /// <summary>
       /// Decodes the specified barcode bitmap.
       /// </summary>
-      /// <param name="rawRGB">The image as RGB24 array.</param>
-      /// <param name="width"></param>
-      /// <param name="height"></param>
+      /// <param name="rawRGB">The image as byte[] array.</param>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      /// <param name="format">The format.</param>
       /// <returns>
       /// the result data or null
       /// </returns>
-      public Result Decode(byte[] rawRGB, int width, int height)
+      public Result Decode(byte[] rawRGB, int width, int height, RGBLuminanceSource.BitmapFormat format)
       {
          if (rawRGB == null)
             throw new ArgumentNullException("rawRGB");
          
-         var luminanceSource = createRGBLuminanceSource(rawRGB, width, height);
+         var luminanceSource = createRGBLuminanceSource(rawRGB, width, height, format);
 
          return Decode(luminanceSource);
       }
@@ -577,18 +577,19 @@ namespace ZXing
       /// <summary>
       /// Decodes the specified barcode bitmap.
       /// </summary>
-      /// <param name="rawRGB">The image as RGB24 array.</param>
-      /// <param name="width"></param>
-      /// <param name="height"></param>
+      /// <param name="rawRGB">The image as byte[] array.</param>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      /// <param name="format">The format.</param>
       /// <returns>
       /// the result data or null
       /// </returns>
-      public Result[] DecodeMultiple(byte[] rawRGB, int width, int height)
+      public Result[] DecodeMultiple(byte[] rawRGB, int width, int height, RGBLuminanceSource.BitmapFormat format)
       {
          if (rawRGB == null)
             throw new ArgumentNullException("rawRGB");
          
-         var luminanceSource = createRGBLuminanceSource(rawRGB, width, height);
+         var luminanceSource = createRGBLuminanceSource(rawRGB, width, height, format);
 
          return DecodeMultiple(luminanceSource);
       }

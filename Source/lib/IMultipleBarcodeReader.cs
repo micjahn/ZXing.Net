@@ -84,8 +84,13 @@ namespace ZXing
       /// Decodes the specified barcode bitmap which is given by a generic byte array with the order RGB24.
       /// </summary>
       /// <param name="rawRGB">The image as RGB24 array.</param>
-      /// <returns>the result data or null</returns>
-      Result[] DecodeMultiple(byte[] rawRGB, int width, int height);
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      /// <param name="format">The format.</param>
+      /// <returns>
+      /// the result data or null
+      /// </returns>
+      Result[] DecodeMultiple(byte[] rawRGB, int width, int height, RGBLuminanceSource.BitmapFormat format);
 
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY

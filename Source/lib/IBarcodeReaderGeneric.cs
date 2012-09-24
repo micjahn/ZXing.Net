@@ -22,6 +22,7 @@ namespace ZXing
    /// <summary>
    /// Interface for a smart class to decode the barcode inside a bitmap object
    /// </summary>
+   /// <typeparam name="T">gives the type of the input data</typeparam>
    public interface IBarcodeReaderGeneric<T>
    {
       /// <summary>
@@ -43,8 +44,7 @@ namespace ZXing
       bool TryHarder { get; set; }
 
       /// <summary>
-      /// Image is a pure monochrome image of a barcode. Doesn't matter what it maps to;
-      /// use {@link Boolean#TRUE}.
+      /// Image is a pure monochrome image of a barcode.
       /// </summary>
       /// <value>
       ///   <c>true</c> if monochrome image of a barcode; otherwise, <c>false</c>.
@@ -69,11 +69,16 @@ namespace ZXing
       IList<BarcodeFormat> PossibleFormats { get; set; }
 
       /// <summary>
-      /// Decodes the specified barcode bitmap which is given by a generic byte array with the order RGB24.
+      /// Decodes the specified barcode bitmap which is given by a generic byte array.
       /// </summary>
       /// <param name="rawRGB">The barcode bitmap.</param>
-      /// <returns>the result data or null</returns>
-      Result Decode(byte[] rawRGB, int width, int height);
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      /// <param name="format">The format.</param>
+      /// <returns>
+      /// the result data or null
+      /// </returns>
+      Result Decode(byte[] rawRGB, int width, int height, RGBLuminanceSource.BitmapFormat format);
 
 #if !UNITY
       /// <summary>
