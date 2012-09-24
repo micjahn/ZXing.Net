@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.8.0.0</version>
+    <version>0.9.0.0</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <licenseUrl>http://zxingnet.codeplex.com/license</licenseUrl>
@@ -14,11 +14,10 @@
 This port of the java library started with the csharp ZXing port created by Suraj Supekar at revision 1202 in the SVN repository.
 But most of the parts are manually new ported from java. There are many tweaks and speed improvements included.
 
-It is now compatible with .Net 2.0, .Net 4.0, Silverlight 4, Silverlight 5, Windows Phone 7.0 and Windows Phone 7.1</description>
+It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, Windows RT, Silverlight 4, Silverlight 5, Windows Phone 7.0 and Windows Phone 7.1</description>
     <summary>ZXing (pronounced "zebra crossing") is an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.</summary>
     <releaseNotes>* sync with rev. 2393 of the java version
-* improved API, direct support for multiple barcode decoding, wrapper for barcode generating
-* many other improvements and fixes</releaseNotes>
+* improvements and fixes</releaseNotes>
     <tags>ZXing barcode scanning 1D 2D UPC-A UPC-E EAN-8 EAN-13 QR ITF Codabar RSS-14 Data Matrix PDF 417 PDF417 Aztec</tags>
   </metadata>
   <files>
@@ -46,5 +45,8 @@ It is now compatible with .Net 2.0, .Net 4.0, Silverlight 4, Silverlight 5, Wind
     <file src="Build\Release\wp7.1\zxing.wp7.1.dll" target="lib/sl4-wp71/zxing.wp7.1.dll" />
     <file src="Build\Release\wp7.1\zxing.wp7.1.pdb" target="lib/sl4-wp71/zxing.wp7.1.pdb" />
     <file src="Build\Release\wp7.1\zxing.wp7.1.XML" target="lib/sl4-wp71/zxing.wp7.1.XML" />
+    <file src="Build\Release\winrt\zxing.winrt.dll" target="lib/winrt/zxing.winrt.dll" />
+    <file src="Build\Release\winrt\zxing.winrt.pdb" target="lib/winrt/zxing.winrt.pdb" />
+    <file src="Build\Release\winrt\zxing.winrt.XML" target="lib/winrt/zxing.winrt.XML" />
   </files>
 </package>

@@ -1,6 +1,6 @@
 @ECHO OFF
 
 SET Id=ZXing.Net
-SET VERSION=0.8.0.0
+SET VERSION=0.9.0.0
 
 3rdParty\nuget\nuget push Build\Deployment\%ID%.%VERSION%.nupkg
