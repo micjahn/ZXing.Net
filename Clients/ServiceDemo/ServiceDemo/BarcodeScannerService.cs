@@ -58,7 +58,7 @@ namespace ServiceDemo
                         directory = Path.GetFullPath(args[1]);
                      }
                      if (!Directory.Exists(directory))
-                        throw new ArgumentException(String.Format("The barcode directory {0} ({1}) doesn't exists.", args[1], directory));
+                        throw new ArgumentException(String.Format("The barcode directory {0} doesn't exists.", directory));
                      
                      var transactedInstaller = new TransactedInstaller();
                      var serviceInstaller = new ServiceInstaller();
