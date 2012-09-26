@@ -50,7 +50,7 @@ public class VuforiaScanner : MonoBehaviour
             {
                try
                {
-                  var data = barcodeReader.Decode(image.Pixels, image.BufferWidth, image.BufferHeight);
+                  var data = barcodeReader.Decode(image.Pixels, image.BufferWidth, image.BufferHeight, RGBLuminanceSource.BitmapFormat.RGB24);
                   if (data != null)
                   {
                      Loom.QueueOnMainThread(() =>

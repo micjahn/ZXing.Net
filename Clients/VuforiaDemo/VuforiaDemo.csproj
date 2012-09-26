@@ -56,6 +56,10 @@
     <Reference Include="UnityEngine">
       <HintPath>..\..\3rdparty\Unity\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="zxing.unity, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Assets\zxing.unity.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Plugins\radical\System\Loom.cs" />
@@ -122,12 +126,6 @@
     <None Include="ProjectSettings\QualitySettings.asset" />
     <None Include="ProjectSettings\TagManager.asset" />
     <None Include="ProjectSettings\TimeManager.asset" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Source\lib\zxing.unity.csproj">
-      <Project>{FD386CF5-E9CD-442C-A44C-B7D996E68CCC}</Project>
-      <Name>zxing.unity</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Library\ScriptAssemblies\" />
