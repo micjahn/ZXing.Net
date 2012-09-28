@@ -58,7 +58,7 @@ namespace ZXing
             var stride = Math.Abs(data.Stride);
             var pixelWidth = stride / width;
 
-            if (pixelWidth == 2 || pixelWidth > 4)
+            if (pixelWidth > 4)
             {
                // old slow way for unsupported bit depth
                Color c;
@@ -120,6 +120,25 @@ namespace ZXing
                         }
                         break;
 #endif
+                     case 2:
+                        // should be RGB565 or RGB555, assume RGB565
+                        {
+                           for (int index = 0, x = 0; index < 2 * width; index += 2, x++)
+                           {
+                              var byte1 = buffer[index];
+                              var byte2 = buffer[index + 1];
+
+                              var b5 = byte1 & 0x1F;
+                              var g5 = (((byte1 & 0xE0) >> 5) | ((byte2 & 0x03) << 3)) & 0x1F;
+                              var r5 = (byte2 >> 2) & 0x1F;
+                              var r8 = (r5 * 527 + 23) >> 6;
+                              var g8 = (g5 * 527 + 23) >> 6;
+                              var b8 = (b5 * 527 + 23) >> 6;
+
+                              luminances[offset + x] = (byte)(0.3 * r8 + 0.59 * g8 + 0.11 * b8 + 0.01);
+                           }
+                        }
+                        break;
                      case 3:
                         for (int x = 0; x < width; x++)
                         {
