@@ -293,6 +293,21 @@ namespace ZXing.QrCode.Internal
          {
             result.Append(Encoding.GetEncoding(encoding).GetString(readBytes, 0, readBytes.Length));
          }
+#if WindowsCE
+         catch (PlatformNotSupportedException)
+         {
+            // WindowsCE doesn't support all encodings. But it is device depended.
+            // So we try here the some different ones
+            if (encoding == "ISO-8859-1")
+            {
+               result.Append(Encoding.GetEncoding(1252).GetString(readBytes, 0, readBytes.Length));
+            }
+            else
+            {
+               result.Append(Encoding.GetEncoding("UTF-8").GetString(readBytes, 0, readBytes.Length));
+            }
+         }
+#endif
          catch (Exception)
          {
             return false;

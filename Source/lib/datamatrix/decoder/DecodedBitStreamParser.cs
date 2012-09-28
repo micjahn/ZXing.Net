@@ -638,7 +638,11 @@ namespace ZXing.Datamatrix.Internal
          try
          {
 #if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || WindowsCE)
+#if WindowsCE
+            result.Append(Encoding.GetEncoding(1252).GetString(bytes, 0, bytes.Length));
+#else
             result.Append(Encoding.GetEncoding("ISO-8859-1").GetString(bytes, 0, bytes.Length));
+#endif
 #else
             result.Append(Encoding.GetEncoding("ISO-8859-1").GetString(bytes));
 #endif
