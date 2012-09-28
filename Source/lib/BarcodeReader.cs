@@ -80,7 +80,7 @@ namespace ZXing
 #endif
          Func<LuminanceSource, Binarizer> createBinarizer
          )
-         : base(reader, createLuminanceSource, createBinarizer)
+         : base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer)
       {
       }
 
