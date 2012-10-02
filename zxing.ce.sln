@@ -5,6 +5,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.ce2.0", "Source\lib\z
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.ce3.5", "Source\lib\zxing.ce3.5.csproj", "{20ED3331-13D2-4384-A962-027894272421}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{3BEAB0BB-0422-4C0A-BA72-B1739EFE3879}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsCEDemo", "Clients\WindowsCEDemo\WindowsCEDemo.csproj", "{A45B3EDD-9944-4B9A-886A-1823E8F310B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,8 +23,17 @@ Global
 		{20ED3331-13D2-4384-A962-027894272421}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20ED3331-13D2-4384-A962-027894272421}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20ED3331-13D2-4384-A962-027894272421}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A45B3EDD-9944-4B9A-886A-1823E8F310B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A45B3EDD-9944-4B9A-886A-1823E8F310B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A45B3EDD-9944-4B9A-886A-1823E8F310B7}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A45B3EDD-9944-4B9A-886A-1823E8F310B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A45B3EDD-9944-4B9A-886A-1823E8F310B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A45B3EDD-9944-4B9A-886A-1823E8F310B7}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A45B3EDD-9944-4B9A-886A-1823E8F310B7} = {3BEAB0BB-0422-4C0A-BA72-B1739EFE3879}
 	EndGlobalSection
 EndGlobal
