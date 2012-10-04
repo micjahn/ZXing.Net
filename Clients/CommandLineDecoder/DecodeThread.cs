@@ -308,22 +308,22 @@ namespace CommandLineDecoder
          int height = bitmap.Height;
          int stride = width * 3;
          var result = new Bitmap(stride, height, PixelFormat.Format32bppArgb);
+         var offset = 0;
 
          // The original image
          for (int indexH = 0; indexH < height; indexH++)
          {
             for (int indexW = 0; indexW < width; indexW++)
             {
-               result.SetPixel(indexW, indexH * width, image.GetPixel(indexW, indexH));
+               result.SetPixel(indexW, indexH, image.GetPixel(indexW, indexH));
             }
          }
 
          // Row sampling
          BitArray row = new BitArray(width);
-         int offset;
+         offset += width;
          for (int y = 0; y < height; y++)
          {
-            offset = y * stride + width;
             try
             {
                row = bitmap.getBlackRow(y, row);
@@ -345,12 +345,12 @@ namespace CommandLineDecoder
          }
 
          // 2D sampling
+         offset += width;
          try
          {
             for (int y = 0; y < height; y++)
             {
                BitMatrix matrix = bitmap.BlackMatrix;
-               offset = y * stride + width * 2;
                for (int x = 0; x < width; x++)
                {
                   result.SetPixel(offset + x, y, matrix[x, y] ? Color.Black : Color.White);
