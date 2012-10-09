@@ -117,7 +117,7 @@ namespace ZXing.Aztec.Internal
          ddata = detectorResult;
          BitMatrix matrix = detectorResult.Bits;
 
-         if (!ddata.isCompact())
+         if (!ddata.Compact)
          {
             matrix = removeDashedLines(ddata.Bits);
          }
@@ -145,7 +145,7 @@ namespace ZXing.Aztec.Internal
       /// <returns>the decoded string</returns>
       private String getEncodedData(bool[] correctedBits)
       {
-         var endIndex = codewordSize * ddata.getNbDatablocks() - invertedBitCount;
+         var endIndex = codewordSize * ddata.NbDatablocks - invertedBitCount;
          if (endIndex > correctedBits.Length)
          {
             return null;
@@ -306,17 +306,17 @@ namespace ZXing.Aztec.Internal
       {
          GenericGF gf;
 
-         if (ddata.getNbLayers() <= 2)
+         if (ddata.NbLayers <= 2)
          {
             codewordSize = 6;
             gf = GenericGF.AZTEC_DATA_6;
          }
-         else if (ddata.getNbLayers() <= 8)
+         else if (ddata.NbLayers <= 8)
          {
             codewordSize = 8;
             gf = GenericGF.AZTEC_DATA_8;
          }
-         else if (ddata.getNbLayers() <= 22)
+         else if (ddata.NbLayers <= 22)
          {
             codewordSize = 10;
             gf = GenericGF.AZTEC_DATA_10;
@@ -327,19 +327,19 @@ namespace ZXing.Aztec.Internal
             gf = GenericGF.AZTEC_DATA_12;
          }
 
-         int numDataCodewords = ddata.getNbDatablocks();
+         int numDataCodewords = ddata.NbDatablocks;
          int numECCodewords;
          int offset;
 
-         if (ddata.isCompact())
+         if (ddata.Compact)
          {
-            offset = NB_BITS_COMPACT[ddata.getNbLayers()] - numCodewords * codewordSize;
-            numECCodewords = NB_DATABLOCK_COMPACT[ddata.getNbLayers()] - numDataCodewords;
+            offset = NB_BITS_COMPACT[ddata.NbLayers] - numCodewords * codewordSize;
+            numECCodewords = NB_DATABLOCK_COMPACT[ddata.NbLayers] - numDataCodewords;
          }
          else
          {
-            offset = NB_BITS[ddata.getNbLayers()] - numCodewords * codewordSize;
-            numECCodewords = NB_DATABLOCK[ddata.getNbLayers()] - numDataCodewords;
+            offset = NB_BITS[ddata.NbLayers] - numCodewords * codewordSize;
+            numECCodewords = NB_DATABLOCK[ddata.NbLayers] - numDataCodewords;
          }
 
          int[] dataWords = new int[numCodewords];
@@ -427,26 +427,26 @@ namespace ZXing.Aztec.Internal
       private bool[] extractBits(BitMatrix matrix)
       {
          bool[] rawbits;
-         if (ddata.isCompact())
+         if (ddata.Compact)
          {
-            if (ddata.getNbLayers() > NB_BITS_COMPACT.Length)
+            if (ddata.NbLayers > NB_BITS_COMPACT.Length)
             {
                return null;
             }
-            rawbits = new bool[NB_BITS_COMPACT[ddata.getNbLayers()]];
-            numCodewords = NB_DATABLOCK_COMPACT[ddata.getNbLayers()];
+            rawbits = new bool[NB_BITS_COMPACT[ddata.NbLayers]];
+            numCodewords = NB_DATABLOCK_COMPACT[ddata.NbLayers];
          }
          else
          {
-            if (ddata.getNbLayers() > NB_BITS.Length)
+            if (ddata.NbLayers > NB_BITS.Length)
             {
                return null;
             }
-            rawbits = new bool[NB_BITS[ddata.getNbLayers()]];
-            numCodewords = NB_DATABLOCK[ddata.getNbLayers()];
+            rawbits = new bool[NB_BITS[ddata.NbLayers]];
+            numCodewords = NB_DATABLOCK[ddata.NbLayers];
          }
 
-         int layer = ddata.getNbLayers();
+         int layer = ddata.NbLayers;
          int size = matrix.Height;
          int rawbitsOffset = 0;
          int matrixOffset = 0;

@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-using System;
-
 using ZXing.Common;
 using ZXing.Common.Detector;
 using ZXing.Common.ReedSolomon;
@@ -37,6 +35,10 @@ namespace ZXing.Aztec.Internal
       private int nbCenterLayers;
       private int shift;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Detector"/> class.
+      /// </summary>
+      /// <param name="image">The image.</param>
       public Detector(BitMatrix image)
       {
          this.image = image;
@@ -45,7 +47,7 @@ namespace ZXing.Aztec.Internal
       /// <summary>
       /// Detects an Aztec Code in an image.
       /// </summary>
-      /// <returns>{@link AztecDetectorResult} encapsulating results of detecting an Aztec Code</returns>
+      /// <returns>encapsulating results of detecting an Aztec Code</returns>
       public AztecDetectorResult detect()
       {
          // 1. Get the center of the aztec matrix
@@ -345,12 +347,10 @@ namespace ZXing.Aztec.Internal
          return new[] { pa, pb, pc, pd };
       }
 
-      /**
-       *
-       * Finds a candidate center point of an Aztec code from an image
-       *
-       * @return the center point
-       */
+      /// <summary>
+      /// Finds a candidate center point of an Aztec code from an image
+      /// </summary>
+      /// <returns>the center point</returns>
       private Point getMatrixCenter()
       {
          ResultPoint pointA;
@@ -414,9 +414,15 @@ namespace ZXing.Aztec.Internal
          return new Point(cx, cy);
       }
 
-      /**
-       * Samples an Aztec matrix from an image
-       */
+      /// <summary>
+      /// Samples an Aztec matrix from an image
+      /// </summary>
+      /// <param name="image">The image.</param>
+      /// <param name="topLeft">The top left.</param>
+      /// <param name="bottomLeft">The bottom left.</param>
+      /// <param name="bottomRight">The bottom right.</param>
+      /// <param name="topRight">The top right.</param>
+      /// <returns></returns>
       private BitMatrix sampleGrid(BitMatrix image,
                                    ResultPoint topLeft,
                                    ResultPoint bottomLeft,
@@ -463,9 +469,10 @@ namespace ZXing.Aztec.Internal
            bottomLeft.Y);
       }
 
-      /**
-       * Sets number of layers and number of datablocks from parameter bits
-       */
+      /// <summary>
+      /// Sets number of layers and number of datablocks from parameter bits
+      /// </summary>
+      /// <param name="parameterData">The parameter data.</param>
       private void getParameters(bool[] parameterData)
       {
 
@@ -506,18 +513,15 @@ namespace ZXing.Aztec.Internal
 
       }
 
-      /**
-       *
-       * Samples a line
-       *
-       * @param p1 first point
-       * @param p2 second point
-       * @param size number of bits
-       * @return the array of bits
-       */
+      /// <summary>
+      /// Samples a line
+      /// </summary>
+      /// <param name="p1">first point</param>
+      /// <param name="p2">second point</param>
+      /// <param name="size">size number of bits</param>
+      /// <returns>the array of bits</returns>
       private bool[] sampleLine(Point p1, Point p2, int size)
       {
-
          bool[] res = new bool[size];
          float d = distance(p1, p2);
          float moduleSize = d / (size - 1);
@@ -537,17 +541,18 @@ namespace ZXing.Aztec.Internal
          return res;
       }
 
-      /**
-       * @return true if the border of the rectangle passed in parameter is compound of white points only
-       * or black points only
-       */
-      private bool isWhiteOrBlackRectangle(Point p1,
-                                              Point p2,
-                                              Point p3,
-                                              Point p4)
+      /// <summary>
+      /// Determines whether [is white or black rectangle] [the specified p1].
+      /// </summary>
+      /// <param name="p1">The p1.</param>
+      /// <param name="p2">The p2.</param>
+      /// <param name="p3">The p3.</param>
+      /// <param name="p4">The p4.</param>
+      /// <returns>true if the border of the rectangle passed in parameter is compound of white points only
+      /// or black points only</returns>
+      private bool isWhiteOrBlackRectangle(Point p1, Point p2, Point p3, Point p4)
       {
-
-         int corr = 3;
+         const int corr = 3;
 
          p1 = new Point(p1.x - corr, p1.y + corr);
          p2 = new Point(p2.x - corr, p2.y - corr);
@@ -581,11 +586,12 @@ namespace ZXing.Aztec.Internal
 
       }
 
-      /**
-       * Gets the color of a segment
-       *
-       * @return 1 if segment more than 90% black, -1 if segment is more than 90% white, 0 else
-       */
+      /// <summary>
+      /// Gets the color of a segment
+      /// </summary>
+      /// <param name="p1">The p1.</param>
+      /// <param name="p2">The p2.</param>
+      /// <returns>1 if segment more than 90% black, -1 if segment is more than 90% white, 0 else</returns>
       private int getColor(Point p1, Point p2)
       {
          float d = distance(p1, p2);
@@ -608,7 +614,7 @@ namespace ZXing.Aztec.Internal
             }
          }
 
-         float errRatio = (float)error / d;
+         float errRatio = error / d;
 
          if (errRatio > 0.1 && errRatio < 0.9)
          {
@@ -619,15 +625,17 @@ namespace ZXing.Aztec.Internal
          {
             return colorModel ? 1 : -1;
          }
-         else
-         {
-            return colorModel ? -1 : 1;
-         }
+         return colorModel ? -1 : 1;
       }
 
-      /**
-       * Gets the coordinate of the first point with a different color in the given direction
-       */
+      /// <summary>
+      /// Gets the coordinate of the first point with a different color in the given direction
+      /// </summary>
+      /// <param name="init">The init.</param>
+      /// <param name="color">if set to <c>true</c> [color].</param>
+      /// <param name="dx">The dx.</param>
+      /// <param name="dy">The dy.</param>
+      /// <returns></returns>
       private Point getFirstDifferent(Point init, bool color, int dx, int dy)
       {
          int x = init.x + dx;
