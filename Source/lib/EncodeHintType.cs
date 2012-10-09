@@ -19,45 +19,63 @@ namespace ZXing
    /// <summary>
    /// These are a set of hints that you may pass to Writers to specify their behavior.
    /// </summary>
-   /// <author>  dswitkin@google.com (Daniel Switkin)
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>dswitkin@google.com (Daniel Switkin)</author>
    public enum EncodeHintType
    {
       /// <summary>
+      /// Specifies the width of the barcode image
+      /// type: <see cref="System.Int32" />
+      /// </summary>
+      WIDTH,
+
+      /// <summary>
+      /// Specifies the height of the barcode image
+      /// type: <see cref="System.Int32" />
+      /// </summary>
+      HEIGHT,
+
+      /// <summary>
+      /// Don't put the content string into the output image.
+      /// type: <see cref="System.Boolean" />
+      /// </summary>
+      PURE_BARCODE,
+
+      /// <summary>
       /// Specifies what degree of error correction to use, for example in QR Codes.
       /// Type depends on the encoder. For example for QR codes it's type
-      /// {@link com.google.zxing.qrcode.decoder.ErrorCorrectionLevel ErrorCorrectionLevel}.
+      /// <see cref="ZXing.QrCode.Internal.ErrorCorrectionLevel" />
       /// </summary>
       ERROR_CORRECTION,
 
       /// <summary>
-      /// Specifies what character encoding to use where applicable (type {@link String})
+      /// Specifies what character encoding to use where applicable.
+      /// type: <see cref="System.String" />
       /// </summary>
       CHARACTER_SET,
 
       /// <summary>
       /// Specifies margin, in pixels, to use when generating the barcode. The meaning can vary
       /// by format; for example it controls margin before and after the barcode horizontally for
-      /// most 1D formats. (Type {@link Integer}).
+      /// most 1D formats.
+      /// type: <see cref="System.Int32" />
       /// </summary>
       MARGIN,
 
       /// <summary>
-      /// Specifies whether to use compact mode for PDF417 (type {@link Boolean}).
+      /// Specifies whether to use compact mode for PDF417.
+      /// type: <see cref="System.Boolean" />
       /// </summary>
       PDF417_COMPACT,
 
       /// <summary>
-      /// Specifies what compaction mode to use for PDF417 (type
-      /// {@link com.google.zxing.pdf417.encoder.Compaction Compaction}).
+      /// Specifies what compaction mode to use for PDF417.
+      /// type: <see cref="ZXing.PDF417.Internal.Compaction" />
       /// </summary>
       PDF417_COMPACTION,
 
       /// <summary>
-      /// Specifies the minimum and maximum number of rows and columns for PDF417 (type
-      /// {@link com.google.zxing.pdf417.encoder.Dimensions Dimensions}).
+      /// Specifies the minimum and maximum number of rows and columns for PDF417.
+      /// type: <see cref="ZXing.PDF417.Internal.Dimensions" />
       /// </summary>
       PDF417_DIMENSIONS,
    }
