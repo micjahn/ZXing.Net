@@ -80,7 +80,7 @@ namespace ZXing.QrCode.Internal
                                 IDictionary<EncodeHintType, object> hints)
       {
          // Determine what character encoding has been specified by the caller, if any
-#if !SILVERLIGHT
+#if !SILVERLIGHT || WINDOWS_PHONE
          String encoding = hints == null || !hints.ContainsKey(EncodeHintType.CHARACTER_SET) ? null : (String)hints[EncodeHintType.CHARACTER_SET];
          if (encoding == null)
          {
@@ -88,7 +88,7 @@ namespace ZXing.QrCode.Internal
          }
 #else
          // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
-         String encoding = "UTF-8";
+         const string encoding = "UTF-8";
 #endif
 
          // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
