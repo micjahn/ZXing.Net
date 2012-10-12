@@ -86,9 +86,13 @@ namespace ZXing.QrCode.Internal
          {
             encoding = DEFAULT_BYTE_MODE_ENCODING;
          }
+         bool generateECI = !DEFAULT_BYTE_MODE_ENCODING.Equals(encoding);
 #else
          // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
          const string encoding = "UTF-8";
+         // caller of the method can only control if the ECI segment should be written
+         // character set is fixed to UTF-8; but some scanners doesn't like the ECI segment
+         bool generateECI = (hints != null && hints.ContainsKey(EncodeHintType.CHARACTER_SET));
 #endif
 
          // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
@@ -100,7 +104,7 @@ namespace ZXing.QrCode.Internal
          BitArray headerBits = new BitArray();
 
          // Append ECI segment if applicable
-         if (mode == Mode.BYTE && !DEFAULT_BYTE_MODE_ENCODING.Equals(encoding))
+         if (mode == Mode.BYTE && generateECI)
          {
             CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding);
             if (eci != null)
