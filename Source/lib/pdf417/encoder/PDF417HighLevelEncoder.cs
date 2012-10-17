@@ -501,8 +501,7 @@ namespace ZXing.PDF417.Internal
 #endif
             do
             {
-               // TODO: not sure if 10 is right 
-               BigInteger c = BigInteger.ModPow(bigint, 10, num900);
+               BigInteger c = bigint % num900;
                tmp.Append((char)c);
                bigint = BigInteger.Divide(bigint, num900);
             } while (!bigint.Equals(num0));
@@ -527,8 +526,7 @@ namespace ZXing.PDF417.Internal
             BigInteger bigint = BigInteger.Parse(part);
             do
             {
-               // TODO: not sure if 10 is right 
-               BigInteger c = BigInteger.ModularExponentiation(bigint, 10, num900);
+               BigInteger c = BigInteger.Modulo(bigint, num900);
                tmp.Append(c.ToString());
                bigint = BigInteger.Division(bigint, num900);
             } while (!bigint.Equals(num0));
