@@ -204,7 +204,7 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
 
          if (rawInformation.Length < 2)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          String firstTwoDigits = rawInformation.Substring(0, 2);
@@ -221,7 +221,7 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
 
          if (rawInformation.Length < 3)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          String firstThreeDigits = rawInformation.Substring(0, 3);
@@ -239,16 +239,16 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
          if (THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH.ContainsKey(firstThreeDigits))
          {
             var dataLength = THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH[firstThreeDigits];
-               if (dataLength[0] == VARIABLE_LENGTH)
-               {
-                  return processVariableAI(4, (int)dataLength[1], rawInformation);
-               }
-            return processFixedAI(4, (int) dataLength[0], rawInformation);
+            if (dataLength[0] == VARIABLE_LENGTH)
+            {
+               return processVariableAI(4, (int)dataLength[1], rawInformation);
+            }
+            return processFixedAI(4, (int)dataLength[0], rawInformation);
          }
 
          if (rawInformation.Length < 4)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          String firstFourDigits = rawInformation.Substring(0, 4);
@@ -263,21 +263,21 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
             return processFixedAI(4, (int)dataLength[0], rawInformation);
          }
 
-         throw NotFoundException.Instance;
+         return null;
       }
 
       private static String processFixedAI(int aiSize, int fieldSize, String rawInformation)
       {
          if (rawInformation.Length < aiSize)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          String ai = rawInformation.Substring(0, aiSize);
 
          if (rawInformation.Length < aiSize + fieldSize)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          String field = rawInformation.Substring(aiSize, fieldSize);

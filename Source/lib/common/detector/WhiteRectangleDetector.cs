@@ -39,11 +39,50 @@ namespace ZXing.Common.Detector
       private readonly int upInit;
 
       /// <summary>
+      /// Creates a WhiteRectangleDetector instance
+      /// </summary>
+      /// <param name="image">The image.</param>
+      /// <returns>null, if image is too small, otherwise a WhiteRectangleDetector instance</returns>
+      public static WhiteRectangleDetector Create(BitMatrix image)
+      {
+         var instance = new WhiteRectangleDetector(image);
+
+         if (instance.upInit < 0 || instance.leftInit < 0 || instance.downInit >= instance.height || instance.rightInit >= instance.width)
+         {
+            return null;
+         }
+
+         return instance;
+      }
+
+      /// <summary>
+      /// Creates a WhiteRectangleDetector instance
+      /// </summary>
+      /// <param name="image">The image.</param>
+      /// <param name="initSize">Size of the init.</param>
+      /// <param name="x">The x.</param>
+      /// <param name="y">The y.</param>
+      /// <returns>
+      /// null, if image is too small, otherwise a WhiteRectangleDetector instance
+      /// </returns>
+      public static WhiteRectangleDetector Create(BitMatrix image, int initSize, int x, int y)
+      {
+         var instance = new WhiteRectangleDetector(image, initSize, x, y);
+
+         if (instance.upInit < 0 || instance.leftInit < 0 || instance.downInit >= instance.height || instance.rightInit >= instance.width)
+         {
+            return null;
+         }
+
+         return instance;
+      }
+
+      /// <summary>
       /// Initializes a new instance of the <see cref="WhiteRectangleDetector"/> class.
       /// </summary>
       /// <param name="image">The image.</param>
-      /// <exception cref="NotFoundException">if image is too small</exception>
-      public WhiteRectangleDetector(BitMatrix image)
+      /// <exception cref="ArgumentException">if image is too small</exception>
+      internal WhiteRectangleDetector(BitMatrix image)
       {
          this.image = image;
          height = image.Height;
@@ -52,10 +91,6 @@ namespace ZXing.Common.Detector
          rightInit = (width + INIT_SIZE) >> 1;
          upInit = (height - INIT_SIZE) >> 1;
          downInit = (height + INIT_SIZE) >> 1;
-         if (upInit < 0 || leftInit < 0 || downInit >= height || rightInit >= width)
-         {
-            throw NotFoundException.Instance;
-         }
       }
 
       /// <summary>
@@ -65,8 +100,7 @@ namespace ZXing.Common.Detector
       /// <param name="initSize">Size of the init.</param>
       /// <param name="x">The x.</param>
       /// <param name="y">The y.</param>
-      /// <exception cref="NotFoundException">if image is too small</exception>
-      public WhiteRectangleDetector(BitMatrix image, int initSize, int x, int y)
+      internal WhiteRectangleDetector(BitMatrix image, int initSize, int x, int y)
       {
          this.image = image;
          height = image.Height;
@@ -76,10 +110,6 @@ namespace ZXing.Common.Detector
          rightInit = x + halfsize;
          upInit = y - halfsize;
          downInit = y + halfsize;
-         if (upInit < 0 || leftInit < 0 || downInit >= height || rightInit >= width)
-         {
-            throw NotFoundException.Instance;
-         }
       }
 
       /// <summary>
@@ -87,15 +117,13 @@ namespace ZXing.Common.Detector
       /// starts around the center of the image, increases the size of the candidate
       /// region until it finds a white rectangular region.
       /// </summary>
-      /// <returns>{@link ResultPoint}[] describing the corners of the rectangular
+      /// <returns><see cref="ResultPoint" />[] describing the corners of the rectangular
       /// region. The first and last points are opposed on the diagonal, as
       /// are the second and third. The first point will be the topmost
       /// point and the last, the bottommost. The second point will be
       /// leftmost and the third, the rightmost</returns>
-      /// <exception cref="NotFoundException">if no Data Matrix Code can be found</exception>
       public ResultPoint[] detect()
       {
-
          int left = leftInit;
          int right = rightInit;
          int up = upInit;
@@ -298,7 +326,7 @@ namespace ZXing.Common.Detector
       /// <param name="z">left most point</param>
       /// <param name="x">right most point</param>
       /// <param name="t">top most point</param>
-      /// <returns>{@link ResultPoint}[] describing the corners of the rectangular
+      /// <returns><see cref="ResultPoint"/>[] describing the corners of the rectangular
       /// region. The first and last points are opposed on the diagonal, as
       /// are the second and third. The first point will be the topmost
       /// point and the last, the bottommost. The second point will be

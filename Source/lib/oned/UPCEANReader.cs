@@ -129,16 +129,13 @@ namespace ZXing.OneD
       /// <summary>
       ///   <p>Attempts to decode a one-dimensional barcode format given a single row of
       /// an image.</p>
-      ///   <param name="rowNumber">row number from top of the row</param>
-      ///   <param name="row">the black/white pixel data of the row</param>
-      ///   <param name="hints">decode hints</param>
-      ///   <returns><see cref="Result"/>containing encoded string and start/end of barcode</returns>
-      ///   <exception cref="NotFoundException">if an error occurs or barcode cannot be found</exception>
       /// </summary>
-      /// <param name="rowNumber"></param>
-      /// <param name="row"></param>
-      /// <param name="hints"></param>
-      /// <returns></returns>
+      /// <param name="rowNumber">row number from top of the row</param>
+      /// <param name="row">the black/white pixel data of the row</param>
+      /// <param name="hints">decode hints</param>
+      /// <returns>
+      ///   <see cref="Result"/>containing encoded string and start/end of barcode or null, if an error occurs or barcode cannot be found
+      /// </returns>
       override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
          return decodeRow(rowNumber, row, findStartGuardPattern(row), hints);
@@ -248,11 +245,9 @@ namespace ZXing.OneD
       /// <summary>
       /// Computes the UPC/EAN checksum on a string of digits, and reports
       /// whether the checksum is correct or not.
-      ///
+      /// </summary>
       /// <param name="s">string of digits to check</param>
       /// <returns>true iff string of digits passes the UPC/EAN checksum algorithm</returns>
-      /// <exception cref="FormatException">if the string does not contain only digits</exception>
-      /// </summary>
       private static bool checkStandardUPCEANChecksum(String s)
       {
          int length = s.Length;
@@ -304,6 +299,7 @@ namespace ZXing.OneD
       }
 
       /// <summary>
+      /// </summary>
       /// <param name="row">row of black/white values to search</param>
       /// <param name="rowOffset">position to start search</param>
       /// <param name="whiteFirst">if true, indicates that the pattern specifies white/black/white/...</param>
@@ -312,8 +308,6 @@ namespace ZXing.OneD
       /// searched for as a pattern
       /// <param name="counters">array of counters, as long as pattern, to re-use</param>
       /// <returns>start/end horizontal offset of guard pattern, as an array of two ints</returns>
-      /// <exception cref="NotFoundException">if pattern is not found</exception>
-      /// </summary>
       internal static int[] findGuardPattern(BitArray row,
                                     int rowOffset,
                                     bool whiteFirst,
@@ -359,7 +353,7 @@ namespace ZXing.OneD
 
       /// <summary>
       /// Attempts to decode a single UPC/EAN-encoded digit.
-      ///
+      /// </summary>
       /// <param name="row">row of black/white values to decode</param>
       /// <param name="counters">the counts of runs of observed black/white/black/... values</param>
       /// <param name="rowOffset">horizontal offset to start decoding from</param>
@@ -367,8 +361,6 @@ namespace ZXing.OneD
       /// for the digits 0-9 are used, and this indicates the encodings for 0 to 9 that should
       /// be used
       /// <returns>horizontal offset of first pixel beyond the decoded digit</returns>
-      /// <exception cref="NotFoundException">if digit cannot be decoded</exception>
-      /// </summary>
       internal static bool decodeDigit(BitArray row, int[] counters, int rowOffset, int[][] patterns, out int digit)
       {
          digit = -1;
@@ -393,7 +385,6 @@ namespace ZXing.OneD
 
       /// <summary>
       /// Get the format of this decoder.
-      ///
       /// <returns>The 1D format.</returns>
       /// </summary>
       internal abstract BarcodeFormat BarcodeFormat { get; }

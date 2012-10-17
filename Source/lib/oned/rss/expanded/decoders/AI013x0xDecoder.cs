@@ -47,7 +47,7 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
       {
          if (this.getInformation().Size != HEADER_SIZE + GTIN_SIZE + WEIGHT_SIZE)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          StringBuilder buf = new StringBuilder();

@@ -25,40 +25,44 @@ namespace ZXing.Datamatrix.Internal
    /// <summary>
    /// <p>Encapsulates logic that can detect a Data Matrix Code in an image, even if the Data Matrix Code
    /// is rotated or skewed, or partially obscured.</p>
-   ///
-   /// <author>Sean Owen</author>
    /// </summary>
+   /// <author>Sean Owen</author>
    public sealed class Detector
    {
       private readonly BitMatrix image;
       private readonly WhiteRectangleDetector rectangleDetector;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Detector"/> class.
+      /// </summary>
+      /// <param name="image">The image.</param>
       public Detector(BitMatrix image)
       {
          this.image = image;
-         rectangleDetector = new WhiteRectangleDetector(image);
+         rectangleDetector = WhiteRectangleDetector.Create(image);
       }
 
       /// <summary>
       /// <p>Detects a Data Matrix Code in an image.</p>
-      ///
-      /// <returns><see cref="DetectorResult" />encapsulating results of detecting a Data Matrix Code</returns>
-      /// <exception cref="NotFoundException">if no Data Matrix Code can be found</exception>
       /// </summary>
+      /// <returns><see cref="DetectorResult" />encapsulating results of detecting a Data Matrix Code or null</returns>
       public DetectorResult detect()
       {
+         if (rectangleDetector == null)
+            // can be null, if the image is to small
+            return null;
          ResultPoint[] cornerPoints = rectangleDetector.detect();
          if (cornerPoints == null)
             return null;
-         ResultPoint pointA = cornerPoints[0];
-         ResultPoint pointB = cornerPoints[1];
-         ResultPoint pointC = cornerPoints[2];
-         ResultPoint pointD = cornerPoints[3];
+         var pointA = cornerPoints[0];
+         var pointB = cornerPoints[1];
+         var pointC = cornerPoints[2];
+         var pointD = cornerPoints[3];
 
          // Point A and D are across the diagonal from one another,
          // as are B and C. Figure out which are the solid black lines
          // by counting transitions
-         List<ResultPointsAndTransitions> transitions = new List<ResultPointsAndTransitions>(4);
+         var transitions = new List<ResultPointsAndTransitions>(4);
          transitions.Add(transitionsBetween(pointA, pointB));
          transitions.Add(transitionsBetween(pointA, pointC));
          transitions.Add(transitionsBetween(pointB, pointD));
@@ -67,12 +71,12 @@ namespace ZXing.Datamatrix.Internal
 
          // Sort by number of transitions. First two will be the two solid sides; last two
          // will be the two alternating black/white sides
-         ResultPointsAndTransitions lSideOne = transitions[0];
-         ResultPointsAndTransitions lSideTwo = transitions[1];
+         var lSideOne = transitions[0];
+         var lSideTwo = transitions[1];
 
          // Figure out which point is their intersection by tallying up the number of times we see the
          // endpoints in the four endpoints. One will show up twice.
-         IDictionary<ResultPoint, int> pointCount = new Dictionary<ResultPoint, int>();
+         var pointCount = new Dictionary<ResultPoint, int>();
          increment(pointCount, lSideOne.From);
          increment(pointCount, lSideOne.To);
          increment(pointCount, lSideTwo.From);

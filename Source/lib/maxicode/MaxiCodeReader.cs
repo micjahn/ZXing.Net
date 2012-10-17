@@ -26,9 +26,9 @@ namespace ZXing.Maxicode
    /// </summary>
    public sealed class MaxiCodeReader : Reader
    {
-      private static ResultPoint[] NO_POINTS = new ResultPoint[0];
-      private static int MATRIX_WIDTH = 30;
-      private static int MATRIX_HEIGHT = 33;
+      private static readonly ResultPoint[] NO_POINTS = new ResultPoint[0];
+      private const int MATRIX_WIDTH = 30;
+      private const int MATRIX_HEIGHT = 33;
 
       private readonly Decoder decoder = new Decoder();
 
@@ -36,15 +36,25 @@ namespace ZXing.Maxicode
       /// Locates and decodes a MaxiCode in an image.
       ///
       /// <returns>a String representing the content encoded by the MaxiCode</returns>
-      /// <exception cref="NotFoundException">if a MaxiCode cannot be found</exception>
       /// <exception cref="FormatException">if a MaxiCode cannot be decoded</exception>
-      /// <exception cref="ChecksumException">if error correction fails</exception>
       /// </summary>
       public Result decode(BinaryBitmap image)
       {
          return decode(image, null);
       }
 
+      /// <summary>
+      /// Locates and decodes a MaxiCode within an image. This method also accepts
+      /// hints, each possibly associated to some data, which may help the implementation decode.
+      /// </summary>
+      /// <param name="image">image of barcode to decode</param>
+      /// <param name="hints">passed as a <see cref="IDictionary{TKey, TValue}"/> from <see cref="DecodeHintType"/>
+      /// to arbitrary data. The
+      /// meaning of the data depends upon the hint type. The implementation may or may not do
+      /// anything with these hints.</param>
+      /// <returns>
+      /// String which the barcode encodes
+      /// </returns>
       public Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
       {
          DecoderResult decoderResult;

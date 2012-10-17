@@ -69,7 +69,7 @@ namespace ZXing
       /// This method is intended for decoding 1D barcodes and may choose to apply sharpening.
       /// 
       /// </summary>
-      /// <param name="y">The row to fetch, 0 <= y < bitmap height.
+      /// <param name="y">The row to fetch, 0 &lt;= y &lt; bitmap height.
       /// </param>
       /// <param name="row">An optional preallocated array. If null or too small, it will be ignored.
       /// If used, the Binarizer will call BitArray.clear(). Always use the returned object.

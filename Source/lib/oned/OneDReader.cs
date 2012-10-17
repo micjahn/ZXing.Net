@@ -117,12 +117,10 @@ namespace ZXing.OneD
       /// rowStep is bigger as the image is taller, but is always at least 1. We've somewhat arbitrarily
       /// decided that moving up and down by about 1/16 of the image is pretty good; we try more of the
       /// image if "trying harder".
-      ///
+      /// </summary>
       /// <param name="image">The image to decode</param>
       /// <param name="hints">Any hints that were requested</param>
       /// <returns>The contents of the decoded barcode</returns>
-      /// <exception cref="NotFoundException">Any spontaneous errors which occur</exception>
-      /// </summary>
       private Result doDecode(BinaryBitmap image,
                               IDictionary<DecodeHintType, object> hints)
       {
@@ -157,16 +155,9 @@ namespace ZXing.OneD
             }
 
             // Estimate black point for this row and load it:
-            try
-            {
-               row = image.getBlackRow(rowNumber, row);
-               if (row == null)
-                  continue;
-            }
-            catch (NotFoundException )
-            {
+            row = image.getBlackRow(rowNumber, row);
+            if (row == null)
                continue;
-            }
 
             // While we have the image data in a BitArray, it's fairly cheap to reverse it in place to
             // handle decoding upside down barcodes.
@@ -222,13 +213,10 @@ namespace ZXing.OneD
       /// of the array. If the row starts on a white pixel at the given start point, then the first count
       /// recorded is the run of white pixels starting from that point; likewise it is the count of a run
       /// of black pixels if the row begin on a black pixels at that point.
-      ///
+      /// </summary>
       /// <param name="row">row to count from</param>
       /// <param name="start">offset into row to start at</param>
       /// <param name="counters">array into which to record counts</param>
-      /// <exception cref="NotFoundException">if counters cannot be filled entirely from row before running out</exception>
-      ///  of pixels
-      /// </summary>
       protected static bool recordPattern(BitArray row,
                                           int start,
                                           int[] counters)
@@ -303,15 +291,14 @@ namespace ZXing.OneD
       /// Determines how closely a set of observed counts of runs of black/white values matches a given
       /// target pattern. This is reported as the ratio of the total variance from the expected pattern
       /// proportions across all pattern elements, to the length of the pattern.
-      ///
+      /// </summary>
       /// <param name="counters">observed counters</param>
       /// <param name="pattern">expected pattern</param>
       /// <param name="maxIndividualVariance">The most any counter can differ before we give up</param>
-      /// <returns>ratio of total variance between counters and pattern compared to total pattern size,</returns>
+      /// <returns>ratio of total variance between counters and pattern compared to total pattern size,
       ///  where the ratio has been multiplied by 256. So, 0 means no variance (perfect match); 256 means
       ///  the total variance between counters and patterns equals the pattern length, higher values mean
-      ///  even more variance
-      /// </summary>
+      ///  even more variance</returns>
       protected static int patternMatchVariance(int[] counters,
                                                 int[] pattern,
                                                 int maxIndividualVariance)
@@ -352,15 +339,15 @@ namespace ZXing.OneD
       }
 
       /// <summary>
-      /// <p>Attempts to decode a one-dimensional barcode format given a single row of
-      /// an image.</p>
-      ///
+      /// Attempts to decode a one-dimensional barcode format given a single row of
+      /// an image.
+      /// </summary>
       /// <param name="rowNumber">row number from top of the row</param>
       /// <param name="row">the black/white pixel data of the row</param>
       /// <param name="hints">decode hints</param>
-      /// <returns><see cref="Result" />containing encoded string and start/end of barcode</returns>
-      /// <exception cref="NotFoundException">if an error occurs or barcode cannot be found</exception>
-      /// </summary>
+      /// <returns>
+      ///   <see cref="Result"/>containing encoded string and start/end of barcode
+      /// </returns>
       public abstract Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints);
    }
 }

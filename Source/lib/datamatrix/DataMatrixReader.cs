@@ -36,9 +36,7 @@ namespace ZXing.Datamatrix
       /// Locates and decodes a Data Matrix code in an image.
       ///
       /// <returns>a String representing the content encoded by the Data Matrix code</returns>
-      /// <exception cref="NotFoundException">if a Data Matrix code cannot be found</exception>
       /// <exception cref="FormatException">if a Data Matrix code cannot be decoded</exception>
-      /// <exception cref="ChecksumException">if error correction fails</exception>
       /// </summary>
       public Result decode(BinaryBitmap image)
       {
@@ -167,6 +165,5 @@ namespace ZXing.Datamatrix
          }
          return true;
       }
-
    }
 }

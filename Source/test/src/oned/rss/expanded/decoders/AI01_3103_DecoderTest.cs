@@ -54,11 +54,10 @@ namespace ZXing.OneD.RSS.Expanded.Decoders.Test
       }
 
       [Test]
-      [ExpectedException(typeof(NotFoundException))]
       public void test01_3103_invalid()
       {
          String data = header + compressedGtin_900123456798908 + compressed15bitWeight_1750 + "..";
-         assertCorrectBinaryString(data, "");
+         assertCorrectBinaryString(data, null);
       }
    }
 }

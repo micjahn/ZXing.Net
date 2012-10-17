@@ -76,6 +76,16 @@ namespace ZXing.OneD
                                               new int[] {N, W, N, W, N} // 9
                                            };
 
+      /// <summary>
+      /// Attempts to decode a one-dimensional barcode format given a single row of
+      /// an image.
+      /// </summary>
+      /// <param name="rowNumber">row number from top of the row</param>
+      /// <param name="row">the black/white pixel data of the row</param>
+      /// <param name="hints">decode hints</param>
+      /// <returns>
+      ///   <see cref="Result"/>containing encoded string and start/end of barcode
+      /// </returns>
       override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
          // Find out where the Middle section (payload) starts & ends
@@ -133,11 +143,14 @@ namespace ZXing.OneD
       }
 
       /// <summary>
+      /// </summary>
       /// <param name="row">row of black/white values to search</param>
       /// <param name="payloadStart">offset of start pattern</param>
-      /// <param name="resultString"><see cref="StringBuilder" />to append decoded chars to</param>
-      /// <exception cref="NotFoundException">if decoding could not complete successfully</exception>
-      /// </summary>
+      /// <param name="payloadEnd">The payload end.</param>
+      /// <param name="resultString"><see cref="StringBuilder"/>to append decoded chars to</param>
+      /// <returns>
+      /// false, if decoding could not complete successfully
+      /// </returns>
       private static bool decodeMiddle(BitArray row,
                                        int payloadStart,
                                        int payloadEnd,
@@ -185,12 +198,9 @@ namespace ZXing.OneD
 
       /// <summary>
       /// Identify where the start of the middle / payload section starts.
-      ///
-      /// <param name="row">row of black/white values to search</param>
-      /// <returns>Array, containing index of start of 'start block' and end of</returns>
-      ///         'start block'
-      /// <exception cref="NotFoundException"></exception>
       /// </summary>
+      /// <param name="row">row of black/white values to search</param>
+      /// <returns>Array, containing index of start of 'start block' and end of 'start block'</returns>
       int[] decodeStart(BitArray row)
       {
          int endStart = skipWhiteSpace(row);
@@ -213,7 +223,7 @@ namespace ZXing.OneD
       }
 
       /// <summary>
-      /// The start & end patterns must be pre/post fixed by a quiet zone. This
+      /// The start &amp; end patterns must be pre/post fixed by a quiet zone. This
       /// zone must be at least 10 times the width of a narrow line.  Scan back until
       /// we either get to the start of the barcode or match the necessary number of
       /// quiet zone pixels.
@@ -222,11 +232,10 @@ namespace ZXing.OneD
       /// quiet zone after the end pattern.
       ///
       /// ref: http://www.barcode-1.net/i25code.html
-      ///
+      /// </summary>
       /// <param name="row">bit array representing the scanned barcode.</param>
       /// <param name="startPattern">index into row of the start or end pattern.</param>
-      /// <exception cref="NotFoundException">if the quiet zone cannot be found, a ReaderException is thrown.</exception>
-      /// </summary>
+      /// <returns>false, if the quiet zone cannot be found</returns>
       private bool validateQuietZone(BitArray row, int startPattern)
       {
 
@@ -250,11 +259,9 @@ namespace ZXing.OneD
 
       /// <summary>
       /// Skip all whitespace until we get to the first black line.
-      ///
-      /// <param name="row">row of black/white values to search</param>
-      /// <returns>index of the first black line.</returns>
-      /// <exception cref="NotFoundException">Throws exception if no black lines are found in the row</exception>
       /// </summary>
+      /// <param name="row">row of black/white values to search</param>
+      /// <returns>index of the first black line or -1 if no black lines are found in the row.</returns>
       private static int skipWhiteSpace(BitArray row)
       {
          int width = row.Size;
@@ -269,12 +276,10 @@ namespace ZXing.OneD
 
       /// <summary>
       /// Identify where the end of the middle / payload section ends.
-      ///
-      /// <param name="row">row of black/white values to search</param>
-      /// <returns>Array, containing index of start of 'end block' and end of 'end</returns>
-      ///         block'
-      /// <exception cref="NotFoundException"></exception>
       /// </summary>
+      /// <param name="row">row of black/white values to search</param>
+      /// <returns>Array, containing index of start of 'end block' and end of 'end
+      /// block' or null, if nothing found</returns>
       int[] decodeEnd(BitArray row)
       {
          // For convenience, reverse the row and then
@@ -311,14 +316,11 @@ namespace ZXing.OneD
       }
 
       /// <summary>
+      /// </summary>
       /// <param name="row">row of black/white values to search</param>
       /// <param name="rowOffset">position to start search</param>
-      /// <param name="pattern">pattern of counts of number of black and white pixels that are</param>
-      ///                  being searched for as a pattern
-      /// <returns>start/end horizontal offset of guard pattern, as an array of two</returns>
-      ///         ints
-      /// <exception cref="NotFoundException">if pattern is not found</exception>
-      /// </summary>
+      /// <param name="pattern">pattern of counts of number of black and white pixels that are being searched for as a pattern</param>
+      /// <returns>start/end horizontal offset of guard pattern, as an array of two ints</returns>
       private static int[] findGuardPattern(BitArray row,
                                             int rowOffset,
                                             int[] pattern)
@@ -367,11 +369,12 @@ namespace ZXing.OneD
       /// <summary>
       /// Attempts to decode a sequence of ITF black/white lines into single
       /// digit.
-      ///
-      /// <param name="counters">the counts of runs of observed black/white/black/... values</param>
-      /// <returns>The decoded digit</returns>
-      /// <exception cref="NotFoundException">if digit cannot be decoded</exception>
       /// </summary>
+      /// <param name="counters">the counts of runs of observed black/white/black/... values</param>
+      /// <param name="bestMatch">The decoded digit</param>
+      /// <returns>
+      /// false, if digit cannot be decoded
+      /// </returns>
       private static bool decodeDigit(int[] counters, out int bestMatch)
       {
          int bestVariance = MAX_AVG_VARIANCE; // worst variance we'll accept

@@ -36,7 +36,6 @@ namespace ZXing.PDF417
       /// Locates and decodes a PDF417 code in an image.
       ///
       /// <returns>a String representing the content encoded by the PDF417 code</returns>
-      /// <exception cref="NotFoundException">if a PDF417 code cannot be found,</exception>
       /// <exception cref="FormatException">if a PDF417 cannot be decoded</exception>
       /// </summary>
       public Result decode(BinaryBitmap image)

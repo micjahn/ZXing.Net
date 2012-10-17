@@ -91,11 +91,11 @@ namespace ZXing.Multi.QrCode.Internal
       }
 
       /// <summary>
-      /// <returns>the 3 best <see cref="FinderPattern" />s from our list of candidates. The "best" are</returns>
+      /// </summary>
+      /// <returns>the 3 best <see cref="FinderPattern" />s from our list of candidates. The "best" are
       ///         those that have been detected at least CENTER_QUORUM times, and whose module
       ///         size differs from the average among those patterns the least
-      /// <exception cref="NotFoundException">if 3 such finder patterns do not exist</exception>
-      /// </summary>
+      /// </returns>
       private FinderPattern[][] selectMutipleBestPatterns()
       {
          List<FinderPattern> possibleCenters = PossibleCenters;
@@ -104,7 +104,7 @@ namespace ZXing.Multi.QrCode.Internal
          if (size < 3)
          {
             // Couldn't find enough finder patterns
-            throw NotFoundException.Instance;
+            return null;
          }
 
          /*
@@ -235,7 +235,7 @@ namespace ZXing.Multi.QrCode.Internal
          }
 
          // Nothing found!
-         throw NotFoundException.Instance;
+         return null;
       }
 
       public FinderPatternInfo[] findMulti(IDictionary<DecodeHintType, object> hints)
@@ -331,6 +331,8 @@ namespace ZXing.Multi.QrCode.Internal
             } // end if foundPatternCross
          } // for i=iSkip-1 ...
          FinderPattern[][] patternInfo = selectMutipleBestPatterns();
+         if (patternInfo == null)
+            return EMPTY_RESULT_ARRAY;
          List<FinderPatternInfo> result = new List<FinderPatternInfo>();
          foreach (FinderPattern[] pattern in patternInfo)
          {

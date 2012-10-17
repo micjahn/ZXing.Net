@@ -52,6 +52,8 @@ namespace ZXing.Aztec.Internal
       {
          // 1. Get the center of the aztec matrix
          Point pCenter = getMatrixCenter();
+         if (pCenter == null)
+            return null;
 
          // 2. Get the corners of the center bull's eye
          Point[] bullEyeCornerPoints = getBullEyeCornerPoints(pCenter);
@@ -361,7 +363,10 @@ namespace ZXing.Aztec.Internal
          int cy;
 
          //Get a white rectangle that can be the border of the matrix in center bull's eye or
-         ResultPoint[] cornerPoints = new WhiteRectangleDetector(image).detect();
+         var whiteDetector = WhiteRectangleDetector.Create(image);
+         if (whiteDetector == null)
+            return null;
+         ResultPoint[] cornerPoints = whiteDetector.detect();
          if (cornerPoints != null)
          {
             pointA = cornerPoints[0];
@@ -389,7 +394,10 @@ namespace ZXing.Aztec.Internal
          // Redetermine the white rectangle starting from previously computed center.
          // This will ensure that we end up with a white rectangle in center bull's eye
          // in order to compute a more accurate center.
-         cornerPoints = new WhiteRectangleDetector(image, 15, cx, cy).detect();
+         whiteDetector = WhiteRectangleDetector.Create(image, 15, cx, cy);
+         if (whiteDetector == null)
+            return null;
+         cornerPoints = whiteDetector.detect();
          if (cornerPoints != null)
          {
             pointA = cornerPoints[0];

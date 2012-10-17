@@ -35,8 +35,8 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
    /// </summary>
    internal sealed class AI01392xDecoder : AI01decoder
    {
-      private static int HEADER_SIZE = 5 + 1 + 2;
-      private static int LAST_DIGIT_SIZE = 2;
+      private const int HEADER_SIZE = 5 + 1 + 2;
+      private const int LAST_DIGIT_SIZE = 2;
 
       internal AI01392xDecoder(BitArray information)
          : base(information)
@@ -47,7 +47,7 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
       {
          if (this.getInformation().Size < HEADER_SIZE + GTIN_SIZE)
          {
-            throw NotFoundException.Instance;
+            return null;
          }
 
          StringBuilder buf = new StringBuilder();
