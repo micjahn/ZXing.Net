@@ -484,6 +484,15 @@ namespace ZXing.OneD
          float left = (startPatternInfo[1] + startPatternInfo[0]) / 2.0f;
          float right = (nextStart + lastStart) / 2.0f;
 
+         var resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)
+                             ? null
+                             : (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
+         if (resultPointCallback != null)
+         {
+            resultPointCallback(new ResultPoint(left, rowNumber));
+            resultPointCallback(new ResultPoint(right, rowNumber));
+         }
+
          int rawCodesSize = rawCodes.Count;
          var rawBytes = new byte[rawCodesSize];
          for (int i = 0; i < rawCodesSize; i++)

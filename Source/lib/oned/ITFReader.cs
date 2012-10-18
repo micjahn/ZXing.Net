@@ -106,7 +106,7 @@ namespace ZXing.OneD
          int[] allowedLengths = null;
          if (hints != null && hints.ContainsKey(DecodeHintType.ALLOWED_LENGTHS))
          {
-            allowedLengths = (int[])hints[DecodeHintType.ALLOWED_LENGTHS];
+            allowedLengths = (int[]) hints[DecodeHintType.ALLOWED_LENGTHS];
 
          }
          if (allowedLengths == null)
@@ -131,13 +131,22 @@ namespace ZXing.OneD
             return null;
          }
 
+         var resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)
+                                      ? null
+                                      : (ResultPointCallback) hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
+         if (resultPointCallback != null)
+         {
+            resultPointCallback(new ResultPoint(startRange[1], rowNumber));
+            resultPointCallback(new ResultPoint(endRange[0], rowNumber));
+         }
+
          return new Result(
             resultString,
             null, // no natural byte representation for these barcodes
             new ResultPoint[]
                {
-                  new ResultPoint(startRange[1], (float) rowNumber),
-                  new ResultPoint(endRange[0], (float) rowNumber)
+                  new ResultPoint(startRange[1], rowNumber),
+                  new ResultPoint(endRange[0], rowNumber)
                },
             BarcodeFormat.ITF);
       }

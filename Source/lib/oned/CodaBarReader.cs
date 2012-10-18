@@ -155,19 +155,29 @@ namespace ZXing.OneD
          {
             runningCount += counters[i];
          }
-         float left = (float) runningCount;
+         float left = runningCount;
          for (int i = startOffset; i < nextStart - 1; i++)
          {
             runningCount += counters[i];
          }
-         float right = (float) runningCount;
+         float right = runningCount;
+
+         var resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)
+                                      ? null
+                                      : (ResultPointCallback) hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
+         if (resultPointCallback != null)
+         {
+            resultPointCallback(new ResultPoint(left, rowNumber));
+            resultPointCallback(new ResultPoint(right, rowNumber));
+         }
+
          return new Result(
             decodeRowResult.ToString(),
             null,
-            new ResultPoint[]
+            new[]
                {
-                  new ResultPoint(left, (float) rowNumber),
-                  new ResultPoint(right, (float) rowNumber)
+                  new ResultPoint(left, rowNumber),
+                  new ResultPoint(right, rowNumber)
                },
             BarcodeFormat.CODABAR);
       }

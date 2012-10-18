@@ -112,12 +112,22 @@ namespace ZXing.OneD
          if (resultString == null)
             return null;
 
-         float left = (start[1] + start[0]) / 2.0f;
-         float right = (nextStart + lastStart) / 2.0f;
+         float left = (start[1] + start[0])/2.0f;
+         float right = (nextStart + lastStart)/2.0f;
+
+         var resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)
+                                      ? null
+                                      : (ResultPointCallback) hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
+         if (resultPointCallback != null)
+         {
+            resultPointCallback(new ResultPoint(left, rowNumber));
+            resultPointCallback(new ResultPoint(right, rowNumber));
+         }
+
          return new Result(
             resultString,
             null,
-            new ResultPoint[]
+            new[]
                {
                   new ResultPoint(left, rowNumber),
                   new ResultPoint(right, rowNumber)

@@ -155,7 +155,7 @@ namespace ZXing.OneD
             {
                total += ALPHABET_STRING.IndexOf(result[i]);
             }
-            if (result[max] != ALPHABET[total % 43])
+            if (result[max] != ALPHABET[total%43])
             {
                return null;
             }
@@ -180,15 +180,25 @@ namespace ZXing.OneD
             resultString = result.ToString();
          }
 
-         float left = (float)(start[1] + start[0]) / 2.0f;
-         float right = (float)(nextStart + lastStart) / 2.0f;
+         float left = (float) (start[1] + start[0])/2.0f;
+         float right = (float) (nextStart + lastStart)/2.0f;
+
+         var resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)
+                                      ? null
+                                      : (ResultPointCallback) hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
+         if (resultPointCallback != null)
+         {
+            resultPointCallback(new ResultPoint(left, rowNumber));
+            resultPointCallback(new ResultPoint(right, rowNumber));
+         }
+
          return new Result(
             resultString,
             null,
-            new ResultPoint[]
+            new[]
                {
-                  new ResultPoint(left, (float) rowNumber),
-                  new ResultPoint(right, (float) rowNumber)
+                  new ResultPoint(left, rowNumber),
+                  new ResultPoint(right, rowNumber)
                },
             BarcodeFormat.CODE_39);
       }

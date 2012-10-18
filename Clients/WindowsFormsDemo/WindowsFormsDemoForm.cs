@@ -111,10 +111,10 @@ namespace WindowsFormsDemo
          }
          labDuration.Text = new TimeSpan(timerStop - timerStart).Milliseconds.ToString("0 ms");
 
-         if (result != null && resultPoints.Count > 0)
+         if (result != null && result.ResultPoints.Length > 0)
          {
-            var rect = new Rectangle((int)resultPoints[0].X, (int)resultPoints[0].Y, 1, 1);
-            foreach (var point in resultPoints)
+            var rect = new Rectangle((int)result.ResultPoints[0].X, (int)result.ResultPoints[0].Y, 1, 1);
+            foreach (var point in result.ResultPoints)
             {
                if (point.X < rect.Left)
                   rect = new Rectangle((int)point.X, rect.Y, rect.Width + rect.X - (int)point.X, rect.Height);
