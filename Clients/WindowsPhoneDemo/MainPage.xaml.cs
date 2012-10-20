@@ -24,6 +24,7 @@ using Microsoft.Devices;
 using Microsoft.Phone.Tasks;
 
 using ZXing;
+using ZXing.Common;
 
 namespace WindowsPhoneDemo
 {
@@ -193,7 +194,12 @@ namespace WindowsPhoneDemo
 
          IBarcodeWriter writer = new BarcodeWriter
                                     {
-                                       Format = (BarcodeFormat) BarcodeType.SelectedItem
+                                       Format = (BarcodeFormat) BarcodeType.SelectedItem,
+                                       Options = new EncodingOptions
+                                                    {
+                                                       Height = 480,
+                                                       Width = 640
+                                                    }
                                     };
          var bmp = writer.Write(BarcodeContent.Text);
          BarcodeImage.Source = bmp;

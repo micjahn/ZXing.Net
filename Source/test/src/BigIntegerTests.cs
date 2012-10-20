@@ -33,5 +33,21 @@ namespace ZXing.Test
 
          Assert.AreEqual(left, right);
       }
+
+      [TestCase("1234567890")]
+      [TestCase("12345678901234567890")]
+      [TestCase("-12345678901234567890")]
+      public void System_Numerics_BigInteger_And_BigIntegerLibrary_Should_Be_The_Same(string number)
+      {
+         var systemBigInt900 = new BigInteger(900);
+         var libraryBigInt900 = new BigIntegerLibrary.BigInteger(900);
+         var systemBigInt = BigInteger.Parse(number);
+         var libraryBigInt = BigIntegerLibrary.BigInteger.Parse(number);
+
+         var systemResult = systemBigInt%systemBigInt900;
+         var libraryResult = BigIntegerLibrary.BigInteger.Modulo(libraryBigInt, libraryBigInt900);
+
+         Assert.AreEqual(systemResult.ToString(), libraryResult.ToString());
+      }
    }
 }

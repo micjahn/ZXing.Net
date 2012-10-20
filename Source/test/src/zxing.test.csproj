@@ -55,6 +55,18 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\lib\common\BigInteger\Base10BigInteger.cs">
+      <Link>common\BigInteger\Base10BigInteger.cs</Link>
+    </Compile>
+    <Compile Include="..\..\lib\common\BigInteger\BigInteger.cs">
+      <Link>common\BigInteger\BigInteger.cs</Link>
+    </Compile>
+    <Compile Include="..\..\lib\common\BigInteger\BigIntegerException.cs">
+      <Link>common\BigInteger\BigIntegerException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\lib\common\BigInteger\Sign.cs">
+      <Link>common\BigInteger\Sign.cs</Link>
+    </Compile>
     <Compile Include="..\..\lib\silverlight\BigInteger.cs">
       <Link>BigInteger.cs</Link>
     </Compile>

@@ -527,7 +527,7 @@ namespace ZXing.PDF417.Internal
             do
             {
                BigInteger c = BigInteger.Modulo(bigint, num900);
-               tmp.Append(c.ToString());
+               tmp.Append((char)c.GetHashCode());
                bigint = BigInteger.Division(bigint, num900);
             } while (!bigint.Equals(num0));
 

@@ -321,32 +321,14 @@ namespace BigIntegerLibrary
             return res.ToString();
         }
 
+        /// <summary>
+        /// Parses the number given by a string
+        /// </summary>
+        /// <param name="str">the number as a string</param>
+        /// <returns></returns>
         public static BigInteger Parse(string str)
         {
-           if (String.IsNullOrEmpty(str))
-              return Zero;
-
-           var result = new BigInteger();
-           var idx = 0;
-           var pos = 0;
-           if (str[0] == '-')
-           {
-              idx++;
-              result.sign = Sign.Negative;
-           }
-           if (str[0] == '+')
-           {
-              idx++;
-              result.sign = Sign.Positive;
-           }
-
-           for (var start = str.Length - 1; start >= idx; start--, pos++)
-           {
-              result.digits[pos] = Convert.ToInt64(str[start]);
-           }
-           result.size = pos + 1;
-
-           return result;
+           return new BigInteger(str);
         }
 
         /// <summary>

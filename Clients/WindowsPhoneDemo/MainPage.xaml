@@ -21,7 +21,7 @@
 
       <StackPanel Grid.Column="1" >
          <TextBlock x:Name="Header" Text="Barcode Scanner" FontSize="26" FontWeight="ExtraBold" />
-         <Image x:Name="BarcodeImage" Width="300" Height="300"/>
+         <Image x:Name="BarcodeImage" Width="470" Height="300"/>
          <Rectangle x:Name="previewRect" 
                     Margin="0" 
                     Height="300"
