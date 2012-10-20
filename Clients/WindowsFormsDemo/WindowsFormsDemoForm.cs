@@ -37,7 +37,7 @@ namespace WindowsFormsDemo
       public WindowsFormsDemoForm()
       {
          InitializeComponent();
-         barcodeReader = new BarcodeReader {AutoRotate = true};
+         barcodeReader = new BarcodeReader {AutoRotate = true, TryHarder = true};
          barcodeReader.ResultPointFound += point =>
                                               {
                                                  if (point == null)
@@ -94,17 +94,12 @@ namespace WindowsFormsDemo
 
       private void Decode(Bitmap image)
       {
-         var timerStart = DateTime.Now.Ticks;
-
-         barcodeReader.TryHarder = false;
          resultPoints.Clear();
+
+         var timerStart = DateTime.Now.Ticks;
          var result = barcodeReader.Decode(image);
-         if (result == null)
-         {
-            barcodeReader.TryHarder = true;
-            result = barcodeReader.Decode(image);
-         }
          var timerStop = DateTime.Now.Ticks;
+
          if (result == null)
          {
             txtContent.Text = "No barcode recognized";
