@@ -84,6 +84,7 @@ namespace ZXing.PDF417.Internal
          BitMatrix matrix = image.BlackMatrix;
 
          bool tryHarder = hints != null && hints.ContainsKey(DecodeHintType.TRY_HARDER);
+         var resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK) ? null : (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
 
          // Try to find the vertices assuming the image is upright.
          ResultPoint[] vertices = findVertices(matrix, tryHarder);
@@ -124,7 +125,14 @@ namespace ZXing.PDF417.Internal
 
          // Deskew and sample image.
          BitMatrix bits = sampleGrid(matrix, vertices[4], vertices[5], vertices[6], vertices[7], dimension, ydimension);
-         return new DetectorResult(bits, new ResultPoint[] { vertices[5], vertices[4], vertices[6], vertices[7] });
+         if (resultPointCallback != null)
+         {
+            resultPointCallback(vertices[5]);
+            resultPointCallback(vertices[4]);
+            resultPointCallback(vertices[6]);
+            resultPointCallback(vertices[7]);
+         }
+         return new DetectorResult(bits, new [] { vertices[5], vertices[4], vertices[6], vertices[7] });
       }
 
       /// <summary>

@@ -70,7 +70,7 @@ namespace ZXing.PDF417
          }
          else
          {
-            DetectorResult detectorResult = new Detector(image).detect();
+            DetectorResult detectorResult = new Detector(image).detect(hints);
             if (detectorResult == null || detectorResult.Bits == null)
                return null;
             decoderResult = decoder.decode(detectorResult.Bits);
