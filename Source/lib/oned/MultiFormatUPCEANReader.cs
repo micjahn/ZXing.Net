@@ -40,19 +40,19 @@ namespace ZXing.OneD
          var readers = new List<UPCEANReader>();
          if (possibleFormats != null)
          {
-            if (possibleFormats.Contains(BarcodeFormat.EAN_13))
+            if (possibleFormats.Contains(BarcodeFormat.EAN_13) || possibleFormats.Contains(BarcodeFormat.All_1D))
             {
                readers.Add(new EAN13Reader());
             }
-            else if (possibleFormats.Contains(BarcodeFormat.UPC_A))
+            else if (possibleFormats.Contains(BarcodeFormat.UPC_A) || possibleFormats.Contains(BarcodeFormat.All_1D))
             {
                readers.Add(new UPCAReader());
             }
-            if (possibleFormats.Contains(BarcodeFormat.EAN_8))
+            if (possibleFormats.Contains(BarcodeFormat.EAN_8) || possibleFormats.Contains(BarcodeFormat.All_1D))
             {
                readers.Add(new EAN8Reader());
             }
-            if (possibleFormats.Contains(BarcodeFormat.UPC_E))
+            if (possibleFormats.Contains(BarcodeFormat.UPC_E) || possibleFormats.Contains(BarcodeFormat.All_1D))
             {
                readers.Add(new UPCEReader());
             }
@@ -109,7 +109,7 @@ namespace ZXing.OneD
                     result.Text[0] == '0';
             var possibleFormats =
                 hints == null || !hints.ContainsKey(DecodeHintType.POSSIBLE_FORMATS) ? null : (IList<BarcodeFormat>)hints[DecodeHintType.POSSIBLE_FORMATS];
-            bool canReturnUPCA = possibleFormats == null || possibleFormats.Contains(BarcodeFormat.UPC_A);
+            bool canReturnUPCA = possibleFormats == null || possibleFormats.Contains(BarcodeFormat.UPC_A) || possibleFormats.Contains(BarcodeFormat.All_1D);
 
             if (ean13MayBeUPCA && canReturnUPCA)
             {

@@ -38,51 +38,55 @@ namespace ZXing.OneD
       {
          var possibleFormats = hints == null || !hints.ContainsKey(DecodeHintType.POSSIBLE_FORMATS) ? null :
              (IList<BarcodeFormat>)hints[DecodeHintType.POSSIBLE_FORMATS];
-         bool useCode39CheckDigit = hints != null && hints.ContainsKey(DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT) &&
-             hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != null;
-         this.readers = new List<OneDReader>();
+         readers = new List<OneDReader>();
          if (possibleFormats != null)
          {
-            if (possibleFormats.Contains(BarcodeFormat.EAN_13) ||
+            if (possibleFormats.Contains(BarcodeFormat.All_1D) || 
+                possibleFormats.Contains(BarcodeFormat.EAN_13) ||
                 possibleFormats.Contains(BarcodeFormat.UPC_A) ||
                 possibleFormats.Contains(BarcodeFormat.EAN_8) ||
                 possibleFormats.Contains(BarcodeFormat.UPC_E))
             {
                readers.Add(new MultiFormatUPCEANReader(hints));
             }
-            if (possibleFormats.Contains(BarcodeFormat.CODE_39))
+            if (possibleFormats.Contains(BarcodeFormat.CODE_39) || possibleFormats.Contains(BarcodeFormat.All_1D))
             {
+               bool useCode39CheckDigit = hints.ContainsKey(DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT) &&
+                   hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != null;
                readers.Add(new Code39Reader(useCode39CheckDigit));
             }
-            if (possibleFormats.Contains(BarcodeFormat.CODE_93))
+            if (possibleFormats.Contains(BarcodeFormat.CODE_93) || possibleFormats.Contains(BarcodeFormat.All_1D))
             {
                readers.Add(new Code93Reader());
             }
-            if (possibleFormats.Contains(BarcodeFormat.CODE_128))
+            if (possibleFormats.Contains(BarcodeFormat.CODE_128) || possibleFormats.Contains(BarcodeFormat.All_1D))
             {
                readers.Add(new Code128Reader());
             }
-            if (possibleFormats.Contains(BarcodeFormat.ITF))
+            if (possibleFormats.Contains(BarcodeFormat.ITF) || possibleFormats.Contains(BarcodeFormat.All_1D))
             {
                readers.Add(new ITFReader());
             }
-            if (possibleFormats.Contains(BarcodeFormat.CODABAR))
+            if (possibleFormats.Contains(BarcodeFormat.CODABAR) || possibleFormats.Contains(BarcodeFormat.All_1D))
             {
                readers.Add(new CodaBarReader());
             }
-            if (possibleFormats.Contains(BarcodeFormat.RSS_14))
+            if (possibleFormats.Contains(BarcodeFormat.RSS_14) || possibleFormats.Contains(BarcodeFormat.All_1D))
             {
                readers.Add(new RSS14Reader());
             }
-            if (possibleFormats.Contains(BarcodeFormat.RSS_EXPANDED))
+            if (possibleFormats.Contains(BarcodeFormat.RSS_EXPANDED) || possibleFormats.Contains(BarcodeFormat.All_1D))
             {
                readers.Add(new RSSExpandedReader());
             }
          }
          if (readers.Count == 0)
          {
+            bool useCode39CheckDigit = hints != null && hints.ContainsKey(DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT) &&
+                hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != null;
+
             readers.Add(new MultiFormatUPCEANReader(hints));
-            readers.Add(new Code39Reader());
+            readers.Add(new Code39Reader(useCode39CheckDigit));
             readers.Add(new CodaBarReader());
             readers.Add(new Code93Reader());
             readers.Add(new Code128Reader());

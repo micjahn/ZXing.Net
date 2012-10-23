@@ -19,59 +19,64 @@ namespace ZXing
    /// <summary>
    /// Enumerates barcode formats known to this package.
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
+   /// <author>Sean Owen</author>
+   [System.Flags]
    public enum BarcodeFormat
    {
       /// <summary>Aztec 2D barcode format.</summary>
-      AZTEC,
+      AZTEC = 1,
 
       /// <summary>CODABAR 1D format.</summary>
-      CODABAR,
+      CODABAR = 2,
 
       /// <summary>Code 39 1D format.</summary>
-      CODE_39,
+      CODE_39 = 4,
 
       /// <summary>Code 93 1D format.</summary>
-      CODE_93,
+      CODE_93 = 8,
 
       /// <summary>Code 128 1D format.</summary>
-      CODE_128,
+      CODE_128 = 16,
 
       /// <summary>Data Matrix 2D barcode format.</summary>
-      DATA_MATRIX,
+      DATA_MATRIX = 32,
 
       /// <summary>EAN-8 1D format.</summary>
-      EAN_8,
+      EAN_8 = 64,
 
       /// <summary>EAN-13 1D format.</summary>
-      EAN_13,
+      EAN_13 = 128,
 
       /// <summary>ITF (Interleaved Two of Five) 1D format.</summary>
-      ITF,
+      ITF = 256,
 
       /// <summary>MaxiCode 2D barcode format.</summary>
-      MAXICODE,
+      MAXICODE = 512,
 
       /// <summary>PDF417 format.</summary>
-      PDF_417,
+      PDF_417 = 1024,
 
       /// <summary>QR Code 2D barcode format.</summary>
-      QR_CODE,
+      QR_CODE = 2048,
 
       /// <summary>RSS 14</summary>
-      RSS_14,
+      RSS_14 = 4096,
 
       /// <summary>RSS EXPANDED</summary>
-      RSS_EXPANDED,
+      RSS_EXPANDED = 8192,
 
       /// <summary>UPC-A 1D format.</summary>
-      UPC_A,
+      UPC_A = 16384,
 
       /// <summary>UPC-E 1D format.</summary>
-      UPC_E,
+      UPC_E = 32768,
 
       /// <summary>UPC/EAN extension format. Not a stand-alone format.</summary>
-      UPC_EAN_EXTENSION
+      UPC_EAN_EXTENSION = 65536,
+
+      /// <summary>
+      /// UPC_A | UPC_E | EAN_13 | EAN_8 | CODABAR | CODE_39 | CODE_93 | CODE_128 | ITF | RSS_14 | RSS_EXPANDED
+      /// </summary>
+      All_1D = UPC_A | UPC_E | EAN_13 | EAN_8 | CODABAR | CODE_39 | CODE_93 | CODE_128 | ITF | RSS_14 | RSS_EXPANDED
    }
 }

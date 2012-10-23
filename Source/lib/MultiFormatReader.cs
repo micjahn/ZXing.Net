@@ -108,6 +108,7 @@ namespace ZXing
             if (formats != null)
             {
                bool addOneDReader =
+                  formats.Contains(BarcodeFormat.All_1D) ||
                   formats.Contains(BarcodeFormat.UPC_A) ||
                   formats.Contains(BarcodeFormat.UPC_E) ||
                   formats.Contains(BarcodeFormat.EAN_13) ||
