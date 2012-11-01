@@ -31,6 +31,9 @@ using System.Runtime.InteropServices;
 #if WINDOWS_PHONE71
 [assembly: AssemblyTitle("zxing.net for windows phone 7.1")]
 #endif
+#if MONOANDROID
+[assembly: AssemblyTitle("zxing.net for mono android")]
+#endif
 [assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing rev. 2393)")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyProduct("ZXing.Net")]

@@ -31,8 +31,13 @@ namespace ZXing
       private static readonly Func<LuminanceSource, Binarizer> defaultCreateBinarizer =
          (luminanceSource) => new HybridBinarizer(luminanceSource);
 
+#if MONOTOUCH
+      private static readonly Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> defaultCreateRGBLuminanceSource =
+         (rawBytes, width, height, format) => new RGBLuminanceSource(rawBytes, width, height);
+#else
       private static readonly Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> defaultCreateRGBLuminanceSource =
          (rawBytes, width, height, format) => new RGBLuminanceSource(rawBytes, width, height, format);
+#endif
 
       private Reader reader;
       private readonly IDictionary<DecodeHintType, object> hints;

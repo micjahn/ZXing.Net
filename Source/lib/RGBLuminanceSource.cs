@@ -150,7 +150,7 @@ namespace ZXing
          }
       }
 
-      private void CalculateLuminance(byte[] rgbRawBytes, BitmapFormat bitmapFormat)
+      protected void CalculateLuminance(byte[] rgbRawBytes, BitmapFormat bitmapFormat)
       {
          if (bitmapFormat == BitmapFormat.Unknown)
          {
@@ -184,7 +184,7 @@ namespace ZXing
       private void CalculateLuminanceRGB565(byte[] rgb565RawData)
       {
          var luminanceIndex = 0;
-         for (var index = 0; index < rgb565RawData.Length; index += 2, luminanceIndex++)
+         for (var index = 0; index < rgb565RawData.Length && luminanceIndex < luminances.Length; index += 2, luminanceIndex++)
          {
             var byte1 = rgb565RawData[index];
             var byte2 = rgb565RawData[index + 1];
@@ -208,7 +208,7 @@ namespace ZXing
 
       private void CalculateLuminanceRGB24(byte[] rgbRawBytes)
       {
-         for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length; luminanceIndex++)
+         for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length && luminanceIndex < luminances.Length; luminanceIndex++)
          {
             // Calculate luminance cheaply, favoring green.
             int r = rgbRawBytes[rgbIndex++];
@@ -220,7 +220,7 @@ namespace ZXing
 
       private void CalculateLuminanceRGB32(byte[] rgbRawBytes)
       {
-         for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length; luminanceIndex++)
+         for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length && luminanceIndex < luminances.Length; luminanceIndex++)
          {
             // Calculate luminance cheaply, favoring green.
             int r = rgbRawBytes[rgbIndex++];
@@ -233,7 +233,7 @@ namespace ZXing
 
       private void CalculateLuminanceARGB32(byte[] rgbRawBytes)
       {
-         for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length; luminanceIndex++)
+         for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length && luminanceIndex < luminances.Length; luminanceIndex++)
          {
             // Calculate luminance cheaply, favoring green.
             var r = rgbRawBytes[rgbIndex++];

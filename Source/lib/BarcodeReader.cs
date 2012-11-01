@@ -26,12 +26,21 @@ using Windows.UI.Xaml.Media.Imaging;
 #else
 using System.Windows.Media.Imaging;
 #endif
+#if MONOANDROID
+using Android.Graphics;
+#endif
 
 namespace ZXing
 {
    /// <summary>
    /// A smart class to decode the barcode inside a bitmap object
    /// </summary>
+#if MONOTOUCH
+   public class BarcodeReader : BarcodeReaderGeneric<MonoTouch.UIKit.UIImage>, IBarcodeReader, IMultipleBarcodeReader
+   {
+      private static readonly Func<MonoTouch.UIKit.UIImage, LuminanceSource> defaultCreateLuminanceSource = 
+         (img) => new RGBLuminanceSource(new Bitmap(img), (int)img.Size.Width, (int)img.Size.Height);
+#else
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
    public class BarcodeReader : BarcodeReaderGeneric<Bitmap>, IBarcodeReader, IMultipleBarcodeReader
@@ -50,7 +59,7 @@ namespace ZXing
       private static readonly Func<WriteableBitmap, LuminanceSource> defaultCreateLuminanceSource =
          (bitmap) => new BitmapLuminanceSource(bitmap);
 #endif
-
+#endif
       /// <summary>
       /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
       /// </summary>
@@ -69,6 +78,11 @@ namespace ZXing
       /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
       /// If null then HybridBinarizer is used</param>
       public BarcodeReader(Reader reader,
+#if MONOTOUCH
+         Func<MonoTouch.UIKit.UIImage, LuminanceSource> createLuminanceSource,
+#elif MONOANDROID
+         Func<Android.Graphics.Bitmap, LuminanceSource> createLuminanceSource,
+#else
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
          Func<Bitmap, LuminanceSource> createLuminanceSource,
@@ -77,6 +91,7 @@ namespace ZXing
 #endif
 #else
          Func<WriteableBitmap, LuminanceSource> createLuminanceSource,
+#endif
 #endif
          Func<LuminanceSource, Binarizer> createBinarizer
          )
@@ -94,6 +109,11 @@ namespace ZXing
       /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
       /// If null then HybridBinarizer is used</param>
       public BarcodeReader(Reader reader,
+#if MONOTOUCH
+         Func<MonoTouch.UIKit.UIImage, LuminanceSource> createLuminanceSource,
+#elif MONOANDROID
+         Func<Android.Graphics.Bitmap, LuminanceSource> createLuminanceSource,
+#else
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
          Func<Bitmap, LuminanceSource> createLuminanceSource,
@@ -102,6 +122,7 @@ namespace ZXing
 #endif
 #else
          Func<WriteableBitmap, LuminanceSource> createLuminanceSource,
+#endif
 #endif
          Func<LuminanceSource, Binarizer> createBinarizer,
          Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource

@@ -19,7 +19,7 @@ namespace BigIntegerLibrary
 #if WindowsCE
     [Serializable]
     internal sealed class BigInteger :
-#elif !(WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5)
+#elif !(WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || MONOTOUCH || MONOANDROID)
     [Serializable]
     internal sealed class BigInteger : ISerializable, 
 #else
@@ -231,7 +231,7 @@ namespace BigIntegerLibrary
 
         #region Public Methods
 
-#if !(WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || WindowsCE)
+#if !(WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || WindowsCE || MONOTOUCH || MONOANDROID)
         /// <summary>
         /// BigInteger serializing method, which should not be called manually.
         /// </summary>

@@ -91,6 +91,21 @@ namespace ZXing
       /// </returns>
       Result Decode(byte[] rawRGB, int width, int height, RGBLuminanceSource.BitmapFormat format);
 
+#if MONOTOUCH
+      /// <summary>
+      /// Decodes the specified barcode bitmap.
+      /// </summary>
+      /// <param name="barcodeBitmap">The barcode bitmap.</param>
+      /// <returns>the result data or null</returns>
+      Result Decode(MonoTouch.UIKit.UIImage barcodeImage);
+#elif MONOANDROID
+      /// <summary>
+      /// Decodes the specified barcode bitmap.
+      /// </summary>
+      /// <param name="barcodeBitmap">The barcode bitmap.</param>
+      /// <returns>the result data or null</returns>
+      Result Decode(Android.Graphics.Bitmap barcodeImage);
+#else
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
       /// <summary>
@@ -114,6 +129,7 @@ namespace ZXing
       /// <param name="barcodeBitmap">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
       Result Decode(WriteableBitmap barcodeBitmap);
+#endif
 #endif
    }
 }

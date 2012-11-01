@@ -30,6 +30,35 @@ using ZXing.Rendering;
 
 namespace ZXing
 {
+#if MONOTOUCH
+   /// <summary>
+   /// A smart class to encode some content to a barcode image
+   /// </summary>
+   public class BarcodeWriter : BarcodeWriterGeneric<MonoTouch.UIKit.UIImage>, IBarcodeWriter
+   {
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+      /// </summary>
+      public BarcodeWriter()
+      {
+         Renderer = new BitmapRenderer();
+      }
+   }
+#elif MONOANDROID
+   /// <summary>
+   /// A smart class to encode some content to a barcode image
+   /// </summary>
+   public class BarcodeWriter : BarcodeWriterGeneric<Android.Graphics.Bitmap>, IBarcodeWriter
+   {
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+      /// </summary>
+      public BarcodeWriter()
+      {
+         Renderer = new BitmapRenderer();
+      }
+   }
+#else
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
    /// <summary>
@@ -74,5 +103,6 @@ namespace ZXing
          Renderer = new WriteableBitmapRenderer();
       }
    }
+#endif
 #endif
 }

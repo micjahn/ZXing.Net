@@ -92,6 +92,11 @@ namespace ZXing
       /// </returns>
       Result[] DecodeMultiple(byte[] rawRGB, int width, int height, RGBLuminanceSource.BitmapFormat format);
 
+#if MONOTOUCH
+      Result[] DecodeMultiple(MonoTouch.UIKit.UIImage barcodeImage);
+#elif MONOANDROID
+      Result[] DecodeMultiple(Android.Graphics.Bitmap barcodeImage);
+#else
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
       /// <summary>
@@ -115,6 +120,7 @@ namespace ZXing
       /// <param name="barcodeBitmap">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
       Result[] DecodeMultiple(WriteableBitmap barcodeBitmap);
+#endif
 #endif
    }
 }

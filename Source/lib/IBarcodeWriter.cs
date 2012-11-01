@@ -42,6 +42,17 @@ namespace ZXing
       /// <returns></returns>
       BitMatrix Encode(string contents);
 
+#if MONOTOUCH
+      /// <summary>
+      /// Creates a visual representation of the contents
+      /// </summary>
+      MonoTouch.UIKit.UIImage Write(string contents);
+#elif MONOANDROID
+      /// <summary>
+      /// Creates a visual representation of the contents
+      /// </summary>
+      Android.Graphics.Bitmap Write(string contents);
+#else
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
       /// <summary>
@@ -59,6 +70,7 @@ namespace ZXing
       /// Creates a visual representation of the contents
       /// </summary>
       WriteableBitmap Write(string contents);
+#endif
 #endif
    }
 }
