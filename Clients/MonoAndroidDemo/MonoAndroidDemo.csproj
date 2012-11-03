@@ -62,24 +62,24 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\Strings.xml" />
-    <AndroidResource Include="Resources\drawable\Icon.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\Icon.png" />
     <AndroidResource Include="Resources\layout\EncoderActivityLayout.axml" />
     <AndroidResource Include="Resources\layout\DecoderActivityLayout.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\aztec.png" />
-    <AndroidResource Include="Resources\drawable\codabar.png" />
-    <AndroidResource Include="Resources\drawable\code_39.png" />
-    <AndroidResource Include="Resources\drawable\code_93.png" />
-    <AndroidResource Include="Resources\drawable\code_128.png" />
-    <AndroidResource Include="Resources\drawable\data_matrix.png" />
-    <AndroidResource Include="Resources\drawable\ean_8.png" />
-    <AndroidResource Include="Resources\drawable\itf.png" />
-    <AndroidResource Include="Resources\drawable\pdf_417.png" />
-    <AndroidResource Include="Resources\drawable\qr_code.png" />
-    <AndroidResource Include="Resources\drawable\upc_a.png" />
-    <AndroidResource Include="Resources\drawable\upc_e.png" />
-    <AndroidResource Include="Resources\drawable\ean_13.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\aztec.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\codabar.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\code_39.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\code_93.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\code_128.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\data_matrix.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\ean_8.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\itf.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\pdf_417.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\qr_code.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\upc_a.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\upc_e.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\ean_13.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup>
