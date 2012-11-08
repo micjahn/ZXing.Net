@@ -34,6 +34,7 @@
          this.btnStartDecoding = new System.Windows.Forms.Button();
          this.txtBarcodeImageFile = new System.Windows.Forms.TextBox();
          this.labBarcodeImageFile = new System.Windows.Forms.Label();
+         this.btnStartEncoding = new System.Windows.Forms.Button();
          this.SuspendLayout();
          // 
          // labDuration
@@ -127,12 +128,23 @@
          this.labBarcodeImageFile.Size = new System.Drawing.Size(151, 20);
          this.labBarcodeImageFile.Text = "Barcode Image File";
          // 
+         // btnStartEncoding
+         // 
+         this.btnStartEncoding.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+         this.btnStartEncoding.Location = new System.Drawing.Point(182, 50);
+         this.btnStartEncoding.Name = "btnStartEncoding";
+         this.btnStartEncoding.Size = new System.Drawing.Size(56, 21);
+         this.btnStartEncoding.TabIndex = 23;
+         this.btnStartEncoding.Text = "Encode";
+         this.btnStartEncoding.Click += new System.EventHandler(this.btnStartEncoding_Click);
+         // 
          // WindowsCEDemoForm
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
          this.AutoScroll = true;
          this.ClientSize = new System.Drawing.Size(318, 194);
+         this.Controls.Add(this.btnStartEncoding);
          this.Controls.Add(this.labDuration);
          this.Controls.Add(this.btnSelectBarcodeImageFileForDecoding);
          this.Controls.Add(this.txtContent);
@@ -161,5 +173,6 @@
       private System.Windows.Forms.Button btnStartDecoding;
       private System.Windows.Forms.TextBox txtBarcodeImageFile;
       private System.Windows.Forms.Label labBarcodeImageFile;
+      private System.Windows.Forms.Button btnStartEncoding;
    }
 }

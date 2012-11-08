@@ -91,6 +91,12 @@ namespace WindowsCEDemoForm
          }
       }
 
+      private Bitmap Encode(string text, BarcodeFormat format)
+      {
+         var writer = new BarcodeWriter { Format = format };
+         return writer.Write(text);
+      }
+
       private void txtBarcodeImageFile_TextChanged(object sender, EventArgs e)
       {
          var fileName = txtBarcodeImageFile.Text;
@@ -99,6 +105,12 @@ namespace WindowsCEDemoForm
             Image img = new Bitmap(fileName);
             picBarcode.Image = img;
          }
+      }
+
+      private void btnStartEncoding_Click(object sender, EventArgs e)
+      {
+         var bitmap = Encode(txtContent.Text, BarcodeFormat.QR_CODE);
+         picBarcode.Image = bitmap;
       }
    }
 }
