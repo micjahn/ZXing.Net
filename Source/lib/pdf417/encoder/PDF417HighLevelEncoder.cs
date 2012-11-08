@@ -151,7 +151,20 @@ namespace ZXing.PDF417.Internal
       /// </summary>
       private static byte[] getBytesForMessage(String msg)
       {
+#if WindowsCE
+         try
+         {
+            return Encoding.GetEncoding("CP437").GetBytes(msg);
+         }
+         catch (PlatformNotSupportedException)
+         {
+            // WindowsCE doesn't support all encodings. But it is device depended.
+            // So we try here the some different ones
+            return Encoding.GetEncoding(1252).GetBytes(msg);
+         }
+#else
          return Encoding.GetEncoding("CP437").GetBytes(msg);
+#endif
       }
 
       /// <summary>
