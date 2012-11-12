@@ -203,6 +203,20 @@ namespace ZXing.QrCode.Internal
          {
             result.Append(Encoding.GetEncoding(StringUtils.GB2312).GetString(buffer, 0, buffer.Length));
          }
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE)
+         catch (ArgumentException)
+         {
+            try
+            {
+               // Silverlight only supports a limited number of character sets, trying fallback to UTF-8
+               result.Append(Encoding.GetEncoding("UTF-8").GetString(buffer, 0, buffer.Length));
+            }
+            catch (Exception)
+            {
+               return false;
+            }
+         }
+#endif
          catch (Exception)
          {
             return false;
@@ -250,6 +264,20 @@ namespace ZXing.QrCode.Internal
          {
             result.Append(Encoding.GetEncoding(StringUtils.SHIFT_JIS).GetString(buffer, 0, buffer.Length));
          }
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE)
+         catch (ArgumentException)
+         {
+            try
+            {
+               // Silverlight only supports a limited number of character sets, trying fallback to UTF-8
+               result.Append(Encoding.GetEncoding("UTF-8").GetString(buffer, 0, buffer.Length));
+            }
+            catch (Exception)
+            {
+               return false;
+            }
+         }
+#endif
          catch (Exception)
          {
             return false;
@@ -293,18 +321,39 @@ namespace ZXing.QrCode.Internal
          {
             result.Append(Encoding.GetEncoding(encoding).GetString(readBytes, 0, readBytes.Length));
          }
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE)
+         catch (ArgumentException)
+         {
+            try
+            {
+               // Silverlight only supports a limited number of character sets, trying fallback to UTF-8
+               result.Append(Encoding.GetEncoding("UTF-8").GetString(readBytes, 0, readBytes.Length));
+            }
+            catch (Exception)
+            {
+               return false;
+            }
+         }
+#endif
 #if WindowsCE
          catch (PlatformNotSupportedException)
          {
-            // WindowsCE doesn't support all encodings. But it is device depended.
-            // So we try here the some different ones
-            if (encoding == "ISO-8859-1")
+            try
             {
-               result.Append(Encoding.GetEncoding(1252).GetString(readBytes, 0, readBytes.Length));
+               // WindowsCE doesn't support all encodings. But it is device depended.
+               // So we try here the some different ones
+               if (encoding == "ISO-8859-1")
+               {
+                  result.Append(Encoding.GetEncoding(1252).GetString(readBytes, 0, readBytes.Length));
+               }
+               else
+               {
+                  result.Append(Encoding.GetEncoding("UTF-8").GetString(readBytes, 0, readBytes.Length));
+               }
             }
-            else
+            catch (Exception)
             {
-               result.Append(Encoding.GetEncoding("UTF-8").GetString(readBytes, 0, readBytes.Length));
+               return false;
             }
          }
 #endif
