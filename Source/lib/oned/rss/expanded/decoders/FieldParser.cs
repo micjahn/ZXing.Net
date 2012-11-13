@@ -185,7 +185,8 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
                                         {"8100", new object[] {6}},
                                         {"8101", new object[] {10}},
                                         {"8102", new object[] {2}},
-                                        {"8110", new object[] {VARIABLE_LENGTH, 30}},
+                                        {"8110", new object[] {VARIABLE_LENGTH, 70}},
+                                        {"8200", new object[] {VARIABLE_LENGTH, 70}},
                                      };
       }
 
