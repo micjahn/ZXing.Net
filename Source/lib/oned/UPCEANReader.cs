@@ -248,7 +248,7 @@ namespace ZXing.OneD
       /// </summary>
       /// <param name="s">string of digits to check</param>
       /// <returns>true iff string of digits passes the UPC/EAN checksum algorithm</returns>
-      private static bool checkStandardUPCEANChecksum(String s)
+      internal static bool checkStandardUPCEANChecksum(String s)
       {
          int length = s.Length;
          if (length == 0)
