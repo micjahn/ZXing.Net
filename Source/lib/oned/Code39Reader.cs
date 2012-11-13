@@ -272,7 +272,7 @@ namespace ZXing.OneD
             for (int i = 0; i < numCounters; i++)
             {
                int counter = counters[i];
-               if (counters[i] > maxNarrowCounter)
+               if (counter > maxNarrowCounter)
                {
                   pattern |= 1 << (numCounters - 1 - i);
                   wideCounters++;
@@ -287,7 +287,7 @@ namespace ZXing.OneD
                for (int i = 0; i < numCounters && wideCounters > 0; i++)
                {
                   int counter = counters[i];
-                  if (counters[i] > maxNarrowCounter)
+                  if (counter > maxNarrowCounter)
                   {
                      wideCounters--;
                      // totalWideCountersWidth = 3 * average, so this checks if counter >= 3/2 * average
