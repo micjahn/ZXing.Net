@@ -24,6 +24,21 @@ namespace ZXing.Client.Result
    ///<author>Sean Owen</author>
    public sealed class CalendarParsedResult : ParsedResult
    {
+      private static readonly Regex RFC2445_DURATION = new Regex("P(?:(\\d+)W)?(?:(\\d+)D)?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?"
+#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE)
+, RegexOptions.Compiled);
+#else
+);
+#endif
+
+      private static readonly long[] RFC2445_DURATION_FIELD_UNITS = {
+                                                                       7*24*60*60*1000L, // 1 week
+                                                                       24*60*60*1000L, // 1 day
+                                                                       60*60*1000L, // 1 hour
+                                                                       60*1000L, // 1 minute
+                                                                       1000L, // 1 second
+                                                                    };
+
       private static readonly Regex DATE_TIME = new Regex("[0-9]{8}(T[0-9]{6}Z?)?"
 #if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE)
 , RegexOptions.Compiled);
@@ -58,6 +73,7 @@ namespace ZXing.Client.Result
       public CalendarParsedResult(String summary,
                                   String startString,
                                   String endString,
+                                  String durationString,
                                   String location,
                                   String organizer,
                                   String[] attendees,
@@ -70,14 +86,32 @@ namespace ZXing.Client.Result
          try
          {
             this.start = parseDate(startString);
-            this.end = endString == null ? (DateTime?)null : parseDate(endString);
          }
          catch (Exception pe)
          {
             throw new ArgumentException(pe.ToString());
          }
+
+         if (endString == null)
+         {
+            long durationMS = parseDurationMS(durationString);
+            end = durationMS < 0L ? null : (DateTime?)start + new TimeSpan(0, 0, 0, 0, (int)durationMS);
+         }
+         else
+         {
+            try
+            {
+               this.end = parseDate(endString);
+            }
+            catch (Exception pe)
+            {
+               throw new ArgumentException(pe.ToString());
+            }
+         }
+
          this.startAllDay = startString.Length == 8;
          this.endAllDay = endString != null && endString.Length == 8;
+
          this.location = location;
          this.organizer = organizer;
          this.attendees = attendees;
@@ -209,6 +243,29 @@ namespace ZXing.Client.Result
          if (allDay)
             return date.Value.ToString("D", CultureInfo.CurrentCulture);
          return date.Value.ToString("F", CultureInfo.CurrentCulture);
+      }
+
+      private static long parseDurationMS(String durationString)
+      {
+         if (durationString == null)
+         {
+            return -1L;
+         }
+         var m = RFC2445_DURATION.Match(durationString);
+         if (!m.Success)
+         {
+            return -1L;
+         }
+         long durationMS = 0L;
+         for (int i = 0; i < RFC2445_DURATION_FIELD_UNITS.Length; i++)
+         {
+            String fieldValue = m.Groups[i + 1].Value;
+            if (!String.IsNullOrEmpty(fieldValue))
+            {
+               durationMS += RFC2445_DURATION_FIELD_UNITS[i] * Int32.Parse(fieldValue);
+            }
+         }
+         return durationMS;
       }
    }
 }

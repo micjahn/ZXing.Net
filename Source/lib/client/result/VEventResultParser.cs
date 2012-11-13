@@ -50,6 +50,7 @@ namespace ZXing.Client.Result
             return null;
          }
          String end = matchSingleVCardPrefixedField("DTEND", rawText, true);
+         String duration = matchSingleVCardPrefixedField("DURATION", rawText, true);
          String location = matchSingleVCardPrefixedField("LOCATION", rawText, true);
          String organizer = stripMailto(matchSingleVCardPrefixedField("ORGANIZER", rawText, true));
 
@@ -92,6 +93,7 @@ namespace ZXing.Client.Result
             return new CalendarParsedResult(summary,
                                             start,
                                             end,
+                                            duration,
                                             location,
                                             organizer,
                                             attendees,
