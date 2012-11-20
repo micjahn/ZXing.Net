@@ -76,21 +76,18 @@ namespace ZXing.OneD.RSS.Expanded.Test
          FinderPattern finderPattern = pair1.FinderPattern;
          Assert.IsNotNull(finderPattern);
          Assert.AreEqual(0, finderPattern.Value);
-         Assert.IsFalse(pair1.MayBeLast);
 
          ExpandedPair pair2 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
          previousPairs.Add(pair2);
          finderPattern = pair2.FinderPattern;
          Assert.IsNotNull(finderPattern);
          Assert.AreEqual(1, finderPattern.Value);
-         Assert.IsFalse(pair2.MayBeLast);
 
          ExpandedPair pair3 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
          previousPairs.Add(pair3);
          finderPattern = pair3.FinderPattern;
          Assert.IsNotNull(finderPattern);
          Assert.AreEqual(1, finderPattern.Value);
-         Assert.IsTrue(pair3.MayBeLast);
 
          //   the previous was the last pair
          Assert.IsNull(rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber));
@@ -124,14 +121,12 @@ namespace ZXing.OneD.RSS.Expanded.Test
          FinderPattern finderPattern = pair1.FinderPattern;
          Assert.IsNotNull(finderPattern);
          Assert.AreEqual(0, finderPattern.Value);
-         Assert.IsFalse(pair1.MayBeLast);
 
          ExpandedPair pair2 = rssExpandedReader.retrieveNextPair(row, previousPairs, rowNumber);
          previousPairs.Add(pair2);
          finderPattern = pair2.FinderPattern;
          Assert.IsNotNull(finderPattern);
          Assert.AreEqual(0, finderPattern.Value);
-         Assert.IsTrue(pair2.MayBeLast);
       }
 
       [Test]

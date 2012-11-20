@@ -153,6 +153,10 @@
     <Compile Include="oned\rss\expanded\RSSExpandedImage2resultTestCase.cs" />
     <Compile Include="oned\rss\expanded\RSSExpandedImage2stringTestCase.cs" />
     <Compile Include="oned\rss\expanded\RSSExpandedInternalTestCase.cs" />
+    <Compile Include="oned\rss\expanded\RSSExpandedStackedBlackBox1TestCase.cs" />
+    <Compile Include="oned\rss\expanded\RSSExpandedStackedBlackBox2TestCase.cs" />
+    <Compile Include="oned\rss\expanded\RSSExpandedStackedInternalTestCase.cs" />
+    <Compile Include="oned\rss\expanded\TestCaseUtil.cs" />
     <Compile Include="oned\rss\RSS14BlackBox1TestCase.cs" />
     <Compile Include="oned\rss\RSS14BlackBox2TestCase.cs" />
     <Compile Include="oned\UPCABlackBox1TestCase.cs" />

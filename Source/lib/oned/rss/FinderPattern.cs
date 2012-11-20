@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+using System;
+
 namespace ZXing.OneD.RSS
 {
    /// <summary>
@@ -51,6 +53,34 @@ namespace ZXing.OneD.RSS
                                    new ResultPoint(start, rowNumber),
                                    new ResultPoint(end, rowNumber),
                                 };
+      }
+
+      /// <summary>
+      /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
+      /// </summary>
+      /// <param name="o">The <see cref="System.Object"/> to compare with this instance.</param>
+      /// <returns>
+      ///   <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+      /// </returns>
+      override public bool Equals(Object o)
+      {
+         if (!(o is FinderPattern))
+         {
+            return false;
+         }
+         FinderPattern that = (FinderPattern)o;
+         return Value == that.Value;
+      }
+
+      /// <summary>
+      /// Returns a hash code for this instance.
+      /// </summary>
+      /// <returns>
+      /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+      /// </returns>
+      override public int GetHashCode()
+      {
+         return Value;
       }
    }
 }

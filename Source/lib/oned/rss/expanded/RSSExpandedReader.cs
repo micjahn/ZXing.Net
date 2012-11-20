@@ -102,8 +102,10 @@ namespace ZXing.OneD.RSS.Expanded
       private const int MAX_PAIRS = 11;
 
       private readonly List<ExpandedPair> pairs = new List<ExpandedPair>(MAX_PAIRS);
+      private readonly List<ExpandedRow> rows = new List<ExpandedRow>();
       private readonly int[] startEnd = new int[2];
       private readonly int[] currentSequence = new int[LONGEST_SEQUENCE_SIZE];
+      private bool startFromEven = false;
 
       internal List<ExpandedPair> Pairs { get { return pairs; } }
 
@@ -121,10 +123,18 @@ namespace ZXing.OneD.RSS.Expanded
                               BitArray row,
                               IDictionary<DecodeHintType, object> hints)
       {
-         reset();
-         if (decodeRow2pairs(rowNumber, row) == false)
-            return null;
-         return constructResult(pairs);
+         // Rows can start with even pattern in case in prev rows there where odd number of patters.
+         // So lets try twice
+         pairs.Clear();
+         startFromEven = false;
+         if (decodeRow2pairs(rowNumber, row))
+            return constructResult(pairs);
+
+         pairs.Clear();
+         startFromEven = true;
+         if (decodeRow2pairs(rowNumber, row))
+            return constructResult(pairs);
+         return null;
       }
 
       /// <summary>
@@ -133,34 +143,188 @@ namespace ZXing.OneD.RSS.Expanded
       public override void reset()
       {
          pairs.Clear();
+         rows.Clear();
       }
-
+      
       // Not private for testing
       internal bool decodeRow2pairs(int rowNumber, BitArray row)
       {
          while (true)
          {
-            ExpandedPair nextPair = retrieveNextPair(row, pairs, rowNumber);
+            ExpandedPair nextPair = retrieveNextPair(row, this.pairs, rowNumber);
             if (nextPair == null)
-               return false;
-
+               break;
             pairs.Add(nextPair);
+            //System.out.println(this.pairs.size()+" pairs found so far on row "+rowNumber+": "+this.pairs);
+            // exit this loop when retrieveNextPair() fails and throws
+         }
+         if (pairs.Count == 0)
+         {
+            return false;
+         }
 
-            if (nextPair.MayBeLast)
+         // TODO: verify sequence of finder patterns as in checkPairSequence()
+         if (checkChecksum())
+         {
+            return true;
+         }
+
+         bool tryStackedDecode = rows.Count != 0;
+         bool wasReversed = false; // TODO: deal with reversed rows
+         storeRow(rowNumber, wasReversed);
+         if (tryStackedDecode)
+         {
+            // When the image is 180-rotated, then rows are sorted in wrong dirrection.
+            // Try twice with both the directions.
+            List<ExpandedPair> ps = checkRows(false);
+            if (ps != null)
             {
-               if (checkChecksum())
+               return true;
+            }
+            ps = checkRows(true);
+            if (ps != null)
+            {
+               return true;
+            }
+         }
+
+         return false;
+      }
+
+      private List<ExpandedPair> checkRows(bool reverse)
+      {
+         pairs.Clear();
+         if (reverse)
+         {
+            rows.Reverse();
+         }
+
+         foreach (ExpandedRow erow in rows)
+         {
+            pairs.AddRange(erow.Pairs);
+         }
+         //System.out.println(this.pairs.size()+" pairs on MULTIPLE ROWS: "+this.rows);
+         if (checkChecksum())
+         {
+            return pairs;
+         }
+
+         if (reverse)
+         {
+            rows.Reverse();
+         }
+
+         return null;
+      }
+
+      private void storeRow(int rowNumber, bool wasReversed)
+      {
+         // Discard if duplicate above or below; otherwise insert in order by row number.
+         int insertPos = 0;
+         bool prevIsSame = false;
+         bool nextIsSame = false;
+         while (insertPos < rows.Count)
+         {
+            ExpandedRow erow = rows[insertPos];
+            if (erow.RowNumber > rowNumber)
+            {
+               nextIsSame = erow.IsEquivalent(pairs);
+               break;
+            }
+            prevIsSame = erow.IsEquivalent(pairs);
+            insertPos += 1;
+         }
+         if (nextIsSame || prevIsSame)
+         {
+            return;
+         }
+
+         // When the row was partially decoded (e.g. 2 pairs found instead of 3),
+         // it will prevent us from detecting the barcode.
+         // Try to merge partial rows
+
+         // Check whether the row is part of an allready detected row
+         if (isPartialRow(pairs, rows))
+         {
+            return;
+         }
+
+         rows.Insert(insertPos, new ExpandedRow(pairs, rowNumber, wasReversed));
+
+         removePartialRows(pairs, rows);
+      }
+
+      // Remove all the rows that contains only specified pairs 
+      private static void removePartialRows(List<ExpandedPair> pairs, List<ExpandedRow> rows)
+      {
+         //check:
+         foreach (ExpandedRow r in rows)
+         {
+            if (r.Pairs.Count == pairs.Count)
+            {
+               continue;
+            }
+            foreach (ExpandedPair p in r.Pairs)
+            {
+               bool found = false;
+               foreach (ExpandedPair pp in pairs)
                {
-                  return true;
+                  if (p.Equals(pp))
+                  {
+                     found = true;
+                     break;
+                  }
                }
-               if (nextPair.MustBeLast)
+               if (!found)
                {
-                  return false;
+                  break;
+                  //continue check;
                }
             }
+            // 'pairs' contains all the pairs from the row 'r'
+            rows.Remove(r);
+            // start from the begining
+            removePartialRows(pairs, rows);
+            return;
          }
       }
 
-      private static Result constructResult(List<ExpandedPair> pairs)
+      // Returns true when one of the rows already contains all the pairs
+      private static bool isPartialRow(IEnumerable<ExpandedPair> pairs, IEnumerable<ExpandedRow> rows)
+      {
+         //check:
+         foreach (ExpandedRow r in rows)
+         {
+            foreach (ExpandedPair p in pairs)
+            {
+               bool found = false;
+               foreach (ExpandedPair pp in r.Pairs)
+               {
+                  if (p.Equals(pp))
+                  {
+                     found = true;
+                     break;
+                  }
+               }
+               if (!found)
+               {
+                  break;
+                  //continue check;
+               }
+            }
+            // the row 'r' contain all the pairs from 'pairs'
+            return true;
+         }
+         return false;
+      }
+
+      // Only used for unit testing
+      internal List<ExpandedRow> Rows
+      {
+         get { return this.rows; }
+      }
+
+      internal static Result constructResult(List<ExpandedPair> pairs)
       {
          BitArray binary = BitArrayBuilder.buildBitArray(pairs);
 
@@ -185,6 +349,11 @@ namespace ZXing.OneD.RSS.Expanded
          ExpandedPair firstPair = pairs[0];
          DataCharacter checkCharacter = firstPair.LeftChar;
          DataCharacter firstCharacter = firstPair.RightChar;
+
+         if (firstCharacter == null)
+         {
+            return false;
+         }
 
          int checksum = firstCharacter.ChecksumPortion;
          int s = 2;
@@ -229,6 +398,10 @@ namespace ZXing.OneD.RSS.Expanded
       internal ExpandedPair retrieveNextPair(BitArray row, List<ExpandedPair> previousPairs, int rowNumber)
       {
          bool isOddPattern = previousPairs.Count % 2 == 0;
+         if (startFromEven)
+         {
+            isOddPattern = !isOddPattern;
+         }
 
          FinderPattern pattern;
 
@@ -249,59 +422,26 @@ namespace ZXing.OneD.RSS.Expanded
             }
          } while (keepFinding);
 
-         bool mayBeLast;
-         if (!checkPairSequence(previousPairs, pattern, out mayBeLast))
-            return null;
+         // When stacked symbol is split over multiple rows, there's no way to guess if this pair can be last or not.
+         // bool mayBeLast;
+         // if (!checkPairSequence(previousPairs, pattern, out mayBeLast))
+         //   return null;
 
          DataCharacter leftChar = decodeDataCharacter(row, pattern, isOddPattern, true);
          if (leftChar == null)
             return null;
-         DataCharacter rightChar = decodeDataCharacter(row, pattern, isOddPattern, false);
-         if (rightChar == null && !mayBeLast)
-            return null;
 
-         return new ExpandedPair(leftChar, rightChar, pattern, mayBeLast);
-      }
-
-      private bool checkPairSequence(List<ExpandedPair> previousPairs, FinderPattern pattern, out bool mayBeLast)
-      {
-         mayBeLast = false;
-         int currentSequenceLength = previousPairs.Count + 1;
-         if (currentSequenceLength > currentSequence.Length)
+         if (previousPairs.Count != 0)
          {
-            return false;
-         }
-
-         for (int pos = 0; pos < previousPairs.Count; ++pos)
-         {
-            currentSequence[pos] = previousPairs[pos].FinderPattern.Value;
-         }
-
-         currentSequence[currentSequenceLength - 1] = pattern.Value;
-
-         foreach (int[] validSequence in FINDER_PATTERN_SEQUENCES)
-         {
-            if (validSequence.Length >= currentSequenceLength)
+            if (previousPairs[previousPairs.Count - 1].MustBeLast)
             {
-               bool valid = true;
-               for (int pos = 0; pos < currentSequenceLength; ++pos)
-               {
-                  if (currentSequence[pos] != validSequence[pos])
-                  {
-                     valid = false;
-                     break;
-                  }
-               }
-
-               if (valid)
-               {
-                  mayBeLast = currentSequenceLength == validSequence.Length;
-                  return true;
-               }
+               return null;
             }
          }
 
-         return false;
+         DataCharacter rightChar = decodeDataCharacter(row, pattern, isOddPattern, false);
+
+         return new ExpandedPair(leftChar, rightChar, pattern, true);
       }
 
       private bool findNextPair(BitArray row, List<ExpandedPair> previousPairs, int forcedOffset)
@@ -329,6 +469,10 @@ namespace ZXing.OneD.RSS.Expanded
             rowOffset = lastPair.FinderPattern.StartEnd[1];
          }
          bool searchingEvenPair = previousPairs.Count % 2 != 0;
+         if (startFromEven)
+         {
+            searchingEvenPair = !searchingEvenPair;
+         }
 
          bool isWhite = false;
          while (rowOffset < width)

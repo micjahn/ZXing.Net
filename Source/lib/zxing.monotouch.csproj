@@ -192,6 +192,7 @@
     <Compile Include="oned\rss\RSSUtils.cs" />
     <Compile Include="oned\rss\expanded\BitArrayBuilder.cs" />
     <Compile Include="oned\rss\expanded\ExpandedPair.cs" />
+    <Compile Include="oned\rss\expanded\ExpandedRow.cs" />
     <Compile Include="oned\rss\expanded\RSSExpandedReader.cs" />
     <Compile Include="oned\rss\expanded\decoders\AI013103decoder.cs" />
     <Compile Include="oned\rss\expanded\decoders\AI01320xDecoder.cs" />

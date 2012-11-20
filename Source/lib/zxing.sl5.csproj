@@ -215,6 +215,7 @@
     <Compile Include="oned\rss\expanded\decoders\FieldParser.cs" />
     <Compile Include="oned\rss\expanded\decoders\GeneralAppIdDecoder.cs" />
     <Compile Include="oned\rss\expanded\ExpandedPair.cs" />
+    <Compile Include="oned\rss\expanded\ExpandedRow.cs" />
     <Compile Include="oned\rss\expanded\RSSExpandedReader.cs" />
     <Compile Include="oned\rss\FinderPattern.cs" />
     <Compile Include="oned\rss\Pair.cs" />

@@ -24,6 +24,8 @@
  *   http://www.piramidepse.com/
  */
 
+using System;
+
 namespace ZXing.OneD.RSS.Expanded
 {
    /// <summary>
@@ -50,6 +52,41 @@ namespace ZXing.OneD.RSS.Expanded
       public bool MustBeLast
       {
          get { return RightChar == null; }
+      }
+
+      override public String ToString()
+      {
+         return
+             "[ " + LeftChar + " , " + RightChar + " : " +
+             (FinderPattern == null ? "null" : FinderPattern.Value.ToString()) + " ]";
+      }
+
+      override public bool Equals(Object o)
+      {
+         if (!(o is ExpandedPair))
+         {
+            return false;
+         }
+         ExpandedPair that = (ExpandedPair)o;
+         return
+             EqualsOrNull(LeftChar, that.LeftChar) &&
+             EqualsOrNull(RightChar, that.RightChar) &&
+             EqualsOrNull(FinderPattern, that.FinderPattern);
+      }
+
+      private static bool EqualsOrNull(Object o1, Object o2)
+      {
+         return o1 == null ? o2 == null : o1.Equals(o2);
+      }
+
+      override public int GetHashCode()
+      {
+         return hashNotNull(LeftChar) ^ hashNotNull(RightChar) ^ hashNotNull(FinderPattern);
+      }
+
+      private static int hashNotNull(Object o)
+      {
+         return o == null ? 0 : o.GetHashCode();
       }
    }
 }

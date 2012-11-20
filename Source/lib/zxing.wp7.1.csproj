@@ -205,6 +205,7 @@
     <Compile Include="oned\rss\expanded\decoders\FieldParser.cs" />
     <Compile Include="oned\rss\expanded\decoders\GeneralAppIdDecoder.cs" />
     <Compile Include="oned\rss\expanded\ExpandedPair.cs" />
+    <Compile Include="oned\rss\expanded\ExpandedRow.cs" />
     <Compile Include="oned\rss\expanded\RSSExpandedReader.cs" />
     <Compile Include="oned\rss\FinderPattern.cs" />
     <Compile Include="oned\rss\Pair.cs" />
@@ -271,6 +272,7 @@
     <Compile Include="ResultPointCallback.cs" />
     <Compile Include="RGB565LuminanceSource.cs" />
     <Compile Include="RGBLuminanceSource.cs" />
+    <Compile Include="silverlight\ISO88591Encoding.cs" />
     <Compile Include="silverlight\SerializableAttribute.cs" />
     <Compile Include="SupportClass.cs" />
     <Compile Include="Writer.cs" />
