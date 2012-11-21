@@ -75,6 +75,7 @@
          this.Controls.Add(this.propOptions);
          this.Controls.Add(this.btnCancel);
          this.Controls.Add(this.btnUse);
+         this.MinimumSize = new System.Drawing.Size(334, 320);
          this.Name = "EncodingOptionsForm";
          this.Text = "EncodingOptionsForm";
          this.ResumeLayout(false);
