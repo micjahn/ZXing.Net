@@ -348,34 +348,47 @@ namespace ZXing.OneD
          {
             return -1;
          }
-         // First element is for bars, second is for spaces.
-         int[] maxes = { 0, 0 };
-         int[] mins = { Int32.MaxValue, Int32.MaxValue };
-         int[] thresholds = { 0, 0 };
+         int[] theCounters = counters;
 
-         for (int i = 0; i < 2; i++)
+         int maxBar = 0;
+         int minBar = Int32.MaxValue;
+         for (int j = position; j < end; j += 2)
          {
-            for (int j = position + i; j < end; j += 2)
+            int currentCounter = theCounters[j];
+            if (currentCounter < minBar)
             {
-               if (counters[j] < mins[i])
-               {
-                  mins[i] = counters[j];
-               }
-               if (counters[j] > maxes[i])
-               {
-                  maxes[i] = counters[j];
-               }
+               minBar = currentCounter;
             }
-            thresholds[i] = (mins[i] + maxes[i]) / 2;
+            if (currentCounter > maxBar)
+            {
+               maxBar = currentCounter;
+            }
          }
+         int thresholdBar = (minBar + maxBar) / 2;
+
+         int maxSpace = 0;
+         int minSpace = Int32.MaxValue;
+         for (int j = position + 1; j < end; j += 2)
+         {
+            int currentCounter = theCounters[j];
+            if (currentCounter < minSpace)
+            {
+               minSpace = currentCounter;
+            }
+            if (currentCounter > maxSpace)
+            {
+               maxSpace = currentCounter;
+            }
+         }
+         int thresholdSpace = (minSpace + maxSpace) / 2;
 
          int bitmask = 1 << 7;
          int pattern = 0;
          for (int i = 0; i < 7; i++)
          {
-            int barOrSpace = i & 1;
+            int threshold = (i & 1) == 0 ? thresholdBar : thresholdSpace;
             bitmask >>= 1;
-            if (counters[position + i] > thresholds[barOrSpace])
+            if (theCounters[position + i] > threshold)
             {
                pattern |= bitmask;
             }
