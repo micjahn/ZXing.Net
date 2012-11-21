@@ -77,12 +77,16 @@ namespace ZXing.OneD.RSS
          Pair rightPair = decodePair(row, true, rowNumber, hints);
          addOrTally(possibleRightPairs, rightPair);
          row.reverse();
-         foreach (Pair left in possibleLeftPairs)
+         int lefSize = possibleLeftPairs.Count;
+         for (int i = 0; i < lefSize; i++)
          {
+            Pair left = possibleLeftPairs[i];
             if (left.Count > 1)
             {
-               foreach (Pair right in possibleRightPairs)
+               int rightSize = possibleRightPairs.Count;
+               for (int j = 0; j < rightSize; j++)
                {
+                  Pair right = possibleRightPairs[j];
                   if (right.Count > 1)
                   {
                      if (checkChecksum(left, right))

@@ -76,7 +76,6 @@ namespace ZXing.OneD.RSS.Expanded
                                           new[] {55, 165, 73, 8, 24, 72, 5, 15},
                                           new[] {45, 135, 194, 160, 58, 174, 100, 89}
                                        };
-      /*
       private const int FINDER_PAT_A = 0;
       private const int FINDER_PAT_B = 1;
       private const int FINDER_PAT_C = 2;
@@ -97,8 +96,7 @@ namespace ZXing.OneD.RSS.Expanded
          new[] { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
       };
 
-      private static readonly int LONGEST_SEQUENCE_SIZE = FINDER_PATTERN_SEQUENCES[FINDER_PATTERN_SEQUENCES.Length - 1].Length;
-      */
+      // private static readonly int LONGEST_SEQUENCE_SIZE = FINDER_PATTERN_SEQUENCES[FINDER_PATTERN_SEQUENCES.Length - 1].Length;
 
       private const int MAX_PAIRS = 11;
 
@@ -194,28 +192,98 @@ namespace ZXing.OneD.RSS.Expanded
 
       private List<ExpandedPair> checkRows(bool reverse)
       {
+         // Limit number of rows we are checking
+         // We use recursive algorithm with pure complexity and don't want it to take forever
+         // Stacked barcode can have up to 11 rows, so 25 seems resonable enough
+         if (rows.Count > 25)
+         {
+            rows.Clear();  // We will never have a chance to get result, so clear it
+            return null;
+         }
+         
          pairs.Clear();
          if (reverse)
          {
             rows.Reverse();
          }
 
-         foreach (ExpandedRow erow in rows)
-         {
-            pairs.AddRange(erow.Pairs);
-         }
-         //System.out.println(this.pairs.size()+" pairs on MULTIPLE ROWS: "+this.rows);
-         if (checkChecksum())
-         {
-            return pairs;
-         }
+         List<ExpandedPair> ps = checkRows(new List<ExpandedRow>(), 0);
 
          if (reverse)
          {
             rows.Reverse();
          }
 
+         return ps;
+      }
+
+      // Try to construct a valid rows sequence
+      // Recursion is used to implement backtracking
+      private List<ExpandedPair> checkRows(List<ExpandedRow> collectedRows, int currentRow)
+      {
+         for (int i = currentRow; i < rows.Count; i++)
+         {
+            ExpandedRow row = rows[i];
+            pairs.Clear();
+            int size = collectedRows.Count;
+            for (int j = 0; j < size; j++)
+            {
+               pairs.AddRange(collectedRows[j].Pairs);
+            }
+            pairs.AddRange(row.Pairs);
+
+            if (!isValidSequence(pairs))
+            {
+               continue;
+            }
+
+            if (checkChecksum())
+            {
+               return this.pairs;
+            }
+
+            List<ExpandedRow> rs = new List<ExpandedRow>();
+            rs.AddRange(collectedRows);
+            rs.Add(row);
+            // Recursion: try to add more rows
+            var result = checkRows(rs, i + 1);
+            if (result == null)
+               // We failed, try the next candidate
+               continue;
+            return result;
+         }
+
          return null;
+      }
+
+      // Whether the pairs form a valid find pattern seqience,
+      // either complete or a prefix
+      private static bool isValidSequence(List<ExpandedPair> pairs)
+      {
+         foreach (int[] sequence in FINDER_PATTERN_SEQUENCES)
+         {
+            if (pairs.Count > sequence.Length)
+            {
+               continue;
+            }
+
+            bool stop = true;
+            for (int j = 0; j < pairs.Count; j++)
+            {
+               if (pairs[j].FinderPattern.Value != sequence[j])
+               {
+                  stop = false;
+                  break;
+               }
+            }
+
+            if (stop)
+            {
+               return true;
+            }
+         }
+
+         return false;
       }
 
       private void storeRow(int rowNumber, bool wasReversed)

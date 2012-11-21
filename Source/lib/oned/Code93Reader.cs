@@ -46,6 +46,18 @@ namespace ZXing.OneD
                                                  };
       private static readonly int ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
 
+      private readonly StringBuilder decodeRowResult;
+      private readonly int[] counters;
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Code93Reader"/> class.
+      /// </summary>
+      public Code93Reader()
+      {
+         decodeRowResult = new StringBuilder(20);
+         counters = new int[6];
+      }
+
       /// <summary>
       ///   <p>Attempts to decode a one-dimensional barcode format given a single row of
       /// an image.</p>
@@ -56,6 +68,10 @@ namespace ZXing.OneD
       /// <returns><see cref="Result"/>containing encoded string and start/end of barcode</returns>
       override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
+         for (var index = 0; index < counters.Length; index++)
+            counters[index] = 0;
+         decodeRowResult.Length = 0;
+         
          int[] start = findAsteriskPattern(row);
          if (start == null)
             return null;
@@ -64,8 +80,6 @@ namespace ZXing.OneD
          int nextStart = row.getNextSet(start[1]);
          int end = row.Size;
 
-         StringBuilder result = new StringBuilder(20);
-         int[] counters = new int[6];
          char decodedChar;
          int lastStart;
          do
@@ -80,7 +94,7 @@ namespace ZXing.OneD
             }
             if (!patternToChar(pattern, out decodedChar))
                return null;
-            result.Append(decodedChar);
+            decodeRowResult.Append(decodedChar);
             lastStart = nextStart;
             foreach (int counter in counters)
             {
@@ -89,7 +103,7 @@ namespace ZXing.OneD
             // Read off white space
             nextStart = row.getNextSet(nextStart);
          } while (decodedChar != '*');
-         result.Remove(result.Length - 1, 1); // remove asterisk
+         decodeRowResult.Remove(decodeRowResult.Length - 1, 1); // remove asterisk
 
          // Should be at least one more black module
          if (nextStart == end || !row[nextStart])
@@ -97,18 +111,18 @@ namespace ZXing.OneD
             return null;
          }
 
-         if (result.Length < 2)
+         if (decodeRowResult.Length < 2)
          {
             // false positive -- need at least 2 checksum digits
             return null;
          }
 
-         if (!checkChecksums(result))
+         if (!checkChecksums(decodeRowResult))
             return null;
          // Remove checksum digits
-         result.Length = result.Length - 2;
+         decodeRowResult.Length = decodeRowResult.Length - 2;
 
-         String resultString = decodeExtended(result);
+         String resultString = decodeExtended(decodeRowResult);
          if (resultString == null)
             return null;
 
@@ -135,13 +149,14 @@ namespace ZXing.OneD
             BarcodeFormat.CODE_93);
       }
 
-      private static int[] findAsteriskPattern(BitArray row)
+      private int[] findAsteriskPattern(BitArray row)
       {
          int width = row.Size;
          int rowOffset = row.getNextSet(0);
 
+         for (var index = 0; index < counters.Length; index++)
+            counters[index] = 0;
          int counterPosition = 0;
-         int[] counters = new int[6];
          int patternStart = rowOffset;
          bool isWhite = false;
          int patternLength = counters.Length;
