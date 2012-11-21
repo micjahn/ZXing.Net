@@ -48,15 +48,16 @@ namespace ZXing.OneD
 
       private readonly bool usingCheckDigit;
       private readonly bool extendedMode;
+      private readonly StringBuilder decodeRowResult;
+      private readonly int[] counters;
 
       /// <summary>
       /// Creates a reader that assumes all encoded data is data, and does not treat the final
       /// character as a check digit. It will not decoded "extended Code 39" sequences.
       /// </summary>
       public Code39Reader()
+         :this(false)
       {
-         usingCheckDigit = false;
-         extendedMode = false;
       }
 
       /// <summary>
@@ -67,9 +68,8 @@ namespace ZXing.OneD
       /// data, and verify that the checksum passes.
       /// </summary>
       public Code39Reader(bool usingCheckDigit)
+         :this(usingCheckDigit, false)
       {
-         this.usingCheckDigit = usingCheckDigit;
-         this.extendedMode = false;
       }
 
       /// <summary>
@@ -86,6 +86,8 @@ namespace ZXing.OneD
       {
          this.usingCheckDigit = usingCheckDigit;
          this.extendedMode = extendedMode;
+         decodeRowResult = new StringBuilder(20);
+         counters = new int[9];
       }
 
       /// <summary>
@@ -98,7 +100,10 @@ namespace ZXing.OneD
       /// <returns><see cref="Result"/>containing encoded string and start/end of barcode</returns>
       override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
-         int[] counters = new int[9];
+         for (var index = 0; index < counters.Length; index++)
+            counters[index] = 0;
+         decodeRowResult.Length = 0;
+
          int[] start = findAsteriskPattern(row, counters);
          if (start == null)
             return null;
@@ -107,7 +112,6 @@ namespace ZXing.OneD
          int nextStart = row.getNextSet(start[1]);
          int end = row.Size;
 
-         StringBuilder result = new StringBuilder(20);
          char decodedChar;
          int lastStart;
          do
@@ -122,7 +126,7 @@ namespace ZXing.OneD
             }
             if (!patternToChar(pattern, out decodedChar))
                return null;
-            result.Append(decodedChar);
+            decodeRowResult.Append(decodedChar);
             lastStart = nextStart;
             foreach (int counter in counters)
             {
@@ -131,7 +135,7 @@ namespace ZXing.OneD
             // Read off white space
             nextStart = row.getNextSet(nextStart);
          } while (decodedChar != '*');
-         result.Length = result.Length - 1; // remove asterisk
+         decodeRowResult.Length = decodeRowResult.Length - 1; // remove asterisk
 
          // Look for whitespace after pattern:
          int lastPatternSize = 0;
@@ -149,20 +153,20 @@ namespace ZXing.OneD
 
          if (usingCheckDigit)
          {
-            int max = result.Length - 1;
+            int max = decodeRowResult.Length - 1;
             int total = 0;
             for (int i = 0; i < max; i++)
             {
-               total += ALPHABET_STRING.IndexOf(result[i]);
+               total += ALPHABET_STRING.IndexOf(decodeRowResult[i]);
             }
-            if (result[max] != ALPHABET[total%43])
+            if (decodeRowResult[max] != ALPHABET[total % 43])
             {
                return null;
             }
-            result.Length = max;
+            decodeRowResult.Length = max;
          }
 
-         if (result.Length == 0)
+         if (decodeRowResult.Length == 0)
          {
             // false positive
             return null;
@@ -171,13 +175,13 @@ namespace ZXing.OneD
          String resultString;
          if (extendedMode)
          {
-            resultString = decodeExtended(result.ToString());
+            resultString = decodeExtended(decodeRowResult.ToString());
             if (resultString == null)
                return null;
          }
          else
          {
-            resultString = result.ToString();
+            resultString = decodeRowResult.ToString();
          }
 
          float left = (float) (start[1] + start[0])/2.0f;

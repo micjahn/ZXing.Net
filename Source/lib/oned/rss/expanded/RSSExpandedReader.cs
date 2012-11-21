@@ -287,8 +287,6 @@ namespace ZXing.OneD.RSS.Expanded
             {
                // 'pairs' contains all the pairs from the row 'r'
                rows.RemoveAt(index);
-               // start from the begining
-               removePartialRows(pairs, rows);
             }
          }
       }

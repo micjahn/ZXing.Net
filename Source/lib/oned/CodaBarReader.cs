@@ -74,6 +74,9 @@ namespace ZXing.OneD
 
       override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
+         for (var index = 0; index < counters.Length; index++)
+            counters[index] = 0;
+
          if (!setCounters(row))
             return null;
 
