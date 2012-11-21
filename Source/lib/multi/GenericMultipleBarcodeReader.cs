@@ -93,11 +93,11 @@ namespace ZXing.Multi
                break;
             }
          }
-         if (alreadyFound)
+         if (!alreadyFound)
          {
-            return;
+            results.Add(translateResultPoints(result, xOffset, yOffset));
          }
-         results.Add(translateResultPoints(result, xOffset, yOffset));
+
          ResultPoint[] resultPoints = result.ResultPoints;
          if (resultPoints == null || resultPoints.Length == 0)
          {
