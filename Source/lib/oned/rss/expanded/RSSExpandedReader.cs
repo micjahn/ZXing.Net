@@ -76,7 +76,7 @@ namespace ZXing.OneD.RSS.Expanded
                                           new[] {55, 165, 73, 8, 24, 72, 5, 15},
                                           new[] {45, 135, 194, 160, 58, 174, 100, 89}
                                        };
-
+      /*
       private const int FINDER_PAT_A = 0;
       private const int FINDER_PAT_B = 1;
       private const int FINDER_PAT_C = 2;
@@ -98,13 +98,14 @@ namespace ZXing.OneD.RSS.Expanded
       };
 
       private static readonly int LONGEST_SEQUENCE_SIZE = FINDER_PATTERN_SEQUENCES[FINDER_PATTERN_SEQUENCES.Length - 1].Length;
+      */
 
       private const int MAX_PAIRS = 11;
 
       private readonly List<ExpandedPair> pairs = new List<ExpandedPair>(MAX_PAIRS);
       private readonly List<ExpandedRow> rows = new List<ExpandedRow>();
       private readonly int[] startEnd = new int[2];
-      private readonly int[] currentSequence = new int[LONGEST_SEQUENCE_SIZE];
+      //private readonly int[] currentSequence = new int[LONGEST_SEQUENCE_SIZE];
       private bool startFromEven = false;
 
       internal List<ExpandedPair> Pairs { get { return pairs; } }
@@ -232,7 +233,7 @@ namespace ZXing.OneD.RSS.Expanded
                break;
             }
             prevIsSame = erow.IsEquivalent(pairs);
-            insertPos += 1;
+            insertPos++;
          }
          if (nextIsSame || prevIsSame)
          {
@@ -257,13 +258,14 @@ namespace ZXing.OneD.RSS.Expanded
       // Remove all the rows that contains only specified pairs 
       private static void removePartialRows(List<ExpandedPair> pairs, List<ExpandedRow> rows)
       {
-         //check:
-         foreach (ExpandedRow r in rows)
+         for (var index = 0; index < rows.Count; index++)
          {
+            var r = rows[index];
             if (r.Pairs.Count == pairs.Count)
             {
                continue;
             }
+            bool allFound = true;
             foreach (ExpandedPair p in r.Pairs)
             {
                bool found = false;
@@ -277,24 +279,26 @@ namespace ZXing.OneD.RSS.Expanded
                }
                if (!found)
                {
+                  allFound = false;
                   break;
-                  //continue check;
                }
             }
-            // 'pairs' contains all the pairs from the row 'r'
-            rows.Remove(r);
-            // start from the begining
-            removePartialRows(pairs, rows);
-            return;
+            if (allFound)
+            {
+               // 'pairs' contains all the pairs from the row 'r'
+               rows.RemoveAt(index);
+               // start from the begining
+               removePartialRows(pairs, rows);
+            }
          }
       }
 
       // Returns true when one of the rows already contains all the pairs
       private static bool isPartialRow(IEnumerable<ExpandedPair> pairs, IEnumerable<ExpandedRow> rows)
       {
-         //check:
          foreach (ExpandedRow r in rows)
          {
+            var allFound = true;
             foreach (ExpandedPair p in pairs)
             {
                bool found = false;
@@ -308,12 +312,15 @@ namespace ZXing.OneD.RSS.Expanded
                }
                if (!found)
                {
+                  allFound = false;
                   break;
-                  //continue check;
                }
             }
-            // the row 'r' contain all the pairs from 'pairs'
-            return true;
+            if (allFound)
+            {
+               // the row 'r' contain all the pairs from 'pairs'
+               return true;
+            }
          }
          return false;
       }

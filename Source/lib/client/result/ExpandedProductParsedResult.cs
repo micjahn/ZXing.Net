@@ -39,6 +39,7 @@ namespace ZXing.Client.Result
       public static String KILOGRAM = "KG";
       public static String POUND = "LB";
 
+      private readonly String rawText;
       private readonly String productID;
       private readonly String sscc;
       private readonly String lotNumber;
@@ -55,7 +56,8 @@ namespace ZXing.Client.Result
       // For AIS that not exist in this object
       private readonly IDictionary<String, String> uncommonAIs;
 
-      public ExpandedProductParsedResult(String productID,
+      public ExpandedProductParsedResult(String rawText,
+                                         String productID,
                                          String sscc,
                                          String lotNumber,
                                          String productionDate,
@@ -71,6 +73,7 @@ namespace ZXing.Client.Result
                                          IDictionary<String, String> uncommonAIs)
          : base(ParsedResultType.PRODUCT)
       {
+         this.rawText = rawText;
          this.productID = productID;
          this.sscc = sscc;
          this.lotNumber = lotNumber;
@@ -158,6 +161,11 @@ namespace ZXing.Client.Result
          return o == null ? 0 : o.GetHashCode();
       }
 
+      public String RawText
+      {
+         get { return rawText; }
+      }
+
       public String ProductID
       {
          get { return productID; }
@@ -226,6 +234,14 @@ namespace ZXing.Client.Result
       public IDictionary<String, String> UncommonAIs
       {
          get { return uncommonAIs; }
+      }
+
+      public override string DisplayResult
+      {
+         get
+         {
+            return rawText;
+         }
       }
    }
 }
