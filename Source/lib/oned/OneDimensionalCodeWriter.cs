@@ -142,10 +142,10 @@ namespace ZXing.OneD
       }
 
       /// <summary>
-      /// Encode the contents to byte array expression of one-dimensional barcode.
+      /// Encode the contents to bool array expression of one-dimensional barcode.
       /// Start code and end code should be included in result, and side margins should not be included.
       ///
-      /// <returns>a {@code boolean[]} of horizontal pixels (false = white, true = black)</returns>
+      /// <returns>a {@code bool[]} of horizontal pixels (false = white, true = black)</returns>
       /// </summary>
       public abstract bool[] encode(String contents);
 

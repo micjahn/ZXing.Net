@@ -58,9 +58,8 @@ namespace ZXing.PDF417.Internal
       /// symbols in the barcode. When it finds a number of consecutive rows which
       /// are the same, it assumes that this is a row of codewords and processes
       /// them into a codeword array.
-      ///
-      /// <returns>an array of codewords.</returns>
       /// </summary>
+      /// <returns>an array of codewords.</returns>
       internal int[] readCodewords()
       {
          int width = bitMatrix.Width;
@@ -168,11 +167,10 @@ namespace ZXing.PDF417.Internal
 
       /// <summary>
       /// Trim the array to the required size.
-      ///
+      /// </summary>
       /// <param name="array">the array</param>
       /// <param name="size">the size to trim it to</param>
       /// <returns>the new trimmed array</returns>
-      /// </summary>
       private static int[] trimArray(int[] array, int size)
       {
          if (size < 0)
@@ -193,16 +191,13 @@ namespace ZXing.PDF417.Internal
       /// Each PDF417 symbol character consists of four bar elements and four space
       /// elements, each of which can be one to six modules wide. The four bar and
       /// four space elements shall measure 17 modules in total.
-      ///
-      /// <param name="rowCounters">an array containing the counts of black pixels for each column</param>
-      ///                    in the row.
+      /// </summary>
+      /// <param name="rowCounters">an array containing the counts of black pixels for each column in the row.</param>
       /// <param name="rowNumber">the current row number of codewords.</param>
       /// <param name="rowHeight">the height of this row in pixels.</param>
       /// <param name="codewords">the codeword array to save codewords into.</param>
       /// <param name="next">the next available index into the codewords array.</param>
-      /// <returns>the next available index into the codeword array after processing</returns>
-      ///         this row.
-      /// </summary>
+      /// <returns>the next available index into the codeword array after processing this row.</returns>
       int processRow(int[] rowCounters, int rowNumber, int rowHeight, int[] codewords, int next)
       {
          int width = bitMatrix.Width;
@@ -246,12 +241,10 @@ namespace ZXing.PDF417.Internal
             {
                // Left row indicator column
                int cw = getCodeword(symbol);
-               if (ecLevel < 0)
+               if (ecLevel < 0 &&
+                   rowNumber % 3 == 1)
                {
-                  if (rowNumber % 3 == 1)
-                  {
-                     leftColumnECData = cw;
-                  }
+                  leftColumnECData = cw;
                }
             }
             symbol = 0;
@@ -264,15 +257,13 @@ namespace ZXing.PDF417.Internal
             //columns--;
             // Overwrite the last codeword i.e. Right Row Indicator
             --next;
-            if (ecLevel < 0)
+            if (ecLevel < 0 &&
+                rowNumber%3 == 2)
             {
-               if (rowNumber%3 == 2)
+               rightColumnECData = codewords[next];
+               if (rightColumnECData == leftColumnECData && leftColumnECData != 0)
                {
-                  rightColumnECData = codewords[next];
-                  if (rightColumnECData == leftColumnECData && leftColumnECData != 0)
-                  {
-                     ecLevel = ((rightColumnECData%30) - rows%3)/3;
-                  }
+                  ecLevel = ((rightColumnECData%30) - rows%3)/3;
                }
             }
             codewords[next] = 0;
@@ -282,10 +273,8 @@ namespace ZXing.PDF417.Internal
 
       /// <summary>
       /// Translate the symbol into a codeword.
-      ///
-      /// @param symbol
-      /// <returns>the codeword corresponding to the symbol.</returns>
       /// </summary>
+      /// <returns>the codeword corresponding to the symbol.</returns>
       private static int getCodeword(long symbol)
       {
          long sym = symbol & 0x3FFFF;
@@ -305,10 +294,9 @@ namespace ZXing.PDF417.Internal
       /// <summary>
       /// Use a binary search to find the index of the codeword corresponding to
       /// this symbol.
-      ///
+      /// </summary>
       /// <param name="symbol">the symbol from the barcode.</param>
       /// <returns>the index into the codeword table.</returns>
-      /// </summary>
       private static int findCodewordIndex(long symbol)
       {
          int first = 0;
@@ -350,7 +338,7 @@ namespace ZXing.PDF417.Internal
       /// specification. The index of a symbol in this table corresponds to the
       /// index into the codeword table.
       /// </summary>
-      private static int[] SYMBOL_TABLE = {
+      private static readonly int[] SYMBOL_TABLE = {
                                              0x1025e, 0x1027a, 0x1029e,
                                              0x102bc, 0x102f2, 0x102f4, 0x1032e, 0x1034e, 0x1035c, 0x10396,
                                              0x103a6, 0x103ac, 0x10422, 0x10428, 0x10436, 0x10442, 0x10444,
@@ -755,7 +743,7 @@ namespace ZXing.PDF417.Internal
       /// <summary>
       /// This table contains to codewords for all symbols.
       /// </summary>
-      private static int[] CODEWORD_TABLE = {
+      private static readonly int[] CODEWORD_TABLE = {
                                                2627, 1819, 2622, 2621, 1813,
                                                1812, 2729, 2724, 2723, 2779, 2774, 2773, 902, 896, 908, 868, 865,
                                                861, 859, 2511, 873, 871, 1780, 835, 2493, 825, 2491, 842, 837, 844,

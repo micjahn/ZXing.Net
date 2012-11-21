@@ -504,12 +504,10 @@ namespace ZXing.OneD.RSS.Expanded
          if (leftChar == null)
             return null;
 
-         if (previousPairs.Count != 0)
+         if (previousPairs.Count != 0 &&
+             previousPairs[previousPairs.Count - 1].MustBeLast)
          {
-            if (previousPairs[previousPairs.Count - 1].MustBeLast)
-            {
-               return null;
-            }
+            return null;
          }
 
          DataCharacter rightChar = decodeDataCharacter(row, pattern, isOddPattern, false);

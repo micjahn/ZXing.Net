@@ -21,8 +21,8 @@ using ZXing.Common.ReedSolomon;
 namespace ZXing.Aztec.Internal
 {
    /// <summary>
-   /// <p>Encapsulates logic that can detect an Aztec Code in an image, even if the Aztec Code
-   /// is rotated or skewed, or partially obscured.</p>
+   /// Encapsulates logic that can detect an Aztec Code in an image, even if the Aztec Code
+   /// is rotated or skewed, or partially obscured.
    /// </summary>
    /// <author>David Olivier</author>
    public sealed class Detector
@@ -84,26 +84,28 @@ namespace ZXing.Aztec.Internal
       /// <returns></returns>
       private bool extractParameters(Point[] bullEyeCornerPoints)
       {
+         int twoCenterLayers = 2 * nbCenterLayers;
+
          // Get the bits around the bull's eye
-         bool[] resab = sampleLine(bullEyeCornerPoints[0], bullEyeCornerPoints[1], 2 * nbCenterLayers + 1);
-         bool[] resbc = sampleLine(bullEyeCornerPoints[1], bullEyeCornerPoints[2], 2 * nbCenterLayers + 1);
-         bool[] rescd = sampleLine(bullEyeCornerPoints[2], bullEyeCornerPoints[3], 2 * nbCenterLayers + 1);
-         bool[] resda = sampleLine(bullEyeCornerPoints[3], bullEyeCornerPoints[0], 2 * nbCenterLayers + 1);
+         bool[] resab = sampleLine(bullEyeCornerPoints[0], bullEyeCornerPoints[1], twoCenterLayers + 1);
+         bool[] resbc = sampleLine(bullEyeCornerPoints[1], bullEyeCornerPoints[2], twoCenterLayers + 1);
+         bool[] rescd = sampleLine(bullEyeCornerPoints[2], bullEyeCornerPoints[3], twoCenterLayers + 1);
+         bool[] resda = sampleLine(bullEyeCornerPoints[3], bullEyeCornerPoints[0], twoCenterLayers + 1);
 
          // Determine the orientation of the matrix
-         if (resab[0] && resab[2 * nbCenterLayers])
+         if (resab[0] && resab[twoCenterLayers])
          {
             shift = 0;
          }
-         else if (resbc[0] && resbc[2 * nbCenterLayers])
+         else if (resbc[0] && resbc[twoCenterLayers])
          {
             shift = 1;
          }
-         else if (rescd[0] && rescd[2 * nbCenterLayers])
+         else if (rescd[0] && rescd[twoCenterLayers])
          {
             shift = 2;
          }
-         else if (resda[0] && resda[2 * nbCenterLayers])
+         else if (resda[0] && resda[twoCenterLayers])
          {
             shift = 3;
          }
@@ -181,36 +183,45 @@ namespace ZXing.Aztec.Internal
       /// <returns>the array of aztec code corners</returns>
       private ResultPoint[] getMatrixCornerPoints(Point[] bullEyeCornerPoints)
       {
-         float ratio = (2 * nbLayers + (nbLayers > 4 ? 1 : 0) + (nbLayers - 4) / 8)
-             / (2.0f * nbCenterLayers);
+         float ratio = (2*nbLayers + (nbLayers > 4 ? 1 : 0) + (nbLayers - 4)/8)
+                       /(2.0f*nbCenterLayers);
 
          int dx = bullEyeCornerPoints[0].x - bullEyeCornerPoints[2].x;
          dx += dx > 0 ? 1 : -1;
          int dy = bullEyeCornerPoints[0].y - bullEyeCornerPoints[2].y;
          dy += dy > 0 ? 1 : -1;
 
-         int targetcx = MathUtils.round(bullEyeCornerPoints[2].x - ratio * dx);
-         int targetcy = MathUtils.round(bullEyeCornerPoints[2].y - ratio * dy);
+         int targetcx = MathUtils.round(bullEyeCornerPoints[2].x - ratio*dx);
+         int targetcy = MathUtils.round(bullEyeCornerPoints[2].y - ratio*dy);
 
-         int targetax = MathUtils.round(bullEyeCornerPoints[0].x + ratio * dx);
-         int targetay = MathUtils.round(bullEyeCornerPoints[0].y + ratio * dy);
+         int targetax = MathUtils.round(bullEyeCornerPoints[0].x + ratio*dx);
+         int targetay = MathUtils.round(bullEyeCornerPoints[0].y + ratio*dy);
 
          dx = bullEyeCornerPoints[1].x - bullEyeCornerPoints[3].x;
          dx += dx > 0 ? 1 : -1;
          dy = bullEyeCornerPoints[1].y - bullEyeCornerPoints[3].y;
          dy += dy > 0 ? 1 : -1;
 
-         int targetdx = MathUtils.round(bullEyeCornerPoints[3].x - ratio * dx);
-         int targetdy = MathUtils.round(bullEyeCornerPoints[3].y - ratio * dy);
-         int targetbx = MathUtils.round(bullEyeCornerPoints[1].x + ratio * dx);
-         int targetby = MathUtils.round(bullEyeCornerPoints[1].y + ratio * dy);
+         int targetdx = MathUtils.round(bullEyeCornerPoints[3].x - ratio*dx);
+         int targetdy = MathUtils.round(bullEyeCornerPoints[3].y - ratio*dy);
+         int targetbx = MathUtils.round(bullEyeCornerPoints[1].x + ratio*dx);
+         int targetby = MathUtils.round(bullEyeCornerPoints[1].y + ratio*dy);
 
-         if (!isValid(targetax, targetay) || !isValid(targetbx, targetby) || !isValid(targetcx, targetcy) || !isValid(targetdx, targetdy))
+         if (!isValid(targetax, targetay) ||
+             !isValid(targetbx, targetby) ||
+             !isValid(targetcx, targetcy) ||
+             !isValid(targetdx, targetdy))
          {
             return null;
          }
 
-         return new[] { new ResultPoint(targetax, targetay), new ResultPoint(targetbx, targetby), new ResultPoint(targetcx, targetcy), new ResultPoint(targetdx, targetdy) };
+         return new[]
+                   {
+                      new ResultPoint(targetax, targetay),
+                      new ResultPoint(targetbx, targetby),
+                      new ResultPoint(targetcx, targetcy),
+                      new ResultPoint(targetdx, targetdy)
+                   };
       }
 
       /// <summary>
@@ -296,7 +307,7 @@ namespace ZXing.Aztec.Internal
 
             if (nbCenterLayers > 2)
             {
-               float q = distance(poutd, pouta) * nbCenterLayers / (distance(pind, pina) * (nbCenterLayers + 2));
+               float q = distance(poutd, pouta)*nbCenterLayers/(distance(pind, pina)*(nbCenterLayers + 2));
                if (q < 0.75 || q > 1.25 || !isWhiteOrBlackRectangle(pouta, poutb, poutc, poutd))
                {
                   break;
@@ -318,35 +329,38 @@ namespace ZXing.Aztec.Internal
 
          compact = nbCenterLayers == 5;
 
-         float ratio = 0.75f * 2 / (2 * nbCenterLayers - 3);
+         float ratio = 0.75f*2/(2*nbCenterLayers - 3);
 
          int dx = pina.x - pinc.x;
          int dy = pina.y - pinc.y;
-         int targetcx = MathUtils.round(pinc.x - ratio * dx);
-         int targetcy = MathUtils.round(pinc.y - ratio * dy);
-         int targetax = MathUtils.round(pina.x + ratio * dx);
-         int targetay = MathUtils.round(pina.y + ratio * dy);
+         int targetcx = MathUtils.round(pinc.x - ratio*dx);
+         int targetcy = MathUtils.round(pinc.y - ratio*dy);
+         int targetax = MathUtils.round(pina.x + ratio*dx);
+         int targetay = MathUtils.round(pina.y + ratio*dy);
 
          dx = pinb.x - pind.x;
          dy = pinb.y - pind.y;
 
-         int targetdx = MathUtils.round(pind.x - ratio * dx);
-         int targetdy = MathUtils.round(pind.y - ratio * dy);
-         int targetbx = MathUtils.round(pinb.x + ratio * dx);
-         int targetby = MathUtils.round(pinb.y + ratio * dy);
+         int targetdx = MathUtils.round(pind.x - ratio*dx);
+         int targetdy = MathUtils.round(pind.y - ratio*dy);
+         int targetbx = MathUtils.round(pinb.x + ratio*dx);
+         int targetby = MathUtils.round(pinb.y + ratio*dy);
 
-         if (!isValid(targetax, targetay) || !isValid(targetbx, targetby)
-             || !isValid(targetcx, targetcy) || !isValid(targetdx, targetdy))
+         if (!isValid(targetax, targetay) ||
+             !isValid(targetbx, targetby) ||
+             !isValid(targetcx, targetcy) ||
+             !isValid(targetdx, targetdy))
          {
             return null;
          }
 
-         Point pa = new Point(targetax, targetay);
-         Point pb = new Point(targetbx, targetby);
-         Point pc = new Point(targetcx, targetcy);
-         Point pd = new Point(targetdx, targetdy);
-
-         return new[] { pa, pb, pc, pd };
+         return new[]
+                   {
+                      new Point(targetax, targetay),
+                      new Point(targetbx, targetby),
+                      new Point(targetcx, targetcy),
+                      new Point(targetdx, targetdy)
+                   };
       }
 
       /// <summary>
@@ -381,15 +395,15 @@ namespace ZXing.Aztec.Internal
             // In that case, surely in the bull's eye, we try to expand the rectangle.
             cx = image.Width/2;
             cy = image.Height/2;
-            pointA = getFirstDifferent(new Point(cx + 15/2, cy - 15/2), false, 1, -1).toResultPoint();
-            pointB = getFirstDifferent(new Point(cx + 15/2, cy + 15/2), false, 1, 1).toResultPoint();
-            pointC = getFirstDifferent(new Point(cx - 15/2, cy + 15/2), false, -1, 1).toResultPoint();
-            pointD = getFirstDifferent(new Point(cx - 15/2, cy - 15/2), false, -1, -1).toResultPoint();
+            pointA = getFirstDifferent(new Point(cx + 7, cy - 7), false, 1, -1).toResultPoint();
+            pointB = getFirstDifferent(new Point(cx + 7, cy + 7), false, 1, 1).toResultPoint();
+            pointC = getFirstDifferent(new Point(cx - 7, cy + 7), false, -1, 1).toResultPoint();
+            pointD = getFirstDifferent(new Point(cx - 7, cy - 7), false, -1, -1).toResultPoint();
          }
 
          //Compute the center of the rectangle
-         cx = MathUtils.round((pointA.X + pointD.X + pointB.X + pointC.X) / 4);
-         cy = MathUtils.round((pointA.Y + pointD.Y + pointB.Y + pointC.Y) / 4);
+         cx = MathUtils.round((pointA.X + pointD.X + pointB.X + pointC.X) / 4.0f);
+         cy = MathUtils.round((pointA.Y + pointD.Y + pointB.Y + pointC.Y) / 4.0f);
 
          // Redetermine the white rectangle starting from previously computed center.
          // This will ensure that we end up with a white rectangle in center bull's eye
@@ -409,15 +423,15 @@ namespace ZXing.Aztec.Internal
          {
             // This exception can be in case the initial rectangle is white
             // In that case we try to expand the rectangle.
-            pointA = getFirstDifferent(new Point(cx + 15/2, cy - 15/2), false, 1, -1).toResultPoint();
-            pointB = getFirstDifferent(new Point(cx + 15/2, cy + 15/2), false, 1, 1).toResultPoint();
-            pointC = getFirstDifferent(new Point(cx - 15/2, cy + 15/2), false, -1, 1).toResultPoint();
-            pointD = getFirstDifferent(new Point(cx - 15/2, cy - 15/2), false, -1, -1).toResultPoint();
+            pointA = getFirstDifferent(new Point(cx + 7, cy - 7), false, 1, -1).toResultPoint();
+            pointB = getFirstDifferent(new Point(cx + 7, cy + 7), false, 1, 1).toResultPoint();
+            pointC = getFirstDifferent(new Point(cx - 7, cy + 7), false, -1, 1).toResultPoint();
+            pointD = getFirstDifferent(new Point(cx - 7, cy - 7), false, -1, -1).toResultPoint();
          }
 
          // Recompute the center of the rectangle
-         cx = MathUtils.round((pointA.X + pointD.X + pointB.X + pointC.X) / 4);
-         cy = MathUtils.round((pointA.Y + pointD.Y + pointB.Y + pointC.Y) / 4);
+         cx = MathUtils.round((pointA.X + pointD.X + pointB.X + pointC.X) / 4.0f);
+         cy = MathUtils.round((pointA.Y + pointD.Y + pointB.Y + pointC.Y) / 4.0f);
 
          return new Point(cx, cy);
       }
@@ -478,7 +492,7 @@ namespace ZXing.Aztec.Internal
       }
 
       /// <summary>
-      /// Sets number of layers and number of datablocks from parameter bits
+      /// Sets number of layers and number of data blocks from parameter bits
       /// </summary>
       /// <param name="parameterData">The parameter data.</param>
       private void getParameters(bool[] parameterData)
@@ -503,7 +517,7 @@ namespace ZXing.Aztec.Internal
             nbLayers <<= 1;
             if (parameterData[i])
             {
-               nbLayers += 1;
+               nbLayers++;
             }
          }
 
@@ -512,7 +526,7 @@ namespace ZXing.Aztec.Internal
             nbDataBlocks <<= 1;
             if (parameterData[i])
             {
-               nbDataBlocks += 1;
+               nbDataBlocks++;
             }
          }
 
@@ -624,16 +638,12 @@ namespace ZXing.Aztec.Internal
 
          float errRatio = error / d;
 
-         if (errRatio > 0.1 && errRatio < 0.9)
+         if (errRatio > 0.1f && errRatio < 0.9f)
          {
             return 0;
          }
 
-         if (errRatio <= 0.1)
-         {
-            return colorModel ? 1 : -1;
-         }
-         return colorModel ? -1 : 1;
+         return (errRatio <= 0.1f) == colorModel ? 1 : -1;
       }
 
       /// <summary>
@@ -673,6 +683,17 @@ namespace ZXing.Aztec.Internal
          return new Point(x, y);
       }
 
+      private bool isValid(int x, int y)
+      {
+         return x >= 0 && x < image.Width && y > 0 && y < image.Height;
+      }
+
+      // L2 distance
+      private static float distance(Point a, Point b)
+      {
+         return MathUtils.distance(a.x, a.y, b.x, b.y);
+      }
+
       internal sealed class Point
       {
          public int x;
@@ -688,17 +709,6 @@ namespace ZXing.Aztec.Internal
             this.x = x;
             this.y = y;
          }
-      }
-
-      private bool isValid(int x, int y)
-      {
-         return x >= 0 && x < image.Width && y > 0 && y < image.Height;
-      }
-
-      // L2 distance
-      private static float distance(Point a, Point b)
-      {
-         return MathUtils.distance(a.x, a.y, b.x, b.y);
       }
    }
 }

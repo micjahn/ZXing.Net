@@ -551,46 +551,13 @@ namespace ZXing.PDF417.Internal
 
       /// <summary>
       /// Calculates the necessary number of rows as described in annex Q of ISO/IEC 15438:2001(E).
-      ///
+      /// </summary>
       /// <param name="m">the number of source codewords prior to the additional of the Symbol Length</param>
       ///          Descriptor and any pad codewords
       /// <param name="k">the number of error correction codewords</param>
       /// <param name="c">the number of columns in the symbol in the data region (excluding start, stop and</param>
       ///          row indicator codewords)
       /// <returns>the number of rows in the symbol (r)</returns>
-      /// </summary>
-      private static int getNumberOfRows(int m, int k, int c)
-      {
-         int r = calculateNumberOfRows(m, k, c);
-         if (r > 90)
-         {
-            throw new WriterException(
-                "The message doesn't fit in the configured symbol size."
-                    + " The resultant number of rows for this barcode exceeds 90."
-                    + " Please increase the number of columns or decrease the error correction"
-                    + " level to reduce the number of rows.");
-         }
-         if (r < 2)
-         {
-            throw new WriterException(
-                "The message is too short for the configured symbol size."
-                    + " The resultant number of rows is less than 3."
-                    + " Please decrease the number of columns or increase the error correction"
-                    + " level to increase the number of rows.");
-         }
-         return r;
-      }
-
-      /// <summary>
-      /// Calculates the necessary number of rows as described in annex Q of ISO/IEC 15438:2001(E).
-      ///
-      /// <param name="m">the number of source codewords prior to the additional of the Symbol Length</param>
-      ///          Descriptor and any pad codewords
-      /// <param name="k">the number of error correction codewords</param>
-      /// <param name="c">the number of columns in the symbol in the data region (excluding start, stop and</param>
-      ///          row indicator codewords)
-      /// <returns>the number of rows in the symbol (r)</returns>
-      /// </summary>
       private static int calculateNumberOfRows(int m, int k, int c)
       {
          int r = ((m + 1 + k) / c) + 1;
@@ -603,7 +570,7 @@ namespace ZXing.PDF417.Internal
 
       /// <summary>
       /// Calculates the number of pad codewords as described in 4.9.2 of ISO/IEC 15438:2001(E).
-      ///
+      /// </summary>
       /// <param name="m">the number of source codewords prior to the additional of the Symbol Length</param>
       ///          Descriptor and any pad codewords
       /// <param name="k">the number of error correction codewords</param>
@@ -611,28 +578,10 @@ namespace ZXing.PDF417.Internal
       ///          row indicator codewords)
       /// <param name="r">the number of rows in the symbol</param>
       /// <returns>the number of pad codewords</returns>
-      /// </summary>
       private static int getNumberOfPadCodewords(int m, int k, int c, int r)
       {
          int n = c * r - k;
          return n > m + 1 ? n - m - 1 : 0;
-      }
-
-      /// <summary>
-      /// Calculates the number of data codewords (equals the Symbol Length Descriptor).
-      ///
-      /// <param name="m">the number of source codewords prior to the additional of the Symbol Length</param>
-      ///                             Descriptor and any pad codewords
-      /// <param name="errorCorrectionLevel">the error correction level (value between 0 and 8)</param>
-      /// <param name="c">the number of columns in the symbol in the data region (excluding start, stop and</param>
-      ///                             row indicator codewords)
-      /// <returns>the number of data codewords</returns>
-      /// </summary>
-      private static int getNumberOfDataCodewords(int m, int errorCorrectionLevel, int c)
-      {
-         int k = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
-         int r = getNumberOfRows(m, k, c);
-         return c * r - k;
       }
 
       private static void encodeChar(int pattern, int len, BarcodeRow logic)
@@ -717,9 +666,8 @@ namespace ZXing.PDF417.Internal
 
       /// <summary>
       /// Generates the barcode logic.
-      ///
-      /// <param name="msg">the message to encode</param>
       /// </summary>
+      /// <param name="msg">the message to encode</param>
       internal void generateBarcodeLogic(String msg, int errorCorrectionLevel)
       {
 
@@ -763,11 +711,10 @@ namespace ZXing.PDF417.Internal
       /// <summary>
       /// Determine optimal nr of columns and rows for the specified number of
       /// codewords.
-      ///
+      /// </summary>
       /// <param name="sourceCodeWords">number of code words</param>
       /// <param name="errorCorrectionCodeWords">number of error correction code words</param>
       /// <returns>dimension object containing cols as width and rows as height</returns>
-      /// </summary>
       int[] determineDimensions(int sourceCodeWords, int errorCorrectionCodeWords)
       {
          float ratio = 0.0f;
@@ -839,7 +786,6 @@ namespace ZXing.PDF417.Internal
 
       /// <summary>
       /// Sets compact to be true or false
-      /// @param compact
       /// </summary>
       internal void setCompact(bool compact)
       {

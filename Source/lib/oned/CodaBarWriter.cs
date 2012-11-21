@@ -16,12 +16,10 @@
 
 using System;
 
-using ZXing.Common;
-
 namespace ZXing.OneD
 {
    /// <summary>
-   /// This class renders CodaBar as <see cref="BitMatrix" />.
+   /// This class renders CodaBar as <see cref="bool" />[].
    /// </summary>
    /// <author>dsbnatut@gmail.com (Kazuki Nishiura)</author>
    public sealed class CodaBarWriter : OneDimensionalCodeWriter
@@ -29,9 +27,6 @@ namespace ZXing.OneD
       private static readonly char[] START_CHARS = { 'A', 'B', 'C', 'D' };
       private static readonly char[] END_CHARS = { 'T', 'N', '*', 'E' };
 
-      /// <summary>
-      /// @see OneDimensionalCodeWriter#encode(java.lang.String)
-      /// </summary>
       override public bool[] encode(String contents)
       {
          // Verify input and calculate decoded length.

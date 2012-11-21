@@ -350,7 +350,7 @@ namespace ZXing.Common.Detector
          float ti = t.X;
          float tj = t.Y;
 
-         if (yi < width / 2)
+         if (yi < width / 2.0f)
          {
             return new[]
                       {
