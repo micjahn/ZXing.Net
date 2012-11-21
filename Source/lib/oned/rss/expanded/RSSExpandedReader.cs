@@ -620,8 +620,15 @@ namespace ZXing.OneD.RSS.Expanded
             }
          }//counters[] has the pixels of the module
 
-         int numModules = 17; //left and right data characters have all the same length
+         const int numModules = 17; //left and right data characters have all the same length
          float elementWidth = (float)count(counters) / (float)numModules;
+
+         // Sanity check: element width for pattern and the character should match
+         float expectedElementWidth = (pattern.StartEnd[1] - pattern.StartEnd[0]) / 15.0f;
+         if (Math.Abs(elementWidth - expectedElementWidth) / expectedElementWidth > 0.3f)
+         {
+            return null;
+         }
 
          int[] oddCounts = getOddCounts();
          int[] evenCounts = getEvenCounts();
@@ -634,10 +641,18 @@ namespace ZXing.OneD.RSS.Expanded
             int rounded = (int)(divided + 0.5f); // Round
             if (rounded < 1)
             {
+               if (divided < 0.3f)
+               {
+                  return null;
+               }
                rounded = 1;
             }
             else if (rounded > 8)
             {
+               if (divided > 8.7f)
+               {
+                  return null;
+               }
                rounded = 8;
             }
             int offset = i >> 1;
