@@ -26,7 +26,9 @@ IF NOT EXIST "%BINARY_DIR%\sl5\zxing.sl5.dll" GOTO BINARY_SL50_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\unity\zxing.unity.dll" GOTO BINARY_UNITY_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\wp7.0\zxing.wp7.0.dll" GOTO BINARY_WP70_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\wp7.1\zxing.wp7.1.dll" GOTO BINARY_WP71_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\wp8.0\zxing.wp8.0.dll" GOTO BINARY_WP80_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\winrt\zxing.winrt.dll" GOTO BINARY_WINRT_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\monodroid\zxing.monoandroid.dll" GOTO BINARY_MONODROID_NOT_FOUND
 
 ECHO.
 ECHO Build deployment files in directory
@@ -49,7 +51,7 @@ REM building archives for binaries
 REM ***************************************************************************************
 
 CD "%BINARY_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net3.5 net4.0 winrt unity sl4 sl5 wp7.0 wp7.1 -xr!Documentation
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net3.5 net4.0 winrt unity sl4 sl5 wp7.0 wp7.1 wp8.0 monodroid -xr!Documentation
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DEMO_BINARY%" Clients
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DOCUMENTATION%" Documentation
 CD "%CURRENT_DIR%"
@@ -79,6 +81,7 @@ MKDIR "%SVN_EXPORT_DIR%\Source\test" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\Source\test\src" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\Clients" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\3rdparty" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\3rdparty\AForge" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\3rdparty\EmguCV" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\3rdparty\NUnit.NET" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\3rdparty\NUnit.Silverlight" >NUL: 2>&1
@@ -87,6 +90,7 @@ MKDIR "%SVN_EXPORT_DIR%\3rdparty\Unity" >NUL: 2>&1
 "%SVN_TOOL%" export --force "%SVN_URL%/Source/lib" "%SVN_EXPORT_DIR%\Source\lib"
 "%SVN_TOOL%" export --force "%SVN_URL%/Source/test/src" "%SVN_EXPORT_DIR%\Source\test\src"
 "%SVN_TOOL%" export --force "%SVN_URL%/Clients" "%SVN_EXPORT_DIR%\Clients"
+"%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/AForge" "%SVN_EXPORT_DIR%\3rdparty\AForge"
 "%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/EmguCV" "%SVN_EXPORT_DIR%\3rdparty\EmguCV"
 "%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/NUnit.NET" "%SVN_EXPORT_DIR%\3rdparty\NUnit.NET"
 "%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/NUnit.Silverlight" "%SVN_EXPORT_DIR%\3rdparty\NUnit.Silverlight"
@@ -94,10 +98,13 @@ MKDIR "%SVN_EXPORT_DIR%\3rdparty\Unity" >NUL: 2>&1
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.sln" "%SVN_EXPORT_DIR%"
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.ce.sln" "%SVN_EXPORT_DIR%"
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.vs2012.sln" "%SVN_EXPORT_DIR%"
+"%SVN_TOOL%" export --force "%SVN_URL%/zxing.monoandroid.sln" "%SVN_EXPORT_DIR%"
+"%SVN_TOOL%" export --force "%SVN_URL%/zxing.monotouch.sln" "%SVN_EXPORT_DIR%"
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.nunit" "%SVN_EXPORT_DIR%"
+"%SVN_TOOL%" export --force "%SVN_URL%/THANKS" "%SVN_EXPORT_DIR%"
 
 CD "%SVN_EXPORT_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Source\lib\*.* Source\test\src\*.* Clients\*.* 3rdparty\*.* zxing.sln zxing.ce.sln zxing.vs2012.sln zxing.nunit
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Source\lib\*.* Source\test\src\*.* Clients\*.* 3rdparty\*.* zxing.sln zxing.ce.sln zxing.vs2012.sln zxing.monoandroid.sln zxing.monotouch.sln zxing.nunit THANKS
 CD "%CURRENT_DIR%"
 
 RMDIR /S /Q "%SVN_EXPORT_DIR%" >NUL: 2>&1
@@ -196,9 +203,23 @@ ECHO weren't found.
 ECHO.
 GOTO END
 
+:BINARY_WP80_NOT_FOUND
+ECHO The Windows Phone 8.0 binaries 
+ECHO %BINARY_DIR%\wp8.0\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
 :BINARY_WINRT_NOT_FOUND
 ECHO The Windows RT binaries 
 ECHO %BINARY_DIR%\winrt\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
+:BINARY_MONODROID_NOT_FOUND
+ECHO The MonoDroid binaries 
+ECHO %BINARY_DIR%\monodroid\...
 ECHO weren't found.
 ECHO.
 GOTO END

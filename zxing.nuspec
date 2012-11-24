@@ -12,10 +12,11 @@
     <description>ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.
 It has been ported by hand with a lot of optimizations and improvements.
 
-It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, Windows RT, Silverlight 4, Silverlight 5, Windows Phone 7.0 and Windows Phone 7.1</description>
+It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, Windows RT, Silverlight 4, Silverlight 5, Windows Phone 7.0, Windows Phone 7.1 and Windows Phone 8.0</description>
     <summary>ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.</summary>
     <releaseNotes>* sync with rev. 2521 of the java version
-* improvements and fixes</releaseNotes>
+* improvements and fixes
+* Windows Phone 8 assemblies</releaseNotes>
     <tags>ZXing barcode scanning 1D 2D UPC-A UPC-E EAN-8 EAN-13 QR ITF Codabar RSS-14 Data Matrix PDF 417 PDF417 Aztec</tags>
   </metadata>
   <files>
@@ -31,20 +32,23 @@ It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, Windows RT, Silverlight 
     <file src="Build\Release\net4.0\zxing.presentation.dll" target="lib/net40/zxing.presentation.dll" />
     <file src="Build\Release\net4.0\zxing.presentation.pdb" target="lib/net40/zxing.presentation.pdb" />
     <file src="Build\Release\net4.0\zxing.presentation.XML" target="lib/net40/zxing.presentation.XML" />
-    <file src="Build\Release\wp7.0\zxing.wp7.0.dll" target="lib/sl3-wp/zxing.wp7.0.dll" />
-    <file src="Build\Release\wp7.0\zxing.wp7.0.pdb" target="lib/sl3-wp/zxing.wp7.0.pdb" />
-    <file src="Build\Release\wp7.0\zxing.wp7.0.XML" target="lib/sl3-wp/zxing.wp7.0.XML" />
+    <file src="Build\Release\winrt\zxing.winrt.dll" target="lib/winRT45/zxing.winrt.dll" />
+    <file src="Build\Release\winrt\zxing.winrt.pdb" target="lib/winRT45/zxing.winrt.pdb" />
+    <file src="Build\Release\winrt\zxing.winrt.XML" target="lib/winRT45/zxing.winrt.XML" />
     <file src="Build\Release\sl4\zxing.sl4.dll" target="lib/sl4/zxing.sl4.dll" />
     <file src="Build\Release\sl4\zxing.sl4.pdb" target="lib/sl4/zxing.sl4.pdb" />
     <file src="Build\Release\sl4\zxing.sl4.XML" target="lib/sl4/zxing.sl4.XML" />
     <file src="Build\Release\sl5\zxing.sl5.dll" target="lib/sl5/zxing.sl5.dll" />
     <file src="Build\Release\sl5\zxing.sl5.pdb" target="lib/sl5/zxing.sl5.pdb" />
     <file src="Build\Release\sl5\zxing.sl5.XML" target="lib/sl5/zxing.sl5.XML" />
+    <file src="Build\Release\wp7.0\zxing.wp7.0.dll" target="lib/sl3-wp/zxing.wp7.0.dll" />
+    <file src="Build\Release\wp7.0\zxing.wp7.0.pdb" target="lib/sl3-wp/zxing.wp7.0.pdb" />
+    <file src="Build\Release\wp7.0\zxing.wp7.0.XML" target="lib/sl3-wp/zxing.wp7.0.XML" />
     <file src="Build\Release\wp7.1\zxing.wp7.1.dll" target="lib/sl4-wp71/zxing.wp7.1.dll" />
     <file src="Build\Release\wp7.1\zxing.wp7.1.pdb" target="lib/sl4-wp71/zxing.wp7.1.pdb" />
     <file src="Build\Release\wp7.1\zxing.wp7.1.XML" target="lib/sl4-wp71/zxing.wp7.1.XML" />
-    <file src="Build\Release\winrt\zxing.winrt.dll" target="lib/winrt/zxing.winrt.dll" />
-    <file src="Build\Release\winrt\zxing.winrt.pdb" target="lib/winrt/zxing.winrt.pdb" />
-    <file src="Build\Release\winrt\zxing.winrt.XML" target="lib/winrt/zxing.winrt.XML" />
+    <file src="Build\Release\wp8.0\zxing.wp8.0.dll" target="lib/wp8/zxing.wp8.0.dll" />
+    <file src="Build\Release\wp8.0\zxing.wp8.0.pdb" target="lib/wp8/zxing.wp8.0.pdb" />
+    <file src="Build\Release\wp8.0\zxing.wp8.0.XML" target="lib/wp8/zxing.wp8.0.XML" />
   </files>
 </package>
