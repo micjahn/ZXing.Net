@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\Build\Release\net4.5\zxing.XML</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\Key\private.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -248,6 +254,11 @@
     <Compile Include="SupportClass.cs" />
     <Compile Include="Writer.cs" />
     <Compile Include="WriterException.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Key\private.snk">
+      <Link>Properties\private.snk</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
