@@ -77,7 +77,7 @@ namespace ZXing
                var strideStep = data.Stride;
                var buffer = new byte[stride];
                var ptrInBitmap = data.Scan0;
-
+               
 #if !WindowsCE
                // prepare palette for 1 and 8 bit indexed bitmaps
                var luminancePalette = new byte[bitmap.Palette.Entries.Length];
@@ -87,6 +87,11 @@ namespace ZXing
                   luminancePalette[index] = (byte)(0.3 * color.R +
                                                     0.59 * color.G +
                                                     0.11 * color.B + 0.01);
+               }
+               if (bitmap.PixelFormat == PixelFormat.Format32bppArgb ||
+                   bitmap.PixelFormat == PixelFormat.Format32bppPArgb)
+               {
+                  pixelWidth = 40;
                }
 #endif
 
@@ -142,26 +147,37 @@ namespace ZXing
                      case 3:
                         for (int x = 0; x < width; x++)
                         {
-                           var luminance = (byte)(0.3 * buffer[x * pixelWidth] +
-                                                   0.59 * buffer[x * pixelWidth + 1] +
-                                                   0.11 * buffer[x * pixelWidth + 2] + 0.01);
+                           var luminance = (byte)(0.3  * buffer[x * 3] +
+                                                  0.59 * buffer[x * 3 + 1] +
+                                                  0.11 * buffer[x * 3 + 2] + 0.01);
                            luminances[offset + x] = luminance;
                         }
                         break;
                      case 4:
+                        // 4 bytes without alpha channel value
+                        for (int x = 0; x < width; x++)
+                        {
+                           var luminance = (byte)(0.30 * buffer[x * 4] +
+                                                  0.59 * buffer[x * 4 + 1] +
+                                                  0.11 * buffer[x * 4 + 2] + 0.01);
+
+                           luminances[offset + x] = luminance;
+                        }
+                        break;
+                     case 40:
                         // with alpha channel; some barcodes are completely black if you
                         // only look at the r, g and b channel but the alpha channel controls
                         // the view
                         for (int x = 0; x < width; x++)
                         {
-                           var luminance = (byte)(0.3 * buffer[x * pixelWidth] +
-                                                   0.59 * buffer[x * pixelWidth + 1] +
-                                                   0.11 * buffer[x * pixelWidth + 2] + 0.01);
+                           var luminance = (byte)(0.30 * buffer[x * 4] +
+                                                  0.59 * buffer[x * 4 + 1] +
+                                                  0.11 * buffer[x * 4 + 2] + 0.01);
 
                            // calculating the resulting luminance based upon a white background
                            // var alpha = buffer[x * pixelWidth + 3] / 255.0;
                            // luminance = (byte)(luminance * alpha + 255 * (1 - alpha));
-                           var alpha = buffer[x * pixelWidth + 3];
+                           var alpha = buffer[x * 4 + 3];
                            luminance = (byte)(((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8));
                            luminances[offset + x] = luminance;
                         }
