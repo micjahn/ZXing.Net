@@ -14,18 +14,6 @@
  * limitations under the License.
  */
 
-#if !(SILVERLIGHT || NETFX_CORE)
-#if !UNITY
-using System.Drawing;
-#else
-using UnityEngine;
-#endif
-#elif NETFX_CORE
-using Windows.UI.Xaml.Media.Imaging;
-#else
-using System.Windows.Media.Imaging;
-#endif
-
 using ZXing.Common;
 
 namespace ZXing
@@ -47,30 +35,41 @@ namespace ZXing
       /// Creates a visual representation of the contents
       /// </summary>
       MonoTouch.UIKit.UIImage Write(string contents);
-#elif MONOANDROID
+#endif
+
+#if MONOANDROID
       /// <summary>
       /// Creates a visual representation of the contents
       /// </summary>
       Android.Graphics.Bitmap Write(string contents);
-#else
-#if !(SILVERLIGHT || NETFX_CORE)
-#if !UNITY
-      /// <summary>
-      /// Creates a visual representation of the contents
-      /// </summary>
-      Bitmap Write(string contents);
-#else
-      /// <summary>
-      /// Creates a visual representation of the contents
-      /// </summary>
-      Color32[] Write(string contents);
 #endif
-#else
+
+#if UNITY
       /// <summary>
       /// Creates a visual representation of the contents
       /// </summary>
-      WriteableBitmap Write(string contents);
+      UnityEngine.Color32[] Write(string contents);
 #endif
+
+#if SILVERLIGHT
+      /// <summary>
+      /// Creates a visual representation of the contents
+      /// </summary>
+      System.Windows.Media.Imaging.WriteableBitmap Write(string contents);
+#endif
+
+#if NETFX_CORE
+      /// <summary>
+      /// Creates a visual representation of the contents
+      /// </summary>
+      Windows.UI.Xaml.Media.Imaging.WriteableBitmap Write(string contents);
+#endif
+
+#if (NET40 || NET35 || NET20) && !UNITY
+      /// <summary>
+      /// Creates a visual representation of the contents
+      /// </summary>
+      System.Drawing.Bitmap Write(string contents);
 #endif
    }
 }

@@ -14,18 +14,6 @@
  * limitations under the License.
  */
 
-#if !(SILVERLIGHT || NETFX_CORE)
-#if !UNITY
-using System.Drawing;
-#else
-using UnityEngine;
-#endif
-#elif NETFX_CORE
-using Windows.UI.Xaml.Media.Imaging;
-#else
-using System.Windows.Media.Imaging;
-#endif
-
 using ZXing.Rendering;
 
 namespace ZXing
@@ -37,51 +25,39 @@ namespace ZXing
    public class BarcodeWriter : BarcodeWriterGeneric<MonoTouch.UIKit.UIImage>, IBarcodeWriter
    {
       /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+      /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.
       /// </summary>
       public BarcodeWriter()
       {
          Renderer = new BitmapRenderer();
       }
    }
-#elif MONOANDROID
+#endif
+
+#if MONOANDROID
    /// <summary>
    /// A smart class to encode some content to a barcode image
    /// </summary>
    public class BarcodeWriter : BarcodeWriterGeneric<Android.Graphics.Bitmap>, IBarcodeWriter
    {
       /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+      /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.
       /// </summary>
       public BarcodeWriter()
       {
          Renderer = new BitmapRenderer();
       }
    }
-#else
-#if !(SILVERLIGHT || NETFX_CORE)
-#if !UNITY
+#endif
+
+#if UNITY
    /// <summary>
    /// A smart class to encode some content to a barcode image
    /// </summary>
-   public class BarcodeWriter : BarcodeWriterGeneric<Bitmap>, IBarcodeWriter
+   public class BarcodeWriter : BarcodeWriterGeneric<UnityEngine.Color32[]>, IBarcodeWriter
    {
       /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
-      /// </summary>
-      public BarcodeWriter()
-      {
-         Renderer = new BitmapRenderer();
-      }
-   }
-#else
-   /// <summary>
-   /// A smart class to encode some content to a barcode image
-   /// </summary>
-   public class BarcodeWriter : BarcodeWriterGeneric<Color32[]>, IBarcodeWriter
-   {
-      /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+      /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.
       /// </summary>
       public BarcodeWriter()
       {
@@ -89,14 +65,15 @@ namespace ZXing
       }
    }
 #endif
-#else
+
+#if SILVERLIGHT
    /// <summary>
    /// A smart class to encode some content to a barcode image
    /// </summary>
-   public class BarcodeWriter : BarcodeWriterGeneric<WriteableBitmap>, IBarcodeWriter
+   public class BarcodeWriter : BarcodeWriterGeneric<System.Windows.Media.Imaging.WriteableBitmap>, IBarcodeWriter
    {
       /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+      /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.
       /// </summary>
       public BarcodeWriter()
       {
@@ -104,5 +81,50 @@ namespace ZXing
       }
    }
 #endif
+
+#if NETFX_CORE
+   /// <summary>
+   /// A smart class to encode some content to a barcode image
+   /// </summary>
+   public class BarcodeWriter : BarcodeWriterGeneric<Windows.UI.Xaml.Media.Imaging.WriteableBitmap>, IBarcodeWriter
+   {
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.
+      /// </summary>
+      public BarcodeWriter()
+      {
+         Renderer = new WriteableBitmapRenderer();
+      }
+   }
 #endif
+
+#if (NET40 || NET35 || NET20 || WindowsCE) && !UNITY
+   /// <summary>
+   /// A smart class to encode some content to a barcode image
+   /// </summary>
+   public class BarcodeWriter : BarcodeWriterGeneric<System.Drawing.Bitmap>, IBarcodeWriter
+   {
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.
+      /// </summary>
+      public BarcodeWriter()
+      {
+         Renderer = new BitmapRenderer();
+      }
+   }
+#endif
+
+   /// <summary>
+   /// A smart class to encode some content to a svg barcode image
+   /// </summary>
+   public class BarcodeWriterSvg : BarcodeWriterGeneric<SvgRenderer.SvgImage>
+   {
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.
+      /// </summary>
+      public BarcodeWriterSvg()
+      {
+         Renderer = new SvgRenderer();
+      }
+   }
 }

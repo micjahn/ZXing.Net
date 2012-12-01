@@ -15,6 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.test", "Source\test\s
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{2D5E0A30-FC6C-493C-A756-D5E889809407}"
 	ProjectSection(SolutionItems) = preProject
+		THANKS = THANKS
 		TODO.txt = TODO.txt
 		zxing.nunit = zxing.nunit
 	EndProjectSection

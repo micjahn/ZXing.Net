@@ -250,6 +250,7 @@
     <Compile Include="ReaderException.cs" />
     <Compile Include="renderer\BitmapRenderer.cs" />
     <Compile Include="renderer\IBarcodeRenderer.cs" />
+    <Compile Include="renderer\SvgRenderer.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="ResultMetadataType.cs" />
     <Compile Include="ResultPoint.cs" />
