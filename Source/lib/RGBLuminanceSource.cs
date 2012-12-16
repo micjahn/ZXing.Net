@@ -37,33 +37,37 @@ namespace ZXing
          /// </summary>
          Gray8,
          /// <summary>
-         /// 3 byte per pixel with the channels red, green and blue
+         /// 3 bytes per pixel with the channels red, green and blue
          /// </summary>
          RGB24,
          /// <summary>
-         /// 4 byte per pixel with the channels red, green and blue
+         /// 4 bytes per pixel with the channels red, green and blue
          /// </summary>
          RGB32,
          /// <summary>
-         /// 4 byte per pixel with the channels alpha, red, green and blue
+         /// 4 bytes per pixel with the channels alpha, red, green and blue
          /// </summary>
          ARGB32,
          /// <summary>
-         /// 3 byte per pixel with the channels blue, green and red
+         /// 3 bytes per pixel with the channels blue, green and red
          /// </summary>
          BGR24,
          /// <summary>
-         /// 4 byte per pixel with the channels blue, green and red
+         /// 4 bytes per pixel with the channels blue, green and red
          /// </summary>
          BGR32,
          /// <summary>
-         /// 4 byte per pixel with the channels blue, green, red and alpha
+         /// 4 bytes per pixel with the channels blue, green, red and alpha
          /// </summary>
          BGRA32,
          /// <summary>
-         /// 2 byte per pixel, 5 bit red, 6 bits green and 5 bits blue
+         /// 2 bytes per pixel, 5 bit red, 6 bits green and 5 bits blue
          /// </summary>
-         RGB565
+         RGB565,
+         /// <summary>
+         /// 4 bytes per pixel with the channels red, green, blue and alpha
+         /// </summary>
+         RGBA32,
       }
 
       /// <summary>
@@ -169,9 +173,14 @@ namespace ZXing
             case BitmapFormat.BGR32:
                CalculateLuminanceRGB32(rgbRawBytes);
                break;
+            case BitmapFormat.RGBA32:
+               CalculateLuminanceRGBA32(rgbRawBytes);
+               break;
             case BitmapFormat.ARGB32:
-            case BitmapFormat.BGRA32:
                CalculateLuminanceARGB32(rgbRawBytes);
+               break;
+            case BitmapFormat.BGRA32:
+               CalculateLuminanceBGRA32(rgbRawBytes);
                break;
             case BitmapFormat.RGB565:
                CalculateLuminanceRGB565(rgbRawBytes);
@@ -231,7 +240,21 @@ namespace ZXing
          }
       }
 
-      private void CalculateLuminanceARGB32(byte[] rgbRawBytes)
+      private void CalculateLuminanceBGRA32(byte[] rgbRawBytes)
+      {
+         for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length && luminanceIndex < luminances.Length; luminanceIndex++)
+         {
+            // Calculate luminance cheaply, favoring green.
+            var b = rgbRawBytes[rgbIndex++];
+            var g = rgbRawBytes[rgbIndex++];
+            var r = rgbRawBytes[rgbIndex++];
+            var alpha = rgbRawBytes[rgbIndex++];
+            var luminance = (byte)((r + g + g + b) >> 2);
+            luminances[luminanceIndex] = (byte)(((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8));
+         }
+      }
+
+      private void CalculateLuminanceRGBA32(byte[] rgbRawBytes)
       {
          for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length && luminanceIndex < luminances.Length; luminanceIndex++)
          {
@@ -240,6 +263,20 @@ namespace ZXing
             var g = rgbRawBytes[rgbIndex++];
             var b = rgbRawBytes[rgbIndex++];
             var alpha = rgbRawBytes[rgbIndex++];
+            var luminance = (byte)((r + g + g + b) >> 2);
+            luminances[luminanceIndex] = (byte)(((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8));
+         }
+      }
+
+      private void CalculateLuminanceARGB32(byte[] rgbRawBytes)
+      {
+         for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length && luminanceIndex < luminances.Length; luminanceIndex++)
+         {
+            // Calculate luminance cheaply, favoring green.
+            var alpha = rgbRawBytes[rgbIndex++];
+            var r = rgbRawBytes[rgbIndex++];
+            var g = rgbRawBytes[rgbIndex++];
+            var b = rgbRawBytes[rgbIndex++];
             var luminance = (byte)((r + g + g + b) >> 2);
             luminances[luminanceIndex] = (byte)(((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8));
          }
