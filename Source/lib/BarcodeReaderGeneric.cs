@@ -302,12 +302,8 @@ namespace ZXing
 #endif
          Func<LuminanceSource, Binarizer> createBinarizer
          )
+         : this(reader, createLuminanceSource, createBinarizer, null)
       {
-         this.reader = reader ?? new MultiFormatReader();
-         this.createLuminanceSource = createLuminanceSource;
-         this.createBinarizer = createBinarizer ?? defaultCreateBinarizer;
-         hints = new Dictionary<DecodeHintType, object>();
-         usePreviousState = false;
       }
 
       /// <summary>
