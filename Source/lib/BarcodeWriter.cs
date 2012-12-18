@@ -98,7 +98,7 @@ namespace ZXing
    }
 #endif
 
-#if (NET40 || NET35 || NET20 || WindowsCE) && !UNITY
+#if (NET45 || NET40 || NET35 || NET20 || WindowsCE) && !UNITY
    /// <summary>
    /// A smart class to encode some content to a barcode image
    /// </summary>
