@@ -20,7 +20,7 @@ using System.Text;
 using System.IO;
 
 #if NETFX_CORE
-using Windows.UI.Xaml.Media;
+using Windows.UI;
 #elif SILVERLIGHT
 using System.Windows.Media;
 #elif UNITY
