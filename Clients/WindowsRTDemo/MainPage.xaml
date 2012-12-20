@@ -1,0 +1,16 @@
+﻿<Page
+    x:Class="WindowsRT.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+        <Canvas Width="640" Height="360">
+            <CaptureElement x:Name="VideoCapture" Width="640" Height="360" />
+            <Image x:Name="CaptureImage" Width="640" Height="360" Visibility="Collapsed" />
+        </Canvas>
+        <TextBlock x:Name="ScanResult" VerticalAlignment="Bottom" FontSize="32" Width="640" TextAlignment="Center" />
+    </Grid>
+</Page>
