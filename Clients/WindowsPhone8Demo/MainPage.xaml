@@ -1,0 +1,59 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="WindowsPhone8Demo.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+   <!--LayoutRoot ist das Stammraster, in dem alle anderen Seiteninhalte platziert werden-->
+   <Grid x:Name="LayoutRoot" Background="Transparent">
+      <Grid.ColumnDefinitions>
+         <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+
+      <StackPanel Grid.Column="1" >
+         <TextBlock x:Name="Header" Text="Barcode Scanner" FontSize="26" FontWeight="ExtraBold" />
+         <Image x:Name="BarcodeImage" Width="470" Height="300"/>
+         <Rectangle x:Name="previewRect" 
+                    Margin="0" 
+                    Height="300"
+                    Width="300" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center"
+                    Visibility="Collapsed">
+            <Rectangle.Fill>
+               <VideoBrush x:Name="previewVideo">
+                  <VideoBrush.RelativeTransform>
+                     <CompositeTransform  
+                        x:Name="previewTransform" CenterX=".5" CenterY=".5" />
+                  </VideoBrush.RelativeTransform>
+               </VideoBrush>
+            </Rectangle.Fill>
+         </Rectangle>
+         <Grid x:Name="LayoutButtons" Background="Transparent">
+            <Grid.ColumnDefinitions>
+               <ColumnDefinition Width="*" />
+               <ColumnDefinition Width="*" />
+               <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button x:Name="OpenImageButton" Content="Open" Click="OpenImageButton_Click" FontSize="26" FontWeight="ExtraBold" Height="75" />
+            <Button x:Name="CameraButton" Content="Camera" Click="CameraButton_Click" FontSize="26" FontWeight="ExtraBold" Height="75" Grid.Column="2" />
+            <Button x:Name="GenerateButton" Content="Generate" Height="71" Width="160" Grid.Column="1" Margin="0,2" Click="GenerateButton_Click" />
+         </Grid>
+         <TextBlock x:Name="BarcodeTypeLabel" Text="Barcode Type" FontSize="26" FontWeight="ExtraBold" />
+         <ListBox Height="100" Name="BarcodeType" Width="460" />
+         <TextBlock x:Name="BarcodeTypeContent" Text="Barcode Content" FontSize="26" FontWeight="ExtraBold" />
+         <TextBox x:Name="BarcodeContent" FontSize="26" MinHeight="200" TextWrapping="Wrap" />
+      </StackPanel>
+
+   </Grid>
+
+</phone:PhoneApplicationPage>
