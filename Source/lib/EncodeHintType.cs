@@ -78,5 +78,16 @@ namespace ZXing
       /// type: <see cref="ZXing.PDF417.Internal.Dimensions" />
       /// </summary>
       PDF417_DIMENSIONS,
+
+      /// <summary>
+      /// Don't append ECI segment.
+      /// That is against the specification of QR Code but some
+      /// readers have problems if the charset is switched from
+      /// ISO-8859-1 (default) to UTF-8 with the necessary ECI segment.
+      /// If you set the property to true you can use UTF-8 encoding
+      /// and the ECI segment is omitted.
+      /// type: <see cref="System.Boolean" />
+      /// </summary>
+      DISABLE_ECI,
    }
 }

@@ -82,5 +82,29 @@ namespace ZXing.QrCode
             }
          }
       }
+
+      /// <summary>
+      /// Explicitly disables ECI segment when generating QR Code
+      /// That is against the specification of QR Code but some
+      /// readers have problems if the charset is switched from
+      /// ISO-8859-1 (default) to UTF-8 with the necessary ECI segment.
+      /// If you set the property to true you can use UTF-8 encoding
+      /// and the ECI segment is omitted.
+      /// </summary>
+      public bool DisableECI
+      {
+         get
+         {
+            if (Hints.ContainsKey(EncodeHintType.DISABLE_ECI))
+            {
+               return (bool)Hints[EncodeHintType.DISABLE_ECI];
+            }
+            return false;
+         }
+         set
+         {
+            Hints[EncodeHintType.DISABLE_ECI] = value;
+         }
+      }
    }
 }
