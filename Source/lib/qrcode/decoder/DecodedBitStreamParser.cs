@@ -203,7 +203,7 @@ namespace ZXing.QrCode.Internal
          {
             result.Append(Encoding.GetEncoding(StringUtils.GB2312).GetString(buffer, 0, buffer.Length));
          }
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE)
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || MONOANDROID || MONOTOUCH)
          catch (ArgumentException)
          {
             try
@@ -264,7 +264,7 @@ namespace ZXing.QrCode.Internal
          {
             result.Append(Encoding.GetEncoding(StringUtils.SHIFT_JIS).GetString(buffer, 0, buffer.Length));
          }
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE)
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || MONOANDROID || MONOTOUCH)
          catch (ArgumentException)
          {
             try
@@ -321,7 +321,7 @@ namespace ZXing.QrCode.Internal
          {
             result.Append(Encoding.GetEncoding(encoding).GetString(readBytes, 0, readBytes.Length));
          }
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE)
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || MONOANDROID || MONOTOUCH)
          catch (ArgumentException)
          {
             try
