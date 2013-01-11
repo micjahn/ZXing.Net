@@ -6,11 +6,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
-        <Canvas Width="640" Height="360">
-            <CaptureElement x:Name="VideoCapture" Width="640" Height="360" />
-            <Image x:Name="CaptureImage" Width="640" Height="360" Visibility="Collapsed" />
-        </Canvas>
-        <TextBlock x:Name="ScanResult" VerticalAlignment="Bottom" FontSize="32" Width="640" TextAlignment="Center" />
-    </Grid>
+   <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+      <Canvas Width="640" Height="360">
+         <CaptureElement x:Name="VideoCapture" Width="640" Height="360" />
+         <Image x:Name="CaptureImage" Width="640" Height="360" Visibility="Collapsed" />
+      </Canvas>
+      <TextBlock x:Name="Error" VerticalAlignment="Bottom" FontSize="32" Width="640" TextAlignment="Center" Margin="363,0,363,37" />
+      <TextBlock x:Name="ScanResult" VerticalAlignment="Bottom" TextAlignment="Center" FontSize="32" Width="640"/>
+   </Grid>
 </Page>

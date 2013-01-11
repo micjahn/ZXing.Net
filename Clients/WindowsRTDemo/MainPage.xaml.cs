@@ -28,10 +28,19 @@ namespace WindowsRT
             var cameras = await DeviceInformation.FindAllAsync(DeviceClass.VideoCapture);
             if (cameras.Count < 1)
             {
-               ScanResult.Text = "No camera found";
+               Error.Text = "No camera found, decoding static image";
+               await DecodeStaticResource();
                return;
             }
-            var settings = new MediaCaptureInitializationSettings { VideoDeviceId = cameras[1].Id }; // 0 => front, 1 => back
+            MediaCaptureInitializationSettings settings;
+            if (String.IsNullOrEmpty(cameras[1].Id))
+            {
+               settings = new MediaCaptureInitializationSettings { VideoDeviceId = cameras[0].Id }; // 0 => front, 1 => back
+            }
+            else
+            {
+               settings = new MediaCaptureInitializationSettings { VideoDeviceId = cameras[1].Id }; // 0 => front, 1 => back
+            }
 
             await _mediaCapture.InitializeAsync(settings);
             VideoCapture.Source = _mediaCapture;
@@ -42,20 +51,17 @@ namespace WindowsRT
                var photoStorageFile = await KnownFolders.PicturesLibrary.CreateFileAsync("scan.jpg", CreationCollisionOption.GenerateUniqueName);
                await _mediaCapture.CapturePhotoToStorageFileAsync(ImageEncodingProperties.CreateJpeg(), photoStorageFile);
 
-               var writeableBmp = new WriteableBitmap(640, 360);
-               writeableBmp.SetSource(await photoStorageFile.OpenReadAsync());
+               var stream = await photoStorageFile.OpenReadAsync();
+               // initialize with 1,1 to get the current size of the image
+               var writeableBmp = new WriteableBitmap(1, 1);
+               writeableBmp.SetSource(stream);
+               // and create it again because otherwise the WB isn't fully initialized and decoding
+               // results in a IndexOutOfRange
+               writeableBmp = new WriteableBitmap(writeableBmp.PixelWidth, writeableBmp.PixelHeight);
+               stream.Seek(0);
+               writeableBmp.SetSource(stream);
 
-               var barcodeReader = new BarcodeReader
-               {
-                  TryHarder = true,
-                  AutoRotate = true
-               };
-               _result = barcodeReader.Decode(writeableBmp);
-
-               if (_result != null)
-               {
-                  CaptureImage.Source = writeableBmp;
-               }
+               _result = ScanBitmap(writeableBmp);
 
                await photoStorageFile.DeleteAsync(StorageDeleteOption.PermanentDelete);
             }
@@ -67,8 +73,49 @@ namespace WindowsRT
          }
          catch (Exception ex)
          {
-            ScanResult.Text = ex.Message;
+            Error.Text = ex.Message;
          }
+      }
+
+      private async System.Threading.Tasks.Task DecodeStaticResource()
+      {
+         var file = await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFileAsync(@"Assets\1.jpg");
+         var stream = await file.OpenReadAsync();
+         // initialize with 1,1 to get the current size of the image
+         var writeableBmp = new WriteableBitmap(1, 1);
+         writeableBmp.SetSource(stream);
+         // and create it again because otherwise the WB isn't fully initialized and decoding
+         // results in a IndexOutOfRange
+         writeableBmp = new WriteableBitmap(writeableBmp.PixelWidth, writeableBmp.PixelHeight);
+         stream.Seek(0);
+         writeableBmp.SetSource(stream);
+         CaptureImage.Source = writeableBmp;
+         VideoCapture.Visibility = Visibility.Collapsed;
+         CaptureImage.Visibility = Visibility.Visible;
+
+         _result = ScanBitmap(writeableBmp);
+         if (_result != null)
+         {
+            ScanResult.Text += _result.Text;
+         }
+         return;
+      }
+
+      private Result ScanBitmap(WriteableBitmap writeableBmp)
+      {
+         var barcodeReader = new BarcodeReader
+         {
+            TryHarder = true,
+            AutoRotate = true
+         };
+         var result = barcodeReader.Decode(writeableBmp);
+
+         if (result != null)
+         {
+            CaptureImage.Source = writeableBmp;
+         }
+
+         return result;
       }
 
       protected override async void OnNavigatingFrom(NavigatingCancelEventArgs e)
