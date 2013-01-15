@@ -49,6 +49,7 @@ namespace ZXing
                            {BarcodeFormat.ITF, () => new ITFWriter()},
                            {BarcodeFormat.PDF_417, () => new PDF417Writer()},
                            {BarcodeFormat.CODABAR, () => new CodaBarWriter()},
+                           {BarcodeFormat.MSI, () => new MSIWriter()},
                         };
       }
 
