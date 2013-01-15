@@ -33,7 +33,7 @@ namespace WindowsRT
                return;
             }
             MediaCaptureInitializationSettings settings;
-            if (String.IsNullOrEmpty(cameras[1].Id))
+            if (cameras.Count == 1)
             {
                settings = new MediaCaptureInitializationSettings { VideoDeviceId = cameras[0].Id }; // 0 => front, 1 => back
             }
