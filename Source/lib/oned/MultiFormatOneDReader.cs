@@ -49,10 +49,16 @@ namespace ZXing.OneD
             {
                readers.Add(new MultiFormatUPCEANReader(hints));
             }
+            if (possibleFormats.Contains(BarcodeFormat.MSI) || possibleFormats.Contains(BarcodeFormat.All_1D))
+            {
+               bool useMsiCheckDigit = hints.ContainsKey(DecodeHintType.ASSUME_MSI_CHECK_DIGIT) &&
+                                       hints[DecodeHintType.ASSUME_MSI_CHECK_DIGIT] != null;
+               readers.Add(new MSIReader(useMsiCheckDigit));
+            }
             if (possibleFormats.Contains(BarcodeFormat.CODE_39) || possibleFormats.Contains(BarcodeFormat.All_1D))
             {
                bool useCode39CheckDigit = hints.ContainsKey(DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT) &&
-                   hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != null;
+                                          hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != null;
                readers.Add(new Code39Reader(useCode39CheckDigit));
             }
             if (possibleFormats.Contains(BarcodeFormat.CODE_93) || possibleFormats.Contains(BarcodeFormat.All_1D))
@@ -83,10 +89,13 @@ namespace ZXing.OneD
          if (readers.Count == 0)
          {
             bool useCode39CheckDigit = hints != null && hints.ContainsKey(DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT) &&
-                hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != null;
+                                       hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != null;
+            bool useMsiCheckDigit = hints != null && hints.ContainsKey(DecodeHintType.ASSUME_MSI_CHECK_DIGIT) &&
+                                    hints[DecodeHintType.ASSUME_MSI_CHECK_DIGIT] != null;
 
             readers.Add(new MultiFormatUPCEANReader(hints));
-            readers.Add(new Code39Reader(useCode39CheckDigit));
+            readers.Add(new MSIReader(useMsiCheckDigit));
+            readers.Add(new Code39Reader(useCode39CheckDigit, true));
             readers.Add(new CodaBarReader());
             readers.Add(new Code93Reader());
             readers.Add(new Code128Reader());

@@ -221,7 +221,24 @@ namespace ZXing.OneD
                                           int start,
                                           int[] counters)
       {
-         int numCounters = counters.Length;
+         return recordPattern(row, start, counters, counters.Length);
+      }
+
+      /// <summary>
+      /// Records the size of successive runs of white and black pixels in a row, starting at a given point.
+      /// The values are recorded in the given array, and the number of runs recorded is equal to the size
+      /// of the array. If the row starts on a white pixel at the given start point, then the first count
+      /// recorded is the run of white pixels starting from that point; likewise it is the count of a run
+      /// of black pixels if the row begin on a black pixels at that point.
+      /// </summary>
+      /// <param name="row">row to count from</param>
+      /// <param name="start">offset into row to start at</param>
+      /// <param name="counters">array into which to record counts</param>
+      protected static bool recordPattern(BitArray row,
+                                          int start,
+                                          int[] counters,
+                                          int numCounters)
+      {
          for (int idx = 0; idx < numCounters; idx++)
          {
             counters[idx] = 0;

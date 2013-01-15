@@ -167,6 +167,7 @@
     <Compile Include="oned\EANManufacturerOrgSupport.cs" />
     <Compile Include="oned\ITFReader.cs" />
     <Compile Include="oned\ITFWriter.cs" />
+    <Compile Include="oned\MSIReader.cs" />
     <Compile Include="oned\MultiFormatOneDReader.cs" />
     <Compile Include="oned\MultiFormatUPCEANReader.cs" />
     <Compile Include="oned\OneDimensionalCodeWriter.cs" />

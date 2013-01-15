@@ -71,5 +71,10 @@ namespace ZXing
       /// is found. Maps to a <see cref="ResultPointCallback" />.
       /// </summary>
       NEED_RESULT_POINT_CALLBACK,
+
+      /// <summary>
+      /// Assume MSI codes employ a check digit. Maps to <see cref="bool" />.
+      /// </summary>
+      ASSUME_MSI_CHECK_DIGIT,
    }
 }
