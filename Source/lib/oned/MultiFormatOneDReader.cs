@@ -51,8 +51,9 @@ namespace ZXing.OneD
             }
             if (possibleFormats.Contains(BarcodeFormat.MSI) || possibleFormats.Contains(BarcodeFormat.All_1D))
             {
-               bool useMsiCheckDigit = hints.ContainsKey(DecodeHintType.ASSUME_MSI_CHECK_DIGIT) &&
-                                       hints[DecodeHintType.ASSUME_MSI_CHECK_DIGIT] != null;
+               bool useMsiCheckDigit = (hints.ContainsKey(DecodeHintType.ASSUME_MSI_CHECK_DIGIT)
+                                          ? (bool)hints[DecodeHintType.ASSUME_MSI_CHECK_DIGIT]
+                                          : false);
                readers.Add(new MSIReader(useMsiCheckDigit));
             }
             if (possibleFormats.Contains(BarcodeFormat.CODE_39) || possibleFormats.Contains(BarcodeFormat.All_1D))
@@ -90,8 +91,9 @@ namespace ZXing.OneD
          {
             bool useCode39CheckDigit = hints != null && hints.ContainsKey(DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT) &&
                                        hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != null;
-            bool useMsiCheckDigit = hints != null && hints.ContainsKey(DecodeHintType.ASSUME_MSI_CHECK_DIGIT) &&
-                                    hints[DecodeHintType.ASSUME_MSI_CHECK_DIGIT] != null;
+            bool useMsiCheckDigit = ((hints != null && hints.ContainsKey(DecodeHintType.ASSUME_MSI_CHECK_DIGIT))
+                                          ? (bool)hints[DecodeHintType.ASSUME_MSI_CHECK_DIGIT]
+                                          : false);
 
             readers.Add(new MultiFormatUPCEANReader(hints));
             readers.Add(new MSIReader(useMsiCheckDigit));

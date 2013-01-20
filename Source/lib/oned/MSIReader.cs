@@ -125,7 +125,10 @@ namespace ZXing.OneD
             // Read off white space
             nextStart = row.getNextSet(nextStart);
          } while (decodedChar != '*');
-         if (decodeRowResult.Length < 1)
+         
+         // at least 3 digits to prevent false positives within other kind
+         // of codes like PDF417
+         if (decodeRowResult.Length < 3)
          {
             return null;
          }
@@ -135,10 +138,6 @@ namespace ZXing.OneD
 
          if (usingCheckDigit)
          {
-            if (decodeRowResult.Length < 2)
-            {
-               return null;
-            }
             var resultStringWithoutChecksum = resultString.Substring(0, resultString.Length - 1);
             int checkSum = CalculateChecksumLuhn(resultStringWithoutChecksum);
             if ((char)(checkSum + 48) != resultString[resultStringWithoutChecksum.Length])
@@ -193,13 +192,19 @@ namespace ZXing.OneD
             {
                if (counterPosition == patternLength - 1)
                {
-                  calculateAverageCounterWidth(counters, patternLength);
-                  if (toPattern(counters, patternLength) == START_ENCODING)
+                  // narrow and wide areas should be as near as possible to factor 2
+                  // lets say we will check 1.5 <= factor <= 5
+                  var factorNarrowToWide = ((float)counters[0]) / ((float)counters[1]);
+                  if (factorNarrowToWide >= 1.5 && factorNarrowToWide <= 5)
                   {
-                     // Look for whitespace before start pattern, >= 50% of width of start pattern
-                     if (row.isRange(Math.Max(0, patternStart - ((i - patternStart) >> 1)), patternStart, false))
+                     calculateAverageCounterWidth(counters, patternLength);
+                     if (toPattern(counters, patternLength) == START_ENCODING)
                      {
-                        return new int[] { patternStart, i };
+                        // Look for whitespace before start pattern, >= 50% of width of start pattern
+                        if (row.isRange(Math.Max(0, patternStart - ((i - patternStart) >> 1)), patternStart, false))
+                        {
+                           return new int[] {patternStart, i};
+                        }
                      }
                   }
                   patternStart += counters[0] + counters[1];
@@ -242,13 +247,17 @@ namespace ZXing.OneD
             {
                if (counterPosition == patternLength - 1)
                {
-                  if (toPattern(counters, patternLength) == END_ENCODING)
+                  var factorNarrowToWide = ((float)counters[1]) / ((float)counters[0]);
+                  if (factorNarrowToWide >= 1.5 && factorNarrowToWide <= 5)
                   {
-                     // Look for whitespace after end pattern, >= 50% of width of end pattern
-                     var minEndOfWhite = Math.Min(row.Size - 1, i + ((i - patternStart) >> 1));
-                     if (row.isRange(i, minEndOfWhite, false))
+                     if (toPattern(counters, patternLength) == END_ENCODING)
                      {
-                        return new int[] { patternStart, i };
+                        // Look for whitespace after end pattern, >= 50% of width of end pattern
+                        var minEndOfWhite = Math.Min(row.Size - 1, i + ((i - patternStart) >> 1));
+                        if (row.isRange(i, minEndOfWhite, false))
+                        {
+                           return new int[] {patternStart, i};
+                        }
                      }
                   }
                   return null;
