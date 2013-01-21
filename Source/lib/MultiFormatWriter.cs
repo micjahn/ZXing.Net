@@ -50,6 +50,7 @@ namespace ZXing
                            {BarcodeFormat.PDF_417, () => new PDF417Writer()},
                            {BarcodeFormat.CODABAR, () => new CodaBarWriter()},
                            {BarcodeFormat.MSI, () => new MSIWriter()},
+                           {BarcodeFormat.Plessey, () => new PlesseyWriter()},
                         };
       }
 

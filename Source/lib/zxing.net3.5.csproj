@@ -168,6 +168,7 @@
     <Compile Include="oned\MultiFormatUPCEANReader.cs" />
     <Compile Include="oned\OneDimensionalCodeWriter.cs" />
     <Compile Include="oned\OneDReader.cs" />
+    <Compile Include="oned\PlesseyWriter.cs" />
     <Compile Include="oned\rss\AbstractRSSReader.cs" />
     <Compile Include="oned\rss\DataCharacter.cs" />
     <Compile Include="oned\rss\expanded\BitArrayBuilder.cs" />

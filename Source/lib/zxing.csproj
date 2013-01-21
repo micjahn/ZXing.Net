@@ -198,6 +198,7 @@
     <Compile Include="IBarcodeReaderGeneric.cs" />
     <Compile Include="oned\MSIReader.cs" />
     <Compile Include="oned\MSIWriter.cs" />
+    <Compile Include="oned\PlesseyWriter.cs" />
     <Compile Include="oned\rss\expanded\ExpandedRow.cs" />
     <Compile Include="pdf417\encoder\PDF417EncodingOptions.cs" />
     <Compile Include="qrcode\encoder\QrCodeEncodingOptions.cs" />
