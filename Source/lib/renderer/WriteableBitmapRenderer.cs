@@ -130,7 +130,8 @@ namespace ZXing.Rendering
       {
          int width = matrix.Width;
          int height = matrix.Height;
-         bool outputContent = !options.PureBarcode && !String.IsNullOrEmpty(content) && (format == BarcodeFormat.CODE_39 ||
+         bool outputContent = (options == null || !options.PureBarcode) &&
+                              !String.IsNullOrEmpty(content) && (format == BarcodeFormat.CODE_39 ||
                                                                  format == BarcodeFormat.CODE_128 ||
                                                                  format == BarcodeFormat.EAN_13 ||
                                                                  format == BarcodeFormat.EAN_8 ||
