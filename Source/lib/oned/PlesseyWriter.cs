@@ -49,6 +49,9 @@ namespace ZXing.OneD
                                                            new[] { 5, 20, 14, 11, 14, 11, 14, 11 },  // E / 14
                                                            new[] { 14, 11, 14, 11, 14, 11, 14, 11 }, // F / 15
                                                         };
+      private static readonly byte[] crcGrid = new byte[] { 1, 1, 1, 1, 0, 1, 0, 0, 1 };
+      private static readonly int[] crc0Widths = new[] {5, 20};
+      private static readonly int[] crc1Widths = new[] {14, 11};
 
       /// <summary>
       /// Encode the contents following specified format.
@@ -93,17 +96,53 @@ namespace ZXing.OneD
                throw new ArgumentException("Requested contents contains a not encodable character: '" + contents[i] + "'");
          }
 
-         var codeWidth = 100 + 100 + length * 100 + 25 + 100 + 100;
+         // quiet zone + start pattern + data + crc + termination bar + end pattern + quiet zone
+         var codeWidth = 100 + 100 + length * 100 + 25 * 8 + 25 + 100 + 100;
          var result = new bool[codeWidth];
+         var crcBuffer = new byte[4*length + 8];
+         var crcBufferPos = 0;
          var pos = 100;
+         // start pattern
          pos += appendPattern(result, pos, startWidths, true);
+         // data
          for (var i = 0; i < length; i++)
          {
             var indexInString = ALPHABET_STRING.IndexOf(contents[i]);
             var widths = numberWidths[indexInString];
             pos += appendPattern(result, pos, widths, true);
+            // remember the position number for crc calculation
+            crcBuffer[crcBufferPos++] = (byte)(indexInString & 1);
+            crcBuffer[crcBufferPos++] = (byte)((indexInString >> 1) & 1);
+            crcBuffer[crcBufferPos++] = (byte)((indexInString >> 2) & 1);
+            crcBuffer[crcBufferPos++] = (byte)((indexInString >> 3) & 1);
          }
+         // CRC calculation
+         for (var i = 0; i < (4 * length); i++)
+         {
+            if (crcBuffer[i] != 0)
+            {
+               for (var j = 0; j < 9; j++)
+               {
+                  crcBuffer[i + j] ^= crcGrid[j];
+               }
+            }
+         }
+         // append CRC pattern
+         for (var i = 0; i < 8; i++)
+         {
+            switch (crcBuffer[length * 4 + i])
+            {
+               case 0:
+                  pos += appendPattern(result, pos, crc0Widths, true);
+                  break;
+               case 1:
+                  pos += appendPattern(result, pos, crc1Widths, true);
+                  break;
+            }
+         }
+         // termination bar
          pos += appendPattern(result, pos, terminationWidths, true);
+         // end pattern
          appendPattern(result, pos, endWidths, false);
          return result;
       }
