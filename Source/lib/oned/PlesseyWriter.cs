@@ -69,7 +69,7 @@ namespace ZXing.OneD
                               int height,
                               IDictionary<EncodeHintType, object> hints)
       {
-         if (format != BarcodeFormat.Plessey)
+         if (format != BarcodeFormat.PLESSEY)
          {
             throw new ArgumentException("Can only encode Plessey, but got " + format);
          }
@@ -95,7 +95,8 @@ namespace ZXing.OneD
 
          var codeWidth = 100 + 100 + length * 100 + 25 + 100 + 100;
          var result = new bool[codeWidth];
-         var pos = appendPattern(result, 100, startWidths, true);
+         var pos = 100;
+         pos += appendPattern(result, pos, startWidths, true);
          for (var i = 0; i < length; i++)
          {
             var indexInString = ALPHABET_STRING.IndexOf(contents[i]);

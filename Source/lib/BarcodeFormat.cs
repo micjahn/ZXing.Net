@@ -78,7 +78,7 @@ namespace ZXing
       MSI = 131072,
 
       /// <summary>Plessey</summary>
-      Plessey = 262144,
+      PLESSEY = 262144,
 
       /// <summary>
       /// UPC_A | UPC_E | EAN_13 | EAN_8 | CODABAR | CODE_39 | CODE_93 | CODE_128 | ITF | RSS_14 | RSS_EXPANDED
