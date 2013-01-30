@@ -37,6 +37,11 @@ namespace ZXing.Test
          using (var deflateStream = new GZipStream(stream, CompressionMode.Decompress, true))
          using (var reader = new StreamReader(deflateStream))
             samplePicRelResult = reader.ReadToEnd();
+
+         using (var stream = File.OpenRead(cropSamplePicRelResultPath))
+         using (var deflateStream = new GZipStream(stream, CompressionMode.Decompress, true))
+         using (var reader = new StreamReader(deflateStream))
+            cropSamplePicRelResult = reader.ReadToEnd();
       }
 
       [Test]
@@ -76,6 +81,20 @@ namespace ZXing.Test
          var rgbLuminanceSource = new BitmapSourceLuminanceSource(bitmapImage);
 
          Assert.AreEqual(rgbLuminanceSource.ToString(), rgb565LuminanceSource.ToString());
+      }
+
+      private const string cropSamplePicRelPath = @"../../../Source/test/data/luminance/crop_sample.png";
+      private const string cropSamplePicRelResultPath = @"../../../Source/test/data/luminance/crop_sample.txt.gz";
+      private string cropSamplePicRelResult;
+
+      [Test]
+      public void Should_Support_Cropping()
+      {
+         BitmapSource bitmapImage = new BitmapImage(new Uri(cropSamplePicRelPath, UriKind.RelativeOrAbsolute));
+         var rgbLuminanceSource = new BitmapSourceLuminanceSource(bitmapImage);
+         var croppedImage = rgbLuminanceSource.crop(0, 0, rgbLuminanceSource.Width / 2, rgbLuminanceSource.Height/5);
+         var result = croppedImage.ToString();
+         Assert.AreEqual(cropSamplePicRelResult, result);
       }
    }
 }
