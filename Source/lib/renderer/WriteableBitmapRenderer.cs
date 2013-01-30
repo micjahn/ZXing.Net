@@ -137,7 +137,9 @@ namespace ZXing.Rendering
                                                                  format == BarcodeFormat.EAN_8 ||
                                                                  format == BarcodeFormat.CODABAR ||
                                                                  format == BarcodeFormat.ITF ||
-                                                                 format == BarcodeFormat.UPC_A);
+                                                                 format == BarcodeFormat.UPC_A ||
+                                                                 format == BarcodeFormat.MSI ||
+                                                                 format == BarcodeFormat.PLESSEY);
          int emptyArea = outputContent ? 16 : 0;
 
 #if NETFX_CORE
