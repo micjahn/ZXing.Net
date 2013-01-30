@@ -93,7 +93,7 @@ namespace ZXing.OneD
                                        hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != null;
             bool useMsiCheckDigit = ((hints != null && hints.ContainsKey(DecodeHintType.ASSUME_MSI_CHECK_DIGIT))
                                           ? (bool)hints[DecodeHintType.ASSUME_MSI_CHECK_DIGIT]
-                                          : false);
+                                          : true);
 
             readers.Add(new MultiFormatUPCEANReader(hints));
             readers.Add(new MSIReader(useMsiCheckDigit));
