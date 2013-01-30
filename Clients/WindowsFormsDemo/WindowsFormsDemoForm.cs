@@ -23,6 +23,7 @@ using System.Windows.Forms;
 
 using ZXing;
 using ZXing.Common;
+using ZXing.Rendering;
 
 namespace WindowsFormsDemo
 {
@@ -175,14 +176,14 @@ namespace WindowsFormsDemo
          try
          {
             var writer = new BarcodeWriter
-                            {
-                               Format = (BarcodeFormat) cmbEncoderType.SelectedItem,
-                               Options = EncodingOptions ?? new EncodingOptions
-                                  {
-                                     Height = picEncodedBarCode.Height,
-                                     Width = picEncodedBarCode.Width
-                                  }
-                            };
+            {
+               Format = (BarcodeFormat)cmbEncoderType.SelectedItem,
+               Options = EncodingOptions ?? new EncodingOptions
+               {
+                  Height = picEncodedBarCode.Height,
+                  Width = picEncodedBarCode.Width
+               }
+            };
             picEncodedBarCode.Image = writer.Write(txtEncoderContent.Text);
          }
          catch (Exception exc)
@@ -199,13 +200,45 @@ namespace WindowsFormsDemo
             using (var dlg = new SaveFileDialog())
             {
                dlg.DefaultExt = "png";
-               dlg.Filter = "PNG Files (*.png)|*.png|All Files (*.*)|*.*";
+               dlg.Filter = "PNG Files (*.png)|*.png|SVG Files (*.svg)|*.svg|BMP Files (*.bmp)|*.bmp|TIFF Files (*.tif)|*.tif|JPG Files (*.jpg)|*.jpg|All Files (*.*)|*.*";
                if (dlg.ShowDialog(this) != DialogResult.OK)
                   return;
                fileName = dlg.FileName;
             }
-            var bmp = (Bitmap) picEncodedBarCode.Image;
-            bmp.Save(fileName, ImageFormat.Png);
+            var extension = Path.GetExtension(fileName).ToLower();
+            var bmp = (Bitmap)picEncodedBarCode.Image;
+            switch (extension)
+            {
+               case ".bmp":
+                  bmp.Save(fileName, ImageFormat.Bmp);
+                  break;
+               case ".jpeg":
+               case ".jpg":
+                  bmp.Save(fileName, ImageFormat.Jpeg);
+                  break;
+               case ".tiff":
+               case ".tif":
+                  bmp.Save(fileName, ImageFormat.Tiff);
+                  break;
+               case ".svg":
+                  {
+                     var writer = new BarcodeWriterSvg
+                                     {
+                                        Format = (BarcodeFormat) cmbEncoderType.SelectedItem,
+                                        Options = EncodingOptions ?? new EncodingOptions
+                                                                        {
+                                                                           Height = picEncodedBarCode.Height,
+                                                                           Width = picEncodedBarCode.Width
+                                                                        }
+                                     };
+                     var svgImage = writer.Write(txtEncoderContent.Text);
+                     File.WriteAllText(fileName, svgImage.Content, System.Text.Encoding.UTF8);
+                  }
+                  break;
+               default:
+                  bmp.Save(fileName, ImageFormat.Png);
+                  break;
+            }
          }
       }
 
