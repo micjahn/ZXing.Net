@@ -127,7 +127,15 @@ namespace WindowsPhoneDemo
          if (timer == null)
          {
             timer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(500)};
-            timer.Tick += (o, arg) => ScanPreviewBuffer();
+            if (photoCamera.IsFocusSupported)
+            {
+               photoCamera.AutoFocusCompleted += (o, arg) => { if (arg.Succeeded) ScanPreviewBuffer(); };
+               timer.Tick += (o, arg) => { try { photoCamera.Focus(); } catch (Exception ) { } };
+            }
+            else
+            {
+               timer.Tick += (o, arg) => ScanPreviewBuffer();
+            }
          }
 
          BarcodeImage.Visibility = System.Windows.Visibility.Collapsed;
@@ -139,12 +147,12 @@ namespace WindowsPhoneDemo
       {
          base.OnNavigatedFrom(e);
 
-         photoCamera = null;
          if (timer != null)
          {
             timer.Stop();
             timer = null;
          }
+         photoCamera = null;
       }
 
       private void OnPhotoCameraInitialized(object sender, CameraOperationCompletedEventArgs e)
