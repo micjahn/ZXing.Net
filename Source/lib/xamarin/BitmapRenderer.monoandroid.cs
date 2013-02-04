@@ -75,11 +75,11 @@ namespace ZXing.Rendering
          var fColor = Foreground.ToArgb();
          var bColor = Background.ToArgb();
 
-         for (var x = 0; x < width; x++)
+         for (var y = 0; y < height; y++)
          {
-            for (var y = 0; y < height; y++)
+            for (var x = 0; x < width; x++)
             {
-               pixels[outputIndex] = matrix[y, x] ? fColor : bColor;
+               pixels[outputIndex] = matrix[x, y] ? fColor : bColor;
                outputIndex++;
             }
          }
