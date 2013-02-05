@@ -40,7 +40,14 @@ namespace ZXing
          var pixelBytes = new byte[pixels.Length * 4];
          Buffer.BlockCopy(pixels, 0, pixelBytes, 0, pixelBytes.Length);
          // calculating the luminance values the same way as RGBLuminanceSource
-         CalculateLuminance(pixelBytes, BitmapFormat.RGB32);
+         if (bitmap.HasAlpha)
+         {
+            CalculateLuminance(pixelBytes, BitmapFormat.RGBA32);
+         }
+         else
+         {
+            CalculateLuminance(pixelBytes, BitmapFormat.RGB32);
+         }
       }
 
       /// <summary>
