@@ -37,6 +37,8 @@ namespace ZXing.Common.Test
    [TestFixture]
    public abstract class AbstractNegativeBlackBoxTestCase : AbstractBlackBoxTestCase
    {
+      private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
       private class TestResult
       {
          private readonly int falsePositivesAllowed;
@@ -83,7 +85,7 @@ namespace ZXing.Common.Test
          foreach (var testImage in imageFiles)
          {
             var absPath = Path.GetFullPath(testImage);
-            Console.WriteLine("Starting {0}", absPath);
+            Log.InfoFormat("Starting {0}", absPath);
 
 #if !SILVERLIGHT
             var image = new Bitmap(Image.FromFile(testImage));
@@ -113,19 +115,19 @@ namespace ZXing.Common.Test
 
          if (totalFalsePositives < totalAllowed)
          {
-            Console.WriteLine("  +++ Test too lax by {0} images\n", totalAllowed - totalFalsePositives);
+            Log.InfoFormat("+++ Test too lax by {0} images", totalAllowed - totalFalsePositives);
          }
          else if (totalFalsePositives > totalAllowed)
          {
-            Console.WriteLine("  --- Test failed by {0} images\n", totalFalsePositives - totalAllowed);
+            Log.InfoFormat("--- Test failed by {0} images", totalFalsePositives - totalAllowed);
          }
 
          for (int x = 0; x < testResults.Count; x++)
          {
             TestResult testResult = testResults[x];
-            Console.WriteLine("Rotation {0} degrees: {1} of {2} images were false positives ({3} allowed)\n",
-                              (int)testResult.getRotation(), falsePositives[x], imageFiles.Count(),
-                              testResult.getFalsePositivesAllowed());
+            Log.InfoFormat("Rotation {0} degrees: {1} of {2} images were false positives ({3} allowed)",
+                           (int) testResult.getRotation(), falsePositives[x], imageFiles.Count(),
+                           testResult.getFalsePositivesAllowed());
             Assert.IsTrue(falsePositives[x] <= testResult.getFalsePositivesAllowed(), "Rotation " + testResult.getRotation() + " degrees: Too many false positives found");
          }
       }
@@ -149,8 +151,8 @@ namespace ZXing.Common.Test
          var result = getReader().decode(bitmap);
          if (result != null)
          {
-            Console.WriteLine("Found false positive: '{0}' with format '{1}' (rotation: {2})\n",
-                              result.Text, result.BarcodeFormat, (int) rotationInDegrees);
+            Log.InfoFormat("Found false positive: '{0}' with format '{1}' (rotation: {2})",
+                           result.Text, result.BarcodeFormat, (int) rotationInDegrees);
             return false;
          }
 
@@ -160,8 +162,8 @@ namespace ZXing.Common.Test
          result = getReader().decode(bitmap, hints);
          if (result != null)
          {
-            Console.WriteLine("Try harder found false positive: '{0}' with format '{1}' (rotation: {2})\n",
-                              result.Text, result.BarcodeFormat, (int) rotationInDegrees);
+            Log.InfoFormat("Try harder found false positive: '{0}' with format '{1}' (rotation: {2})",
+                           result.Text, result.BarcodeFormat, (int) rotationInDegrees);
             return false;
          }
          return true;

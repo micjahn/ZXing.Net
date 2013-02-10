@@ -38,6 +38,8 @@ namespace ZXing.Common.Test
    /// </summary>
    public abstract class AbstractBlackBoxTestCase
    {
+      private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
       public bool accept(String dir, String name)
       {
          String lowerCase = name.ToLower(CultureInfo.InvariantCulture);
@@ -92,8 +94,8 @@ namespace ZXing.Common.Test
 
       protected IEnumerable<string> getImageFiles()
       {
-         Console.WriteLine(testBase);
-         Console.WriteLine(Environment.CurrentDirectory);
+         Log.Info(testBase);
+         Log.Info(Environment.CurrentDirectory);
          Assert.IsTrue(Directory.Exists(testBase), "Please run from the 'core' directory");
          return Directory.EnumerateFiles(testBase).Where(p => accept(testBase, p));
       }
@@ -126,7 +128,7 @@ namespace ZXing.Common.Test
          foreach (var testImage in imageFiles)
          {
             var absPath = Path.GetFullPath(testImage);
-            Console.WriteLine("Starting {0}\n", absPath);
+            Log.InfoFormat("Starting {0}", absPath);
 
 #if !SILVERLIGHT
             var image = new Bitmap(Image.FromFile(testImage));
@@ -175,36 +177,36 @@ namespace ZXing.Common.Test
                   if (decode(bitmap, rotation, expectedText, expectedMetadata, false))
                   {
                      passedCounts[x]++;
-                     Console.WriteLine("   without try-hard ... ok.");
+                     Log.Info("   without try-hard ... ok.");
                   }
                   else
                   {
                      misreadCounts[x]++;
-                     Console.WriteLine("   without try-hard ... fail.");
+                     Log.Info("   without try-hard ... fail.");
                   }
                }
                catch (ReaderException )
                {
                   // continue
-                  Console.WriteLine("   without try-hard ... fail (exc).");
+                  Log.Info("   without try-hard ... fail (exc).");
                }
                try
                {
                   if (decode(bitmap, rotation, expectedText, expectedMetadata, true))
                   {
                      tryHarderCounts[x]++;
-                     Console.WriteLine("   with try-hard ... ok.");
+                     Log.Info("   with try-hard ... ok.");
                   }
                   else
                   {
                      tryHaderMisreadCounts[x]++;
-                     Console.WriteLine("   with try-hard ... fail.");
+                     Log.Info("   with try-hard ... fail.");
                   }
                }
                catch (ReaderException )
                {
                   // continue
-                  Console.WriteLine("   with try-hard ... fail (exc).");
+                  Log.Info("   with try-hard ... fail (exc).");
                }
             }
          }
@@ -218,16 +220,16 @@ namespace ZXing.Common.Test
          for (int x = 0; x < testResults.Count; x++)
          {
             TestResult testResult = testResults[x];
-            Console.WriteLine("Rotation {0} degrees:\n", (int)testResult.Rotation);
-            Console.WriteLine("  {0} of {1} images passed ({2} required)\n",
+            Log.InfoFormat("Rotation {0} degrees:", (int)testResult.Rotation);
+            Log.InfoFormat(" {0} of {1} images passed ({2} required)",
                               passedCounts[x], imageFilesCount, testResult.MustPassCount);
             int failed = imageFilesCount - passedCounts[x];
-            Console.WriteLine("    {0} failed due to misreads, {1} not detected\n",
+            Log.InfoFormat(" {0} failed due to misreads, {1} not detected",
                               misreadCounts[x], failed - misreadCounts[x]);
-            Console.WriteLine("  {0} of {1} images passed with try harder ({2} required)\n",
+            Log.InfoFormat(" {0} of {1} images passed with try harder ({2} required)",
                               tryHarderCounts[x], imageFilesCount, testResult.TryHarderCount);
             failed = imageFilesCount - tryHarderCounts[x];
-            Console.WriteLine("    {0} failed due to misreads, {1} not detected\n",
+            Log.InfoFormat(" {0} failed due to misreads, {1} not detected",
                               tryHaderMisreadCounts[x], failed - tryHaderMisreadCounts[x]);
             totalFound += passedCounts[x] + tryHarderCounts[x];
             totalMustPass += testResult.MustPassCount + testResult.TryHarderCount;
@@ -236,24 +238,24 @@ namespace ZXing.Common.Test
          }
 
          int totalTests = imageFilesCount * testCount * 2;
-         Console.WriteLine("TOTALS:\nDecoded {0} images out of {1} ({2}%, {3} required)\n",
+         Log.InfoFormat("Decoded {0} images out of {1} ({2}%, {3} required)",
                            totalFound, totalTests, totalFound * 100 / totalTests, totalMustPass);
          if (totalFound > totalMustPass)
          {
-            Console.WriteLine("  +++ Test too lax by {0} images\n", totalFound - totalMustPass);
+            Log.WarnFormat("+++ Test too lax by {0} images", totalFound - totalMustPass);
          }
          else if (totalFound < totalMustPass)
          {
-            Console.WriteLine("  --- Test failed by {0} images\n", totalMustPass - totalFound);
+            Log.WarnFormat("--- Test failed by {0} images", totalMustPass - totalFound);
          }
 
          if (totalMisread < totalMaxMisread)
          {
-            Console.WriteLine("  +++ Test expects too many misreads by {0} images\n", totalMaxMisread - totalMisread);
+            Log.WarnFormat("+++ Test expects too many misreads by {0} images", totalMaxMisread - totalMisread);
          }
          else if (totalMisread > totalMaxMisread)
          {
-            Console.WriteLine("  --- Test had too many misreads by {0} images\n", totalMisread - totalMaxMisread);
+            Log.WarnFormat("--- Test had too many misreads by {0} images", totalMisread - totalMaxMisread);
          }
 
          // Then run through again and assert if any failed
@@ -298,7 +300,7 @@ namespace ZXing.Common.Test
 
             if (expectedResults.Length != results.Length)
             {
-               Console.WriteLine("Count mismatch: expected '{0}' results but got '{1}'\n",
+               Log.InfoFormat("Count mismatch: expected '{0}' results but got '{1}'",
                   expectedResults.Length, results.Length);
                throw ReaderException.Instance;
             }
@@ -306,7 +308,7 @@ namespace ZXing.Common.Test
             {
                if (expectedFormat != result.BarcodeFormat)
                {
-                  Console.WriteLine("Format mismatch: expected '{0}' but got '{1}'{2}\n",
+                  Log.InfoFormat("Format mismatch: expected '{0}' but got '{1}'{2}",
                                     expectedFormat, result.BarcodeFormat, suffix);
                   return false;
                }
@@ -322,7 +324,7 @@ namespace ZXing.Common.Test
                }
                if (!found)
                {
-                  Console.WriteLine("Content was not expected: '{0}'\n", resultText);
+                  Log.InfoFormat("Content was not expected: '{0}'", resultText);
                   return false;
                }
             }
@@ -340,7 +342,7 @@ namespace ZXing.Common.Test
                }
                if (!found)
                {
-                  Console.WriteLine("Content was expected but not found: '{0}'\n", expectedResult);
+                  Log.InfoFormat("Content was expected but not found: '{0}'", expectedResult);
                   return false;
                }
             }
@@ -353,7 +355,7 @@ namespace ZXing.Common.Test
 
             if (expectedFormat != result.BarcodeFormat)
             {
-               Console.WriteLine("Format mismatch: expected '{0}' but got '{1}'{2}\n",
+               Log.InfoFormat("Format mismatch: expected '{0}' but got '{1}'{2}",
                                  expectedFormat, result.BarcodeFormat, suffix);
                return false;
             }
@@ -361,7 +363,7 @@ namespace ZXing.Common.Test
             String resultText = result.Text;
             if (!expectedText.Equals(resultText))
             {
-               Console.WriteLine("Content mismatch: expected '{0}' but got '{1}'{2}\n",
+               Log.InfoFormat("Content mismatch: expected '{0}' but got '{1}'{2}",
                                  expectedText, resultText, suffix);
                return false;
             }
@@ -375,8 +377,8 @@ namespace ZXing.Common.Test
                Object actualValue = resultMetadata == null ? null : resultMetadata[key];
                if (!expectedValue.Equals(actualValue))
                {
-                  Console.WriteLine("Metadata mismatch for key '{0}': expected '{1}' but got '{2}'\n",
-                                    key, expectedValue, actualValue);
+                  Log.InfoFormat("Metadata mismatch for key '{0}': expected '{1}' but got '{2}'",
+                                 key, expectedValue, actualValue);
                   return false;
                }
             }

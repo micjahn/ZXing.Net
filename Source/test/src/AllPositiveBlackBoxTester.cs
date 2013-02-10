@@ -15,7 +15,9 @@
  */
 
 using System;
+
 using NUnit.Framework;
+
 using ZXing.Aztec.Test;
 using ZXing.Common.Test;
 using ZXing.Datamatrix.Test;
@@ -36,6 +38,8 @@ namespace ZXing.Test
    [TestFixture]
    public sealed class AllPositiveBlackBoxTester
    {
+      private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
       // This list has to be manually kept up to date. I don't know any automatic way to include every
       // subclass of AbstractBlackBoxTestCase, and furthermore to exclude subclasses of
       // AbstractNegativeBlackBoxTestCase which derives from it.
@@ -77,16 +81,17 @@ namespace ZXing.Test
       [Test]
       public void All_Positive_Black_Box_Tests_Should_Pass()
       {
-         long now = DateTime.Now.Ticks;
-         SummaryResults results = new SummaryResults();
+         var start = DateTime.Now;
+         var results = new SummaryResults();
 
-         foreach (AbstractBlackBoxTestCase test in TESTS)
+         foreach (var test in TESTS)
          {
+            Log.InfoFormat("Executing {0} ...", test.GetType());
             results.Add(test.testBlackBoxCountingResults(false));
          }
 
-         now = DateTime.Now.Ticks - now;
-         Console.WriteLine(results + "\n  Total time: " + now + " ms");
+         Log.Info(results.ToString());
+         Log.InfoFormat("Total time: {0} ms", (DateTime.Now - start).Milliseconds);
       }
    }
 }

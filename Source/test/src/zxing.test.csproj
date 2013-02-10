@@ -43,6 +43,9 @@
     <AssemblyOriginatorKeyFile>..\..\..\Key\private.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\3rdparty\NUnit.NET\nunit.framework.dll</HintPath>
     </Reference>
@@ -52,6 +55,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Xaml" />
+    <Reference Include="System.XML" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -198,11 +202,16 @@
     <Compile Include="qrcode\QRCodeWriterTestCase.cs" />
     <Compile Include="RegressionTestCase.cs" />
     <Compile Include="RGBLuminanceSourceTests.cs" />
+    <Compile Include="TestSetUpFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Key\private.snk">
       <Link>Properties\private.snk</Link>
     </None>
+    <Content Include="..\..\..\log4net.config">
+      <Link>log4net.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\lib\zxing.csproj">
