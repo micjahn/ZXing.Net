@@ -44,9 +44,9 @@ namespace ZXing.Client.Result
 
          bool hidden = false;
 #if WindowsCE
-         try { hidden = Boolean.Parse(matchSinglePrefixedField("B:", rawText, ';', false)); } catch { }
+         try { hidden = Boolean.Parse(matchSinglePrefixedField("H:", rawText, ';', false)); } catch { }
 #else
-         Boolean.TryParse(matchSinglePrefixedField("B:", rawText, ';', false), out hidden);
+         Boolean.TryParse(matchSinglePrefixedField("H:", rawText, ';', false), out hidden);
 #endif
 
          return new WifiParsedResult(type, ssid, pass, hidden);
