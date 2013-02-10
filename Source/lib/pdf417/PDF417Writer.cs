@@ -93,30 +93,6 @@ namespace ZXing.PDF417
       }
 
       /// <summary>
-      /// Use <see cref="encode(String, BarcodeFormat, int, int, IDictionary{TKey, TValue})" /> instead, with hints to
-      /// specify the encoding options.
-      /// </summary>
-      /// <returns></returns>
-      [Obsolete]
-      public BitMatrix encode(String contents,
-                               BarcodeFormat format,
-                               bool compact,
-                               int width,
-                               int height,
-                               int minCols,
-                               int maxCols,
-                               int minRows,
-                               int maxRows,
-                               Compaction compaction)
-      {
-         IDictionary<EncodeHintType, Object> hints = new Dictionary<EncodeHintType, Object>();
-         hints[EncodeHintType.PDF417_COMPACT] = compact;
-         hints[EncodeHintType.PDF417_COMPACTION] = compaction;
-         hints[EncodeHintType.PDF417_DIMENSIONS] = new Dimensions(minCols, maxCols, minRows, maxRows);
-         return encode(contents, format, width, height, hints);
-      }
-
-      /// <summary>
       /// Takes encoder, accounts for width/height, and retrieves bit matrix
       /// </summary>
       private static BitMatrix bitMatrixFromEncoder(Internal.PDF417 encoder,

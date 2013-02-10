@@ -48,103 +48,111 @@ namespace ZXing.QrCode.Internal
       {
          var bits = new BitSource(bytes);
          var result = new StringBuilder(50);
-         CharacterSetECI currentCharacterSetECI = null;
-         bool fc1InEffect = false;
          var byteSegments = new List<byte[]>(1);
-         Mode mode;
-         do
+         try
          {
-            // While still another segment to read...
-            if (bits.available() < 4)
+            CharacterSetECI currentCharacterSetECI = null;
+            bool fc1InEffect = false;
+            Mode mode;
+            do
             {
-               // OK, assume we're done. Really, a TERMINATOR mode should have been recorded here
-               mode = Mode.TERMINATOR;
-            }
-            else
-            {
-               try
+               // While still another segment to read...
+               if (bits.available() < 4)
                {
-                  mode = Mode.forBits(bits.readBits(4)); // mode is encoded by 4 bits
-               }
-               catch (ArgumentException)
-               {
-                  return null;
-               }
-            }
-            if (mode != Mode.TERMINATOR)
-            {
-               if (mode == Mode.FNC1_FIRST_POSITION || mode == Mode.FNC1_SECOND_POSITION)
-               {
-                  // We do little with FNC1 except alter the parsed result a bit according to the spec
-                  fc1InEffect = true;
-               }
-               else if (mode == Mode.STRUCTURED_APPEND)
-               {
-                  if (bits.available() < 16)
-                  {
-                     return null;
-                  }
-                  // not really supported; all we do is ignore it
-                  // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
-                  bits.readBits(16);
-               }
-               else if (mode == Mode.ECI)
-               {
-                  // Count doesn't apply to ECI
-                  int value = parseECIValue(bits);
-                  currentCharacterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
-                  if (currentCharacterSetECI == null)
-                  {
-                     return null;
-                  }
+                  // OK, assume we're done. Really, a TERMINATOR mode should have been recorded here
+                  mode = Mode.TERMINATOR;
                }
                else
                {
-                  // First handle Hanzi mode which does not start with character count
-                  if (mode == Mode.HANZI)
+                  try
                   {
-                     //chinese mode contains a sub set indicator right after mode indicator
-                     int subset = bits.readBits(4);
-                     int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
-                     if (subset == GB2312_SUBSET)
-                     {
-                        if (!decodeHanziSegment(bits, result, countHanzi))
-                           return null;
-                     }
+                     mode = Mode.forBits(bits.readBits(4)); // mode is encoded by 4 bits
                   }
-                  else
+                  catch (ArgumentException)
                   {
-                     // "Normal" QR code modes:
-                     // How many characters will follow, encoded in this mode?
-                     int count = bits.readBits(mode.getCharacterCountBits(version));
-                     if (mode == Mode.NUMERIC)
+                     return null;
+                  }
+               }
+               if (mode != Mode.TERMINATOR)
+               {
+                  if (mode == Mode.FNC1_FIRST_POSITION || mode == Mode.FNC1_SECOND_POSITION)
+                  {
+                     // We do little with FNC1 except alter the parsed result a bit according to the spec
+                     fc1InEffect = true;
+                  }
+                  else if (mode == Mode.STRUCTURED_APPEND)
+                  {
+                     if (bits.available() < 16)
                      {
-                        if (!decodeNumericSegment(bits, result, count))
-                           return null;
+                        return null;
                      }
-                     else if (mode == Mode.ALPHANUMERIC)
-                     {
-                        if (!decodeAlphanumericSegment(bits, result, count, fc1InEffect))
-                           return null;
-                     }
-                     else if (mode == Mode.BYTE)
-                     {
-                        if (!decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments, hints))
-                           return null;
-                     }
-                     else if (mode == Mode.KANJI)
-                     {
-                        if (!decodeKanjiSegment(bits, result, count))
-                           return null;
-                     }
-                     else
+                     // not really supported; all we do is ignore it
+                     // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
+                     bits.readBits(16);
+                  }
+                  else if (mode == Mode.ECI)
+                  {
+                     // Count doesn't apply to ECI
+                     int value = parseECIValue(bits);
+                     currentCharacterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
+                     if (currentCharacterSetECI == null)
                      {
                         return null;
                      }
                   }
+                  else
+                  {
+                     // First handle Hanzi mode which does not start with character count
+                     if (mode == Mode.HANZI)
+                     {
+                        //chinese mode contains a sub set indicator right after mode indicator
+                        int subset = bits.readBits(4);
+                        int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
+                        if (subset == GB2312_SUBSET)
+                        {
+                           if (!decodeHanziSegment(bits, result, countHanzi))
+                              return null;
+                        }
+                     }
+                     else
+                     {
+                        // "Normal" QR code modes:
+                        // How many characters will follow, encoded in this mode?
+                        int count = bits.readBits(mode.getCharacterCountBits(version));
+                        if (mode == Mode.NUMERIC)
+                        {
+                           if (!decodeNumericSegment(bits, result, count))
+                              return null;
+                        }
+                        else if (mode == Mode.ALPHANUMERIC)
+                        {
+                           if (!decodeAlphanumericSegment(bits, result, count, fc1InEffect))
+                              return null;
+                        }
+                        else if (mode == Mode.BYTE)
+                        {
+                           if (!decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments, hints))
+                              return null;
+                        }
+                        else if (mode == Mode.KANJI)
+                        {
+                           if (!decodeKanjiSegment(bits, result, count))
+                              return null;
+                        }
+                        else
+                        {
+                           return null;
+                        }
+                     }
+                  }
                }
-            }
-         } while (mode != Mode.TERMINATOR);
+            } while (mode != Mode.TERMINATOR);
+         }
+         catch (ArgumentException )
+         {
+            // from readBits() calls
+            return null;
+         }
 
 #if WindowsCE
          var resultString = result.ToString().Replace("\n", "\r\n");
