@@ -48,7 +48,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       [Test]
       public void testDecodeRow2string_1()
       {
-         String path = "test/data/blackbox/rssexpanded-1/1.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/1.png";
          String expected = "(11)100224(17)110224(3102)000100";
 
          assertCorrectImage2string(path, expected);
@@ -57,7 +57,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       [Test]
       public void testDecodeRow2string_2()
       {
-         String path = "test/data/blackbox/rssexpanded-1/2.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/2.png";
          String expected = "(01)90012345678908(3103)001750";
 
          assertCorrectImage2string(path, expected);
@@ -66,7 +66,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       [Test]
       public void testDecodeRow2string_3()
       {
-         String path = "test/data/blackbox/rssexpanded-1/3.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/3.png";
          String expected = "(10)12A";
 
          assertCorrectImage2string(path, expected);
@@ -75,7 +75,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       [Test]
       public void testDecodeRow2string_4()
       {
-         String path = "test/data/blackbox/rssexpanded-1/4.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/4.png";
          String expected = "(01)98898765432106(3202)012345(15)991231";
 
          assertCorrectImage2string(path, expected);
@@ -84,7 +84,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       [Test]
       public void testDecodeRow2string_5()
       {
-         String path = "test/data/blackbox/rssexpanded-1/5.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/5.png";
          String expected = "(01)90614141000015(3202)000150";
 
          assertCorrectImage2string(path, expected);
@@ -121,7 +121,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       public void testDecodeRow2string_12()
       {
          String expected = "(01)98898765432106(3103)001750";
-         String path = "test/data/blackbox/rssexpanded-1/12.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/12.png";
 
          assertCorrectImage2string(path, expected);
       }
@@ -148,7 +148,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       public void testDecodeRow2string_15()
       {
          String expected = "(01)90012345678908(3102)001750(11)100312";
-         String path = "test/data/blackbox/rssexpanded-1/15.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/15.png";
 
          assertCorrectImage2string(path, expected);
       }
@@ -157,7 +157,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       public void testDecodeRow2string_16()
       {
          String expected = "(01)90012345678908(3202)001750(11)100312";
-         String path = "test/data/blackbox/rssexpanded-1/16.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/16.png";
 
          assertCorrectImage2string(path, expected);
       }
@@ -166,7 +166,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       public void testDecodeRow2string_17()
       {
          String expected = "(01)90012345678908(3102)001750(13)100312";
-         String path = "test/data/blackbox/rssexpanded-1/17.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/17.png";
 
          assertCorrectImage2string(path, expected);
       }
@@ -175,7 +175,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       public void testDecodeRow2string_18()
       {
          String expected = "(01)90012345678908(3202)001750(13)100312";
-         String path = "test/data/blackbox/rssexpanded-1/18.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/18.png";
 
          assertCorrectImage2string(path, expected);
       }
@@ -184,7 +184,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       public void testDecodeRow2string_19()
       {
          String expected = "(01)90012345678908(3102)001750(15)100312";
-         String path = "test/data/blackbox/rssexpanded-1/19.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/19.png";
 
          assertCorrectImage2string(path, expected);
       }
@@ -193,7 +193,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       public void testDecodeRow2string_20()
       {
          String expected = "(01)90012345678908(3202)001750(15)100312";
-         String path = "test/data/blackbox/rssexpanded-1/20.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/20.png";
 
          assertCorrectImage2string(path, expected);
       }
@@ -202,7 +202,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       public void testDecodeRow2string_21()
       {
          String expected = "(01)90012345678908(3102)001750(17)100312";
-         String path = "test/data/blackbox/rssexpanded-1/21.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/21.png";
 
          assertCorrectImage2string(path, expected);
       }
@@ -211,7 +211,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       public void testDecodeRow2string_22()
       {
          String expected = "(01)90012345678908(3202)001750(17)100312";
-         String path = "test/data/blackbox/rssexpanded-1/22.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/22.png";
 
          assertCorrectImage2string(path, expected);
       }

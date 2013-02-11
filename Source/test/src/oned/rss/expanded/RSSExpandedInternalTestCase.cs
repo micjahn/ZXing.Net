@@ -52,7 +52,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       {
          RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
-         String path = "test/data/blackbox/rssexpanded-1/2.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/2.png";
 
          if (!File.Exists(path))
          {
@@ -98,7 +98,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       {
          RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
-         String path = "test/data/blackbox/rssexpanded-1/3.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/3.png";
          if (!File.Exists(path))
          {
             // Support running from project root too
@@ -134,7 +134,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       {
          RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
-         String path = "test/data/blackbox/rssexpanded-1/3.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/3.png";
          if (!File.Exists(path))
          {
             // Support running from project root too
@@ -168,7 +168,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
       {
          RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
 
-         String path = "test/data/blackbox/rssexpanded-1/3.jpg";
+         String path = "test/data/blackbox/rssexpanded-1/3.png";
          if (!File.Exists(path))
          {
             // Support running from project root too
