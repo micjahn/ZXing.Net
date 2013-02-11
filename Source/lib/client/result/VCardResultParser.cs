@@ -41,6 +41,8 @@ namespace ZXing.Client.Result
       private static readonly Regex EQUALS = new Regex("=");
       private static readonly Regex SEMICOLON = new Regex(";");
       private static readonly Regex UNESCAPED_SEMICOLONS = new Regex("(?<!\\\\);+");
+      private static readonly Regex COMMA = new Regex(",");
+      private static readonly Regex SEMICOLON_OR_COMMA = new Regex("[;,]");
 #else
       private static readonly Regex BEGIN_VCARD = new Regex("BEGIN:VCARD", RegexOptions.Compiled | RegexOptions.IgnoreCase);
       private static readonly Regex VCARD_LIKE_DATE = new Regex("\\d{4}-?\\d{2}-?\\d{2}", RegexOptions.Compiled);
@@ -50,6 +52,8 @@ namespace ZXing.Client.Result
       private static readonly Regex EQUALS = new Regex("=", RegexOptions.Compiled);
       private static readonly Regex SEMICOLON = new Regex(";", RegexOptions.Compiled);
       private static readonly Regex UNESCAPED_SEMICOLONS = new Regex("(?<!\\\\);+", RegexOptions.Compiled);
+      private static readonly Regex COMMA = new Regex(",", RegexOptions.Compiled);
+      private static readonly Regex SEMICOLON_OR_COMMA = new Regex("[;,]", RegexOptions.Compiled);
 #endif
 
       override public ParsedResult parse(ZXing.Result result)
@@ -70,6 +74,8 @@ namespace ZXing.Client.Result
             names = matchVCardPrefixedField("N", rawText, true, false);
             formatNames(names);
          }
+         List<String> nicknameString = matchSingleVCardPrefixedField("NICKNAME", rawText, true, false);
+         String[] nicknames = nicknameString == null ? null : COMMA.Split(nicknameString[0]);
          List<List<String>> phoneNumbers = matchVCardPrefixedField("TEL", rawText, true, false);
          List<List<String>> emails = matchVCardPrefixedField("EMAIL", rawText, true, false);
          List<String> note = matchSingleVCardPrefixedField("NOTE", rawText, false, false);
@@ -83,7 +89,14 @@ namespace ZXing.Client.Result
          List<String> title = matchSingleVCardPrefixedField("TITLE", rawText, true, false);
          List<String> url = matchSingleVCardPrefixedField("URL", rawText, true, false);
          List<String> instantMessenger = matchSingleVCardPrefixedField("IMPP", rawText, true, false);
+         List<String> geoString = matchSingleVCardPrefixedField("GEO", rawText, true, false);
+         String[] geo = geoString == null ? null : SEMICOLON_OR_COMMA.Split(geoString[0]);
+         if (geo != null && geo.Length != 2)
+         {
+            geo = null;
+         }
          return new AddressBookParsedResult(toPrimaryValues(names),
+                                            nicknames,
                                             null,
                                             toPrimaryValues(phoneNumbers),
                                             toTypes(phoneNumbers),
@@ -96,7 +109,8 @@ namespace ZXing.Client.Result
                                             toPrimaryValue(org),
                                             toPrimaryValue(birthday),
                                             toPrimaryValue(title),
-                                            toPrimaryValue(url));
+                                            toPrimaryValue(url),
+                                            geo);
       }
 
       public static List<List<String>> matchVCardPrefixedField(String prefix,

@@ -23,6 +23,7 @@ namespace ZXing.Client.Result
    public sealed class AddressBookParsedResult : ParsedResult
    {
       private readonly String[] names;
+      private readonly String[] nicknames;
       private readonly String pronunciation;
       private readonly String[] phoneNumbers;
       private readonly String[] phoneTypes;
@@ -36,8 +37,36 @@ namespace ZXing.Client.Result
       private readonly String birthday;
       private readonly String title;
       private readonly String url;
+      private readonly String[] geo;
 
       public AddressBookParsedResult(String[] names,
+                                 String[] phoneNumbers,
+                                 String[] phoneTypes,
+                                 String[] emails,
+                                 String[] emailTypes,
+                                 String[] addresses,
+                                 String[] addressTypes)
+         : this(names,
+           null,
+           null,
+           phoneNumbers,
+           phoneTypes,
+           emails,
+           emailTypes,
+           null,
+           null,
+           addresses,
+           addressTypes,
+           null,
+           null,
+           null,
+           null,
+           null)
+      {
+      }
+
+      public AddressBookParsedResult(String[] names,
+                                     String[] nicknames,
                                      String pronunciation,
                                      String[] phoneNumbers,
                                      String[] phoneTypes,
@@ -50,10 +79,12 @@ namespace ZXing.Client.Result
                                      String org,
                                      String birthday,
                                      String title,
-                                     String url)
+                                     String url,
+                                     String[] geo)
          : base(ParsedResultType.ADDRESSBOOK)
       {
          this.names = names;
+         this.nicknames = nicknames;
          this.pronunciation = pronunciation;
          this.phoneNumbers = phoneNumbers;
          this.phoneTypes = phoneTypes;
@@ -67,6 +98,7 @@ namespace ZXing.Client.Result
          this.birthday = birthday;
          this.title = title;
          this.url = url;
+         this.geo = geo;
 
          displayResultValue = getDisplayResult();
       }
@@ -74,6 +106,11 @@ namespace ZXing.Client.Result
       public String[] Names
       {
          get { return names; }
+      }
+
+      public String[] Nicknames
+      {
+         get { return nicknames; }
       }
 
       /// <summary>
@@ -153,10 +190,17 @@ namespace ZXing.Client.Result
          get { return birthday; }
       }
 
+      /// <return>a location as a latitude/longitude pair</return>
+      public String[] Geo
+      {
+         get { return geo; }
+      }
+
       private String getDisplayResult()
       {
          var result = new StringBuilder(100);
          maybeAppend(names, result);
+         maybeAppend(nicknames, result);
          maybeAppend(pronunciation, result);
          maybeAppend(title, result);
          maybeAppend(org, result);
@@ -166,6 +210,7 @@ namespace ZXing.Client.Result
          maybeAppend(instantMessenger, result);
          maybeAppend(url, result);
          maybeAppend(birthday, result);
+         maybeAppend(geo, result);
          maybeAppend(note, result);
          return result.ToString();
       }

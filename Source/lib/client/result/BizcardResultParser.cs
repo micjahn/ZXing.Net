@@ -54,6 +54,7 @@ namespace ZXing.Client.Result
 
          return new AddressBookParsedResult(maybeWrap(fullName),
                                             null,
+                                            null,
                                             buildPhoneNumbers(phoneNumber1, phoneNumber2, phoneNumber3),
                                             null,
                                             maybeWrap(email),
@@ -65,6 +66,7 @@ namespace ZXing.Client.Result
                                             org,
                                             null,
                                             title,
+                                            null,
                                             null);
       }
 

@@ -51,6 +51,7 @@ namespace ZXing.Client.Result
          var address = matchSinglePrefixedField("ADD:", rawText, '\r', true);
          var addresses = address == null ? null : new [] { address };
          return new AddressBookParsedResult(maybeWrap(name),
+                                            null,
                                             pronunciation,
                                             phoneNumbers,
                                             null,
@@ -59,6 +60,7 @@ namespace ZXing.Client.Result
                                             null,
                                             note,
                                             addresses,
+                                            null,
                                             null,
                                             null,
                                             null,
