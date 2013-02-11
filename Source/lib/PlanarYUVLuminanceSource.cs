@@ -28,6 +28,8 @@ namespace ZXing
    /// </summary>
    public sealed class PlanarYUVLuminanceSource : LuminanceSource
    {
+      private const int THUMBNAIL_SCALE_FACTOR = 2;
+
       private readonly byte[] yuvData;
       private readonly int dataWidth;
       private readonly int dataHeight;
@@ -175,10 +177,10 @@ namespace ZXing
       /// Renders the cropped greyscale bitmap.
       /// </summary>
       /// <returns></returns>
-      public int[] renderCroppedGreyscaleBitmap()
+      public int[] renderThumbnail()
       {
-         int width = Width;
-         int height = Height;
+         int width = Width / THUMBNAIL_SCALE_FACTOR;
+         int height = Height / THUMBNAIL_SCALE_FACTOR;
          int[] pixels = new int[width * height];
          byte[] yuv = yuvData;
          int inputOffset = top * dataWidth + left;
@@ -188,12 +190,34 @@ namespace ZXing
             int outputOffset = y * width;
             for (int x = 0; x < width; x++)
             {
-               int grey = yuv[inputOffset + x] & 0xff;
-               pixels[outputOffset + x] = ((0x00FF0000 << 8)| (grey * 0x00010101));
+               int grey = yuv[inputOffset + x * THUMBNAIL_SCALE_FACTOR] & 0xff;
+               pixels[outputOffset + x] = ((0x00FF0000 << 8) | (grey * 0x00010101));
             }
-            inputOffset += dataWidth;
+            inputOffset += dataWidth * THUMBNAIL_SCALE_FACTOR;
          }
          return pixels;
+      }
+
+      /// <summary>
+      /// width of image from {@link #renderThumbnail()}
+      /// </summary>
+      public int ThumbnailWidth
+      {
+         get
+         {
+            return Width / THUMBNAIL_SCALE_FACTOR;
+         }
+      }
+
+      /// <summary>
+      /// height of image from {@link #renderThumbnail()}
+      /// </summary>
+      public int ThumbnailHeight
+      {
+         get
+         {
+            return Height / THUMBNAIL_SCALE_FACTOR;
+         }
       }
 
       private void reverseHorizontal(int width, int height)
