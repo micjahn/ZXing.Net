@@ -284,17 +284,8 @@ namespace ZXing.Multi.QrCode.Internal
                   { // Counting black pixels
                      if (currentState == 4)
                      { // A winner?
-                        if (foundPatternCross(stateCount))
+                        if (foundPatternCross(stateCount) && handlePossibleCenter(stateCount, i, j))
                         { // Yes
-                           bool confirmed = handlePossibleCenter(stateCount, i, j);
-                           if (!confirmed)
-                           {
-                              do
-                              { // Advance to next black pixel
-                                 j++;
-                              } while (j < maxJ && !image[j, i]);
-                              j--; // back up to that last white pixel
-                           }
                            // Clear state to start looking again
                            currentState = 0;
                            stateCount[0] = 0;
