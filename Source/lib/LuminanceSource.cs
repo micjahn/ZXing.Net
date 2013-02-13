@@ -150,6 +150,22 @@ namespace ZXing
          throw new NotSupportedException("This luminance source does not support rotation by 45 degrees.");
       }
 
+      /// <summary>
+      /// </summary>
+      /// <returns>Whether this subclass supports invertion.</returns>
+      virtual public bool InversionSupported
+      {
+         get
+         {
+            return false;
+         }
+      }
+
+      virtual public void invert()
+      {
+         throw new NotSupportedException("This luminance source does not support inversion.");
+      }
+
       override public String ToString()
       {
          var row = new byte[width];

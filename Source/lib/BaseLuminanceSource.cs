@@ -94,13 +94,14 @@ namespace ZXing
          var rotatedLuminances = new byte[Width * Height];
          var newWidth = Height;
          var newHeight = Width;
+         var localLuminances = Matrix;
          for (var yold = 0; yold < Height; yold++)
          {
             for (var xold = 0; xold < Width; xold++)
             {
                var ynew = xold;
                var xnew = newWidth - yold - 1;
-               rotatedLuminances[ynew * newWidth + xnew] = luminances[yold * Width + xold];
+               rotatedLuminances[ynew * newWidth + xnew] = localLuminances[yold * Width + xold];
             }
          }
          return CreateLuminanceSource(rotatedLuminances, newWidth, newHeight);
@@ -166,6 +167,31 @@ namespace ZXing
          {
             return true;
          }
+      }
+
+      /// <summary>
+      /// </summary>
+      /// <returns>Whether this subclass supports invertion.</returns>
+      public override bool InversionSupported
+      {
+         get
+         {
+            return true;
+         }
+      }
+
+      /// <summary>
+      /// Inverts the luminance values (newValue = 255 - oldValue)
+      /// </summary>
+      public override void invert()
+      {
+         var localLuminances = Matrix;
+         var newLuminances = new byte[localLuminances.Length];
+         for (var index = 0; index < luminances.Length; index++)
+         {
+            newLuminances[index] = (byte)(255 - localLuminances[index]);
+         }
+         luminances = newLuminances;
       }
 
       /// <summary>

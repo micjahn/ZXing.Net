@@ -26,7 +26,7 @@ namespace ZXing
    /// YCbCr_420_SP and YCbCr_422_SP.
    /// @author dswitkin@google.com (Daniel Switkin)
    /// </summary>
-   public sealed class PlanarYUVLuminanceSource : LuminanceSource
+   public sealed class PlanarYUVLuminanceSource : BaseLuminanceSource
    {
       private const int THUMBNAIL_SCALE_FACTOR = 2;
 
@@ -71,6 +71,23 @@ namespace ZXing
          {
             reverseHorizontal(width, height);
          }
+      }
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="PlanarYUVLuminanceSource"/> class.
+      /// </summary>
+      /// <param name="luminances">The luminances.</param>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      private PlanarYUVLuminanceSource(byte[] luminances, int width, int height)
+         : base(width, height)
+      {
+         yuvData = luminances;
+         this.luminances = luminances;
+         dataWidth = width;
+         dataHeight = height;
+         left = 0;
+         top = 0;
       }
 
       /// <summary>
@@ -233,6 +250,11 @@ namespace ZXing
                yuvData[x2] = temp;
             }
          }
+      }
+
+      protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
+      {
+         return new PlanarYUVLuminanceSource(newLuminances, width, height);
       }
    }
 }
