@@ -248,7 +248,16 @@ namespace WindowsFormsDemo
          {
             tabCtrlMain.SelectedTab = tabPageDecoder;
             picBarcode.Image = picEncodedBarCode.Image;
-            Decode((Bitmap)picEncodedBarCode.Image);
+            var pureBarcodeSetting = barcodeReader.PureBarcode;
+            try
+            {
+               barcodeReader.PureBarcode = true;
+               Decode((Bitmap)picEncodedBarCode.Image);
+            }
+            finally
+            {
+               barcodeReader.PureBarcode = pureBarcodeSetting;
+            }
          }
       }
 
@@ -277,6 +286,15 @@ namespace WindowsFormsDemo
                                 Height = picEncodedBarCode.Height,
                                 Width = picEncodedBarCode.Width
                              };
+                  break;
+               case BarcodeFormat.DATA_MATRIX:
+                  options = new ZXing.Datamatrix.DatamatrixEncodingOptions
+                  {
+                     Height = picEncodedBarCode.Height,
+                     Width = picEncodedBarCode.Width,
+                     SymbolShape = ZXing.Datamatrix.Encoder.SymbolShapeHint.FORCE_SQUARE,
+                     MinSize = new Dimension(picEncodedBarCode.Width, picEncodedBarCode.Height)
+                  };
                   break;
                default:
                   options = new EncodingOptions

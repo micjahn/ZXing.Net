@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 
 using ZXing.Common;
+using ZXing.Datamatrix;
 using ZXing.OneD;
 using ZXing.PDF417;
 using ZXing.QrCode;
@@ -51,6 +52,7 @@ namespace ZXing
                            {BarcodeFormat.CODABAR, () => new CodaBarWriter()},
                            {BarcodeFormat.MSI, () => new MSIWriter()},
                            {BarcodeFormat.PLESSEY, () => new PlesseyWriter()},
+                           {BarcodeFormat.DATA_MATRIX, () => new DataMatrixWriter()},
                         };
       }
 

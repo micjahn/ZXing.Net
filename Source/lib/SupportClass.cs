@@ -92,5 +92,20 @@ namespace ZXing
 
          return builder.ToString();
       }
+
+      /// <summary>
+      /// Fills the specified array.
+      /// (can't use extension method because of .Net 2.0 support)
+      /// </summary>
+      /// <typeparam name="T"></typeparam>
+      /// <param name="array">The array.</param>
+      /// <param name="value">The value.</param>
+      public static void Fill<T>(T[] array, T value)
+      {
+         for (int i = 0; i < array.Length; i++)
+         {
+            array[i] = value;
+         }
+      }
    }
 }
