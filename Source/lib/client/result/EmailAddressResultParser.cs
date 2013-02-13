@@ -45,6 +45,7 @@ namespace ZXing.Client.Result
             {
                emailAddress = emailAddress.Substring(0, queryStart);
             }
+            emailAddress = urlDecode(emailAddress);
             var nameValues = parseNameValuePairs(rawText);
             String subject = null;
             String body = null;

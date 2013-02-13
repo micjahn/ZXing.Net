@@ -298,9 +298,12 @@ namespace ZXing.Client.Result
          return matches == null ? null : matches[0];
       }
 
-      private static String urlDecode(String escaped)
+      protected static String urlDecode(String escaped)
       {
-         // No we can't use java.net.URLDecoder here. JavaME doesn't have it.
+         // Should we better use HttpUtility.UrlDecode?
+         // Is HttpUtility.UrlDecode available for all platforms?
+         // What about encoding like UTF8?
+
          if (escaped == null)
          {
             return null;
