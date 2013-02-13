@@ -82,6 +82,8 @@ namespace ZXing.PDF417.Internal
       {
          // Fetch the 1 bit matrix once up front.
          BitMatrix matrix = image.BlackMatrix;
+         if (matrix == null)
+            return null;
 
          bool tryHarder = hints != null && hints.ContainsKey(DecodeHintType.TRY_HARDER);
          var resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK) ? null : (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
