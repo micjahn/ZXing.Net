@@ -38,7 +38,11 @@ namespace ZXing.Common.Test
    /// </summary>
    public abstract class AbstractBlackBoxTestCase
    {
+#if !SILVERLIGHT
       private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+#else
+      private static readonly DanielVaughan.Logging.ILog Log = DanielVaughan.Logging.LogManager.GetLog(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+#endif
 
       public bool accept(String dir, String name)
       {

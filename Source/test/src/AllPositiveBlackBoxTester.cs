@@ -38,7 +38,11 @@ namespace ZXing.Test
    [TestFixture]
    public sealed class AllPositiveBlackBoxTester
    {
+#if !SILVERLIGHT
       private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+#else
+      private static readonly DanielVaughan.Logging.ILog Log = DanielVaughan.Logging.LogManager.GetLog(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+#endif
 
       // This list has to be manually kept up to date. I don't know any automatic way to include every
       // subclass of AbstractBlackBoxTestCase, and furthermore to exclude subclasses of

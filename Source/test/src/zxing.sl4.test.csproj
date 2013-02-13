@@ -69,6 +69,9 @@
     <AssemblyOriginatorKeyFile>..\..\..\Key\private.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DanielVaughan.Logging.Silverlight">
+      <HintPath>..\..\..\3rdparty\Clog\DanielVaughan.Logging.Silverlight.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Silverlight.Testing">
       <HintPath>..\..\..\3rdparty\NUnit.Silverlight\Microsoft.Silverlight.Testing.dll</HintPath>
     </Reference>
