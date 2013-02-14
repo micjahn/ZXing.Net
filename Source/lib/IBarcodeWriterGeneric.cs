@@ -43,5 +43,12 @@ namespace ZXing
       /// <param name="contents">The contents.</param>
       /// <returns></returns>
       TOutput Write(string contents);
+
+      /// <summary>
+      /// Returns a rendered instance of the barcode which is given by a BitMatrix.
+      /// </summary>
+      /// <param name="matrix">The matrix.</param>
+      /// <returns></returns>
+      TOutput Write(BitMatrix matrix);
    }
 }

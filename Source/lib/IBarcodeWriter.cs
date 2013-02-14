@@ -35,6 +35,10 @@ namespace ZXing
       /// Creates a visual representation of the contents
       /// </summary>
       MonoTouch.UIKit.UIImage Write(string contents);
+      /// <summary>
+      /// Returns a rendered instance of the barcode which is given by a BitMatrix.
+      /// </summary>
+      MonoTouch.UIKit.UIImage Write(BitMatrix matrix);
 #endif
 
 #if MONOANDROID
@@ -42,6 +46,10 @@ namespace ZXing
       /// Creates a visual representation of the contents
       /// </summary>
       Android.Graphics.Bitmap Write(string contents);
+      /// <summary>
+      /// Returns a rendered instance of the barcode which is given by a BitMatrix.
+      /// </summary>
+      Android.Graphics.Bitmap Write(BitMatrix matrix);
 #endif
 
 #if UNITY
@@ -49,6 +57,10 @@ namespace ZXing
       /// Creates a visual representation of the contents
       /// </summary>
       UnityEngine.Color32[] Write(string contents);
+      /// <summary>
+      /// Returns a rendered instance of the barcode which is given by a BitMatrix.
+      /// </summary>
+      UnityEngine.Color32[] Write(BitMatrix matrix);
 #endif
 
 #if SILVERLIGHT
@@ -56,6 +68,10 @@ namespace ZXing
       /// Creates a visual representation of the contents
       /// </summary>
       System.Windows.Media.Imaging.WriteableBitmap Write(string contents);
+      /// <summary>
+      /// Returns a rendered instance of the barcode which is given by a BitMatrix.
+      /// </summary>
+      System.Windows.Media.Imaging.WriteableBitmap Write(BitMatrix matrix);
 #endif
 
 #if NETFX_CORE
@@ -63,6 +79,10 @@ namespace ZXing
       /// Creates a visual representation of the contents
       /// </summary>
       Windows.UI.Xaml.Media.Imaging.WriteableBitmap Write(string contents);
+      /// <summary>
+      /// Returns a rendered instance of the barcode which is given by a BitMatrix.
+      /// </summary>
+      Windows.UI.Xaml.Media.Imaging.WriteableBitmap Write(BitMatrix matrix);
 #endif
 
 #if (NET40 || NET35 || NET20) && !UNITY
@@ -70,6 +90,10 @@ namespace ZXing
       /// Creates a visual representation of the contents
       /// </summary>
       System.Drawing.Bitmap Write(string contents);
+      /// <summary>
+      /// Returns a rendered instance of the barcode which is given by a BitMatrix.
+      /// </summary>
+      System.Drawing.Bitmap Write(BitMatrix matrix);
 #endif
    }
 }
