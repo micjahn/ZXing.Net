@@ -23,7 +23,6 @@ using System.Windows.Forms;
 
 using ZXing;
 using ZXing.Common;
-using ZXing.Rendering;
 
 namespace WindowsFormsDemo
 {
@@ -31,14 +30,14 @@ namespace WindowsFormsDemo
    {
       private WebCam wCam;
       private Timer webCamTimer;
-      private readonly IBarcodeReader barcodeReader;
+      private readonly BarcodeReader barcodeReader;
       private readonly IList<ResultPoint> resultPoints;
       private EncodingOptions EncodingOptions { get; set; }
 
       public WindowsFormsDemoForm()
       {
          InitializeComponent();
-         barcodeReader = new BarcodeReader {AutoRotate = true, TryHarder = true};
+         barcodeReader = new BarcodeReader {AutoRotate = true, TryHarder = true, TryInverted = true};
          barcodeReader.ResultPointFound += point =>
                                               {
                                                  if (point == null)
@@ -316,6 +315,14 @@ namespace WindowsFormsDemo
          catch (Exception exc)
          {
             MessageBox.Show(this, exc.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+         }
+      }
+
+      private void btnDecodingOptions_Click(object sender, EventArgs e)
+      {
+         using (var dlg = new DecodingOptionsForm(barcodeReader))
+         {
+            dlg.ShowDialog(this);
          }
       }
    }

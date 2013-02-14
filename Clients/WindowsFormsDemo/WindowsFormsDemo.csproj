@@ -81,6 +81,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DecodingOptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DecodingOptionsForm.Designer.cs">
+      <DependentUpon>DecodingOptionsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EncodingOptionsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,6 +102,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DecodingOptionsForm.resx">
+      <DependentUpon>DecodingOptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EncodingOptionsForm.resx">
       <DependentUpon>EncodingOptionsForm.cs</DependentUpon>
     </EmbeddedResource>
