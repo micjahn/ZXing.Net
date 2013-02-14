@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace System
+namespace ZXing
 {
 #if !WindowsCE
    /// <summary>
