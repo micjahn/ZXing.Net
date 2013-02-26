@@ -412,8 +412,7 @@ namespace ZXing
             {
                if (TryInverted && luminanceSource.InversionSupported)
                {
-                  luminanceSource.invert();
-                  binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource));
+                  binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource.invert()));
                   if (usePreviousState && multiformatReader != null)
                   {
                      result = multiformatReader.decodeWithState(binaryBitmap);
@@ -423,11 +422,6 @@ namespace ZXing
                      result = Reader.decode(binaryBitmap, hints);
                      usePreviousState = true;
                   }
-                  // invert back because for next round of rotation
-                  // but I'm not sure if it would be necessary because the next round
-                  // with rotation would decode an inverted image and if no result was found
-                  // it would be inverted back and checked again
-                  luminanceSource.invert();
                }
             }
 

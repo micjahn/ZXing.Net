@@ -57,7 +57,7 @@ namespace ZXing
       public abstract byte[] getRow(int y, byte[] row);
 
       /// <summary> Fetches luminance data for the underlying bitmap. Values should be fetched using:
-      /// int luminance = array[y * width + x] & 0xff;
+      /// int luminance = array[y * width + x] &amp; 0xff;
       /// 
       /// </summary>
       /// <returns> A row-major 2D array of luminance values. Do not use result.length as it may be
@@ -161,7 +161,7 @@ namespace ZXing
          }
       }
 
-      virtual public void invert()
+      virtual public LuminanceSource invert()
       {
          throw new NotSupportedException("This luminance source does not support inversion.");
       }

@@ -186,6 +186,7 @@
     <Compile Include="IBarcodeWriterGeneric.cs" />
     <Compile Include="IMultipleBarcodeReader.cs" />
     <Compile Include="IMultipleBarcodeReaderGeneric.cs" />
+    <Compile Include="InvertedLuminanceSource.cs" />
     <Compile Include="LuminanceSource.cs" />
     <Compile Include="maxicode\decoder\BitMatrixParser.cs" />
     <Compile Include="maxicode\decoder\DecodedBitStreamParser.cs" />

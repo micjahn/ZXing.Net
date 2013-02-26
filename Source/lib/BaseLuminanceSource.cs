@@ -183,15 +183,9 @@ namespace ZXing
       /// <summary>
       /// Inverts the luminance values (newValue = 255 - oldValue)
       /// </summary>
-      public override void invert()
+      public override LuminanceSource invert()
       {
-         var localLuminances = Matrix;
-         var newLuminances = new byte[localLuminances.Length];
-         for (var index = 0; index < luminances.Length; index++)
-         {
-            newLuminances[index] = (byte)(255 - localLuminances[index]);
-         }
-         luminances = newLuminances;
+         return new InvertedLuminanceSource(this);
       }
 
       /// <summary>
