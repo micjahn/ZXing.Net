@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 
+using ZXing.Aztec;
 using ZXing.Common;
 using ZXing.Datamatrix;
 using ZXing.OneD;
@@ -53,6 +54,7 @@ namespace ZXing
                            {BarcodeFormat.MSI, () => new MSIWriter()},
                            {BarcodeFormat.PLESSEY, () => new PlesseyWriter()},
                            {BarcodeFormat.DATA_MATRIX, () => new DataMatrixWriter()},
+                           {BarcodeFormat.AZTEC, () => new AztecWriter()},
                         };
       }
 

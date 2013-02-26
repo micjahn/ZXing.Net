@@ -34,14 +34,9 @@ namespace ZXing.Common.ReedSolomon
    /// port of his C++ Reed-Solomon implementation.</p>
    /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>  William Rucklidge
-   /// </author>
-   /// <author>  sanfordsquires
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
+   /// <author>William Rucklidge</author>
+   /// <author>sanfordsquires</author>
    public sealed class ReedSolomonDecoder
    {
       private readonly GenericGF field;
@@ -51,26 +46,22 @@ namespace ZXing.Common.ReedSolomon
          this.field = field;
       }
 
-      /// <summary> <p>Decodes given set of received codewords, which include both data and error-correction
+      /// <summary>
+      ///   <p>Decodes given set of received codewords, which include both data and error-correction
       /// codewords. Really, this means it uses Reed-Solomon to detect and correct errors, in-place,
       /// in the input.</p>
-      /// 
       /// </summary>
-      /// <param name="received">data and error-correction codewords
-      /// </param>
-      /// <param name="twoS">number of error-correction codewords available
-      /// </param>
-      /// <throws>  ReedSolomonException if decoding fails for any reason </throws>
+      /// <param name="received">data and error-correction codewords</param>
+      /// <param name="twoS">number of error-correction codewords available</param>
+      /// <returns>false: decoding fails</returns>
       public bool decode(int[] received, int twoS)
       {
-         GenericGFPoly poly = new GenericGFPoly(field, received);
-         int[] syndromeCoefficients = new int[twoS];
-         bool dataMatrix = field.Equals(GenericGF.DATA_MATRIX_FIELD_256);
-         bool noError = true;
-         for (int i = 0; i < twoS; i++)
+         var poly = new GenericGFPoly(field, received);
+         var syndromeCoefficients = new int[twoS];
+         var noError = true;
+         for (var i = 0; i < twoS; i++)
          {
-            // Thanks to sanfordsquires for this fix:
-            int eval = poly.evaluateAt(field.exp(dataMatrix ? i + 1 : i));
+            var eval = poly.evaluateAt(field.exp(i + field.GeneratorBase));
             syndromeCoefficients[syndromeCoefficients.Length - 1 - i] = eval;
             if (eval != 0)
             {
@@ -81,22 +72,22 @@ namespace ZXing.Common.ReedSolomon
          {
             return true;
          }
-         GenericGFPoly syndrome = new GenericGFPoly(field, syndromeCoefficients);
-         
-         GenericGFPoly[] sigmaOmega = runEuclideanAlgorithm(field.buildMonomial(twoS, 1), syndrome, twoS);
+         var syndrome = new GenericGFPoly(field, syndromeCoefficients);
+
+         var sigmaOmega = runEuclideanAlgorithm(field.buildMonomial(twoS, 1), syndrome, twoS);
          if (sigmaOmega == null)
             return false;
 
-         GenericGFPoly sigma = sigmaOmega[0];
-         int[] errorLocations = findErrorLocations(sigma);
+         var sigma = sigmaOmega[0];
+         var errorLocations = findErrorLocations(sigma);
          if (errorLocations == null)
             return false;
 
-         GenericGFPoly omega = sigmaOmega[1];
-         int[] errorMagnitudes = findErrorMagnitudes(omega, errorLocations, dataMatrix);
-         for (int i = 0; i < errorLocations.Length; i++)
+         var omega = sigmaOmega[1];
+         var errorMagnitudes = findErrorMagnitudes(omega, errorLocations);
+         for (var i = 0; i < errorLocations.Length; i++)
          {
-            int position = received.Length - 1 - field.log(errorLocations[i]);
+            var position = received.Length - 1 - field.log(errorLocations[i]);
             if (position < 0)
             {
                // throw new ReedSolomonException("Bad error location");
@@ -193,7 +184,7 @@ namespace ZXing.Common.ReedSolomon
          return result;
       }
 
-      private int[] findErrorMagnitudes(GenericGFPoly errorEvaluator, int[] errorLocations, bool dataMatrix)
+      private int[] findErrorMagnitudes(GenericGFPoly errorEvaluator, int[] errorLocations)
       {
          // This is directly applying Forney's Formula
          int s = errorLocations.Length;
@@ -219,8 +210,7 @@ namespace ZXing.Common.ReedSolomon
                }
             }
             result[i] = field.multiply(errorEvaluator.evaluateAt(xiInverse), field.inverse(denominator));
-            // Thanks to sanfordsquires for this fix:
-            if (dataMatrix)
+            if (field.GeneratorBase != 0)
             {
                result[i] = field.multiply(result[i], xiInverse);
             }

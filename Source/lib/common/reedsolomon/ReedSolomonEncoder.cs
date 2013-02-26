@@ -19,15 +19,11 @@ using System.Collections.Generic;
 
 namespace ZXing.Common.ReedSolomon
 {
-   /// <summary> <p>Implements Reed-Solomon enbcoding, as the name implies.</p>
-   /// 
+   /// <summary>
+   /// Implements Reed-Solomon encoding, as the name implies.
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>  William Rucklidge
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
+   /// <author>William Rucklidge</author>
    public sealed class ReedSolomonEncoder
    {
       private readonly GenericGF field;
@@ -35,10 +31,6 @@ namespace ZXing.Common.ReedSolomon
 
       public ReedSolomonEncoder(GenericGF field)
       {
-         if (!GenericGF.QR_CODE_FIELD_256.Equals(field))
-         {
-            throw new System.ArgumentException("Only QR Code is supported at this time");
-         }
          this.field = field;
          this.cachedGenerators = new List<GenericGFPoly>();
          cachedGenerators.Add(new GenericGFPoly(field, new int[] { 1 }));
@@ -51,7 +43,7 @@ namespace ZXing.Common.ReedSolomon
             var lastGenerator = cachedGenerators[cachedGenerators.Count - 1];
             for (int d = cachedGenerators.Count; d <= degree; d++)
             {
-               var nextGenerator = lastGenerator.multiply(new GenericGFPoly(field, new int[] { 1, field.exp(d - 1) }));
+               var nextGenerator = lastGenerator.multiply(new GenericGFPoly(field, new int[] { 1, field.exp(d - 1 + field.GeneratorBase) }));
                cachedGenerators.Add(nextGenerator);
                lastGenerator = nextGenerator;
             }
@@ -63,25 +55,29 @@ namespace ZXing.Common.ReedSolomon
       {
          if (ecBytes == 0)
          {
-            throw new System.ArgumentException("No error correction bytes");
+            throw new ArgumentException("No error correction bytes");
          }
-         int dataBytes = toEncode.Length - ecBytes;
+         var dataBytes = toEncode.Length - ecBytes;
          if (dataBytes <= 0)
          {
-            throw new System.ArgumentException("No data bytes provided");
+            throw new ArgumentException("No data bytes provided");
          }
-         GenericGFPoly generator = buildGenerator(ecBytes);
-         int[] infoCoefficients = new int[dataBytes];
+
+         var generator = buildGenerator(ecBytes);
+         var infoCoefficients = new int[dataBytes];
          Array.Copy(toEncode, 0, infoCoefficients, 0, dataBytes);
-         GenericGFPoly info = new GenericGFPoly(field, infoCoefficients);
+
+         var info = new GenericGFPoly(field, infoCoefficients);
          info = info.multiplyByMonomial(ecBytes, 1);
-         GenericGFPoly remainder = info.divide(generator)[1];
-         int[] coefficients = remainder.Coefficients;
-         int numZeroCoefficients = ecBytes - coefficients.Length;
-         for (int i = 0; i < numZeroCoefficients; i++)
+
+         var remainder = info.divide(generator)[1];
+         var coefficients = remainder.Coefficients;
+         var numZeroCoefficients = ecBytes - coefficients.Length;
+         for (var i = 0; i < numZeroCoefficients; i++)
          {
             toEncode[dataBytes + i] = 0;
          }
+
          Array.Copy(coefficients, 0, toEncode, dataBytes + numZeroCoefficients, coefficients.Length);
       }
    }

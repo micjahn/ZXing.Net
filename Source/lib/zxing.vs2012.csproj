@@ -45,8 +45,11 @@
   <ItemGroup>
     <Compile Include="aztec\AztecDetectorResult.cs" />
     <Compile Include="aztec\AztecReader.cs" />
+    <Compile Include="aztec\AztecWriter.cs" />
     <Compile Include="aztec\decoder\Decoder.cs" />
     <Compile Include="aztec\detector\Detector.cs" />
+    <Compile Include="aztec\encoder\AztecCode.cs" />
+    <Compile Include="aztec\encoder\Encoder.cs" />
     <Compile Include="BarcodeFormat.cs" />
     <Compile Include="BarcodeReader.cs" />
     <Compile Include="BarcodeReaderGeneric.cs" />

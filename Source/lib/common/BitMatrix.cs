@@ -383,7 +383,7 @@ namespace ZXing.Common
          {
             for (int x = 0; x < width; x++)
             {
-               result.Append(this[x, y] ? "X" : " ");
+               result.Append(this[x, y] ? "X " : "  ");
             }
 #if WindowsCE
             result.Append("\r\n");
