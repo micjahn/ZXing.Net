@@ -31,13 +31,8 @@ namespace ZXing
       private static readonly Func<LuminanceSource, Binarizer> defaultCreateBinarizer =
          (luminanceSource) => new HybridBinarizer(luminanceSource);
 
-#if MONOTOUCH
-      private static readonly Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> defaultCreateRGBLuminanceSource =
-         (rawBytes, width, height, format) => new RGBLuminanceSource(rawBytes, width, height);
-#else
-      private static readonly Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> defaultCreateRGBLuminanceSource =
+      protected static readonly Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> defaultCreateRGBLuminanceSource =
          (rawBytes, width, height, format) => new RGBLuminanceSource(rawBytes, width, height, format);
-#endif
 
       private Reader reader;
       private readonly IDictionary<DecodeHintType, object> hints;
@@ -345,6 +340,7 @@ namespace ZXing
          usePreviousState = false;
       }
 
+#if !PORTABLE
 #if !UNITY
       /// <summary>
       /// Decodes the specified barcode bitmap.
@@ -386,6 +382,7 @@ namespace ZXing
 
          return Decode(luminanceSource);
       }
+#endif
 
       virtual protected Result Decode(LuminanceSource luminanceSource)
       {
@@ -455,6 +452,7 @@ namespace ZXing
          return result;
       }
 
+#if !PORTABLE
 #if !UNITY
       /// <summary>
       /// Decodes the specified barcode bitmap.
@@ -495,6 +493,7 @@ namespace ZXing
 
          return DecodeMultiple(luminanceSource);
       }
+#endif
 
       virtual protected Result[] DecodeMultiple(LuminanceSource luminanceSource)
       {

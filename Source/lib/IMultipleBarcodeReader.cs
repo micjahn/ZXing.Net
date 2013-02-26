@@ -19,7 +19,9 @@ using System.Collections.Generic;
 
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
+#if !PORTABLE
 using System.Drawing;
+#endif
 #else
 using UnityEngine;
 #endif
@@ -97,6 +99,7 @@ namespace ZXing
 #elif MONOANDROID
       Result[] DecodeMultiple(Android.Graphics.Bitmap barcodeImage);
 #else
+#if !PORTABLE
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
       /// <summary>
@@ -120,6 +123,7 @@ namespace ZXing
       /// <param name="barcodeBitmap">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
       Result[] DecodeMultiple(WriteableBitmap barcodeBitmap);
+#endif
 #endif
 #endif
    }

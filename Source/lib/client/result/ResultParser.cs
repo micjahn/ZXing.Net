@@ -58,7 +58,7 @@ namespace ZXing.Client.Result
                                                  new ExpandedProductResultParser()
                                               };
 
-#if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE
+#if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE
       private static readonly Regex DIGITS = new Regex("\\d*");
       private static readonly Regex ALPHANUM = new Regex("[a-zA-Z0-9]*");
       private static readonly Regex AMPERSAND = new Regex("&");

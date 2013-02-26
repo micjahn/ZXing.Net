@@ -46,7 +46,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © 2012-2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+#if !PORTABLE
 [assembly: Guid("ECE3AB74-9DD1-4CFB-9D48-FCBFB30E06D6")]
+#endif
 
 // Version information for an assembly consists of the following four values:
 //

@@ -74,6 +74,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDemo", "Clients\Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFDemo", "Clients\WPFDemo\WPFDemo\WPFDemo.csproj", "{AF488075-40E9-48B1-8C5B-2FC5356C9233}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.portable", "Source\lib\zxing.portable.csproj", "{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -515,6 +517,21 @@ Global
 		{AF488075-40E9-48B1-8C5B-2FC5356C9233}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AF488075-40E9-48B1-8C5B-2FC5356C9233}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AF488075-40E9-48B1-8C5B-2FC5356C9233}.Release|x86.ActiveCfg = Release|Any CPU
+		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Release with Documentation|Any CPU.ActiveCfg = Release|Any CPU
+		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Release with Documentation|Any CPU.Build.0 = Release|Any CPU
+		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Release with Documentation|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Release with Documentation|Mixed Platforms.Build.0 = Release|Any CPU
+		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Release with Documentation|x86.ActiveCfg = Release|Any CPU
+		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -15,6 +15,7 @@
  */
 
 using System;
+#if !PORTABLE
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
 using System.Drawing;
@@ -25,6 +26,7 @@ using UnityEngine;
 using Windows.UI.Xaml.Media.Imaging;
 #else
 using System.Windows.Media.Imaging;
+#endif
 #endif
 #if MONOANDROID
 using Android.Graphics;
@@ -41,6 +43,7 @@ namespace ZXing
       private static readonly Func<MonoTouch.UIKit.UIImage, LuminanceSource> defaultCreateLuminanceSource = 
          (img) => new RGBLuminanceSource(new Bitmap(img), (int)img.Size.Width, (int)img.Size.Height);
 #else
+#if !PORTABLE
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
    public class BarcodeReader : BarcodeReaderGeneric<Bitmap>, IBarcodeReader, IMultipleBarcodeReader
@@ -58,6 +61,12 @@ namespace ZXing
    {
       private static readonly Func<WriteableBitmap, LuminanceSource> defaultCreateLuminanceSource =
          (bitmap) => new BitmapLuminanceSource(bitmap);
+#endif
+#else
+   public class BarcodeReader : BarcodeReaderGeneric<byte[]>, IBarcodeReader, IMultipleBarcodeReader
+   {
+      private static readonly Func<byte[], LuminanceSource> defaultCreateLuminanceSource =
+         (data) => null;
 #endif
 #endif
       /// <summary>
@@ -85,7 +94,11 @@ namespace ZXing
 #else
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
+#if !PORTABLE
          Func<Bitmap, LuminanceSource> createLuminanceSource,
+#else
+         Func<byte[], LuminanceSource> createLuminanceSource,
+#endif
 #else
          Func<Color32[], int, int, LuminanceSource> createLuminanceSource,
 #endif
@@ -95,7 +108,7 @@ namespace ZXing
 #endif
          Func<LuminanceSource, Binarizer> createBinarizer
          )
-         : base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer)
+         : base(reader, createLuminanceSource, createBinarizer)
       {
       }
 
@@ -116,7 +129,11 @@ namespace ZXing
 #else
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
+#if !PORTABLE
          Func<Bitmap, LuminanceSource> createLuminanceSource,
+#else
+         Func<byte[], LuminanceSource> createLuminanceSource,
+#endif
 #else
          Func<Color32[], int, int, LuminanceSource> createLuminanceSource,
 #endif

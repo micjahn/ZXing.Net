@@ -80,6 +80,7 @@ namespace ZXing
       /// </returns>
       Result Decode(byte[] rawRGB, int width, int height, RGBLuminanceSource.BitmapFormat format);
 
+#if !PORTABLE
 #if !UNITY
       /// <summary>
       /// Decodes the specified barcode bitmap.
@@ -94,6 +95,7 @@ namespace ZXing
       /// <param name="rawRGB">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
       Result Decode(T rawRGB, int width, int height);
+#endif
 #endif
    }
 }

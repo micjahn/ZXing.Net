@@ -32,7 +32,7 @@ namespace ZXing.Client.Result
    /// </author>
    sealed class VCardResultParser : ResultParser
    {
-#if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE
+#if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE
       private static readonly Regex BEGIN_VCARD = new Regex("BEGIN:VCARD", RegexOptions.IgnoreCase);
       private static readonly Regex VCARD_LIKE_DATE = new Regex("\\d{4}-?\\d{2}-?\\d{2}");
       private static readonly Regex CR_LF_SPACE_TAB = new Regex("\r\n[ \t]");
@@ -310,7 +310,7 @@ namespace ZXing.Client.Result
             {
 #if WindowsCE
                fragment = Encoding.Default.GetString(fragmentBytes, 0, fragmentBytes.Length);
-#elif (WINDOWS_PHONE70 || WINDOWS_PHONE71 || WINDOWS_PHONE80 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE)
+#elif (WINDOWS_PHONE70 || WINDOWS_PHONE71 || WINDOWS_PHONE80 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
                fragment = Encoding.UTF8.GetString(fragmentBytes, 0, fragmentBytes.Length);
 #else
                fragment = Encoding.Default.GetString(fragmentBytes);
@@ -337,7 +337,7 @@ namespace ZXing.Client.Result
                      fragment = Encoding.Default.GetString(fragmentBytes, 0, fragmentBytes.Length);
                   }
                   fragment = Encoding.Default.GetString(fragmentBytes, 0, fragmentBytes.Length);
-#elif (WINDOWS_PHONE70 || WINDOWS_PHONE71 || WINDOWS_PHONE80 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE)
+#elif (WINDOWS_PHONE70 || WINDOWS_PHONE71 || WINDOWS_PHONE80 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
                   fragment = Encoding.UTF8.GetString(fragmentBytes, 0, fragmentBytes.Length);
 #else
                   fragment = Encoding.Default.GetString(fragmentBytes);

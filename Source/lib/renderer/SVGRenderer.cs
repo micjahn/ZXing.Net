@@ -25,7 +25,7 @@ using Windows.UI;
 using System.Windows.Media;
 #elif UNITY
 using UnityEngine;
-#else
+#elif !PORTABLE
 using System.Drawing;
 #endif
 
@@ -39,6 +39,26 @@ namespace ZXing.Rendering
    public class SvgRenderer : IBarcodeRenderer<SvgRenderer.SvgImage>
    {
 #if !UNITY
+#if PORTABLE
+      public struct Color
+      {
+         public static Color Black = new Color(0);
+         public static Color White = new Color(0x00FFFFFF);
+
+         public byte A;
+         public byte R;
+         public byte G;
+         public byte B;
+
+         public Color(int color)
+         {
+            A = (byte)((color & 0xFF000000) >> 24);
+            R = (byte)((color & 0x00FF0000) >> 16);
+            G = (byte)((color & 0x0000FF00) >> 8);
+            B = (byte)((color & 0x000000FF));
+         }
+      }
+#endif
       /// <summary>
       /// Gets or sets the foreground color.
       /// </summary>
@@ -251,8 +271,7 @@ namespace ZXing.Rendering
             content.Append("</svg>");
          }
 
-         internal void AddTag(
-            int displaysizeX, int displaysizeY, int viewboxSizeX, int viewboxSizeY, Color background, Color fill)
+         internal void AddTag(int displaysizeX, int displaysizeY, int viewboxSizeX, int viewboxSizeY, Color background, Color fill)
          {
 
             if (displaysizeX <= 0 || displaysizeY <= 0)
