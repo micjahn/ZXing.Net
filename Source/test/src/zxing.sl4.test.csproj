@@ -96,6 +96,7 @@
     </Compile>
     <Compile Include="aztec\AztecBlackBox1TestCase.cs" />
     <Compile Include="aztec\AztecBlackBox2TestCase.cs" />
+    <Compile Include="aztec\encoder\EncoderTest.cs" />
     <Compile Include="client\result\AddressBookParsedResultTestCase.cs" />
     <Compile Include="client\result\CalendarParsedResultTestCase.cs" />
     <Compile Include="client\result\EmailAddressParsedResultTestCase.cs" />
@@ -115,10 +116,7 @@
     <Compile Include="common\BitSourceBuilder.cs" />
     <Compile Include="common\BitSourceTestCase.cs" />
     <Compile Include="common\PerspectiveTransformTestCase.cs" />
-    <Compile Include="common\reedsolomon\AbstractReedSolomonTestCase.cs" />
-    <Compile Include="common\reedsolomon\ReedSolomonDecoderDataMatrixTestCase.cs" />
-    <Compile Include="common\reedsolomon\ReedSolomonDecoderQRCodeTestCase.cs" />
-    <Compile Include="common\reedsolomon\ReedSolomonEncoderQRCodeTestCase.cs" />
+    <Compile Include="common\reedsolomon\ReedSolomonTestCase.cs" />
     <Compile Include="common\StringUtilsTestCase.cs" />
     <Compile Include="common\SummaryResults.cs" />
     <Compile Include="common\TestResult.cs" />

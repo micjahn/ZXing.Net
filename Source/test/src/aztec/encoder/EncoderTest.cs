@@ -34,7 +34,11 @@ namespace ZXing.Aztec.Test
    public sealed class EncoderTest
    {
       private static readonly Encoding LATIN_1 = Encoding.GetEncoding("ISO-8859-1");
-      private static readonly Regex DOTX = new Regex("[^.X]", RegexOptions.Compiled);
+      private static readonly Regex DOTX = new Regex("[^.X]"
+#if !SILVERLIGHT
+         , RegexOptions.Compiled
+#endif
+         );
       public static readonly ResultPoint[] NO_POINTS = new ResultPoint[0];
 
       // real life tests
