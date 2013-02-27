@@ -109,7 +109,19 @@ namespace WindowsCEDemoForm
 
       private void btnStartEncoding_Click(object sender, EventArgs e)
       {
-         var bitmap = Encode(txtContent.Text, BarcodeFormat.QR_CODE);
+         var format = BarcodeFormat.QR_CODE;
+         if (!String.IsNullOrEmpty(txtType.Text))
+         {
+            try
+            {
+               format = (BarcodeFormat)Enum.Parse(typeof(BarcodeFormat), txtType.Text, true);
+            }
+            catch
+            {
+               txtType.Text = format.ToString();
+            }
+         }
+         var bitmap = Encode(txtContent.Text, format);
          picBarcode.Image = bitmap;
       }
    }

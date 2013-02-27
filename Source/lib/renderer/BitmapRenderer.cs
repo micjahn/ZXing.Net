@@ -100,6 +100,25 @@ namespace ZXing.Rendering
                                                                  format == BarcodeFormat.MSI ||
                                                                  format == BarcodeFormat.PLESSEY);
          int emptyArea = outputContent ? 16 : 0;
+         int pixelsize = 1;
+
+         if (options != null)
+         {
+            if (options.Width > width)
+            {
+               width = options.Width;
+            }
+            if (options.Height > height)
+            {
+               height = options.Height;
+            }
+            // calculating the scaling factor
+            pixelsize = width/matrix.Width;
+            if (pixelsize > height/matrix.Height)
+            {
+               pixelsize = height/matrix.Height;
+            }
+         }
 
          // create the bitmap and lock the bits because we need the stride
          // which is the width of the image and possible padding bytes
@@ -112,25 +131,36 @@ namespace ZXing.Rendering
             var index = 0;
             var color = Background;
 
-            for (int y = 0; y < height - emptyArea; y++)
+            for (int y = 0; y < matrix.Height - emptyArea; y++)
             {
-               for (var x = 0; x < width; x++)
+               for (var pixelsizeHeight = 0; pixelsizeHeight < pixelsize; pixelsizeHeight++)
                {
-                  color = matrix[x, y] ? Foreground : Background;
-                  pixels[index++] = color.R;
-                  pixels[index++] = color.G;
-                  pixels[index++] = color.B;
+                  for (var x = 0; x < matrix.Width; x++)
+                  {
+                     color = matrix[x, y] ? Foreground : Background;
+                     for (var pixelsizeWidth = 0; pixelsizeWidth < pixelsize; pixelsizeWidth++)
+                     {
+                        pixels[index++] = color.R;
+                        pixels[index++] = color.G;
+                        pixels[index++] = color.B;
+                     }
+                  }
+                  for (var x = pixelsize * matrix.Width; x < width; x++)
+                  {
+                     pixels[index++] = Background.R;
+                     pixels[index++] = Background.G;
+                     pixels[index++] = Background.B;
+                  }
+                  index += padding;
                }
-               index += padding;
             }
-            color = Background;
-            for (int y = height - emptyArea; y < height; y++)
+            for (int y = matrix.Height * pixelsize - emptyArea; y < height; y++)
             {
                for (var x = 0; x < width; x++)
                {
-                  pixels[index++] = color.R;
-                  pixels[index++] = color.G;
-                  pixels[index++] = color.B;
+                  pixels[index++] = Background.R;
+                  pixels[index++] = Background.G;
+                  pixels[index++] = Background.B;
                }
                index += padding;
             }
