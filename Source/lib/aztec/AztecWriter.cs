@@ -28,7 +28,26 @@ namespace ZXing.Aztec
    /// </summary>
    public sealed class AztecWriter : Writer
    {
-      private static readonly Encoding LATIN_1 = Encoding.GetEncoding("ISO-8859-1");
+      private static readonly Encoding LATIN_1;
+
+      static AztecWriter()
+      {
+#if !(WindowsCE || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
+         LATIN_1 = Encoding.GetEncoding("ISO-8859-1");
+#elif WindowsCE
+         try
+         {
+            LATIN_1 = Encoding.GetEncoding("ISO-8859-1");
+         }
+         catch (PlatformNotSupportedException)
+         {
+            LATIN_1 = Encoding.GetEncoding(1252);
+         }
+#else
+         // not fully correct but what else
+         LATIN_1 = Encoding.GetEncoding("UTF-8");
+#endif
+      }
 
       /// <summary>
       /// Encode a barcode using the default settings.

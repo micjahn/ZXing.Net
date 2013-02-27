@@ -30,20 +30,40 @@ namespace ZXing.Datamatrix.Encoder
       private int newEncoding;
       private SymbolInfo symbolInfo;
       private int skipAtEnd;
+      private static readonly Encoding encoding;
+
+      static EncoderContext()
+      {
+#if !(WindowsCE || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
+         encoding = Encoding.GetEncoding("ISO-8859-1");
+#elif WindowsCE
+         try
+         {
+            encoding = Encoding.GetEncoding("ISO-8859-1");
+         }
+         catch (PlatformNotSupportedException)
+         {
+            encoding = Encoding.GetEncoding(1252);
+         }
+#else
+         // not fully correct but what else
+         encoding = Encoding.GetEncoding("UTF-8");
+#endif
+      }
 
       public EncoderContext(String msg)
       {
          //From this point on Strings are not Unicode anymore!
-         var msgBinary = Encoding.GetEncoding("ISO-8859-1").GetBytes(msg);
+         var msgBinary = encoding.GetBytes(msg);
          var sb = new StringBuilder(msgBinary.Length);
          var c = msgBinary.Length;
          for (int i = 0; i < c; i++)
          {
             // TODO: does it works in .Net the same way?
-            char ch = (char)(msgBinary[i] & 0xff);
+            var ch = (char)(msgBinary[i] & 0xff);
             if (ch == '?' && msg[i] != '?')
             {
-               throw new ArgumentException("Message contains characters outside ISO-8859-1 encoding.");
+               throw new ArgumentException("Message contains characters outside " + encoding.WebName + " encoding.");
             }
             sb.Append(ch);
          }
