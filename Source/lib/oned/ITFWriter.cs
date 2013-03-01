@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+
 using ZXing.Common;
 
 namespace ZXing.OneD
@@ -30,6 +31,19 @@ namespace ZXing.OneD
       private static readonly int[] START_PATTERN = {1, 1, 1, 1};
       private static readonly int[] END_PATTERN = {3, 1, 1};
 
+      /// <summary>
+      /// Encode the contents following specified format.
+      /// {@code width} and {@code height} are required size. This method may return bigger size
+      /// {@code BitMatrix} when specified size is too small. The user can set both {@code width} and
+      /// {@code height} to zero to get minimum size barcode. If negative value is set to {@code width}
+      /// or {@code height}, {@code IllegalArgumentException} is thrown.
+      /// </summary>
+      /// <param name="contents"></param>
+      /// <param name="format"></param>
+      /// <param name="width"></param>
+      /// <param name="height"></param>
+      /// <param name="hints"></param>
+      /// <returns></returns>
       public override BitMatrix encode(String contents,
                               BarcodeFormat format,
                               int width,
@@ -44,6 +58,13 @@ namespace ZXing.OneD
          return base.encode(contents, format, width, height, hints);
       }
 
+      /// <summary>
+      /// Encode the contents to bool array expression of one-dimensional barcode.
+      /// Start code and end code should be included in result, and side margins should not be included.
+      /// <returns>a {@code bool[]} of horizontal pixels (false = white, true = black)</returns>
+      /// </summary>
+      /// <param name="contents"></param>
+      /// <returns></returns>
       override public bool[] encode(String contents)
       {
          int length = contents.Length;
@@ -71,7 +92,7 @@ namespace ZXing.OneD
             int[] encoding = new int[18];
             for (int j = 0; j < 5; j++)
             {
-               encoding[(j << 1)] = ITFReader.PATTERNS[one][j];
+               encoding[j << 1] = ITFReader.PATTERNS[one][j];
                encoding[(j << 1) + 1] = ITFReader.PATTERNS[two][j];
             }
             pos += appendPattern(result, pos, encoding, true);

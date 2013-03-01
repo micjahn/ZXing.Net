@@ -177,7 +177,6 @@ namespace ZXing.Client.Result
 
       private static String findAIvalue(int i, String rawText)
       {
-         var buf = new StringBuilder();
          char c = rawText[i];
          // First character must be a open parenthesis.If not, ERROR
          if (c != '(')
@@ -186,6 +185,7 @@ namespace ZXing.Client.Result
          }
 
          var rawTextAux = rawText.Substring(i + 1);
+         var buf = new StringBuilder();
 
          for (int index = 0; index < rawTextAux.Length; index++)
          {

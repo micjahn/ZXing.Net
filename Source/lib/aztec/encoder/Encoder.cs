@@ -144,8 +144,6 @@ namespace ZXing.Aztec.Internal
       /// <returns>Aztec symbol matrix with metadata</returns>
       public static AztecCode encode(byte[] data, int minECCPercent)
       {
-         var aztec = new AztecCode();
-
          // High-level encode
          var bits = highLevelEncode(data);
 
@@ -301,12 +299,14 @@ namespace ZXing.Aztec.Internal
             }
          }
 
-         aztec.isCompact = compact;
-         aztec.Size = matrixSize;
-         aztec.Layers = layers;
-         aztec.CodeWords = messageSizeInWords;
-         aztec.Matrix = matrix;
-         return aztec;
+         return new AztecCode
+                        {
+                           isCompact = compact,
+                           Size = matrixSize,
+                           Layers = layers,
+                           CodeWords = messageSizeInWords,
+                           Matrix = matrix
+                        };
       }
 
       private static void drawBullsEye(BitMatrix matrix, int center, int size)

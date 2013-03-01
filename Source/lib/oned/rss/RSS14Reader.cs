@@ -167,12 +167,12 @@ namespace ZXing.OneD.RSS
 
       private static bool checkChecksum(Pair leftPair, Pair rightPair)
       {
-         int leftFPValue = leftPair.FinderPattern.Value;
-         int rightFPValue = rightPair.FinderPattern.Value;
-         if ((leftFPValue == 0 && rightFPValue == 8) ||
-             (leftFPValue == 8 && rightFPValue == 0))
-         {
-         }
+         //int leftFPValue = leftPair.FinderPattern.Value;
+         //int rightFPValue = rightPair.FinderPattern.Value;
+         //if ((leftFPValue == 0 && rightFPValue == 8) ||
+         //    (leftFPValue == 8 && rightFPValue == 0))
+         //{
+         //}
          int checkValue = (leftPair.ChecksumPortion + 16 * rightPair.ChecksumPortion) % 79;
          int targetCheckValue =
              9 * leftPair.FinderPattern.Value + rightPair.FinderPattern.Value;

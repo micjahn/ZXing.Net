@@ -111,7 +111,13 @@
     </Compile>
     <Compile Include="datamatrix\DataMatrixBlackBox1TestCase.cs" />
     <Compile Include="datamatrix\DataMatrixBlackBox2TestCase.cs" />
+    <Compile Include="datamatrix\DataMatrixWriterTestCase.cs" />
     <Compile Include="datamatrix\decoder\DecodedBitStreamParserTestCase.cs" />
+    <Compile Include="datamatrix\encoder\DebugPlacement.cs" />
+    <Compile Include="datamatrix\encoder\ErrorCorrectionTestCase.cs" />
+    <Compile Include="datamatrix\encoder\HighLevelEncodeTestCase.cs" />
+    <Compile Include="datamatrix\encoder\PlacementTestCase.cs" />
+    <Compile Include="datamatrix\encoder\SymbolInfoTestCase.cs" />
     <Compile Include="multi\GenericMultipleBarcodeReaderTestCase.cs" />
     <Compile Include="multi\qrcode\MultiQRCodeBlackBox1TestCase.cs" />
     <Compile Include="negative\FalsePositives2BlackBoxTestCase.cs" />
@@ -221,7 +227,9 @@
       <Name>zxing.presentation</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="datamatrix\detector\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

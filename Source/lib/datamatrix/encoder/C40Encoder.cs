@@ -131,10 +131,7 @@ namespace ZXing.Datamatrix.Encoder
             {
                context.writeCodeword(HighLevelEncoder.C40_UNLATCH);
             }
-            else
-            {
-               //No unlatch
-            }
+            // else no unlatch
             context.Pos--;
          }
          else if (rest == 0)
