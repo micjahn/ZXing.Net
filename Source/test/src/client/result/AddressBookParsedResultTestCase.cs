@@ -34,7 +34,7 @@ namespace ZXing.Client.Result.Test
          doTest("MECARD:N:Sean Owen;;", null, new String[] { "Sean Owen" }, null, null, null, null, null, null, null, null);
          doTest("MECARD:NOTE:ZXing Team;N:Sean Owen;URL:google.com;EMAIL:srowen@example.org;;",
              null, new String[] { "Sean Owen" }, null, null, new String[] { "srowen@example.org" }, null, null,
-             "google.com", null, "ZXing Team");
+              new String[] { "google.com" }, null, "ZXing Team");
       }
 
       [Test]
@@ -115,7 +115,7 @@ namespace ZXing.Client.Result.Test
                                  String[] emails,
                                  String[] phoneNumbers,
                                  String org,
-                                 String url,
+                                 String[] urls,
                                  String birthday,
                                  String note)
       {
@@ -130,12 +130,12 @@ namespace ZXing.Client.Result.Test
          Assert.IsTrue(AreEqual(emails, addressResult.Emails));
          Assert.IsTrue(AreEqual(phoneNumbers, addressResult.PhoneNumbers));
          Assert.AreEqual(org, addressResult.Org);
-         Assert.AreEqual(url, addressResult.URL);
+         Assert.IsTrue(AreEqual(urls, addressResult.URLs));
          Assert.AreEqual(birthday, addressResult.Birthday);
          Assert.AreEqual(note, addressResult.Note);
       }
 
-      private static bool AreEqual<T>(IList<T> left, IList<T> right)
+      internal static bool AreEqual<T>(IList<T> left, IList<T> right)
       {
          if (left == null)
             return right == null;

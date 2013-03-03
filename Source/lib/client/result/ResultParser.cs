@@ -20,7 +20,6 @@ using System.Text.RegularExpressions;
 
 namespace ZXing.Client.Result
 {
-
    /// <summary> <p>Abstract class representing the result of decoding a barcode, as more than
    /// a String -- as some type of structured data. This might be a subclass which represents
    /// a URL, or an e-mail address. {@link #parseResult(com.google.zxing.Result)} will turn a raw
@@ -28,15 +27,11 @@ namespace ZXing.Client.Result
    /// 
    /// <p>Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
    /// on exception-based mechanisms during parsing.</p>
-   /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public abstract class ResultParser
    {
-      private static ResultParser[] PARSERS = {
+      private static readonly ResultParser[] PARSERS = {
                                                  new BookmarkDoCoMoResultParser(),
                                                  new AddressBookDoCoMoResultParser(),
                                                  new EmailDoCoMoResultParser(),
@@ -92,23 +87,23 @@ namespace ZXing.Client.Result
          return new TextParsedResult(theResult.Text, null);
       }
 
-      protected static void maybeAppend(String value_Renamed, System.Text.StringBuilder result)
+      protected static void maybeAppend(String value, System.Text.StringBuilder result)
       {
-         if (value_Renamed != null)
+         if (value != null)
          {
             result.Append('\n');
-            result.Append(value_Renamed);
+            result.Append(value);
          }
       }
 
-      protected static void maybeAppend(String[] value_Renamed, System.Text.StringBuilder result)
+      protected static void maybeAppend(String[] value, System.Text.StringBuilder result)
       {
-         if (value_Renamed != null)
+         if (value != null)
          {
-            for (int i = 0; i < value_Renamed.Length; i++)
+            for (int i = 0; i < value.Length; i++)
             {
                result.Append('\n');
-               result.Append(value_Renamed[i]);
+               result.Append(value[i]);
             }
          }
       }
@@ -126,7 +121,7 @@ namespace ZXing.Client.Result
             if (backslash >= 0)
             {
                int max = escaped.Length;
-               System.Text.StringBuilder unescaped = new System.Text.StringBuilder(max - 1);
+               var unescaped = new System.Text.StringBuilder(max - 1);
                unescaped.Append(escaped.ToCharArray(), 0, backslash);
                bool nextIsEscaped = false;
                for (int i = backslash; i < max; i++)
@@ -214,8 +209,7 @@ namespace ZXing.Client.Result
          return result;
       }
 
-      private static void appendKeyValue(String keyValue,
-                                         IDictionary<String, String> result)
+      private static void appendKeyValue(String keyValue, IDictionary<String, String> result)
       {
          String[] keyValueTokens = EQUALS.Split(keyValue, 2);
          if (keyValueTokens.Length == 2)
@@ -279,7 +273,10 @@ namespace ZXing.Client.Result
                   {
                      element = element.Trim();
                   }
-                  matches.Add(element);
+                  if (element.Length > 0)
+                  {
+                     matches.Add(element);
+                  }
                   i++;
                   done = true;
                }
@@ -292,7 +289,7 @@ namespace ZXing.Client.Result
          return SupportClass.toStringArray(matches);
       }
 
-      internal static String matchSinglePrefixedField(System.String prefix, System.String rawText, char endChar, bool trim)
+      internal static String matchSinglePrefixedField(String prefix, String rawText, char endChar, bool trim)
       {
          String[] matches = matchPrefixedField(prefix, rawText, endChar, trim);
          return matches == null ? null : matches[0];

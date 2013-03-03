@@ -61,7 +61,7 @@ namespace ZXing.Client.Result
             // No reason to throw out the whole card because the birthday is formatted wrong.
             birthday = null;
          }
-         String url = matchSingleDoCoMoPrefixedField("URL:", rawText, true);
+         String[] urls = matchDoCoMoPrefixedField("URL:", rawText, true);
 
          // Although ORG may not be strictly legal in MECARD, it does exist in VCARD and we might as well
          // honor it when found in the wild.
@@ -81,7 +81,7 @@ namespace ZXing.Client.Result
                                             org,
                                             birthday,
                                             null,
-                                            url,
+                                            urls,
                                             null);
       }
 

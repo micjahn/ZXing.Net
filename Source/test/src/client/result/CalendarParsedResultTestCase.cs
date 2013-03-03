@@ -220,18 +220,17 @@ namespace ZXing.Client.Result.Test
                                  double latitude,
                                  double longitude)
       {
-         ZXing.Result fakeResult = new ZXing.Result(contents, null, null, BarcodeFormat.QR_CODE);
-         ParsedResult result = ResultParser.parseResult(fakeResult);
+         var fakeResult = new ZXing.Result(contents, null, null, BarcodeFormat.QR_CODE);
+         var result = ResultParser.parseResult(fakeResult);
          Assert.AreEqual(ParsedResultType.CALENDAR, result.Type);
-         CalendarParsedResult calResult = (CalendarParsedResult)result;
+         var calResult = (CalendarParsedResult)result;
          Assert.AreEqual(description, calResult.Description);
          Assert.AreEqual(summary, calResult.Summary);
          Assert.AreEqual(location, calResult.Location);
          Assert.AreEqual(startString, calResult.Start.ToString(DATE_TIME_FORMAT));
          Assert.AreEqual(endString, calResult.End == null ? null : calResult.End.Value.ToString(DATE_TIME_FORMAT));
          Assert.AreEqual(organizer, calResult.Organizer);
-         Assert.IsTrue((attendees == null && calResult.Attendees == null) ||
-                    Equals(attendees, calResult.Attendees));
+         Assert.IsTrue(AddressBookParsedResultTestCase.AreEqual(attendees, calResult.Attendees));
          assertEqualOrNaN(latitude, calResult.Latitude);
          assertEqualOrNaN(longitude, calResult.Longitude);
       }
@@ -246,23 +245,6 @@ namespace ZXing.Client.Result.Test
          {
             Assert.AreEqual(expected, actual, EPSILON);
          }
-      }
-
-      private static bool Equals(string[] left, string[] right)
-      {
-         if (left == null && right != null)
-            return false;
-         if (left != null && right == null)
-            return false;
-         if (left.Length != right.Length)
-            return false;
-
-         for (var i = 0; i < left.Length; i++)
-         {
-            if (!left[i].Equals(right[i]))
-               return false;
-         }
-         return true;
       }
    }
 }

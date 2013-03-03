@@ -26,12 +26,8 @@ namespace ZXing.Client.Result
    /// 
    /// <p>Thanks to Jeff Griffin for proposing rewrite of these classes that relies less
    /// on exception-based mechanisms during parsing.</p>
-   /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public abstract class ParsedResult
    {
       protected string displayResultValue;
@@ -75,20 +71,13 @@ namespace ZXing.Client.Result
          result.Append(value);
       }
 
-      public static void maybeAppend(String[] value, StringBuilder result)
+      public static void maybeAppend(String[] values, StringBuilder result)
       {
-         if (value == null)
-            return;
-
-         foreach (string t in value)
+         if (values != null)
          {
-            if (!string.IsNullOrEmpty(t))
+            foreach (String value in values)
             {
-               if (result.Length > 0)
-               {
-                  result.Append('\n');
-               }
-               result.Append(t);
+               maybeAppend(value, result);
             }
          }
       }

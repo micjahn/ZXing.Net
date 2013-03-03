@@ -22,14 +22,11 @@ using System.Text.RegularExpressions;
 
 namespace ZXing.Client.Result
 {
-   /// <summary> Parses contact information formatted according to the VCard (2.1) format. This is not a complete
+   /// <summary>
+   /// Parses contact information formatted according to the VCard (2.1) format. This is not a complete
    /// implementation but should parse information as commonly encoded in 2D barcodes.
-   /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <authorSean Owen</author>
    sealed class VCardResultParser : ResultParser
    {
 #if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE
@@ -87,7 +84,7 @@ namespace ZXing.Client.Result
             birthday = null;
          }
          List<String> title = matchSingleVCardPrefixedField("TITLE", rawText, true, false);
-         List<String> url = matchSingleVCardPrefixedField("URL", rawText, true, false);
+         List<List<String>> urls = matchVCardPrefixedField("URL", rawText, true, false);
          List<String> instantMessenger = matchSingleVCardPrefixedField("IMPP", rawText, true, false);
          List<String> geoString = matchSingleVCardPrefixedField("GEO", rawText, true, false);
          String[] geo = geoString == null ? null : SEMICOLON_OR_COMMA.Split(geoString[0]);
@@ -109,7 +106,7 @@ namespace ZXing.Client.Result
                                             toPrimaryValue(org),
                                             toPrimaryValue(birthday),
                                             toPrimaryValue(title),
-                                            toPrimaryValue(url),
+                                            toPrimaryValues(urls),
                                             geo);
       }
 
@@ -370,10 +367,14 @@ namespace ZXing.Client.Result
          {
             return null;
          }
-         List<String> result = new List<String>(lists.Count);
+         var result = new List<String>(lists.Count);
          foreach (var list in lists)
          {
-            result.Add(list[0]);
+            String value = list[0];
+            if (!String.IsNullOrEmpty(value))
+            {
+               result.Add(value);
+            }
          }
          return SupportClass.toStringArray(result);
       }

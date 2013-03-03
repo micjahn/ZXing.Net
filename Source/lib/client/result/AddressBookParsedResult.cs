@@ -36,7 +36,7 @@ namespace ZXing.Client.Result
       private readonly String org;
       private readonly String birthday;
       private readonly String title;
-      private readonly String url;
+      private readonly String[] urls;
       private readonly String[] geo;
 
       public AddressBookParsedResult(String[] names,
@@ -79,7 +79,7 @@ namespace ZXing.Client.Result
                                      String org,
                                      String birthday,
                                      String title,
-                                     String url,
+                                     String[] urls,
                                      String[] geo)
          : base(ParsedResultType.ADDRESSBOOK)
       {
@@ -97,7 +97,7 @@ namespace ZXing.Client.Result
          this.org = org;
          this.birthday = birthday;
          this.title = title;
-         this.url = url;
+         this.urls = urls;
          this.geo = geo;
 
          displayResultValue = getDisplayResult();
@@ -179,9 +179,9 @@ namespace ZXing.Client.Result
          get { return org; }
       }
 
-      public String URL
+      public String[] URLs
       {
-         get { return url; }
+         get { return urls; }
       }
 
       /// <return>birthday formatted as yyyyMMdd (e.g. 19780917)</return>
@@ -208,7 +208,7 @@ namespace ZXing.Client.Result
          maybeAppend(phoneNumbers, result);
          maybeAppend(emails, result);
          maybeAppend(instantMessenger, result);
-         maybeAppend(url, result);
+         maybeAppend(urls, result);
          maybeAppend(birthday, result);
          maybeAppend(geo, result);
          maybeAppend(note, result);

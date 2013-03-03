@@ -64,50 +64,10 @@ namespace ZXing.Client.Result.Test
          ParsedResult result = ResultParser.parseResult(fakeResult);
          Assert.AreEqual(ParsedResultType.SMS, result.Type);
          SMSParsedResult smsResult = (SMSParsedResult)result;
-         Assert.IsTrue(AreEqual(numbers, smsResult.Numbers));
+         Assert.IsTrue(AddressBookParsedResultTestCase.AreEqual(numbers, smsResult.Numbers));
          Assert.AreEqual(subject, smsResult.Subject);
          Assert.AreEqual(body, smsResult.Body);
-         Assert.IsTrue(AreEqual(vias, smsResult.Vias));
-      }
-
-      private static bool AreEqual<T>(IList<T> left, IList<T> right)
-      {
-         if (left == null)
-            return right == null;
-         if (right == null)
-            return false;
-         if (left.Count != right.Count)
-            return false;
-
-         foreach (var leftItem in left)
-         {
-            var found = false;
-            foreach (var rightItem in right)
-            {
-               if (Equals(rightItem, leftItem))
-               {
-                  found = true;
-                  break;
-               }
-            }
-            if (!found)
-               return false;
-         }
-         foreach (var rightItem in right)
-         {
-            var found = false;
-            foreach (var leftItem in left)
-            {
-               if (Equals(rightItem, leftItem))
-               {
-                  found = true;
-                  break;
-               }
-            }
-            if (!found)
-               return false;
-         }
-         return true;
+         Assert.IsTrue(AddressBookParsedResultTestCase.AreEqual(vias, smsResult.Vias));
       }
    }
 }
