@@ -116,8 +116,8 @@
     <None Include="WindowsRTDemo_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Source\test\data\blackbox\qrcode-1\1.jpg">
-      <Link>Assets\1.jpg</Link>
+    <Content Include="..\..\Source\test\data\blackbox\qrcode-1\1.png">
+      <Link>Assets\1.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Logo.png" />
