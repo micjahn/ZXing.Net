@@ -40,7 +40,7 @@ using System.Runtime.InteropServices;
 #if MONOTOUCH
 [assembly: AssemblyTitle("zxing.net for mono touch")]
 #endif
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing rev. 2578)")]
+[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing rev. 2583)")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyProduct("ZXing.Net")]
 [assembly: AssemblyCopyright("Copyright © 2012-2013")]
@@ -60,9 +60,9 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("0.10.0.0")]
+[assembly: AssemblyVersion("0.11.0.0")]
 #if !WindowsCE
-[assembly: AssemblyFileVersion("0.10.0.0")]
+[assembly: AssemblyFileVersion("0.11.0.0")]
 #endif
 
 [assembly: CLSCompliant(true)]

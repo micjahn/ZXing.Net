@@ -1,6 +1,6 @@
 @ECHO OFF
 
-SET VERSION=0.10.0.0
+SET VERSION=0.11.0.0
 
 SET CURRENT_DIR=%CD%
 SET BUILD_DIR=%CD%\Build
@@ -29,6 +29,8 @@ IF NOT EXIST "%BINARY_DIR%\wp7.1\zxing.wp7.1.dll" GOTO BINARY_WP71_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\wp8.0\zxing.wp8.0.dll" GOTO BINARY_WP80_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\winrt\zxing.winrt.dll" GOTO BINARY_WINRT_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\monodroid\zxing.monoandroid.dll" GOTO BINARY_MONODROID_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\winmd\zxing.dll" GOTO BINARY_WINRTCOMPONENTS_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\portable\zxing.portable.dll" GOTO BINARY_PORTABLE_NOT_FOUND
 
 ECHO.
 ECHO Build deployment files in directory
@@ -51,7 +53,7 @@ REM building archives for binaries
 REM ***************************************************************************************
 
 CD "%BINARY_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net3.5 net4.0 winrt unity sl4 sl5 wp7.0 wp7.1 wp8.0 monodroid -xr!Documentation
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net3.5 net4.0 winrt unity sl4 sl5 wp7.0 wp7.1 wp8.0 monodroid winmd portable -xr!Documentation
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DEMO_BINARY%" Clients
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DOCUMENTATION%" Documentation
 CD "%CURRENT_DIR%"
@@ -224,4 +226,19 @@ ECHO weren't found.
 ECHO.
 GOTO END
 
+:BINARY_WINRTCOMPONENTS_NOT_FOUND
+ECHO The WinRT Runtime Components binaries 
+ECHO %BINARY_DIR%\winmd\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
+:BINARY_PORTABLE_NOT_FOUND
+ECHO The Portable binaries 
+ECHO %BINARY_DIR%\portable\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
 :END
+
