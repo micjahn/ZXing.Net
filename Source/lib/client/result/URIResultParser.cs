@@ -60,9 +60,15 @@ namespace ZXing.Client.Result
 
       internal static bool isBasicallyValidURI(String uri)
       {
+         if (uri.Contains(" "))
+         {
+            // Quick hack check for a common case
+            return false;
+         }
          var m = URL_WITH_PROTOCOL_PATTERN.Match(uri);
          if (m.Success && m.Index == 0)
-         { // match at start only
+         {
+            // match at start only
             return true;
          }
          m = URL_WITHOUT_PROTOCOL_PATTERN.Match(uri);

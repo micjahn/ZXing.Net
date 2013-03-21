@@ -50,7 +50,7 @@ namespace ZXing.Client.Result.Test
              ParsedResultType.TEXT);
          doTestResult("This: a test with lots of @ nearly-random punctuation! No? OK then.",
              "This: a test with lots of @ nearly-random punctuation! No? OK then.",
-             ParsedResultType.URI); // Yeah, it's OK that this is thought of as maybe a URI
+             ParsedResultType.TEXT);
       }
 
       [Test]
@@ -86,8 +86,7 @@ namespace ZXing.Client.Result.Test
          doTestResult("MATMSG:SUB:Stuff;BODY:This is some text;TO:srowen@example.org;;",
                       "srowen@example.org\nStuff\nThis is some text", ParsedResultType.EMAIL_ADDRESS);
          doTestResult("TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;",
-                      "TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;", ParsedResultType.URI);
-         // Yeah, it's OK that this is thought of as maybe a URI as long as it's not EMAIL_ADDRESS
+                      "TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;", ParsedResultType.TEXT);
       }
 
       [Test]
