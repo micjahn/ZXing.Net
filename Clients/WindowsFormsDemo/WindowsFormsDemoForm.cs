@@ -22,6 +22,7 @@ using System.IO;
 using System.Windows.Forms;
 
 using ZXing;
+using ZXing.Client.Result;
 using ZXing.Common;
 
 namespace WindowsFormsDemo
@@ -49,6 +50,11 @@ namespace WindowsFormsDemo
                                          {
                                             txtType.Text = result.BarcodeFormat.ToString();
                                             txtContent.Text = result.Text;
+                                            var parsedResult = ResultParser.parseResult(result);
+                                            if (parsedResult != null)
+                                            {
+                                               txtContent.Text += parsedResult.DisplayResult;
+                                            }
                                          };
          resultPoints = new List<ResultPoint>();
       }
@@ -293,6 +299,13 @@ namespace WindowsFormsDemo
                      Width = picEncodedBarCode.Width,
                      SymbolShape = ZXing.Datamatrix.Encoder.SymbolShapeHint.FORCE_SQUARE,
                      MinSize = new Dimension(picEncodedBarCode.Width, picEncodedBarCode.Height)
+                  };
+                  break;
+               case BarcodeFormat.AZTEC:
+                  options = new ZXing.Aztec.AztecEncodingOptions
+                  {
+                     Height = picEncodedBarCode.Height,
+                     Width = picEncodedBarCode.Width,
                   };
                   break;
                default:

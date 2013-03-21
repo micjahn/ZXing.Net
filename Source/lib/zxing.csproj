@@ -114,6 +114,7 @@
   <ItemGroup>
     <Compile Include="aztec\AztecWriter.cs" />
     <Compile Include="aztec\encoder\AztecCode.cs" />
+    <Compile Include="aztec\encoder\AztecEncodingOptions.cs" />
     <Compile Include="aztec\encoder\Encoder.cs" />
     <Compile Include="BarcodeFormat.cs" />
     <Compile Include="BarcodeReader.cs" />

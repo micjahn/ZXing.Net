@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -36,9 +37,9 @@ namespace ZXing.Aztec.Test
       private static readonly Encoding LATIN_1 = Encoding.GetEncoding("ISO-8859-1");
       private static readonly Regex DOTX = new Regex("[^.X]"
 #if !SILVERLIGHT
-         , RegexOptions.Compiled
+, RegexOptions.Compiled
 #endif
-         );
+);
       public static readonly ResultPoint[] NO_POINTS = new ResultPoint[0];
 
       // real life tests
@@ -119,6 +120,24 @@ namespace ZXing.Aztec.Test
              "X   X   X X   X X X   X         X X     X X X X     X X   X   X     X   X       X \r\n" +
              "      X     X     X     X X     X   X X   X X   X         X X       X       X   X \r\n" +
              "X       X           X   X   X     X X   X               X     X     X X X         \r\n");
+      }
+
+      [Test]
+      public void testAztecWriter()
+      {
+         testWriter("\u20AC 1 sample data.", "ISO-8859-1", 25, true, 2);
+         testWriter("\u20AC 1 sample data.", "ISO-8859-15", 25, true, 2);
+         testWriter("\u20AC 1 sample data.", "UTF-8", 25, true, 2);
+         testWriter("\u20AC 1 sample data.", "UTF-8", 100, true, 3);
+         testWriter("\u20AC 1 sample data.", "UTF-8", 300, true, 4);
+         testWriter("\u20AC 1 sample data.", "UTF-8", 500, false, 5);
+         // Test AztecWriter defaults
+         var data = "In ut magna vel mauris malesuada";
+         var writer = new AztecWriter();
+         var matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
+         var aztec = Internal.Encoder.encode(LATIN_1.GetBytes(data), Internal.Encoder.DEFAULT_EC_PERCENT);
+         var expectedMatrix = aztec.Matrix;
+         Assert.AreEqual(matrix, expectedMatrix);
       }
 
       // synthetic tests (encode-decode round-trip)
@@ -290,7 +309,8 @@ namespace ZXing.Aztec.Test
          testHighLevelEncodeString("\0a\u00FF\u0080 A",
              "XXXXX ..X.. ........ .XX....X XXXXXXXX X....... ....X ...X.");
          // binary long form optimization into 2 short forms (saves 1 bit)
-         testHighLevelEncodeString("\0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \u0082\u0084\u0088\0 \0\0\0\0 \0\0\0\0 ",
+         testHighLevelEncodeString(
+             "\0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \u0082\u0084\u0088\0 \0\0\0\0 \0\0\0\0 ",
              "XXXXX XXXXX ........ ........ ........ ........ ..X....." +
              " ........ ........ ........ ........ ..X....." +
              " ........ ........ ........ ........ ..X....." +
@@ -301,7 +321,8 @@ namespace ZXing.Aztec.Test
              " ........ ........ ........ ........ ..X....." +
              " ........ ........ ........ ........ ..X.....");
          // binary long form
-         testHighLevelEncodeString("\0\0\0\0 \0\0\u0001\0 \0\0\u0002\0 \0\0\u0003\0 \0\0\u0004\0 \0\0\u0005\0 \0\0\u0006\0 \0\0\u0007\0 \0\0\u0008\0 \0\0\u0009\0 \0\0\u00F0\0 \0\0\u00F1\0 \0\0\u00F2\0A",
+         testHighLevelEncodeString(
+             "\0\0\0\0 \0\0\u0001\0 \0\0\u0002\0 \0\0\u0003\0 \0\0\u0004\0 \0\0\u0005\0 \0\0\u0006\0 \0\0\u0007\0 \0\0\u0008\0 \0\0\u0009\0 \0\0\u00F0\0 \0\0\u00F1\0 \0\0\u00F2\0A",
              "XXXXX ..... .....X...X. ........ ........ ........ ........ ..X....." +
              " ........ ........ .......X ........ ..X....." +
              " ........ ........ ......X. ........ ..X....." +
@@ -347,6 +368,49 @@ namespace ZXing.Aztec.Test
          r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers);
          res = new Internal.Decoder().decode(r);
          Assert.AreEqual(data, res.Text);
+      }
+
+
+      private static void testWriter(String data,
+                                     String charset,
+                                     int eccPercent,
+                                     bool compact,
+                                     int layers)
+      {
+         // 1. Perform an encode-decode round-trip because it can be lossy.
+         // 2. Aztec Decoder currently always decodes the data with a LATIN-1 charset:
+         var expectedData = LATIN_1.GetString(Encoding.GetEncoding(charset).GetBytes(data));
+         var hints = new Dictionary<EncodeHintType, Object>()
+         ;
+         hints[EncodeHintType.CHARACTER_SET] = charset;
+         hints[EncodeHintType.ERROR_CORRECTION] = eccPercent;
+         var writer = new AztecWriter();
+         var matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0, hints);
+         var aztec = Internal.Encoder.encode(Encoding.GetEncoding(charset).GetBytes(data), eccPercent);
+         Assert.AreEqual(compact, aztec.isCompact, "Unexpected symbol format (compact)");
+         Assert.AreEqual(layers, aztec.Layers, "Unexpected nr. of layers");
+         var matrix2 = aztec.Matrix;
+         Assert.AreEqual(matrix, matrix2);
+         var r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers);
+         var res = new Internal.Decoder().decode(r);
+         Assert.AreEqual(expectedData, res.Text);
+         // Check error correction by introducing up to eccPercent errors
+         int ecWords = aztec.CodeWords * eccPercent / 100;
+         var random = getPseudoRandom();
+         for (int i = 0; i < ecWords; i++)
+         {
+            // don't touch the core
+            int x = random.Next(1) > 0
+                       ? random.Next(aztec.Layers * 2)
+                       : matrix.Width - 1 - random.Next(aztec.Layers * 2);
+            int y = random.Next(1) > 0
+                       ? random.Next(aztec.Layers * 2)
+                       : matrix.Height - 1 - random.Next(aztec.Layers * 2);
+            matrix.flip(x, y);
+         }
+         r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers);
+         res = new Internal.Decoder().decode(r);
+         Assert.AreEqual(expectedData, res.Text);
       }
 
       static Random getPseudoRandom()

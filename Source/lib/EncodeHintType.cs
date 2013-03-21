@@ -44,6 +44,8 @@ namespace ZXing
       /// Specifies what degree of error correction to use, for example in QR Codes.
       /// Type depends on the encoder. For example for QR codes it's type
       /// <see cref="ZXing.QrCode.Internal.ErrorCorrectionLevel" />
+      /// For Aztec it is of type <see cref="System.Int32" />, representing the minimal percentage of error correction words. 
+      /// Note: an Aztec symbol should have a minimum of 25% EC words.
       /// </summary>
       ERROR_CORRECTION,
 
