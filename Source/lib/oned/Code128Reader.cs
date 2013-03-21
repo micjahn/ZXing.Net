@@ -138,8 +138,8 @@ namespace ZXing.OneD
                                                 new[] {2, 3, 3, 1, 1, 1, 2}
                                              };
 
-      private static int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f);
-      private static int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
+      private static readonly int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f);
+      private static readonly int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
 
       private const int CODE_SHIFT = 98;
 
@@ -342,6 +342,18 @@ namespace ZXing.OneD
                      switch (code)
                      {
                         case CODE_FNC_1:
+                           if (result.Length == 0)
+                           {
+                              // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
+                              // is FNC1 then this is GS1-128. We add the symbology identifier.
+                              result.Append("]C1");
+                           }
+                           else
+                           {
+                              // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
+                              result.Append((char)29);
+                           }
+                           break;
                         case CODE_FNC_2:
                         case CODE_FNC_3:
                         case CODE_FNC_4_A:
