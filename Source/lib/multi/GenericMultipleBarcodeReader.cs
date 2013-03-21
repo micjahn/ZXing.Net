@@ -32,6 +32,7 @@ namespace ZXing.Multi
    public sealed class GenericMultipleBarcodeReader : MultipleBarcodeReader, Reader
    {
       private const int MIN_DIMENSION_TO_RECUR = 30;
+      private const int MAX_DEPTH = 4;
 
       private readonly Reader _delegate;
 
@@ -63,7 +64,7 @@ namespace ZXing.Multi
       public Result[] decodeMultiple(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
       {
          var results = new List<Result>();
-         doDecodeMultiple(image, hints, results, 0, 0);
+         doDecodeMultiple(image, hints, results, 0, 0, 0);
          if ((results.Count == 0))
          {
             return null;
@@ -77,8 +78,13 @@ namespace ZXing.Multi
          return resultArray;
       }
 
-      private void doDecodeMultiple(BinaryBitmap image, IDictionary<DecodeHintType, object> hints, IList<Result> results, int xOffset, int yOffset)
+      private void doDecodeMultiple(BinaryBitmap image, IDictionary<DecodeHintType, object> hints, IList<Result> results, int xOffset, int yOffset, int currentDepth)
       {
+         if (currentDepth > MAX_DEPTH)
+         {
+            return;
+         }
+
          Result result = _delegate.decode(image, hints);
          if (result == null)
             return;
@@ -135,26 +141,22 @@ namespace ZXing.Multi
          // Decode left of barcode
          if (minX > MIN_DIMENSION_TO_RECUR)
          {
-            //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-            doDecodeMultiple(image.crop(0, 0, (int)minX, height), hints, results, xOffset, yOffset);
+            doDecodeMultiple(image.crop(0, 0, (int)minX, height), hints, results, xOffset, yOffset, currentDepth + 1);
          }
          // Decode above barcode
          if (minY > MIN_DIMENSION_TO_RECUR)
          {
-            //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-            doDecodeMultiple(image.crop(0, 0, width, (int)minY), hints, results, xOffset, yOffset);
+            doDecodeMultiple(image.crop(0, 0, width, (int)minY), hints, results, xOffset, yOffset, currentDepth + 1);
          }
          // Decode right of barcode
          if (maxX < width - MIN_DIMENSION_TO_RECUR)
          {
-            //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-            doDecodeMultiple(image.crop((int)maxX, 0, width - (int)maxX, height), hints, results, xOffset + (int)maxX, yOffset);
+            doDecodeMultiple(image.crop((int)maxX, 0, width - (int)maxX, height), hints, results, xOffset + (int)maxX, yOffset, currentDepth + 1);
          }
          // Decode below barcode
          if (maxY < height - MIN_DIMENSION_TO_RECUR)
          {
-            //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-            doDecodeMultiple(image.crop(0, (int)maxY, width, height - (int)maxY), hints, results, xOffset, yOffset + (int)maxY);
+            doDecodeMultiple(image.crop(0, (int)maxY, width, height - (int)maxY), hints, results, xOffset, yOffset + (int)maxY, currentDepth + 1);
          }
       }
 

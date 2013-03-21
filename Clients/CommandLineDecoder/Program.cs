@@ -108,7 +108,7 @@ namespace CommandLineDecoder
             }
          }
 
-         var threads = new Dictionary<Thread, DecodeThread>(config.Threads);
+         var threads = new Dictionary<Thread, DecodeThread>(Math.Min(config.Threads, inputs.getInputCount()));
          for (int x = 0; x < config.Threads; x++)
          {
             var decodeThread = new DecodeThread(config, inputs);
