@@ -379,7 +379,8 @@ namespace ZXing.Aztec.Test
       {
          // 1. Perform an encode-decode round-trip because it can be lossy.
          // 2. Aztec Decoder currently always decodes the data with a LATIN-1 charset:
-         var expectedData = LATIN_1.GetString(Encoding.GetEncoding(charset).GetBytes(data));
+         var byteData = Encoding.GetEncoding(charset).GetBytes(data);
+         var expectedData = LATIN_1.GetString(byteData, 0, byteData.Length);
          var hints = new Dictionary<EncodeHintType, Object>()
          ;
          hints[EncodeHintType.CHARACTER_SET] = charset;

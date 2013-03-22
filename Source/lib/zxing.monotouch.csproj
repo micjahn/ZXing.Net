@@ -80,6 +80,7 @@
     <Compile Include="aztec\decoder\Decoder.cs" />
     <Compile Include="aztec\detector\Detector.cs" />
     <Compile Include="aztec\encoder\AztecCode.cs" />
+    <Compile Include="aztec\encoder\AztecEncodingOptions.cs" />
     <Compile Include="aztec\encoder\Encoder.cs" />
     <Compile Include="client\result\AbstractDoCoMoResultParser.cs" />
     <Compile Include="client\result\AddressBookAUResultParser.cs" />
