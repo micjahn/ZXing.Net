@@ -53,7 +53,7 @@ namespace WindowsFormsDemo
                                             var parsedResult = ResultParser.parseResult(result);
                                             if (parsedResult != null)
                                             {
-                                               txtContent.Text += parsedResult.DisplayResult;
+                                               txtContent.Text += "\r\n\r\nParsed result:\r\n" + parsedResult.DisplayResult;
                                             }
                                          };
          resultPoints = new List<ResultPoint>();

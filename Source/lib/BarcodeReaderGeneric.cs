@@ -336,7 +336,7 @@ namespace ZXing
          this.createLuminanceSource = createLuminanceSource;
          this.createBinarizer = createBinarizer ?? defaultCreateBinarizer;
          this.createRGBLuminanceSource = createRGBLuminanceSource ?? defaultCreateRGBLuminanceSource;
-         hints = new Dictionary<DecodeHintType, object>();
+         hints = new Dictionary<DecodeHintType, object> {{DecodeHintType.RELAXED_CODE_39_EXTENDED_MODE, true}};
          usePreviousState = false;
       }
 

@@ -76,5 +76,11 @@ namespace ZXing
       /// Assume MSI codes employ a check digit. Maps to <see cref="bool" />.
       /// </summary>
       ASSUME_MSI_CHECK_DIGIT,
+
+      /// <summary>
+      /// Don't fail if a Code39 is detected but can't be decoded in extended mode.
+      /// Return the raw Code39 result instead. Maps to <see cref="bool" />.
+      /// </summary>
+      RELAXED_CODE_39_EXTENDED_MODE,
    }
 }

@@ -33,6 +33,7 @@
          this.labBarcodeImageFile = new System.Windows.Forms.Label();
          this.tabCtrlMain = new System.Windows.Forms.TabControl();
          this.tabPageDecoder = new System.Windows.Forms.TabPage();
+         this.btnDecodingOptions = new System.Windows.Forms.Button();
          this.labDuration = new System.Windows.Forms.Label();
          this.labBarcodeText = new System.Windows.Forms.Label();
          this.labType = new System.Windows.Forms.Label();
@@ -58,7 +59,6 @@
          this.txtContentWebCam = new System.Windows.Forms.TextBox();
          this.txtTypeWebCam = new System.Windows.Forms.TextBox();
          this.picWebCam = new System.Windows.Forms.PictureBox();
-         this.btnDecodingOptions = new System.Windows.Forms.Button();
          this.tabCtrlMain.SuspendLayout();
          this.tabPageDecoder.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.picBarcode)).BeginInit();
@@ -133,6 +133,17 @@
          this.tabPageDecoder.TabIndex = 0;
          this.tabPageDecoder.Text = "Decoder";
          this.tabPageDecoder.UseVisualStyleBackColor = true;
+         // 
+         // btnDecodingOptions
+         // 
+         this.btnDecodingOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+         this.btnDecodingOptions.Location = new System.Drawing.Point(353, 79);
+         this.btnDecodingOptions.Name = "btnDecodingOptions";
+         this.btnDecodingOptions.Size = new System.Drawing.Size(107, 23);
+         this.btnDecodingOptions.TabIndex = 11;
+         this.btnDecodingOptions.Text = "Options";
+         this.btnDecodingOptions.UseVisualStyleBackColor = true;
+         this.btnDecodingOptions.Click += new System.EventHandler(this.btnDecodingOptions_Click);
          // 
          // labDuration
          // 
@@ -406,16 +417,6 @@
          this.picWebCam.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
          this.picWebCam.TabIndex = 8;
          this.picWebCam.TabStop = false;
-         // 
-         // btnDecodingOptions
-         // 
-         this.btnDecodingOptions.Location = new System.Drawing.Point(353, 79);
-         this.btnDecodingOptions.Name = "btnDecodingOptions";
-         this.btnDecodingOptions.Size = new System.Drawing.Size(107, 23);
-         this.btnDecodingOptions.TabIndex = 11;
-         this.btnDecodingOptions.Text = "Options";
-         this.btnDecodingOptions.UseVisualStyleBackColor = true;
-         this.btnDecodingOptions.Click += new System.EventHandler(this.btnDecodingOptions_Click);
          // 
          // WindowsFormsDemoForm
          // 

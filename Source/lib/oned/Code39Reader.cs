@@ -63,10 +63,9 @@ namespace ZXing.OneD
       /// <summary>
       /// Creates a reader that can be configured to check the last character as a check digit.
       /// It will not decoded "extended Code 39" sequences.
-      ///
-      /// <param name="usingCheckDigit">if true, treat the last data character as a check digit, not</param>
-      /// data, and verify that the checksum passes.
       /// </summary>
+      /// <param name="usingCheckDigit">if true, treat the last data character as a check digit, not
+      /// data, and verify that the checksum passes.</param>
       public Code39Reader(bool usingCheckDigit)
          :this(usingCheckDigit, false)
       {
@@ -76,12 +75,10 @@ namespace ZXing.OneD
       /// Creates a reader that can be configured to check the last character as a check digit,
       /// or optionally attempt to decode "extended Code 39" sequences that are used to encode
       /// the full ASCII character set.
-      ///
-      /// <param name="usingCheckDigit">if true, treat the last data character as a check digit, not</param>
-      /// data, and verify that the checksum passes.
-      /// <param name="extendedMode">if true, will attempt to decode extended Code 39 sequences in the</param>
-      /// text.
       /// </summary>
+      /// <param name="usingCheckDigit">if true, treat the last data character as a check digit, not
+      /// data, and verify that the checksum passes.</param>
+      /// <param name="extendedMode">if true, will attempt to decode extended Code 39 sequences in the text.</param>
       public Code39Reader(bool usingCheckDigit, bool extendedMode)
       {
          this.usingCheckDigit = usingCheckDigit;
@@ -177,7 +174,14 @@ namespace ZXing.OneD
          {
             resultString = decodeExtended(decodeRowResult.ToString());
             if (resultString == null)
-               return null;
+            {
+               if (hints != null && 
+                   hints.ContainsKey(DecodeHintType.RELAXED_CODE_39_EXTENDED_MODE) &&
+                   Convert.ToBoolean(hints[DecodeHintType.RELAXED_CODE_39_EXTENDED_MODE]))
+                  resultString = decodeRowResult.ToString();
+               else
+                  return null;
+            }
          }
          else
          {
