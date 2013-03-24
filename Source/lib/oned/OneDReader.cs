@@ -62,14 +62,14 @@ namespace ZXing.OneD
       /// <returns>
       /// String which the barcode encodes
       /// </returns>
-      virtual public Result decode(BinaryBitmap image,
-                           IDictionary<DecodeHintType, object> hints)
+      virtual public Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
       {
          var result = doDecode(image, hints);
          if (result == null)
          {
             bool tryHarder = hints != null && hints.ContainsKey(DecodeHintType.TRY_HARDER);
-            if (tryHarder && image.RotateSupported)
+            bool tryHarderWithoutRotation = hints != null && hints.ContainsKey(DecodeHintType.TRY_HARDER_WITHOUT_ROTATION);
+            if (tryHarder && !tryHarderWithoutRotation && image.RotateSupported)
             {
                BinaryBitmap rotatedImage = image.rotateCounterClockwise();
                result = doDecode(rotatedImage, hints);
@@ -121,8 +121,7 @@ namespace ZXing.OneD
       /// <param name="image">The image to decode</param>
       /// <param name="hints">Any hints that were requested</param>
       /// <returns>The contents of the decoded barcode</returns>
-      private Result doDecode(BinaryBitmap image,
-                              IDictionary<DecodeHintType, object> hints)
+      private Result doDecode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
       {
          int width = image.Width;
          int height = image.Height;

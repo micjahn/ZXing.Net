@@ -88,5 +88,14 @@ namespace ZXing
       /// Return the raw Code39 result instead. Maps to <see cref="bool" />.
       /// </summary>
       RELAXED_CODE_39_EXTENDED_MODE,
+
+      /// <summary>
+      /// 1D readers supporting rotation with TRY_HARDER enabled.
+      /// But BarcodeReader class can do auto-rotating for 1D and 2D codes.
+      /// Enabling that option prevents 1D readers doing double rotation.
+      /// BarcodeReader enables that option automatically if "global" auto-rotation is enabled.
+      /// Maps to <see cref="bool" />.
+      /// </summary>
+      TRY_HARDER_WITHOUT_ROTATION
    }
 }

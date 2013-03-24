@@ -336,7 +336,11 @@ namespace ZXing
          this.createLuminanceSource = createLuminanceSource;
          this.createBinarizer = createBinarizer ?? defaultCreateBinarizer;
          this.createRGBLuminanceSource = createRGBLuminanceSource ?? defaultCreateRGBLuminanceSource;
-         hints = new Dictionary<DecodeHintType, object> {{DecodeHintType.RELAXED_CODE_39_EXTENDED_MODE, true}};
+         hints = new Dictionary<DecodeHintType, object>
+                    {
+                       {DecodeHintType.USE_CODE_39_EXTENDED_MODE, true},
+                       {DecodeHintType.RELAXED_CODE_39_EXTENDED_MODE, true}
+                    };
          usePreviousState = false;
       }
 
@@ -391,7 +395,13 @@ namespace ZXing
          var binaryBitmap = new BinaryBitmap(binarizer);
          var multiformatReader = Reader as MultiFormatReader;
          var rotationCount = 0;
-         var rotationMaxCount = AutoRotate ? 4 : 1;
+         var rotationMaxCount = 1;
+
+         if (AutoRotate)
+         {
+            hints[DecodeHintType.TRY_HARDER_WITHOUT_ROTATION] = true;
+            rotationMaxCount = 4;
+         }
 
          for (; rotationCount < rotationMaxCount; rotationCount++)
          {
@@ -501,8 +511,14 @@ namespace ZXing
          var binarizer = CreateBinarizer(luminanceSource);
          var binaryBitmap = new BinaryBitmap(binarizer);
          var rotationCount = 0;
-         var rotationMaxCount = AutoRotate ? 4 : 1;
+         var rotationMaxCount = 1;
          MultipleBarcodeReader multiReader = null;
+
+         if (AutoRotate)
+         {
+            hints[DecodeHintType.TRY_HARDER_WITHOUT_ROTATION] = true;
+            rotationMaxCount = 4;
+         }
 
          var formats = PossibleFormats;
          if (formats != null &&
@@ -524,14 +540,8 @@ namespace ZXing
             {
                if (TryInverted && luminanceSource.InversionSupported)
                {
-                  luminanceSource.invert();
-                  binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource));
+                  binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource.invert()));
                   results = multiReader.decodeMultiple(binaryBitmap, hints);
-                  // invert back because for next round of rotation
-                  // but I'm not sure if it would be necessary because the next round
-                  // with rotation would decode an inverted image and if no result was found
-                  // it would be inverted back and checked again
-                  luminanceSource.invert();
                }
             }
 
