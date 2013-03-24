@@ -76,6 +76,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFDemo", "Clients\WPFDemo\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.portable", "Source\lib\zxing.portable.csproj", "{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}"
 EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "zxing.portable.doc", "Source\lib\documentation\zxing.portable.doc.shfbproj", "{B95B1194-0D6A-4121-A629-695B1F8EF0A7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3} = {24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -532,6 +537,20 @@ Global
 		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}.Release|x86.ActiveCfg = Release|Any CPU
+		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Release with Documentation|Any CPU.ActiveCfg = Release with Documentation|Any CPU
+		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Release with Documentation|Any CPU.Build.0 = Release with Documentation|Any CPU
+		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Release with Documentation|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Release with Documentation|Mixed Platforms.Build.0 = Release|Any CPU
+		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Release with Documentation|x86.ActiveCfg = Release with Documentation|Any CPU
+		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -554,6 +573,7 @@ Global
 		{F983B572-DCD7-4AB4-B9D5-D218A22BA5FE} = {A91C1873-C7D0-41BC-86B1-9DAB76AFE9E5}
 		{12441BD6-6380-40F8-B6F6-C42A98443BBA} = {A91C1873-C7D0-41BC-86B1-9DAB76AFE9E5}
 		{0DDD7A5D-C54A-4841-8555-7940DB210DF7} = {A91C1873-C7D0-41BC-86B1-9DAB76AFE9E5}
+		{B95B1194-0D6A-4121-A629-695B1F8EF0A7} = {A91C1873-C7D0-41BC-86B1-9DAB76AFE9E5}
 		{7B604F37-11C5-499F-9CE2-943BAFB60552} = {4A65D793-76EE-4B99-AA5C-F3208C11EE33}
 		{F37668D8-6423-4019-90D9-3DA81EEC6A1A} = {4A65D793-76EE-4B99-AA5C-F3208C11EE33}
 	EndGlobalSection
