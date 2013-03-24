@@ -59,8 +59,10 @@ namespace ZXing.OneD
             if (possibleFormats.Contains(BarcodeFormat.CODE_39) || possibleFormats.Contains(BarcodeFormat.All_1D))
             {
                bool useCode39CheckDigit = hints.ContainsKey(DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT) &&
-                                          hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != null;
-               readers.Add(new Code39Reader(useCode39CheckDigit));
+                                          (bool) hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT];
+               bool useCode39ExtendedMode = hints.ContainsKey(DecodeHintType.USE_CODE_39_EXTENDED_MODE) &&
+                                            (bool) hints[DecodeHintType.USE_CODE_39_EXTENDED_MODE];
+               readers.Add(new Code39Reader(useCode39CheckDigit, useCode39ExtendedMode));
             }
             if (possibleFormats.Contains(BarcodeFormat.CODE_93) || possibleFormats.Contains(BarcodeFormat.All_1D))
             {
@@ -90,14 +92,16 @@ namespace ZXing.OneD
          if (readers.Count == 0)
          {
             bool useCode39CheckDigit = hints != null && hints.ContainsKey(DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT) &&
-                                       hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] != null;
+                                       (bool) hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT];
+            bool useCode39ExtendedMode = hints != null && hints.ContainsKey(DecodeHintType.USE_CODE_39_EXTENDED_MODE) &&
+                                         (bool) hints[DecodeHintType.USE_CODE_39_EXTENDED_MODE];
             bool useMsiCheckDigit = ((hints != null && hints.ContainsKey(DecodeHintType.ASSUME_MSI_CHECK_DIGIT))
-                                          ? (bool)hints[DecodeHintType.ASSUME_MSI_CHECK_DIGIT]
-                                          : true);
+                                        ? (bool) hints[DecodeHintType.ASSUME_MSI_CHECK_DIGIT]
+                                        : true);
 
             readers.Add(new MultiFormatUPCEANReader(hints));
             readers.Add(new MSIReader(useMsiCheckDigit));
-            readers.Add(new Code39Reader(useCode39CheckDigit, true));
+            readers.Add(new Code39Reader(useCode39CheckDigit, useCode39ExtendedMode));
             readers.Add(new CodaBarReader());
             readers.Add(new Code93Reader());
             readers.Add(new Code128Reader());

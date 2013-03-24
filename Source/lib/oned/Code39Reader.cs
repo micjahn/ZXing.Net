@@ -148,7 +148,14 @@ namespace ZXing.OneD
             return null;
          }
 
-         if (usingCheckDigit)
+         // overriding constructor value is possible
+         bool useCode39CheckDigit = usingCheckDigit;
+         if (hints != null && hints.ContainsKey(DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT))
+         {
+            useCode39CheckDigit = (bool) hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT];
+         }
+
+         if (useCode39CheckDigit)
          {
             int max = decodeRowResult.Length - 1;
             int total = 0;
@@ -169,8 +176,15 @@ namespace ZXing.OneD
             return null;
          }
 
+         // overriding constructor value is possible
+         bool useCode39ExtendedMode = extendedMode;
+         if (hints != null && hints.ContainsKey(DecodeHintType.USE_CODE_39_EXTENDED_MODE))
+         {
+            useCode39ExtendedMode = (bool)hints[DecodeHintType.USE_CODE_39_EXTENDED_MODE];
+         }
+
          String resultString;
-         if (extendedMode)
+         if (useCode39ExtendedMode)
          {
             resultString = decodeExtended(decodeRowResult.ToString());
             if (resultString == null)

@@ -78,6 +78,12 @@ namespace ZXing
       ASSUME_MSI_CHECK_DIGIT,
 
       /// <summary>
+      /// if Code39 could be detected try to use extended mode for full ASCII character set
+      /// Maps to <see cref="bool" />.
+      /// </summary>
+      USE_CODE_39_EXTENDED_MODE,
+
+      /// <summary>
       /// Don't fail if a Code39 is detected but can't be decoded in extended mode.
       /// Return the raw Code39 result instead. Maps to <see cref="bool" />.
       /// </summary>
