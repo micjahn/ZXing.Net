@@ -24,11 +24,22 @@ namespace WindowsFormsDemo
    public partial class DecodingOptionsForm : Form
    {
       private readonly BarcodeReader reader;
+      public bool MultipleBarcodes
+      {
+         get { return chkMultipleDecode.Checked; }
+      }
+      public bool MultipleBarcodesOnlyQR
+      {
+         get { return chkMultipleDecodeOnlyQR.Checked; }
+      }
 
-      public DecodingOptionsForm(BarcodeReader reader)
+      public DecodingOptionsForm(BarcodeReader reader, bool multipleBarcodes, bool multipleBarcodesOnlyQR)
       {
          this.reader = reader;
          InitializeComponent();
+
+         chkMultipleDecode.Checked = multipleBarcodes;
+         chkMultipleDecodeOnlyQR.Checked = multipleBarcodesOnlyQR;
       }
 
       protected override void OnLoad(EventArgs e)

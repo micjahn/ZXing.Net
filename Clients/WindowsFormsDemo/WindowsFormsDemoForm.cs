@@ -34,6 +34,8 @@ namespace WindowsFormsDemo
       private readonly BarcodeReader barcodeReader;
       private readonly IList<ResultPoint> resultPoints;
       private EncodingOptions EncodingOptions { get; set; }
+      private bool TryMultipleBarcodes { get; set; }
+      private bool TryOnlyMultipleQRCodes { get; set; }
 
       public WindowsFormsDemoForm()
       {
@@ -49,11 +51,11 @@ namespace WindowsFormsDemo
          barcodeReader.ResultFound += result =>
                                          {
                                             txtType.Text = result.BarcodeFormat.ToString();
-                                            txtContent.Text = result.Text;
+                                            txtContent.Text += result.Text + Environment.NewLine;
                                             var parsedResult = ResultParser.parseResult(result);
                                             if (parsedResult != null)
                                             {
-                                               txtContent.Text += "\r\n\r\nParsed result:\r\n" + parsedResult.DisplayResult;
+                                               txtContent.Text += "\r\n\r\nParsed result:\r\n" + parsedResult.DisplayResult + Environment.NewLine + Environment.NewLine;
                                             }
                                          };
          resultPoints = new List<ResultPoint>();
@@ -95,40 +97,64 @@ namespace WindowsFormsDemo
             return;
          }
 
-         Decode((Bitmap) Bitmap.FromFile(fileName));
+         using (var bitmap = (Bitmap)Bitmap.FromFile(fileName))
+         {
+            if (TryOnlyMultipleQRCodes)
+               Decode(bitmap, TryMultipleBarcodes, new List<BarcodeFormat> { BarcodeFormat.QR_CODE });
+            else
+               Decode(bitmap, TryMultipleBarcodes, null);
+         }
       }
 
-      private void Decode(Bitmap image)
+      private void Decode(Bitmap image, bool tryMultipleBarcodes, IList<BarcodeFormat> possibleFormats)
       {
          resultPoints.Clear();
+         txtContent.Text = String.Empty;
 
          var timerStart = DateTime.Now.Ticks;
-         var result = barcodeReader.Decode(image);
+         Result[] results = null;
+         barcodeReader.PossibleFormats = possibleFormats;
+         if (tryMultipleBarcodes)
+            results = barcodeReader.DecodeMultiple(image);
+         else
+         {
+            var result = barcodeReader.Decode(image);
+            if (result != null)
+            {
+               results = new[] {result};
+            }
+         }
          var timerStop = DateTime.Now.Ticks;
 
-         if (result == null)
+         if (results == null)
          {
             txtContent.Text = "No barcode recognized";
          }
          labDuration.Text = new TimeSpan(timerStop - timerStart).Milliseconds.ToString("0 ms");
 
-         if (result != null && result.ResultPoints.Length > 0)
+         if (results != null)
          {
-            var rect = new Rectangle((int)result.ResultPoints[0].X, (int)result.ResultPoints[0].Y, 1, 1);
-            foreach (var point in result.ResultPoints)
+            foreach (var result in results)
             {
-               if (point.X < rect.Left)
-                  rect = new Rectangle((int)point.X, rect.Y, rect.Width + rect.X - (int)point.X, rect.Height);
-               if (point.X > rect.Right)
-                  rect = new Rectangle(rect.X, rect.Y, rect.Width + (int)point.X - rect.X, rect.Height);
-               if (point.Y < rect.Top)
-                  rect = new Rectangle(rect.X, (int)point.Y, rect.Width, rect.Height + rect.Y - (int)point.Y);
-               if (point.Y > rect.Bottom)
-                  rect = new Rectangle(rect.X, rect.Y, rect.Width, rect.Height + (int)point.Y - rect.Y);
-            }
-            using (var g = picBarcode.CreateGraphics())
-            {
-               g.DrawRectangle(Pens.Green, rect);
+               if (result.ResultPoints.Length > 0)
+               {
+                  var rect = new Rectangle((int) result.ResultPoints[0].X, (int) result.ResultPoints[0].Y, 1, 1);
+                  foreach (var point in result.ResultPoints)
+                  {
+                     if (point.X < rect.Left)
+                        rect = new Rectangle((int) point.X, rect.Y, rect.Width + rect.X - (int) point.X, rect.Height);
+                     if (point.X > rect.Right)
+                        rect = new Rectangle(rect.X, rect.Y, rect.Width + (int) point.X - rect.X, rect.Height);
+                     if (point.Y < rect.Top)
+                        rect = new Rectangle(rect.X, (int) point.Y, rect.Width, rect.Height + rect.Y - (int) point.Y);
+                     if (point.Y > rect.Bottom)
+                        rect = new Rectangle(rect.X, rect.Y, rect.Width, rect.Height + (int) point.Y - rect.Y);
+                  }
+                  using (var g = picBarcode.CreateGraphics())
+                  {
+                     g.DrawRectangle(Pens.Green, rect);
+                  }
+               }
             }
          }
       }
@@ -257,7 +283,7 @@ namespace WindowsFormsDemo
             try
             {
                barcodeReader.PureBarcode = true;
-               Decode((Bitmap)picEncodedBarCode.Image);
+               Decode((Bitmap)picEncodedBarCode.Image, false, null);
             }
             finally
             {
@@ -333,9 +359,13 @@ namespace WindowsFormsDemo
 
       private void btnDecodingOptions_Click(object sender, EventArgs e)
       {
-         using (var dlg = new DecodingOptionsForm(barcodeReader))
+         using (var dlg = new DecodingOptionsForm(barcodeReader, TryMultipleBarcodes, TryOnlyMultipleQRCodes))
          {
-            dlg.ShowDialog(this);
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+               TryMultipleBarcodes = dlg.MultipleBarcodes;
+               TryOnlyMultipleQRCodes = dlg.MultipleBarcodesOnlyQR;
+            }
          }
       }
    }

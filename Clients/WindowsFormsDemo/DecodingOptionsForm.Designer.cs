@@ -33,6 +33,8 @@
          this.chkTryInverted = new System.Windows.Forms.CheckBox();
          this.btnOk = new System.Windows.Forms.Button();
          this.chkPureBarcode = new System.Windows.Forms.CheckBox();
+         this.chkMultipleDecode = new System.Windows.Forms.CheckBox();
+         this.chkMultipleDecodeOnlyQR = new System.Windows.Forms.CheckBox();
          this.SuspendLayout();
          // 
          // chkAutoRotate
@@ -67,10 +69,11 @@
          // 
          // btnOk
          // 
-         this.btnOk.Location = new System.Drawing.Point(160, 77);
+         this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
+         this.btnOk.Location = new System.Drawing.Point(160, 150);
          this.btnOk.Name = "btnOk";
          this.btnOk.Size = new System.Drawing.Size(112, 23);
-         this.btnOk.TabIndex = 3;
+         this.btnOk.TabIndex = 6;
          this.btnOk.Text = "Ok";
          this.btnOk.UseVisualStyleBackColor = true;
          this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
@@ -81,21 +84,45 @@
          this.chkPureBarcode.Location = new System.Drawing.Point(12, 81);
          this.chkPureBarcode.Name = "chkPureBarcode";
          this.chkPureBarcode.Size = new System.Drawing.Size(142, 17);
-         this.chkPureBarcode.TabIndex = 4;
+         this.chkPureBarcode.TabIndex = 3;
          this.chkPureBarcode.Text = "image has Pure Barcode";
          this.chkPureBarcode.UseVisualStyleBackColor = true;
+         // 
+         // chkMultipleDecode
+         // 
+         this.chkMultipleDecode.AutoSize = true;
+         this.chkMultipleDecode.Location = new System.Drawing.Point(12, 104);
+         this.chkMultipleDecode.Name = "chkMultipleDecode";
+         this.chkMultipleDecode.Size = new System.Drawing.Size(139, 17);
+         this.chkMultipleDecode.TabIndex = 4;
+         this.chkMultipleDecode.Text = "try to find multiple codes";
+         this.chkMultipleDecode.UseVisualStyleBackColor = true;
+         // 
+         // chkMultipleDecodeOnlyQR
+         // 
+         this.chkMultipleDecodeOnlyQR.AutoSize = true;
+         this.chkMultipleDecodeOnlyQR.Location = new System.Drawing.Point(30, 127);
+         this.chkMultipleDecodeOnlyQR.Name = "chkMultipleDecodeOnlyQR";
+         this.chkMultipleDecodeOnlyQR.Size = new System.Drawing.Size(165, 17);
+         this.chkMultipleDecodeOnlyQR.TabIndex = 5;
+         this.chkMultipleDecodeOnlyQR.Text = "only QR Codes (special case)";
+         this.chkMultipleDecodeOnlyQR.UseVisualStyleBackColor = true;
          // 
          // DecodingOptionsForm
          // 
          this.AcceptButton = this.btnOk;
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(284, 116);
+         this.ClientSize = new System.Drawing.Size(284, 184);
+         this.Controls.Add(this.chkMultipleDecodeOnlyQR);
+         this.Controls.Add(this.chkMultipleDecode);
          this.Controls.Add(this.chkPureBarcode);
          this.Controls.Add(this.btnOk);
          this.Controls.Add(this.chkTryInverted);
          this.Controls.Add(this.chkTryHarder);
          this.Controls.Add(this.chkAutoRotate);
+         this.MaximumSize = new System.Drawing.Size(300, 222);
+         this.MinimumSize = new System.Drawing.Size(300, 222);
          this.Name = "DecodingOptionsForm";
          this.Text = "DecodingOptionsForm";
          this.ResumeLayout(false);
@@ -110,5 +137,7 @@
       private System.Windows.Forms.CheckBox chkTryInverted;
       private System.Windows.Forms.Button btnOk;
       private System.Windows.Forms.CheckBox chkPureBarcode;
+      private System.Windows.Forms.CheckBox chkMultipleDecode;
+      private System.Windows.Forms.CheckBox chkMultipleDecodeOnlyQR;
    }
 }
