@@ -194,8 +194,8 @@ namespace ZXing.Rendering
          }
          bmp.Invalidate();
 #else
-         int foreground = Foreground.A << 24 | Foreground.B << 16 | Foreground.G << 8 | Foreground.R;
-         int background = Background.A << 24 | Background.B << 16 | Background.G << 8 | Background.R;
+         int foreground = Foreground.A << 24 | Foreground.R << 16 | Foreground.G << 8 | Foreground.B;
+         int background = Background.A << 24 | Background.R << 16 | Background.G << 8 | Background.B;
          var bmp = new WriteableBitmap(width, height);
          var pixels = bmp.Pixels;
          var index = 0;
