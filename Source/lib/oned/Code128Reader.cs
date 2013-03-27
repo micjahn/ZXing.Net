@@ -240,6 +240,8 @@ namespace ZXing.OneD
 
       override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
+         bool convertFNC1 = hints != null && hints.ContainsKey(DecodeHintType.ASSUME_GS1);
+
          int[] startPatternInfo = findStartPattern(row);
          if (startPatternInfo == null)
             return null;
@@ -342,16 +344,19 @@ namespace ZXing.OneD
                      switch (code)
                      {
                         case CODE_FNC_1:
-                           if (result.Length == 0)
+                           if (convertFNC1)
                            {
-                              // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
-                              // is FNC1 then this is GS1-128. We add the symbology identifier.
-                              result.Append("]C1");
-                           }
-                           else
-                           {
-                              // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
-                              result.Append((char)29);
+                              if (result.Length == 0)
+                              {
+                                 // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
+                                 // is FNC1 then this is GS1-128. We add the symbology identifier.
+                                 result.Append("]C1");
+                              }
+                              else
+                              {
+                                 // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
+                                 result.Append((char) 29);
+                              }
                            }
                            break;
                         case CODE_FNC_2:
@@ -389,6 +394,21 @@ namespace ZXing.OneD
                      switch (code)
                      {
                         case CODE_FNC_1:
+                           if (convertFNC1)
+                           {
+                              if (result.Length == 0)
+                              {
+                                 // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
+                                 // is FNC1 then this is GS1-128. We add the symbology identifier.
+                                 result.Append("]C1");
+                              }
+                              else
+                              {
+                                 // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
+                                 result.Append((char)29);
+                              }
+                           }
+                           break;
                         case CODE_FNC_2:
                         case CODE_FNC_3:
                         case CODE_FNC_4_B:
@@ -428,7 +448,20 @@ namespace ZXing.OneD
                      switch (code)
                      {
                         case CODE_FNC_1:
-                           // do nothing?
+                           if (convertFNC1)
+                           {
+                              if (result.Length == 0)
+                              {
+                                 // GS1 specification 5.4.3.7. and 5.4.6.4. If the first char after the start code
+                                 // is FNC1 then this is GS1-128. We add the symbology identifier.
+                                 result.Append("]C1");
+                              }
+                              else
+                              {
+                                 // GS1 specification 5.4.7.5. Every subsequent FNC1 is returned as ASCII 29 (GS)
+                                 result.Append((char) 29);
+                              }
+                           }
                            break;
                         case CODE_CODE_A:
                            codeSet = CODE_CODE_A;

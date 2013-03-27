@@ -97,5 +97,12 @@ namespace ZXing
       /// Maps to <see cref="bool" />.
       /// </summary>
       TRY_HARDER_WITHOUT_ROTATION
+
+      /// <summary>
+      /// Assume the barcode is being processed as a GS1 barcode, and modify behavior as needed.
+      /// For example this affects FNC1 handling for Code 128 (aka GS1-128). Doesn't matter what it maps to;
+      /// use <see cref="bool" />.
+      /// </summary>
+      ASSUME_GS1,
    }
 }
