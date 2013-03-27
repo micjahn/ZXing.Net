@@ -96,7 +96,7 @@ namespace ZXing
       /// BarcodeReader enables that option automatically if "global" auto-rotation is enabled.
       /// Maps to <see cref="bool" />.
       /// </summary>
-      TRY_HARDER_WITHOUT_ROTATION
+      TRY_HARDER_WITHOUT_ROTATION,
 
       /// <summary>
       /// Assume the barcode is being processed as a GS1 barcode, and modify behavior as needed.
