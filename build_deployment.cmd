@@ -13,6 +13,7 @@ SET FILENAME_DOCUMENTATION=%DEPLOYMENT_DIR%\ZXing.Net.Documentation.%VERSION%.zi
 SET ZIP_TOOL=%CD%\3rdparty\zip\7za.exe
 SET SVN_EXPORT_DIR=%DEPLOYMENT_DIR%\Source
 SET SVN_URL=https://zxingnet.svn.codeplex.com/svn/trunk
+SET SVN_URL_WINMD=https://zxingnet.svn.codeplex.com/svn/branches/WinMD
 SET SVN_TOOL=%CD%\3rdparty\Subversion\svn.exe
 
 IF NOT EXIST "%BINARY_DIR%\ce2.0\zxing.ce2.0.dll" GOTO BINARY_CE20_NOT_FOUND
@@ -29,7 +30,7 @@ IF NOT EXIST "%BINARY_DIR%\wp7.1\zxing.wp7.1.dll" GOTO BINARY_WP71_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\wp8.0\zxing.wp8.0.dll" GOTO BINARY_WP80_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\winrt\zxing.winrt.dll" GOTO BINARY_WINRT_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\monodroid\zxing.monoandroid.dll" GOTO BINARY_MONODROID_NOT_FOUND
-IF NOT EXIST "%BINARY_DIR%\winmd\zxing.dll" GOTO BINARY_WINRTCOMPONENTS_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\winmd\zxing.winmd" GOTO BINARY_WINRTCOMPONENTS_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\portable\zxing.portable.dll" GOTO BINARY_PORTABLE_NOT_FOUND
 
 ECHO.
@@ -77,36 +78,46 @@ REM ****************************************************************************
 RMDIR /S /Q "%SVN_EXPORT_DIR%" >NUL: 2>&1
 
 MKDIR "%SVN_EXPORT_DIR%" >NUL: 2>&1
-MKDIR "%SVN_EXPORT_DIR%\Source" >NUL: 2>&1
-MKDIR "%SVN_EXPORT_DIR%\Source\lib" >NUL: 2>&1
-MKDIR "%SVN_EXPORT_DIR%\Source\test" >NUL: 2>&1
-MKDIR "%SVN_EXPORT_DIR%\Source\test\src" >NUL: 2>&1
-MKDIR "%SVN_EXPORT_DIR%\Clients" >NUL: 2>&1
-MKDIR "%SVN_EXPORT_DIR%\3rdparty" >NUL: 2>&1
-MKDIR "%SVN_EXPORT_DIR%\3rdparty\AForge" >NUL: 2>&1
-MKDIR "%SVN_EXPORT_DIR%\3rdparty\EmguCV" >NUL: 2>&1
-MKDIR "%SVN_EXPORT_DIR%\3rdparty\NUnit.NET" >NUL: 2>&1
-MKDIR "%SVN_EXPORT_DIR%\3rdparty\NUnit.Silverlight" >NUL: 2>&1
-MKDIR "%SVN_EXPORT_DIR%\3rdparty\Unity" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\Base" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\Base\Source" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\Base\Source\lib" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\Base\Source\test" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\Base\Source\test\src" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\Base\Clients" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\AForge" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\EmguCV" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\NUnit.NET" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\NUnit.Silverlight" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\Unity" >NUL: 2>&1
 
-"%SVN_TOOL%" export --force "%SVN_URL%/Source/lib" "%SVN_EXPORT_DIR%\Source\lib"
-"%SVN_TOOL%" export --force "%SVN_URL%/Source/test/src" "%SVN_EXPORT_DIR%\Source\test\src"
-"%SVN_TOOL%" export --force "%SVN_URL%/Clients" "%SVN_EXPORT_DIR%\Clients"
-"%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/AForge" "%SVN_EXPORT_DIR%\3rdparty\AForge"
-"%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/EmguCV" "%SVN_EXPORT_DIR%\3rdparty\EmguCV"
-"%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/NUnit.NET" "%SVN_EXPORT_DIR%\3rdparty\NUnit.NET"
-"%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/NUnit.Silverlight" "%SVN_EXPORT_DIR%\3rdparty\NUnit.Silverlight"
-"%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/Unity" "%SVN_EXPORT_DIR%\3rdparty\Unity"
-"%SVN_TOOL%" export --force "%SVN_URL%/zxing.sln" "%SVN_EXPORT_DIR%"
-"%SVN_TOOL%" export --force "%SVN_URL%/zxing.ce.sln" "%SVN_EXPORT_DIR%"
-"%SVN_TOOL%" export --force "%SVN_URL%/zxing.vs2012.sln" "%SVN_EXPORT_DIR%"
-"%SVN_TOOL%" export --force "%SVN_URL%/zxing.monoandroid.sln" "%SVN_EXPORT_DIR%"
-"%SVN_TOOL%" export --force "%SVN_URL%/zxing.monotouch.sln" "%SVN_EXPORT_DIR%"
-"%SVN_TOOL%" export --force "%SVN_URL%/zxing.nunit" "%SVN_EXPORT_DIR%"
-"%SVN_TOOL%" export --force "%SVN_URL%/THANKS" "%SVN_EXPORT_DIR%"
+MKDIR "%SVN_EXPORT_DIR%\WinMD" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\WinMD\Source" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\WinMD\Source\lib" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\WinMD\Clients" >NUL: 2>&1
+
+"%SVN_TOOL%" export --force "%SVN_URL%/Source/lib" "%SVN_EXPORT_DIR%\Base\Source\lib"
+"%SVN_TOOL%" export --force "%SVN_URL%/Source/test/src" "%SVN_EXPORT_DIR%\Base\Source\test\src"
+"%SVN_TOOL%" export --force "%SVN_URL%/Clients" "%SVN_EXPORT_DIR%\Base\Clients"
+"%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/AForge" "%SVN_EXPORT_DIR%\Base\3rdparty\AForge"
+"%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/EmguCV" "%SVN_EXPORT_DIR%\Base\3rdparty\EmguCV"
+"%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/NUnit.NET" "%SVN_EXPORT_DIR%\Base\3rdparty\NUnit.NET"
+"%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/NUnit.Silverlight" "%SVN_EXPORT_DIR%\Base\3rdparty\NUnit.Silverlight"
+"%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/Unity" "%SVN_EXPORT_DIR%\Base\3rdparty\Unity"
+"%SVN_TOOL%" export --force "%SVN_URL%/zxing.sln" "%SVN_EXPORT_DIR%\Base"
+"%SVN_TOOL%" export --force "%SVN_URL%/zxing.ce.sln" "%SVN_EXPORT_DIR%\Base"
+"%SVN_TOOL%" export --force "%SVN_URL%/zxing.vs2012.sln" "%SVN_EXPORT_DIR%\Base"
+"%SVN_TOOL%" export --force "%SVN_URL%/zxing.monoandroid.sln" "%SVN_EXPORT_DIR%\Base"
+"%SVN_TOOL%" export --force "%SVN_URL%/zxing.monotouch.sln" "%SVN_EXPORT_DIR%\Base"
+"%SVN_TOOL%" export --force "%SVN_URL%/zxing.nunit" "%SVN_EXPORT_DIR%\Base"
+"%SVN_TOOL%" export --force "%SVN_URL%/THANKS" "%SVN_EXPORT_DIR%\Base"
+
+"%SVN_TOOL%" export --force "%SVN_URL_WINMD%/Source/lib" "%SVN_EXPORT_DIR%\WinMD\Source\lib"
+"%SVN_TOOL%" export --force "%SVN_URL_WINMD%/Clients" "%SVN_EXPORT_DIR%\WinMD\Clients"
+"%SVN_TOOL%" export --force "%SVN_URL_WINMD%/zxing.vs2012.sln" "%SVN_EXPORT_DIR%\WinMD"
 
 CD "%SVN_EXPORT_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Source\lib\*.* Source\test\src\*.* Clients\*.* 3rdparty\*.* zxing.sln zxing.ce.sln zxing.vs2012.sln zxing.monoandroid.sln zxing.monotouch.sln zxing.nunit THANKS
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Base\Source\lib\*.* Base\Source\test\src\*.* Base\Clients\*.* Base\3rdparty\*.* Base\zxing.sln Base\zxing.ce.sln Base\zxing.vs2012.sln Base\zxing.monoandroid.sln Base\zxing.monotouch.sln Base\zxing.nunit Base\THANKS WinMD\Source\lib\*.* WinMD\Clients\*.* WinMD\zxing.vs2012.sln
 CD "%CURRENT_DIR%"
 
 RMDIR /S /Q "%SVN_EXPORT_DIR%" >NUL: 2>&1

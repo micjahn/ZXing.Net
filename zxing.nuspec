@@ -14,13 +14,14 @@ It has been ported by hand with a lot of optimizations and improvements.
 
 It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, Windows RT Class Library and Components, Silverlight 4, Silverlight 5, Windows Phone 7.0, Windows Phone 7.1 and Windows Phone 8.0, Xamarin.Android and Xamarin.iOS</description>
     <summary>ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.</summary>
-    <releaseNotes>* sync with rev. 2583 of the java version
+    <releaseNotes>* sync with rev. 2592 of the java version
 * new generator for Aztec, Data Matrix, MSI and Plessey
 * new decoder for MSI
 * decoding of inverted codes
 * SVG renderer
 * Portable Class Library support
-* Windows RT Components support (Windows Runtime Metadata)</releaseNotes>
+* Windows RT Components support (Windows Runtime Metadata)
+* many other small bug fixes and improvements</releaseNotes>
     <tags>ZXing barcode scanning 1D 2D UPC-A UPC-E EAN-8 EAN-13 QR ITF Codabar RSS-14 Data Matrix PDF 417 PDF417 Aztec</tags>
   </metadata>
   <files>
@@ -36,9 +37,6 @@ It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, Windows RT Class Library
     <file src="Build\Release\net4.0\zxing.presentation.dll" target="lib/net40/zxing.presentation.dll" />
     <file src="Build\Release\net4.0\zxing.presentation.pdb" target="lib/net40/zxing.presentation.pdb" />
     <file src="Build\Release\net4.0\zxing.presentation.XML" target="lib/net40/zxing.presentation.XML" />
-    <file src="Build\Release\winrt\zxing.winrt.dll" target="lib/winRT45/zxing.winrt.dll" />
-    <file src="Build\Release\winrt\zxing.winrt.pdb" target="lib/winRT45/zxing.winrt.pdb" />
-    <file src="Build\Release\winrt\zxing.winrt.XML" target="lib/winRT45/zxing.winrt.XML" />
     <file src="Build\Release\sl4\zxing.sl4.dll" target="lib/sl4/zxing.sl4.dll" />
     <file src="Build\Release\sl4\zxing.sl4.pdb" target="lib/sl4/zxing.sl4.pdb" />
     <file src="Build\Release\sl4\zxing.sl4.XML" target="lib/sl4/zxing.sl4.XML" />
@@ -57,8 +55,12 @@ It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, Windows RT Class Library
     <file src="Build\Release\portable\zxing.portable.dll" target="lib/portable-win+net40+sl4+sl5+wp7+wp71+wp8/zxing.portable.dll" />
     <file src="Build\Release\portable\zxing.portable.pdb" target="lib/portable-win+net40+sl4+sl5+wp7+wp71+wp8/zxing.portable.pdb" />
     <file src="Build\Release\portable\zxing.portable.XML" target="lib/portable-win+net40+sl4+sl5+wp7+wp71+wp8/zxing.portable.XML" />
-    <file src="Build\Release\winmd\zxing.dll" target="lib/netcore45/zxing.dll" />
-    <file src="Build\Release\winmd\zxing.pdb" target="lib/netcore45/zxing.pdb" />
-    <file src="Build\Release\winmd\zxing.XML" target="lib/netcore45/zxing.XML" />
+    <file src="Build\Release\winrt\zxing.winrt.dll" target="lib/windows8-managed/zxing.winrt.dll" />
+    <file src="Build\Release\winrt\zxing.winrt.pdb" target="lib/windows8-managed/zxing.winrt.pdb" />
+    <file src="Build\Release\winrt\zxing.winrt.XML" target="lib/windows8-managed/zxing.winrt.XML" />
+    <file src="Build\Release\winmd\ZXing.winmd" target="lib/windows8-native+javascript/ZXing.winmd" />
+    <file src="Build\Release\winmd\ZXing.pdb" target="lib/windows8-native+javascript/ZXing.pdb" />
+    <file src="Build\Release\winmd\ZXing.XML" target="lib/windows8-native+javascript/ZXing.XML" />
+    <file src="Build\Release\winmd\ZXing.pri" target="lib/windows8-native+javascript/ZXing.pri" />
   </files>
 </package>
