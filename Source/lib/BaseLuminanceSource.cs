@@ -148,11 +148,15 @@ namespace ZXing
             throw new ArgumentException("Crop rectangle does not fit within image data.");
          }
          var croppedLuminances = new byte[width * height];
-         for (int yold = top, ynew = 0; yold < height; yold++, ynew++)
+         var oldLuminances = Matrix;
+         var oldWidth = Width;
+         var oldRightBound = left + width;
+         var oldBottomBound = top + height;
+         for (int yold = top, ynew = 0; yold < oldBottomBound; yold++, ynew++)
          {
-            for (int xold = left, xnew = 0; xold < width; xold++, xnew++)
+            for (int xold = left, xnew = 0; xold < oldRightBound; xold++, xnew++)
             {
-               croppedLuminances[ynew * width + xnew] = luminances[yold * Width + xold];
+               croppedLuminances[ynew * width + xnew] = oldLuminances[yold * oldWidth + xold];
             }
          }
          return CreateLuminanceSource(croppedLuminances, width, height);
