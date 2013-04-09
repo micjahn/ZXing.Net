@@ -170,17 +170,21 @@ namespace ZXing.Rendering
          // Copy data back
          using (var stream = System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.AsStream(bmp.PixelBuffer))
          {
-            for (int y = 0; y < height - emptyArea; y++)
+            for (int y = 0; y < matrix.Height - emptyArea; y++)
             {
                for (var pixelsizeHeight = 0; pixelsizeHeight < pixelsize; pixelsizeHeight++)
                {
-                  for (var x = 0; x < width; x++)
+                  for (var x = 0; x < matrix.Width; x++)
                   {
                      var color = matrix[x, y] ? foreground : background;
                      for (var pixelsizeWidth = 0; pixelsizeWidth < pixelsize; pixelsizeWidth++)
                      {
                         stream.Write(color, 0, 4);
                      }
+                  }
+                  for (var x = pixelsize * matrix.Width; x < width; x++)
+                  {
+                     stream.Write(background, 0, 4);
                   }
                }
             }
