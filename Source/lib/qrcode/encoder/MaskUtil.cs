@@ -254,7 +254,7 @@ namespace ZXing.QrCode.Internal
                   prevBit = bit;
                }
             }
-            if (numSameBitCells > 5)
+            if (numSameBitCells >= 5)
             {
                penalty += N1 + (numSameBitCells - 5);
             }
