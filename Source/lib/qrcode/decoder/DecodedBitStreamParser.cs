@@ -42,13 +42,16 @@ namespace ZXing.QrCode.Internal
       private const int GB2312_SUBSET = 1;
 
       internal static DecoderResult decode(byte[] bytes,
-                                  Version version,
-                                  ErrorCorrectionLevel ecLevel,
-                                  IDictionary<DecodeHintType, object> hints)
+                                           Version version,
+                                           ErrorCorrectionLevel ecLevel,
+                                           IDictionary<DecodeHintType, object> hints)
       {
          var bits = new BitSource(bytes);
          var result = new StringBuilder(50);
          var byteSegments = new List<byte[]>(1);
+         var symbolSequence = -1;
+         var parityData = -1;
+
          try
          {
             CharacterSetECI currentCharacterSetECI = null;
@@ -86,9 +89,10 @@ namespace ZXing.QrCode.Internal
                      {
                         return null;
                      }
-                     // not really supported; all we do is ignore it
+                     // not really supported; but sequence number and parity is added later to the result metadata
                      // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
-                     bits.readBits(16);
+                     symbolSequence = bits.readBits(8);
+                     parityData = bits.readBits(8);
                   }
                   else if (mode == Mode.ECI)
                   {
@@ -148,7 +152,7 @@ namespace ZXing.QrCode.Internal
                }
             } while (mode != Mode.TERMINATOR);
          }
-         catch (ArgumentException )
+         catch (ArgumentException)
          {
             // from readBits() calls
             return null;
@@ -159,10 +163,16 @@ namespace ZXing.QrCode.Internal
 #else
          var resultString = result.ToString().Replace("\r\n", "\n").Replace("\n", Environment.NewLine);
 #endif
-         return new DecoderResult(bytes,
-                                  resultString,
-                                  byteSegments.Count == 0 ? null : byteSegments,
-                                  ecLevel == null ? null : ecLevel.ToString());
+         return symbolSequence > -1 ?
+                   new DecoderResult(bytes,
+                                     resultString,
+                                     byteSegments.Count == 0 ? null : byteSegments,
+                                     ecLevel == null ? null : ecLevel.ToString(),
+                                     symbolSequence, parityData)
+                   : new DecoderResult(bytes,
+                                       resultString,
+                                       byteSegments.Count == 0 ? null : byteSegments,
+                                       ecLevel == null ? null : ecLevel.ToString());
       }
 
       /// <summary>

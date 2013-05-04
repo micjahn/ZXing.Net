@@ -76,6 +76,20 @@ namespace ZXing
       /// <summary>
       /// For some products, the extension text
       /// </summary>
-      UPC_EAN_EXTENSION
+      UPC_EAN_EXTENSION,
+
+      /// <summary>
+      /// If the code format supports structured append and
+      /// the current scanned code is part of one then the
+      /// sequence number is given with it.
+      /// </summary>
+      STRUCTURED_APPEND_SEQUENCE,
+
+      /// <summary>
+      /// If the code format supports structured append and
+      /// the current scanned code is part of one then the
+      /// parity is given with it.
+      /// </summary>
+      STRUCTURED_APPEND_PARITY
    }
 }

@@ -103,6 +103,11 @@ namespace ZXing.QrCode
          {
             result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
          }
+         if (decoderResult.StructuredAppend)
+         {
+            result.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, decoderResult.StructuredAppendSequenceNumber);
+            result.putMetadata(ResultMetadataType.STRUCTURED_APPEND_PARITY, decoderResult.StructuredAppendParity);
+         }
          return result;
       }
 

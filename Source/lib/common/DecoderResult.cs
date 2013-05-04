@@ -34,6 +34,12 @@ namespace ZXing.Common
 
       public String ECLevel { get; private set; }
 
+      public bool StructuredAppend { get; private set; }
+
+      public int StructuredAppendSequenceNumber { get; private set; }
+
+      public int StructuredAppendParity { get; private set; }
+
       public DecoderResult(byte[] rawBytes, String text, IList<byte[]> byteSegments, String ecLevel)
       {
          if (rawBytes == null && text == null)
@@ -44,6 +50,22 @@ namespace ZXing.Common
          Text = text;
          ByteSegments = byteSegments;
          ECLevel = ecLevel;
+         StructuredAppend = false;
+      }
+
+      public DecoderResult(byte[] rawBytes, String text, IList<byte[]> byteSegments, String ecLevel, int saSequence, int saParity)
+      {
+         if (rawBytes == null && text == null)
+         {
+            throw new ArgumentException();
+         }
+         RawBytes = rawBytes;
+         Text = text;
+         ByteSegments = byteSegments;
+         ECLevel = ecLevel;
+         StructuredAppend = true;
+         StructuredAppendParity = saParity;
+         StructuredAppendSequenceNumber = saSequence;
       }
    }
 }
