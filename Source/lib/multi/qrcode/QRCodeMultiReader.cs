@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System;
 using System.Collections.Generic;
 
 using ZXing.Common;
@@ -67,9 +68,69 @@ namespace ZXing.Multi.QrCode
             {
                result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
             }
+            if (decoderResult.StructuredAppend)
+            {
+               result.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, decoderResult.StructuredAppendSequenceNumber);
+               result.putMetadata(ResultMetadataType.STRUCTURED_APPEND_PARITY, decoderResult.StructuredAppendParity);
+            }
             results.Add(result);
          }
+         results = ProcessStructuredAppend(results);
          return results.Count == 0 ? EMPTY_RESULT_ARRAY : results.ToArray();
+      }
+
+      private List<Result> ProcessStructuredAppend(List<Result> results)
+      {
+         bool hasSA = false;
+         // first, check, if there is at least on SA result in the list
+         foreach (var result in results)
+         {
+            if (result.ResultMetadata.ContainsKey(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE))
+            {
+               hasSA = true;
+               break;
+            }
+         }
+         if (!hasSA)
+         {
+            return results;
+         }
+         // it is, second, split the lists and built a new result list
+         var newResults = new List<Result>();
+         var saResults = new List<Result>();
+         foreach (var result in results)
+         {
+            newResults.Add(result);
+            if (result.ResultMetadata.ContainsKey(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE))
+            {
+               saResults.Add(result);
+            }
+         }
+         // sort and concatenate the SA list items
+         saResults.Sort(SaSequenceSort);
+         var concatedText = String.Empty;
+         var rawBytesLen = 0;
+         foreach (var saResult in saResults)
+         {
+            concatedText += saResult.Text;
+            rawBytesLen += saResult.RawBytes.Length;
+         }
+         var newRawBytes = new byte[rawBytesLen];
+         var newRawBytesIndex = 0;
+         foreach (var saResult in saResults)
+         {
+            Array.Copy(saResult.RawBytes, 0, newRawBytes, newRawBytesIndex, saResult.RawBytes.Length);
+            newRawBytesIndex += saResult.RawBytes.Length;
+         }
+         newResults.Add(new Result(concatedText, newRawBytes, new ResultPoint[0], BarcodeFormat.QR_CODE));
+         return newResults;
+      }
+
+      private int SaSequenceSort(Result a, Result b)
+      {
+         var aNumber = (int)(a.ResultMetadata[ResultMetadataType.STRUCTURED_APPEND_SEQUENCE]);
+         var bNumber = (int)(b.ResultMetadata[ResultMetadataType.STRUCTURED_APPEND_SEQUENCE]);
+         return aNumber - bNumber;
       }
    }
 }
