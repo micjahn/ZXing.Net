@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\Build\Debug\test\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -79,6 +79,7 @@
     <Compile Include="aztec\AztecBlackBox2TestCase.cs" />
     <Compile Include="aztec\encoder\EncoderTest.cs" />
     <Compile Include="BigIntegerTests.cs" />
+    <Compile Include="BitmapLuminanceSourceTests.cs" />
     <Compile Include="client\result\AddressBookParsedResultTestCase.cs" />
     <Compile Include="client\result\CalendarParsedResultTestCase.cs" />
     <Compile Include="client\result\EmailAddressParsedResultTestCase.cs" />

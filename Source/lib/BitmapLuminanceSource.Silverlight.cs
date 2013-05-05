@@ -41,40 +41,37 @@ namespace ZXing
       {
          var height = writeableBitmap.PixelHeight;
          var width = writeableBitmap.PixelWidth;
-         var stride = width * 4;
-         // In order to measure pure decoding speed, we convert the entire image to a greyscale array
-         luminances = new byte[width * height];
-         Color c;
 
+         // In order to measure pure decoding speed, we convert the entire image to a greyscale array
+         // luminance array is initialized with new byte[width * height]; in base class
 #if NETFX_CORE
          var data = System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.ToArray(writeableBitmap.PixelBuffer, 0, (int)writeableBitmap.PixelBuffer.Length);
-         for (int y = 0; y < height; y++)
+         var luminanceIndex = 0;
+         var maxSourceIndex = width*height*4;
+         for (var sourceIndex = 0; sourceIndex < maxSourceIndex; sourceIndex+=4)
          {
-            int offset = y * stride;
-            for (int x = 0, xl = 0; x < stride; x += 4, xl++)
-            {
-               c = Color.FromArgb(
-                  data[x + offset], 
-                  data[x + offset + 1], 
-                  data[x + offset + 2], 
-                  data[x + offset + 3]);
-               luminances[y * width + xl] = (byte)(0.3 * c.R + 0.59 * c.G + 0.11 * c.B + 0.01);
-            }
+            var c = Color.FromArgb(
+               data[sourceIndex], 
+               data[sourceIndex + 1], 
+               data[sourceIndex + 2], 
+               data[sourceIndex + 3]);
+            luminances[luminanceIndex] = (byte)((RChannelWeight * c.R + GChannelWeight * c.G + BChannelWeight * c.B) >> ChannelWeight);
+            luminanceIndex++;
          }
 #else
          var pixels = writeableBitmap.Pixels;
-         for (int y = 0; y < height; y++)
+         var luminanceIndex = 0;
+         var maxSourceIndex = width*height;
+         for (var sourceIndex = 0; sourceIndex < maxSourceIndex; sourceIndex++)
          {
-            int offset = y * width;
-            for (int x = 0; x < width; x++)
-            {
-               int srcPixel = pixels[x + offset];
-               c = Color.FromArgb((byte)((srcPixel >> 0x18) & 0xff),
-                     (byte)((srcPixel >> 0x10) & 0xff),
-                     (byte)((srcPixel >> 8) & 0xff),
-                     (byte)(srcPixel & 0xff));
-               luminances[offset + x] = (byte)(0.3 * c.R + 0.59 * c.G + 0.11 * c.B + 0.01);
-            }
+            int srcPixel = pixels[sourceIndex];
+            var c = Color.FromArgb(
+               (byte) ((srcPixel >> 24) & 0xff),
+               (byte) ((srcPixel >> 16) & 0xff),
+               (byte) ((srcPixel >> 8) & 0xff),
+               (byte) (srcPixel & 0xff));
+            luminances[luminanceIndex] = (byte)((RChannelWeight * c.R + GChannelWeight * c.G + BChannelWeight * c.B) >> ChannelWeight);
+            luminanceIndex++;
          }
 #endif
       }

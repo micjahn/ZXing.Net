@@ -77,8 +77,6 @@ namespace ZXing
          var rect = new Int32Rect(0, 0, width, 1);
          var luminanceIndex = 0;
 
-         luminances = new byte[width * height];
-
          for (var curY = 0; curY < height; curY++)
          {
             bitmap.CopyPixels(rect, buffer, bufferSize, 0);
@@ -87,8 +85,7 @@ namespace ZXing
                var r = buffer[curX];
                var g = buffer[curX + 1];
                var b = buffer[curX + 2];
-               luminances[luminanceIndex] = (byte)
-                  (0.3 * r + 0.59 * g + 0.11 * b + 0.01);
+               luminances[luminanceIndex] = (byte)((RChannelWeight * r + GChannelWeight * g + BChannelWeight * b) >> ChannelWeight);
                luminanceIndex++;
             }
             rect.Y++;
@@ -105,8 +102,6 @@ namespace ZXing
          var rect = new Int32Rect(0, 0, width, 1);
          var luminanceIndex = 0;
 
-         luminances = new byte[width * height];
-
          for (var curY = 0; curY < height; curY++)
          {
             bitmap.CopyPixels(rect, buffer, bufferSize, 0);
@@ -115,8 +110,7 @@ namespace ZXing
                var b = buffer[curX];
                var g = buffer[curX + 1];
                var r = buffer[curX + 2];
-               luminances[luminanceIndex] = (byte)
-                  (0.3 * r + 0.59 * g + 0.11 * b + 0.01);
+               luminances[luminanceIndex] = (byte)((RChannelWeight * r + GChannelWeight * g + BChannelWeight * b) >> ChannelWeight);
                luminanceIndex++;
             }
             rect.Y++;
@@ -133,8 +127,6 @@ namespace ZXing
          var rect = new Int32Rect(0, 0, width, 1);
          var luminanceIndex = 0;
 
-         luminances = new byte[width * height];
-
          for (var curY = 0; curY < height; curY++)
          {
             bitmap.CopyPixels(rect, buffer, bufferSize, 0);
@@ -143,8 +135,7 @@ namespace ZXing
                var b = buffer[curX];
                var g = buffer[curX + 1];
                var r = buffer[curX + 2];
-               var luminance = (byte)
-                  (0.3 * r + 0.59 * g + 0.11 * b + 0.01);
+               var luminance = (byte)((RChannelWeight * r + GChannelWeight * g + BChannelWeight * b) >> ChannelWeight);
                var alpha = buffer[curX + 3];
                luminance = (byte)(((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8));
                luminances[luminanceIndex] = luminance;
@@ -163,8 +154,6 @@ namespace ZXing
          var buffer = new byte[bufferSize];
          var rect = new Int32Rect(0, 0, width, 1);
          var luminanceIndex = 0;
-
-         luminances = new byte[width * height];
 
          for (var curY = 0; curY < height; curY++)
          {
@@ -187,8 +176,7 @@ namespace ZXing
                //g8 = (((pixel) & 0x07E0) >> 2) & 0xFF;
                //r8 = (((pixel) & 0xF800) >> 8);
 
-               luminances[luminanceIndex] = (byte)
-                  (0.3 * r8 + 0.59 * g8 + 0.11 * b8 + 0.01);
+               luminances[luminanceIndex] = (byte)((RChannelWeight * r8 + GChannelWeight * g8 + BChannelWeight * b8) >> ChannelWeight);
                luminanceIndex++;
             }
             rect.Y++;

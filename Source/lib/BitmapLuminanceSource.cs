@@ -45,8 +45,6 @@ namespace ZXing
          var width = bitmap.Width;
 
          // In order to measure pure decoding speed, we convert the entire image to a greyscale array
-         luminances = new byte[width * height];
-
          // The underlying raster of image consists of bytes with the luminance values
 #if WindowsCE
          var data = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
@@ -56,7 +54,7 @@ namespace ZXing
          try
          {
             var stride = Math.Abs(data.Stride);
-            var pixelWidth = stride / width;
+            var pixelWidth = stride/width;
 
             if (pixelWidth > 4)
             {
@@ -64,11 +62,11 @@ namespace ZXing
                Color c;
                for (int y = 0; y < height; y++)
                {
-                  int offset = y * width;
+                  int offset = y*width;
                   for (int x = 0; x < width; x++)
                   {
                      c = bitmap.GetPixel(x, y);
-                     luminances[offset + x] = (byte)(0.3 * c.R + 0.59 * c.G + 0.11 * c.B + 0.01);
+                     luminances[offset + x] = (byte)((RChannelWeight * c.R + GChannelWeight * c.G + BChannelWeight * c.B) >> ChannelWeight);
                   }
                }
             }
@@ -77,16 +75,16 @@ namespace ZXing
                var strideStep = data.Stride;
                var buffer = new byte[stride];
                var ptrInBitmap = data.Scan0;
-               
+
 #if !WindowsCE
                // prepare palette for 1 and 8 bit indexed bitmaps
                var luminancePalette = new byte[bitmap.Palette.Entries.Length];
                for (var index = 0; index < bitmap.Palette.Entries.Length; index++)
                {
                   var color = bitmap.Palette.Entries[index];
-                  luminancePalette[index] = (byte)(0.3 * color.R +
-                                                    0.59 * color.G +
-                                                    0.11 * color.B + 0.01);
+                  luminancePalette[index] = (byte) ((RChannelWeight*color.R +
+                                                     GChannelWeight*color.G +
+                                                     BChannelWeight*color.B) >> ChannelWeight);
                }
                if (bitmap.PixelFormat == PixelFormat.Format32bppArgb ||
                    bitmap.PixelFormat == PixelFormat.Format32bppPArgb)
@@ -104,17 +102,17 @@ namespace ZXing
 #else
                   ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
 #endif
-                  var offset = y * width;
+                  var offset = y*width;
                   switch (pixelWidth)
                   {
 #if !WindowsCE
                      case 0:
-                        for (int x = 0; x * 8 < width; x++)
+                        for (int x = 0; x*8 < width; x++)
                         {
-                           for (int subX = 0; subX < 8 && 8 * x + subX < width; subX++)
+                           for (int subX = 0; subX < 8 && 8*x + subX < width; subX++)
                            {
                               var index = (buffer[x] >> (7 - subX)) & 1;
-                              luminances[offset + 8 * x + subX] = luminancePalette[index];
+                              luminances[offset + 8*x + subX] = luminancePalette[index];
                            }
                         }
                         break;
@@ -128,7 +126,8 @@ namespace ZXing
                      case 2:
                         // should be RGB565 or RGB555, assume RGB565
                         {
-                           for (int index = 0, x = 0; index < 2 * width; index += 2, x++)
+                           var maxIndex = 2*width;
+                           for (int index = 0; index < maxIndex; index += 2)
                            {
                               var byte1 = buffer[index];
                               var byte2 = buffer[index + 1];
@@ -136,50 +135,63 @@ namespace ZXing
                               var b5 = byte1 & 0x1F;
                               var g5 = (((byte1 & 0xE0) >> 5) | ((byte2 & 0x03) << 3)) & 0x1F;
                               var r5 = (byte2 >> 2) & 0x1F;
-                              var r8 = (r5 * 527 + 23) >> 6;
-                              var g8 = (g5 * 527 + 23) >> 6;
-                              var b8 = (b5 * 527 + 23) >> 6;
+                              var r8 = (r5*527 + 23) >> 6;
+                              var g8 = (g5*527 + 23) >> 6;
+                              var b8 = (b5*527 + 23) >> 6;
 
-                              luminances[offset + x] = (byte)(0.3 * r8 + 0.59 * g8 + 0.11 * b8 + 0.01);
+                              luminances[offset] = (byte)((RChannelWeight * r8 + GChannelWeight * g8 + BChannelWeight * b8)  >> ChannelWeight);
+                              offset++;
                            }
                         }
                         break;
                      case 3:
-                        for (int x = 0; x < width; x++)
                         {
-                           var luminance = (byte)(0.3  * buffer[x * 3] +
-                                                  0.59 * buffer[x * 3 + 1] +
-                                                  0.11 * buffer[x * 3 + 2] + 0.01);
-                           luminances[offset + x] = luminance;
+                           var maxIndex = width*3;
+                           for (int x = 0; x < maxIndex; x += 3)
+                           {
+                              var luminance = (byte) ((BChannelWeight*buffer[x] +
+                                                       GChannelWeight*buffer[x + 1] +
+                                                       RChannelWeight*buffer[x + 2]) >> ChannelWeight);
+                              luminances[offset] = luminance;
+                              offset++;
+                           }
                         }
                         break;
                      case 4:
                         // 4 bytes without alpha channel value
-                        for (int x = 0; x < width; x++)
                         {
-                           var luminance = (byte)(0.30 * buffer[x * 4] +
-                                                  0.59 * buffer[x * 4 + 1] +
-                                                  0.11 * buffer[x * 4 + 2] + 0.01);
+                           var maxIndex = 4*width;
+                           for (int x = 0; x < maxIndex; x += 4)
+                           {
+                              var luminance = (byte) ((BChannelWeight*buffer[x] +
+                                                       GChannelWeight*buffer[x + 1] +
+                                                       RChannelWeight*buffer[x + 2]) >> ChannelWeight);
 
-                           luminances[offset + x] = luminance;
+                              luminances[offset] = luminance;
+                              offset++;
+                           }
                         }
                         break;
                      case 40:
                         // with alpha channel; some barcodes are completely black if you
                         // only look at the r, g and b channel but the alpha channel controls
                         // the view
-                        for (int x = 0; x < width; x++)
                         {
-                           var luminance = (byte)(0.30 * buffer[x * 4] +
-                                                  0.59 * buffer[x * 4 + 1] +
-                                                  0.11 * buffer[x * 4 + 2] + 0.01);
+                           var maxIndex = 4*width;
+                           for (int x = 0; x < maxIndex; x += 4)
+                           {
+                              var luminance = (byte) ((BChannelWeight*buffer[x] +
+                                                       GChannelWeight*buffer[x + 1] +
+                                                       RChannelWeight*buffer[x + 2]) >> ChannelWeight);
 
-                           // calculating the resulting luminance based upon a white background
-                           // var alpha = buffer[x * pixelWidth + 3] / 255.0;
-                           // luminance = (byte)(luminance * alpha + 255 * (1 - alpha));
-                           var alpha = buffer[x * 4 + 3];
-                           luminance = (byte)(((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8));
-                           luminances[offset + x] = luminance;
+                              // calculating the resulting luminance based upon a white background
+                              // var alpha = buffer[x * pixelWidth + 3] / 255.0;
+                              // luminance = (byte)(luminance * alpha + 255 * (1 - alpha));
+                              var alpha = buffer[x + 3];
+                              luminance = (byte) (((luminance*alpha) >> 8) + (255*(255 - alpha) >> 8) + 1);
+                              luminances[offset] = luminance;
+                              offset++;
+                           }
                         }
                         break;
                      default:

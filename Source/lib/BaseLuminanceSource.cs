@@ -24,6 +24,14 @@ namespace ZXing
    /// </summary>
    public abstract class BaseLuminanceSource : LuminanceSource
    {
+      // the following channel weights give nearly the same
+      // gray scale picture as the java version with BufferedImage.TYPE_BYTE_GRAY
+      // they are used in sub classes for luminance / gray scale calculation
+      protected const int RChannelWeight = 77;
+      protected const int GChannelWeight = 150;
+      protected const int BChannelWeight = 29;
+      protected const int ChannelWeight = 8;
+
       /// <summary>
       /// 
       /// </summary>
