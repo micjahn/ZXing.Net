@@ -38,6 +38,16 @@ namespace ZXing.Kinect
       /// </summary>
       /// <param name="bitmap">The bitmap.</param>
       public ColorImageFrameLuminanceSource(ColorImageFrame bitmap)
+         : this(bitmap, true)
+      {
+      }
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="ColorImageFrameLuminanceSource"/> class.
+      /// </summary>
+      /// <param name="bitmap">The bitmap.</param>
+      /// <param name="flipTheImage">if set to <c>true</c> [flip the image].</param>
+      public ColorImageFrameLuminanceSource(ColorImageFrame bitmap, bool flipTheImage)
          : base(bitmap.Width, bitmap.Height)
       {
          var pixelData = new byte[bitmap.PixelDataLength];
@@ -64,6 +74,30 @@ namespace ZXing.Kinect
          }
          bitmap.CopyPixelDataTo(pixelData);
          CalculateLuminance(pixelData, bitmapFormat);
+         if (flipTheImage)
+         {
+            // flip the luminance values because the kinect has it flipped before
+            FlipLuminanceValues();
+         }
+      }
+
+      private void FlipLuminanceValues()
+      {
+         var width = Width;
+         var height = Height;
+         var halfWidth = width/2;
+
+         for (var y = 0; y < height; y++)
+         {
+            for (var x = 0; x < halfWidth; x++)
+            {
+               var posLeft = y*width + x;
+               var posRight = y * width + width - x - 1;
+               var tmp = luminances[posLeft];
+               luminances[posLeft] = luminances[posRight];
+               luminances[posRight] = tmp;
+            }
+         }
       }
 
       protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
