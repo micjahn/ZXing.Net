@@ -281,7 +281,6 @@
     <Compile Include="silverlight\BigInteger.cs" />
     <Compile Include="silverlight\BrowsableAttribute.cs" />
     <Compile Include="silverlight\SerializableAttribute.cs" />
-    <Compile Include="xamarin\Bitmap.monotouch.cs" />
     <Compile Include="xamarin\Color.cs" />
     <Compile Include="xamarin\ColorConverter.cs" />
     <Compile Include="xamarin\ColorTranslator.cs" />

@@ -41,7 +41,7 @@ namespace ZXing
    public class BarcodeReader : BarcodeReaderGeneric<MonoTouch.UIKit.UIImage>, IBarcodeReader, IMultipleBarcodeReader
    {
       private static readonly Func<MonoTouch.UIKit.UIImage, LuminanceSource> defaultCreateLuminanceSource = 
-         (img) => new RGBLuminanceSource(new Bitmap(img), (int)img.Size.Width, (int)img.Size.Height);
+         (img) => new RGBLuminanceSource(img);
 #else
 #if !PORTABLE
 #if !(SILVERLIGHT || NETFX_CORE)

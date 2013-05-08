@@ -1,5 +1,9 @@
-﻿using System.Drawing;
-using System;
+﻿using System;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
+using MonoTouch.UIKit;
+using MonoTouch.CoreGraphics;
 
 namespace ZXing
 {
@@ -12,24 +16,35 @@ namespace ZXing
       /// <param name="d"></param>
       /// <param name="W"></param>
       /// <param name="H"></param>
-      public RGBLuminanceSource(Bitmap d, int W, int H)
-         : base(W, H)
+      public RGBLuminanceSource(UIImage d)
+         : base(d.CGImage.Width, d.CGImage.Height)
       {
-         int width = W;
-         int height = H;
-         // In order to measure pure decoding speed, we convert the entire image to a greyscale array
-         // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
-         //if (format == PixelFormat.Format8bppIndexed)
+         CalculateLuminance(d);
+      }
+
+      private void CalculateLuminance(UIImage d)
+      {
+         var imageRef = d.CGImage;
+         var width = imageRef.Width;
+         var height = imageRef.Height;
+         var colorSpace = CGColorSpace.CreateDeviceRGB();
+
+         var rawData = Marshal.AllocHGlobal(height * width * 4);
+
+         try
          {
-            for (int y = 0; y < height; y++)
-            {
-               int offset = y * width;
-               for (int x = 0; x < width; x++)
-               {
-                  var c = d.GetPixel(x, y);
-                  luminances[offset + x] = (byte)((RChannelWeight * c.R + GChannelWeight * c.G + BChannelWeight * c.B) >> ChannelWeight);
-               }
-            }
+            var context = new CGBitmapContext(rawData, width, height, 8, 4 * width,
+            colorSpace, CGImageAlphaInfo.PremultipliedLast);
+
+            context.DrawImage(new RectangleF(0.0f, 0.0f, (float)width, (float)height), imageRef);
+            var pixelData = new byte[height * width * 4];
+            Marshal.Copy(rawData, pixelData, 0, pixelData.Length);
+
+            CalculateLuminance(pixelData, BitmapFormat.RGB32);
+         }
+         finally
+         {
+            Marshal.FreeHGlobal(rawData);
          }
       }
    }
