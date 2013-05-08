@@ -63,7 +63,7 @@ namespace ZXing.Kinect
                break;
             case ColorImageFormat.RgbResolution1280x960Fps12:
             case ColorImageFormat.RgbResolution640x480Fps30:
-               bitmapFormat = BitmapFormat.RGB32;
+               bitmapFormat = BitmapFormat.BGR32;
                break;
             case ColorImageFormat.RawYuvResolution640x480Fps15:
             case ColorImageFormat.YuvResolution640x480Fps15:
