@@ -81,6 +81,8 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "zxing.portable.doc", "Sourc
 		{24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3} = {24B441F2-CBE9-4405-9FD0-72EBCBEA0EC3}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.kinect", "Source\lib\zxing.kinect.csproj", "{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -551,6 +553,21 @@ Global
 		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B95B1194-0D6A-4121-A629-695B1F8EF0A7}.Release|x86.ActiveCfg = Release|Any CPU
+		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Release with Documentation|Any CPU.ActiveCfg = Release|Any CPU
+		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Release with Documentation|Any CPU.Build.0 = Release|Any CPU
+		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Release with Documentation|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Release with Documentation|Mixed Platforms.Build.0 = Release|Any CPU
+		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Release with Documentation|x86.ActiveCfg = Release|Any CPU
+		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
