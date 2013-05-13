@@ -177,126 +177,96 @@ namespace ZXing.QrCode.Internal.Test
       [Test]
       public void testAppendLengthInfo()
       {
-         {
-            BitArray bits = new BitArray();
-            Encoder.appendLengthInfo(1,  // 1 letter (1/1).
-                                     Version.getVersionForNumber(1),
-                                     Mode.NUMERIC,
-                                     bits);
-            Assert.AreEqual(" ........ .X", bits.ToString());  // 10 bits.
-         }
-         {
-            BitArray bits = new BitArray();
-            Encoder.appendLengthInfo(2,  // 2 letters (2/1).
-                                     Version.getVersionForNumber(10),
-                                     Mode.ALPHANUMERIC,
-                                     bits);
-            Assert.AreEqual(" ........ .X.", bits.ToString());  // 11 bits.
-         }
-         {
-            BitArray bits = new BitArray();
-            Encoder.appendLengthInfo(255,  // 255 letter (255/1).
-                                     Version.getVersionForNumber(27),
-                                     Mode.BYTE,
-                                     bits);
-            Assert.AreEqual(" ........ XXXXXXXX", bits.ToString());  // 16 bits.
-         }
-         {
-            BitArray bits = new BitArray();
-            Encoder.appendLengthInfo(512,  // 512 letters (1024/2).
-                                     Version.getVersionForNumber(40),
-                                     Mode.KANJI,
-                                     bits);
-            Assert.AreEqual(" ..X..... ....", bits.ToString());  // 12 bits.
-         }
+         var bits = new BitArray();
+         Encoder.appendLengthInfo(1, // 1 letter (1/1).
+                                  Version.getVersionForNumber(1),
+                                  Mode.NUMERIC,
+                                  bits);
+         Assert.AreEqual(" ........ .X", bits.ToString()); // 10 bits.
+         bits = new BitArray();
+         Encoder.appendLengthInfo(2, // 2 letters (2/1).
+                                  Version.getVersionForNumber(10),
+                                  Mode.ALPHANUMERIC,
+                                  bits);
+         Assert.AreEqual(" ........ .X.", bits.ToString()); // 11 bits.
+         bits = new BitArray();
+         Encoder.appendLengthInfo(255, // 255 letter (255/1).
+                                  Version.getVersionForNumber(27),
+                                  Mode.BYTE,
+                                  bits);
+         Assert.AreEqual(" ........ XXXXXXXX", bits.ToString()); // 16 bits.
+         bits = new BitArray();
+         Encoder.appendLengthInfo(512, // 512 letters (1024/2).
+                                  Version.getVersionForNumber(40),
+                                  Mode.KANJI,
+                                  bits);
+         Assert.AreEqual(" ..X..... ....", bits.ToString()); // 12 bits.
       }
 
       [Test]
       public void testAppendBytes()
       {
+         // Should use appendNumericBytes.
+         // 1 = 01 = 0001 in 4 bits.
+         var bits = new BitArray();
+         Encoder.appendBytes("1", Mode.NUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
+         Assert.AreEqual(" ...X", bits.ToString());
+         // Should use appendAlphanumericBytes.
+         // A = 10 = 0xa = 001010 in 6 bits
+         bits = new BitArray();
+         Encoder.appendBytes("A", Mode.ALPHANUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
+         Assert.AreEqual(" ..X.X.", bits.ToString());
+         // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
+         try
          {
-            // Should use appendNumericBytes.
-            // 1 = 01 = 0001 in 4 bits.
-            BitArray bits = new BitArray();
-            Encoder.appendBytes("1", Mode.NUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
-            Assert.AreEqual(" ...X", bits.ToString());
+            Encoder.appendBytes("a", Mode.ALPHANUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
          }
+         catch (WriterException)
          {
-            // Should use appendAlphanumericBytes.
-            // A = 10 = 0xa = 001010 in 6 bits
-            BitArray bits = new BitArray();
-            Encoder.appendBytes("A", Mode.ALPHANUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
-            Assert.AreEqual(" ..X.X.", bits.ToString());
-            // Lower letters such as 'a' cannot be encoded in MODE_ALPHANUMERIC.
-            try
-            {
-               Encoder.appendBytes("a", Mode.ALPHANUMERIC, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
-            }
-            catch (WriterException )
-            {
-               // good
-            }
+            // good
          }
-         {
-            // Should use append8BitBytes.
-            // 0x61, 0x62, 0x63
-            BitArray bits = new BitArray();
-            Encoder.appendBytes("abc", Mode.BYTE, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
-            Assert.AreEqual(" .XX....X .XX...X. .XX...XX", bits.ToString());
-            // Anything can be encoded in QRCode.MODE_8BIT_BYTE.
-            Encoder.appendBytes("\0", Mode.BYTE, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
-         }
-         {
-            // Should use appendKanjiBytes.
-            // 0x93, 0x5f
-            BitArray bits = new BitArray();
-            Encoder.appendBytes(shiftJISString(new byte[] { 0x93, 0x5f }), Mode.KANJI, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
-            Assert.AreEqual(" .XX.XX.. XXXXX", bits.ToString());
-         }
+         // Should use append8BitBytes.
+         // 0x61, 0x62, 0x63
+         bits = new BitArray();
+         Encoder.appendBytes("abc", Mode.BYTE, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
+         Assert.AreEqual(" .XX....X .XX...X. .XX...XX", bits.ToString());
+         // Anything can be encoded in QRCode.MODE_8BIT_BYTE.
+         Encoder.appendBytes("\0", Mode.BYTE, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
+         // Should use appendKanjiBytes.
+         // 0x93, 0x5f
+         bits = new BitArray();
+         Encoder.appendBytes(shiftJISString(new byte[] {0x93, 0x5f}), Mode.KANJI, bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
+         Assert.AreEqual(" .XX.XX.. XXXXX", bits.ToString());
       }
 
       [Test]
       public void testTerminateBits()
       {
-         {
-            BitArray v = new BitArray();
-            Encoder.terminateBits(0, v);
-            Assert.AreEqual("", v.ToString());
-         }
-         {
-            BitArray v = new BitArray();
-            Encoder.terminateBits(1, v);
-            Assert.AreEqual(" ........", v.ToString());
-         }
-         {
-            BitArray v = new BitArray();
-            v.appendBits(0, 3);  // Append 000
-            Encoder.terminateBits(1, v);
-            Assert.AreEqual(" ........", v.ToString());
-         }
-         {
-            BitArray v = new BitArray();
-            v.appendBits(0, 5);  // Append 00000
-            Encoder.terminateBits(1, v);
-            Assert.AreEqual(" ........", v.ToString());
-         }
-         {
-            BitArray v = new BitArray();
-            v.appendBits(0, 8);  // Append 00000000
-            Encoder.terminateBits(1, v);
-            Assert.AreEqual(" ........", v.ToString());
-         }
-         {
-            BitArray v = new BitArray();
-            Encoder.terminateBits(2, v);
-            Assert.AreEqual(" ........ XXX.XX..", v.ToString());
-         }
-         {
-            BitArray v = new BitArray();
-            v.appendBits(0, 1);  // Append 0
-            Encoder.terminateBits(3, v);
-            Assert.AreEqual(" ........ XXX.XX.. ...X...X", v.ToString());
-         }
+         var v = new BitArray();
+         Encoder.terminateBits(0, v);
+         Assert.AreEqual("", v.ToString());
+         v = new BitArray();
+         Encoder.terminateBits(1, v);
+         Assert.AreEqual(" ........", v.ToString());
+         v = new BitArray();
+         v.appendBits(0, 3); // Append 000
+         Encoder.terminateBits(1, v);
+         Assert.AreEqual(" ........", v.ToString());
+         v = new BitArray();
+         v.appendBits(0, 5); // Append 00000
+         Encoder.terminateBits(1, v);
+         Assert.AreEqual(" ........", v.ToString());
+         v = new BitArray();
+         v.appendBits(0, 8); // Append 00000000
+         Encoder.terminateBits(1, v);
+         Assert.AreEqual(" ........", v.ToString());
+         v = new BitArray();
+         Encoder.terminateBits(2, v);
+         Assert.AreEqual(" ........ XXX.XX..", v.ToString());
+         v = new BitArray();
+         v.appendBits(0, 1); // Append 0
+         Encoder.terminateBits(3, v);
+         Assert.AreEqual(" ........ XXX.XX.. ...X...X", v.ToString());
       }
 
       [Test]
@@ -340,163 +310,138 @@ namespace ZXing.QrCode.Internal.Test
       [Test]
       public void testInterleaveWithECBytes()
       {
+         byte[] dataBytes = {32, 65, 205, 69, 41, 220, 46, 128, 236};
+         var @in = new BitArray();
+         foreach (byte dataByte in dataBytes)
          {
-            byte[] dataBytes = { 32, 65, 205, 69, 41, 220, 46, 128, 236 };
-            BitArray @in = new BitArray();
-            foreach (byte dataByte in dataBytes)
+            @in.appendBits(dataByte, 8);
+         }
+         var @out = Encoder.interleaveWithECBytes(@in, 26, 9, 1);
+         byte[] expected =
             {
-               @in.appendBits(dataByte, 8);
-            }
-            BitArray @out = Encoder.interleaveWithECBytes(@in, 26, 9, 1);
-            byte[] expected = {
-                                 // Data bytes.
-                                 32, 65, 205, 69, 41, 220, 46, 128, 236,
-                                 // Error correction bytes.
-                                 42, 159, 74, 221, 244, 169, 239, 150, 138, 70,
-                                 237, 85, 224, 96, 74, 219, 61,
-                              };
-            Assert.AreEqual(expected.Length, @out.SizeInBytes);
-            byte[] outArray = new byte[expected.Length];
-            @out.toBytes(0, outArray, 0, expected.Length);
-            // Can't use Arrays.equals(), because outArray may be longer than out.sizeInBytes()
-            for (int x = 0; x < expected.Length; x++)
-            {
-               Assert.AreEqual(expected[x], outArray[x]);
-            }
+               // Data bytes.
+               32, 65, 205, 69, 41, 220, 46, 128, 236,
+               // Error correction bytes.
+               42, 159, 74, 221, 244, 169, 239, 150, 138, 70,
+               237, 85, 224, 96, 74, 219, 61,
+            };
+         Assert.AreEqual(expected.Length, @out.SizeInBytes);
+         var outArray = new byte[expected.Length];
+         @out.toBytes(0, outArray, 0, expected.Length);
+         // Can't use Arrays.equals(), because outArray may be longer than out.sizeInBytes()
+         for (int x = 0; x < expected.Length; x++)
+         {
+            Assert.AreEqual(expected[x], outArray[x]);
          }
          // Numbers are from http://www.swetake.com/qr/qr8.html
+         dataBytes = new byte[]
+            {
+               67, 70, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166, 182,
+               198, 214, 230, 247, 7, 23, 39, 55, 71, 87, 103, 119, 135,
+               151, 166, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166,
+               182, 198, 214, 230, 247, 7, 23, 39, 55, 71, 87, 103, 119,
+               135, 151, 160, 236, 17, 236, 17, 236, 17, 236,
+               17
+            };
+         @in = new BitArray();
+         foreach (byte dataByte in dataBytes)
          {
-            byte[] dataBytes = {
-                                  67, 70, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166, 182,
-                                  198, 214, 230, 247, 7, 23, 39, 55, 71, 87, 103, 119, 135,
-                                  151, 166, 22, 38, 54, 70, 86, 102, 118, 134, 150, 166,
-                                  182, 198, 214, 230, 247, 7, 23, 39, 55, 71, 87, 103, 119,
-                                  135, 151, 160, 236, 17, 236, 17, 236, 17, 236,
-                                  17
-                               };
-            BitArray @in = new BitArray();
-            foreach (byte dataByte in dataBytes)
+            @in.appendBits(dataByte, 8);
+         }
+         @out = Encoder.interleaveWithECBytes(@in, 134, 62, 4);
+         expected = new byte[]
             {
-               @in.appendBits(dataByte, 8);
-            }
-            BitArray @out = Encoder.interleaveWithECBytes(@in, 134, 62, 4);
-            byte[] expected = {
-                                 // Data bytes.
-                                 67, 230, 54, 55, 70, 247, 70, 71, 22, 7, 86, 87, 38, 23, 102, 103, 54, 39,
-                                 118, 119, 70, 55, 134, 135, 86, 71, 150, 151, 102, 87, 166,
-                                 160, 118, 103, 182, 236, 134, 119, 198, 17, 150,
-                                 135, 214, 236, 166, 151, 230, 17, 182,
-                                 166, 247, 236, 198, 22, 7, 17, 214, 38, 23, 236, 39,
-                                 17,
-                                 // Error correction bytes.
-                                 175, 155, 245, 236, 80, 146, 56, 74, 155, 165,
-                                 133, 142, 64, 183, 132, 13, 178, 54, 132, 108, 45,
-                                 113, 53, 50, 214, 98, 193, 152, 233, 147, 50, 71, 65,
-                                 190, 82, 51, 209, 199, 171, 54, 12, 112, 57, 113, 155, 117,
-                                 211, 164, 117, 30, 158, 225, 31, 190, 242, 38,
-                                 140, 61, 179, 154, 214, 138, 147, 87, 27, 96, 77, 47,
-                                 187, 49, 156, 214,
-                              };
-            Assert.AreEqual(expected.Length, @out.SizeInBytes);
-            byte[] outArray = new byte[expected.Length];
-            @out.toBytes(0, outArray, 0, expected.Length);
-            for (int x = 0; x < expected.Length; x++)
-            {
-               Assert.AreEqual(expected[x], outArray[x]);
-            }
+               // Data bytes.
+               67, 230, 54, 55, 70, 247, 70, 71, 22, 7, 86, 87, 38, 23, 102, 103, 54, 39,
+               118, 119, 70, 55, 134, 135, 86, 71, 150, 151, 102, 87, 166,
+               160, 118, 103, 182, 236, 134, 119, 198, 17, 150,
+               135, 214, 236, 166, 151, 230, 17, 182,
+               166, 247, 236, 198, 22, 7, 17, 214, 38, 23, 236, 39,
+               17,
+               // Error correction bytes.
+               175, 155, 245, 236, 80, 146, 56, 74, 155, 165,
+               133, 142, 64, 183, 132, 13, 178, 54, 132, 108, 45,
+               113, 53, 50, 214, 98, 193, 152, 233, 147, 50, 71, 65,
+               190, 82, 51, 209, 199, 171, 54, 12, 112, 57, 113, 155, 117,
+               211, 164, 117, 30, 158, 225, 31, 190, 242, 38,
+               140, 61, 179, 154, 214, 138, 147, 87, 27, 96, 77, 47,
+               187, 49, 156, 214,
+            };
+         Assert.AreEqual(expected.Length, @out.SizeInBytes);
+         outArray = new byte[expected.Length];
+         @out.toBytes(0, outArray, 0, expected.Length);
+         for (int x = 0; x < expected.Length; x++)
+         {
+            Assert.AreEqual(expected[x], outArray[x]);
          }
       }
 
       [Test]
       public void testAppendNumericBytes()
       {
-         {
-            // 1 = 01 = 0001 in 4 bits.
-            BitArray bits = new BitArray();
-            Encoder.appendNumericBytes("1", bits);
-            Assert.AreEqual(" ...X", bits.ToString());
-         }
-         {
-            // 12 = 0xc = 0001100 in 7 bits.
-            BitArray bits = new BitArray();
-            Encoder.appendNumericBytes("12", bits);
-            Assert.AreEqual(" ...XX..", bits.ToString());
-         }
-         {
-            // 123 = 0x7b = 0001111011 in 10 bits.
-            BitArray bits = new BitArray();
-            Encoder.appendNumericBytes("123", bits);
-            Assert.AreEqual(" ...XXXX. XX", bits.ToString());
-         }
-         {
-            // 1234 = "123" + "4" = 0001111011 + 0100
-            BitArray bits = new BitArray();
-            Encoder.appendNumericBytes("1234", bits);
-            Assert.AreEqual(" ...XXXX. XX.X..", bits.ToString());
-         }
-         {
-            // Empty.
-            BitArray bits = new BitArray();
-            Encoder.appendNumericBytes("", bits);
-            Assert.AreEqual("", bits.ToString());
-         }
+         // 1 = 01 = 0001 in 4 bits.
+         var bits = new BitArray();
+         Encoder.appendNumericBytes("1", bits);
+         Assert.AreEqual(" ...X", bits.ToString());
+         // 12 = 0xc = 0001100 in 7 bits.
+         bits = new BitArray();
+         Encoder.appendNumericBytes("12", bits);
+         Assert.AreEqual(" ...XX..", bits.ToString());
+         // 123 = 0x7b = 0001111011 in 10 bits.
+         bits = new BitArray();
+         Encoder.appendNumericBytes("123", bits);
+         Assert.AreEqual(" ...XXXX. XX", bits.ToString());
+         // 1234 = "123" + "4" = 0001111011 + 0100
+         bits = new BitArray();
+         Encoder.appendNumericBytes("1234", bits);
+         Assert.AreEqual(" ...XXXX. XX.X..", bits.ToString());
+         // Empty.
+         bits = new BitArray();
+         Encoder.appendNumericBytes("", bits);
+         Assert.AreEqual("", bits.ToString());
       }
 
       [Test]
       public void testAppendAlphanumericBytes()
       {
+         // A = 10 = 0xa = 001010 in 6 bits
+         var bits = new BitArray();
+         Encoder.appendAlphanumericBytes("A", bits);
+         Assert.AreEqual(" ..X.X.", bits.ToString());
+         // AB = 10 * 45 + 11 = 461 = 0x1cd = 00111001101 in 11 bits
+         bits = new BitArray();
+         Encoder.appendAlphanumericBytes("AB", bits);
+         Assert.AreEqual(" ..XXX..X X.X", bits.ToString());
+         // ABC = "AB" + "C" = 00111001101 + 001100
+         bits = new BitArray();
+         Encoder.appendAlphanumericBytes("ABC", bits);
+         Assert.AreEqual(" ..XXX..X X.X..XX. .", bits.ToString());
+         // Empty.
+         bits = new BitArray();
+         Encoder.appendAlphanumericBytes("", bits);
+         Assert.AreEqual("", bits.ToString());
+         // Invalid data.
+         try
          {
-            // A = 10 = 0xa = 001010 in 6 bits
-            BitArray bits = new BitArray();
-            Encoder.appendAlphanumericBytes("A", bits);
-            Assert.AreEqual(" ..X.X.", bits.ToString());
+            Encoder.appendAlphanumericBytes("abc", new BitArray());
          }
+         catch (WriterException)
          {
-            // AB = 10 * 45 + 11 = 461 = 0x1cd = 00111001101 in 11 bits
-            BitArray bits = new BitArray();
-            Encoder.appendAlphanumericBytes("AB", bits);
-            Assert.AreEqual(" ..XXX..X X.X", bits.ToString());
-         }
-         {
-            // ABC = "AB" + "C" = 00111001101 + 001100
-            BitArray bits = new BitArray();
-            Encoder.appendAlphanumericBytes("ABC", bits);
-            Assert.AreEqual(" ..XXX..X X.X..XX. .", bits.ToString());
-         }
-         {
-            // Empty.
-            BitArray bits = new BitArray();
-            Encoder.appendAlphanumericBytes("", bits);
-            Assert.AreEqual("", bits.ToString());
-         }
-         {
-            // Invalid data.
-            try
-            {
-               Encoder.appendAlphanumericBytes("abc", new BitArray());
-            }
-            catch (WriterException )
-            {
-               // good
-            }
+            // good
          }
       }
 
       [Test]
       public void testAppend8BitBytes()
       {
-         {
-            // 0x61, 0x62, 0x63
-            BitArray bits = new BitArray();
-            Encoder.append8BitBytes("abc", bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
-            Assert.AreEqual(" .XX....X .XX...X. .XX...XX", bits.ToString());
-         }
-         {
-            // Empty.
-            BitArray bits = new BitArray();
-            Encoder.append8BitBytes("", bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
-            Assert.AreEqual("", bits.ToString());
-         }
+         // 0x61, 0x62, 0x63
+         var bits = new BitArray();
+         Encoder.append8BitBytes("abc", bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
+         Assert.AreEqual(" .XX....X .XX...X. .XX...XX", bits.ToString());
+         // Empty.
+         bits = new BitArray();
+         Encoder.append8BitBytes("", bits, Encoder.DEFAULT_BYTE_MODE_ENCODING);
+         Assert.AreEqual("", bits.ToString());
       }
 
       // Numbers are from page 21 of JISX0510:2004
@@ -515,43 +460,43 @@ namespace ZXing.QrCode.Internal.Test
       [Test]
       public void testGenerateECBytes()
       {
-         {
-            byte[] dataBytes = { 32, 65, 205, 69, 41, 220, 46, 128, 236 };
-            byte[] ecBytes = Encoder.generateECBytes(dataBytes, 17);
-            int[] expected = {
-          42, 159, 74, 221, 244, 169, 239, 150, 138, 70, 237, 85, 224, 96, 74, 219, 61
-      };
-            Assert.AreEqual(expected.Length, ecBytes.Length);
-            for (int x = 0; x < expected.Length; x++)
+         byte[] dataBytes = {32, 65, 205, 69, 41, 220, 46, 128, 236};
+         byte[] ecBytes = Encoder.generateECBytes(dataBytes, 17);
+         int[] expected =
             {
-               Assert.AreEqual(expected[x], ecBytes[x] & 0xFF);
-            }
+               42, 159, 74, 221, 244, 169, 239, 150, 138, 70, 237, 85, 224, 96, 74, 219, 61
+            };
+         Assert.AreEqual(expected.Length, ecBytes.Length);
+         for (int x = 0; x < expected.Length; x++)
+         {
+            Assert.AreEqual(expected[x], ecBytes[x] & 0xFF);
          }
-         {
-            byte[] dataBytes = {67, 70, 22, 38, 54, 70, 86, 102, 118,
-          134, 150, 166, 182, 198, 214};
-            byte[] ecBytes = Encoder.generateECBytes(dataBytes, 18);
-            int[] expected = {
-          175, 80, 155, 64, 178, 45, 214, 233, 65, 209, 12, 155, 117, 31, 140, 214, 27, 187
-      };
-            Assert.AreEqual(expected.Length, ecBytes.Length);
-            for (int x = 0; x < expected.Length; x++)
+         dataBytes = new byte[]
             {
-               Assert.AreEqual(expected[x], ecBytes[x] & 0xFF);
-            }
+               67, 70, 22, 38, 54, 70, 86, 102, 118,
+               134, 150, 166, 182, 198, 214
+            };
+         ecBytes = Encoder.generateECBytes(dataBytes, 18);
+         expected = new []
+            {
+               175, 80, 155, 64, 178, 45, 214, 233, 65, 209, 12, 155, 117, 31, 140, 214, 27, 187
+            };
+         Assert.AreEqual(expected.Length, ecBytes.Length);
+         for (int x = 0; x < expected.Length; x++)
+         {
+            Assert.AreEqual(expected[x], ecBytes[x] & 0xFF);
          }
-         {
-            // High-order zero coefficient case.
-            byte[] dataBytes = { 32, 49, 205, 69, 42, 20, 0, 236, 17 };
-            byte[] ecBytes = Encoder.generateECBytes(dataBytes, 17);
-            int[] expected = {
-          0, 3, 130, 179, 194, 0, 55, 211, 110, 79, 98, 72, 170, 96, 211, 137, 213
-      };
-            Assert.AreEqual(expected.Length, ecBytes.Length);
-            for (int x = 0; x < expected.Length; x++)
+         // High-order zero coefficient case.
+         dataBytes = new byte[] {32, 49, 205, 69, 42, 20, 0, 236, 17};
+         ecBytes = Encoder.generateECBytes(dataBytes, 17);
+         expected = new []
             {
-               Assert.AreEqual(expected[x], ecBytes[x] & 0xFF);
-            }
+               0, 3, 130, 179, 194, 0, 55, 211, 110, 79, 98, 72, 170, 96, 211, 137, 213
+            };
+         Assert.AreEqual(expected.Length, ecBytes.Length);
+         for (int x = 0; x < expected.Length; x++)
+         {
+            Assert.AreEqual(expected[x], ecBytes[x] & 0xFF);
          }
       }
 

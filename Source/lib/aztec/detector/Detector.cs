@@ -186,26 +186,26 @@ namespace ZXing.Aztec.Internal
          float ratio = (2*nbLayers + (nbLayers > 4 ? 1 : 0) + (nbLayers - 4)/8)
                        /(2.0f*nbCenterLayers);
 
-         int dx = bullEyeCornerPoints[0].x - bullEyeCornerPoints[2].x;
+         int dx = bullEyeCornerPoints[0].X - bullEyeCornerPoints[2].X;
          dx += dx > 0 ? 1 : -1;
-         int dy = bullEyeCornerPoints[0].y - bullEyeCornerPoints[2].y;
+         int dy = bullEyeCornerPoints[0].Y - bullEyeCornerPoints[2].Y;
          dy += dy > 0 ? 1 : -1;
 
-         int targetcx = MathUtils.round(bullEyeCornerPoints[2].x - ratio*dx);
-         int targetcy = MathUtils.round(bullEyeCornerPoints[2].y - ratio*dy);
+         int targetcx = MathUtils.round(bullEyeCornerPoints[2].X - ratio*dx);
+         int targetcy = MathUtils.round(bullEyeCornerPoints[2].Y - ratio*dy);
 
-         int targetax = MathUtils.round(bullEyeCornerPoints[0].x + ratio*dx);
-         int targetay = MathUtils.round(bullEyeCornerPoints[0].y + ratio*dy);
+         int targetax = MathUtils.round(bullEyeCornerPoints[0].X + ratio*dx);
+         int targetay = MathUtils.round(bullEyeCornerPoints[0].Y + ratio*dy);
 
-         dx = bullEyeCornerPoints[1].x - bullEyeCornerPoints[3].x;
+         dx = bullEyeCornerPoints[1].X - bullEyeCornerPoints[3].X;
          dx += dx > 0 ? 1 : -1;
-         dy = bullEyeCornerPoints[1].y - bullEyeCornerPoints[3].y;
+         dy = bullEyeCornerPoints[1].Y - bullEyeCornerPoints[3].Y;
          dy += dy > 0 ? 1 : -1;
 
-         int targetdx = MathUtils.round(bullEyeCornerPoints[3].x - ratio*dx);
-         int targetdy = MathUtils.round(bullEyeCornerPoints[3].y - ratio*dy);
-         int targetbx = MathUtils.round(bullEyeCornerPoints[1].x + ratio*dx);
-         int targetby = MathUtils.round(bullEyeCornerPoints[1].y + ratio*dy);
+         int targetdx = MathUtils.round(bullEyeCornerPoints[3].X - ratio*dx);
+         int targetdy = MathUtils.round(bullEyeCornerPoints[3].Y - ratio*dy);
+         int targetbx = MathUtils.round(bullEyeCornerPoints[1].X + ratio*dx);
+         int targetby = MathUtils.round(bullEyeCornerPoints[1].Y + ratio*dy);
 
          if (!isValid(targetax, targetay) ||
              !isValid(targetbx, targetby) ||
@@ -331,20 +331,20 @@ namespace ZXing.Aztec.Internal
 
          float ratio = 0.75f*2/(2*nbCenterLayers - 3);
 
-         int dx = pina.x - pinc.x;
-         int dy = pina.y - pinc.y;
-         int targetcx = MathUtils.round(pinc.x - ratio*dx);
-         int targetcy = MathUtils.round(pinc.y - ratio*dy);
-         int targetax = MathUtils.round(pina.x + ratio*dx);
-         int targetay = MathUtils.round(pina.y + ratio*dy);
+         int dx = pina.X - pinc.X;
+         int dy = pina.Y - pinc.Y;
+         int targetcx = MathUtils.round(pinc.X - ratio*dx);
+         int targetcy = MathUtils.round(pinc.Y - ratio*dy);
+         int targetax = MathUtils.round(pina.X + ratio*dx);
+         int targetay = MathUtils.round(pina.Y + ratio*dy);
 
-         dx = pinb.x - pind.x;
-         dy = pinb.y - pind.y;
+         dx = pinb.X - pind.X;
+         dy = pinb.Y - pind.Y;
 
-         int targetdx = MathUtils.round(pind.x - ratio*dx);
-         int targetdy = MathUtils.round(pind.y - ratio*dy);
-         int targetbx = MathUtils.round(pinb.x + ratio*dx);
-         int targetby = MathUtils.round(pinb.y + ratio*dy);
+         int targetdx = MathUtils.round(pind.X - ratio*dx);
+         int targetdy = MathUtils.round(pind.Y - ratio*dy);
+         int targetbx = MathUtils.round(pinb.X + ratio*dx);
+         int targetby = MathUtils.round(pinb.Y + ratio*dy);
 
          if (!isValid(targetax, targetay) ||
              !isValid(targetbx, targetby) ||
@@ -547,11 +547,11 @@ namespace ZXing.Aztec.Internal
          bool[] res = new bool[size];
          float d = distance(p1, p2);
          float moduleSize = d / (size - 1);
-         float dx = moduleSize * (p2.x - p1.x) / d;
-         float dy = moduleSize * (p2.y - p1.y) / d;
+         float dx = moduleSize * (p2.X - p1.X) / d;
+         float dy = moduleSize * (p2.Y - p1.Y) / d;
 
-         float px = p1.x;
-         float py = p1.y;
+         float px = p1.X;
+         float py = p1.Y;
 
          for (int i = 0; i < size; i++)
          {
@@ -576,10 +576,10 @@ namespace ZXing.Aztec.Internal
       {
          const int corr = 3;
 
-         p1 = new Point(p1.x - corr, p1.y + corr);
-         p2 = new Point(p2.x - corr, p2.y - corr);
-         p3 = new Point(p3.x + corr, p3.y - corr);
-         p4 = new Point(p4.x + corr, p4.y + corr);
+         p1 = new Point(p1.X - corr, p1.Y + corr);
+         p2 = new Point(p2.X - corr, p2.Y - corr);
+         p3 = new Point(p3.X + corr, p3.Y - corr);
+         p4 = new Point(p4.X + corr, p4.Y + corr);
 
          int cInit = getColor(p4, p1);
 
@@ -617,14 +617,14 @@ namespace ZXing.Aztec.Internal
       private int getColor(Point p1, Point p2)
       {
          float d = distance(p1, p2);
-         float dx = (p2.x - p1.x) / d;
-         float dy = (p2.y - p1.y) / d;
+         float dx = (p2.X - p1.X) / d;
+         float dy = (p2.Y - p1.Y) / d;
          int error = 0;
 
-         float px = p1.x;
-         float py = p1.y;
+         float px = p1.X;
+         float py = p1.Y;
 
-         bool colorModel = image[p1.x, p1.y];
+         bool colorModel = image[p1.X, p1.Y];
 
          for (int i = 0; i < d; i++)
          {
@@ -656,8 +656,8 @@ namespace ZXing.Aztec.Internal
       /// <returns></returns>
       private Point getFirstDifferent(Point init, bool color, int dx, int dy)
       {
-         int x = init.x + dx;
-         int y = init.y + dy;
+         int x = init.X + dx;
+         int y = init.Y + dy;
 
          while (isValid(x, y) && image[x, y] == color)
          {
@@ -691,23 +691,23 @@ namespace ZXing.Aztec.Internal
       // L2 distance
       private static float distance(Point a, Point b)
       {
-         return MathUtils.distance(a.x, a.y, b.x, b.y);
+         return MathUtils.distance(a.X, a.Y, b.X, b.Y);
       }
 
       internal sealed class Point
       {
-         public int x;
-         public int y;
+         public int X { get; private set; }
+         public int Y { get; private set; }
 
          public ResultPoint toResultPoint()
          {
-            return new ResultPoint(x, y);
+            return new ResultPoint(X, Y);
          }
 
          internal Point(int x, int y)
          {
-            this.x = x;
-            this.y = y;
+            X = x;
+            Y = y;
          }
       }
    }

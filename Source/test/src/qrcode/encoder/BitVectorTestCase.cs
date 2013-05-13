@@ -90,24 +90,18 @@ namespace ZXing.QrCode.Internal.Test
       [Test]
       public void testAppendBits()
       {
-         {
-            BitArray v = new BitArray();
-            v.appendBits(0x1, 1);
-            Assert.AreEqual(1, v.Size);
-            Assert.AreEqual(0x80000000L, getUnsignedInt(v, 0));
-         }
-         {
-            BitArray v = new BitArray();
-            v.appendBits(0xff, 8);
-            Assert.AreEqual(8, v.Size);
-            Assert.AreEqual(0xff000000L, getUnsignedInt(v, 0));
-         }
-         {
-            BitArray v = new BitArray();
-            v.appendBits(0xff7, 12);
-            Assert.AreEqual(12, v.Size);
-            Assert.AreEqual(0xff700000L, getUnsignedInt(v, 0));
-         }
+         var v = new BitArray();
+         v.appendBits(0x1, 1);
+         Assert.AreEqual(1, v.Size);
+         Assert.AreEqual(0x80000000L, getUnsignedInt(v, 0));
+         v = new BitArray();
+         v.appendBits(0xff, 8);
+         Assert.AreEqual(8, v.Size);
+         Assert.AreEqual(0xff000000L, getUnsignedInt(v, 0));
+         v = new BitArray();
+         v.appendBits(0xff7, 12);
+         Assert.AreEqual(12, v.Size);
+         Assert.AreEqual(0xff700000L, getUnsignedInt(v, 0));
       }
 
       [Test]
