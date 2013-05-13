@@ -92,8 +92,7 @@ namespace ZXing.Datamatrix
       /// around it. This is a specialized method that works exceptionally fast in this special
       /// case.
       ///
-      /// @see com.google.zxing.pdf417.PDF417Reader#extractPureBits(BitMatrix)
-      /// @see com.google.zxing.qrcode.QRCodeReader#extractPureBits(BitMatrix)
+      /// <seealso cref="ZXing.QrCode.QRCodeReader.extractPureBits(BitMatrix)" />
       /// </summary>
       private static BitMatrix extractPureBits(BitMatrix image)
       {
