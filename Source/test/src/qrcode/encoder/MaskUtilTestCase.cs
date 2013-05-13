@@ -46,7 +46,7 @@ namespace ZXing.QrCode.Internal.Test
          matrix.set(5, 0, 0);
          Assert.AreEqual(4, MaskUtil.applyMaskPenaltyRule1(matrix));
          // Vertical.
-         var matrix = new ByteMatrix(1, 6);
+         matrix = new ByteMatrix(1, 6);
          matrix.set(0, 0, 0);
          matrix.set(0, 1, 0);
          matrix.set(0, 2, 0);
