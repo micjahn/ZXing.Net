@@ -99,7 +99,7 @@ namespace ZXing.Common.ReedSolomon
          return true;
       }
 
-      private GenericGFPoly[] runEuclideanAlgorithm(GenericGFPoly a, GenericGFPoly b, int R)
+      internal GenericGFPoly[] runEuclideanAlgorithm(GenericGFPoly a, GenericGFPoly b, int R)
       {
          // Assume a's degree is >= b's
          if (a.Degree < b.Degree)
@@ -142,6 +142,12 @@ namespace ZXing.Common.ReedSolomon
             }
 
             t = q.multiply(tLast).addOrSubtract(tLastLast);
+
+            if (r.Degree >= rLast.Degree)
+            {
+               // throw new IllegalStateException("Division algorithm failed to reduce polynomial?");
+               return null;
+            }
          }
 
          int sigmaTildeAtZero = t.getCoefficient(0);
