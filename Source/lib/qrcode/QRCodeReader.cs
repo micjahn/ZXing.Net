@@ -147,6 +147,12 @@ namespace ZXing.QrCode
          int left = leftTopBlack[0];
          int right = rightBottomBlack[0];
 
+         // Sanity check!
+         if (left >= right || top >= bottom)
+         {
+            return null;
+         }
+
          if (bottom - top != right - left)
          {
             // Special case, where bottom-right module wasn't black so we found something else in the last row
