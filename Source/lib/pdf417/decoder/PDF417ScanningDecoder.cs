@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 using ZXing.Common;
@@ -178,7 +177,7 @@ namespace ZXing.PDF417.Internal
             return null;
          }
          int[] rowHeights = rowIndicatorColumn.getRowHeights();
-         int maxRowHeight = rowHeights.Max();
+         int maxRowHeight = getMax(rowHeights);
          int missingStartRows = 0;
          foreach (int rowHeight in rowHeights)
          {
@@ -207,6 +206,16 @@ namespace ZXing.PDF417.Internal
             missingEndRows--;
          }
          return rowIndicatorColumn.Box.addMissingRows(missingStartRows, missingEndRows, rowIndicatorColumn.IsLeft);
+      }
+
+      private static int getMax(int[] values)
+      {
+         int maxValue = -1;
+         for (var index = values.Length - 1; index >= 0; index--)
+         {
+            maxValue = Math.Max(maxValue, values[index]);
+         }
+         return maxValue;
       }
 
       /// <summary>
