@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 ZXing authors
+ * Copyright 2013 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,31 +14,17 @@
  * limitations under the License.
  */
 
-namespace ZXing.PDF417.Internal
+namespace ZXing.PDF417
 {
    /// <summary>
-   /// PDF417 compaction mode
+   /// PDF 417 result meta data.
+   /// <author>Guenther Grau</author>
    /// </summary>
-   public enum Compaction
+   public sealed class PDF417ResultMetadata
    {
-      /// <summary>
-      /// 
-      /// </summary>
-      AUTO,
-
-      /// <summary>
-      /// 
-      /// </summary>
-      TEXT,
-
-      /// <summary>
-      /// 
-      /// </summary>
-      BYTE,
-
-      /// <summary>
-      /// 
-      /// </summary>
-      NUMERIC
+      public int SegmentIndex { get; set; }
+      public string FileId { get; set; }
+      public int[] OptionalData { get; set; }
+      public bool IsLastSegment { get; set; }
    }
 }

@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 
 using ZXing.Common;
-using ZXing.Common.Detector;
 
 namespace ZXing.PDF417.Internal
 {
@@ -28,120 +27,178 @@ namespace ZXing.PDF417.Internal
    ///
    /// <author>SITA Lab (kevin.osullivan@sita.aero)</author>
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
+   /// <author> Guenther Grau</author>
    /// </summary>
    public sealed class Detector
    {
+      private static readonly int[] INDEXES_START_PATTERN = {0, 4, 1, 5};
+      private static readonly int[] INDEXES_STOP_PATTERN = {6, 2, 7, 3};
       private const int INTEGER_MATH_SHIFT = 8;
       private const int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
-      private const int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
-      private const int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8f);
-      private const int SKEW_THRESHOLD = 3;
+      private const int MAX_AVG_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR*0.42f);
+      private const int MAX_INDIVIDUAL_VARIANCE = (int) (PATTERN_MATCH_RESULT_SCALE_FACTOR*0.8f);
 
-      // B S B S B S B S Bar/Space pattern
-      // 11111111 0 1 0 1 0 1 000
-      private static readonly int[] START_PATTERN = { 8, 1, 1, 1, 1, 1, 1, 3 };
-
-      // 11111111 0 1 0 1 0 1 000
-      private static readonly int[] START_PATTERN_REVERSE = { 3, 1, 1, 1, 1, 1, 1, 8 };
-
-      // 1111111 0 1 000 1 0 1 00 1
-      private static readonly int[] STOP_PATTERN = { 7, 1, 1, 3, 1, 1, 1, 2, 1 };
-
-      // B S B S B S B S B Bar/Space pattern
-      // 1111111 0 1 000 1 0 1 00 1
-      private static readonly int[] STOP_PATTERN_REVERSE = { 1, 2, 1, 1, 1, 3, 1, 1, 7 };
-
-      private readonly BinaryBitmap image;
 
       /// <summary>
-      /// Initializes a new instance of the <see cref="Detector"/> class.
+      /// B S B S B S B S Bar/Space pattern
+      /// 11111111 0 1 0 1 0 1 000.
       /// </summary>
-      /// <param name="image">The image.</param>
-      public Detector(BinaryBitmap image)
-      {
-         this.image = image;
-      }
+      private static readonly int[] START_PATTERN = {8, 1, 1, 1, 1, 1, 1, 3};
 
       /// <summary>
-      /// <p>Detects a PDF417 Code in an image, simply.</p>
-      ///
-      /// <returns><see cref="DetectorResult" />encapsulating results of detecting a PDF417 Code</returns>
+      /// 1111111 0 1 000 1 0 1 00 1
       /// </summary>
-      public DetectorResult detect()
-      {
-         return detect(null);
-      }
+      private static readonly int[] STOP_PATTERN = {7, 1, 1, 3, 1, 1, 1, 2, 1};
+
+      private const int MAX_PIXEL_DRIFT = 3;
+      private const int MAX_PATTERN_DRIFT = 5;
+
+      /// <summary>
+      /// if we set the value too low, then we don't detect the correct height of the bar if the start patterns are damaged.
+      /// if we set the value too high, then we might detect the start pattern from a neighbor barcode.
+      /// </summary>
+      private const int SKIPPED_ROW_COUNT_MAX = 25;
+
+      /// <summary>
+      /// A PDF471 barcode should have at least 3 rows, with each row being >= 3 times the module width. Therefore it should be at least
+      /// 9 pixels tall. To be conservative, we use about half the size to ensure we don't miss it.
+      /// </summary>
+      private const int ROW_STEP = 5;
+
+      private const int BARCODE_MIN_HEIGHT = 10;
 
       /// <summary>
       /// <p>Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.</p>
-      ///
-      /// <param name="hints">optional hints to detector</param>
-      /// <returns><see cref="DetectorResult" />encapsulating results of detecting a PDF417 Code</returns>
       /// </summary>
-      public DetectorResult detect(IDictionary<DecodeHintType, object> hints)
+      /// <param name="image">Image.</param>
+      /// <param name="hints">Hints.</param>
+      /// <param name="multiple">If set to <c>true</c> multiple.</param>
+      /// <returns><see cref="PDF417DetectorResult"/> encapsulating results of detecting a PDF417 code </returns>
+      public static PDF417DetectorResult detect(BinaryBitmap image, IDictionary<DecodeHintType, object> hints, bool multiple)
       {
-         // Fetch the 1 bit matrix once up front.
-         BitMatrix matrix = image.BlackMatrix;
-         if (matrix == null)
-            return null;
+         // TODO detection improvement, tryHarder could try several different luminance thresholds/blackpoints or even 
+         // different binarizers (SF: or different Skipped Row Counts/Steps?)
+         //boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
 
-         bool tryHarder = hints != null && hints.ContainsKey(DecodeHintType.TRY_HARDER);
-         var resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK) ? null : (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
+         BitMatrix bitMatrix = image.BlackMatrix;
 
-         // Try to find the vertices assuming the image is upright.
-         ResultPoint[] vertices = findVertices(matrix, tryHarder);
-         if (vertices == null)
+         List<ResultPoint[]> barcodeCoordinates = detect(multiple, bitMatrix);
+         if (barcodeCoordinates.Count == 0)
          {
-            // Maybe the image is rotated 180 degrees?
-            vertices = findVertices180(matrix, tryHarder);
-            if (vertices != null)
-            {
-               correctCodeWordVertices(vertices, true);
-            }
+            rotate180(bitMatrix);
+            barcodeCoordinates = detect(multiple, bitMatrix);
          }
-         else
-         {
-            correctCodeWordVertices(vertices, false);
-         }
-
-         if (vertices == null)
-         {
-            return null;
-         }
-
-         float moduleWidth = computeModuleWidth(vertices);
-         if (moduleWidth < 1.0f)
-         {
-            return null;
-         }
-
-         int dimension = computeDimension(vertices[4], vertices[6],
-             vertices[5], vertices[7], moduleWidth);
-         if (dimension < 1)
-         {
-            return null;
-         }
-
-         int ydimension = computeYDimension(vertices[4], vertices[6], vertices[5], vertices[7], moduleWidth);
-         ydimension = ydimension > dimension ? ydimension : dimension;
-
-         // Deskew and sample image.
-         BitMatrix bits = sampleGrid(matrix, vertices[4], vertices[5], vertices[6], vertices[7], dimension, ydimension);
-         if (resultPointCallback != null)
-         {
-            resultPointCallback(vertices[5]);
-            resultPointCallback(vertices[4]);
-            resultPointCallback(vertices[6]);
-            resultPointCallback(vertices[7]);
-         }
-         return new DetectorResult(bits, new [] { vertices[5], vertices[4], vertices[6], vertices[7] });
+         return new PDF417DetectorResult(bitMatrix, barcodeCoordinates);
       }
 
       /// <summary>
-      /// Locate the vertices and the codewords area of a black blob using the Start
-      /// and Stop patterns as locators.
-      /// <param name="matrix">the scanned barcode image.</param>
-      /// <returns>an array containing the vertices:</returns>
+      /// Detects PDF417 codes in an image. Only checks 0 degree rotation (so rotate the matrix and check again outside of this method)
+      /// </summary>
+      /// <param name="multiple">multiple if true, then the image is searched for multiple codes. If false, then at most one code will be found and returned.</param>
+      /// <param name="bitMatrix">bit matrix to detect barcodes in.</param>
+      /// <returns>List of ResultPoint arrays containing the coordinates of found barcodes</returns>
+      private static List<ResultPoint[]> detect(bool multiple, BitMatrix bitMatrix)
+      {
+         List<ResultPoint[]> barcodeCoordinates = new List<ResultPoint[]>();
+         int row = 0;
+         int column = 0;
+         bool foundBarcodeInRow = false;
+         while (row < bitMatrix.Height)
+         {
+            ResultPoint[] vertices = findVertices(bitMatrix, row, column);
+
+            if (vertices[0] == null && vertices[3] == null)
+            {
+               if (!foundBarcodeInRow)
+               {
+                  // we didn't find any barcode so that's the end of searching 
+                  break;
+               }
+               // we didn't find a barcode starting at the given column and row. Try again from the first column and slightly
+               // below the lowest barcode we found so far.
+               foundBarcodeInRow = false;
+               column = 0;
+               foreach (ResultPoint[] barcodeCoordinate in barcodeCoordinates)
+               {
+                  if (barcodeCoordinate[1] != null)
+                  {
+                     row = (int) Math.Max(row, barcodeCoordinate[1].Y);
+                  }
+                  if (barcodeCoordinate[3] != null)
+                  {
+                     row = Math.Max(row, (int) barcodeCoordinate[3].Y);
+                  }
+               }
+               row += ROW_STEP;
+               continue;
+            }
+            foundBarcodeInRow = true;
+            barcodeCoordinates.Add(vertices);
+            if (!multiple)
+            {
+               break;
+            }
+            // if we didn't find a right row indicator column, then continue the search for the next barcode after the 
+            // start pattern of the barcode just found.
+            if (vertices[2] != null)
+            {
+               column = (int) vertices[2].X;
+               row = (int) vertices[2].Y;
+            }
+            else
+            {
+               column = (int) vertices[4].X;
+               row = (int) vertices[4].Y;
+            }
+         }
+         return barcodeCoordinates;
+      }
+
+      // The following could go to the BitMatrix class (maybe in a more efficient version using the BitMatrix internal
+      // data structures)
+      /// <summary>
+      /// Rotate180s the specified bit matrix.
+      /// </summary>
+      /// <param name="bitMatrix">bit matrix to rotate</param>
+      internal static void rotate180(BitMatrix bitMatrix)
+      {
+         int width = bitMatrix.Width;
+         int height = bitMatrix.Height;
+         BitArray firstRowBitArray = new BitArray(width);
+         BitArray secondRowBitArray = new BitArray(width);
+         BitArray tmpBitArray = new BitArray(width);
+         for (int y = 0; y < height + 1 >> 1; y++)
+         {
+
+            firstRowBitArray = bitMatrix.getRow(y, firstRowBitArray);
+            bitMatrix.setRow(y, mirror(bitMatrix.getRow(height - 1 - y, secondRowBitArray), tmpBitArray));
+            bitMatrix.setRow(height - 1 - y, mirror(firstRowBitArray, tmpBitArray));
+         }
+      }
+
+      /// <summary>
+      /// Copies the bits from the input to the result BitArray in reverse order.
+      /// </summary>
+      /// <param name="input">Input.</param>
+      /// <param name="result">Result.</param>
+      internal static BitArray mirror(BitArray input, BitArray result)
+      {
+         result.clear();
+         int size = input.Size;
+         for (int i = 0; i < size; i++)
+         {
+            result[size - 1 - i] = input[i];
+         }
+         return result;
+      }
+
+      /// <summary>
+      /// Locate the vertices and the codewords area of a black blob using the Start and Stop patterns as locators.
+      /// </summary>
+      /// <param name="matrix">Matrix.</param>
+      /// <param name="startRow">Start row.</param>
+      /// <param name="startColumn">Start column.</param>
+      /// <returns> an array containing the vertices:
       ///           vertices[0] x, y top left barcode
       ///           vertices[1] x, y bottom left barcode
       ///           vertices[2] x, y top right barcode
@@ -150,388 +207,165 @@ namespace ZXing.PDF417.Internal
       ///           vertices[5] x, y bottom left codeword area
       ///           vertices[6] x, y top right codeword area
       ///           vertices[7] x, y bottom right codeword area
-      /// </summary>
-      private static ResultPoint[] findVertices(BitMatrix matrix, bool tryHarder)
+      /// </returns>
+      private static ResultPoint[] findVertices(BitMatrix matrix, int startRow, int startColumn)
       {
          int height = matrix.Height;
          int width = matrix.Width;
 
          ResultPoint[] result = new ResultPoint[8];
-         bool found = false;
+         copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, START_PATTERN),
+                      INDEXES_START_PATTERN);
 
-         int[] counters = new int[START_PATTERN.Length];
-
-         int rowStep = Math.Max(1, height >> (tryHarder ? 9 : 7));
-
-         // Top Left
-         for (int i = 0; i < height; i += rowStep)
+         if (result[4] != null)
          {
-            int[] loc = findGuardPattern(matrix, 0, i, width, false, START_PATTERN, counters);
+            startColumn = (int) result[4].X;
+            startRow = (int) result[4].Y;
+         }
+         copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, STOP_PATTERN),
+                      INDEXES_STOP_PATTERN);
+         return result;
+      }
+
+      /// <summary>
+      /// Copies the temp data to the final result
+      /// </summary>
+      /// <param name="result">Result.</param>
+      /// <param name="tmpResult">Temp result.</param>
+      /// <param name="destinationIndexes">Destination indexes.</param>
+      private static void copyToResult(ResultPoint[] result, ResultPoint[] tmpResult, int[] destinationIndexes)
+      {
+         for (int i = 0; i < destinationIndexes.Length; i++)
+         {
+            result[destinationIndexes[i]] = tmpResult[i];
+         }
+      }
+
+      /// <summary>
+      /// Finds the rows with the given pattern.
+      /// </summary>
+      /// <returns>The rows with pattern.</returns>
+      /// <param name="matrix">Matrix.</param>
+      /// <param name="height">Height.</param>
+      /// <param name="width">Width.</param>
+      /// <param name="startRow">Start row.</param>
+      /// <param name="startColumn">Start column.</param>
+      /// <param name="pattern">Pattern.</param>
+      private static ResultPoint[] findRowsWithPattern(
+         BitMatrix matrix,
+         int height,
+         int width,
+         int startRow,
+         int startColumn,
+         int[] pattern)
+      {
+         ResultPoint[] result = new ResultPoint[4];
+         bool found = false;
+         int[] counters = new int[pattern.Length];
+         for (; startRow < height; startRow += ROW_STEP)
+         {
+            int[] loc = findGuardPattern(matrix, startColumn, startRow, width, false, pattern, counters);
             if (loc != null)
             {
-               result[0] = new ResultPoint(loc[0], i);
-               result[4] = new ResultPoint(loc[1], i);
+               while (startRow > 0)
+               {
+                  int[] previousRowLoc = findGuardPattern(matrix, startColumn, --startRow, width, false, pattern, counters);
+                  if (previousRowLoc != null)
+                  {
+                     loc = previousRowLoc;
+                  }
+                  else
+                  {
+                     startRow++;
+                     break;
+                  }
+               }
+               result[0] = new ResultPoint(loc[0], startRow);
+               result[1] = new ResultPoint(loc[1], startRow);
                found = true;
                break;
             }
          }
-         // Bottom left
+         int stopRow = startRow + 1;
+         // Last row of the current symbol that contains pattern
          if (found)
-         { // Found the Top Left vertex
-            found = false;
-            for (int i = height - 1; i > 0; i -= rowStep)
+         {
+            int skippedRowCount = 0;
+            int[] previousRowLoc = {(int) result[0].X, (int) result[1].X};
+            for (; stopRow < height; stopRow++)
             {
-               int[] loc = findGuardPattern(matrix, 0, i, width, false, START_PATTERN, counters);
-               if (loc != null)
+               int[] loc = findGuardPattern(matrix, previousRowLoc[0], stopRow, width, false, pattern, counters);
+               // a found pattern is only considered to belong to the same barcode if the start and end positions
+               // don't differ too much. Pattern drift should be not bigger than two for consecutive rows. With
+               // a higher number of skipped rows drift could be larger. To keep it simple for now, we allow a slightly
+               // larger drift and don't check for skipped rows.
+               if (loc != null &&
+                   Math.Abs(previousRowLoc[0] - loc[0]) < MAX_PATTERN_DRIFT &&
+                   Math.Abs(previousRowLoc[1] - loc[1]) < MAX_PATTERN_DRIFT)
                {
-                  result[1] = new ResultPoint(loc[0], i);
-                  result[5] = new ResultPoint(loc[1], i);
-                  found = true;
-                  break;
+                  previousRowLoc = loc;
+                  skippedRowCount = 0;
+               }
+               else
+               {
+                  if (skippedRowCount > SKIPPED_ROW_COUNT_MAX)
+                  {
+                     break;
+                  }
+                  else
+                  {
+                     skippedRowCount++;
+                  }
                }
             }
+            stopRow -= skippedRowCount + 1;
+            result[2] = new ResultPoint(previousRowLoc[0], stopRow);
+            result[3] = new ResultPoint(previousRowLoc[1], stopRow);
          }
-
-         counters = new int[STOP_PATTERN.Length];
-
-         // Top right
-         if (found)
-         { // Found the Bottom Left vertex
-            found = false;
-            for (int i = 0; i < height; i += rowStep)
+         if (stopRow - startRow < BARCODE_MIN_HEIGHT)
+         {
+            for (int i = 0; i < result.Length; i++)
             {
-               int[] loc = findGuardPattern(matrix, 0, i, width, false, STOP_PATTERN, counters);
-               if (loc != null)
-               {
-                  result[2] = new ResultPoint(loc[1], i);
-                  result[6] = new ResultPoint(loc[0], i);
-                  found = true;
-                  break;
-               }
+               result[i] = null;
             }
          }
-         // Bottom right
-         if (found)
-         { // Found the Top right vertex
-            found = false;
-            for (int i = height - 1; i > 0; i -= rowStep)
-            {
-               int[] loc = findGuardPattern(matrix, 0, i, width, false, STOP_PATTERN, counters);
-               if (loc != null)
-               {
-                  result[3] = new ResultPoint(loc[1], i);
-                  result[7] = new ResultPoint(loc[0], i);
-                  found = true;
-                  break;
-               }
-            }
-         }
-         return found ? result : null;
+         return result;
       }
 
       /// <summary>
-      /// Locate the vertices and the codewords area of a black blob using the Start
-      /// and Stop patterns as locators. This assumes that the image is rotated 180
-      /// degrees and if it locates the start and stop patterns at it will re-map
-      /// the vertices for a 0 degree rotation.
-      /// TODO: Change assumption about barcode location.
-      /// <param name="matrix">the scanned barcode image.</param>
-      /// <returns>an array containing the vertices:</returns>
-      ///           vertices[0] x, y top left barcode
-      ///           vertices[1] x, y bottom left barcode
-      ///           vertices[2] x, y top right barcode
-      ///           vertices[3] x, y bottom right barcode
-      ///           vertices[4] x, y top left codeword area
-      ///           vertices[5] x, y bottom left codeword area
-      ///           vertices[6] x, y top right codeword area
-      ///           vertices[7] x, y bottom right codeword area
+      /// Finds the guard pattern.  Uses System.Linq.Enumerable.Repeat to fill in counters.  This might be a performance issue?
       /// </summary>
-      private static ResultPoint[] findVertices180(BitMatrix matrix, bool tryHarder)
-      {
-         int height = matrix.Height;
-         int width = matrix.Width;
-         int halfWidth = width >> 1;
-
-         ResultPoint[] result = new ResultPoint[8];
-         bool found = false;
-
-         int[] counters = new int[START_PATTERN_REVERSE.Length];
-
-         int rowStep = Math.Max(1, height >> (tryHarder ? 9 : 7));
-
-         // Top Left
-         for (int i = height - 1; i > 0; i -= rowStep)
-         {
-            int[] loc = findGuardPattern(matrix, halfWidth, i, halfWidth, true, START_PATTERN_REVERSE, counters);
-            if (loc != null)
-            {
-               result[0] = new ResultPoint(loc[1], i);
-               result[4] = new ResultPoint(loc[0], i);
-               found = true;
-               break;
-            }
-         }
-         // Bottom Left
-         if (found)
-         { // Found the Top Left vertex
-            found = false;
-            for (int i = 0; i < height; i += rowStep)
-            {
-               int[] loc = findGuardPattern(matrix, halfWidth, i, halfWidth, true, START_PATTERN_REVERSE, counters);
-               if (loc != null)
-               {
-                  result[1] = new ResultPoint(loc[1], i);
-                  result[5] = new ResultPoint(loc[0], i);
-                  found = true;
-                  break;
-               }
-            }
-         }
-
-         counters = new int[STOP_PATTERN_REVERSE.Length];
-
-         // Top Right
-         if (found)
-         { // Found the Bottom Left vertex
-            found = false;
-            for (int i = height - 1; i > 0; i -= rowStep)
-            {
-               int[] loc = findGuardPattern(matrix, 0, i, halfWidth, false, STOP_PATTERN_REVERSE, counters);
-               if (loc != null)
-               {
-                  result[2] = new ResultPoint(loc[0], i);
-                  result[6] = new ResultPoint(loc[1], i);
-                  found = true;
-                  break;
-               }
-            }
-         }
-         // Bottom Right
-         if (found)
-         { // Found the Top Right vertex
-            found = false;
-            for (int i = 0; i < height; i += rowStep)
-            {
-               int[] loc = findGuardPattern(matrix, 0, i, halfWidth, false, STOP_PATTERN_REVERSE, counters);
-               if (loc != null)
-               {
-                  result[3] = new ResultPoint(loc[0], i);
-                  result[7] = new ResultPoint(loc[1], i);
-                  found = true;
-                  break;
-               }
-            }
-         }
-         return found ? result : null;
-      }
-
-      /// <summary>
-      /// Because we scan horizontally to detect the start and stop patterns, the vertical component of
-      /// the codeword coordinates will be slightly wrong if there is any skew or rotation in the image.
-      /// This method moves those points back onto the edges of the theoretically perfect bounding
-      /// quadrilateral if needed.
-      ///
-      /// <param name="vertices">The eight vertices located by findVertices().</param>
-      /// </summary>
-      private static void correctCodeWordVertices(ResultPoint[] vertices, bool upsideDown)
-      {
-         float v0x = vertices[0].X;
-         float v0y = vertices[0].Y;
-         float v2x = vertices[2].X;
-         float v2y = vertices[2].Y;
-         float v4x = vertices[4].X;
-         float v4y = vertices[4].Y;
-         float v6x = vertices[6].X;
-         float v6y = vertices[6].Y;
-
-         float skew = v4y - v6y;
-         if (upsideDown)
-         {
-            skew = -skew;
-         }
-         if (skew > SKEW_THRESHOLD)
-         {
-            // Fix v4
-            float deltax = v6x - v0x;
-            float deltay = v6y - v0y;
-            float delta2 = deltax*deltax + deltay*deltay;
-            float correction = (v4x - v0x)*deltax/delta2;
-            vertices[4] = new ResultPoint(v0x + correction*deltax, v0y + correction*deltay);
-         }
-         else if (-skew > SKEW_THRESHOLD)
-         {
-            // Fix v6
-            float deltax = v2x - v4x;
-            float deltay = v2y - v4y;
-            float delta2 = deltax*deltax + deltay*deltay;
-            float correction = (v2x - v6x)*deltax/delta2;
-            vertices[6] = new ResultPoint(v2x - correction*deltax, v2y - correction*deltay);
-         }
-
-         float v1x = vertices[1].X;
-         float v1y = vertices[1].Y;
-         float v3x = vertices[3].X;
-         float v3y = vertices[3].Y;
-         float v5x = vertices[5].X;
-         float v5y = vertices[5].Y;
-         float v7x = vertices[7].X;
-         float v7y = vertices[7].Y;
-
-         skew = v7y - v5y;
-         if (upsideDown)
-         {
-            skew = -skew;
-         }
-         if (skew > SKEW_THRESHOLD)
-         {
-            // Fix v5
-            float deltax = v7x - v1x;
-            float deltay = v7y - v1y;
-            float delta2 = deltax*deltax + deltay*deltay;
-            float correction = (v5x - v1x)*deltax/delta2;
-            vertices[5] = new ResultPoint(v1x + correction*deltax, v1y + correction*deltay);
-         }
-         else if (-skew > SKEW_THRESHOLD)
-         {
-            // Fix v7
-            float deltax = v3x - v5x;
-            float deltay = v3y - v5y;
-            float delta2 = deltax*deltax + deltay*deltay;
-            float correction = (v3x - v7x)*deltax/delta2;
-            vertices[7] = new ResultPoint(v3x - correction*deltax, v3y - correction*deltay);
-         }
-      }
-
-      /// <summary>
-      /// <p>Estimates module size (pixels in a module) based on the Start and End
-      /// finder patterns.</p>
-      ///
-      /// <param name="vertices">an array of vertices:</param>
-      ///           vertices[0] x, y top left barcode
-      ///           vertices[1] x, y bottom left barcode
-      ///           vertices[2] x, y top right barcode
-      ///           vertices[3] x, y bottom right barcode
-      ///           vertices[4] x, y top left codeword area
-      ///           vertices[5] x, y bottom left codeword area
-      ///           vertices[6] x, y top right codeword area
-      ///           vertices[7] x, y bottom right codeword area
-      /// <returns>the module size.</returns>
-      /// </summary>
-      private static float computeModuleWidth(ResultPoint[] vertices)
-      {
-         float pixels1 = ResultPoint.distance(vertices[0], vertices[4]);
-         float pixels2 = ResultPoint.distance(vertices[1], vertices[5]);
-         float moduleWidth1 = (pixels1 + pixels2) / (17 * 2.0f);
-         float pixels3 = ResultPoint.distance(vertices[6], vertices[2]);
-         float pixels4 = ResultPoint.distance(vertices[7], vertices[3]);
-         float moduleWidth2 = (pixels3 + pixels4) / (18 * 2.0f);
-         return (moduleWidth1 + moduleWidth2) / 2.0f;
-      }
-
-      /// <summary>
-      /// Computes the dimension (number of modules in a row) of the PDF417 Code
-      /// based on vertices of the codeword area and estimated module size.
-      ///
-      /// <param name="topLeft">of codeword area</param>
-      /// <param name="topRight">of codeword area</param>
-      /// <param name="bottomLeft">of codeword area</param>
-      /// <param name="bottomRight">of codeword are</param>
-      /// <param name="moduleWidth">estimated module size</param>
-      /// <returns>the number of modules in a row.</returns>
-      /// </summary>
-      private static int computeDimension(ResultPoint topLeft,
-                                          ResultPoint topRight,
-                                          ResultPoint bottomLeft,
-                                          ResultPoint bottomRight,
-                                          float moduleWidth)
-      {
-         int topRowDimension = MathUtils.round(ResultPoint.distance(topLeft, topRight) / moduleWidth);
-         int bottomRowDimension = MathUtils.round(ResultPoint.distance(bottomLeft, bottomRight) / moduleWidth);
-         return ((((topRowDimension + bottomRowDimension) >> 1) + 8) / 17) * 17;
-      }
-
-
-      /// <summary>
-      /// Computes the y dimension (number of modules in a column) of the PDF417 Code
-      /// based on vertices of the codeword area and estimated module size.
-      /// </summary>
-      /// <param name="topLeft">of codeword area</param>
-      /// <param name="topRight">of codeword area</param>
-      /// <param name="bottomLeft">of codeword area</param>
-      /// <param name="bottomRight">of codeword are</param>
-      /// <param name="moduleWidth">estimated module size</param>
-      /// <returns>the number of modules in a row.</returns>
-      private static int computeYDimension(ResultPoint topLeft,
-                                          ResultPoint topRight,
-                                          ResultPoint bottomLeft,
-                                          ResultPoint bottomRight,
-                                          float moduleWidth)
-      {
-         int leftColumnDimension = MathUtils.round(ResultPoint.distance(topLeft, bottomLeft) / moduleWidth);
-         int rightColumnDimension = MathUtils.round(ResultPoint.distance(topRight, bottomRight) / moduleWidth);
-         return (leftColumnDimension + rightColumnDimension) >> 1;
-      }
-
-      private static BitMatrix sampleGrid(BitMatrix matrix,
-                                          ResultPoint topLeft,
-                                          ResultPoint bottomLeft,
-                                          ResultPoint topRight,
-                                          ResultPoint bottomRight,
-                                          int xdimension,
-                                          int ydimension)
-      {
-
-         // Note that unlike the QR Code sampler, we didn't find the center of modules, but the
-         // very corners. So there is no 0.5f here; 0.0f is right.
-         GridSampler sampler = GridSampler.Instance;
-
-         return sampler.sampleGrid(
-            matrix,
-            xdimension, ydimension,
-            0.0f, // p1ToX
-            0.0f, // p1ToY
-            xdimension, // p2ToX
-            0.0f, // p2ToY
-            xdimension, // p3ToX
-            ydimension, // p3ToY
-            0.0f, // p4ToX
-            ydimension, // p4ToY
-            topLeft.X, // p1FromX
-            topLeft.Y, // p1FromY
-            topRight.X, // p2FromX
-            topRight.Y, // p2FromY
-            bottomRight.X, // p3FromX
-            bottomRight.Y, // p3FromY
-            bottomLeft.X, // p4FromX
-            bottomLeft.Y); // p4FromY
-      }
-
-      /// <summary>
-      /// <param name="matrix">row of black/white values to search</param>
-      /// <param name="column">x position to start search</param>
-      /// <param name="row">y position to start search</param>
-      /// <param name="width">the number of pixels to search on this row</param>
-      /// <param name="pattern">pattern of counts of number of black and white pixels that are</param>
-      ///                 being searched for as a pattern
-      /// <param name="counters">array of counters, as long as pattern, to re-use </param>
       /// <returns>start/end horizontal offset of guard pattern, as an array of two ints.</returns>
-      /// </summary>
-      private static int[] findGuardPattern(BitMatrix matrix,
-                                            int column,
-                                            int row,
-                                            int width,
-                                            bool whiteFirst,
-                                            int[] pattern,
-                                            int[] counters)
+      /// <param name="matrix">matrix row of black/white values to search</param>
+      /// <param name="column">column x position to start search.</param>
+      /// <param name="row">row y position to start search.</param>
+      /// <param name="width">width the number of pixels to search on this row.</param>
+      /// <param name="whiteFirst">If set to <c>true</c> search the white patterns first.</param>
+      /// <param name="pattern">pattern of counts of number of black and white pixels that are being searched for as a pattern.</param>
+      /// <param name="counters">counters array of counters, as long as pattern, to re-use .</param>
+      private static int[] findGuardPattern(
+         BitMatrix matrix,
+         int column,
+         int row,
+         int width,
+         bool whiteFirst,
+         int[] pattern,
+         int[] counters)
       {
-         for (int i = 0; i < counters.Length; i++)
-            counters[i] = 0;
+         SupportClass.Fill(counters, 0);
          int patternLength = pattern.Length;
          bool isWhite = whiteFirst;
-
-         int counterPosition = 0;
          int patternStart = column;
-         for (int x = column; x < column + width; x++)
+         int pixelDrift = 0;
+
+         // if there are black pixels left of the current pixel shift to the left, but only for MAX_PIXEL_DRIFT pixels 
+         while (matrix[patternStart, row] && patternStart > 0 && pixelDrift++ < MAX_PIXEL_DRIFT)
+         {
+            patternStart--;
+         }
+         int x = patternStart;
+         int counterPosition = 0;
+         for (; x < width; x++)
          {
             bool pixel = matrix[x, row];
             if (pixel ^ isWhite)
@@ -544,7 +378,7 @@ namespace ZXing.PDF417.Internal
                {
                   if (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE)
                   {
-                     return new int[] { patternStart, x };
+                     return new int[] {patternStart, x};
                   }
                   patternStart += counters[0] + counters[1];
                   Array.Copy(counters, 2, counters, 0, patternLength - 2);
@@ -560,24 +394,32 @@ namespace ZXing.PDF417.Internal
                isWhite = !isWhite;
             }
          }
+         if (counterPosition == patternLength - 1)
+         {
+            if (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE)
+            {
+               return new int[] {patternStart, x - 1};
+            }
+         }
          return null;
       }
 
       /// <summary>
-      /// Determines how closely a set of observed counts of runs of black/white
+      /// Determines how closely a set of observed counts of runs of black/white.
       /// values matches a given target pattern. This is reported as the ratio of
       /// the total variance from the expected pattern proportions across all
       /// pattern elements, to the length of the pattern.
-      ///
-      /// <param name="counters">observed counters</param>
-      /// <param name="pattern">expected pattern</param>
-      /// <param name="maxIndividualVariance">The most any counter can differ before we give up</param>
-      /// <returns>ratio of total variance between counters and pattern compared to</returns>
-      ///         total pattern size, where the ratio has been multiplied by 256.
-      ///         So, 0 means no variance (perfect match); 256 means the total
-      ///         variance between counters and patterns equals the pattern length,
-      ///         higher values mean even more variance
       /// </summary>
+      /// <returns>
+      /// ratio of total variance between counters and pattern compared to
+      /// total pattern size, where the ratio has been multiplied by 256.
+      /// So, 0 means no variance (perfect match); 256 means the total
+      /// variance between counters and patterns equals the pattern length,
+      /// higher values mean even more variance
+      /// </returns>
+      /// <param name="counters">observed counters.</param>
+      /// <param name="pattern">expected pattern.</param>
+      /// <param name="maxIndividualVariance">The most any counter can differ before we give up.</param>
       private static int patternMatchVariance(int[] counters, int[] pattern, int maxIndividualVariance)
       {
          int numCounters = counters.Length;
@@ -592,28 +434,27 @@ namespace ZXing.PDF417.Internal
          {
             // If we don't even have one pixel per unit of bar width, assume this
             // is too small to reliably match, so fail:
-            return Int32.MaxValue;
+            return int.MaxValue;
          }
          // We're going to fake floating-point math in integers. We just need to use more bits.
          // Scale up patternLength so that intermediate values below like scaledCounter will have
          // more "significant digits".
-         int unitBarWidth = (total << INTEGER_MATH_SHIFT) / patternLength;
-         maxIndividualVariance = (maxIndividualVariance * unitBarWidth) >> 8;
+         int unitBarWidth = (total << INTEGER_MATH_SHIFT)/patternLength;
+         maxIndividualVariance = (maxIndividualVariance*unitBarWidth) >> INTEGER_MATH_SHIFT;
 
          int totalVariance = 0;
          for (int x = 0; x < numCounters; x++)
          {
             int counter = counters[x] << INTEGER_MATH_SHIFT;
-            int scaledPattern = pattern[x] * unitBarWidth;
+            int scaledPattern = pattern[x]*unitBarWidth;
             int variance = counter > scaledPattern ? counter - scaledPattern : scaledPattern - counter;
             if (variance > maxIndividualVariance)
             {
-               return Int32.MaxValue;
+               return int.MaxValue;
             }
             totalVariance += variance;
          }
-         return totalVariance / total;
+         return totalVariance/total;
       }
-
    }
 }

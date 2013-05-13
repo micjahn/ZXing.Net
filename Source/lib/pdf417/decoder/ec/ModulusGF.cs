@@ -25,13 +25,13 @@ namespace ZXing.PDF417.Internal.EC
    /// <author>Sean Owen</author>
    internal sealed class ModulusGF
    {
-      public static ModulusGF PDF417_GF = new ModulusGF(929, 3);
+      public static ModulusGF PDF417_GF = new ModulusGF(PDF417Common.NUMBER_OF_CODEWORDS, 3);
 
-      private int[] expTable;
-      private int[] logTable;
-      private ModulusPoly zero;
-      private ModulusPoly one;
-      private int modulus;
+      private readonly int[] expTable;
+      private readonly int[] logTable;
+      public ModulusPoly Zero { get; private set; }
+      public ModulusPoly One { get; private set; }
+      private readonly int modulus;
 
       public ModulusGF(int modulus, int generator)
       {
@@ -49,19 +49,8 @@ namespace ZXing.PDF417.Internal.EC
             logTable[expTable[i]] = i;
          }
          // logTable[0] == 0 but this should never be used
-         zero = new ModulusPoly(this, new int[] { 0 });
-         one = new ModulusPoly(this, new int[] { 1 });
-      }
-
-
-      internal ModulusPoly getZero()
-      {
-         return zero;
-      }
-
-      internal ModulusPoly getOne()
-      {
-         return one;
+         Zero = new ModulusPoly(this, new int[] {0});
+         One = new ModulusPoly(this, new int[] {1});
       }
 
       internal ModulusPoly buildMonomial(int degree, int coefficient)
@@ -72,7 +61,7 @@ namespace ZXing.PDF417.Internal.EC
          }
          if (coefficient == 0)
          {
-            return zero;
+            return Zero;
          }
          int[] coefficients = new int[degree + 1];
          coefficients[0] = coefficient;
@@ -81,12 +70,12 @@ namespace ZXing.PDF417.Internal.EC
 
       internal int add(int a, int b)
       {
-         return (a + b) % modulus;
+         return (a + b)%modulus;
       }
 
       internal int subtract(int a, int b)
       {
-         return (modulus + a - b) % modulus;
+         return (modulus + a - b)%modulus;
       }
 
       internal int exp(int a)

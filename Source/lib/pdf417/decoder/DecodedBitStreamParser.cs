@@ -109,13 +109,15 @@ namespace ZXing.PDF417.Internal
          }
       }
 #endif
+      private const int NUMBER_OF_SEQUENCE_CODEWORDS = 2;
 
-      internal static DecoderResult decode(int[] codewords)
+      internal static DecoderResult decode(int[] codewords, String ecLevel)
       {
-         StringBuilder result = new StringBuilder(100);
+         StringBuilder result = new StringBuilder(codewords.Length * 2);
          // Get compaction mode
          int codeIndex = 1;
          int code = codewords[codeIndex++];
+         PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
          while (codeIndex < codewords[0])
          {
             switch (code)
@@ -134,6 +136,9 @@ namespace ZXing.PDF417.Internal
                   break;
                case BYTE_COMPACTION_MODE_LATCH_6:
                   codeIndex = byteCompaction(code, codewords, codeIndex, result);
+                  break;
+               case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
+                  codeIndex = decodeMacroBlock(codewords, codeIndex, resultMetadata);
                   break;
                default:
                   // Default to text compaction. During testing numerous barcodes
@@ -160,7 +165,70 @@ namespace ZXing.PDF417.Internal
             return null;
          }
 
-         return new DecoderResult(null, result.ToString(), null, null);
+         var decoderResult = new DecoderResult(null, result.ToString(), null, ecLevel);
+         decoderResult.Other = resultMetadata;
+         return decoderResult;
+      }
+
+      private static int decodeMacroBlock(int[] codewords, int codeIndex, PDF417ResultMetadata resultMetadata)
+      {
+         if (codeIndex + NUMBER_OF_SEQUENCE_CODEWORDS > codewords[0])
+         {
+            // we must have at least two bytes left for the segment index
+            return -1;
+         }
+         int[] segmentIndexArray = new int[NUMBER_OF_SEQUENCE_CODEWORDS];
+         for (int i = 0; i < NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++)
+         {
+            segmentIndexArray[i] = codewords[codeIndex];
+         }
+         String s = decodeBase900toBase10(segmentIndexArray, NUMBER_OF_SEQUENCE_CODEWORDS);
+         if (s == null)
+            return -1;
+         resultMetadata.SegmentIndex = Int32.Parse(s);
+
+         StringBuilder fileId = new StringBuilder();
+         codeIndex = textCompaction(codewords, codeIndex, fileId);
+         resultMetadata.FileId = fileId.ToString();
+
+         if (codewords[codeIndex] == BEGIN_MACRO_PDF417_OPTIONAL_FIELD)
+         {
+            codeIndex++;
+            int[] additionalOptionCodeWords = new int[codewords[0] - codeIndex];
+            int additionalOptionCodeWordsIndex = 0;
+
+            bool end = false;
+            while ((codeIndex < codewords[0]) && !end)
+            {
+               int code = codewords[codeIndex++];
+               if (code < TEXT_COMPACTION_MODE_LATCH)
+               {
+                  additionalOptionCodeWords[additionalOptionCodeWordsIndex++] = code;
+               }
+               else
+               {
+                  switch (code)
+                  {
+                     case MACRO_PDF417_TERMINATOR:
+                        resultMetadata.IsLastSegment = true;
+                        codeIndex++;
+                        end = true;
+                        break;
+                     default:
+                        return -1;
+                  }
+               }
+            }
+            resultMetadata.OptionalData = new int[additionalOptionCodeWordsIndex];
+            Array.Copy(additionalOptionCodeWords, resultMetadata.OptionalData, additionalOptionCodeWordsIndex);
+         }
+         else if (codewords[codeIndex] == MACRO_PDF417_TERMINATOR)
+         {
+            resultMetadata.IsLastSegment = true;
+            codeIndex++;
+         }
+
+         return codeIndex;
       }
 
       /// <summary>
@@ -176,9 +244,9 @@ namespace ZXing.PDF417.Internal
       private static int textCompaction(int[] codewords, int codeIndex, StringBuilder result)
       {
          // 2 character per codeword
-         int[] textCompactionData = new int[codewords[0] << 1];
+         int[] textCompactionData = new int[(codewords[0] - codeIndex) << 1];
          // Used to hold the byte compaction value if there is a mode shift
-         int[] byteCompactionData = new int[codewords[0] << 1];
+         int[] byteCompactionData = new int[(codewords[0] - codeIndex) << 1];
 
          int index = 0;
          bool end = false;
@@ -207,6 +275,18 @@ namespace ZXing.PDF417.Internal
                      codeIndex--;
                      end = true;
                      break;
+                  case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
+                     codeIndex--;
+                     end = true;
+                     break;
+                  case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+                     codeIndex--;
+                     end = true;
+                     break;
+                  case MACRO_PDF417_TERMINATOR:
+                     codeIndex--;
+                     end = true;
+                     break;
                   case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
                      // The Mode Shift codeword 913 shall cause a temporary
                      // switch from Text Compaction mode to Byte Compaction mode.
@@ -216,7 +296,7 @@ namespace ZXing.PDF417.Internal
                      // in Text Compaction mode; its use is described in 5.4.2.4.
                      textCompactionData[index] = MODE_SHIFT_TO_BYTE_COMPACTION_MODE;
                      code = codewords[codeIndex++];
-                     byteCompactionData[index] = code; //Integer.toHexString(code);
+                     byteCompactionData[index] = code;
                      index++;
                      break;
                   case BYTE_COMPACTION_MODE_LATCH_6:

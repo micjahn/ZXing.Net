@@ -16,3 +16,6 @@ List of people who have contributed to the project
   base of a special windows phone demo (WindowsPhoneDemoJonasFolleso)
   previously developed for another zxing port and modified to work with ZXing.Net
   (modification is done by the ZXing.Net team)
+  
+* Stephen Furlani
+  ported PDF417 related 2708 and 2693 from java to C#

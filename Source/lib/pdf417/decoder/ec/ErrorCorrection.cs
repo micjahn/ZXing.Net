@@ -41,12 +41,14 @@ namespace ZXing.PDF417.Internal.EC
       /// <param name="received">The received.</param>
       /// <param name="numECCodewords">The num EC codewords.</param>
       /// <param name="erasures">The erasures.</param>
+      /// <param name="errorLocationsCount">The error locations count.</param>
       /// <returns></returns>
-      public bool decode(int[] received, int numECCodewords, int[] erasures)
+      public bool decode(int[] received, int numECCodewords, int[] erasures, out int errorLocationsCount)
       {
          ModulusPoly poly = new ModulusPoly(field, received);
          int[] S = new int[numECCodewords];
          bool error = false;
+         errorLocationsCount = 0;
          for (int i = numECCodewords; i > 0; i--)
          {
             int eval = poly.evaluateAt(field.exp(i));
@@ -56,50 +58,68 @@ namespace ZXing.PDF417.Internal.EC
                error = true;
             }
          }
-         if (error)
+
+         if (!error)
          {
-            ModulusPoly knownErrors = field.getOne();
-            foreach (int erasure in erasures)
-            {
-               int b = field.exp(received.Length - 1 - erasure);
-               // Add (1 - bx) term:
-               ModulusPoly term = new ModulusPoly(field, new int[] { field.subtract(0, b), 1 });
-               knownErrors = knownErrors.multiply(term);
-            }
-
-            ModulusPoly syndrome = new ModulusPoly(field, S);
-            //syndrome = syndrome.multiply(knownErrors);
-
-            ModulusPoly[] sigmaOmega =
-                runEuclideanAlgorithm(field.buildMonomial(numECCodewords, 1), syndrome, numECCodewords);
-            if (sigmaOmega == null)
-               return false;
-            ModulusPoly sigma = sigmaOmega[0];
-            ModulusPoly omega = sigmaOmega[1];
-
-            //sigma = sigma.multiply(knownErrors);
-
-            int[] errorLocations = findErrorLocations(sigma);
-            if (errorLocations == null)
-               return false;
-            int[] errorMagnitudes = findErrorMagnitudes(omega, sigma, errorLocations);
-            if (errorMagnitudes == null)
-               return false;
-
-            for (int i = 0; i < errorLocations.Length; i++)
-            {
-               int position = received.Length - 1 - field.log(errorLocations[i]);
-               if (position < 0)
-               {
-                  return false;
-               }
-               received[position] = field.subtract(received[position], errorMagnitudes[i]);
-            }
+            return true;
          }
 
+         ModulusPoly knownErrors = field.One;
+         foreach (int erasure in erasures)
+         {
+            int b = field.exp(received.Length - 1 - erasure);
+            // Add (1 - bx) term:
+            ModulusPoly term = new ModulusPoly(field, new int[] {field.subtract(0, b), 1});
+            knownErrors = knownErrors.multiply(term);
+         }
+
+         ModulusPoly syndrome = new ModulusPoly(field, S);
+         //syndrome = syndrome.multiply(knownErrors);
+
+         ModulusPoly[] sigmaOmega = runEuclideanAlgorithm(field.buildMonomial(numECCodewords, 1), syndrome, numECCodewords);
+
+         if (sigmaOmega == null)
+         {
+            return false;
+         }
+
+         ModulusPoly sigma = sigmaOmega[0];
+         ModulusPoly omega = sigmaOmega[1];
+
+         if (sigma == null || omega == null)
+         {
+            return false;
+         }
+
+         //sigma = sigma.multiply(knownErrors);
+
+         int[] errorLocations = findErrorLocations(sigma);
+
+         if (errorLocations == null)
+         {
+            return false;
+         }
+
+         int[] errorMagnitudes = findErrorMagnitudes(omega, sigma, errorLocations);
+
+         for (int i = 0; i < errorLocations.Length; i++)
+         {
+            int position = received.Length - 1 - field.log(errorLocations[i]);
+            if (position < 0)
+            {
+               return false;
+
+            }
+            received[position] = field.subtract(received[position], errorMagnitudes[i]);
+         }
+         errorLocationsCount = errorLocations.Length;
          return true;
       }
 
+      /// <summary>
+      /// Runs the euclidean algorithm (Greatest Common Divisor) until r's degree is less than R/2
+      /// </summary>
+      /// <returns>The euclidean algorithm.</returns>
       private ModulusPoly[] runEuclideanAlgorithm(ModulusPoly a, ModulusPoly b, int R)
       {
          // Assume a's degree is >= b's
@@ -112,8 +132,8 @@ namespace ZXing.PDF417.Internal.EC
 
          ModulusPoly rLast = a;
          ModulusPoly r = b;
-         ModulusPoly tLast = field.getZero();
-         ModulusPoly t = field.getOne();
+         ModulusPoly tLast = field.Zero;
+         ModulusPoly t = field.One;
 
          // Run Euclidean algorithm until r's degree is less than R/2
          while (r.Degree >= R / 2)
@@ -130,7 +150,7 @@ namespace ZXing.PDF417.Internal.EC
                return null;
             }
             r = rLastLast;
-            ModulusPoly q = field.getZero();
+            ModulusPoly q = field.Zero;
             int denominatorLeadingTerm = rLast.getCoefficient(rLast.Degree);
             int dltInverse = field.inverse(denominatorLeadingTerm);
             while (r.Degree >= rLast.Degree && !r.isZero)
@@ -141,7 +161,7 @@ namespace ZXing.PDF417.Internal.EC
                r = r.subtract(rLast.multiplyByMonomial(degreeDiff, scale));
             }
 
-            t = q.multiply(tLast).subtract(tLastLast).negative();
+            t = q.multiply(tLast).subtract(tLastLast).getNegative();
          }
 
          int sigmaTildeAtZero = t.getCoefficient(0);
@@ -156,6 +176,11 @@ namespace ZXing.PDF417.Internal.EC
          return new ModulusPoly[] { sigma, omega };
       }
 
+      /// <summary>
+      /// Finds the error locations as a direct application of Chien's search
+      /// </summary>
+      /// <returns>The error locations.</returns>
+      /// <param name="errorLocator">Error locator.</param>
       private int[] findErrorLocations(ModulusPoly errorLocator)
       {
          // This is a direct application of Chien's search
@@ -177,6 +202,13 @@ namespace ZXing.PDF417.Internal.EC
          return result;
       }
 
+      /// <summary>
+      /// Finds the error magnitudes by directly applying Forney's Formula
+      /// </summary>
+      /// <returns>The error magnitudes.</returns>
+      /// <param name="errorEvaluator">Error evaluator.</param>
+      /// <param name="errorLocator">Error locator.</param>
+      /// <param name="errorLocations">Error locations.</param>
       private int[] findErrorMagnitudes(ModulusPoly errorEvaluator,
                                         ModulusPoly errorLocator,
                                         int[] errorLocations)

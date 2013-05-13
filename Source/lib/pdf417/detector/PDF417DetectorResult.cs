@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 ZXing authors
+ * Copyright 2013 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,31 +14,30 @@
  * limitations under the License.
  */
 
+using System.Collections.Generic;
+
+using ZXing.Common;
+
 namespace ZXing.PDF417.Internal
 {
    /// <summary>
-   /// PDF417 compaction mode
+   /// PDF 417 Detector Result class.  Skipped private backing stores.
+   /// <author>Guenther Grau</author> 
    /// </summary>
-   public enum Compaction
+   public sealed class PDF417DetectorResult
    {
-      /// <summary>
-      /// 
-      /// </summary>
-      AUTO,
+      public BitMatrix Bits { get; private set; }
+      public List<ResultPoint[]> Points { get; private set; }
 
       /// <summary>
-      /// 
+      /// Initializes a new instance of the <see cref="ZXing.PDF417.Internal.PDF417DetectorResult"/> class.
       /// </summary>
-      TEXT,
-
-      /// <summary>
-      /// 
-      /// </summary>
-      BYTE,
-
-      /// <summary>
-      /// 
-      /// </summary>
-      NUMERIC
+      /// <param name="bits">Bits.</param>
+      /// <param name="points">Points.</param>
+      public PDF417DetectorResult(BitMatrix bits, List<ResultPoint[]> points)
+      {
+         Bits = bits;
+         Points = points;
+      }
    }
 }

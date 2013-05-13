@@ -32,7 +32,7 @@ namespace ZXing.PDF417.Internal
    /// PDF417 high-level encoder following the algorithm described in ISO/IEC 15438:2001(E) in
    /// annex P.
    /// </summary>
-   sealed class PDF417HighLevelEncoder
+   internal sealed class PDF417HighLevelEncoder
    {
       /// <summary>
       /// code for Text compaction
@@ -97,18 +97,20 @@ namespace ZXing.PDF417.Internal
       /// <summary>
       /// Raw code table for text compaction Mixed sub-mode
       /// </summary>
-      private static readonly sbyte[] TEXT_MIXED_RAW = {
-                                                          48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 38, 13, 9, 44, 58,
-                                                          35, 45, 46, 36, 47, 43, 37, 42, 61, 94, 0, 32, 0, 0, 0
-                                                       };
+      private static readonly sbyte[] TEXT_MIXED_RAW =
+         {
+            48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 38, 13, 9, 44, 58,
+            35, 45, 46, 36, 47, 43, 37, 42, 61, 94, 0, 32, 0, 0, 0
+         };
 
       /// <summary>
       /// Raw code table for text compaction: Punctuation sub-mode
       /// </summary>
-      private static readonly sbyte[] TEXT_PUNCTUATION_RAW = {
-                                                                59, 60, 62, 64, 91, 92, 93, 95, 96, 126, 33, 13, 9, 44, 58,
-                                                                10, 45, 46, 36, 47, 34, 124, 42, 40, 41, 63, 123, 125, 39, 0
-                                                             };
+      private static readonly sbyte[] TEXT_PUNCTUATION_RAW =
+         {
+            59, 60, 62, 64, 91, 92, 93, 95, 96, 126, 33, 13, 9, 44, 58,
+            10, 45, 46, 36, 47, 34, 124, 42, 40, 41, 63, 123, 125, 39, 0
+         };
 
       private static readonly sbyte[] MIXED = new sbyte[128];
       private static readonly sbyte[] PUNCTUATION = new sbyte[128];
@@ -200,7 +202,7 @@ namespace ZXing.PDF417.Internal
          }
          else if (compaction == Compaction.NUMERIC)
          {
-            sb.Append((char)LATCH_TO_NUMERIC);
+            sb.Append((char) LATCH_TO_NUMERIC);
             encodeNumeric(msg, p, len, sb);
 
          }
@@ -212,7 +214,7 @@ namespace ZXing.PDF417.Internal
                int n = determineConsecutiveDigitCount(msg, p);
                if (n >= 13)
                {
-                  sb.Append((char)LATCH_TO_NUMERIC);
+                  sb.Append((char) LATCH_TO_NUMERIC);
                   encodingMode = NUMERIC_COMPACTION;
                   textSubMode = SUBMODE_ALPHA; //Reset after latch
                   encodeNumeric(msg, p, n, sb);
@@ -225,7 +227,7 @@ namespace ZXing.PDF417.Internal
                   {
                      if (encodingMode != TEXT_COMPACTION)
                      {
-                        sb.Append((char)LATCH_TO_TEXT);
+                        sb.Append((char) LATCH_TO_TEXT);
                         encodingMode = TEXT_COMPACTION;
                         textSubMode = SUBMODE_ALPHA; //start with submode alpha after latch
                      }
@@ -294,11 +296,11 @@ namespace ZXing.PDF417.Internal
                   {
                      if (ch == ' ')
                      {
-                        tmp.Append((char)26); //space
+                        tmp.Append((char) 26); //space
                      }
                      else
                      {
-                        tmp.Append((char)(ch - 65));
+                        tmp.Append((char) (ch - 65));
                      }
                   }
                   else
@@ -306,19 +308,19 @@ namespace ZXing.PDF417.Internal
                      if (isAlphaLower(ch))
                      {
                         submode = SUBMODE_LOWER;
-                        tmp.Append((char)27); //ll
+                        tmp.Append((char) 27); //ll
                         continue;
                      }
                      else if (isMixed(ch))
                      {
                         submode = SUBMODE_MIXED;
-                        tmp.Append((char)28); //ml
+                        tmp.Append((char) 28); //ml
                         continue;
                      }
                      else
                      {
-                        tmp.Append((char)29); //ps
-                        tmp.Append((char)PUNCTUATION[ch]);
+                        tmp.Append((char) 29); //ps
+                        tmp.Append((char) PUNCTUATION[ch]);
                         break;
                      }
                   }
@@ -328,32 +330,32 @@ namespace ZXing.PDF417.Internal
                   {
                      if (ch == ' ')
                      {
-                        tmp.Append((char)26); //space
+                        tmp.Append((char) 26); //space
                      }
                      else
                      {
-                        tmp.Append((char)(ch - 97));
+                        tmp.Append((char) (ch - 97));
                      }
                   }
                   else
                   {
                      if (isAlphaUpper(ch))
                      {
-                        tmp.Append((char)27); //as
-                        tmp.Append((char)(ch - 65));
+                        tmp.Append((char) 27); //as
+                        tmp.Append((char) (ch - 65));
                         //space cannot happen here, it is also in "Lower"
                         break;
                      }
                      else if (isMixed(ch))
                      {
                         submode = SUBMODE_MIXED;
-                        tmp.Append((char)28); //ml
+                        tmp.Append((char) 28); //ml
                         continue;
                      }
                      else
                      {
-                        tmp.Append((char)29); //ps
-                        tmp.Append((char)PUNCTUATION[ch]);
+                        tmp.Append((char) 29); //ps
+                        tmp.Append((char) PUNCTUATION[ch]);
                         break;
                      }
                   }
@@ -361,20 +363,20 @@ namespace ZXing.PDF417.Internal
                case SUBMODE_MIXED:
                   if (isMixed(ch))
                   {
-                     tmp.Append((char)MIXED[ch]);
+                     tmp.Append((char) MIXED[ch]);
                   }
                   else
                   {
                      if (isAlphaUpper(ch))
                      {
                         submode = SUBMODE_ALPHA;
-                        tmp.Append((char)28); //al
+                        tmp.Append((char) 28); //al
                         continue;
                      }
                      else if (isAlphaLower(ch))
                      {
                         submode = SUBMODE_LOWER;
-                        tmp.Append((char)27); //ll
+                        tmp.Append((char) 27); //ll
                         continue;
                      }
                      else
@@ -385,24 +387,24 @@ namespace ZXing.PDF417.Internal
                            if (isPunctuation(next))
                            {
                               submode = SUBMODE_PUNCTUATION;
-                              tmp.Append((char)25); //pl
+                              tmp.Append((char) 25); //pl
                               continue;
                            }
                         }
-                        tmp.Append((char)29); //ps
-                        tmp.Append((char)PUNCTUATION[ch]);
+                        tmp.Append((char) 29); //ps
+                        tmp.Append((char) PUNCTUATION[ch]);
                      }
                   }
                   break;
                default: //SUBMODE_PUNCTUATION
                   if (isPunctuation(ch))
                   {
-                     tmp.Append((char)PUNCTUATION[ch]);
+                     tmp.Append((char) PUNCTUATION[ch]);
                   }
                   else
                   {
                      submode = SUBMODE_ALPHA;
-                     tmp.Append((char)29); //al
+                     tmp.Append((char) 29); //al
                      continue;
                   }
                   break;
@@ -413,14 +415,14 @@ namespace ZXing.PDF417.Internal
                break;
             }
          }
-         char h = (char)0;
+         char h = (char) 0;
          int len = tmp.Length;
          for (int i = 0; i < len; i++)
          {
-            bool odd = (i % 2) != 0;
+            bool odd = (i%2) != 0;
             if (odd)
             {
-               h = (char)((h * 30) + tmp[i]);
+               h = (char) ((h*30) + tmp[i]);
                sb.Append(h);
             }
             else
@@ -428,9 +430,9 @@ namespace ZXing.PDF417.Internal
                h = tmp[i];
             }
          }
-         if ((len % 2) != 0)
+         if ((len%2) != 0)
          {
-            sb.Append((char)((h * 30) + 29)); //ps
+            sb.Append((char) ((h*30) + 29)); //ps
          }
          return submode;
       }
@@ -454,14 +456,14 @@ namespace ZXing.PDF417.Internal
       {
          if (count == 1 && startmode == TEXT_COMPACTION)
          {
-            sb.Append((char)SHIFT_TO_BYTE);
+            sb.Append((char) SHIFT_TO_BYTE);
          }
 
          int idx = startpos;
          // Encode sixpacks
          if (count >= 6)
          {
-            sb.Append((char)LATCH_TO_BYTE);
+            sb.Append((char) LATCH_TO_BYTE);
             char[] chars = new char[5];
             while ((startpos + count - idx) >= 6)
             {
@@ -473,7 +475,7 @@ namespace ZXing.PDF417.Internal
                }
                for (int i = 0; i < 5; i++)
                {
-                  chars[i] = (char)(t % 900);
+                  chars[i] = (char) (t%900);
                   t /= 900;
                }
                for (int i = chars.Length - 1; i >= 0; i--)
@@ -486,12 +488,12 @@ namespace ZXing.PDF417.Internal
          //Encode rest (remaining n<5 bytes if any)
          if (idx < startpos + count)
          {
-            sb.Append((char)LATCH_TO_BYTE_PADDED);
+            sb.Append((char) LATCH_TO_BYTE_PADDED);
          }
          for (int i = idx; i < startpos + count; i++)
          {
             int ch = bytes[i] & 0xff;
-            sb.Append((char)ch);
+            sb.Append((char) ch);
          }
       }
 
@@ -499,7 +501,7 @@ namespace ZXing.PDF417.Internal
       {
 #if SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NETFX_CORE
          int idx = 0;
-         StringBuilder tmp = new StringBuilder(count / 3 + 1);
+         StringBuilder tmp = new StringBuilder(count/3 + 1);
          BigInteger num900 = new BigInteger(900);
          BigInteger num0 = new BigInteger(0);
          while (idx < count - 1)
@@ -514,8 +516,8 @@ namespace ZXing.PDF417.Internal
 #endif
             do
             {
-               BigInteger c = bigint % num900;
-               tmp.Append((char)c);
+               BigInteger c = bigint%num900;
+               tmp.Append((char) c);
                bigint = BigInteger.Divide(bigint, num900);
             } while (!bigint.Equals(num0));
 
@@ -712,7 +714,7 @@ namespace ZXing.PDF417.Internal
             //other VMs do the same
             if (bytes[idx] == 63 && ch != '?')
             {
-               throw new WriterException("Non-encodable character detected: " + ch + " (Unicode: " + (int)ch + ')');
+               throw new WriterException("Non-encodable character detected: " + ch + " (Unicode: " + (int) ch + ')');
             }
             idx++;
          }

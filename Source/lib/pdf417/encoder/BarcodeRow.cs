@@ -21,18 +21,17 @@ namespace ZXing.PDF417.Internal
    /// </summary>
    internal sealed class BarcodeRow
    {
-      private sbyte[] row;
+      private readonly sbyte[] row;
       //A tacker for position in the bar
       private int currentLocation;
 
       /// <summary>
       /// Creates a Barcode row of the width
-      ///
-      /// @param width
       /// </summary>
+      /// <param name="width">The width.</param>
       internal BarcodeRow(int width)
       {
-         this.row = new sbyte[width];
+         row = new sbyte[width];
          currentLocation = 0;
       }
 
@@ -56,7 +55,7 @@ namespace ZXing.PDF417.Internal
       /// </summary>
       internal void set(int x, bool black)
       {
-         row[x] = (sbyte)(black ? 1 : 0);
+         row[x] = (sbyte) (black ? 1 : 0);
       }
 
       /// <summary>
@@ -84,10 +83,10 @@ namespace ZXing.PDF417.Internal
       /// </summary>
       internal sbyte[] getScaledRow(int scale)
       {
-         sbyte[] output = new sbyte[row.Length * scale];
+         var output = new sbyte[row.Length*scale];
          for (int i = 0; i < output.Length; i++)
          {
-            output[i] = row[i / scale];
+            output[i] = row[i/scale];
          }
          return output;
       }

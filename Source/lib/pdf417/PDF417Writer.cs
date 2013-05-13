@@ -55,15 +55,15 @@ namespace ZXing.PDF417
          {
             if (hints.ContainsKey(EncodeHintType.PDF417_COMPACT))
             {
-               encoder.setCompact((Boolean)hints[EncodeHintType.PDF417_COMPACT]);
+               encoder.setCompact((Boolean) hints[EncodeHintType.PDF417_COMPACT]);
             }
             if (hints.ContainsKey(EncodeHintType.PDF417_COMPACTION))
             {
-               encoder.setCompaction((Compaction)hints[EncodeHintType.PDF417_COMPACTION]);
+               encoder.setCompaction((Compaction) hints[EncodeHintType.PDF417_COMPACTION]);
             }
             if (hints.ContainsKey(EncodeHintType.PDF417_DIMENSIONS))
             {
-               Dimensions dimensions = (Dimensions)hints[EncodeHintType.PDF417_DIMENSIONS];
+               Dimensions dimensions = (Dimensions) hints[EncodeHintType.PDF417_DIMENSIONS];
                encoder.setDimensions(dimensions.MaxCols,
                                      dimensions.MinCols,
                                      dimensions.MaxRows,
@@ -105,7 +105,7 @@ namespace ZXing.PDF417
 
          const int lineThickness = 2;
          const int aspectRatio = 4;
-         sbyte[][] originalScale = encoder.BarcodeMatrix.getScaledMatrix(lineThickness, aspectRatio * lineThickness);
+         sbyte[][] originalScale = encoder.BarcodeMatrix.getScaledMatrix(lineThickness, aspectRatio*lineThickness);
          bool rotated = false;
          if ((height > width) ^ (originalScale[0].Length < originalScale.Length))
          {
@@ -113,8 +113,8 @@ namespace ZXing.PDF417
             rotated = true;
          }
 
-         int scaleX = width / originalScale[0].Length;
-         int scaleY = height / originalScale.Length;
+         int scaleX = width/originalScale[0].Length;
+         int scaleY = height/originalScale.Length;
 
          int scale;
          if (scaleX < scaleY)
@@ -129,7 +129,7 @@ namespace ZXing.PDF417
          if (scale > 1)
          {
             sbyte[][] scaledMatrix =
-                encoder.BarcodeMatrix.getScaledMatrix(scale * lineThickness, scale * aspectRatio * lineThickness);
+               encoder.BarcodeMatrix.getScaledMatrix(scale*lineThickness, scale*aspectRatio*lineThickness);
             if (rotated)
             {
                scaledMatrix = rotateArray(scaledMatrix);
@@ -151,7 +151,7 @@ namespace ZXing.PDF417
          const int whiteSpace = 30;
 
          // Creates the bitmatrix with extra space for whitespace
-         var output = new BitMatrix(input[0].Length + 2 * whiteSpace, input.Length + 2 * whiteSpace);
+         var output = new BitMatrix(input[0].Length + 2*whiteSpace, input.Length + 2*whiteSpace);
          var yOutput = output.Height - whiteSpace;
          for (int y = 0; y < input.Length; y++)
          {

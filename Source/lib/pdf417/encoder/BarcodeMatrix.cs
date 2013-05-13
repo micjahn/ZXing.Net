@@ -16,7 +16,6 @@
 
 namespace ZXing.PDF417.Internal
 {
-
    /// <summary>
    /// Holds all of the information for a barcode in a format where it can be easily accessable
    ///
@@ -24,10 +23,10 @@ namespace ZXing.PDF417.Internal
    /// </summary>
    internal sealed class BarcodeMatrix
    {
-      private BarcodeRow[] matrix;
+      private readonly BarcodeRow[] matrix;
       private int currentRow;
-      private int height;
-      private int width;
+      private readonly int height;
+      private readonly int width;
 
       /// <summary>
       /// <param name="height">the height of the matrix (Rows)</param>
@@ -39,9 +38,9 @@ namespace ZXing.PDF417.Internal
          //Initializes the array to the correct width
          for (int i = 0, matrixLength = matrix.Length; i < matrixLength; i++)
          {
-            matrix[i] = new BarcodeRow((width + 4) * 17 + 1);
+            matrix[i] = new BarcodeRow((width + 4)*17 + 1);
          }
-         this.width = width * 17;
+         this.width = width*17;
          this.height = height + 2;
          this.currentRow = 0;
       }
@@ -53,7 +52,7 @@ namespace ZXing.PDF417.Internal
 
       internal void setMatrix(int x, int y, bool black)
       {
-         set(x, y, (sbyte)(black ? 1 : 0));
+         set(x, y, (sbyte) (black ? 1 : 0));
       }
 
       internal void startRow()
@@ -78,9 +77,9 @@ namespace ZXing.PDF417.Internal
 
       internal sbyte[][] getScaledMatrix(int xScale, int yScale)
       {
-         sbyte[][] matrixOut = new sbyte[height * yScale][];
-         for (int idx = 0; idx < height * yScale; idx++)
-            matrixOut[idx] = new sbyte[width * xScale];
+         sbyte[][] matrixOut = new sbyte[height*yScale][];
+         for (int idx = 0; idx < height*yScale; idx++)
+            matrixOut[idx] = new sbyte[width*xScale];
          int yMax = height*yScale;
          for (int ii = 0; ii < yMax; ii++)
          {
