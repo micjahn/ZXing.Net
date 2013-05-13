@@ -112,7 +112,7 @@ namespace ZXing.Common.Test
       // This workaround is used because AbstractNegativeBlackBoxTestCase overrides this method but does
       // not return SummaryResults.
       [Test]
-      public void testBlackBox()
+      virtual public void testBlackBox()
       {
          testBlackBoxCountingResults(true);
       }

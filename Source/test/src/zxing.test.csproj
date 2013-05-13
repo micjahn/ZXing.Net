@@ -182,9 +182,11 @@
     <Compile Include="oned\UPCEBlackBox3ReflectiveTestCase.cs" />
     <Compile Include="pdf417\decoder\ec\AbstractErrorCorrectionTestCase.cs" />
     <Compile Include="pdf417\decoder\ec\ErrorCorrectionTestCase.cs" />
+    <Compile Include="pdf417\detector\DetectorTest.cs" />
     <Compile Include="pdf417\PDF417BlackBox1TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox2TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox3TestCase.cs" />
+    <Compile Include="pdf417\PDF417BlackBox4TestCase.cs" />
     <Compile Include="pdf417\PDF417DecodedBitStreamParserTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="qrcode\decoder\DataMaskTestCase.cs" />
