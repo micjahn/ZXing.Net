@@ -25,7 +25,7 @@ namespace ZXing.OneD
    /// <p>Implements decoding of the ITF format, or Interleaved Two of Five.</p>
    ///
    /// <p>This Reader will scan ITF barcodes of certain lengths only.
-   /// At the moment it reads length 6, 8, 10, 12, 14, 16, 18, 20, 24, and 44 as these have appeared "in the wild". Not all
+   /// At the moment it reads length 6, 8, 10, 12, 14, 16, 18, 20, 24, 44 and 48 as these have appeared "in the wild". Not all
    /// lengths are scanned, especially shorter ones, to avoid false positives. This in turn is due to a lack of
    /// required checksum function.</p>
    ///
@@ -45,7 +45,7 @@ namespace ZXing.OneD
       private const int W = 3; // Pixel width of a wide line
       private const int N = 1; // Pixed width of a narrow line
 
-      private static readonly int[] DEFAULT_ALLOWED_LENGTHS = { 44, 24, 20, 18, 16, 14, 12, 10, 8, 6 };
+      private static readonly int[] DEFAULT_ALLOWED_LENGTHS = { 48, 44, 24, 20, 18, 16, 14, 12, 10, 8, 6 };
 
       // Stores the actual narrow line width of the image being decoded.
       private int narrowLineWidth = -1;
