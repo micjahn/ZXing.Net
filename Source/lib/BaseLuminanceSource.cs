@@ -27,10 +27,10 @@ namespace ZXing
       // the following channel weights give nearly the same
       // gray scale picture as the java version with BufferedImage.TYPE_BYTE_GRAY
       // they are used in sub classes for luminance / gray scale calculation
-      protected const int RChannelWeight = 77;
-      protected const int GChannelWeight = 150;
-      protected const int BChannelWeight = 29;
-      protected const int ChannelWeight = 8;
+      protected const int RChannelWeight = 19562;
+      protected const int GChannelWeight = 38550;
+      protected const int BChannelWeight = 7424;
+      protected const int ChannelWeight = 16;
 
       /// <summary>
       /// 
