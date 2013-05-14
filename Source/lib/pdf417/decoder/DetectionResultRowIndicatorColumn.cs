@@ -285,20 +285,24 @@ namespace ZXing.PDF417.Internal
             }
          }
          // Maybe we should check if we have ambiguous values?
-         if ((barcodeColumnCount.getValue().Length == 0) ||
-             (barcodeRowCountUpperPart.getValue().Length == 0) ||
-             (barcodeRowCountLowerPart.getValue().Length == 0) ||
-             (barcodeECLevel.getValue().Length == 0) ||
-             barcodeColumnCount.getValue()[0] < 1 ||
-             barcodeRowCountUpperPart.getValue()[0] + barcodeRowCountLowerPart.getValue()[0] < PDF417Common.MIN_ROWS_IN_BARCODE ||
-             barcodeRowCountUpperPart.getValue()[0] + barcodeRowCountLowerPart.getValue()[0] > PDF417Common.MAX_ROWS_IN_BARCODE)
+         var barcodeColumnCountValues = barcodeColumnCount.getValue();
+         var barcodeRowCountUpperPartValues = barcodeRowCountUpperPart.getValue();
+         var barcodeRowCountLowerPartValues = barcodeRowCountLowerPart.getValue();
+         var barcodeECLevelValues = barcodeECLevel.getValue();
+         if ((barcodeColumnCountValues.Length == 0) ||
+             (barcodeRowCountUpperPartValues.Length == 0) ||
+             (barcodeRowCountLowerPartValues.Length == 0) ||
+             (barcodeECLevelValues.Length == 0) ||
+              barcodeColumnCountValues[0] < 1 ||
+              barcodeRowCountUpperPartValues[0] + barcodeRowCountLowerPartValues[0] < PDF417Common.MIN_ROWS_IN_BARCODE ||
+              barcodeRowCountUpperPartValues[0] + barcodeRowCountLowerPartValues[0] > PDF417Common.MAX_ROWS_IN_BARCODE)
          {
             return null;
          }
-         BarcodeMetadata barcodeMetadata = new BarcodeMetadata(barcodeColumnCount.getValue()[0],
-                                                               barcodeRowCountUpperPart.getValue()[0],
-                                                               barcodeRowCountLowerPart.getValue()[0],
-                                                               barcodeECLevel.getValue()[0]);
+         var barcodeMetadata = new BarcodeMetadata(barcodeColumnCountValues[0],
+                                                   barcodeRowCountUpperPartValues[0],
+                                                   barcodeRowCountLowerPartValues[0],
+                                                   barcodeECLevelValues[0]);
          removeIncorrectCodewords(codewords, barcodeMetadata);
          return barcodeMetadata;
       }
