@@ -245,13 +245,6 @@ namespace ZXing.Test
 
       internal sealed class GrayScalingAlgorithm2 : BaseLuminanceSource
       {
-         // the following channel weights give nearly the same
-         // gray scale picture as the java version with BufferedImage.TYPE_BYTE_GRAY
-         private const int RChannelWeight = 77;
-         private const int GChannelWeight = 150;
-         private const int BChannelWeight = 29;
-         private const int ChannelWeight = 8;
-
          protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
          {
             throw new NotImplementedException();
@@ -428,13 +421,6 @@ namespace ZXing.Test
 
       internal sealed class GrayScalingAlgorithm3 : BaseLuminanceSource
       {
-         // the following channel weights give nearly the same
-         // gray scale picture as the java version with BufferedImage.TYPE_BYTE_GRAY
-         private const int RChannelWeight = 77;
-         private const int GChannelWeight = 150;
-         private const int BChannelWeight = 29;
-         private const int ChannelWeight = 8;
-
          protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
          {
             throw new NotImplementedException();
