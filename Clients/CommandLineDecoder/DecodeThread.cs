@@ -161,7 +161,7 @@ namespace CommandLineDecoder
          BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
          if (config.DumpBlackPoint)
          {
-            dumpBlackPoint(uri, image, bitmap);
+            dumpBlackPoint(uri, image, bitmap, source);
          }
          Result result = new MultiFormatReader().decode(bitmap, hints);
          if (result != null)
@@ -217,7 +217,7 @@ namespace CommandLineDecoder
          BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
          if (config.DumpBlackPoint)
          {
-            dumpBlackPoint(uri, image, bitmap);
+            dumpBlackPoint(uri, image, bitmap, source);
          }
 
          MultiFormatReader multiFormatReader = new MultiFormatReader();
@@ -262,7 +262,7 @@ namespace CommandLineDecoder
        * to right: the original image, the row sampling monochrome version, and the 2D sampling
        * monochrome version.
        */
-      private static void dumpBlackPoint(Uri uri, Bitmap image, BinaryBitmap bitmap)
+      private static void dumpBlackPoint(Uri uri, Bitmap image, BinaryBitmap bitmap, LuminanceSource luminanceSource)
       {
          // TODO: Update to compare different Binarizer implementations.
          String inputName = uri.LocalPath;
@@ -291,7 +291,7 @@ namespace CommandLineDecoder
 
          int width = bitmap.Width;
          int height = bitmap.Height;
-         int stride = width * 3;
+         int stride = width * 4;
          var result = new Bitmap(stride, height, PixelFormat.Format32bppArgb);
          var offset = 0;
 
@@ -328,15 +328,24 @@ namespace CommandLineDecoder
 
          // 2D sampling
          offset += width;
+         BitMatrix matrix = bitmap.BlackMatrix;
          for (int y = 0; y < height; y++)
          {
-            BitMatrix matrix = bitmap.BlackMatrix;
             for (int x = 0; x < width; x++)
             {
                result.SetPixel(offset + x, y, matrix[x, y] ? Color.Black : Color.White);
             }
          }
 
+         offset += width;
+         var luminanceMatrix = luminanceSource.Matrix;
+         for (int y = 0; y < height; y++)
+         {
+            for (int x = 0; x < width; x++)
+            {
+               result.SetPixel(offset + x, y, Color.FromArgb(luminanceMatrix[y * width + x], luminanceMatrix[y * width + x], luminanceMatrix[y * width + x]));
+            }
+         }
          result.Save(resultName, ImageFormat.Png);
       }
    }
