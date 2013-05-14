@@ -756,7 +756,7 @@ namespace ZXing.OneD.RSS.Expanded
             oddSum += oddCounts[i];
          }
          int evenChecksumPortion = 0;
-         int evenSum = 0;
+         //int evenSum = 0;
          for (int i = evenCounts.Length - 1; i >= 0; i--)
          {
             if (isNotA1left(pattern, isOddPattern, leftChar))
@@ -764,7 +764,7 @@ namespace ZXing.OneD.RSS.Expanded
                int weight = WEIGHTS[weightRowNumber][2 * i + 1];
                evenChecksumPortion += evenCounts[i] * weight;
             }
-            evenSum += evenCounts[i];
+            //evenSum += evenCounts[i];
          }
          int checksumPortion = oddChecksumPortion + evenChecksumPortion;
 
