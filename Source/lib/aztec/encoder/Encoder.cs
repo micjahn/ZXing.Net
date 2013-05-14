@@ -198,10 +198,13 @@ namespace ZXing.Aztec.Internal
 
          // pad the end
          int messageSizeInWords = (stuffedBits.Size + wordSize - 1) / wordSize;
+         // This seems to be redundant? 
+         /*
          for (int i = messageSizeInWords * wordSize - stuffedBits.Size; i > 0; i--)
          {
             stuffedBits.appendBit(true);
          }
+         */
 
          // generate check words
          var rs = new ReedSolomonEncoder(getGF(wordSize));
@@ -488,6 +491,8 @@ namespace ZXing.Aztec.Internal
          }
 
          // 2. pad last word to wordSize
+         // This seems to be redundant?
+         /*
          n = @out.Size;
          int remainder = n % wordSize;
          if (remainder != 0)
@@ -506,6 +511,7 @@ namespace ZXing.Aztec.Internal
             }
             @out.appendBit(j == 0);
          }
+         */
          return @out;
       }
 
