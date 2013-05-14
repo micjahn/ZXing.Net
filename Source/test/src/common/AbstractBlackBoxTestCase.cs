@@ -28,7 +28,6 @@ using System.Windows.Media.Imaging;
 #endif
 using NUnit.Framework;
 using ZXing.Multi;
-using ZXing.Test;
 
 namespace ZXing.Common.Test
 {
@@ -153,7 +152,7 @@ namespace ZXing.Common.Test
                if (File.Exists(expectedBinFile))
                {
                   // it is only a dirty workaround for some special cases
-                  expectedText = File.ReadAllText(expectedBinFile, System.Text.Encoding.GetEncoding("UTF-7"));
+                  expectedText = File.ReadAllText(expectedBinFile, System.Text.Encoding.GetEncoding("ISO8859-1"));
                }
                else
                {
