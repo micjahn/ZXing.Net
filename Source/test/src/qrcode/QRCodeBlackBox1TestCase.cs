@@ -27,9 +27,9 @@ namespace ZXing.QrCode.Test
          : base("test/data/blackbox/qrcode-1", new MultiFormatReader(), BarcodeFormat.QR_CODE)
       {
          addTest(17, 17, 0.0f);
-         addTest(14, 14, 90.0f);
+         addTest(14, 15, 90.0f);
          addTest(17, 17, 180.0f);
-         addTest(14, 14, 270.0f);
+         addTest(14, 15, 270.0f);
       }
    }
 }

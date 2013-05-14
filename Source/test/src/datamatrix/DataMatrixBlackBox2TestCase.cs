@@ -26,10 +26,10 @@ namespace ZXing.Datamatrix.Test
       public DataMatrixBlackBox2TestCase()
          : base("test/data/blackbox/datamatrix-2", new MultiFormatReader(), BarcodeFormat.DATA_MATRIX)
       {
-         addTest(8, 8, 0, 1, 0.0f);
-         addTest(14, 14, 0, 1, 90.0f);
-         addTest(14, 14, 0, 1, 180.0f);
-         addTest(13, 13, 0, 1, 270.0f);
+         addTest(8, 15, 0, 1, 0.0f);
+         addTest(14, 16, 0, 1, 90.0f);
+         addTest(14, 15, 0, 1, 180.0f);
+         addTest(13, 16, 0, 1, 270.0f);
       }
    }
 }
