@@ -112,6 +112,7 @@
     </Compile>
     <Compile Include="datamatrix\DataMatrixBlackBox1TestCase.cs" />
     <Compile Include="datamatrix\DataMatrixBlackBox2TestCase.cs" />
+    <Compile Include="datamatrix\DataMatrixBlackBoxZTestCase.cs" />
     <Compile Include="datamatrix\DataMatrixWriterTestCase.cs" />
     <Compile Include="datamatrix\decoder\DecodedBitStreamParserTestCase.cs" />
     <Compile Include="datamatrix\encoder\DebugPlacement.cs" />
@@ -187,6 +188,7 @@
     <Compile Include="pdf417\PDF417BlackBox2TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox3TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox4TestCase.cs" />
+    <Compile Include="pdf417\PDF417BlackBoxZTestCase.cs" />
     <Compile Include="pdf417\PDF417DecodedBitStreamParserTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="qrcode\decoder\DataMaskTestCase.cs" />
