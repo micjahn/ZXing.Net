@@ -166,12 +166,16 @@ namespace ZXing
                Buffer.BlockCopy(rgbRawBytes, 0, luminances, 0, rgbRawBytes.Length < luminances.Length ? rgbRawBytes.Length : luminances.Length);
                break;
             case BitmapFormat.RGB24:
-            case BitmapFormat.BGR24:
                CalculateLuminanceRGB24(rgbRawBytes);
                break;
+            case BitmapFormat.BGR24:
+               CalculateLuminanceBGR24(rgbRawBytes);
+               break;
             case BitmapFormat.RGB32:
-            case BitmapFormat.BGR32:
                CalculateLuminanceRGB32(rgbRawBytes);
+               break;
+            case BitmapFormat.BGR32:
+               CalculateLuminanceBGR32(rgbRawBytes);
                break;
             case BitmapFormat.RGBA32:
                CalculateLuminanceRGBA32(rgbRawBytes);
@@ -227,6 +231,18 @@ namespace ZXing
          }
       }
 
+      private void CalculateLuminanceBGR24(byte[] rgbRawBytes)
+      {
+         for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length && luminanceIndex < luminances.Length; luminanceIndex++)
+         {
+            // Calculate luminance cheaply, favoring green.
+            int b = rgbRawBytes[rgbIndex++];
+            int g = rgbRawBytes[rgbIndex++];
+            int r = rgbRawBytes[rgbIndex++];
+            luminances[luminanceIndex] = (byte)((RChannelWeight * r + GChannelWeight * g + BChannelWeight * b) >> ChannelWeight);
+         }
+      }
+
       private void CalculateLuminanceRGB32(byte[] rgbRawBytes)
       {
          for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length && luminanceIndex < luminances.Length; luminanceIndex++)
@@ -235,6 +251,19 @@ namespace ZXing
             int r = rgbRawBytes[rgbIndex++];
             int g = rgbRawBytes[rgbIndex++];
             int b = rgbRawBytes[rgbIndex++];
+            rgbIndex++;
+            luminances[luminanceIndex] = (byte)((RChannelWeight * r + GChannelWeight * g + BChannelWeight * b) >> ChannelWeight);
+         }
+      }
+
+      private void CalculateLuminanceBGR32(byte[] rgbRawBytes)
+      {
+         for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length && luminanceIndex < luminances.Length; luminanceIndex++)
+         {
+            // Calculate luminance cheaply, favoring green.
+            int b = rgbRawBytes[rgbIndex++];
+            int g = rgbRawBytes[rgbIndex++];
+            int r = rgbRawBytes[rgbIndex++];
             rgbIndex++;
             luminances[luminanceIndex] = (byte)((RChannelWeight * r + GChannelWeight * g + BChannelWeight * b) >> ChannelWeight);
          }
