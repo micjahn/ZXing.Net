@@ -26,6 +26,7 @@ namespace CommandLineDecoder
 {
    class Program
    {
+      [STAThread]
       static void Main(string[] args)
       {
          if (args.Length == 0)
@@ -36,7 +37,6 @@ namespace CommandLineDecoder
 
          Config config = new Config();
          Inputs inputs = new Inputs();
-
 
          foreach (var arg in args)
          {
@@ -109,9 +109,11 @@ namespace CommandLineDecoder
          }
 
          var threads = new Dictionary<Thread, DecodeThread>(Math.Min(config.Threads, inputs.getInputCount()));
+         var decodeObjects = new List<DecodeThread>();
          for (int x = 0; x < config.Threads; x++)
          {
             var decodeThread = new DecodeThread(config, inputs);
+            decodeObjects.Add(decodeThread);
             var thread = new Thread(decodeThread.run);
             threads.Add(thread, decodeThread);
             thread.Start();
@@ -123,6 +125,15 @@ namespace CommandLineDecoder
             thread.Join();
             successful += threads[thread].getSuccessful();
          }
+
+         var completeResult = String.Empty;
+         foreach (var decodeObject in decodeObjects)
+         {
+            completeResult += decodeObject.ResultString;
+            completeResult += Environment.NewLine;
+         }
+         System.Windows.Forms.Clipboard.SetText(completeResult);
+
          int total = inputs.getInputCount();
          if (total > 1)
          {

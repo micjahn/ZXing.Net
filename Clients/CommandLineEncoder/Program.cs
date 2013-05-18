@@ -34,6 +34,7 @@ namespace CommandLineEncoder
       private const int DEFAULT_WIDTH = 300;
       private const int DEFAULT_HEIGHT = 300;
 
+      [STAThread]
       static void Main(string[] args)
       {
          if (args.Length == 0)
@@ -50,6 +51,7 @@ namespace CommandLineEncoder
          var outFileString = DEFAULT_OUTPUT_FILE;
          var width = DEFAULT_WIDTH;
          var height = DEFAULT_HEIGHT;
+         var clipboard = false;
          foreach (var arg in args)
          {
             if (arg.StartsWith("--barcode_format"))
@@ -102,6 +104,10 @@ namespace CommandLineEncoder
             {
                height = int.Parse(arg.Split('=')[1]);
             }
+            else if (arg.StartsWith("--copy_to_clipboard"))
+            {
+               clipboard = true;
+            }
          }
 
          if (DEFAULT_OUTPUT_FILE.Equals(outFileString))
@@ -135,7 +141,14 @@ namespace CommandLineEncoder
                                                 }
                                 };
          var bitmap = barcodeWriter.Write(contents);
-         bitmap.Save(outFileString, imageFormat);
+         if (clipboard)
+         {
+            System.Windows.Forms.Clipboard.SetImage(bitmap);
+         }
+         else
+         {
+            bitmap.Save(outFileString, imageFormat);
+         }
       }
 
       private static void printUsage()
@@ -148,6 +161,7 @@ namespace CommandLineEncoder
          Console.Out.WriteLine("  --output=filename: File to write to. Defaults to out.png");
          Console.Out.WriteLine("  --width=pixels: Image width. Defaults to 300");
          Console.Out.WriteLine("  --height=pixels: Image height. Defaults to 300");
+         Console.Out.WriteLine("  --copy_to_clipboard: Copy the image to the clipboard instead saving to a file");
       }
    }
 }

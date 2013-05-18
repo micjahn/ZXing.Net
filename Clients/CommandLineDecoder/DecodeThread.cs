@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Net;
 
 using ZXing;
 using ZXing.Client.Result;
@@ -36,6 +37,7 @@ namespace CommandLineDecoder
       private int successful;
       private readonly Config config;
       private readonly Inputs inputs;
+      public string ResultString { get; private set; }
 
       public DecodeThread(Config config, Inputs inputs)
       {
@@ -45,6 +47,7 @@ namespace CommandLineDecoder
 
       public void run()
       {
+         ResultString = String.Empty;
          while (true)
          {
             String input = inputs.getNextInput();
@@ -59,7 +62,7 @@ namespace CommandLineDecoder
                {
                   if (config.Multi)
                   {
-                     Result[] results = decodeMulti(new Uri(input), config.Hints);
+                     Result[] results = decodeMulti(new Uri(Path.GetFullPath(input)), input, config.Hints);
                      if (results != null)
                      {
                         successful++;
@@ -71,7 +74,7 @@ namespace CommandLineDecoder
                   }
                   else
                   {
-                     Result result = decode(new Uri(input), config.Hints);
+                     Result result = decode(new Uri(Path.GetFullPath(input)), input, config.Hints);
                      if (result != null)
                      {
                         successful++;
@@ -82,21 +85,39 @@ namespace CommandLineDecoder
                      }
                   }
                }
-               catch (IOException )
+               catch (IOException exc)
                {
+                  Console.WriteLine(exc.ToString());
                }
             }
             else
             {
                try
                {
-                  if (decode(new Uri(input), config.Hints) != null)
+                  var tempFile = Path.GetTempFileName();
+                  var uri = new Uri(input);
+                  var client = new WebClient();
+                  client.DownloadFile(uri, tempFile);
+                  try
                   {
-                     successful++;
+                     Result result = decode(new Uri(tempFile), input, config.Hints);
+                     if (result != null)
+                     {
+                        successful++;
+                        if (config.DumpResults)
+                        {
+                           dumpResult(input, result);
+                        }
+                     }
+                  }
+                  finally
+                  {
+                     File.Delete(tempFile);
                   }
                }
-               catch (Exception )
+               catch (Exception exc)
                {
+                  Console.WriteLine(exc.ToString());
                }
             }
          }
@@ -136,7 +157,7 @@ namespace CommandLineDecoder
          }
       }
 
-      private Result decode(Uri uri, IDictionary<DecodeHintType, object> hints)
+      private Result decode(Uri uri, string originalInput, IDictionary<DecodeHintType, object> hints)
       {
          Bitmap image;
          try
@@ -148,51 +169,57 @@ namespace CommandLineDecoder
             throw new FileNotFoundException("Resource not found: " + uri);
          }
 
-         LuminanceSource source;
-         if (config.Crop == null)
+         using (image)
          {
-            source = new BitmapLuminanceSource(image);
-         }
-         else
-         {
-            int[] crop = config.Crop;
-            source = new BitmapLuminanceSource(image).crop(crop[0], crop[1], crop[2], crop[3]);
-         }
-         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-         if (config.DumpBlackPoint)
-         {
-            dumpBlackPoint(uri, image, bitmap, source);
-         }
-         Result result = new MultiFormatReader().decode(bitmap, hints);
-         if (result != null)
-         {
-            if (config.Brief)
+            LuminanceSource source;
+            if (config.Crop == null)
             {
-               Console.Out.WriteLine(uri + ": Success");
+               source = new BitmapLuminanceSource(image);
             }
             else
             {
-               ParsedResult parsedResult = ResultParser.parseResult(result);
-               Console.Out.WriteLine(uri + " (format: " + result.BarcodeFormat + ", type: " +
-                                     parsedResult.Type + "):\nRaw result:\n" + result.Text + "\nParsed result:\n" +
-                                     parsedResult.DisplayResult);
-
-               Console.Out.WriteLine("Found " + result.ResultPoints.Length + " result points.");
-               for (int i = 0; i < result.ResultPoints.Length; i++)
+               int[] crop = config.Crop;
+               source = new BitmapLuminanceSource(image).crop(crop[0], crop[1], crop[2], crop[3]);
+            }
+            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+            if (config.DumpBlackPoint)
+            {
+               dumpBlackPoint(uri, image, bitmap, source);
+            }
+            Result result = new MultiFormatReader().decode(bitmap, hints);
+            if (result != null)
+            {
+               if (config.Brief)
                {
-                  ResultPoint rp = result.ResultPoints[i];
-                  Console.Out.WriteLine("  Point " + i + ": (" + rp.X + ',' + rp.Y + ')');
+                  Console.Out.WriteLine(uri + ": Success");
+               }
+               else
+               {
+                  ParsedResult parsedResult = ResultParser.parseResult(result);
+                  var resultString = originalInput + " (format: " + result.BarcodeFormat + ", type: " + parsedResult.Type + "):" + Environment.NewLine;
+                  for (int i = 0; i < result.ResultPoints.Length; i++)
+                  {
+                     ResultPoint rp = result.ResultPoints[i];
+                     Console.Out.WriteLine("  Point " + i + ": (" + rp.X + ',' + rp.Y + ')');
+                  }
+                  resultString += "Raw result:" + Environment.NewLine + result.Text + Environment.NewLine;
+                  resultString += "Parsed result:" + Environment.NewLine + parsedResult.DisplayResult + Environment.NewLine;
+
+                  Console.Out.WriteLine(resultString);
+                  ResultString = resultString;
                }
             }
+            else
+            {
+               var resultString = originalInput + ": No barcode found";
+               Console.Out.WriteLine(resultString);
+               ResultString = resultString;
+            }
+            return result;
          }
-         else
-         {
-            Console.Out.WriteLine(uri + ": No barcode found");
-         }
-         return result;
       }
 
-      private Result[] decodeMulti(Uri uri, IDictionary<DecodeHintType, object> hints)
+      private Result[] decodeMulti(Uri uri, string originalInput, IDictionary<DecodeHintType, object> hints)
       {
          Bitmap image;
          try
@@ -204,57 +231,62 @@ namespace CommandLineDecoder
             throw new FileNotFoundException("Resource not found: " + uri);
          }
 
-         LuminanceSource source;
-         if (config.Crop == null)
+         using (image)
          {
-            source = new BitmapLuminanceSource(image);
-         }
-         else
-         {
-            int[] crop = config.Crop;
-            source = new BitmapLuminanceSource(image).crop(crop[0], crop[1], crop[2], crop[3]);
-         }
-         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-         if (config.DumpBlackPoint)
-         {
-            dumpBlackPoint(uri, image, bitmap, source);
-         }
-
-         MultiFormatReader multiFormatReader = new MultiFormatReader();
-         GenericMultipleBarcodeReader reader = new GenericMultipleBarcodeReader(
-               multiFormatReader);
-         Result[] results = reader.decodeMultiple(bitmap, hints);
-         if (results != null && results.Length > 0)
-         {
-            if (config.Brief)
+            LuminanceSource source;
+            if (config.Crop == null)
             {
-               Console.Out.WriteLine(uri + ": Success");
+               source = new BitmapLuminanceSource(image);
             }
             else
             {
-               foreach (var result in results)
+               int[] crop = config.Crop;
+               source = new BitmapLuminanceSource(image).crop(crop[0], crop[1], crop[2], crop[3]);
+            }
+            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+            if (config.DumpBlackPoint)
+            {
+               dumpBlackPoint(uri, image, bitmap, source);
+            }
+
+            MultiFormatReader multiFormatReader = new MultiFormatReader();
+            GenericMultipleBarcodeReader reader = new GenericMultipleBarcodeReader(
+               multiFormatReader);
+            Result[] results = reader.decodeMultiple(bitmap, hints);
+            if (results != null && results.Length > 0)
+            {
+               if (config.Brief)
                {
-                  ParsedResult parsedResult = ResultParser.parseResult(result);
-                  Console.Out.WriteLine(uri + " (format: "
-                                          + result.BarcodeFormat + ", type: "
-                                          + parsedResult.Type + "):\nRaw result:\n"
-                                          + result.Text + "\nParsed result:\n"
-                                          + parsedResult.DisplayResult);
-                  Console.Out.WriteLine("Found " + result.ResultPoints.Length + " result points.");
-                  for (int i = 0; i < result.ResultPoints.Length; i++)
+                  Console.Out.WriteLine(uri + ": Success");
+               }
+               else
+               {
+                  foreach (var result in results)
                   {
-                     ResultPoint rp = result.ResultPoints[i];
-                     Console.Out.WriteLine("  Point " + i + ": (" + rp.X + ',' + rp.Y + ')');
+                     ParsedResult parsedResult = ResultParser.parseResult(result);
+                     var resultString = originalInput + " (format: " + result.BarcodeFormat + ", type: " + parsedResult.Type + "):" + Environment.NewLine;
+                     for (int i = 0; i < result.ResultPoints.Length; i++)
+                     {
+                        ResultPoint rp = result.ResultPoints[i];
+                        Console.Out.WriteLine("  Point " + i + ": (" + rp.X + ',' + rp.Y + ')');
+                     }
+                     resultString += "Raw result:" + Environment.NewLine + result.Text + Environment.NewLine;
+                     resultString += "Parsed result:" + Environment.NewLine + parsedResult.DisplayResult + Environment.NewLine;
+
+                     Console.Out.WriteLine(resultString);
+                     ResultString = resultString;
                   }
                }
+               return results;
             }
-            return results;
+            else
+            {
+               var resultString = originalInput + ": No barcode found";
+               Console.Out.WriteLine(resultString);
+               ResultString = resultString;
+            }
+            return null;
          }
-         else
-         {
-            Console.Out.WriteLine(uri + ": No barcode found");
-         }
-         return null;
       }
 
       /**
