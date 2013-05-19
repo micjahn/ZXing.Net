@@ -1,0 +1,44 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="WindowsPhone8Demo.Views.CaptureView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:WindowsPhone8Demo.ViewModels"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Landscape" Orientation="Landscape"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="False">
+
+    <phone:PhoneApplicationPage.Resources>
+        
+    </phone:PhoneApplicationPage.Resources>
+    
+    <phone:PhoneApplicationPage.DataContext>
+        <viewModels:CaptureViewModel />
+    </phone:PhoneApplicationPage.DataContext>
+
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Canvas Background="{Binding VideoBrush}" />
+        <TextBlock Text="{Binding Result.Text}" Style="{StaticResource PhoneTextAccentStyle}"/>
+        <ListBox ItemsSource="{Binding Results}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding Text}" Style="{StaticResource PhoneTextAccentStyle}" />
+                        <TextBlock Grid.Column="1" Text="{Binding BarcodeFormat}" Style="{StaticResource PhoneTextAccentStyle}" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+    
+</phone:PhoneApplicationPage>

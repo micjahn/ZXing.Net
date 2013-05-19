@@ -1,0 +1,130 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="WindowsPhone8Demo.Views.MainView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:ec="clr-namespace:Microsoft.Expression.Interactivity.Core;assembly=Microsoft.Expression.Interactions"
+    xmlns:viewModels="clr-namespace:WindowsPhone8Demo.ViewModels"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="False">
+    
+    <phone:PhoneApplicationPage.DataContext>
+        <viewModels:MainViewModel />
+    </phone:PhoneApplicationPage.DataContext>
+    
+    <Grid x:Name="LayoutRoot">
+        <StackPanel>
+            <StackPanel>
+                <TextBlock Text="{Binding ActivityMessage}" Style="{StaticResource PhoneTextAccentStyle}"/>
+                <ProgressBar IsIndeterminate="{Binding Processing}" />
+            </StackPanel>
+            <phone:Panorama Title="ZXing.net" Grid.Row="0">
+
+                <phone:PanoramaItem Header="Decode">
+                    <ListBox>
+                        <ListBoxItem>
+                            <Button BorderThickness="0">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <ec:NavigateToPageAction TargetPage="/Views/CaptureView.xaml" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Decode from Camerafeed"
+                                               Style="{StaticResource PhoneTextTitle2Style}"/>
+                                    </StackPanel>
+                                    <TextBlock Text="Decodes the barcode directly from the PreviewBufferY of the CaptureDevice."
+                                               Style="{StaticResource PhoneTextAccentStyle}"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Button>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <Button BorderThickness="0"
+                                    Command="{Binding PhotoChooserCommandOnClick}" CommandParameter="{Binding}">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Decode from Library"
+                                               Style="{StaticResource PhoneTextTitle2Style}"/>
+                                    </StackPanel>
+                                    <TextBlock Text="Decodes the barcode from a PhotoChooserTask."
+                                               Style="{StaticResource PhoneTextAccentStyle}"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Button>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <Button BorderThickness="0"
+                                    Command="{Binding CameraCaptureTaskOnClick}" CommandParameter="{Binding}">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Decode from Picture"
+                                               Style="{StaticResource PhoneTextTitle2Style}"/>
+                                    </StackPanel>
+                                    <TextBlock Text="Decodes the barcode from a picture from a CameraCaptureTask."
+                                               Style="{StaticResource PhoneTextAccentStyle}"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Button>
+                        </ListBoxItem>
+                    </ListBox>
+                </phone:PanoramaItem>
+
+                <phone:PanoramaItem Header="Encode">
+                    <Grid Margin="0,0,0,35">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBox Text="{Binding ValueToBeEncoded, Mode=TwoWay}" 
+                                 Grid.Row="0"/>
+                        <ListBox ItemsSource="{Binding BarcodeFormats}"
+                                 SelectedItem="{Binding SelectedBarcodeFormat}" 
+                                 Grid.Row="1">
+                        	<i:Interaction.Triggers>
+                        		<i:EventTrigger EventName="SelectionChanged">
+                                    <ec:CallMethodAction TargetObject="{Binding}" MethodName="BarcodeFormatOnSelectionChanged"/>
+                        		</i:EventTrigger>
+                        	</i:Interaction.Triggers>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" 
+                                               Style="{StaticResource PhoneTextLargeStyle}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </phone:PanoramaItem>
+
+                <phone:PanoramaItem Header="Encoded">
+                    <Image Source="{Binding ImageSource}" />
+                </phone:PanoramaItem>
+
+                <phone:PanoramaItem Header="Results">
+                    <ListBox ItemsSource="{Binding Results}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding BarcodeFormat}" 
+                                                Style="{StaticResource PhoneTextNormalStyle}"/>
+                                    <TextBlock Text="{Binding Text}" 
+                                               Style="{StaticResource PhoneTextAccentStyle}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </phone:PanoramaItem>
+            </phone:Panorama>
+        </StackPanel>
+    </Grid>
+
+</phone:PhoneApplicationPage>

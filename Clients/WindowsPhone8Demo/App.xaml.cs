@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Microsoft.Phone.Controls;
+using Microsoft.Phone.Shell;
+using System;
 using System.Diagnostics;
-using System.Resources;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
 using WindowsPhone8Demo.Resources;
 
 namespace WindowsPhone8Demo
@@ -39,7 +38,7 @@ namespace WindowsPhone8Demo
          if (Debugger.IsAttached)
          {
             // Zähler für die aktuelle Bildrate anzeigen.
-            Application.Current.Host.Settings.EnableFrameRateCounter = true;
+            Application.Current.Host.Settings.EnableFrameRateCounter = false;
 
             // Bereiche der Anwendung hervorheben, die mit jedem Bild neu gezeichnet werden.
             //Application.Current.Host.Settings.EnableRedrawRegions = true;
@@ -54,7 +53,6 @@ namespace WindowsPhone8Demo
             // und verbraucht auch dann Akkuenergie, wenn der Benutzer das Handy nicht verwendet.
             PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
          }
-
       }
 
       // Code, der beim Starten der Anwendung ausgeführt werden soll (z. B. über "Start")

@@ -16,7 +16,7 @@
 
 using ZXing;
 
-namespace WindowsPhone8Demo
+namespace WindowsPhone8Demo.Models
 {
    public class PhotoCameraLuminanceSource : BaseLuminanceSource
    {
