@@ -91,6 +91,17 @@ namespace ZXing
       /// </returns>
       Result[] DecodeMultiple(byte[] rawRGB, int width, int height, RGBLuminanceSource.BitmapFormat format);
 
+      /// <summary>
+      /// Tries to decode barcodes within an image which is given by a luminance source.
+      /// That method gives a chance to prepare a luminance source completely before calling
+      /// the time consuming decoding method. On the other hand there is a chance to create
+      /// a luminance source which is independent from external resources (like Bitmap objects)
+      /// and the decoding call can be made in a background thread.
+      /// </summary>
+      /// <param name="luminanceSource">The luminance source.</param>
+      /// <returns></returns>
+      Result[] DecodeMultiple(LuminanceSource luminanceSource);
+
 #if !PORTABLE
 #if !UNITY
       /// <summary>
