@@ -47,17 +47,17 @@ namespace WindowsFormsDemo
          base.OnLoad(e);
 
          chkTryInverted.Checked = reader.TryInverted;
-         chkTryHarder.Checked = reader.TryHarder;
+         chkTryHarder.Checked = reader.Options.TryHarder;
          chkAutoRotate.Checked = reader.AutoRotate;
-         chkPureBarcode.Checked = reader.PureBarcode;
+         chkPureBarcode.Checked = reader.Options.PureBarcode;
       }
 
       private void btnOk_Click(object sender, EventArgs e)
       {
          reader.TryInverted = chkTryInverted.Checked;
-         reader.TryHarder = chkTryHarder.Checked;
+         reader.Options.TryHarder = chkTryHarder.Checked;
          reader.AutoRotate = chkAutoRotate.Checked;
-         reader.PureBarcode = chkPureBarcode.Checked;
+         reader.Options.PureBarcode = chkPureBarcode.Checked;
          Close();
       }
    }

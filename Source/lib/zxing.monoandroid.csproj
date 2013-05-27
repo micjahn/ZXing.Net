@@ -107,6 +107,7 @@
     <Compile Include="common\BitSource.cs" />
     <Compile Include="common\CharacterSetECI.cs" />
     <Compile Include="common\DecoderResult.cs" />
+    <Compile Include="common\DecodingOptions.cs" />
     <Compile Include="common\DefaultGridSampler.cs" />
     <Compile Include="common\DetectorResult.cs" />
     <Compile Include="common\detector\MathUtils.cs" />

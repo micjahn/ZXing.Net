@@ -24,6 +24,7 @@ using System.ServiceProcess;
 using System.Text;
 
 using ZXing;
+using ZXing.Common;
 
 namespace ServiceDemo
 {
@@ -36,10 +37,13 @@ namespace ServiceDemo
          InitializeComponent();
 
          barcodeReader = new BarcodeReader
-                            {
-                               AutoRotate = true,
-                               TryHarder = true
-                            };
+            {
+               AutoRotate = true,
+               Options = new DecodingOptions
+                  {
+                     TryHarder = true
+                  }
+            };
       }
 
       public void StartForeground(string[] args)

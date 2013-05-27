@@ -40,7 +40,12 @@ namespace WindowsFormsDemo
       public WindowsFormsDemoForm()
       {
          InitializeComponent();
-         barcodeReader = new BarcodeReader {AutoRotate = true, TryHarder = true, TryInverted = true};
+         barcodeReader = new BarcodeReader
+            {
+               AutoRotate = true,
+               TryInverted = true,
+               Options = new DecodingOptions {TryHarder = true}
+            };
          barcodeReader.ResultPointFound += point =>
                                               {
                                                  if (point == null)
@@ -113,7 +118,7 @@ namespace WindowsFormsDemo
 
          var timerStart = DateTime.Now.Ticks;
          Result[] results = null;
-         barcodeReader.PossibleFormats = possibleFormats;
+         barcodeReader.Options.PossibleFormats = possibleFormats;
          if (tryMultipleBarcodes)
             results = barcodeReader.DecodeMultiple(image);
          else
@@ -279,15 +284,15 @@ namespace WindowsFormsDemo
          {
             tabCtrlMain.SelectedTab = tabPageDecoder;
             picBarcode.Image = picEncodedBarCode.Image;
-            var pureBarcodeSetting = barcodeReader.PureBarcode;
+            var pureBarcodeSetting = barcodeReader.Options.PureBarcode;
             try
             {
-               barcodeReader.PureBarcode = true;
+               barcodeReader.Options.PureBarcode = true;
                Decode((Bitmap)picEncodedBarCode.Image, false, null);
             }
             finally
             {
-               barcodeReader.PureBarcode = pureBarcodeSetting;
+               barcodeReader.Options.PureBarcode = pureBarcodeSetting;
             }
          }
       }

@@ -37,9 +37,15 @@ namespace WindowsCEDemoForm
       {
          InitializeComponent();
 
-         barcodeReader = new BarcodeReader { AutoRotate = true, TryHarder = false };
-         barcodeReader.PossibleFormats = new List<BarcodeFormat>();
-         barcodeReader.PossibleFormats.Add(BarcodeFormat.QR_CODE);
+         barcodeReader = new BarcodeReader
+            {
+               AutoRotate = true,
+               Options = new DecodingOptions
+                  {
+                     TryHarder = false,
+                     PossibleFormats = new List<BarcodeFormat> {BarcodeFormat.QR_CODE}
+                  }
+            };
       }
 
       private void btnSelectBarcodeImageFileForDecoding_Click(object sender, EventArgs e)

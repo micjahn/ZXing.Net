@@ -122,6 +122,7 @@
     <Compile Include="common\BitSource.cs" />
     <Compile Include="common\CharacterSetECI.cs" />
     <Compile Include="common\DecoderResult.cs" />
+    <Compile Include="common\DecodingOptions.cs" />
     <Compile Include="common\DefaultGridSampler.cs" />
     <Compile Include="common\DetectorResult.cs" />
     <Compile Include="common\detector\MathUtils.cs" />
@@ -308,6 +309,7 @@
     <Compile Include="ResultPointCallback.cs" />
     <Compile Include="RGB565LuminanceSource.cs" />
     <Compile Include="RGBLuminanceSource.cs" />
+    <Compile Include="silverlight\NonSerializedAttribute.cs" />
     <Compile Include="silverlight\SerializableAttribute.cs" />
     <Compile Include="SupportClass.cs" />
     <Compile Include="Writer.cs" />

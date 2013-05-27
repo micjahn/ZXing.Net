@@ -118,6 +118,7 @@
     <Compile Include="common\BitSource.cs" />
     <Compile Include="common\CharacterSetECI.cs" />
     <Compile Include="common\DecoderResult.cs" />
+    <Compile Include="common\DecodingOptions.cs" />
     <Compile Include="common\DefaultGridSampler.cs" />
     <Compile Include="common\DetectorResult.cs" />
     <Compile Include="common\detector\MathUtils.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="multi\qrcode\detector\MultiDetector.cs" />
     <Compile Include="multi\qrcode\detector\MultiFinderPatternFinder.cs" />
     <Compile Include="multi\qrcode\QRCodeMultiReader.cs" />
+    <Compile Include="net2.0\Action.cs" />
     <Compile Include="net2.0\Func.cs" />
     <Compile Include="net2.0\TimeZoneInfo.cs" />
     <Compile Include="NotFoundException.cs" />

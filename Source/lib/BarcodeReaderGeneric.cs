@@ -35,7 +35,6 @@ namespace ZXing
          (rawBytes, width, height, format) => new RGBLuminanceSource(rawBytes, width, height, format);
 
       private Reader reader;
-      private readonly IDictionary<DecodeHintType, object> hints;
       private readonly Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource;
 #if !UNITY
       private readonly Func<T, LuminanceSource> createLuminanceSource;
@@ -44,6 +43,19 @@ namespace ZXing
 #endif
       private readonly Func<LuminanceSource, Binarizer> createBinarizer;
       private bool usePreviousState;
+      private DecodingOptions options;
+
+      /// <summary>
+      /// Gets or sets the options.
+      /// </summary>
+      /// <value>
+      /// The options.
+      /// </value>
+      public DecodingOptions Options
+      {
+         get { return options ?? (options = new DecodingOptions()); }
+         set { options = value; }
+      }
 
       /// <summary>
       /// Gets the reader which should be used to find and decode the barcode.
@@ -69,10 +81,10 @@ namespace ZXing
       {
          add
          {
-            if (!hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK))
+            if (!Options.Hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK))
             {
                var callback = new ResultPointCallback(OnResultPointFound);
-               hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK] = callback;
+               Options.Hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK] = callback;
             }
             explicitResultPointFound += value;
             usePreviousState = false;
@@ -81,7 +93,7 @@ namespace ZXing
          {
             explicitResultPointFound -= value;
             if (explicitResultPointFound == null)
-               hints.Remove(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
+               Options.Hints.Remove(DecodeHintType.NEED_RESULT_POINT_CALLBACK);
             usePreviousState = false;
          }
       }
@@ -99,30 +111,11 @@ namespace ZXing
       /// <value>
       ///   <c>true</c> if [try harder]; otherwise, <c>false</c>.
       /// </value>
+      [Obsolete("Please use the Options.TryHarder property instead.")]
       public bool TryHarder
       {
-         get
-         {
-            if (hints.ContainsKey(DecodeHintType.TRY_HARDER))
-               return (bool)hints[DecodeHintType.TRY_HARDER];
-            return false;
-         }
-         set
-         {
-            if (value)
-            {
-               hints[DecodeHintType.TRY_HARDER] = true;
-               usePreviousState = false;
-            }
-            else
-            {
-               if (hints.ContainsKey(DecodeHintType.TRY_HARDER))
-               {
-                  hints.Remove(DecodeHintType.TRY_HARDER);
-                  usePreviousState = false;
-               }
-            }
-         }
+         get { return Options.TryHarder; }
+         set { Options.TryHarder = value; }
       }
 
       /// <summary>
@@ -131,30 +124,11 @@ namespace ZXing
       /// <value>
       ///   <c>true</c> if monochrome image of a barcode; otherwise, <c>false</c>.
       /// </value>
+      [Obsolete("Please use the Options.PureBarcode property instead.")]
       public bool PureBarcode
       {
-         get
-         {
-            if (hints.ContainsKey(DecodeHintType.PURE_BARCODE))
-               return (bool)hints[DecodeHintType.PURE_BARCODE];
-            return false;
-         }
-         set
-         {
-            if (value)
-            {
-               hints[DecodeHintType.PURE_BARCODE] = true;
-               usePreviousState = false;
-            }
-            else
-            {
-               if (hints.ContainsKey(DecodeHintType.PURE_BARCODE))
-               {
-                  hints.Remove(DecodeHintType.PURE_BARCODE);
-                  usePreviousState = false;
-               }
-            }
-         }
+         get { return Options.PureBarcode; }
+         set { Options.PureBarcode = value; }
       }
 
       /// <summary>
@@ -163,30 +137,11 @@ namespace ZXing
       /// <value>
       /// The character set.
       /// </value>
+      [Obsolete("Please use the Options.CharacterSet property instead.")]
       public string CharacterSet
       {
-         get
-         {
-            if (hints.ContainsKey(DecodeHintType.CHARACTER_SET))
-               return (string)hints[DecodeHintType.CHARACTER_SET];
-            return null;
-         }
-         set
-         {
-            if (value != null)
-            {
-               hints[DecodeHintType.CHARACTER_SET] = value;
-               usePreviousState = false;
-            }
-            else
-            {
-               if (hints.ContainsKey(DecodeHintType.CHARACTER_SET))
-               {
-                  hints.Remove(DecodeHintType.CHARACTER_SET);
-                  usePreviousState = false;
-               }
-            }
-         }
+         get { return Options.CharacterSet; }
+         set { Options.CharacterSet = value; }
       }
 
       /// <summary>
@@ -196,30 +151,11 @@ namespace ZXing
       /// <value>
       /// The possible formats.
       /// </value>
+      [Obsolete("Please use the Options.PossibleFormats property instead.")]
       public IList<BarcodeFormat> PossibleFormats
       {
-         get
-         {
-            if (hints.ContainsKey(DecodeHintType.POSSIBLE_FORMATS))
-               return (IList<BarcodeFormat>)hints[DecodeHintType.POSSIBLE_FORMATS];
-            return null;
-         }
-         set
-         {
-            if (value != null)
-            {
-               hints[DecodeHintType.POSSIBLE_FORMATS] = value;
-               usePreviousState = false;
-            }
-            else
-            {
-               if (hints.ContainsKey(DecodeHintType.POSSIBLE_FORMATS))
-               {
-                  hints.Remove(DecodeHintType.POSSIBLE_FORMATS);
-                  usePreviousState = false;
-               }
-            }
-         }
+         get { return Options.PossibleFormats; }
+         set { Options.PossibleFormats = value; }
       }
 
       /// <summary>
@@ -336,11 +272,7 @@ namespace ZXing
          this.createLuminanceSource = createLuminanceSource;
          this.createBinarizer = createBinarizer ?? defaultCreateBinarizer;
          this.createRGBLuminanceSource = createRGBLuminanceSource ?? defaultCreateRGBLuminanceSource;
-         hints = new Dictionary<DecodeHintType, object>
-                    {
-                       {DecodeHintType.USE_CODE_39_EXTENDED_MODE, true},
-                       {DecodeHintType.RELAXED_CODE_39_EXTENDED_MODE, true}
-                    };
+         Options.ValueChanged += (o, args) => usePreviousState = false;
          usePreviousState = false;
       }
 
@@ -408,7 +340,7 @@ namespace ZXing
 
          if (AutoRotate)
          {
-            hints[DecodeHintType.TRY_HARDER_WITHOUT_ROTATION] = true;
+            Options.Hints[DecodeHintType.TRY_HARDER_WITHOUT_ROTATION] = true;
             rotationMaxCount = 4;
          }
 
@@ -420,7 +352,7 @@ namespace ZXing
             }
             else
             {
-               result = Reader.decode(binaryBitmap, hints);
+               result = Reader.decode(binaryBitmap, Options.Hints);
                usePreviousState = true;
             }
 
@@ -435,7 +367,7 @@ namespace ZXing
                   }
                   else
                   {
-                     result = Reader.decode(binaryBitmap, hints);
+                     result = Reader.decode(binaryBitmap, Options.Hints);
                      usePreviousState = true;
                   }
                }
@@ -534,11 +466,11 @@ namespace ZXing
 
          if (AutoRotate)
          {
-            hints[DecodeHintType.TRY_HARDER_WITHOUT_ROTATION] = true;
+            Options.Hints[DecodeHintType.TRY_HARDER_WITHOUT_ROTATION] = true;
             rotationMaxCount = 4;
          }
 
-         var formats = PossibleFormats;
+         var formats = Options.PossibleFormats;
          if (formats != null &&
              formats.Count == 1 &&
              formats.Contains(BarcodeFormat.QR_CODE))
@@ -552,14 +484,14 @@ namespace ZXing
 
          for (; rotationCount < rotationMaxCount; rotationCount++)
          {
-            results = multiReader.decodeMultiple(binaryBitmap, hints);
+            results = multiReader.decodeMultiple(binaryBitmap, Options.Hints);
 
             if (results == null)
             {
                if (TryInverted && luminanceSource.InversionSupported)
                {
                   binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource.invert()));
-                  results = multiReader.decodeMultiple(binaryBitmap, hints);
+                  results = multiReader.decodeMultiple(binaryBitmap, Options.Hints);
                }
             }
 
