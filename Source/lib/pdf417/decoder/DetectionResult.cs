@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System.Globalization;
 using System.Text;
 
 namespace ZXing.PDF417.Internal
@@ -354,7 +355,7 @@ namespace ZXing.PDF417.Internal
          }
          for (int codewordsRow = 0; codewordsRow < rowIndicatorColumn.Codewords.Length; codewordsRow++)
          {
-            formatter.AppendFormat("CW {0,3}:", codewordsRow);
+            formatter.AppendFormat(CultureInfo.InvariantCulture, "CW {0,3}:", codewordsRow);
             for (int barcodeColumn = 0; barcodeColumn < ColumnCount + 2; barcodeColumn++)
             {
                if (DetectionResultColumns[barcodeColumn] == null)
@@ -368,7 +369,7 @@ namespace ZXing.PDF417.Internal
                   formatter.Append("    |   ");
                   continue;
                }
-               formatter.AppendFormat(" {0,3}|{1,3}", codeword.RowNumber, codeword.Value);
+               formatter.AppendFormat(CultureInfo.InvariantCulture, " {0,3}|{1,3}", codeword.RowNumber, codeword.Value);
             }
             formatter.Append("\n");
          }

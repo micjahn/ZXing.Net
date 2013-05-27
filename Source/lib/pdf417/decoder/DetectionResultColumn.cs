@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System.Globalization;
 using System.Text;
 
 namespace ZXing.PDF417.Internal
@@ -151,11 +152,11 @@ namespace ZXing.PDF417.Internal
          {
             if (cw == null)
             {
-               builder.AppendFormat("{0,3}:    |   \n", row++);
+               builder.AppendFormat(CultureInfo.InvariantCulture, "{0,3}:    |   \n", row++);
             }
             else
             {
-               builder.AppendFormat("{0,3}: {1,3}|{2,3}\n", row++, cw.RowNumber, cw.Value);
+               builder.AppendFormat(CultureInfo.InvariantCulture, "{0,3}: {1,3}|{2,3}\n", row++, cw.RowNumber, cw.Value);
             }
          }
          return builder.ToString();

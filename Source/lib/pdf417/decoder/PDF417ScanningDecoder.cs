@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 using ZXing.Common;
@@ -870,7 +871,7 @@ namespace ZXing.PDF417.Internal
          StringBuilder formatter = new StringBuilder();
          for (int row = 0; row < barcodeMatrix.Length; row++)
          {
-            formatter.AppendFormat("Row {0,2}: ", row);
+            formatter.AppendFormat(CultureInfo.InvariantCulture, "Row {0,2}: ", row);
             for (int column = 0; column < barcodeMatrix[row].Length; column++)
             {
                BarcodeValue barcodeValue = barcodeMatrix[row][column];
@@ -881,7 +882,7 @@ namespace ZXing.PDF417.Internal
                }
                else
                {
-                  formatter.AppendFormat("{0,4}({1,2})", values[0], barcodeValue.getConfidence(values[0]));
+                  formatter.AppendFormat(CultureInfo.InvariantCulture, "{0,4}({1,2})", values[0], barcodeValue.getConfidence(values[0]));
                }
             }
             formatter.Append("\n");
