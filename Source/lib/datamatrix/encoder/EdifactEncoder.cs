@@ -42,7 +42,7 @@ namespace ZXing.Datamatrix.Encoder
                context.writeCodewords(encodeToCodewords(buffer, 0));
                buffer.Remove(0, 4);
 
-               int newMode = HighLevelEncoder.lookAheadTest(context.Msg, context.Pos, EncodingMode);
+               int newMode = HighLevelEncoder.lookAheadTest(context.Message, context.Pos, EncodingMode);
                if (newMode != EncodingMode)
                {
                   context.signalEncoderChange(HighLevelEncoder.ASCII_ENCODATION);

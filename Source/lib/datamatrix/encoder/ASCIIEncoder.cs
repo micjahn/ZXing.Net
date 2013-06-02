@@ -28,17 +28,17 @@ namespace ZXing.Datamatrix.Encoder
       public void encode(EncoderContext context)
       {
          //step B
-         int n = HighLevelEncoder.determineConsecutiveDigitCount(context.Msg, context.Pos);
+         int n = HighLevelEncoder.determineConsecutiveDigitCount(context.Message, context.Pos);
          if (n >= 2)
          {
-            context.writeCodeword(encodeASCIIDigits(context.Msg[context.Pos],
-                                                    context.Msg[context.Pos + 1]));
+            context.writeCodeword(encodeASCIIDigits(context.Message[context.Pos],
+                                                    context.Message[context.Pos + 1]));
             context.Pos += 2;
          }
          else
          {
             char c = context.CurrentChar;
-            int newMode = HighLevelEncoder.lookAheadTest(context.Msg, context.Pos, EncodingMode);
+            int newMode = HighLevelEncoder.lookAheadTest(context.Message, context.Pos, EncodingMode);
             if (newMode != EncodingMode)
             {
                switch (newMode)

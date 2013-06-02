@@ -37,7 +37,7 @@ namespace ZXing.Datamatrix.Encoder
 
             context.Pos++;
 
-            int newMode = HighLevelEncoder.lookAheadTest(context.Msg, context.Pos, EncodingMode);
+            int newMode = HighLevelEncoder.lookAheadTest(context.Message, context.Pos, EncodingMode);
             if (newMode != EncodingMode)
             {
                context.signalEncoderChange(newMode);

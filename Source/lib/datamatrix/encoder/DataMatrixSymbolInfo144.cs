@@ -19,10 +19,8 @@ namespace ZXing.Datamatrix.Encoder
    internal sealed class DataMatrixSymbolInfo144 : SymbolInfo
    {
       public DataMatrixSymbolInfo144()
-         : base(false, 1558, 620, 22, 22, 36)
+         : base(false, 1558, 620, 22, 22, 36, -1, 62)
       {
-         this.rsBlockData = -1; //special! see below
-         this.rsBlockError = 62;
       }
 
       public override int getInterleavedBlockCount()

@@ -78,8 +78,8 @@ namespace ZXing.Datamatrix.Encoder
       public readonly int matrixWidth;
       public readonly int matrixHeight;
       private readonly int dataRegions;
-      protected int rsBlockData;
-      protected int rsBlockError;
+      private readonly int rsBlockData;
+      private readonly int rsBlockError;
 
       public SymbolInfo(bool rectangular, int dataCapacity, int errorCodewords,
                         int matrixWidth, int matrixHeight, int dataRegions)
@@ -88,7 +88,7 @@ namespace ZXing.Datamatrix.Encoder
       {
       }
 
-      private SymbolInfo(bool rectangular, int dataCapacity, int errorCodewords,
+      internal SymbolInfo(bool rectangular, int dataCapacity, int errorCodewords,
                          int matrixWidth, int matrixHeight, int dataRegions,
                          int rsBlockData, int rsBlockError)
       {

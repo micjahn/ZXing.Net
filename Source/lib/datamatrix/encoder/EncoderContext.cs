@@ -84,11 +84,6 @@ namespace ZXing.Datamatrix.Encoder
          this.maxSize = maxSize;
       }
 
-      public String getMessage()
-      {
-         return this.msg;
-      }
-
       public void setSkipAtEnd(int count)
       {
          this.skipAtEnd = count;
@@ -183,7 +178,7 @@ namespace ZXing.Datamatrix.Encoder
          get { return newEncoding; }
       }
 
-      public String Msg
+      public String Message
       {
          get { return msg; }
       }
