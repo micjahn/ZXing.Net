@@ -79,6 +79,10 @@ namespace ZXing.OneD
          for (int i = 0; i < length; i++)
          {
             int indexInString = Code39Reader.ALPHABET_STRING.IndexOf(contents[i]);
+            if (indexInString < 0)
+            {
+               throw new ArgumentException("Bad contents: " + contents);
+            }
             toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
             foreach (int width in widths)
             {
