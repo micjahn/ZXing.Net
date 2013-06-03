@@ -80,7 +80,7 @@ namespace ZXing.PDF417.Internal
                // if a barcode was not decoded where it was detected instead of throwing a new exception object.
                return null;
             }
-            if (i == 0 &&
+            if (i == 0 && detectionResult.Box != null &&
                 (detectionResult.Box.MinY < boundingBox.MinY || detectionResult.Box.MaxY > boundingBox.MaxY))
             {
                boundingBox = detectionResult.Box;
