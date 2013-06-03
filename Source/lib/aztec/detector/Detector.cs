@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+using System;
+
 using ZXing.Common;
 using ZXing.Common.Detector;
 using ZXing.Common.ReedSolomon;
@@ -51,28 +53,39 @@ namespace ZXing.Aztec.Internal
       public AztecDetectorResult detect()
       {
          // 1. Get the center of the aztec matrix
-         Point pCenter = getMatrixCenter();
+         var pCenter = getMatrixCenter();
          if (pCenter == null)
             return null;
 
-         // 2. Get the corners of the center bull's eye
-         Point[] bullEyeCornerPoints = getBullEyeCornerPoints(pCenter);
-         if (bullEyeCornerPoints == null)
+         // 2. Get the center points of the four diagonal points just outside the bull's eye
+         //  [topRight, bottomRight, bottomLeft, topLeft]
+         var bullsEyeCorners = getBullsEyeCorners(pCenter);
+         if (bullsEyeCorners == null)
+         {
             return null;
+         }
 
-         // 3. Get the size of the matrix from the bull's eye
-         if (!extractParameters(bullEyeCornerPoints))
+         // 3. Get the size of the matrix and other parameters from the bull's eye
+         if (!extractParameters(bullsEyeCorners))
+         {
             return null;
+         }
 
-         // 4. Get the corners of the matrix
-         ResultPoint[] corners = getMatrixCornerPoints(bullEyeCornerPoints);
-         if (corners == null)
-            return null;
-
-         // 5. Sample the grid
-         BitMatrix bits = sampleGrid(image, corners[shift % 4], corners[(shift + 3) % 4], corners[(shift + 2) % 4], corners[(shift + 1) % 4]);
+         // 4. Sample the grid
+         var bits = sampleGrid(image,
+           bullsEyeCorners[shift % 4], bullsEyeCorners[(shift + 1) % 4],
+           bullsEyeCorners[(shift + 2) % 4], bullsEyeCorners[(shift + 3) % 4]);
          if (bits == null)
+         {
             return null;
+         }
+
+         // 5. Get the corners of the matrix.
+         var corners = getMatrixCornerPoints(bullsEyeCorners);
+         if (corners == null)
+         {
+            return null;
+         }
 
          return new AztecDetectorResult(bits, corners, compact, nbDataBlocks, nbLayers);
       }
@@ -80,17 +93,17 @@ namespace ZXing.Aztec.Internal
       /// <summary>
       /// Extracts the number of data layers and data blocks from the layer around the bull's eye 
       /// </summary>
-      /// <param name="bullEyeCornerPoints">bullEyeCornerPoints the array of bull's eye corners</param>
+      /// <param name="bullsEyeCorners">bullEyeCornerPoints the array of bull's eye corners</param>
       /// <returns></returns>
-      private bool extractParameters(Point[] bullEyeCornerPoints)
+      private bool extractParameters(ResultPoint[] bullsEyeCorners)
       {
          int twoCenterLayers = 2 * nbCenterLayers;
 
          // Get the bits around the bull's eye
-         bool[] resab = sampleLine(bullEyeCornerPoints[0], bullEyeCornerPoints[1], twoCenterLayers + 1);
-         bool[] resbc = sampleLine(bullEyeCornerPoints[1], bullEyeCornerPoints[2], twoCenterLayers + 1);
-         bool[] rescd = sampleLine(bullEyeCornerPoints[2], bullEyeCornerPoints[3], twoCenterLayers + 1);
-         bool[] resda = sampleLine(bullEyeCornerPoints[3], bullEyeCornerPoints[0], twoCenterLayers + 1);
+         bool[] resab = sampleLine(bullsEyeCorners[0], bullsEyeCorners[1], twoCenterLayers + 1);
+         bool[] resbc = sampleLine(bullsEyeCorners[1], bullsEyeCorners[2], twoCenterLayers + 1);
+         bool[] rescd = sampleLine(bullsEyeCorners[2], bullsEyeCorners[3], twoCenterLayers + 1);
+         bool[] resda = sampleLine(bullsEyeCorners[3], bullsEyeCorners[0], twoCenterLayers + 1);
 
          // Determine the orientation of the matrix
          if (resab[0] && resab[twoCenterLayers])
@@ -179,49 +192,11 @@ namespace ZXing.Aztec.Internal
       /// <summary>
       /// Gets the Aztec code corners from the bull's eye corners and the parameters
       /// </summary>
-      /// <param name="bullEyeCornerPoints">the array of bull's eye corners</param>
+      /// <param name="bullsEyeCorners">the array of bull's eye corners</param>
       /// <returns>the array of aztec code corners</returns>
-      private ResultPoint[] getMatrixCornerPoints(Point[] bullEyeCornerPoints)
+      private ResultPoint[] getMatrixCornerPoints(ResultPoint[] bullsEyeCorners)
       {
-         float ratio = (2*nbLayers + (nbLayers > 4 ? 1 : 0) + (nbLayers - 4)/8)
-                       /(2.0f*nbCenterLayers);
-
-         int dx = bullEyeCornerPoints[0].X - bullEyeCornerPoints[2].X;
-         dx += dx > 0 ? 1 : -1;
-         int dy = bullEyeCornerPoints[0].Y - bullEyeCornerPoints[2].Y;
-         dy += dy > 0 ? 1 : -1;
-
-         int targetcx = MathUtils.round(bullEyeCornerPoints[2].X - ratio*dx);
-         int targetcy = MathUtils.round(bullEyeCornerPoints[2].Y - ratio*dy);
-
-         int targetax = MathUtils.round(bullEyeCornerPoints[0].X + ratio*dx);
-         int targetay = MathUtils.round(bullEyeCornerPoints[0].Y + ratio*dy);
-
-         dx = bullEyeCornerPoints[1].X - bullEyeCornerPoints[3].X;
-         dx += dx > 0 ? 1 : -1;
-         dy = bullEyeCornerPoints[1].Y - bullEyeCornerPoints[3].Y;
-         dy += dy > 0 ? 1 : -1;
-
-         int targetdx = MathUtils.round(bullEyeCornerPoints[3].X - ratio*dx);
-         int targetdy = MathUtils.round(bullEyeCornerPoints[3].Y - ratio*dy);
-         int targetbx = MathUtils.round(bullEyeCornerPoints[1].X + ratio*dx);
-         int targetby = MathUtils.round(bullEyeCornerPoints[1].Y + ratio*dy);
-
-         if (!isValid(targetax, targetay) ||
-             !isValid(targetbx, targetby) ||
-             !isValid(targetcx, targetcy) ||
-             !isValid(targetdx, targetdy))
-         {
-            return null;
-         }
-
-         return new[]
-                   {
-                      new ResultPoint(targetax, targetay),
-                      new ResultPoint(targetbx, targetby),
-                      new ResultPoint(targetcx, targetcy),
-                      new ResultPoint(targetdx, targetdy)
-                   };
+         return expandSquare(bullsEyeCorners, 2*nbCenterLayers, getDimension());
       }
 
       /// <summary>
@@ -282,10 +257,12 @@ namespace ZXing.Aztec.Internal
 
       /// <summary>
       /// Finds the corners of a bull-eye centered on the passed point
+      /// This returns the centers of the diagonal points just outside the bull's eye
+      /// Returns [topRight, bottomRight, bottomLeft, topLeft]
       /// </summary>
       /// <param name="pCenter">Center point</param>
       /// <returns>The corners of the bull-eye</returns>
-      private Point[] getBullEyeCornerPoints(Point pCenter)
+      private ResultPoint[] getBullsEyeCorners(Point pCenter)
       {
          Point pina = pCenter;
          Point pinb = pCenter;
@@ -329,38 +306,18 @@ namespace ZXing.Aztec.Internal
 
          compact = nbCenterLayers == 5;
 
-         float ratio = 0.75f*2/(2*nbCenterLayers - 3);
+         // Expand the square by .5 pixel in each direction so that we're on the border
+         // between the white square and the black square
+         var pinax = new ResultPoint(pina.X + 0.5f, pina.Y - 0.5f);
+         var pinbx = new ResultPoint(pinb.X + 0.5f, pinb.Y + 0.5f);
+         var pincx = new ResultPoint(pinc.X - 0.5f, pinc.Y + 0.5f);
+         var pindx = new ResultPoint(pind.X - 0.5f, pind.Y - 0.5f);
 
-         int dx = pina.X - pinc.X;
-         int dy = pina.Y - pinc.Y;
-         int targetcx = MathUtils.round(pinc.X - ratio*dx);
-         int targetcy = MathUtils.round(pinc.Y - ratio*dy);
-         int targetax = MathUtils.round(pina.X + ratio*dx);
-         int targetay = MathUtils.round(pina.Y + ratio*dy);
-
-         dx = pinb.X - pind.X;
-         dy = pinb.Y - pind.Y;
-
-         int targetdx = MathUtils.round(pind.X - ratio*dx);
-         int targetdy = MathUtils.round(pind.Y - ratio*dy);
-         int targetbx = MathUtils.round(pinb.X + ratio*dx);
-         int targetby = MathUtils.round(pinb.Y + ratio*dy);
-
-         if (!isValid(targetax, targetay) ||
-             !isValid(targetbx, targetby) ||
-             !isValid(targetcx, targetcy) ||
-             !isValid(targetdx, targetdy))
-         {
-            return null;
-         }
-
-         return new[]
-                   {
-                      new Point(targetax, targetay),
-                      new Point(targetbx, targetby),
-                      new Point(targetcx, targetcy),
-                      new Point(targetdx, targetdy)
-                   };
+         // Expand the square so that its corners are the centers of the points
+         // just outside the bull's eye.
+         return expandSquare(new[] {pinax, pinbx, pincx, pindx},
+                             2*nbCenterLayers - 3,
+                             2*nbCenterLayers);
       }
 
       /// <summary>
@@ -437,7 +394,9 @@ namespace ZXing.Aztec.Internal
       }
 
       /// <summary>
-      /// Samples an Aztec matrix from an image
+      /// Creates a BitMatrix by sampling the provided image.
+      /// topLeft, topRight, bottomRight, and bottomLeft are the centers of the squares on the
+      /// diagonal just outside the bull's eye.
       /// </summary>
       /// <param name="image">The image.</param>
       /// <param name="topLeft">The top left.</param>
@@ -447,48 +406,27 @@ namespace ZXing.Aztec.Internal
       /// <returns></returns>
       private BitMatrix sampleGrid(BitMatrix image,
                                    ResultPoint topLeft,
-                                   ResultPoint bottomLeft,
+                                   ResultPoint topRight,
                                    ResultPoint bottomRight,
-                                   ResultPoint topRight)
+                                   ResultPoint bottomLeft)
       {
-         int dimension;
-         if (compact)
-         {
-            dimension = 4 * nbLayers + 11;
-         }
-         else
-         {
-            if (nbLayers <= 4)
-            {
-               dimension = 4 * nbLayers + 15;
-            }
-            else
-            {
-               dimension = 4 * nbLayers + 2 * ((nbLayers - 4) / 8 + 1) + 15;
-            }
-         }
-
          GridSampler sampler = GridSampler.Instance;
+         int dimension = getDimension();
+
+         float low = dimension/2.0f - nbCenterLayers;
+         float high = dimension/2.0f + nbCenterLayers;
 
          return sampler.sampleGrid(image,
-           dimension,
-           dimension,
-           0.5f,
-           0.5f,
-           dimension - 0.5f,
-           0.5f,
-           dimension - 0.5f,
-           dimension - 0.5f,
-           0.5f,
-           dimension - 0.5f,
-           topLeft.X,
-           topLeft.Y,
-           topRight.X,
-           topRight.Y,
-           bottomRight.X,
-           bottomRight.Y,
-           bottomLeft.X,
-           bottomLeft.Y);
+                                   dimension,
+                                   dimension,
+                                   low, low, // topleft
+                                   high, low, // topright
+                                   high, high, // bottomright
+                                   low, high, // bottomleft
+                                   topLeft.X, topLeft.Y,
+                                   topRight.X, topRight.Y,
+                                   bottomRight.X, bottomRight.Y,
+                                   bottomLeft.X, bottomLeft.Y);
       }
 
       /// <summary>
@@ -542,7 +480,7 @@ namespace ZXing.Aztec.Internal
       /// <param name="p2">second point</param>
       /// <param name="size">size number of bits</param>
       /// <returns>the array of bits</returns>
-      private bool[] sampleLine(Point p1, Point p2, int size)
+      private bool[] sampleLine(ResultPoint p1, ResultPoint p2, int size)
       {
          bool[] res = new bool[size];
          float d = distance(p1, p2);
@@ -683,15 +621,72 @@ namespace ZXing.Aztec.Internal
          return new Point(x, y);
       }
 
+      /// <summary>
+      /// Expand the square represented by the corner points by pushing out equally in all directions
+      /// </summary>
+      /// <param name="cornerPoints">the corners of the square, which has the bull's eye at its center</param>
+      /// <param name="oldSide">the original length of the side of the square in the target bit matrix</param>
+      /// <param name="newSide">the new length of the size of the square in the target bit matrix</param>
+      /// <returns>the corners of the expanded square</returns>
+      private ResultPoint[] expandSquare(ResultPoint[] cornerPoints, float oldSide, float newSide)
+      {
+         float ratio = newSide/(2*oldSide);
+         float dx = cornerPoints[0].X - cornerPoints[2].X;
+         float dy = cornerPoints[0].Y - cornerPoints[2].Y;
+         float centerx = (cornerPoints[0].X + cornerPoints[2].X)/2.0f;
+         float centery = (cornerPoints[0].Y + cornerPoints[2].Y)/2.0f;
+
+         var result0 = new ResultPoint(centerx + ratio*dx, centery + ratio*dy);
+         var result2 = new ResultPoint(centerx - ratio * dx, centery - ratio * dy);
+
+         dx = cornerPoints[1].X - cornerPoints[3].X;
+         dy = cornerPoints[1].Y - cornerPoints[3].Y;
+         centerx = (cornerPoints[1].X + cornerPoints[3].X)/2.0f;
+         centery = (cornerPoints[1].Y + cornerPoints[3].Y)/2.0f;
+         var result1 = new ResultPoint(centerx + ratio * dx, centery + ratio * dy);
+         var result3 = new ResultPoint(centerx - ratio * dx, centery - ratio * dy);
+
+         if (!isValid(result0) || !isValid(result1) || !isValid(result2) || !isValid(result3))
+         {
+            return null;
+         }
+         return new ResultPoint[] {result0, result1, result2, result3};
+      }
+
       private bool isValid(int x, int y)
       {
          return x >= 0 && x < image.Width && y > 0 && y < image.Height;
+      }
+
+      private bool isValid(ResultPoint point)
+      {
+         int x = MathUtils.round(point.X);
+         int y = MathUtils.round(point.Y);
+         return isValid(x, y);
       }
 
       // L2 distance
       private static float distance(Point a, Point b)
       {
          return MathUtils.distance(a.X, a.Y, b.X, b.Y);
+      }
+
+      private static float distance(ResultPoint a, ResultPoint b)
+      {
+         return MathUtils.distance(a.X, a.Y, b.X, b.Y);
+      }
+
+      private int getDimension()
+      {
+         if (compact)
+         {
+            return 4 * nbLayers + 11;
+         }
+         if (nbLayers <= 4)
+         {
+            return 4 * nbLayers + 15;
+         }
+         return 4 * nbLayers + 2 * ((nbLayers - 4) / 8 + 1) + 15;
       }
 
       internal sealed class Point
@@ -708,6 +703,11 @@ namespace ZXing.Aztec.Internal
          {
             X = x;
             Y = y;
+         }
+
+         public override String ToString()
+         {
+            return "<" + X + ' ' + Y + '>';
          }
       }
    }
