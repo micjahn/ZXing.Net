@@ -40,7 +40,7 @@ namespace ZXing.OneD
    public sealed class ITFReader : OneDReader
    {
       private static readonly int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
-      private static readonly int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8f);
+      private static readonly int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.78f);
 
       private const int W = 3; // Pixel width of a wide line
       private const int N = 1; // Pixed width of a narrow line
