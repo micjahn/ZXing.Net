@@ -113,11 +113,11 @@ namespace ZXing.PDF417.Internal
 
       internal static DecoderResult decode(int[] codewords, String ecLevel)
       {
-         StringBuilder result = new StringBuilder(codewords.Length * 2);
+         var result = new StringBuilder(codewords.Length * 2);
          // Get compaction mode
          int codeIndex = 1;
          int code = codewords[codeIndex++];
-         PDF417ResultMetadata resultMetadata = new PDF417ResultMetadata();
+         var resultMetadata = new PDF417ResultMetadata();
          while (codeIndex < codewords[0])
          {
             switch (code)
@@ -140,6 +140,10 @@ namespace ZXing.PDF417.Internal
                case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
                   codeIndex = decodeMacroBlock(codewords, codeIndex, resultMetadata);
                   break;
+               case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+               case MACRO_PDF417_TERMINATOR:
+                  // Should not see these outside a macro block
+                  return null;
                default:
                   // Default to text compaction. During testing numerous barcodes
                   // appeared to be missing the starting mode. In these cases defaulting
