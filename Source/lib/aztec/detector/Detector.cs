@@ -97,6 +97,12 @@ namespace ZXing.Aztec.Internal
       /// <returns></returns>
       private bool extractParameters(ResultPoint[] bullsEyeCorners)
       {
+         if (!isValid(bullsEyeCorners[0]) || !isValid(bullsEyeCorners[1]) ||
+             !isValid(bullsEyeCorners[2]) || !isValid(bullsEyeCorners[3]))
+         {
+            return false;
+         }
+         
          int twoCenterLayers = 2 * nbCenterLayers;
 
          // Get the bits around the bull's eye
@@ -646,10 +652,6 @@ namespace ZXing.Aztec.Internal
          var result1 = new ResultPoint(centerx + ratio * dx, centery + ratio * dy);
          var result3 = new ResultPoint(centerx - ratio * dx, centery - ratio * dy);
 
-         if (!isValid(result0) || !isValid(result1) || !isValid(result2) || !isValid(result3))
-         {
-            return null;
-         }
          return new ResultPoint[] {result0, result1, result2, result3};
       }
 
