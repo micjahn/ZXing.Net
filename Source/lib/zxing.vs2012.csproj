@@ -50,7 +50,12 @@
     <Compile Include="aztec\detector\Detector.cs" />
     <Compile Include="aztec\encoder\AztecCode.cs" />
     <Compile Include="aztec\encoder\AztecEncodingOptions.cs" />
+    <Compile Include="aztec\encoder\BinaryShiftToken.cs" />
     <Compile Include="aztec\encoder\Encoder.cs" />
+    <Compile Include="aztec\encoder\HighLevelEncoder.cs" />
+    <Compile Include="aztec\encoder\SimpleToken.cs" />
+    <Compile Include="aztec\encoder\State.cs" />
+    <Compile Include="aztec\encoder\Token.cs" />
     <Compile Include="BarcodeFormat.cs" />
     <Compile Include="BarcodeReader.cs" />
     <Compile Include="BarcodeReaderGeneric.cs" />

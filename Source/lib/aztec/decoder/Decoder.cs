@@ -40,68 +40,78 @@ namespace ZXing.Aztec.Internal
          BINARY
       }
 
-      private static readonly int[] NB_BITS_COMPACT = {
-                                                         0, 104, 240, 408, 608
-                                                      };
+      private static readonly int[] NB_BITS_COMPACT =
+         {
+            0, 104, 240, 408, 608
+         };
 
-      private static readonly int[] NB_BITS = {
-                                                 0, 128, 288, 480, 704, 960, 1248, 1568, 1920, 2304, 2720, 3168, 3648, 4160, 4704, 5280, 5888, 6528,
-                                                 7200, 7904, 8640, 9408, 10208, 11040, 11904, 12800, 13728, 14688, 15680, 16704, 17760, 18848, 19968
-                                              };
+      private static readonly int[] NB_BITS =
+         {
+            0, 128, 288, 480, 704, 960, 1248, 1568, 1920, 2304, 2720, 3168, 3648, 4160, 4704, 5280, 5888, 6528,
+            7200, 7904, 8640, 9408, 10208, 11040, 11904, 12800, 13728, 14688, 15680, 16704, 17760, 18848, 19968
+         };
 
-      private static readonly int[] NB_DATABLOCK_COMPACT = {
-                                                              0, 17, 40, 51, 76
-                                                           };
+      private static readonly int[] NB_DATABLOCK_COMPACT =
+         {
+            0, 17, 40, 51, 76
+         };
 
-      private static readonly int[] NB_DATABLOCK = {
-                                                      0, 21, 48, 60, 88, 120, 156, 196, 240, 230, 272, 316, 364, 416, 470, 528, 588, 652, 720, 790, 864,
-                                                      940, 1020, 920, 992, 1066, 1144, 1224, 1306, 1392, 1480, 1570, 1664
-                                                   };
+      private static readonly int[] NB_DATABLOCK =
+         {
+            0, 21, 48, 60, 88, 120, 156, 196, 240, 230, 272, 316, 364, 416, 470, 528, 588, 652, 720, 790, 864,
+            940, 1020, 920, 992, 1066, 1144, 1224, 1306, 1392, 1480, 1570, 1664
+         };
 
-      private static readonly String[] UPPER_TABLE = {
-                                                        "CTRL_PS", " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" , "K", "L", "M", "N", "O", "P",
-                                                        "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "CTRL_LL", "CTRL_ML", "CTRL_DL", "CTRL_BS"
-                                                     };
+      private static readonly String[] UPPER_TABLE =
+         {
+            "CTRL_PS", " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P",
+            "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "CTRL_LL", "CTRL_ML", "CTRL_DL", "CTRL_BS"
+         };
 
-      private static readonly String[] LOWER_TABLE = {
-                                                        "CTRL_PS", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j" , "k", "l", "m", "n", "o", "p",
-                                                        "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "CTRL_US", "CTRL_ML", "CTRL_DL", "CTRL_BS"
-                                                     };
+      private static readonly String[] LOWER_TABLE =
+         {
+            "CTRL_PS", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p",
+            "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "CTRL_US", "CTRL_ML", "CTRL_DL", "CTRL_BS"
+         };
 
-      private static readonly String[] MIXED_TABLE = {
-                                               "CTRL_PS", " ", "\x1", "\x2", "\x3", "\x4", "\x5", "\x6", "\x7", "\b", "\t", "\n",
-                                               "\xD", "\f", "\r", "\x21", "\x22", "\x23", "\x24", "\x25", "@", "\\", "^" , "_",
-                                               "`", "|", "~", "\xB1", "CTRL_LL", "CTRL_UL", "CTRL_PL", "CTRL_BS"
-                                            };
+      private static readonly String[] MIXED_TABLE =
+         {
+            "CTRL_PS", " ", "\x1", "\x2", "\x3", "\x4", "\x5", "\x6", "\x7", "\b", "\t", "\n",
+            "\xD", "\f", "\r", "\x21", "\x22", "\x23", "\x24", "\x25", "@", "\\", "^", "_",
+            "`", "|", "~", "\xB1", "CTRL_LL", "CTRL_UL", "CTRL_PL", "CTRL_BS"
+         };
 
-      private static readonly String[] PUNCT_TABLE = {
-                                                        "", "\r", "\r\n", ". ", ", ", ": ", "!", "\"", "#", "$", "%", "&", "'", "(", ")",
-                                                        "*", "+", ",", "-", ".", "/", ":", ";", "<", "=", ">", "?", "[", "]", "{", "}", "CTRL_UL"
-                                                     };
+      private static readonly String[] PUNCT_TABLE =
+         {
+            "", "\r", "\r\n", ". ", ", ", ": ", "!", "\"", "#", "$", "%", "&", "'", "(", ")",
+            "*", "+", ",", "-", ".", "/", ":", ";", "<", "=", ">", "?", "[", "]", "{", "}", "CTRL_UL"
+         };
 
-      private static readonly String[] DIGIT_TABLE = {
-                                                        "CTRL_PS", " ", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" , ",", ".", "CTRL_UL", "CTRL_US"
-                                                     };
+      private static readonly String[] DIGIT_TABLE =
+         {
+            "CTRL_PS", " ", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ",", ".", "CTRL_UL", "CTRL_US"
+         };
 
       private static readonly IDictionary<Table, String[]> codeTables = new Dictionary<Table, String[]>
-                                                                 {
-                                                                    {Table.UPPER, UPPER_TABLE},
-                                                                    {Table.LOWER, LOWER_TABLE},
-                                                                    {Table.MIXED, MIXED_TABLE},
-                                                                    {Table.PUNCT, PUNCT_TABLE},
-                                                                    {Table.DIGIT, DIGIT_TABLE},
-                                                                    {Table.BINARY, null}
-                                                                 };
+         {
+            {Table.UPPER, UPPER_TABLE},
+            {Table.LOWER, LOWER_TABLE},
+            {Table.MIXED, MIXED_TABLE},
+            {Table.PUNCT, PUNCT_TABLE},
+            {Table.DIGIT, DIGIT_TABLE},
+            {Table.BINARY, null}
+         };
+
       private static readonly IDictionary<char, Table> codeTableMap = new Dictionary<char, Table>
-                                                                 {
-                                                                    {'U', Table.UPPER},
-                                                                    {'L', Table.LOWER},
-                                                                    {'M', Table.MIXED},
-                                                                    {'P', Table.PUNCT},
-                                                                    {'D', Table.DIGIT},
-                                                                    {'B', Table.BINARY}
-                                                                 };
-      
+         {
+            {'U', Table.UPPER},
+            {'L', Table.LOWER},
+            {'M', Table.MIXED},
+            {'P', Table.PUNCT},
+            {'D', Table.DIGIT},
+            {'B', Table.BINARY}
+         };
+
       private int numCodewords;
       private int codewordSize;
       private AztecDetectorResult ddata;
@@ -145,12 +155,22 @@ namespace ZXing.Aztec.Internal
       /// <returns>the decoded string</returns>
       private String getEncodedData(bool[] correctedBits)
       {
-         var endIndex = codewordSize * ddata.NbDatablocks - invertedBitCount;
+         int endIndex = codewordSize*ddata.NbDatablocks - invertedBitCount;
          if (endIndex > correctedBits.Length)
          {
             return null;
          }
+         return getEncodedData(correctedBits, endIndex);
+      }
 
+      // This method is used for testing the high-level encoder
+      public static String highLevelDecode(bool[] correctedBits)
+      {
+         return getEncodedData(correctedBits, correctedBits.Length);
+      }
+
+      private static String getEncodedData(bool[] correctedBits, int endIndex)
+      {
          var lastTable = Table.UPPER;
          var table = Table.UPPER;
          var strTable = UPPER_TABLE;
@@ -203,7 +223,7 @@ namespace ZXing.Aztec.Internal
                   }
 
                   code = readCode(correctedBits, startIndex, 8);
-                  result.Append((char)code);
+                  result.Append((char) code);
                   startIndex += 8;
                }
                binaryShift = false;
@@ -219,7 +239,7 @@ namespace ZXing.Aztec.Internal
                   code = readCode(correctedBits, startIndex, 8);
                   startIndex += 8;
 
-                  result.Append((char)code);
+                  result.Append((char) code);
                }
                else
                {
@@ -333,12 +353,12 @@ namespace ZXing.Aztec.Internal
 
          if (ddata.Compact)
          {
-            offset = NB_BITS_COMPACT[ddata.NbLayers] - numCodewords * codewordSize;
+            offset = NB_BITS_COMPACT[ddata.NbLayers] - numCodewords*codewordSize;
             numECCodewords = NB_DATABLOCK_COMPACT[ddata.NbLayers] - numDataCodewords;
          }
          else
          {
-            offset = NB_BITS[ddata.NbLayers] - numCodewords * codewordSize;
+            offset = NB_BITS[ddata.NbLayers] - numCodewords*codewordSize;
             numECCodewords = NB_DATABLOCK[ddata.NbLayers] - numDataCodewords;
          }
 
@@ -348,7 +368,7 @@ namespace ZXing.Aztec.Internal
             int flag = 1;
             for (int j = 1; j <= codewordSize; j++)
             {
-               if (rawbits[codewordSize * i + codewordSize - j + offset])
+               if (rawbits[codewordSize*i + codewordSize - j + offset])
                {
                   dataWords[i] += flag;
                }
@@ -367,7 +387,7 @@ namespace ZXing.Aztec.Internal
          offset = 0;
          invertedBitCount = 0;
 
-         bool[] correctedBits = new bool[numDataCodewords * codewordSize];
+         bool[] correctedBits = new bool[numDataCodewords*codewordSize];
          for (int i = 0; i < numDataCodewords; i++)
          {
 
@@ -407,11 +427,11 @@ namespace ZXing.Aztec.Internal
                      seriesColor = color;
                   }
 
-                  correctedBits[i * codewordSize + j - offset] = color;
+                  correctedBits[i*codewordSize + j - offset] = color;
 
                }
 
-               flag = (int)((uint)flag >> 1); // flag >>>= 1;
+               flag = (int) ((uint) flag >> 1); // flag >>>= 1;
             }
          }
 
@@ -455,23 +475,23 @@ namespace ZXing.Aztec.Internal
          {
 
             int flip = 0;
-            for (int i = 0; i < 2 * size - 4; i++)
+            for (int i = 0; i < 2*size - 4; i++)
             {
-               rawbits[rawbitsOffset + i] = matrix[matrixOffset + flip, matrixOffset + i / 2];
-               rawbits[rawbitsOffset + 2 * size - 4 + i] = matrix[matrixOffset + i / 2, matrixOffset + size - 1 - flip];
-               flip = (flip + 1) % 2;
+               rawbits[rawbitsOffset + i] = matrix[matrixOffset + flip, matrixOffset + i/2];
+               rawbits[rawbitsOffset + 2*size - 4 + i] = matrix[matrixOffset + i/2, matrixOffset + size - 1 - flip];
+               flip = (flip + 1)%2;
             }
 
             flip = 0;
-            for (int i = 2 * size + 1; i > 5; i--)
+            for (int i = 2*size + 1; i > 5; i--)
             {
-               rawbits[rawbitsOffset + 4 * size - 8 + (2 * size - i) + 1] = matrix[matrixOffset + size - 1 - flip, matrixOffset + i / 2 - 1];
-               rawbits[rawbitsOffset + 6 * size - 12 + (2 * size - i) + 1] = matrix[matrixOffset + i / 2 - 1, matrixOffset + flip];
-               flip = (flip + 1) % 2;
+               rawbits[rawbitsOffset + 4*size - 8 + (2*size - i) + 1] = matrix[matrixOffset + size - 1 - flip, matrixOffset + i/2 - 1];
+               rawbits[rawbitsOffset + 6*size - 12 + (2*size - i) + 1] = matrix[matrixOffset + i/2 - 1, matrixOffset + flip];
+               flip = (flip + 1)%2;
             }
 
             matrixOffset += 2;
-            rawbitsOffset += 8 * size - 16;
+            rawbitsOffset += 8*size - 16;
             layer--;
             size -= 4;
          }
@@ -487,7 +507,7 @@ namespace ZXing.Aztec.Internal
       /// <returns></returns>
       private static BitMatrix removeDashedLines(BitMatrix matrix)
       {
-         int nbDashed = 1 + 2 * ((matrix.Width - 1) / 2 / 16);
+         int nbDashed = 1 + 2*((matrix.Width - 1)/2/16);
          BitMatrix newMatrix = new BitMatrix(matrix.Width - nbDashed, matrix.Height - nbDashed);
 
          int nx = 0;
@@ -495,7 +515,7 @@ namespace ZXing.Aztec.Internal
          for (int x = 0; x < matrix.Width; x++)
          {
 
-            if ((matrix.Width / 2 - x) % 16 == 0)
+            if ((matrix.Width/2 - x)%16 == 0)
             {
                continue;
             }
@@ -504,7 +524,7 @@ namespace ZXing.Aztec.Internal
             for (int y = 0; y < matrix.Height; y++)
             {
 
-               if ((matrix.Width / 2 - y) % 16 == 0)
+               if ((matrix.Width/2 - y)%16 == 0)
                {
                   continue;
                }

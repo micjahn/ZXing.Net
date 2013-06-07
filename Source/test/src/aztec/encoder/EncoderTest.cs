@@ -30,17 +30,21 @@ namespace ZXing.Aztec.Test
     * Aztec 2D generator unit tests.
     *
     * @author Rustam Abdullaev
+    * @author Frank Yellin
     */
+
    [TestFixture]
    public sealed class EncoderTest
    {
       private static readonly Encoding LATIN_1 = Encoding.GetEncoding("ISO-8859-1");
+
       private static readonly Regex DOTX = new Regex("[^.X]"
 #if !SILVERLIGHT
-, RegexOptions.Compiled
+                                                     , RegexOptions.Compiled
 #endif
-);
-      public static readonly ResultPoint[] NO_POINTS = new ResultPoint[0];
+         );
+
+      private static readonly ResultPoint[] NO_POINTS = new ResultPoint[0];
 
       // real life tests
 
@@ -48,78 +52,78 @@ namespace ZXing.Aztec.Test
       public void testEncode1()
       {
          testEncode("This is an example Aztec symbol for Wikipedia.", true, 3,
-             "X     X X       X     X X     X     X         \r\n" +
-             "X         X     X X     X   X X   X X       X \r\n" +
-             "X X   X X X X X   X X X                 X     \r\n" +
-             "X X                 X X   X       X X X X X X \r\n" +
-             "    X X X   X   X     X X X X         X X     \r\n" +
-             "  X X X   X X X X   X     X   X     X X   X   \r\n" +
-             "        X X X X X     X X X X   X   X     X   \r\n" +
-             "X       X   X X X X X X X X X X X     X   X X \r\n" +
-             "X   X     X X X               X X X X   X X   \r\n" +
-             "X     X X   X X   X X X X X   X X   X   X X X \r\n" +
-             "X   X         X   X       X   X X X X       X \r\n" +
-             "X       X     X   X   X   X   X   X X   X     \r\n" +
-             "      X   X X X   X       X   X     X X X     \r\n" +
-             "    X X X X X X   X X X X X   X X X X X X   X \r\n" +
-             "  X X   X   X X               X X X   X X X X \r\n" +
-             "  X   X       X X X X X X X X X X X X   X X   \r\n" +
-             "  X X   X       X X X   X X X       X X       \r\n" +
-             "  X               X   X X     X     X X X     \r\n" +
-             "  X   X X X   X X   X   X X X X   X   X X X X \r\n" +
-             "    X   X   X X X   X   X   X X X X     X     \r\n" +
-             "        X               X                 X   \r\n" +
-             "        X X     X   X X   X   X   X       X X \r\n" +
-             "  X   X   X X       X   X         X X X     X \r\n");
+                    "X     X X       X     X X     X     X         \r\n" +
+                    "X         X     X X     X   X X   X X       X \r\n" +
+                    "X X   X X X X X   X X X                 X     \r\n" +
+                    "X X                 X X   X       X X X X X X \r\n" +
+                    "    X X X   X   X     X X X X         X X     \r\n" +
+                    "  X X X   X X X X   X     X   X     X X   X   \r\n" +
+                    "        X X X X X     X X X X   X   X     X   \r\n" +
+                    "X       X   X X X X X X X X X X X     X   X X \r\n" +
+                    "X   X     X X X               X X X X   X X   \r\n" +
+                    "X     X X   X X   X X X X X   X X   X   X X X \r\n" +
+                    "X   X         X   X       X   X X X X       X \r\n" +
+                    "X       X     X   X   X   X   X   X X   X     \r\n" +
+                    "      X   X X X   X       X   X     X X X     \r\n" +
+                    "    X X X X X X   X X X X X   X X X X X X   X \r\n" +
+                    "  X X   X   X X               X X X   X X X X \r\n" +
+                    "  X   X       X X X X X X X X X X X X   X X   \r\n" +
+                    "  X X   X       X X X   X X X       X X       \r\n" +
+                    "  X               X   X X     X     X X X     \r\n" +
+                    "  X   X X X   X X   X   X X X X   X   X X X X \r\n" +
+                    "    X   X   X X X   X   X   X X X X     X     \r\n" +
+                    "        X               X                 X   \r\n" +
+                    "        X X     X   X X   X   X   X       X X \r\n" +
+                    "  X   X   X X       X   X         X X X     X \r\n");
       }
 
       [Test]
       public void testEncode2()
       {
          testEncode("Aztec Code is a public domain 2D matrix barcode symbology" +
-              " of nominally square symbols built on a square grid with a " +
-              "distinctive square bullseye pattern at their center.", false, 6,
-             "        X X     X X     X     X     X   X X X         X   X         X   X X       \r\n" +
-             "  X       X X     X   X X   X X       X             X     X   X X   X           X \r\n" +
-             "  X   X X X     X   X   X X     X X X   X   X X               X X       X X     X \r\n" +
-             "X X X             X   X         X         X     X     X   X     X X       X   X   \r\n" +
-             "X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X \r\n" +
-             "    X X   X   X   X X X               X       X       X X     X X   X X       X   \r\n" +
-             "X X     X       X       X X X X   X   X X       X   X X   X       X X   X X   X   \r\n" +
-             "  X       X   X         X     X   X         X X       X         X     X   X   X X \r\n" +
-             "X X   X X   X   X   X X       X X     X X     X X X   X X   X X   X X   X X X     \r\n" +
-             "  X       X   X   X X     X X   X X         X X X   X     X     X X   X     X X X \r\n" +
-             "  X   X X X   X X X   X   X X   X   X   X X   X X   X X X X X   X X X   X X     X \r\n" +
-             "    X     X   X X   X   X X X X       X       X       X X X         X X     X   X \r\n" +
-             "X X X   X           X X X X     X X X X X X X X   X       X X X     X   X   X   X \r\n" +
-             "          X       X   X X X X     X   X           X   X X       X                 \r\n" +
-             "  X     X X   X   X X   X X X X X X X X X X X X X X X X   X X       X   X X X     \r\n" +
-             "    X X           X X       X                       X X X X X X             X X X \r\n" +
-             "        X   X X   X X X   X X   X X X X X X X X X   X   X               X X X X   \r\n" +
-             "          X X X       X     X   X               X   X X   X       X X X           \r\n" +
-             "X X     X     X   X     X X X   X   X X X X X   X   X X       X         X   X X X \r\n" +
-             "X X X X       X     X   X X X   X   X       X   X   X       X X X   X X       X X \r\n" +
-             "X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X \r\n" +
-             "    X     X       X     X   X   X   X       X   X   X       X                     \r\n" +
-             "        X X     X X X X X   X   X   X X X X X   X   X X X     X     X   X         \r\n" +
-             "X     X   X   X   X X X X   X   X               X   X X X   X X     X     X   X   \r\n" +
-             "  X   X X X   X     X X X X X   X X X X X X X X X   X X X X X           X X X X   \r\n" +
-             "    X X   X   X     X X     X                       X X X X       X   X     X     \r\n" +
-             "    X X X X   X       X     X X X X X X X X X X X X X X       X     X   X X   X X \r\n" +
-             "            X   X X     X     X X X X X     X X X       X X X X X   X         X   \r\n" +
-             "X       X         X           X X   X X X X   X X   X X X     X X   X   X       X \r\n" +
-             "X     X       X X     X     X X     X             X X   X       X     X   X X     \r\n" +
-             "  X X X X X       X   X     X           X     X   X X X X   X X X X     X X   X X \r\n" +
-             "X             X   X X X     X X       X       X X   X   X X     X X X         X X \r\n" +
-             "    X   X X       X     X       X   X X X X X X   X X   X X X X X X X X X   X X   \r\n" +
-             "    X         X X   X       X     X   X   X       X     X X X     X       X X     \r\n" +
-             "X     X X     X X X X X X             X X X   X               X   X     X       X \r\n" +
-             "X   X X     X               X X X X X     X X     X X X X X X X X     X   X   X X \r\n" +
-             "X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X \r\n" +
-             "X           X     X X X X     X     X         X         X   X       X X   X X X   \r\n" +
-             "X   X   X X   X X X   X         X X     X X X X     X X   X   X     X   X       X \r\n" +
-             "      X     X     X     X X     X   X X   X X   X         X X       X       X   X \r\n" +
-             "X       X           X   X   X     X X   X               X     X     X X X         \r\n");
+                    " of nominally square symbols built on a square grid with a " +
+                    "distinctive square bullseye pattern at their center.", false, 6,
+                    "        X X     X X     X     X     X   X X X         X   X         X   X X       \r\n" +
+                    "  X       X X     X   X X   X X       X             X     X   X X   X           X \r\n" +
+                    "  X   X X X     X   X   X X     X X X   X   X X               X X       X X     X \r\n" +
+                    "X X X             X   X         X         X     X     X   X     X X       X   X   \r\n" +
+                    "X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X \r\n" +
+                    "    X X   X   X   X X X               X       X       X X     X X   X X       X   \r\n" +
+                    "X X     X       X       X X X X   X   X X       X   X X   X       X X   X X   X   \r\n" +
+                    "  X       X   X     X X   X   X X   X X   X X X X X X   X X           X   X   X X \r\n" +
+                    "X X   X X   X   X X X X   X X X X X X X X   X   X       X X   X X X X   X X X     \r\n" +
+                    "  X       X   X     X       X X     X X   X   X   X     X X   X X X   X     X X X \r\n" +
+                    "  X   X X X   X X       X X X         X X           X   X   X   X X X   X X     X \r\n" +
+                    "    X     X   X X     X X X X     X   X     X X X X   X X   X X   X X X     X   X \r\n" +
+                    "X X X   X             X         X X X X X   X   X X   X   X   X X   X   X   X   X \r\n" +
+                    "          X       X X X   X X     X   X           X   X X X X   X X               \r\n" +
+                    "  X     X X   X   X       X X X X X X X X X X X X X X X   X   X X   X   X X X     \r\n" +
+                    "    X X                 X   X                       X X   X       X         X X X \r\n" +
+                    "        X   X X   X X X X X X   X X X X X X X X X   X     X X           X X X X   \r\n" +
+                    "          X X X   X     X   X   X               X   X X     X X X   X X           \r\n" +
+                    "X X     X     X   X   X   X X   X   X X X X X   X   X X X X X X X       X   X X X \r\n" +
+                    "X X X X       X       X   X X   X   X       X   X   X     X X X     X X       X X \r\n" +
+                    "X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X \r\n" +
+                    "    X     X       X         X   X   X       X   X   X     X   X X                 \r\n" +
+                    "        X X     X X X X X   X   X   X X X X X   X   X X X     X X X X   X         \r\n" +
+                    "X     X   X   X         X   X   X               X   X X   X X   X X X     X   X   \r\n" +
+                    "  X   X X X   X   X X   X X X   X X X X X X X X X   X X         X X     X X X X   \r\n" +
+                    "    X X   X   X   X X X     X                       X X X   X X   X   X     X     \r\n" +
+                    "    X X X X   X         X   X X X X X X X X X X X X X X   X       X X   X X   X X \r\n" +
+                    "            X   X   X X       X X X X X     X X X       X       X X X         X   \r\n" +
+                    "X       X         X   X X X X   X     X X     X X     X X           X   X       X \r\n" +
+                    "X     X       X X X X X     X   X X X X   X X X     X       X X X X   X   X X   X \r\n" +
+                    "  X X X X X               X     X X X   X       X X   X X   X X X X     X X       \r\n" +
+                    "X             X         X   X X   X X     X     X     X   X   X X X X             \r\n" +
+                    "    X   X X       X     X       X   X X X X X X   X X   X X X X X X X X X   X   X \r\n" +
+                    "    X         X X   X       X     X   X   X       X     X X X     X       X X X X \r\n" +
+                    "X     X X     X X X X X X             X X X   X               X   X     X     X X \r\n" +
+                    "X   X X     X               X X X X X     X X     X X X X X X X X     X   X   X X \r\n" +
+                    "X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X   X \r\n" +
+                    "X           X     X X X X     X     X         X         X   X       X X   X X X   \r\n" +
+                    "X   X   X X   X X X   X         X X     X X X X     X X   X   X     X   X       X \r\n" +
+                    "      X     X     X     X X     X   X X   X X   X         X X       X       X   X \r\n" +
+                    "X       X           X   X   X     X X   X               X     X     X X X         \r\n");
       }
 
       [Test]
@@ -169,87 +173,89 @@ namespace ZXing.Aztec.Test
       [Test]
       public void testEncodeDecode5()
       {
-         testEncodeDecode("http://test/~!@#*^%&)__ ;:'\"[]{}\\|-+-=`1029384756<>/?abc", false, 5);
+         testEncodeDecode("http://test/~!@#*^%&)__ ;:'\"[]{}\\|-+-=`1029384756<>/?abc"
+                          + "Four score and seven our forefathers brought forth", false, 5);
+
       }
 
       [Test]
       public void testEncodeDecode10()
       {
          testEncodeDecode("In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus quis diam" +
-             " cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum" +
-             " est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue" +
-             " auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla" +
-             " ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id" +
-             " elementum sapien dolor et diam.", false, 10);
+                          " cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum" +
+                          " est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue" +
+                          " auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla" +
+                          " ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id" +
+                          " elementum sapien dolor et diam.", false, 10);
       }
 
       [Test]
       public void testEncodeDecode23()
       {
          testEncodeDecode("In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus quis diam" +
-             " cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum" +
-             " est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue" +
-             " auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla" +
-             " ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id" +
-             " elementum sapien dolor et diam. Donec ac nunc sodales elit placerat eleifend." +
-             " Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra fringilla, risus" +
-             " justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo diam, lobortis eu" +
-             " tristique ac, p.In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus" +
-             " quis diam cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec" +
-             " laoreet rutrum est, nec convallis mauris condimentum sit amet. Phasellus gravida," +
-             " justo et congue auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec" +
-             " lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar" +
-             " nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit placerat" +
-             " eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra" +
-             " fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo" +
-             " diam, lobortis eu tristique ac, p. In ut magna vel mauris malesuada dictum. Nulla" +
-             " ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum" +
-             " sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet." +
-             " Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget hendrerit" +
-             " felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo" +
-             " erat pulvinar nisi, id elementum sapien dolor et diam.", false, 23);
+                          " cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum" +
+                          " est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue" +
+                          " auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla" +
+                          " ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id" +
+                          " elementum sapien dolor et diam. Donec ac nunc sodales elit placerat eleifend." +
+                          " Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra fringilla, risus" +
+                          " justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo diam, lobortis eu" +
+                          " tristique ac, p.In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus" +
+                          " quis diam cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec" +
+                          " laoreet rutrum est, nec convallis mauris condimentum sit amet. Phasellus gravida," +
+                          " justo et congue auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec" +
+                          " lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar" +
+                          " nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit placerat" +
+                          " eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra" +
+                          " fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo" +
+                          " diam, lobortis eu tristique ac, p. In ut magna vel mauris malesuada dictum. Nulla" +
+                          " ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum" +
+                          " sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet." +
+                          " Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget hendrerit" +
+                          " felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo" +
+                          " erat pulvinar nisi, id elementum sapien dolor et diam.", false, 23);
       }
 
       [Test]
       public void testEncodeDecode31()
       {
          testEncodeDecode("In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus quis diam" +
-           " cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum" +
-           " est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue" +
-           " auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla" +
-           " ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id" +
-           " elementum sapien dolor et diam. Donec ac nunc sodales elit placerat eleifend." +
-           " Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra fringilla, risus" +
-           " justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo diam, lobortis eu" +
-           " tristique ac, p.In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus" +
-           " quis diam cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec" +
-           " laoreet rutrum est, nec convallis mauris condimentum sit amet. Phasellus gravida," +
-           " justo et congue auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec" +
-           " lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar" +
-           " nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit placerat" +
-           " eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra" +
-           " fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo" +
-           " diam, lobortis eu tristique ac, p. In ut magna vel mauris malesuada dictum. Nulla" +
-           " ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum" +
-           " sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet." +
-           " Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget hendrerit" +
-           " felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo" +
-           " erat pulvinar nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit" +
-           " placerat eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at" +
-           " pharetra fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est." +
-           " Ut justo diam, lobortis eu tristique ac, p.In ut magna vel mauris malesuada" +
-           " dictum. Nulla ullamcorper metus quis diam cursus facilisis. Sed mollis quam id" +
-           " justo rutrum sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum" +
-           " sit amet. Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat," +
-           " eget hendrerit felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet" +
-           " laoreet, justo erat pulvinar nisi, id elementum sapien dolor et diam. Donec ac" +
-           " nunc sodales elit placerat eleifend. Sed ornare luctus ornare. Vestibulum vehicula," +
-           " massa at pharetra fringilla, risus justo faucibus erat, nec porttitor nibh tellus" +
-           " sed est. Ut justo diam, lobortis eu tris. In ut magna vel mauris malesuada dictum." +
-           " Nulla ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum" +
-           " sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet." +
-           " Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget" +
-           " hendrerit felis turpis nec lorem.", false, 31);
+                          " cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec laoreet rutrum" +
+                          " est, nec convallis mauris condimentum sit amet. Phasellus gravida, justo et congue" +
+                          " auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec lorem. Nulla" +
+                          " ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar nisi, id" +
+                          " elementum sapien dolor et diam. Donec ac nunc sodales elit placerat eleifend." +
+                          " Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra fringilla, risus" +
+                          " justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo diam, lobortis eu" +
+                          " tristique ac, p.In ut magna vel mauris malesuada dictum. Nulla ullamcorper metus" +
+                          " quis diam cursus facilisis. Sed mollis quam id justo rutrum sagittis. Donec" +
+                          " laoreet rutrum est, nec convallis mauris condimentum sit amet. Phasellus gravida," +
+                          " justo et congue auctor, nisi ipsum viverra erat, eget hendrerit felis turpis nec" +
+                          " lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo erat pulvinar" +
+                          " nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit placerat" +
+                          " eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at pharetra" +
+                          " fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est. Ut justo" +
+                          " diam, lobortis eu tristique ac, p. In ut magna vel mauris malesuada dictum. Nulla" +
+                          " ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum" +
+                          " sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet." +
+                          " Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget hendrerit" +
+                          " felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet laoreet, justo" +
+                          " erat pulvinar nisi, id elementum sapien dolor et diam. Donec ac nunc sodales elit" +
+                          " placerat eleifend. Sed ornare luctus ornare. Vestibulum vehicula, massa at" +
+                          " pharetra fringilla, risus justo faucibus erat, nec porttitor nibh tellus sed est." +
+                          " Ut justo diam, lobortis eu tristique ac, p.In ut magna vel mauris malesuada" +
+                          " dictum. Nulla ullamcorper metus quis diam cursus facilisis. Sed mollis quam id" +
+                          " justo rutrum sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum" +
+                          " sit amet. Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat," +
+                          " eget hendrerit felis turpis nec lorem. Nulla ultrices, elit pellentesque aliquet" +
+                          " laoreet, justo erat pulvinar nisi, id elementum sapien dolor et diam. Donec ac" +
+                          " nunc sodales elit placerat eleifend. Sed ornare luctus ornare. Vestibulum vehicula," +
+                          " massa at pharetra fringilla, risus justo faucibus erat, nec porttitor nibh tellus" +
+                          " sed est. Ut justo diam, lobortis eu tris. In ut magna vel mauris malesuada dictum." +
+                          " Nulla ullamcorper metus quis diam cursus facilisis. Sed mollis quam id justo rutrum" +
+                          " sagittis. Donec laoreet rutrum est, nec convallis mauris condimentum sit amet." +
+                          " Phasellus gravida, justo et congue auctor, nisi ipsum viverra erat, eget" +
+                          " hendrerit felis turpis nec lorem.", false, 31);
       }
 
       [Test]
@@ -265,35 +271,51 @@ namespace ZXing.Aztec.Test
       public void testStuffBits()
       {
          testStuffBits(5, ".X.X. X.X.X .X.X.",
-             ".X.X. X.X.X .X.X.");
+                       ".X.X. X.X.X .X.X.");
          testStuffBits(5, ".X.X. ..... .X.X",
-             ".X.X. ....X ..X.X");
+                       ".X.X. ....X ..X.X");
          testStuffBits(3, "XX. ... ... ..X XXX .X. ..",
-             "XX. ..X ..X ..X ..X .XX XX. .X. ..X");
+                       "XX. ..X ..X ..X ..X .XX XX. .X. ..X");
          testStuffBits(6, ".X.X.. ...... ..X.XX",
-             ".X.X.. .....X. ..X.XX XXXX.");
+                       ".X.X.. .....X. ..X.XX XXXX.");
          testStuffBits(6, ".X.X.. ...... ...... ..X.X.",
-             ".X.X.. .....X .....X ....X. X.XXXX");
+                       ".X.X.. .....X .....X ....X. X.XXXX");
          testStuffBits(6, ".X.X.. XXXXXX ...... ..X.XX",
-             ".X.X.. XXXXX. X..... ...X.X XXXXX.");
+                       ".X.X.. XXXXX. X..... ...X.X XXXXX.");
          testStuffBits(6,
-             "...... ..XXXX X..XX. .X.... .X.X.X .....X .X.... ...X.X .....X ....XX ..X... ....X. X..XXX X.XX.X",
-             ".....X ...XXX XX..XX ..X... ..X.X. X..... X.X... ....X. X..... X....X X..X.. .....X X.X..X XXX.XX .XXXXX");
+                       "...... ..XXXX X..XX. .X.... .X.X.X .....X .X.... ...X.X .....X ....XX ..X... ....X. X..XXX X.XX.X",
+                       ".....X ...XXX XX..XX ..X... ..X.X. X..... X.X... ....X. X..... X....X X..X.. .....X X.X..X XXX.XX .XXXXX");
       }
 
       [Test]
       public void testHighLevelEncode()
       {
          testHighLevelEncodeString("A. b.",
-             "...X. ..... ...XX XXX.. ...XX XXXX. XX.X");
+                                   // 'A'  P/S   '. ' L/L    b    D/L    '.'
+                                   "...X. ..... ...XX XXX.. ...XX XXXX. XX.X");
          testHighLevelEncodeString("Lorem ipsum.",
-             ".XX.X XXX.. X.... X..XX ..XX. .XXX. ....X .X.X. X...X X.X.. X.XX. .XXX. XXXX. XX.X");
+                                   // 'L'  L/L   'o'   'r'   'e'   'm'   ' '   'i'   'p'   's'   'u'   'm'   D/L   '.'
+                                   ".XX.X XXX.. X.... X..XX ..XX. .XXX. ....X .X.X. X...X X.X.. X.XX. .XXX. XXXX. XX.X");
          testHighLevelEncodeString("Lo. Test 123.",
-             ".XX.X XXX.. X.... ..... ...XX XXX.. X.X.X ..XX. X.X.. X.X.X ....X XXXX. ..XX .X.. .X.X XX.X");
+                                   // 'L'  L/L   'o'   P/S   '. '  U/S   'T'   'e'   's'   't'    D/L   ' '  '1'  '2'  '3'  '.'
+                                   ".XX.X XXX.. X.... ..... ...XX XXX.. X.X.X ..XX. X.X.. X.X.X  XXXX. ...X ..XX .X.. .X.X XX.X");
          testHighLevelEncodeString("Lo...x",
-             ".XX.X XXX.. X.... XXXX. XX.X XX.X XX.X XXX. XXX.. XX..X");
+                                   // 'L'  L/L   'o'   D/L   '.'  '.'  '.'  U/L  L/L   'x'
+                                   ".XX.X XXX.. X.... XXXX. XX.X XX.X XX.X XXX. XXX.. XX..X");
          testHighLevelEncodeString(". x://abc/.",
-             "..... ...XX XXX.. XX..X ..... X.X.X ..... X.X.. ..... X.X.. ...X. ...XX ..X.. ..... X.X.. XXXX. XX.X");
+                                   //P/S   '. '  L/L   'x'   P/S   ':'   P/S   '/'   P/S   '/'   'a'   'b'   'c'   P/S   '/'   D/L   '.'
+                                   "..... ...XX XXX.. XX..X ..... X.X.X ..... X.X.. ..... X.X.. ...X. ...XX ..X.. ..... X.X.. XXXX. XX.X");
+         // Uses Binary/Shift rather than Lower/Shift to save two bits.
+         testHighLevelEncodeString("ABCdEFG",
+                                   //'A'   'B'   'C'   B/S    =1    'd'     'E'   'F'   'G'
+                                   "...X. ...XX ..X.. XXXXX ....X .XX..X.. ..XX. ..XXX .X...");
+
+         testHighLevelEncodeString(
+            // Found on an airline boarding pass.  Several stretches of Binary shift are
+            // necessary to keep the bitcount so low.
+            "09  UAG    ^160MEUCIQC0sYS/HpKxnBELR1uB85R20OoqqwFGa0q2uEi"
+            + "Ygh6utAIgLl1aBVM4EOTQtMQQYH9M2Z3Dp4qnA/fwWuQ+M8L3V8U=",
+            823);
       }
 
       [Test]
@@ -301,42 +323,85 @@ namespace ZXing.Aztec.Test
       {
          // binary short form single byte
          testHighLevelEncodeString("N\0N",
-             ".XXXX XXXXX ...X. ........ .X..XXX.");
+                                   // 'N'  B/S    =1   '\0'      N
+                                   ".XXXX XXXXX ....X ........ .XXXX"); // Encode "N" in UPPER
+
+         testHighLevelEncodeString("N\0n",
+                                   // 'N'  B/S    =2   '\0'       'n'
+                                   ".XXXX XXXXX ...X. ........ .XX.XXX."); // Encode "n" in BINARY
+
          // binary short form consecutive bytes
          testHighLevelEncodeString("N\0\u0080 A",
-             ".XXXX XXXXX ...X. ........ X....... ....X ...X.");
+                                   // 'N'  B/S    =2    '\0'    \u0080   ' '  'A'
+                                   ".XXXX XXXXX ...X. ........ X....... ....X ...X.");
+
          // binary skipping over single character
          testHighLevelEncodeString("\0a\u00FF\u0080 A",
-             "XXXXX ..X.. ........ .XX....X XXXXXXXX X....... ....X ...X.");
-         // binary long form optimization into 2 short forms (saves 1 bit)
-         testHighLevelEncodeString(
-             "\0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \0\0\0\0 \u0082\u0084\u0088\0 \0\0\0\0 \0\0\0\0 ",
-             "XXXXX XXXXX ........ ........ ........ ........ ..X....." +
-             " ........ ........ ........ ........ ..X....." +
-             " ........ ........ ........ ........ ..X....." +
-             " ........ ........ ........ ........ ..X....." +
-             " ........ ........ ........ ........ ..X....." +
-             " ........ ........ ........ ........ ..X....." +
-             " X.....X. XXXXX .XXX. X....X.. X...X... ........ ..X....." +
-             " ........ ........ ........ ........ ..X....." +
-             " ........ ........ ........ ........ ..X.....");
-         // binary long form
-         testHighLevelEncodeString(
-             "\0\0\0\0 \0\0\u0001\0 \0\0\u0002\0 \0\0\u0003\0 \0\0\u0004\0 \0\0\u0005\0 \0\0\u0006\0 \0\0\u0007\0 \0\0\u0008\0 \0\0\u0009\0 \0\0\u00F0\0 \0\0\u00F1\0 \0\0\u00F2\0A",
-             "XXXXX ..... .....X...X. ........ ........ ........ ........ ..X....." +
-             " ........ ........ .......X ........ ..X....." +
-             " ........ ........ ......X. ........ ..X....." +
-             " ........ ........ ......XX ........ ..X....." +
-             " ........ ........ .....X.. ........ ..X....." +
-             " ........ ........ .....X.X ........ ..X....." +
-             " ........ ........ .....XX. ........ ..X....." +
-             " ........ ........ .....XXX ........ ..X....." +
-             " ........ ........ ....X... ........ ..X....." +
-             " ........ ........ ....X..X ........ ..X....." +
-             " ........ ........ XXXX.... ........ ..X....." +
-             " ........ ........ XXXX...X ........ ..X....." +
-             " ........ ........ XXXX..X. ........ .X.....X");
+                                   // B/S  =4    '\0'      'a'     '\3ff'   '\200'   ' '   'A'
+                                   "XXXXX ..X.. ........ .XX....X XXXXXXXX X....... ....X ...X.");
+
+         // getting into binary mode from digit mode
+         testHighLevelEncodeString("1234\0",
+                                   //D/L   '1'  '2'  '3'  '4'  U/L  B/S    =1    \0
+                                   "XXXX. ..XX .X.. .X.X .XX. XXX. XXXXX ....X ........"
+            );
+
+         // Create a string in which every character requires binary
+         StringBuilder sbBuild = new StringBuilder();
+         for (int i = 0; i <= 3000; i++)
+         {
+            sbBuild.Append((char) (128 + (i%30)));
+         }
+         string sb = sbBuild.ToString();
+         // Test the output generated by Binary/Switch, particularly near the
+         // places where the encoding changes: 31, 62, and 2047+31=2078
+         foreach (int i in new int[]
+            {
+               1, 2, 3, 10, 29, 30, 31, 32, 33,
+               60, 61, 62, 63, 64, 2076, 2077, 2078, 2079, 2080, 3000
+            })
+         {
+            // This is the expected length of a binary string of length "i"
+            int expectedLength = (8*i) +
+                                 ((i <= 31) ? 10 : (i <= 62) ? 20 : (i <= 2078) ? 21 : 31);
+            // Verify that we are correct about the length.
+            testHighLevelEncodeString(sb.Substring(0, i), expectedLength);
+            // A lower case letter at the beginning will be merged into binary mode
+            testHighLevelEncodeString('a' + sb.Substring(0, i - 1), expectedLength);
+            // A lower case letter at the end will also be merged into binary mode
+            testHighLevelEncodeString(sb.Substring(0, i - 1) + 'a', expectedLength);
+            // A lower case letter at both ends will enough to latch us into LOWER.
+            testHighLevelEncodeString('a' + sb.Substring(0, i) + 'b', expectedLength + 15);
+         }
       }
+
+      [Test]
+      public void testHighLevelEncodePairs()
+      {
+         // Typical usage
+         testHighLevelEncodeString("ABC. DEF\r\n",
+                                   //  A     B    C    P/S   .<sp>   D    E     F    P/S   \r\n
+                                   "...X. ...XX ..X.. ..... ...XX ..X.X ..XX. ..XXX ..... ...X.");
+
+         // We should latch to PUNCT mode, rather than shift.  Also check all pairs
+         testHighLevelEncodeString("A. : , \r\n",
+                                   // 'A'    M/L   P/L   ". "  ": "   ", " "\r\n"
+                                   "...X. XXX.X XXXX. ...XX ..X.X  ..X.. ...X.");
+
+         // Latch to DIGIT rather than shift to PUNCT
+         testHighLevelEncodeString("A. 1234",
+                                   // 'A'  D/L   '.'  ' '  '1' '2'   '3'  '4'
+                                   "...X. XXXX. XX.X ...X ..XX .X.. .X.X .X X."
+            );
+         // Don't bother leaving Binary Shift.
+         //testHighLevelEncodeString("A\200. \200",
+         //                          // 'A'  B/S    =2    \200      "."     " "     \200
+         //                          "...X. XXXXX ..X.. X....... ..X.XXX. ..X..... X.......");
+         //testHighLevelEncodeString("A" + 128 + ". " + 128,
+         //   // 'A'  B/S    =2    \200      "."     " "     \200
+         //                          "...X. XXXXX ..X.. X....... ..X.XXX. ..X..... X.......");
+      }
+
 
       // Helper routines
 
@@ -356,7 +421,7 @@ namespace ZXing.Aztec.Test
          Assert.AreEqual(layers, aztec.Layers, "Unexpected nr. of layers");
          BitMatrix matrix = aztec.Matrix;
          AztecDetectorResult r =
-             new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers);
+            new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers);
          DecoderResult res = new Internal.Decoder().decode(r);
          Assert.AreEqual(data, res.Text);
          // Check error correction by introducing a few minor errors
@@ -382,7 +447,7 @@ namespace ZXing.Aztec.Test
          var byteData = Encoding.GetEncoding(charset).GetBytes(data);
          var expectedData = LATIN_1.GetString(byteData, 0, byteData.Length);
          var hints = new Dictionary<EncodeHintType, Object>()
-         ;
+            ;
          hints[EncodeHintType.CHARACTER_SET] = charset;
          hints[EncodeHintType.ERROR_CORRECTION] = eccPercent;
          var writer = new AztecWriter();
@@ -396,17 +461,17 @@ namespace ZXing.Aztec.Test
          var res = new Internal.Decoder().decode(r);
          Assert.AreEqual(expectedData, res.Text);
          // Check error correction by introducing up to eccPercent errors
-         int ecWords = aztec.CodeWords * eccPercent / 100;
+         int ecWords = aztec.CodeWords*eccPercent/100;
          var random = getPseudoRandom();
          for (int i = 0; i < ecWords; i++)
          {
             // don't touch the core
             int x = random.Next(1) > 0
-                       ? random.Next(aztec.Layers * 2)
-                       : matrix.Width - 1 - random.Next(aztec.Layers * 2);
+                       ? random.Next(aztec.Layers*2)
+                       : matrix.Width - 1 - random.Next(aztec.Layers*2);
             int y = random.Next(1) > 0
-                       ? random.Next(aztec.Layers * 2)
-                       : matrix.Height - 1 - random.Next(aztec.Layers * 2);
+                       ? random.Next(aztec.Layers*2)
+                       : matrix.Height - 1 - random.Next(aztec.Layers*2);
             matrix.flip(x, y);
          }
          r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers);
@@ -414,10 +479,10 @@ namespace ZXing.Aztec.Test
          Assert.AreEqual(expectedData, res.Text);
       }
 
-      static Random getPseudoRandom()
+      private static Random getPseudoRandom()
       {
          //return new SecureRandom(new byte[] {(byte) 0xDE, (byte) 0xAD, (byte) 0xBE, (byte) 0xEF});
-         return new Random((int)DateTime.Now.Ticks);
+         return new Random((int) DateTime.Now.Ticks);
       }
 
       private static void testModeMessage(bool compact, int layers, int words, String expected)
@@ -445,11 +510,30 @@ namespace ZXing.Aztec.Test
          return @in;
       }
 
+      private static bool[] toBooleanArray(BitArray bitArray)
+      {
+         bool[] result = new bool[bitArray.Size];
+         for (int i = 0; i < result.Length; i++)
+         {
+            result[i] = bitArray[i];
+         }
+         return result;
+      }
+
       private static void testHighLevelEncodeString(String s, String expectedBits)
       {
-         BitArray bits = Internal.Encoder.highLevelEncode(LATIN_1.GetBytes(s));
+         BitArray bits = new HighLevelEncoder(LATIN_1.GetBytes(s)).encode();
          String receivedBits = bits.ToString().Replace(" ", "");
          Assert.AreEqual(expectedBits.Replace(" ", ""), receivedBits, "highLevelEncode() failed for input string: " + s);
+         Assert.AreEqual(s, Internal.Decoder.highLevelDecode(toBooleanArray(bits)));
+      }
+
+      private static void testHighLevelEncodeString(String s, int receivedBits)
+      {
+         BitArray bits = new HighLevelEncoder(LATIN_1.GetBytes(s)).encode();
+         int receivedBitCount = bits.ToString().Replace(" ", "").Length;
+         Assert.AreEqual(receivedBitCount, receivedBitCount, "highLevelEncode() failed for input string: " + s);
+         Assert.AreEqual(s, Internal.Decoder.highLevelDecode(toBooleanArray(bits)));
       }
    }
 }

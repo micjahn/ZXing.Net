@@ -29,84 +29,11 @@ namespace ZXing.Aztec.Internal
    {
       public const int DEFAULT_EC_PERCENT = 33; // default minimal percentage of error check words
 
-      private const int TABLE_UPPER = 0; // 5 bits
-      private const int TABLE_LOWER = 1; // 5 bits
-      private const int TABLE_DIGIT = 2; // 4 bits
-      private const int TABLE_MIXED = 3; // 5 bits
-      private const int TABLE_PUNCT = 4; // 5 bits
-      private const int TABLE_BINARY = 5; // 8 bits
-
-      private static readonly int[][] CHAR_MAP = new[] { new int[256], new int[256], new int[256], new int[256], new int[256] }; // reverse mapping ASCII -> table offset, per table
-      private static readonly int[][] SHIFT_TABLE = new[] { new int[6], new int[6], new int[6], new int[6], new int[6], new int[6] }; // mode shift codes, per table
-      private static readonly int[][] LATCH_TABLE = new[] { new int[6], new int[6], new int[6], new int[6], new int[6], new int[6] }; // mode latch codes, per table
       private static readonly int[] NB_BITS; // total bits per compact symbol for a given number of layers
       private static readonly int[] NB_BITS_COMPACT; // total bits per full symbol for a given number of layers
 
       static Encoder()
       {
-         CHAR_MAP[TABLE_UPPER][' '] = 1;
-         for (int c = 'A'; c <= 'Z'; c++)
-         {
-            CHAR_MAP[TABLE_UPPER][c] = c - 'A' + 2;
-         }
-         CHAR_MAP[TABLE_LOWER][' '] = 1;
-         for (int c = 'a'; c <= 'z'; c++)
-         {
-            CHAR_MAP[TABLE_LOWER][c] = c - 'a' + 2;
-         }
-         CHAR_MAP[TABLE_DIGIT][' '] = 1;
-         for (int c = '0'; c <= '9'; c++)
-         {
-            CHAR_MAP[TABLE_DIGIT][c] = c - '0' + 2;
-         }
-         CHAR_MAP[TABLE_DIGIT][','] = 12;
-         CHAR_MAP[TABLE_DIGIT]['.'] = 13;
-         int[] mixedTable = {
-                               '\0', ' ', 1, 2, 3, 4, 5, 6, 7, '\b', '\t', '\n', 11, '\f', '\r',
-                               27, 28, 29, 30, 31, '@', '\\', '^', '_', '`', '|', '~', 127
-                            };
-         for (int i = 0; i < mixedTable.Length; i++)
-         {
-            CHAR_MAP[TABLE_MIXED][mixedTable[i]] = i;
-         }
-         int[] punctTable = {
-                               '\0', '\r', '\0', '\0', '\0', '\0', '!', '\'', '#', '$', '%', '&', '\'', '(', ')', '*', '+',
-                               ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '[', ']', '{', '}'
-                            };
-         for (int i = 0; i < punctTable.Length; i++)
-         {
-            if (punctTable[i] > 0)
-            {
-               CHAR_MAP[TABLE_PUNCT][punctTable[i]] = i;
-            }
-         }
-         foreach (int[] table in SHIFT_TABLE)
-         {
-            SupportClass.Fill(table, -1);
-         }
-         foreach (int[] table in LATCH_TABLE)
-         {
-            SupportClass.Fill(table, -1);
-         }
-         SHIFT_TABLE[TABLE_UPPER][TABLE_PUNCT] = 0;
-         LATCH_TABLE[TABLE_UPPER][TABLE_LOWER] = 28;
-         LATCH_TABLE[TABLE_UPPER][TABLE_MIXED] = 29;
-         LATCH_TABLE[TABLE_UPPER][TABLE_DIGIT] = 30;
-         SHIFT_TABLE[TABLE_UPPER][TABLE_BINARY] = 31;
-         SHIFT_TABLE[TABLE_LOWER][TABLE_PUNCT] = 0;
-         SHIFT_TABLE[TABLE_LOWER][TABLE_UPPER] = 28;
-         LATCH_TABLE[TABLE_LOWER][TABLE_MIXED] = 29;
-         LATCH_TABLE[TABLE_LOWER][TABLE_DIGIT] = 30;
-         SHIFT_TABLE[TABLE_LOWER][TABLE_BINARY] = 31;
-         SHIFT_TABLE[TABLE_MIXED][TABLE_PUNCT] = 0;
-         LATCH_TABLE[TABLE_MIXED][TABLE_LOWER] = 28;
-         LATCH_TABLE[TABLE_MIXED][TABLE_UPPER] = 29;
-         LATCH_TABLE[TABLE_MIXED][TABLE_PUNCT] = 30;
-         SHIFT_TABLE[TABLE_MIXED][TABLE_BINARY] = 31;
-         LATCH_TABLE[TABLE_PUNCT][TABLE_UPPER] = 31;
-         SHIFT_TABLE[TABLE_DIGIT][TABLE_PUNCT] = 0;
-         LATCH_TABLE[TABLE_DIGIT][TABLE_UPPER] = 30;
-         SHIFT_TABLE[TABLE_DIGIT][TABLE_UPPER] = 31;
          NB_BITS_COMPACT = new int[5];
          for (int i = 1; i < NB_BITS_COMPACT.Length; i++)
          {
@@ -145,7 +72,7 @@ namespace ZXing.Aztec.Internal
       public static AztecCode encode(byte[] data, int minECCPercent)
       {
          // High-level encode
-         var bits = highLevelEncode(data);
+         var bits = new HighLevelEncoder(data).encode();
 
          // stuff bits and choose symbol size
          int eccBits = bits.Size * minECCPercent / 100 + 11;
@@ -198,13 +125,10 @@ namespace ZXing.Aztec.Internal
 
          // pad the end
          int messageSizeInWords = (stuffedBits.Size + wordSize - 1) / wordSize;
-         // This seems to be redundant? 
-         /*
          for (int i = messageSizeInWords * wordSize - stuffedBits.Size; i > 0; i--)
          {
             stuffedBits.appendBit(true);
          }
-         */
 
          // generate check words
          var rs = new ReedSolomonEncoder(getGF(wordSize));
@@ -491,8 +415,6 @@ namespace ZXing.Aztec.Internal
          }
 
          // 2. pad last word to wordSize
-         // This seems to be redundant?
-         /*
          n = @out.Size;
          int remainder = n % wordSize;
          if (remainder != 0)
@@ -511,229 +433,7 @@ namespace ZXing.Aztec.Internal
             }
             @out.appendBit(j == 0);
          }
-         */
          return @out;
-      }
-
-      internal static BitArray highLevelEncode(byte[] data)
-      {
-         var bits = new BitArray();
-         var mode = TABLE_UPPER;
-         var idx = new int[5];
-         var idxnext = new int[5];
-         for (int i = 0; i < data.Length; i++)
-         {
-            int c = data[i] & 0xFF;
-            int next = i < data.Length - 1 ? data[i + 1] & 0xFF : 0;
-            int punctWord = 0;
-            // special case: double-character codes
-            if (c == '\r' && next == '\n')
-            {
-               punctWord = 2;
-            }
-            else if (c == '.' && next == ' ')
-            {
-               punctWord = 3;
-            }
-            else if (c == ',' && next == ' ')
-            {
-               punctWord = 4;
-            }
-            else if (c == ':' && next == ' ')
-            {
-               punctWord = 5;
-            }
-            if (punctWord > 0)
-            {
-               if (mode == TABLE_PUNCT)
-               {
-                  outputWord(bits, TABLE_PUNCT, punctWord);
-                  i++;
-                  continue;
-               }
-               if (SHIFT_TABLE[mode][TABLE_PUNCT] >= 0)
-               {
-                  outputWord(bits, mode, SHIFT_TABLE[mode][TABLE_PUNCT]);
-                  outputWord(bits, TABLE_PUNCT, punctWord);
-                  i++;
-                  continue;
-               }
-               if (LATCH_TABLE[mode][TABLE_PUNCT] >= 0)
-               {
-                  outputWord(bits, mode, LATCH_TABLE[mode][TABLE_PUNCT]);
-                  outputWord(bits, TABLE_PUNCT, punctWord);
-                  mode = TABLE_PUNCT;
-                  i++;
-                  continue;
-               }
-            }
-            // find the best matching table, taking current mode and next character into account
-            int firstMatch = -1;
-            int shiftMode = -1;
-            int latchMode = -1;
-            int j;
-            for (j = 0; j < TABLE_BINARY; j++)
-            {
-               idx[j] = CHAR_MAP[j][c];
-               if (idx[j] > 0 && firstMatch < 0)
-               {
-                  firstMatch = j;
-               }
-               if (shiftMode < 0 && idx[j] > 0 && SHIFT_TABLE[mode][j] >= 0)
-               {
-                  shiftMode = j;
-               }
-               idxnext[j] = CHAR_MAP[j][next];
-               if (latchMode < 0 && idx[j] > 0 && (next == 0 || idxnext[j] > 0) && LATCH_TABLE[mode][j] >= 0)
-               {
-                  latchMode = j;
-               }
-            }
-            if (shiftMode < 0 && latchMode < 0)
-            {
-               for (j = 0; j < TABLE_BINARY; j++)
-               {
-                  if (idx[j] > 0 && LATCH_TABLE[mode][j] >= 0)
-                  {
-                     latchMode = j;
-                     break;
-                  }
-               }
-            }
-            if (idx[mode] > 0)
-            {
-               // found character in current table - stay in current table
-               outputWord(bits, mode, idx[mode]);
-            }
-            else
-            {
-               if (latchMode >= 0)
-               {
-                  // latch into mode latchMode
-                  outputWord(bits, mode, LATCH_TABLE[mode][latchMode]);
-                  outputWord(bits, latchMode, idx[latchMode]);
-                  mode = latchMode;
-               }
-               else if (shiftMode >= 0)
-               {
-                  // shift into shiftMode
-                  outputWord(bits, mode, SHIFT_TABLE[mode][shiftMode]);
-                  outputWord(bits, shiftMode, idx[shiftMode]);
-               }
-               else
-               {
-                  if (firstMatch >= 0)
-                  {
-                     // can't switch into this mode from current mode - switch in two steps
-                     if (mode == TABLE_PUNCT)
-                     {
-                        outputWord(bits, TABLE_PUNCT, LATCH_TABLE[TABLE_PUNCT][TABLE_UPPER]);
-                        mode = TABLE_UPPER;
-                        i--;
-                        continue;
-                     }
-                     if (mode == TABLE_DIGIT)
-                     {
-                        outputWord(bits, TABLE_DIGIT, LATCH_TABLE[TABLE_DIGIT][TABLE_UPPER]);
-                        mode = TABLE_UPPER;
-                        i--;
-                        continue;
-                     }
-                  }
-                  // use binary table
-                  // find the binary string length
-                  int k;
-                  int lookahead;
-                  for (k = i + 1, lookahead = 0; k < data.Length; k++)
-                  {
-                     next = data[k] & 0xFF;
-                     bool binary = true;
-                     for (j = 0; j < TABLE_BINARY; j++)
-                     {
-                        if (CHAR_MAP[j][next] > 0)
-                        {
-                           binary = false;
-                           break;
-                        }
-                     }
-                     if (binary)
-                     {
-                        lookahead = 0;
-                     }
-                     else
-                     {
-                        // skip over single character in between binary bytes
-                        if (lookahead >= 1)
-                        {
-                           k -= lookahead;
-                           break;
-                        }
-                        lookahead++;
-                     }
-                  }
-                  k -= i;
-                  // switch into binary table
-                  switch (mode)
-                  {
-                     case TABLE_UPPER:
-                     case TABLE_LOWER:
-                     case TABLE_MIXED:
-                        outputWord(bits, mode, SHIFT_TABLE[mode][TABLE_BINARY]);
-                        break;
-                     case TABLE_DIGIT:
-                        outputWord(bits, mode, LATCH_TABLE[mode][TABLE_UPPER]);
-                        mode = TABLE_UPPER;
-                        outputWord(bits, mode, SHIFT_TABLE[mode][TABLE_BINARY]);
-                        break;
-                     case TABLE_PUNCT:
-                        outputWord(bits, mode, LATCH_TABLE[mode][TABLE_UPPER]);
-                        mode = TABLE_UPPER;
-                        outputWord(bits, mode, SHIFT_TABLE[mode][TABLE_BINARY]);
-                        break;
-                  }
-                  if (k >= 32 && k < 63)
-                  {
-                     // optimization: split one long form into two short forms, saves 1 bit
-                     k = 31;
-                  }
-                  if (k > 542)
-                  {
-                     // maximum encodable binary length in long form is 511 + 31
-                     k = 542;
-                  }
-                  if (k < 32)
-                  {
-                     bits.appendBits(k, 5);
-                  }
-                  else
-                  {
-                     bits.appendBits(k - 31, 16);
-                  }
-                  for (; k > 0; k--, i++)
-                  {
-                     bits.appendBits(data[i], 8);
-                  }
-                  i--;
-               }
-            }
-         }
-         return bits;
-      }
-
-      private static void outputWord(BitArray bits, int mode, int value)
-      {
-         if (mode == TABLE_DIGIT)
-         {
-            bits.appendBits(value, 4);
-         }
-         else if (mode < TABLE_BINARY)
-         {
-            bits.appendBits(value, 5);
-         }
-         else
-         {
-            bits.appendBits(value, 8);
-         }
       }
    }
 }
