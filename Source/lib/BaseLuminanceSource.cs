@@ -107,8 +107,8 @@ namespace ZXing
          {
             for (var xold = 0; xold < Width; xold++)
             {
-               var ynew = xold;
-               var xnew = newWidth - yold - 1;
+               var ynew = newHeight - xold - 1;
+               var xnew = yold;
                rotatedLuminances[ynew * newWidth + xnew] = localLuminances[yold * Width + xold];
             }
          }
