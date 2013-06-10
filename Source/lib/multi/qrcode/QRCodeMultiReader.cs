@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using ZXing.Common;
 using ZXing.Multi.QrCode.Internal;
 using ZXing.QrCode;
+using ZXing.QrCode.Internal;
 
 namespace ZXing.Multi.QrCode
 {
@@ -57,6 +58,12 @@ namespace ZXing.Multi.QrCode
                continue;
 
             var points = detectorResult.Points;
+            // If the code was mirrored: swap the bottom-left and the top-right points.
+            var data = decoderResult.Other as QRCodeDecoderMetaData;
+            if (data != null)
+            {
+               data.applyMirroredCorrection(points);
+            }
             var result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.QR_CODE);
             var byteSegments = decoderResult.ByteSegments;
             if (byteSegments != null)

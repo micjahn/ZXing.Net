@@ -24,7 +24,6 @@ namespace ZXing.QrCode
 {
    /// <summary>
    /// This implementation can detect and decode QR Codes in an image.
-   ///
    /// <author>Sean Owen</author>
    /// </summary>
    public class QRCodeReader : Reader
@@ -75,7 +74,7 @@ namespace ZXing.QrCode
          }
          if (hints != null && hints.ContainsKey(DecodeHintType.PURE_BARCODE))
          {
-            BitMatrix bits = extractPureBits(image.BlackMatrix);
+            var bits = extractPureBits(image.BlackMatrix);
             if (bits == null)
                return null;
             decoderResult = decoder.decode(bits, hints);
@@ -83,7 +82,7 @@ namespace ZXing.QrCode
          }
          else
          {
-            DetectorResult detectorResult = new Detector(image.BlackMatrix).detect(hints);
+            var detectorResult = new Detector(image.BlackMatrix).detect(hints);
             if (detectorResult == null)
                return null;
             decoderResult = decoder.decode(detectorResult.Bits, hints);
@@ -92,8 +91,15 @@ namespace ZXing.QrCode
          if (decoderResult == null)
             return null;
 
-         Result result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.QR_CODE);
-         IList<byte[]> byteSegments = decoderResult.ByteSegments;
+         // If the code was mirrored: swap the bottom-left and the top-right points.
+         var data = decoderResult.Other as QRCodeDecoderMetaData;
+         if (data != null)
+         {
+            data.applyMirroredCorrection(points);
+         }
+
+         var result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.QR_CODE);
+         var byteSegments = decoderResult.ByteSegments;
          if (byteSegments != null)
          {
             result.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegments);

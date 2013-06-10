@@ -14,24 +14,20 @@
 * limitations under the License.
 */
 
-using System;
 using ZXing.Common;
 
 namespace ZXing.QrCode.Internal
 {
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    sealed class BitMatrixParser
    {
       private readonly BitMatrix bitMatrix;
       private Version parsedVersion;
       private FormatInformation parsedFormatInfo;
+      private bool mirrored;
 
-      /// <param name="bitMatrix">{@link BitMatrix} to parse
-      /// </param>
-      /// <throws>  ReaderException if dimension is not >= 21 and 1 mod 4 </throws>
+      /// <param name="bitMatrix">{@link BitMatrix} to parse</param>
+      /// <throws>ReaderException if dimension is not >= 21 and 1 mod 4</throws>
       internal static BitMatrixParser createBitMatrixParser(BitMatrix bitMatrix)
       {
          int dimension = bitMatrix.Height;
@@ -159,11 +155,12 @@ namespace ZXing.QrCode.Internal
 
       private int copyBit(int i, int j, int versionBits)
       {
-         return bitMatrix[i, j] ? (versionBits << 1) | 0x1 : versionBits << 1;
+         bool bit = mirrored ? bitMatrix[j, i] : bitMatrix[i, j];
+         return bit ? (versionBits << 1) | 0x1 : versionBits << 1;
       }
 
       /// <summary> <p>Reads the bits in the {@link BitMatrix} representing the finder pattern in the
-      /// correct order in order to reconstitute the codewords bytes contained within the
+      /// correct order in order to reconstruct the codewords bytes contained within the
       /// QR Code.</p>
       /// 
       /// </summary>
@@ -234,6 +231,51 @@ namespace ZXing.QrCode.Internal
             return null;
          }
          return result;
+      }
+
+      /**
+       * Revert the mask removal done while reading the code words. The bit matrix should revert to its original state.
+       */
+      internal void remask()
+      {
+         if (parsedFormatInfo == null)
+         {
+            return; // We have no format information, and have no data mask
+         }
+         DataMask dataMask = DataMask.forReference(parsedFormatInfo.DataMask);
+         int dimension = bitMatrix.Height;
+         dataMask.unmaskBitMatrix(bitMatrix, dimension);
+      }
+
+      /**
+       * Prepare the parser for a mirrored operation.
+       * This flag has effect only on the {@link #readFormatInformation()} and the
+       * {@link #readVersion()}. Before proceeding with {@link #readCodewords()} the
+       * {@link #mirror()} method should be called.
+       * 
+       * @param mirror Whether to read version and format information mirrored.
+       */
+      internal void setMirror(bool mirror)
+      {
+         parsedVersion = null;
+         parsedFormatInfo = null;
+         mirrored = mirror;
+      }
+
+      /** Mirror the bit matrix in order to attempt a second reading. */
+      internal void mirror()
+      {
+         for (int x = 0; x < bitMatrix.Width; x++)
+         {
+            for (int y = x + 1; y < bitMatrix.Height; y++)
+            {
+               if (bitMatrix[x, y] != bitMatrix[y, x])
+               {
+                  bitMatrix.flip(y, x);
+                  bitMatrix.flip(x, y);
+               }
+            }
+         }
       }
    }
 }

@@ -51,8 +51,8 @@ namespace ZXing.QrCode.Internal
       /// </returns>
       public DecoderResult decode(bool[][] image, IDictionary<DecodeHintType, object> hints)
       {
-         int dimension = image.Length;
-         BitMatrix bits = new BitMatrix(dimension);
+         var dimension = image.Length;
+         var bits = new BitMatrix(dimension);
          for (int i = 0; i < dimension; i++)
          {
             for (int j = 0; j < dimension; j++)
@@ -74,9 +74,52 @@ namespace ZXing.QrCode.Internal
       public DecoderResult decode(BitMatrix bits, IDictionary<DecodeHintType, object> hints)
       {
          // Construct a parser and read version, error-correction level
-         BitMatrixParser parser = BitMatrixParser.createBitMatrixParser(bits);
+         var parser = BitMatrixParser.createBitMatrixParser(bits);
          if (parser == null)
             return null;
+
+         var result = decode(parser, hints);
+         if (result == null)
+         {
+            // Revert the bit matrix
+            parser.remask();
+
+            // Will be attempting a mirrored reading of the version and format info.
+            parser.setMirror(true);
+
+            // Preemptively read the version.
+            var version = parser.readVersion();
+            if (version == null)
+               return null;
+
+            // Preemptively read the format information.
+            var formatinfo = parser.readFormatInformation();
+            if (formatinfo == null)
+               return null;
+
+            /*
+             * Since we're here, this means we have successfully detected some kind
+             * of version and format information when mirrored. This is a good sign,
+             * that the QR code may be mirrored, and we should try once more with a
+             * mirrored content.
+             */
+            // Prepare for a mirrored reading.
+            parser.mirror();
+
+            result = decode(parser, hints);
+
+            if (result != null)
+            {
+               // Success! Notify the caller that the code was mirrored.
+               result.Other = new QRCodeDecoderMetaData(true);
+            }
+         }
+
+         return result;
+      }
+
+      private DecoderResult decode(BitMatrixParser parser, IDictionary<DecodeHintType, object> hints)
+      {
          Version version = parser.readVersion();
          if (version == null)
             return null;

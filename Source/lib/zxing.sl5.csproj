@@ -297,6 +297,7 @@
     <Compile Include="qrcode\decoder\ErrorCorrectionLevel.cs" />
     <Compile Include="qrcode\decoder\FormatInformation.cs" />
     <Compile Include="qrcode\decoder\Mode.cs" />
+    <Compile Include="qrcode\decoder\QRCodeDecoderMetaData.cs" />
     <Compile Include="qrcode\decoder\Version.cs" />
     <Compile Include="qrcode\detector\AlignmentPattern.cs" />
     <Compile Include="qrcode\detector\AlignmentPatternFinder.cs" />
