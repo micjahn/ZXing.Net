@@ -44,6 +44,8 @@ namespace ZXing.OneD
       private const int CODE_FNC_3 = 96;    // Code A, Code B
       private const int CODE_FNC_4_B = 100; // Code B
 
+      private bool forceCodesetB;
+
       public override BitMatrix encode(String contents,
                               BarcodeFormat format,
                               int width,
@@ -54,6 +56,11 @@ namespace ZXing.OneD
          {
             throw new ArgumentException("Can only encode CODE_128, but got " + format);
          }
+
+         forceCodesetB = (hints != null &&
+                          hints.ContainsKey(EncodeHintType.CODE128_FORCE_CODESET_B) &&
+                          (bool) hints[EncodeHintType.CODE128_FORCE_CODESET_B]);
+
          return base.encode(contents, format, width, height, hints);
       }
 
@@ -98,7 +105,7 @@ namespace ZXing.OneD
             int newCodeSet;
             if (isDigits(contents, position, requiredDigitCount))
             {
-               newCodeSet = CODE_CODE_C;
+               newCodeSet = forceCodesetB ? CODE_CODE_B : CODE_CODE_C;
             }
             else
             {
@@ -112,8 +119,29 @@ namespace ZXing.OneD
                // Encode the current character
                if (codeSet == CODE_CODE_B)
                {
-                  patternIndex = contents[position] - ' ';
-                  position += 1;
+                  switch (contents[position])
+                  {
+                     case ESCAPE_FNC_1:
+                        patternIndex = CODE_FNC_1;
+                        position++;
+                        break;
+                     case ESCAPE_FNC_2:
+                        patternIndex = CODE_FNC_2;
+                        position++;
+                        break;
+                     case ESCAPE_FNC_3:
+                        patternIndex = CODE_FNC_3;
+                        position++;
+                        break;
+                     case ESCAPE_FNC_4:
+                        patternIndex = CODE_FNC_4_B;
+                        position++;
+                        break;
+                     default:
+                        patternIndex = contents[position] - ' ';
+                        position += 1;
+                        break;
+                  }
                }
                else
                { // CODE_CODE_C

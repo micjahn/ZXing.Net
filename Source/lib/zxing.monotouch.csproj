@@ -185,6 +185,7 @@
     <Compile Include="net2.0\TimeZoneInfo.cs" />
     <Compile Include="oned\CodaBarReader.cs" />
     <Compile Include="oned\CodaBarWriter.cs" />
+    <Compile Include="oned\Code128EncodingOptions.cs" />
     <Compile Include="oned\Code128Reader.cs" />
     <Compile Include="oned\Code128Writer.cs" />
     <Compile Include="oned\Code39Reader.cs" />

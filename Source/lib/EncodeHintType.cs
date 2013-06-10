@@ -106,5 +106,10 @@ namespace ZXing
       /// Specifies a maximum barcode size (type {@link Dimension}). Only applicable to Data Matrix now.
       /// </summary>
       MAX_SIZE,
+
+      /// <summary>
+      /// if true, don't switch to codeset C for numbers
+      /// </summary>
+      CODE128_FORCE_CODESET_B,
    }
 }
