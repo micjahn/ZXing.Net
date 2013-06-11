@@ -17,7 +17,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 using ZXing.Common;
 
@@ -218,7 +217,21 @@ namespace ZXing.Aztec.Internal
             }
          }
          // We are left with a set of states.  Find the shortest one.
-         State minState = states.OrderBy(a => a.BitCount).First();
+         State minState = null;
+         foreach (var state in states)
+         {
+            if (minState == null)
+            {
+               minState = state;
+            }
+            else
+            {
+               if (state.BitCount < minState.BitCount)
+               {
+                  minState = state;
+               }
+            }
+         }
          /*
          State minState = Collections.min(states, new Comparator<State>() {
             @Override
