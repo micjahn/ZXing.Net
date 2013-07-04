@@ -60,7 +60,7 @@ namespace ZXing.Client.Result
 
       public static void maybeAppend(String value, StringBuilder result)
       {
-         if (value == null || value.Length <= 0)
+         if (String.IsNullOrEmpty(value))
             return;
 
          // Don't add a newline before the first value

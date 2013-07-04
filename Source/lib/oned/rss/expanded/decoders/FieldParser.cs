@@ -33,18 +33,17 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
    /// <author>Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)</author>
    /// </summary>
-   sealed class FieldParser
+   static class FieldParser
    {
-
-      private static Object VARIABLE_LENGTH = new Object();
+      private static readonly Object VARIABLE_LENGTH = new Object();
 
       // "DIGITS", new Integer(LENGTH)
       //    or
       // "DIGITS", VARIABLE_LENGTH, new Integer(MAX_SIZE)
-      private static IDictionary<string, object[]> TWO_DIGIT_DATA_LENGTH;
-      private static IDictionary<string, object[]> THREE_DIGIT_DATA_LENGTH;
-      private static IDictionary<string, object[]> THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH;
-      private static IDictionary<string, object[]> FOUR_DIGIT_DATA_LENGTH;
+      private static readonly IDictionary<string, object[]> TWO_DIGIT_DATA_LENGTH;
+      private static readonly IDictionary<string, object[]> THREE_DIGIT_DATA_LENGTH;
+      private static readonly IDictionary<string, object[]> THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH;
+      private static readonly IDictionary<string, object[]> FOUR_DIGIT_DATA_LENGTH;
 
       static FieldParser()
       {
@@ -190,13 +189,9 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
                                      };
       }
 
-      private FieldParser()
-      {
-      }
-
       internal static String parseFieldsInGeneralPurpose(String rawInformation)
       {
-         if (rawInformation.Length == 0)
+         if (String.IsNullOrEmpty(rawInformation))
          {
             return null;
          }

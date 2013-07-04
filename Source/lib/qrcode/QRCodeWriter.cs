@@ -62,7 +62,7 @@ namespace ZXing.QrCode
                               int height,
                               IDictionary<EncodeHintType, object> hints)
       {
-         if (contents.Length == 0)
+         if (String.IsNullOrEmpty(contents))
          {
             throw new ArgumentException("Found empty contents");
          }

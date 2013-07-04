@@ -51,7 +51,7 @@ namespace ZXing.Client.Result
             String body = null;
             if (nameValues != null)
             {
-               if (emailAddress.Length == 0)
+               if (String.IsNullOrEmpty(emailAddress))
                {
                   emailAddress = nameValues["to"];
                }

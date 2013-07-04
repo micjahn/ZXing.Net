@@ -273,7 +273,7 @@ namespace ZXing.Client.Result
                   {
                      element = element.Trim();
                   }
-                  if (element.Length > 0)
+                  if (!String.IsNullOrEmpty(element))
                   {
                      matches.Add(element);
                   }
