@@ -22,7 +22,7 @@ namespace ZXing.Datamatrix.Encoder
    {
       override public int EncodingMode
       {
-         get { return HighLevelEncoder.TEXT_ENCODATION; }
+         get { return Encodation.TEXT; }
       }
 
       override protected int encodeChar(char c, StringBuilder sb)

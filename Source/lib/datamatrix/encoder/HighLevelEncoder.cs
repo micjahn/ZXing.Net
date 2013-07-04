@@ -100,13 +100,6 @@ namespace ZXing.Datamatrix.Encoder
       /// </summary>
       public const String MACRO_TRAILER = "\u001E\u0004";
 
-      public const int ASCII_ENCODATION = 0;
-      public const int C40_ENCODATION = 1;
-      public const int TEXT_ENCODATION = 2;
-      public const int X12_ENCODATION = 3;
-      public const int EDIFACT_ENCODATION = 4;
-      public const int BASE256_ENCODATION = 5;
-
       /// <summary>
       /// Converts the message to a byte array using the default encoding (cp437) as defined by the
       /// specification
@@ -115,7 +108,7 @@ namespace ZXing.Datamatrix.Encoder
       /// <returns>the byte array of the message</returns>
       public static byte[] getBytesForMessage(String msg)
       {
-         return System.Text.Encoding.GetEncoding("CP437").GetBytes(msg); //See 4.4.3 and annex B of ISO/IEC 15438:2001(E)
+         return Encoding.GetEncoding("CP437").GetBytes(msg); //See 4.4.3 and annex B of ISO/IEC 15438:2001(E)
       }
 
       private static char randomize253State(char ch, int codewordPosition)
@@ -133,7 +126,7 @@ namespace ZXing.Datamatrix.Encoder
       /// <returns>the encoded message (the char values range from 0 to 255)</returns>
       public static String encodeHighLevel(String msg)
       {
-         return encodeHighLevel(msg, SymbolShapeHint.FORCE_NONE, null, null);
+         return encodeHighLevel(msg, SymbolShapeHint.FORCE_NONE, null, null, Encodation.ASCII);
       }
 
       /// <summary>
@@ -148,13 +141,15 @@ namespace ZXing.Datamatrix.Encoder
       public static String encodeHighLevel(String msg,
                                            SymbolShapeHint shape,
                                            Dimension minSize,
-                                           Dimension maxSize)
+                                           Dimension maxSize,
+                                           int defaultEncodation)
       {
          //the codewords 0..255 are encoded as Unicode characters
-         Encoder[] encoders = {
-        new ASCIIEncoder(), new C40Encoder(), new TextEncoder(), 
-        new X12Encoder(), new EdifactEncoder(),  new Base256Encoder()
-    };
+         Encoder[] encoders =
+            {
+               new ASCIIEncoder(), new C40Encoder(), new TextEncoder(),
+               new X12Encoder(), new EdifactEncoder(), new Base256Encoder()
+            };
 
          var context = new EncoderContext(msg);
          context.setSymbolShape(shape);
@@ -173,7 +168,29 @@ namespace ZXing.Datamatrix.Encoder
             context.Pos += MACRO_06_HEADER.Length;
          }
 
-         int encodingMode = ASCII_ENCODATION; //Default mode
+         int encodingMode = defaultEncodation; //Default mode
+         switch (encodingMode)
+         {
+            case Encodation.BASE256:
+               context.writeCodeword(HighLevelEncoder.LATCH_TO_BASE256);
+               break;
+            case Encodation.C40:
+               context.writeCodeword(HighLevelEncoder.LATCH_TO_C40);
+               break;
+            case Encodation.X12:
+               context.writeCodeword(HighLevelEncoder.LATCH_TO_ANSIX12);
+               break;
+            case Encodation.TEXT:
+               context.writeCodeword(HighLevelEncoder.LATCH_TO_TEXT);
+               break;
+            case Encodation.EDIFACT:
+               context.writeCodeword(HighLevelEncoder.LATCH_TO_EDIFACT);
+               break;
+            case Encodation.ASCII:
+               break;
+            default:
+               throw new InvalidOperationException("Illegal mode: " + encodingMode);
+         }
          while (context.HasMoreCharacters)
          {
             encoders[encodingMode].encode(context);
@@ -188,7 +205,7 @@ namespace ZXing.Datamatrix.Encoder
          int capacity = context.SymbolInfo.dataCapacity;
          if (len < capacity)
          {
-            if (encodingMode != ASCII_ENCODATION && encodingMode != BASE256_ENCODATION)
+            if (encodingMode != Encodation.ASCII && encodingMode != Encodation.BASE256)
             {
                context.writeCodeword('\u00fe'); //Unlatch (254)
             }
@@ -215,13 +232,13 @@ namespace ZXing.Datamatrix.Encoder
          }
          float[] charCounts;
          //step J
-         if (currentMode == ASCII_ENCODATION)
+         if (currentMode == Encodation.ASCII)
          {
-            charCounts = new float[] { 0, 1, 1, 1, 1, 1.25f };
+            charCounts = new [] { 0, 1, 1, 1, 1, 1.25f };
          }
          else
          {
-            charCounts = new float[] { 1, 2, 2, 2, 2, 2.25f };
+            charCounts = new [] { 1, 2, 2, 2, 2, 2.25f };
             charCounts[currentMode] = 0;
          }
 
@@ -231,33 +248,33 @@ namespace ZXing.Datamatrix.Encoder
             //step K
             if ((startpos + charsProcessed) == msg.Length)
             {
-               int min = Int32.MaxValue;
-               byte[] mins = new byte[6];
-               int[] intCharCounts = new int[6];
+               var min = Int32.MaxValue;
+               var mins = new byte[6];
+               var intCharCounts = new int[6];
                min = findMinimums(charCounts, intCharCounts, min, mins);
-               int minCount = getMinimumCount(mins);
+               var minCount = getMinimumCount(mins);
 
-               if (intCharCounts[ASCII_ENCODATION] == min)
+               if (intCharCounts[Encodation.ASCII] == min)
                {
-                  return ASCII_ENCODATION;
+                  return Encodation.ASCII;
                }
-               if (minCount == 1 && mins[BASE256_ENCODATION] > 0)
+               if (minCount == 1 && mins[Encodation.BASE256] > 0)
                {
-                  return BASE256_ENCODATION;
+                  return Encodation.BASE256;
                }
-               if (minCount == 1 && mins[EDIFACT_ENCODATION] > 0)
+               if (minCount == 1 && mins[Encodation.EDIFACT] > 0)
                {
-                  return EDIFACT_ENCODATION;
+                  return Encodation.EDIFACT;
                }
-               if (minCount == 1 && mins[TEXT_ENCODATION] > 0)
+               if (minCount == 1 && mins[Encodation.TEXT] > 0)
                {
-                  return TEXT_ENCODATION;
+                  return Encodation.TEXT;
                }
-               if (minCount == 1 && mins[X12_ENCODATION] > 0)
+               if (minCount == 1 && mins[Encodation.X12] > 0)
                {
-                  return X12_ENCODATION;
+                  return Encodation.X12;
                }
-               return C40_ENCODATION;
+               return Encodation.C40;
             }
 
             char c = msg[startpos + charsProcessed];
@@ -266,128 +283,128 @@ namespace ZXing.Datamatrix.Encoder
             //step L
             if (isDigit(c))
             {
-               charCounts[ASCII_ENCODATION] += 0.5f;
+               charCounts[Encodation.ASCII] += 0.5f;
             }
             else if (isExtendedASCII(c))
             {
-               charCounts[ASCII_ENCODATION] = (int)Math.Ceiling(charCounts[ASCII_ENCODATION]);
-               charCounts[ASCII_ENCODATION] += 2;
+               charCounts[Encodation.ASCII] = (int)Math.Ceiling(charCounts[Encodation.ASCII]);
+               charCounts[Encodation.ASCII] += 2;
             }
             else
             {
-               charCounts[ASCII_ENCODATION] = (int)Math.Ceiling(charCounts[ASCII_ENCODATION]);
-               charCounts[ASCII_ENCODATION]++;
+               charCounts[Encodation.ASCII] = (int)Math.Ceiling(charCounts[Encodation.ASCII]);
+               charCounts[Encodation.ASCII]++;
             }
 
             //step M
             if (isNativeC40(c))
             {
-               charCounts[C40_ENCODATION] += 2.0f / 3.0f;
+               charCounts[Encodation.C40] += 2.0f / 3.0f;
             }
             else if (isExtendedASCII(c))
             {
-               charCounts[C40_ENCODATION] += 8.0f / 3.0f;
+               charCounts[Encodation.C40] += 8.0f / 3.0f;
             }
             else
             {
-               charCounts[C40_ENCODATION] += 4.0f / 3.0f;
+               charCounts[Encodation.C40] += 4.0f / 3.0f;
             }
 
             //step N
             if (isNativeText(c))
             {
-               charCounts[TEXT_ENCODATION] += 2.0f / 3.0f;
+               charCounts[Encodation.TEXT] += 2.0f / 3.0f;
             }
             else if (isExtendedASCII(c))
             {
-               charCounts[TEXT_ENCODATION] += 8.0f / 3.0f;
+               charCounts[Encodation.TEXT] += 8.0f / 3.0f;
             }
             else
             {
-               charCounts[TEXT_ENCODATION] += 4.0f / 3.0f;
+               charCounts[Encodation.TEXT] += 4.0f / 3.0f;
             }
 
             //step O
             if (isNativeX12(c))
             {
-               charCounts[X12_ENCODATION] += 2.0f / 3.0f;
+               charCounts[Encodation.X12] += 2.0f / 3.0f;
             }
             else if (isExtendedASCII(c))
             {
-               charCounts[X12_ENCODATION] += 13.0f / 3.0f;
+               charCounts[Encodation.X12] += 13.0f / 3.0f;
             }
             else
             {
-               charCounts[X12_ENCODATION] += 10.0f / 3.0f;
+               charCounts[Encodation.X12] += 10.0f / 3.0f;
             }
 
             //step P
             if (isNativeEDIFACT(c))
             {
-               charCounts[EDIFACT_ENCODATION] += 3.0f / 4.0f;
+               charCounts[Encodation.EDIFACT] += 3.0f / 4.0f;
             }
             else if (isExtendedASCII(c))
             {
-               charCounts[EDIFACT_ENCODATION] += 17.0f / 4.0f;
+               charCounts[Encodation.EDIFACT] += 17.0f / 4.0f;
             }
             else
             {
-               charCounts[EDIFACT_ENCODATION] += 13.0f / 4.0f;
+               charCounts[Encodation.EDIFACT] += 13.0f / 4.0f;
             }
 
             // step Q
             if (isSpecialB256(c))
             {
-               charCounts[BASE256_ENCODATION] += 4;
+               charCounts[Encodation.BASE256] += 4;
             }
             else
             {
-               charCounts[BASE256_ENCODATION]++;
+               charCounts[Encodation.BASE256]++;
             }
 
             //step R
             if (charsProcessed >= 4)
             {
-               int[] intCharCounts = new int[6];
-               byte[] mins = new byte[6];
+               var intCharCounts = new int[6];
+               var mins = new byte[6];
                findMinimums(charCounts, intCharCounts, Int32.MaxValue, mins);
                int minCount = getMinimumCount(mins);
 
-               if (intCharCounts[ASCII_ENCODATION] < intCharCounts[BASE256_ENCODATION]
-                   && intCharCounts[ASCII_ENCODATION] < intCharCounts[C40_ENCODATION]
-                   && intCharCounts[ASCII_ENCODATION] < intCharCounts[TEXT_ENCODATION]
-                   && intCharCounts[ASCII_ENCODATION] < intCharCounts[X12_ENCODATION]
-                   && intCharCounts[ASCII_ENCODATION] < intCharCounts[EDIFACT_ENCODATION])
+               if (intCharCounts[Encodation.ASCII] < intCharCounts[Encodation.BASE256]
+                   && intCharCounts[Encodation.ASCII] < intCharCounts[Encodation.C40]
+                   && intCharCounts[Encodation.ASCII] < intCharCounts[Encodation.TEXT]
+                   && intCharCounts[Encodation.ASCII] < intCharCounts[Encodation.X12]
+                   && intCharCounts[Encodation.ASCII] < intCharCounts[Encodation.EDIFACT])
                {
-                  return ASCII_ENCODATION;
+                  return Encodation.ASCII;
                }
-               if (intCharCounts[BASE256_ENCODATION] < intCharCounts[ASCII_ENCODATION]
-                   || (mins[C40_ENCODATION] + mins[TEXT_ENCODATION] + mins[X12_ENCODATION] + mins[EDIFACT_ENCODATION]) == 0)
+               if (intCharCounts[Encodation.BASE256] < intCharCounts[Encodation.ASCII]
+                   || (mins[Encodation.C40] + mins[Encodation.TEXT] + mins[Encodation.X12] + mins[Encodation.EDIFACT]) == 0)
                {
-                  return BASE256_ENCODATION;
+                  return Encodation.BASE256;
                }
-               if (minCount == 1 && mins[EDIFACT_ENCODATION] > 0)
+               if (minCount == 1 && mins[Encodation.EDIFACT] > 0)
                {
-                  return EDIFACT_ENCODATION;
+                  return Encodation.EDIFACT;
                }
-               if (minCount == 1 && mins[TEXT_ENCODATION] > 0)
+               if (minCount == 1 && mins[Encodation.TEXT] > 0)
                {
-                  return TEXT_ENCODATION;
+                  return Encodation.TEXT;
                }
-               if (minCount == 1 && mins[X12_ENCODATION] > 0)
+               if (minCount == 1 && mins[Encodation.X12] > 0)
                {
-                  return X12_ENCODATION;
+                  return Encodation.X12;
                }
-               if (intCharCounts[C40_ENCODATION] + 1 < intCharCounts[ASCII_ENCODATION]
-                   && intCharCounts[C40_ENCODATION] + 1 < intCharCounts[BASE256_ENCODATION]
-                   && intCharCounts[C40_ENCODATION] + 1 < intCharCounts[EDIFACT_ENCODATION]
-                   && intCharCounts[C40_ENCODATION] + 1 < intCharCounts[TEXT_ENCODATION])
+               if (intCharCounts[Encodation.C40] + 1 < intCharCounts[Encodation.ASCII]
+                   && intCharCounts[Encodation.C40] + 1 < intCharCounts[Encodation.BASE256]
+                   && intCharCounts[Encodation.C40] + 1 < intCharCounts[Encodation.EDIFACT]
+                   && intCharCounts[Encodation.C40] + 1 < intCharCounts[Encodation.TEXT])
                {
-                  if (intCharCounts[C40_ENCODATION] < intCharCounts[X12_ENCODATION])
+                  if (intCharCounts[Encodation.C40] < intCharCounts[Encodation.X12])
                   {
-                     return C40_ENCODATION;
+                     return Encodation.C40;
                   }
-                  if (intCharCounts[C40_ENCODATION] == intCharCounts[X12_ENCODATION])
+                  if (intCharCounts[Encodation.C40] == intCharCounts[Encodation.X12])
                   {
                      int p = startpos + charsProcessed + 1;
                      while (p < msg.Length)
@@ -395,7 +412,7 @@ namespace ZXing.Datamatrix.Encoder
                         char tc = msg[p];
                         if (isX12TermSep(tc))
                         {
-                           return X12_ENCODATION;
+                           return Encodation.X12;
                         }
                         if (!isNativeX12(tc))
                         {
@@ -403,7 +420,7 @@ namespace ZXing.Datamatrix.Encoder
                         }
                         p++;
                      }
-                     return C40_ENCODATION;
+                     return Encodation.C40;
                   }
                }
             }

@@ -22,7 +22,7 @@ namespace ZXing.Datamatrix.Encoder
    {
       public int EncodingMode
       {
-         get { return HighLevelEncoder.ASCII_ENCODATION; }
+         get { return Encodation.ASCII; }
       }
 
       public void encode(EncoderContext context)
@@ -43,25 +43,25 @@ namespace ZXing.Datamatrix.Encoder
             {
                switch (newMode)
                {
-                  case HighLevelEncoder.BASE256_ENCODATION:
+                  case Encodation.BASE256:
                      context.writeCodeword(HighLevelEncoder.LATCH_TO_BASE256);
-                     context.signalEncoderChange(HighLevelEncoder.BASE256_ENCODATION);
+                     context.signalEncoderChange(Encodation.BASE256);
                      return;
-                  case HighLevelEncoder.C40_ENCODATION:
+                  case Encodation.C40:
                      context.writeCodeword(HighLevelEncoder.LATCH_TO_C40);
-                     context.signalEncoderChange(HighLevelEncoder.C40_ENCODATION);
+                     context.signalEncoderChange(Encodation.C40);
                      return;
-                  case HighLevelEncoder.X12_ENCODATION:
+                  case Encodation.X12:
                      context.writeCodeword(HighLevelEncoder.LATCH_TO_ANSIX12);
-                     context.signalEncoderChange(HighLevelEncoder.X12_ENCODATION);
+                     context.signalEncoderChange(Encodation.X12);
                      break;
-                  case HighLevelEncoder.TEXT_ENCODATION:
+                  case Encodation.TEXT:
                      context.writeCodeword(HighLevelEncoder.LATCH_TO_TEXT);
-                     context.signalEncoderChange(HighLevelEncoder.TEXT_ENCODATION);
+                     context.signalEncoderChange(Encodation.TEXT);
                      break;
-                  case HighLevelEncoder.EDIFACT_ENCODATION:
+                  case Encodation.EDIFACT:
                      context.writeCodeword(HighLevelEncoder.LATCH_TO_EDIFACT);
-                     context.signalEncoderChange(HighLevelEncoder.EDIFACT_ENCODATION);
+                     context.signalEncoderChange(Encodation.EDIFACT);
                      break;
                   default:
                      throw new InvalidOperationException("Illegal mode: " + newMode);

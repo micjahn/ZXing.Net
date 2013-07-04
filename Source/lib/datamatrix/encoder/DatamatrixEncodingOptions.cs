@@ -107,5 +107,34 @@ namespace ZXing.Datamatrix
             }
          }
       }
+
+      /// <summary>
+      /// Specifies the default encodation
+      /// Make sure that the content fits into the encodation value, otherwise there will be an exception thrown.
+      /// standard value: Encodation.ASCII
+      /// </summary>
+      public int? DefaultEncodation
+      {
+         get
+         {
+            if (Hints.ContainsKey(EncodeHintType.DATA_MATRIX_DEFAULT_ENCODATION))
+            {
+               return (int)Hints[EncodeHintType.DATA_MATRIX_DEFAULT_ENCODATION];
+            }
+            return null;
+         }
+         set
+         {
+            if (value == null)
+            {
+               if (Hints.ContainsKey(EncodeHintType.DATA_MATRIX_DEFAULT_ENCODATION))
+                  Hints.Remove(EncodeHintType.DATA_MATRIX_DEFAULT_ENCODATION);
+            }
+            else
+            {
+               Hints[EncodeHintType.DATA_MATRIX_DEFAULT_ENCODATION] = value;
+            }
+         }
+      }
    }
 }

@@ -23,7 +23,7 @@ namespace ZXing.Datamatrix.Encoder
    {
       public int EncodingMode
       {
-         get { return HighLevelEncoder.BASE256_ENCODATION; }
+         get { return Encodation.BASE256; }
       }
 
       public void encode(EncoderContext context)
@@ -84,10 +84,7 @@ namespace ZXing.Datamatrix.Encoder
          {
             return (char)tempVariable;
          }
-         else
-         {
-            return (char)(tempVariable - 256);
-         }
+         return (char)(tempVariable - 256);
       }
    }
 }

@@ -155,6 +155,7 @@
     <Compile Include="datamatrix\encoder\DataMatrixSymbolInfo144.cs" />
     <Compile Include="datamatrix\encoder\DefaultPlacement.cs" />
     <Compile Include="datamatrix\encoder\EdifactEncoder.cs" />
+    <Compile Include="datamatrix\encoder\Encodation.cs" />
     <Compile Include="datamatrix\encoder\Encoder.cs" />
     <Compile Include="datamatrix\encoder\EncoderContext.cs" />
     <Compile Include="datamatrix\encoder\ErrorCorrection.cs" />

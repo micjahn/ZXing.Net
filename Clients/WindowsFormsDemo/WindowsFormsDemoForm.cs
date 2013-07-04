@@ -328,12 +328,18 @@ namespace WindowsFormsDemo
                   {
                      Height = picEncodedBarCode.Height,
                      Width = picEncodedBarCode.Width,
-                     SymbolShape = ZXing.Datamatrix.Encoder.SymbolShapeHint.FORCE_SQUARE,
-                     MinSize = new Dimension(picEncodedBarCode.Width, picEncodedBarCode.Height)
+                     SymbolShape = ZXing.Datamatrix.Encoder.SymbolShapeHint.FORCE_SQUARE
                   };
                   break;
                case BarcodeFormat.AZTEC:
                   options = new ZXing.Aztec.AztecEncodingOptions
+                  {
+                     Height = picEncodedBarCode.Height,
+                     Width = picEncodedBarCode.Width,
+                  };
+                  break;
+               case BarcodeFormat.CODE_128:
+                  options = new ZXing.OneD.Code128EncodingOptions
                   {
                      Height = picEncodedBarCode.Height,
                      Width = picEncodedBarCode.Width,

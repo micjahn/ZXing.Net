@@ -93,17 +93,17 @@ namespace ZXing
       DISABLE_ECI,
 
       /// <summary>
-      /// Specifies the matrix shape for Data Matrix (type {@link com.google.zxing.datamatrix.encoder.SymbolShapeHint})
+      /// Specifies the matrix shape for Data Matrix (type <see cref="ZXing.Datamatrix.Encoder.SymbolShapeHint"/>)
       /// </summary>
       DATA_MATRIX_SHAPE,
 
       /// <summary>
-      /// Specifies a minimum barcode size (type {@link Dimension}). Only applicable to Data Matrix now.
+      /// Specifies a minimum barcode size (type <see cref="ZXing.Dimension"/>). Only applicable to Data Matrix now.
       /// </summary>
       MIN_SIZE,
 
       /// <summary>
-      /// Specifies a maximum barcode size (type {@link Dimension}). Only applicable to Data Matrix now.
+      /// Specifies a maximum barcode size (type <see cref="ZXing.Dimension"/>). Only applicable to Data Matrix now.
       /// </summary>
       MAX_SIZE,
 
@@ -111,5 +111,12 @@ namespace ZXing
       /// if true, don't switch to codeset C for numbers
       /// </summary>
       CODE128_FORCE_CODESET_B,
+
+      /// <summary>
+      /// Specifies the default encodation for Data Matrix (type <see cref="ZXing.Datamatrix.Encoder.Encodation"/>)
+      /// Make sure that the content fits into the encodation value, otherwise there will be an exception thrown.
+      /// standard value: Encodation.ASCII
+      /// </summary>
+      DATA_MATRIX_DEFAULT_ENCODATION,
    }
 }
