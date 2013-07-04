@@ -24,25 +24,34 @@ namespace ZXing.OneD
    /// <author>dsbnatut@gmail.com (Kazuki Nishiura)</author>
    public sealed class CodaBarWriter : OneDimensionalCodeWriter
    {
-      private static readonly char[] START_CHARS = { 'A', 'B', 'C', 'D' };
-      private static readonly char[] END_CHARS = { 'T', 'N', '*', 'E' };
+      private static readonly char[] START_END_CHARS = {'A', 'B', 'C', 'D'};
+      private static readonly char[] ALT_START_END_CHARS = {'T', 'N', '*', 'E'};
 
-      override public bool[] encode(String contents)
+      public override bool[] encode(String contents)
       {
+         if (contents.Length < 2)
+         {
+            throw new ArgumentException("Codabar should start/end with start/stop symbols");
+         }
          // Verify input and calculate decoded length.
-         if (!CodaBarReader.arrayContains(START_CHARS, Char.ToUpper(contents[0])))
+         char firstChar = Char.ToUpper(contents[0]);
+         char lastChar = Char.ToUpper(contents[contents.Length - 1]);
+         bool startsEndsNormal =
+            CodaBarReader.arrayContains(START_END_CHARS, firstChar) &&
+            CodaBarReader.arrayContains(START_END_CHARS, lastChar);
+         bool startsEndsAlt =
+            CodaBarReader.arrayContains(ALT_START_END_CHARS, firstChar) &&
+            CodaBarReader.arrayContains(ALT_START_END_CHARS, lastChar);
+         if (!(startsEndsNormal || startsEndsAlt))
          {
             throw new ArgumentException(
-                "Codabar should start with one of the following: " + SupportClass.Join(", ", START_CHARS));
+               "Codabar should start/end with " + SupportClass.Join(", ", START_END_CHARS) +
+               ", or start/end with " + SupportClass.Join(", ", ALT_START_END_CHARS));
          }
-         if (!CodaBarReader.arrayContains(END_CHARS, Char.ToUpper(contents[contents.Length - 1])))
-         {
-            throw new ArgumentException(
-                "Codabar should end with one of the following: " + SupportClass.Join(", ", END_CHARS));
-         }
+
          // The start character and the end character are decoded to 10 length each.
          int resultLength = 20;
-         char[] charsWhichAreTenLengthEachAfterDecoded = { '/', ':', '+', '.' };
+         char[] charsWhichAreTenLengthEachAfterDecoded = {'/', ':', '+', '.'};
          for (int i = 1; i < contents.Length - 1; i++)
          {
             if (Char.IsDigit(contents[i]) || contents[i] == '-'
@@ -51,7 +60,7 @@ namespace ZXing.OneD
                resultLength += 9;
             }
             else if (CodaBarReader.arrayContains(
-              charsWhichAreTenLengthEachAfterDecoded, contents[i]))
+               charsWhichAreTenLengthEachAfterDecoded, contents[i]))
             {
                resultLength += 10;
             }
@@ -101,7 +110,8 @@ namespace ZXing.OneD
             int counter = 0;
             int bit = 0;
             while (bit < 7)
-            { // A character consists of 7 digit.
+            {
+               // A character consists of 7 digit.
                result[position] = color;
                position++;
                if (((code >> (6 - bit)) & 1) == 0 || counter == 1)
