@@ -46,6 +46,9 @@
     <Reference Include="log4net">
       <HintPath>..\..\..\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Kinect, Version=1.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\3rdparty\Kinect\Microsoft.Kinect.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\3rdparty\NUnit.NET\nunit.framework.dll</HintPath>
     </Reference>
@@ -77,6 +80,7 @@
     <Compile Include="AllPositiveBlackBoxTester.cs" />
     <Compile Include="aztec\AztecBlackBox1TestCase.cs" />
     <Compile Include="aztec\AztecBlackBox2TestCase.cs" />
+    <Compile Include="aztec\detector\DetectorTest.cs" />
     <Compile Include="aztec\encoder\EncoderTest.cs" />
     <Compile Include="BigIntegerTests.cs" />
     <Compile Include="BitmapLuminanceSourceTests.cs" />
@@ -120,6 +124,7 @@
     <Compile Include="datamatrix\encoder\HighLevelEncodeTestCase.cs" />
     <Compile Include="datamatrix\encoder\PlacementTestCase.cs" />
     <Compile Include="datamatrix\encoder\SymbolInfoTestCase.cs" />
+    <Compile Include="KinectTests.cs" />
     <Compile Include="multi\GenericMultipleBarcodeReaderTestCase.cs" />
     <Compile Include="multi\qrcode\MultiQRCodeBlackBox1TestCase.cs" />
     <Compile Include="negative\FalsePositives2BlackBoxTestCase.cs" />

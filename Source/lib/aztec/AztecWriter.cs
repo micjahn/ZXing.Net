@@ -61,7 +61,7 @@ namespace ZXing.Aztec
       /// </returns>
       public BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
       {
-         return encode(contents, format, DEFAULT_CHARSET, Internal.Encoder.DEFAULT_EC_PERCENT);
+         return encode(contents, format, width, height, DEFAULT_CHARSET, Internal.Encoder.DEFAULT_EC_PERCENT);
       }
 
       /// <summary>
@@ -76,7 +76,7 @@ namespace ZXing.Aztec
       /// </returns>
       public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, IDictionary<EncodeHintType, object> hints)
       {
-         Encoding charset = DEFAULT_CHARSET;
+         var charset = DEFAULT_CHARSET;
          int? eccPercent = null;
          if (hints != null)
          {
@@ -100,18 +100,54 @@ namespace ZXing.Aztec
 
          return encode(contents,
                        format,
+                       width, 
+                       height,
                        charset,
                        eccPercent == null ? Internal.Encoder.DEFAULT_EC_PERCENT : eccPercent.Value);
       }
 
-      private static BitMatrix encode(String contents, BarcodeFormat format, Encoding charset, int eccPercent)
+      private static BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Encoding charset, int eccPercent)
       {
          if (format != BarcodeFormat.AZTEC)
          {
             throw new ArgumentException("Can only encode AZTEC code, but got " + format);
          }
-         AztecCode aztec = Internal.Encoder.encode(charset.GetBytes(contents), eccPercent);
-         return aztec.Matrix;
+         var aztec = Internal.Encoder.encode(charset.GetBytes(contents), eccPercent);
+         return renderResult(aztec, width, height);
+      }
+
+      private static BitMatrix renderResult(AztecCode code, int width, int height)
+      {
+         var input = code.Matrix;
+         if (input == null)
+         {
+            throw new InvalidOperationException("No input code matrix");
+         }
+
+         int inputWidth = input.Width;
+         int inputHeight = input.Height;
+         int outputWidth = Math.Max(width, inputWidth);
+         int outputHeight = Math.Max(height, inputHeight);
+
+         int multiple = Math.Min(outputWidth / inputWidth, outputHeight / inputHeight);
+         int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
+         int topPadding = (outputHeight - (inputHeight * multiple)) / 2;
+
+         var output = new BitMatrix(outputWidth, outputHeight);
+
+         for (int inputY = 0, outputY = topPadding; inputY < inputHeight; inputY++, outputY += multiple)
+         {
+            // Write the contents of this row of the barcode
+            for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple)
+            {
+               if (input[inputX, inputY])
+               {
+                  output.setRegion(outputX, outputY, multiple, multiple);
+               }
+            }
+         }
+
+         return output;
       }
    }
 }

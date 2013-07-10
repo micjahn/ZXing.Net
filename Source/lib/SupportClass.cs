@@ -108,6 +108,23 @@ namespace ZXing
          }
       }
 
+      /// <summary>
+      /// Fills the specified array.
+      /// (can't use extension method because of .Net 2.0 support)
+      /// </summary>
+      /// <typeparam name="T"></typeparam>
+      /// <param name="array">The array.</param>
+      /// <param name="startIndex">The start index.</param>
+      /// <param name="endIndex">The end index.</param>
+      /// <param name="value">The value.</param>
+      public static void Fill<T>(T[] array, int startIndex, int endIndex, T value)
+      {
+         for (int i = startIndex; i < endIndex; i++)
+         {
+            array[i] = value;
+         }
+      }
+
       public static string ToBinaryString(int x)
       {
          char[] bits = new char[32];
@@ -121,6 +138,17 @@ namespace ZXing
 
          Array.Reverse(bits, 0, i);
          return new string(bits);
+      }
+
+      public static int bitCount(int n)
+      {
+         int ret = 0;
+         while (n != 0)
+         {
+            n &= (n - 1);
+            ret++;
+         }
+         return ret;
       }
    }
 }
