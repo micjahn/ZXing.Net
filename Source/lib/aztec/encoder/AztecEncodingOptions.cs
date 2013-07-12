@@ -53,5 +53,35 @@ namespace ZXing.Aztec
             }
          }
       }
+
+      /// <summary>
+      /// Specifies the required number of layers for an Aztec code:
+      /// a negative number (-1, -2, -3, -4) specifies a compact Aztec code
+      /// 0 indicates to use the minimum number of layers (the default)
+      /// a positive number (1, 2, .. 32) specifies a normal (non-compact) Aztec code
+      /// </summary>
+      public int? Layers
+      {
+         get
+         {
+            if (Hints.ContainsKey(EncodeHintType.AZTEC_LAYERS))
+            {
+               return (int)Hints[EncodeHintType.AZTEC_LAYERS];
+            }
+            return null;
+         }
+         set
+         {
+            if (value == null)
+            {
+               if (Hints.ContainsKey(EncodeHintType.AZTEC_LAYERS))
+                  Hints.Remove(EncodeHintType.AZTEC_LAYERS);
+            }
+            else
+            {
+               Hints[EncodeHintType.AZTEC_LAYERS] = value;
+            }
+         }
+      }
    }
 }

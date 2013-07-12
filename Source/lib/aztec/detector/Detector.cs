@@ -49,8 +49,19 @@ namespace ZXing.Aztec.Internal
       /// <summary>
       /// Detects an Aztec Code in an image.
       /// </summary>
-      /// <returns>encapsulating results of detecting an Aztec Code</returns>
       public AztecDetectorResult detect()
+      {
+         return detect(false);
+      }
+
+      /// <summary>
+      /// Detects an Aztec Code in an image.
+      /// </summary>
+      /// <param name="isMirror">if set to <c>true</c> [is mirror].</param>
+      /// <returns>
+      /// encapsulating results of detecting an Aztec Code
+      /// </returns>
+      public AztecDetectorResult detect(bool isMirror)
       {
          // 1. Get the center of the aztec matrix
          var pCenter = getMatrixCenter();
@@ -63,6 +74,12 @@ namespace ZXing.Aztec.Internal
          if (bullsEyeCorners == null)
          {
             return null;
+         }
+         if (isMirror)
+         {
+            ResultPoint temp = bullsEyeCorners[0];
+            bullsEyeCorners[0] = bullsEyeCorners[2];
+            bullsEyeCorners[2] = temp;
          }
 
          // 3. Get the size of the matrix and other parameters from the bull's eye
@@ -166,7 +183,7 @@ namespace ZXing.Aztec.Internal
          return true;
       }
 
-      private readonly int[] expectedCornerBits =
+      private static readonly int[] EXPECTED_CORNER_BITS =
          {
             0xee0, // 07340  XXX .XX X.. ...
             0x1dc, // 00734  ... XXX .XX X..
@@ -174,7 +191,7 @@ namespace ZXing.Aztec.Internal
             0x707, // 03407 .XX X.. ... XXX
          };
 
-      private int getRotation(int[] sides, int length)
+      private static int getRotation(int[] sides, int length)
       {
          // In a normal pattern, we expect to See
          //   **    .*             D       A
@@ -201,7 +218,7 @@ namespace ZXing.Aztec.Internal
          // can easily tolerate two errors.
          for (int shift = 0; shift < 4; shift++)
          {
-            if (SupportClass.bitCount(cornerBits ^ expectedCornerBits[shift]) <= 2)
+            if (SupportClass.bitCount(cornerBits ^ EXPECTED_CORNER_BITS[shift]) <= 2)
             {
                return shift;
             }

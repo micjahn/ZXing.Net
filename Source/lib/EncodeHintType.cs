@@ -118,5 +118,13 @@ namespace ZXing
       /// standard value: Encodation.ASCII
       /// </summary>
       DATA_MATRIX_DEFAULT_ENCODATION,
+
+      /// <summary>
+      /// Specifies the required number of layers for an Aztec code:
+      /// a negative number (-1, -2, -3, -4) specifies a compact Aztec code
+      /// 0 indicates to use the minimum number of layers (the default)
+      /// a positive number (1, 2, .. 32) specifies a normal (non-compact) Aztec code
+      /// </summary>
+      AZTEC_LAYERS,
    }
 }

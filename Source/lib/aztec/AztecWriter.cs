@@ -61,7 +61,7 @@ namespace ZXing.Aztec
       /// </returns>
       public BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
       {
-         return encode(contents, format, width, height, DEFAULT_CHARSET, Internal.Encoder.DEFAULT_EC_PERCENT);
+         return encode(contents, format, width, height, null);
       }
 
       /// <summary>
@@ -77,7 +77,9 @@ namespace ZXing.Aztec
       public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, IDictionary<EncodeHintType, object> hints)
       {
          var charset = DEFAULT_CHARSET;
-         int? eccPercent = null;
+         int eccPercent = Internal.Encoder.DEFAULT_EC_PERCENT;
+         int layers = Internal.Encoder.DEFAULT_AZTEC_LAYERS;
+
          if (hints != null)
          {
             if (hints.ContainsKey(EncodeHintType.CHARACTER_SET))
@@ -96,6 +98,14 @@ namespace ZXing.Aztec
                   eccPercent = Convert.ToInt32(eccPercentObject);
                }
             }
+            if (hints.ContainsKey(EncodeHintType.AZTEC_LAYERS))
+            {
+               object layersObject = hints[EncodeHintType.AZTEC_LAYERS];
+               if (layersObject != null)
+               {
+                  layers = Convert.ToInt32(layersObject);
+               }
+            }
          }
 
          return encode(contents,
@@ -103,16 +113,17 @@ namespace ZXing.Aztec
                        width, 
                        height,
                        charset,
-                       eccPercent == null ? Internal.Encoder.DEFAULT_EC_PERCENT : eccPercent.Value);
+                       eccPercent,
+                       layers);
       }
 
-      private static BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Encoding charset, int eccPercent)
+      private static BitMatrix encode(String contents, BarcodeFormat format, int width, int height, Encoding charset, int eccPercent, int layers)
       {
          if (format != BarcodeFormat.AZTEC)
          {
             throw new ArgumentException("Can only encode AZTEC code, but got " + format);
          }
-         var aztec = Internal.Encoder.encode(charset.GetBytes(contents), eccPercent);
+         var aztec = Internal.Encoder.encode(charset.GetBytes(contents), eccPercent, layers);
          return renderResult(aztec, width, height);
       }
 

@@ -139,7 +139,8 @@ namespace ZXing.Aztec.Test
          var data = "In ut magna vel mauris malesuada";
          var writer = new AztecWriter();
          var matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
-         var aztec = Internal.Encoder.encode(LATIN_1.GetBytes(data), Internal.Encoder.DEFAULT_EC_PERCENT);
+         var aztec = Internal.Encoder.encode(LATIN_1.GetBytes(data),
+                                             Internal.Encoder.DEFAULT_EC_PERCENT, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
          var expectedMatrix = aztec.Matrix;
          Assert.AreEqual(matrix, expectedMatrix);
       }
@@ -358,7 +359,7 @@ namespace ZXing.Aztec.Test
          foreach (int i in new int[]
             {
                1, 2, 3, 10, 29, 30, 31, 32, 33,
-               60, 61, 62, 63, 64, 2076, 2077, 2078, 2079, 2080, 3000
+               60, 61, 62, 63, 64, 2076, 2077, 2078, 2079, 2080, 2100
             })
          {
             // This is the expected length of a binary string of length "i"
@@ -366,10 +367,16 @@ namespace ZXing.Aztec.Test
                                  ((i <= 31) ? 10 : (i <= 62) ? 20 : (i <= 2078) ? 21 : 31);
             // Verify that we are correct about the length.
             testHighLevelEncodeString(sb.Substring(0, i), expectedLength);
-            // A lower case letter at the beginning will be merged into binary mode
-            testHighLevelEncodeString('a' + sb.Substring(0, i - 1), expectedLength);
-            // A lower case letter at the end will also be merged into binary mode
-            testHighLevelEncodeString(sb.Substring(0, i - 1) + 'a', expectedLength);
+            if (i != 1 && i != 32 && i != 2079)
+            {
+               // The addition of an 'a' at the beginning or end gets merged into the binary code
+               // in those cases where adding another binary character only adds 8 or 9 bits to the result.
+               // So we exclude the border cases i=1,32,2079
+               // A lower case letter at the beginning will be merged into binary mode
+               testHighLevelEncodeString('a' + sb.Substring(0, i - 1), expectedLength);
+               // A lower case letter at the end will also be merged into binary mode
+               testHighLevelEncodeString(sb.Substring(0, i - 1) + 'a', expectedLength);
+            }
             // A lower case letter at both ends will enough to latch us into LOWER.
             testHighLevelEncodeString('a' + sb.Substring(0, i) + 'b', expectedLength + 15);
          }
@@ -402,12 +409,72 @@ namespace ZXing.Aztec.Test
          //                          "...X. XXXXX ..X.. X....... ..X.XXX. ..X..... X.......");
       }
 
+      [Test]
+      public void testUserSpecifiedLayers()
+      {
+         byte[] alphabet = LATIN_1.GetBytes("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+         AztecCode aztec = Internal.Encoder.encode(alphabet, 25, -2);
+         Assert.AreEqual(2, aztec.Layers);
+         Assert.IsTrue(aztec.isCompact);
+
+         aztec = Internal.Encoder.encode(alphabet, 25, 32);
+         Assert.AreEqual(32, aztec.Layers);
+         Assert.IsFalse(aztec.isCompact);
+
+         try
+         {
+            Internal.Encoder.encode(alphabet, 25, 33);
+            Assert.Fail("Encode should have failed.  No such thing as 33 layers");
+         }
+         catch (ArgumentException expected)
+         {
+         }
+
+         try
+         {
+            Internal.Encoder.encode(alphabet, 25, -1);
+            Assert.Fail("Encode should have failed.  Text can't fit in 1-layer compact");
+         }
+         catch (ArgumentException expected)
+         {
+         }
+      }
+
+      [Test]
+      public void testBorderCompact4Case()
+      {
+         // Compact(4) con hold 608 bits of information, but at most 504 can be data.  Rest must
+         // be error correction
+         const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+         // encodes as 26 * 5 * 4 = 520 bits of data
+         const string alphabet4 = alphabet + alphabet + alphabet + alphabet;
+         byte[] data = LATIN_1.GetBytes(alphabet4);
+         try
+         {
+            Internal.Encoder.encode(data, 0, -4);
+            Assert.Fail("Encode should have failed.  Text can't fit in 1-layer compact");
+         }
+         catch (ArgumentException expected)
+         {
+         }
+
+         // If we just try to encode it normally, it will go to a non-compact 4 layer
+         AztecCode aztecCode = Internal.Encoder.encode(data, 0, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
+         Assert.IsFalse(aztecCode.isCompact);
+         Assert.AreEqual(4, aztecCode.Layers);
+
+         // But shortening the string to 100 bytes (500 bits of data), compact works fine, even if we
+         // include more error checking.
+         aztecCode = Internal.Encoder.encode(LATIN_1.GetBytes(alphabet4.Substring(0, 100)), 10, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
+         Assert.IsTrue(aztecCode.isCompact);
+         Assert.AreEqual(4, aztecCode.Layers);
+      }
 
       // Helper routines
 
       private static void testEncode(String data, bool compact, int layers, String expected)
       {
-         AztecCode aztec = Internal.Encoder.encode(LATIN_1.GetBytes(data), 33);
+         AztecCode aztec = Internal.Encoder.encode(LATIN_1.GetBytes(data), 33, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
          Assert.AreEqual(compact, aztec.isCompact, "Unexpected symbol format (compact)");
          Assert.AreEqual(layers, aztec.Layers, "Unexpected nr. of layers");
          BitMatrix matrix = aztec.Matrix;
@@ -416,7 +483,7 @@ namespace ZXing.Aztec.Test
 
       private static void testEncodeDecode(String data, bool compact, int layers)
       {
-         AztecCode aztec = Internal.Encoder.encode(LATIN_1.GetBytes(data), 25);
+         AztecCode aztec = Internal.Encoder.encode(LATIN_1.GetBytes(data), 25, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
          Assert.AreEqual(compact, aztec.isCompact, "Unexpected symbol format (compact)");
          Assert.AreEqual(layers, aztec.Layers, "Unexpected nr. of layers");
          BitMatrix matrix = aztec.Matrix;
@@ -452,7 +519,7 @@ namespace ZXing.Aztec.Test
          hints[EncodeHintType.ERROR_CORRECTION] = eccPercent;
          var writer = new AztecWriter();
          var matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0, hints);
-         var aztec = Internal.Encoder.encode(Encoding.GetEncoding(charset).GetBytes(data), eccPercent);
+         var aztec = Internal.Encoder.encode(Encoding.GetEncoding(charset).GetBytes(data), eccPercent, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
          Assert.AreEqual(compact, aztec.isCompact, "Unexpected symbol format (compact)");
          Assert.AreEqual(layers, aztec.Layers, "Unexpected nr. of layers");
          var matrix2 = aztec.Matrix;
@@ -528,11 +595,11 @@ namespace ZXing.Aztec.Test
          Assert.AreEqual(s, Internal.Decoder.highLevelDecode(toBooleanArray(bits)));
       }
 
-      private static void testHighLevelEncodeString(String s, int receivedBits)
+      private static void testHighLevelEncodeString(String s, int expectedReceivedBits)
       {
          BitArray bits = new HighLevelEncoder(LATIN_1.GetBytes(s)).encode();
          int receivedBitCount = bits.ToString().Replace(" ", "").Length;
-         Assert.AreEqual(receivedBitCount, receivedBitCount, "highLevelEncode() failed for input string: " + s);
+         Assert.AreEqual(expectedReceivedBits, receivedBitCount, "highLevelEncode() failed for input string: " + s);
          Assert.AreEqual(s, Internal.Decoder.highLevelDecode(toBooleanArray(bits)));
       }
    }

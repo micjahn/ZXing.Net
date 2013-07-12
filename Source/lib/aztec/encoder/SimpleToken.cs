@@ -26,8 +26,8 @@ namespace ZXing.Aztec.Internal
       private readonly short value;
       private readonly short bitCount;
 
-      public SimpleToken(Token previous, int totalBitCount, int value, int bitCount)
-         : base(previous, totalBitCount)
+      public SimpleToken(Token previous, int value, int bitCount)
+         : base(previous)
       {
          this.value = (short) value;
          this.bitCount = (short) bitCount;

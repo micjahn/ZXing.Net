@@ -55,11 +55,29 @@ namespace ZXing.Aztec
          var blackmatrix = image.BlackMatrix;
          if (blackmatrix == null)
             return null;
-         AztecDetectorResult detectorResult = new Detector(blackmatrix).detect();
-         if (detectorResult == null)
-            return null;
 
-         ResultPoint[] points = detectorResult.Points;
+         Detector detector = new Detector(blackmatrix);
+         ResultPoint[] points = null;
+         DecoderResult decoderResult = null;
+
+         var detectorResult = detector.detect(false);
+         if (detectorResult != null)
+         {
+            points = detectorResult.Points;
+
+            decoderResult = new Decoder().decode(detectorResult);
+         }
+         if (decoderResult == null)
+         {
+            detectorResult = detector.detect(true);
+            if (detectorResult == null)
+               return null;
+               
+            points = detectorResult.Points;
+            decoderResult = new Decoder().decode(detectorResult);
+            if (decoderResult == null)
+               return null;
+         }
 
          if (hints != null &&
              hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK))
@@ -74,11 +92,7 @@ namespace ZXing.Aztec
             }
          }
 
-         DecoderResult decoderResult = new Internal.Decoder().decode(detectorResult);
-         if (decoderResult == null)
-            return null;
-
-         Result result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.AZTEC);
+         var result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.AZTEC);
 
          IList<byte[]> byteSegments = decoderResult.ByteSegments;
          if (byteSegments != null)

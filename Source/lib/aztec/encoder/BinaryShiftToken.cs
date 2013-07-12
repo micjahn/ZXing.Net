@@ -26,10 +26,9 @@ namespace ZXing.Aztec.Internal
       private readonly short binaryShiftByteCount;
 
       public BinaryShiftToken(Token previous,
-                              int totalBitCount,
                               int binaryShiftStart,
                               int binaryShiftByteCount)
-         : base(previous, totalBitCount)
+         : base(previous)
       {
          this.binaryShiftStart = (short) binaryShiftStart;
          this.binaryShiftByteCount = (short) binaryShiftByteCount;
@@ -43,7 +42,7 @@ namespace ZXing.Aztec.Internal
             {
                // We need a header before the first character, and before
                // character 31 when the total byte code is <= 62
-               bitArray.appendBits(31, 5);
+               bitArray.appendBits(31, 5);  // BINARY_SHIFT
                if (binaryShiftByteCount > 62)
                {
                   bitArray.appendBits(binaryShiftByteCount - 31, 16);
@@ -61,7 +60,6 @@ namespace ZXing.Aztec.Internal
             }
             bitArray.appendBits(text[binaryShiftStart + i], 8);
          }
-         //assert bitArray.getSize() == getTotalBitCount();
       }
 
       public override String ToString()

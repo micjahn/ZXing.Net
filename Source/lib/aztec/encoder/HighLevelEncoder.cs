@@ -96,7 +96,7 @@ namespace ZXing.Aztec.Internal
       // A reverse mapping from [mode][char] to the encoding for that character
       // in that mode.  An entry of 0 indicates no mapping exists.
       internal static readonly int[][] CHAR_MAP = new int[5][];
-      // A map showing the available shift coodes.  (The shifts to BINARY are not shown
+      // A map showing the available shift codes.  (The shifts to BINARY are not shown
       internal static readonly int[][] SHIFT_TABLE = new int[6][]; // mode shift codes, per table
       private readonly byte[] text;
 
