@@ -140,16 +140,16 @@ namespace ZXing.Rendering
                      color = matrix[x, y] ? Foreground : Background;
                      for (var pixelsizeWidth = 0; pixelsizeWidth < pixelsize; pixelsizeWidth++)
                      {
-                        pixels[index++] = color.R;
-                        pixels[index++] = color.G;
                         pixels[index++] = color.B;
+                        pixels[index++] = color.G;
+                        pixels[index++] = color.R;
                      }
                   }
                   for (var x = pixelsize * matrix.Width; x < width; x++)
                   {
-                     pixels[index++] = Background.R;
-                     pixels[index++] = Background.G;
                      pixels[index++] = Background.B;
+                     pixels[index++] = Background.G;
+                     pixels[index++] = Background.R;
                   }
                   index += padding;
                }
@@ -158,9 +158,9 @@ namespace ZXing.Rendering
             {
                for (var x = 0; x < width; x++)
                {
-                  pixels[index++] = Background.R;
-                  pixels[index++] = Background.G;
                   pixels[index++] = Background.B;
+                  pixels[index++] = Background.G;
+                  pixels[index++] = Background.R;
                }
                index += padding;
             }
