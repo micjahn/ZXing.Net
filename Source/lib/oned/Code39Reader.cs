@@ -348,6 +348,11 @@ namespace ZXing.OneD
             char c = encoded[i];
             if (c == '+' || c == '$' || c == '%' || c == '/')
             {
+               if (i + 1 >= encoded.Length)
+               {
+                  return null;
+               }
+
                char next = encoded[i + 1];
                char decodedChar = '\0';
                switch (c)
