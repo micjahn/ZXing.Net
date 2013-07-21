@@ -343,6 +343,11 @@ namespace ZXing
             Options.Hints[DecodeHintType.TRY_HARDER_WITHOUT_ROTATION] = true;
             rotationMaxCount = 4;
          }
+         else
+         {
+            if (Options.Hints.ContainsKey(DecodeHintType.TRY_HARDER_WITHOUT_ROTATION))
+               Options.Hints.Remove(DecodeHintType.TRY_HARDER_WITHOUT_ROTATION);
+         }
 
          for (; rotationCount < rotationMaxCount; rotationCount++)
          {
