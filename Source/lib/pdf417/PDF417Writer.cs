@@ -163,13 +163,15 @@ namespace ZXing.PDF417
 
          // Creates the bitmatrix with extra space for whitespace
          var output = new BitMatrix(input[0].Length + 2*whiteSpace, input.Length + 2*whiteSpace);
-         var yOutput = output.Height - whiteSpace;
+         var yOutput = output.Height - whiteSpace - 1;
          for (int y = 0; y < input.Length; y++)
          {
-            for (int x = 0; x < input[0].Length; x++)
+            var currentInput = input[y];
+            var currentInputLength = currentInput.Length;
+            for (int x = 0; x < currentInputLength; x++)
             {
                // Zero is white in the bytematrix
-               if (input[y][x] == 1)
+               if (currentInput[x] == 1)
                {
                   output[x + whiteSpace, yOutput] = true;
                }
