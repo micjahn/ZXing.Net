@@ -31,7 +31,7 @@ namespace ZXing.PDF417
       /// <summary>
       /// default white space (margin) around the code
       /// </summary>
-      private const int WhiteSpace = 30;
+      private const int WHITE_SPACE = 30;
 
       /// <summary>
       /// </summary>
@@ -55,7 +55,7 @@ namespace ZXing.PDF417
          }
 
          var encoder = new Internal.PDF417();
-         var margin = WhiteSpace;
+         var margin = WHITE_SPACE;
 
          if (hints != null)
          {
@@ -152,18 +152,15 @@ namespace ZXing.PDF417
 
       /// <summary>
       /// This takes an array holding the values of the PDF 417
-      ///
-      /// <param name="input">a byte array of information with 0 is black, and 1 is white</param>
-      /// <returns>BitMatrix of the input</returns>
       /// </summary>
+      /// <param name="input">a byte array of information with 0 is black, and 1 is white</param>
+      /// <param name="margin">border around the barcode</param>
+      /// <returns>BitMatrix of the input</returns>
       private static BitMatrix bitMatrixFrombitArray(sbyte[][] input, int margin)
       {
-         // Creates a small whitespace border around the barcode
-         int whiteSpace = margin;
-
          // Creates the bitmatrix with extra space for whitespace
-         var output = new BitMatrix(input[0].Length + 2*whiteSpace, input.Length + 2*whiteSpace);
-         var yOutput = output.Height - whiteSpace - 1;
+         var output = new BitMatrix(input[0].Length + 2 * margin, input.Length + 2 * margin);
+         var yOutput = output.Height - margin - 1;
          for (int y = 0; y < input.Length; y++)
          {
             var currentInput = input[y];
@@ -173,7 +170,7 @@ namespace ZXing.PDF417
                // Zero is white in the bytematrix
                if (currentInput[x] == 1)
                {
-                  output[x + whiteSpace, yOutput] = true;
+                  output[x + margin, yOutput] = true;
                }
             }
             yOutput--;
