@@ -27,7 +27,7 @@ namespace ZXing.QrCode.Test
          : base("test/data/blackbox/qrcode-2", new MultiFormatReader(), BarcodeFormat.QR_CODE)
       {
          addTest(30, 31, 0.0f);
-         addTest(29, 30, 90.0f);
+         addTest(31, 31, 90.0f);    // Java: addTest(29, 30, 90.0f);
          addTest(30, 30, 180.0f);
          addTest(29, 30, 270.0f);
       }

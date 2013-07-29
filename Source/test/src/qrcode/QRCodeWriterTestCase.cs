@@ -207,5 +207,48 @@ namespace ZXing.QrCode.Test
              "renderer-test-03.png");
          */
       }
+
+#if !SILVERLIGHT
+      [Test]
+      [Explicit]
+      public void test_Random_Encoding_Decoding_Cycles_Up_To_1000()
+       {
+           int bigEnough = 256;
+
+           byte[] data = new byte[256];
+           Random random = new Random(2344);
+
+           for (int i = 0; i < 1000; i++)
+           {
+              random.NextBytes(data);
+              //string content = "U/QcYPdz4MTR2nD2+vv88mZVnLA9/h+EGrEu3mwRIP65DlM6vLwlAwv/Ztd5LkHsio3UEJ29C1XUl0ZGRAFYv7pxPeyowjWqL5ilPZhICutvQlTePBBg+wP+ZiR2378Jp6YcB/FVRMdXKuAEGM29i41a1gKseYKpEEHpqlwRNE/Zm5bxKwL5Gv2NhxIvXOM1QNqWGwm9XC0jcvawbJprRfaRK3w3y2CKYbwEH/FwerRds2mBehhFHD5ozbgLSa1iIkIbnjBn/XV6DLpNuD08s/hCUrgx6crdSw89z/2nfxcOov2vVNuE9rbzB25e+GQBLBq/yfb1MTh3PlMhKS530w==";
+              string content = Convert.ToBase64String(data);
+
+              BarcodeWriter writer = new BarcodeWriter
+                 {
+                    Format = BarcodeFormat.QR_CODE,
+                    Options = new EncodingOptions
+                       {
+                          Height = bigEnough,
+                          Width = bigEnough
+                       }
+                 };
+              Bitmap bmp = writer.Write(content);
+
+              var reader = new BarcodeReader
+                 {
+                    Options = new DecodingOptions
+                       {
+                          PureBarcode = true,
+                          PossibleFormats = new List<BarcodeFormat> {BarcodeFormat.QR_CODE}
+                       }
+                 };
+              var decodedResult = reader.Decode(bmp);
+
+              Assert.IsNotNull(decodedResult);
+              Assert.AreEqual(content, decodedResult.Text);
+           }
+       }
+#endif
    }
 }

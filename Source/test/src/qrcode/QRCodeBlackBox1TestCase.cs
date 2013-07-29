@@ -26,10 +26,10 @@ namespace ZXing.QrCode.Test
       public QRCodeBlackBox1TestCase()
          : base("test/data/blackbox/qrcode-1", new MultiFormatReader(), BarcodeFormat.QR_CODE)
       {
-         addTest(17, 17, 0.0f);
-         addTest(14, 15, 90.0f);
-         addTest(17, 17, 180.0f);
-         addTest(14, 15, 270.0f);
+         addTest(18, 18, 0.0f);     // Java: addTest(17, 17, 0.0f);
+         addTest(15, 16, 90.0f);    // Java: addTest(14, 15, 0.0f);
+         addTest(18, 18, 180.0f);   // Java: addTest(17, 17, 0.0f);
+         addTest(15, 16, 270.0f);   // Java: addTest(14, 15, 0.0f);
       }
    }
 }
