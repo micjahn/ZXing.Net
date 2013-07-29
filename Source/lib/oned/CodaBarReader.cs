@@ -72,7 +72,7 @@ namespace ZXing.OneD
          counterLength = 0;
       }
 
-      override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
+      public override Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
          for (var index = 0; index < counters.Length; index++)
             counters[index] = 0;
@@ -150,8 +150,11 @@ namespace ZXing.OneD
             return null;
          }
 
-         decodeRowResult.Remove(decodeRowResult.Length - 1, 1);
-         decodeRowResult.Remove(0, 1);
+         if (!SupportClass.GetValue(hints, DecodeHintType.RETURN_CODABAR_START_END, false))
+         {
+            decodeRowResult.Remove(decodeRowResult.Length - 1, 1);
+            decodeRowResult.Remove(0, 1);
+         }
 
          int runningCount = 0;
          for (int i = 0; i < startOffset; i++)
@@ -165,9 +168,7 @@ namespace ZXing.OneD
          }
          float right = runningCount;
 
-         var resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)
-                                      ? null
-                                      : (ResultPointCallback) hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
+         var resultPointCallback = SupportClass.GetValue(hints, DecodeHintType.NEED_RESULT_POINT_CALLBACK, (ResultPointCallback) null);
          if (resultPointCallback != null)
          {
             resultPointCallback(new ResultPoint(left, rowNumber));

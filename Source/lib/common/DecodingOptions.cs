@@ -212,6 +212,34 @@ namespace ZXing.Common
       }
 
       /// <summary>
+      /// If true, return the start and end digits in a Codabar barcode instead of stripping them. They
+      /// are alpha, whereas the rest are numeric. By default, they are stripped, but this causes them
+      /// to not be. Doesn't matter what it maps to; use <see cref="bool" />.
+      /// </summary>
+      public bool ReturnCodabarStartEnd
+      {
+         get
+         {
+            if (Hints.ContainsKey(DecodeHintType.RETURN_CODABAR_START_END))
+               return (bool)Hints[DecodeHintType.RETURN_CODABAR_START_END];
+            return false;
+         }
+         set
+         {
+            if (value)
+            {
+               Hints[DecodeHintType.RETURN_CODABAR_START_END] = true;
+            }
+            else
+            {
+               if (Hints.ContainsKey(DecodeHintType.RETURN_CODABAR_START_END))
+               {
+                  Hints.Remove(DecodeHintType.RETURN_CODABAR_START_END);
+               }
+            }
+         }
+      }
+      /// <summary>
       /// Initializes a new instance of the <see cref="EncodingOptions"/> class.
       /// </summary>
       public DecodingOptions()

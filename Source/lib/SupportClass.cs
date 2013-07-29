@@ -150,5 +150,26 @@ namespace ZXing
          }
          return ret;
       }
+
+      /// <summary>
+      /// Savely gets the value of a decoding hint
+      /// if hints is null the default is returned
+      /// </summary>
+      /// <typeparam name="T"></typeparam>
+      /// <param name="hints">The hints.</param>
+      /// <param name="hintType">Type of the hint.</param>
+      /// <param name="default">The @default.</param>
+      /// <returns></returns>
+      public static T GetValue<T>(IDictionary<DecodeHintType, object> hints, DecodeHintType hintType, T @default)
+      {
+         // can't use extension method because of .Net 2.0 support
+
+         if (hints == null)
+            return @default;
+         if (!hints.ContainsKey(hintType))
+            return @default;
+
+         return (T)hints[hintType];
+      }
    }
 }
