@@ -26,8 +26,8 @@ namespace ZXing.OneD.Test
       public ITFBlackBox2TestCase()
          : base("test/data/blackbox/itf-2", new MultiFormatReader(), BarcodeFormat.ITF)
       {
-         addTest(8, 9, 0.0f);
-         addTest(7, 9, 180.0f);
+         addTest(13, 13, 0.0f);
+         addTest(13, 13, 180.0f);
       }
    }
 }

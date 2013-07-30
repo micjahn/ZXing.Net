@@ -247,8 +247,10 @@ namespace ZXing.OneD
       /// <returns>false, if the quiet zone cannot be found</returns>
       private bool validateQuietZone(BitArray row, int startPattern)
       {
-
          int quietCount = this.narrowLineWidth * 10;  // expect to find this many pixels of quiet zone
+
+         // if there are not so many pixel at all let's try as many as possible
+         quietCount = quietCount < startPattern ? quietCount : startPattern;
 
          for (int i = startPattern - 1; quietCount > 0 && i >= 0; i--)
          {
