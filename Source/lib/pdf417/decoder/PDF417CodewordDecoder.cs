@@ -148,10 +148,15 @@ namespace ZXing.PDF417.Internal
          for (int j = 0; j < RATIOS_TABLE.Length; j++)
          {
             float error = 0.0f;
+            float[] ratioTableRow = RATIOS_TABLE[j];
             for (int k = 0; k < PDF417Common.BARS_IN_MODULE; k++)
             {
-               float diff = RATIOS_TABLE[j][k] - bitCountRatios[k];
+               float diff = ratioTableRow[k] - bitCountRatios[k];
                error += diff*diff;
+               if (error >= bestMatchError)
+               {
+                  break;
+               }
             }
             if (error < bestMatchError)
             {
