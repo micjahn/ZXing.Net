@@ -197,6 +197,11 @@ namespace ZXing.OneD
          }
 
          String resultString = result.ToString();
+         // UPC/EAN should never be less than 8 chars anyway
+         if (resultString.Length < 8)
+         {
+            return null;
+         }
          if (!checkChecksum(resultString))
          {
             return null;
