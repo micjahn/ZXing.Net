@@ -44,10 +44,10 @@ namespace ZXing.PDF417.Internal
 
       public DetectionResult(BarcodeMetadata metadata, BoundingBox box)
       {
-         this.Metadata = metadata;
-         this.Box = box;
-         this.ColumnCount = metadata.ColumnCount;
-         this.DetectionResultColumns = new DetectionResultColumn[ColumnCount + 2];
+         Metadata = metadata;
+         Box = box;
+         ColumnCount = metadata.ColumnCount;
+         DetectionResultColumns = new DetectionResultColumn[ColumnCount + 2];
       }
 
       /// <summary>
@@ -133,11 +133,11 @@ namespace ZXing.PDF417.Internal
       /// Adjusts the row numbers from both Row Indicators
       /// </summary>
       /// <returns> zero </returns>
-      private int adjustRowNumbersFromBothRI()
+      private void adjustRowNumbersFromBothRI()
       {
          if (DetectionResultColumns[0] == null || DetectionResultColumns[ColumnCount + 1] == null)
          {
-            return 0;
+            return;
          }
          Codeword[] LRIcodewords = DetectionResultColumns[0].Codewords;
          Codeword[] RRIcodewords = DetectionResultColumns[ColumnCount + 1].Codewords;
@@ -163,7 +163,6 @@ namespace ZXing.PDF417.Internal
                }
             }
          }
-         return 0;
       }
 
       /// <summary>
