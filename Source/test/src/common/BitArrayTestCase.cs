@@ -218,5 +218,171 @@ namespace ZXing.Common.Test
          Assert.IsTrue(array.isRange(0, 64, true));
          Assert.IsFalse(array.isRange(0, 64, false));
       }
+
+#if !SILVERLIGHT
+      [Test]
+      public void ReverseAlgorithmTest()
+      {
+         var oldBits = new[] { 128, 256, 512, 6453324, 50934953 };
+
+         for (var size = 1; size < 160; size++)
+         {
+            var newBitsOriginal = reverseOriginal(oldBits, size);
+            var newBitsNew = reverseNew(oldBits, size);
+
+            if (!arrays_are_equal(newBitsOriginal, newBitsNew, size / 32 + 1))
+            {
+               System.Diagnostics.Trace.WriteLine(size);
+               System.Diagnostics.Trace.WriteLine(BitsToString(oldBits, size));
+               System.Diagnostics.Trace.WriteLine(BitsToString(newBitsOriginal, size));
+               System.Diagnostics.Trace.WriteLine(BitsToString(newBitsNew, size));
+            }
+            Assert.IsTrue(arrays_are_equal(newBitsOriginal, newBitsNew, size / 32 + 1));
+         }
+      }
+
+      [Test]
+      public void ReverseSpeedTest()
+      {
+         var size = 140;
+         var oldBits = new[] {128, 256, 512, 6453324, 50934953};
+         var newBitsOriginal = reverseOriginal(oldBits, size);
+         var newBitsNew = reverseNew(oldBits, size);
+
+         System.Diagnostics.Trace.WriteLine(BitsToString(oldBits, size));
+         System.Diagnostics.Trace.WriteLine(BitsToString(newBitsOriginal, size));
+         System.Diagnostics.Trace.WriteLine(BitsToString(newBitsNew, size));
+
+         Assert.IsTrue(arrays_are_equal(newBitsOriginal, newBitsNew, newBitsNew.Length));
+
+         var startOld = DateTime.Now;
+         for (int runs = 0; runs < 1000000; runs++)
+         {
+            reverseOriginal(oldBits, 140);
+         }
+         var endOld = DateTime.Now;
+
+         var startNew = DateTime.Now;
+         for (int runs = 0; runs < 1000000; runs++)
+         {
+            reverseNew(oldBits, 140);
+         }
+         var endNew = DateTime.Now;
+
+         System.Diagnostics.Trace.WriteLine(endOld - startOld);
+         System.Diagnostics.Trace.WriteLine(endNew - startNew);
+      }
+
+      /// <summary> Reverses all bits in the array.</summary>
+      private int[] reverseOriginal(int[] oldBits, int oldSize)
+      {
+         int[] newBits = new int[oldBits.Length];
+         int size = oldSize;
+         for (int i = 0; i < size; i++)
+         {
+            if (bits_index(oldBits, size - i - 1))
+            {
+               newBits[i >> 5] |= 1 << (i & 0x1F);
+            }
+         }
+         return newBits;
+      }
+
+      private bool bits_index(int[] bits, int i)
+      {
+         return (bits[i >> 5] & (1 << (i & 0x1F))) != 0;
+      }
+
+      /// <summary> Reverses all bits in the array.</summary>
+      private int[] reverseNew(int[] oldBits, int oldSize)
+      {
+         // doesn't work if more ints are used as necessary
+         int[] newBits = new int[oldBits.Length];
+         var oldBitsLen = (int)Math.Ceiling(oldSize / 32f);
+         var len = oldBitsLen - 1;
+         for (var i = 0; i < oldBitsLen; i++)
+         {
+            var x = (long)oldBits[i];
+            x = ((x >> 1) & 0x55555555u) | ((x & 0x55555555u) << 1);
+            x = ((x >> 2) & 0x33333333u) | ((x & 0x33333333u) << 2);
+            x = ((x >> 4) & 0x0f0f0f0fu) | ((x & 0x0f0f0f0fu) << 4);
+            x = ((x >> 8) & 0x00ff00ffu) | ((x & 0x00ff00ffu) << 8);
+            x = ((x >> 16) & 0xffffu) | ((x & 0xffffu) << 16);
+            newBits[len - i] = (int)x;
+         }
+         if (oldSize != oldBitsLen * 32)
+         {
+            var leftOffset = oldBitsLen * 32 - oldSize;
+            var mask = 1;
+            for (var i = 0; i < 31 - leftOffset; i++ )
+               mask = (mask << 1) | 1;
+            var currentInt = (newBits[0] >> leftOffset) & mask;
+            for (var i = 1; i < oldBitsLen; i++)
+            {
+               var nextInt = newBits[i];
+               currentInt |= nextInt << (32 - leftOffset);
+               newBits[i - 1] = currentInt;
+               currentInt = (nextInt >> leftOffset) & mask;
+            }
+            newBits[oldBitsLen - 1] = currentInt;
+         }
+         return newBits;
+      }
+
+      private bool arrays_are_equal(int[] left, int[] right, int size)
+      {
+         for (var i = 0; i < size; i++)
+         {
+            if (left[i] != right[i])
+               return false;
+         }
+         return true;
+      }
+
+      private string BitsToString(int[] bits, int size)
+      {
+         var result = new System.Text.StringBuilder(size);
+         for (int i = 0; i < size; i++)
+         {
+            if ((i & 0x07) == 0)
+            {
+               result.Append(' ');
+            }
+            result.Append(bits_index(bits, i) ? 'X' : '.');
+         }
+         return result.ToString();
+      }
+
+      [Test]
+      public void testBitArrayNet()
+      {
+         var netArray = new System.Collections.BitArray(140, false);
+         var zxingArray = new BitArray(140);
+
+         var netVal = netArray[100];
+         var zxingVal = zxingArray[100];
+         Assert.AreEqual(netVal, zxingVal);
+
+         var startOld = DateTime.Now;
+         for (int runs = 0; runs < 1000000; runs++)
+         {
+            netVal = netArray[100];
+            netArray[100] = netVal;
+         }
+         var endOld = DateTime.Now;
+
+         var startNew = DateTime.Now;
+         for (int runs = 0; runs < 1000000; runs++)
+         {
+            zxingVal = zxingArray[100];
+            zxingArray[100] = zxingVal;
+         }
+         var endNew = DateTime.Now;
+
+         System.Diagnostics.Trace.WriteLine(endOld - startOld);
+         System.Diagnostics.Trace.WriteLine(endNew - startNew);
+      }
+#endif
+
    }
 }
