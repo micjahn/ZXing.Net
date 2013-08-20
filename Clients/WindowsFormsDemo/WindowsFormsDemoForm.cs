@@ -24,6 +24,7 @@ using System.Windows.Forms;
 using ZXing;
 using ZXing.Client.Result;
 using ZXing.Common;
+using ZXing.Rendering;
 
 namespace WindowsFormsDemo
 {
@@ -34,6 +35,7 @@ namespace WindowsFormsDemo
       private readonly BarcodeReader barcodeReader;
       private readonly IList<ResultPoint> resultPoints;
       private EncodingOptions EncodingOptions { get; set; }
+      private Type Renderer { get; set; }
       private bool TryMultipleBarcodes { get; set; }
       private bool TryOnlyMultipleQRCodes { get; set; }
 
@@ -64,6 +66,7 @@ namespace WindowsFormsDemo
                                             }
                                          };
          resultPoints = new List<ResultPoint>();
+         Renderer = typeof (BitmapRenderer);
       }
 
       protected override void OnLoad(EventArgs e)
@@ -212,14 +215,15 @@ namespace WindowsFormsDemo
          try
          {
             var writer = new BarcodeWriter
-            {
-               Format = (BarcodeFormat)cmbEncoderType.SelectedItem,
-               Options = EncodingOptions ?? new EncodingOptions
                {
-                  Height = picEncodedBarCode.Height,
-                  Width = picEncodedBarCode.Width
-               }
-            };
+                  Format = (BarcodeFormat) cmbEncoderType.SelectedItem,
+                  Options = EncodingOptions ?? new EncodingOptions
+                     {
+                        Height = picEncodedBarCode.Height,
+                        Width = picEncodedBarCode.Width
+                     },
+                  Renderer = (IBarcodeRenderer<Bitmap>)Activator.CreateInstance(Renderer)
+               };
             picEncodedBarCode.Image = writer.Write(txtEncoderContent.Text);
          }
          catch (Exception exc)
@@ -355,11 +359,13 @@ namespace WindowsFormsDemo
             }
             var dlg = new EncodingOptionsForm
                          {
-                            Options = options
+                            Options = options,
+                            Renderer = Renderer
                          };
             if (dlg.ShowDialog(this) == DialogResult.OK)
             {
                EncodingOptions = dlg.Options;
+               Renderer = dlg.Renderer;
             }
          }
          catch (Exception exc)

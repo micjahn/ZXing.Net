@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+using System;
 using System.Windows.Forms;
 
 using ZXing.Common;
+using ZXing.Rendering;
 
 namespace WindowsFormsDemo
 {
@@ -34,9 +36,19 @@ namespace WindowsFormsDemo
          }
       }
 
+      public Type Renderer
+      {
+         get { return (Type)cmbRenderer.SelectedItem; }
+         set { cmbRenderer.SelectedItem = value; }
+      }
+
       public EncodingOptionsForm()
       {
          InitializeComponent();
+
+         cmbRenderer.Items.Add(typeof (BitmapRenderer));
+         cmbRenderer.Items.Add(typeof (CustomBitmapRenderer));
+         cmbRenderer.SelectedItem = typeof (BitmapRenderer);
       }
    }
 }

@@ -31,6 +31,7 @@
          this.btnUse = new System.Windows.Forms.Button();
          this.btnCancel = new System.Windows.Forms.Button();
          this.propOptions = new System.Windows.Forms.PropertyGrid();
+         this.cmbRenderer = new System.Windows.Forms.ComboBox();
          this.SuspendLayout();
          // 
          // btnUse
@@ -60,10 +61,21 @@
          this.propOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-         this.propOptions.Location = new System.Drawing.Point(12, 12);
+         this.propOptions.Location = new System.Drawing.Point(12, 43);
          this.propOptions.Name = "propOptions";
-         this.propOptions.Size = new System.Drawing.Size(294, 229);
+         this.propOptions.Size = new System.Drawing.Size(294, 198);
          this.propOptions.TabIndex = 2;
+         // 
+         // cmbRenderer
+         // 
+         this.cmbRenderer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+         this.cmbRenderer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+         this.cmbRenderer.FormattingEnabled = true;
+         this.cmbRenderer.Location = new System.Drawing.Point(12, 16);
+         this.cmbRenderer.Name = "cmbRenderer";
+         this.cmbRenderer.Size = new System.Drawing.Size(294, 21);
+         this.cmbRenderer.TabIndex = 3;
          // 
          // EncodingOptionsForm
          // 
@@ -72,6 +84,7 @@
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
          this.CancelButton = this.btnCancel;
          this.ClientSize = new System.Drawing.Size(318, 282);
+         this.Controls.Add(this.cmbRenderer);
          this.Controls.Add(this.propOptions);
          this.Controls.Add(this.btnCancel);
          this.Controls.Add(this.btnUse);
@@ -87,5 +100,6 @@
       private System.Windows.Forms.Button btnUse;
       private System.Windows.Forms.Button btnCancel;
       private System.Windows.Forms.PropertyGrid propOptions;
+      private System.Windows.Forms.ComboBox cmbRenderer;
    }
 }

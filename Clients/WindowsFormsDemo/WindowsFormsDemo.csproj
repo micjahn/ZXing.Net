@@ -93,6 +93,7 @@
     <Compile Include="EncodingOptionsForm.Designer.cs">
       <DependentUpon>EncodingOptionsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Renderer\CustomBitmapRenderer.cs" />
     <Compile Include="WebCam.cs" />
     <Compile Include="WindowsFormsDemoForm.cs">
       <SubType>Form</SubType>
