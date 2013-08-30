@@ -1,6 +1,6 @@
 @ECHO OFF
 
-SET VERSION=0.11.0.0
+SET VERSION=0.12.0.0
 
 SET CURRENT_DIR=%CD%
 SET BUILD_DIR=%CD%\Build
@@ -32,6 +32,7 @@ IF NOT EXIST "%BINARY_DIR%\winrt\zxing.winrt.dll" GOTO BINARY_WINRT_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\monodroid\zxing.monoandroid.dll" GOTO BINARY_MONODROID_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\winmd\zxing.winmd" GOTO BINARY_WINRTCOMPONENTS_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\portable\zxing.portable.dll" GOTO BINARY_PORTABLE_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\kinect\zxing.kinect.dll" GOTO BINARY_KINECT_NOT_FOUND
 
 ECHO.
 ECHO Build deployment files in directory
@@ -54,7 +55,7 @@ REM building archives for binaries
 REM ***************************************************************************************
 
 CD "%BINARY_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net3.5 net4.0 winrt unity sl4 sl5 wp7.0 wp7.1 wp8.0 monodroid winmd portable -xr!Documentation
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net3.5 net4.0 winrt unity sl4 sl5 wp7.0 wp7.1 wp8.0 monodroid winmd portable kinect -xr!Documentation
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DEMO_BINARY%" Clients
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DOCUMENTATION%" Documentation
 CD "%CURRENT_DIR%"
@@ -90,6 +91,7 @@ MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\EmguCV" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\NUnit.NET" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\NUnit.Silverlight" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\Unity" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\Kinect" >NUL: 2>&1
 
 MKDIR "%SVN_EXPORT_DIR%\WinMD" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\WinMD\Source" >NUL: 2>&1
@@ -104,6 +106,7 @@ MKDIR "%SVN_EXPORT_DIR%\WinMD\Clients" >NUL: 2>&1
 "%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/NUnit.NET" "%SVN_EXPORT_DIR%\Base\3rdparty\NUnit.NET"
 "%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/NUnit.Silverlight" "%SVN_EXPORT_DIR%\Base\3rdparty\NUnit.Silverlight"
 "%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/Unity" "%SVN_EXPORT_DIR%\Base\3rdparty\Unity"
+"%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/Kinect" "%SVN_EXPORT_DIR%\Base\3rdparty\Kinect"
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.sln" "%SVN_EXPORT_DIR%\Base"
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.ce.sln" "%SVN_EXPORT_DIR%\Base"
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.vs2012.sln" "%SVN_EXPORT_DIR%\Base"
@@ -247,6 +250,13 @@ GOTO END
 :BINARY_PORTABLE_NOT_FOUND
 ECHO The Portable binaries 
 ECHO %BINARY_DIR%\portable\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
+:BINARY_KINECT_NOT_FOUND
+ECHO The Kinect binaries 
+ECHO %BINARY_DIR%\kinect\...
 ECHO weren't found.
 ECHO.
 GOTO END
