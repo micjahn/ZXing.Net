@@ -83,8 +83,8 @@ public class BarcodeCam : MonoBehaviour
       screenRect = new Rect(0, 0, Screen.width, Screen.height);
 
       camTexture = new WebCamTexture();
-      camTexture.requestedHeight = 480;
-      camTexture.requestedWidth = 640;
+      camTexture.requestedHeight = Screen.height; // 480;
+      camTexture.requestedWidth = Screen.width; //640;
       OnEnable();
 
       qrThread = new Thread(DecodeQR);
