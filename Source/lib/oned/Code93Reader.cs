@@ -105,6 +105,12 @@ namespace ZXing.OneD
          } while (decodedChar != '*');
          decodeRowResult.Remove(decodeRowResult.Length - 1, 1); // remove asterisk
 
+         int lastPatternSize = 0;
+         foreach (int counter in counters)
+         {
+            lastPatternSize += counter;
+         }
+
          // Should be at least one more black module
          if (nextStart == end || !row[nextStart])
          {
@@ -127,7 +133,7 @@ namespace ZXing.OneD
             return null;
 
          float left = (start[1] + start[0])/2.0f;
-         float right = (nextStart + lastStart)/2.0f;
+         float right = lastStart + lastPatternSize / 2.0f;
 
          var resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)
                                       ? null
