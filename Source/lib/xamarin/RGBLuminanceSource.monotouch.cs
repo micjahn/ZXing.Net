@@ -14,8 +14,6 @@ namespace ZXing
       /// should be replace by BitmapLuminanceSource and the faster grayscale algorithm
       /// </summary>
       /// <param name="d"></param>
-      /// <param name="W"></param>
-      /// <param name="H"></param>
       public RGBLuminanceSource(UIImage d)
          : base(d.CGImage.Width, d.CGImage.Height)
       {
@@ -33,14 +31,15 @@ namespace ZXing
 
          try
          {
+			var flags = CGBitmapFlags.PremultipliedFirst | CGBitmapFlags.ByteOrder32Little; 
             var context = new CGBitmapContext(rawData, width, height, 8, 4 * width,
-            colorSpace, CGImageAlphaInfo.PremultipliedLast);
+            colorSpace, (CGImageAlphaInfo)flags);
 
             context.DrawImage(new RectangleF(0.0f, 0.0f, (float)width, (float)height), imageRef);
             var pixelData = new byte[height * width * 4];
             Marshal.Copy(rawData, pixelData, 0, pixelData.Length);
 
-            CalculateLuminance(pixelData, BitmapFormat.RGB32);
+            CalculateLuminance(pixelData, BitmapFormat.BGRA32);
          }
          finally
          {
