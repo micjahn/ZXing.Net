@@ -178,6 +178,10 @@ namespace ZXing.PDF417.Internal
             return null;
          }
          int[] rowHeights = rowIndicatorColumn.getRowHeights();
+         if (rowHeights == null)
+         {
+            return null;
+         }
          int maxRowHeight = getMax(rowHeights);
          int missingStartRows = 0;
          foreach (int rowHeight in rowHeights)
