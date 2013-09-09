@@ -36,10 +36,12 @@ namespace ZXing.PDF417
       public static readonly int MIN_ROWS_IN_BARCODE = 3;
       public static readonly int MAX_ROWS_IN_BARCODE = 90;
 
+      /*
       /// <summary>
       /// One left row indication column + max 30 data columns + one right row indicator column
       /// </summary>
       public static readonly int MAX_CODEWORDS_IN_ROW = 32;
+      */
 
       public static readonly int MODULES_IN_CODEWORD = 17;
       public static readonly int MODULES_IN_STOP_PATTERN = 18;

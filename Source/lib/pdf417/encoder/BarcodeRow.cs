@@ -70,10 +70,12 @@ namespace ZXing.PDF417.Internal
          }
       }
 
+      /*
       internal sbyte[] Row
       {
          get { return row; }
       }
+      */
 
       /// <summary>
       /// This function scales the row

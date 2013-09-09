@@ -43,7 +43,7 @@ namespace ZXing.PDF417.Internal.Test
             }
          }
       }
-
+      /*
       public static int[] erase(int[] received, int howMany, Random random)
       {
          var erased = new System.Collections.BitArray(received.Length);
@@ -66,13 +66,13 @@ namespace ZXing.PDF417.Internal.Test
          }
          return erasures;
       }
-
+      */
       public static Random getRandom()
       {
          return new Random((int)DateTime.Now.Ticks);
          // return new SecureRandom(new byte[] { (byte)0xDE, (byte)0xAD, (byte)0xBE, (byte)0xEF });
       }
-
+      /*
       public static void assertArraysEqual(int[] expected,
                                     int expectedOffset,
                                     int[] actual,
@@ -84,5 +84,6 @@ namespace ZXing.PDF417.Internal.Test
             Assert.AreEqual(expected[expectedOffset + i], actual[actualOffset + i]);
          }
       }
+      */
    }
 }

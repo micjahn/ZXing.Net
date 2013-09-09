@@ -276,7 +276,7 @@ namespace ZXing.OneD
          }
          bool isWhite = true;
          int count = 0;
-         for (; i < end; i++)
+         while (i < end)
          {
             if (row[i] ^ isWhite)
             {
@@ -289,6 +289,7 @@ namespace ZXing.OneD
                count = 1;
                isWhite = !isWhite;
             }
+            i++;
          }
          counterAppend(count);
          return true;

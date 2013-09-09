@@ -114,15 +114,9 @@ namespace ZXing.PDF417.Internal
                currentRowHeight = 1;
                barcodeRow = codeword.RowNumber;
             }
-            else if (rowDifference < 0)
-            {
-               codewords[codewordRow] = null;
-            }
-            else if (codeword.RowNumber >= metadata.RowCount)
-            {
-               codewords[codewordRow] = null;
-            }
-            else if (rowDifference > codewordRow)
+            else if (rowDifference < 0 ||
+                     codeword.RowNumber >= metadata.RowCount ||
+                     rowDifference > codewordRow)
             {
                codewords[codewordRow] = null;
             }

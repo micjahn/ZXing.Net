@@ -537,7 +537,7 @@ namespace ZXing.QrCode.Internal
          {
             return 0;
          }
-         FinderPattern firstConfirmedCenter = null;
+         ResultPoint firstConfirmedCenter = null;
          foreach (var center in possibleCenters)
          {
             if (center.Count >= CENTER_QUORUM)

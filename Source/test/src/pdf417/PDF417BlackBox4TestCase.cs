@@ -88,7 +88,7 @@ namespace ZXing.PDF417.Test
             log.InfoFormat("Starting Image Group {0}", testImageGroup.Key);
 
             String fileBaseName = testImageGroup.Key;
-            String expectedText = null;
+            String expectedText;
             String expectedTextFile = fileBaseName + ".txt";
             if (File.Exists(expectedTextFile))
             {

@@ -130,10 +130,9 @@ namespace ZXing.Aztec.Test
       }
 
       // Returns a list of the four rotations of the BitMatrix.
-      private static List<BitMatrix> getRotations(BitMatrix input)
+      private static List<BitMatrix> getRotations(BitMatrix matrix0)
       {
-         BitMatrix matrix0 = input;
-         BitMatrix matrix90 = rotateRight(input);
+         BitMatrix matrix90 = rotateRight(matrix0);
          BitMatrix matrix180 = rotateRight(matrix90);
          BitMatrix matrix270 = rotateRight(matrix180);
          return new List<BitMatrix> {matrix0, matrix90, matrix180, matrix270};

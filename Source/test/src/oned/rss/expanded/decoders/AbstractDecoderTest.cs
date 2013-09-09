@@ -41,7 +41,7 @@ namespace ZXing.OneD.RSS.Expanded.Decoders.Test
       protected static String numeric_10 = "..X..XX";
       protected static String numeric_12 = "..X.X.X";
       protected static String numeric_1FNC1 = "..XXX.X";
-      protected static String numeric_FNC11 = "XXX.XXX";
+      //protected static String numeric_FNC11 = "XXX.XXX";
 
       protected static String numeric2alpha = "....";
 

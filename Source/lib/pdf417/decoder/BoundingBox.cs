@@ -203,7 +203,7 @@ namespace ZXing.PDF417.Internal
          this.BottomRight = bottomRight;
          calculateMinMaxValues();
       }
-
+      /*
       /// <summary>
       /// If we adjust the width, set a new right corner coordinate and recalculate
       /// </summary>
@@ -213,5 +213,6 @@ namespace ZXing.PDF417.Internal
          this.TopRight = topRight;
          calculateMinMaxValues();
       }
+      */
    }
 }

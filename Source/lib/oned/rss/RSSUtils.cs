@@ -21,6 +21,7 @@ namespace ZXing.OneD.RSS
    /// </summary>
    public static class RSSUtils
    {
+      /*
       /// <summary>
       /// Gets the RS swidths.
       /// </summary>
@@ -78,6 +79,7 @@ namespace ZXing.OneD.RSS
          widths[bar] = n;
          return widths;
       }
+      */
 
       /// <summary>
       /// Gets the RS svalue.
@@ -164,7 +166,7 @@ namespace ZXing.OneD.RSS
          }
          return val;
       }
-
+      /*
       internal static int[] elements(int[] eDist, int N, int K)
       {
          int[] widths = new int[eDist.Length + 2];
@@ -198,5 +200,6 @@ namespace ZXing.OneD.RSS
          }
          return widths;
       }
+      */
    }
 }
