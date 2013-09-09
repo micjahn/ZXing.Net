@@ -202,8 +202,8 @@ namespace ZXing.OneD
             resultString = decodeRowResult.ToString();
          }
 
-         float left = (float) (start[1] + start[0])/2.0f;
-         float right = (float) (nextStart + lastStart)/2.0f;
+         float left = (start[1] + start[0])/2.0f;
+         float right = lastStart + lastPatternSize / 2.0f;
 
          var resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)
                                       ? null
