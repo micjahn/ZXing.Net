@@ -56,7 +56,7 @@ REM building archives for binaries
 REM ***************************************************************************************
 
 CD "%BINARY_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net3.5 net4.0 net4.5 winrt unity sl4 sl5 wp7.0 wp7.1 wp8.0 monodroid winmd portable kinectmonodroid winmd portable kinect -xr!Documentation
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net3.5 net4.0 net4.5 winrt unity sl4 sl5 wp7.0 wp7.1 wp8.0 monodroid winmd portable kinect ..\..\THANKS ..\..\COPYING -xr!Documentation
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DEMO_BINARY%" Clients
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DOCUMENTATION%" Documentation
 CD "%CURRENT_DIR%"
@@ -115,6 +115,7 @@ MKDIR "%SVN_EXPORT_DIR%\WinMD\Clients" >NUL: 2>&1
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.monotouch.sln" "%SVN_EXPORT_DIR%\Base"
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.nunit" "%SVN_EXPORT_DIR%\Base"
 "%SVN_TOOL%" export --force "%SVN_URL%/THANKS" "%SVN_EXPORT_DIR%\Base"
+"%SVN_TOOL%" export --force "%SVN_URL%/COPYING" "%SVN_EXPORT_DIR%\Base"
 
 "%SVN_TOOL%" export --force "%SVN_URL_WINMD%/Source/lib" "%SVN_EXPORT_DIR%\WinMD\Source\lib"
 "%SVN_TOOL%" export --force "%SVN_URL_WINMD%/Clients" "%SVN_EXPORT_DIR%\WinMD\Clients"
