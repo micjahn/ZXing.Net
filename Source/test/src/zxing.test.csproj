@@ -124,7 +124,6 @@
     <Compile Include="datamatrix\encoder\HighLevelEncodeTestCase.cs" />
     <Compile Include="datamatrix\encoder\PlacementTestCase.cs" />
     <Compile Include="datamatrix\encoder\SymbolInfoTestCase.cs" />
-    <Compile Include="KinectTests.cs" />
     <Compile Include="multi\GenericMultipleBarcodeReaderTestCase.cs" />
     <Compile Include="multi\qrcode\MultiQRCodeBlackBox1TestCase.cs" />
     <Compile Include="negative\FalsePositives2BlackBoxTestCase.cs" />

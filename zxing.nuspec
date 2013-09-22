@@ -61,5 +61,14 @@ It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, Windows RT Class Library
     <file src="Build\Release\winmd\ZXing.pdb" target="lib/windows8-native+javascript/ZXing.pdb" />
     <file src="Build\Release\winmd\ZXing.XML" target="lib/windows8-native+javascript/ZXing.XML" />
     <file src="Build\Release\winmd\ZXing.pri" target="lib/windows8-native+javascript/ZXing.pri" />
+    <file src="Build\Release\monodroid\zxing.monoandroid.dll" target="lib/MonoAndroid/zxing.monoandroid.dll" />
+    <file src="Build\Release\monodroid\zxing.monoandroid.pdb" target="lib/MonoAndroid/zxing.monoandroid.pdb" />
+    <file src="Build\Release\monodroid\zxing.monoandroid.xml" target="lib/MonoAndroid/zxing.monoandroid.xml" />
+    <file src="Build\Release\ce2.0\zxing.ce2.0.dll" target="lib/net20-cf/zxing.ce2.0.dll" />
+    <file src="Build\Release\ce2.0\zxing.ce2.0.pdb" target="lib/net20-cf/zxing.ce2.0.pdb" />
+    <file src="Build\Release\ce2.0\zxing.ce2.0.xml" target="lib/net20-cf/zxing.ce2.0.xml" />
+    <file src="Build\Release\ce3.5\zxing.ce3.5.dll" target="lib/net35-cf/zxing.ce3.5.dll" />
+    <file src="Build\Release\ce3.5\zxing.ce3.5.pdb" target="lib/net35-cf/zxing.ce3.5.pdb" />
+    <file src="Build\Release\ce3.5\zxing.ce3.5.xml" target="lib/net35-cf/zxing.ce3.5.xml" />
   </files>
 </package>

@@ -28,8 +28,8 @@ namespace ZXing.PDF417.Test
       public PDF417BlackBox2TestCase()
          : base("test/data/blackbox/pdf417-2", new MultiFormatReader(), BarcodeFormat.PDF_417)
       {
-         addTest(25, 25, 0, 0, 0.0f);
-         addTest(25, 25, 0, 0, 180.0f);
+         addTest(24, 24, 0, 0, 0.0f);   // java: addTest(25, 25, 0, 0, 0.0f);
+         addTest(24, 24, 0, 0, 180.0f); // java: addTest(25, 25, 0, 0, 180.0f);
       }
    }
 }

@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\Build\Debug\unity\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET35,UNITY</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET35,UNITY,WINDOWS_PHONE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -27,7 +27,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\Build\Release\unity\</OutputPath>
-    <DefineConstants>TRACE;NET35,UNITY</DefineConstants>
+    <DefineConstants>TRACE;NET35,UNITY,WINDOWS_PHONE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\Build\Release\unity\zxing.unity.xml</DocumentationFile>
