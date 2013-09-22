@@ -13,7 +13,38 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsRTDemo", "Clients\Wi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsPhone8Demo", "Clients\WindowsPhone8Demo\WindowsPhone8Demo.csproj", "{BA46155F-1B44-4DE5-A625-BB351D14AD91}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Icons", "Icons", "{AF72F45B-8305-4B44-A28A-5F477E6E8533}"
+	ProjectSection(SolutionItems) = preProject
+		Icons\logo.ai = Icons\logo.ai
+		Icons\logo.jpg = Icons\logo.jpg
+		Icons\logo_logo with text.svg = Icons\logo_logo with text.svg
+		Icons\logo_logo without text.svg = Icons\logo_logo without text.svg
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs05
+		SccProjectUniqueName0 = Clients\\WindowsPhone8Demo\\WindowsPhone8Demo.csproj
+		SccProjectTopLevelParentUniqueName0 = zxing.vs2012.sln
+		SccProjectName0 = Clients/WindowsPhone8Demo
+		SccLocalPath0 = Clients\\WindowsPhone8Demo
+		SccLocalPath1 = .
+		SccProjectUniqueName2 = Clients\\WindowsRTDemo\\WindowsRTDemo.csproj
+		SccProjectTopLevelParentUniqueName2 = zxing.vs2012.sln
+		SccProjectName2 = Clients/WindowsRTDemo
+		SccLocalPath2 = Clients\\WindowsRTDemo
+		SccProjectUniqueName3 = Source\\lib\\zxing.vs2012.csproj
+		SccProjectName3 = Source/lib
+		SccLocalPath3 = Source\\lib
+		SccProjectUniqueName4 = Source\\lib\\zxing.winrt.csproj
+		SccProjectName4 = Source/lib
+		SccLocalPath4 = Source\\lib
+		SccProjectUniqueName5 = Source\\lib\\zxing.wp8.0.csproj
+		SccProjectName5 = Source/lib
+		SccLocalPath5 = Source\\lib
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM
