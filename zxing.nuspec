@@ -6,6 +6,7 @@
     <owners>Michael Jahn</owners>
     <licenseUrl>http://zxingnet.codeplex.com/license</licenseUrl>
     <projectUrl>http://zxingnet.codeplex.com/</projectUrl>
+    <iconUrl>https://zxingnet.svn.codeplex.com/svn/trunk/Icons/logo.jpg</iconUrl>
     <id>ZXing.Net</id>
     <title>ZXing.Net</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -51,16 +52,17 @@ It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, Windows RT Class Library
     <file src="Build\Release\wp8.0\zxing.wp8.0.dll" target="lib/wp8/zxing.wp8.0.dll" />
     <file src="Build\Release\wp8.0\zxing.wp8.0.pdb" target="lib/wp8/zxing.wp8.0.pdb" />
     <file src="Build\Release\wp8.0\zxing.wp8.0.XML" target="lib/wp8/zxing.wp8.0.XML" />
-    <file src="Build\Release\portable\zxing.portable.dll" target="lib/portable-win+net40+sl4+sl5+wp7+wp71+wp8/zxing.portable.dll" />
-    <file src="Build\Release\portable\zxing.portable.pdb" target="lib/portable-win+net40+sl4+sl5+wp7+wp71+wp8/zxing.portable.pdb" />
-    <file src="Build\Release\portable\zxing.portable.XML" target="lib/portable-win+net40+sl4+sl5+wp7+wp71+wp8/zxing.portable.XML" />
     <file src="Build\Release\winrt\zxing.winrt.dll" target="lib/windows8-managed/zxing.winrt.dll" />
     <file src="Build\Release\winrt\zxing.winrt.pdb" target="lib/windows8-managed/zxing.winrt.pdb" />
     <file src="Build\Release\winrt\zxing.winrt.XML" target="lib/windows8-managed/zxing.winrt.XML" />
-    <file src="Build\Release\winmd\ZXing.winmd" target="lib/windows8-native+javascript/ZXing.winmd" />
-    <file src="Build\Release\winmd\ZXing.pdb" target="lib/windows8-native+javascript/ZXing.pdb" />
-    <file src="Build\Release\winmd\ZXing.XML" target="lib/windows8-native+javascript/ZXing.XML" />
-    <file src="Build\Release\winmd\ZXing.pri" target="lib/windows8-native+javascript/ZXing.pri" />
+    <file src="Build\Release\winmd\ZXing.winmd" target="lib/windows8/ZXing.winmd" />
+    <file src="Build\Release\winmd\ZXing.pdb" target="lib/windows8/ZXing.pdb" />
+    <file src="Build\Release\winmd\ZXing.XML" target="lib/windows8/ZXing.XML" />
+    <file src="Build\Release\winmd\ZXing.pri" target="lib/windows8/ZXing.pri" />
+    <file src="Build\Release\winmd\ZXing.winmd" target="lib/native/ZXing.winmd" />
+    <file src="Build\Release\winmd\ZXing.pdb" target="lib/native/ZXing.pdb" />
+    <file src="Build\Release\winmd\ZXing.XML" target="lib/native/ZXing.XML" />
+    <file src="Build\Release\winmd\ZXing.pri" target="lib/native/ZXing.pri" />
     <file src="Build\Release\monodroid\zxing.monoandroid.dll" target="lib/MonoAndroid/zxing.monoandroid.dll" />
     <file src="Build\Release\monodroid\zxing.monoandroid.pdb" target="lib/MonoAndroid/zxing.monoandroid.pdb" />
     <file src="Build\Release\monodroid\zxing.monoandroid.xml" target="lib/MonoAndroid/zxing.monoandroid.xml" />
@@ -70,5 +72,8 @@ It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, Windows RT Class Library
     <file src="Build\Release\ce3.5\zxing.ce3.5.dll" target="lib/net35-cf/zxing.ce3.5.dll" />
     <file src="Build\Release\ce3.5\zxing.ce3.5.pdb" target="lib/net35-cf/zxing.ce3.5.pdb" />
     <file src="Build\Release\ce3.5\zxing.ce3.5.xml" target="lib/net35-cf/zxing.ce3.5.xml" />
+    <file src="Build\Release\portable\zxing.portable.dll" target="lib/portable-win+net40+sl4+sl5+wp7+wp71+wp8/zxing.portable.dll" />
+    <file src="Build\Release\portable\zxing.portable.pdb" target="lib/portable-win+net40+sl4+sl5+wp7+wp71+wp8/zxing.portable.pdb" />
+    <file src="Build\Release\portable\zxing.portable.XML" target="lib/portable-win+net40+sl4+sl5+wp7+wp71+wp8/zxing.portable.XML" />
   </files>
 </package>
