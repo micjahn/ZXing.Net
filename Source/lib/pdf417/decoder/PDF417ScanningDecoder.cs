@@ -749,8 +749,11 @@ namespace ZXing.PDF417.Internal
 
          // Decode the codewords
          DecoderResult decoderResult = DecodedBitStreamParser.decode(codewords, ecLevel.ToString());
-         decoderResult.ErrorsCorrected = correctedErrorsCount;
-         decoderResult.Erasures = erasures.Length;
+         if (decoderResult != null)
+         {
+            decoderResult.ErrorsCorrected = correctedErrorsCount;
+            decoderResult.Erasures = erasures.Length;
+         }
          return decoderResult;
       }
 
