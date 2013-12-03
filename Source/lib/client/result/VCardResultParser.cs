@@ -68,7 +68,7 @@ namespace ZXing.Client.Result
          if (names == null)
          {
             // If no display names found, look for regular name fields and format them
-            names = matchVCardPrefixedField("N", rawText, true, false);
+            names = matchVCardPrefixedField("N", rawText, true, true);
             formatNames(names);
          }
          List<String> nicknameString = matchSingleVCardPrefixedField("NICKNAME", rawText, true, false);
