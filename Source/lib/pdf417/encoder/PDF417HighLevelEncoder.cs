@@ -458,12 +458,23 @@ namespace ZXing.PDF417.Internal
          {
             sb.Append((char) SHIFT_TO_BYTE);
          }
+         else
+         {
+            bool sixpack = ((count % 6) == 0);
+            if (sixpack)
+            {
+               sb.Append((char)LATCH_TO_BYTE);
+            }
+            else
+            {
+               sb.Append((char)LATCH_TO_BYTE_PADDED);
+            }
+         }
 
          int idx = startpos;
          // Encode sixpacks
          if (count >= 6)
          {
-            sb.Append((char) LATCH_TO_BYTE);
             char[] chars = new char[5];
             while ((startpos + count - idx) >= 6)
             {
@@ -486,10 +497,6 @@ namespace ZXing.PDF417.Internal
             }
          }
          //Encode rest (remaining n<5 bytes if any)
-         if (idx < startpos + count)
-         {
-            sb.Append((char) LATCH_TO_BYTE_PADDED);
-         }
          for (int i = idx; i < startpos + count; i++)
          {
             int ch = bytes[i] & 0xff;
