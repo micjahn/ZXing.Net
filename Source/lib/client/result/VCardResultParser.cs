@@ -68,7 +68,7 @@ namespace ZXing.Client.Result
          if (names == null)
          {
             // If no display names found, look for regular name fields and format them
-            names = matchVCardPrefixedField("N", rawText, true, true);
+            names = matchVCardPrefixedField("N", rawText, true, false);
             formatNames(names);
          }
          List<String> nicknameString = matchSingleVCardPrefixedField("NICKNAME", rawText, true, false);
@@ -427,7 +427,7 @@ namespace ZXing.Client.Result
                int start = 0;
                int end;
                int componentIndex = 0;
-               while (componentIndex < components.Length - 1 && (end = name.IndexOf(';', start)) > 0)
+               while (componentIndex < components.Length - 1 && (end = name.IndexOf(';', start)) >= 0)
                {
                   components[componentIndex] = name.Substring(start, end - start);
 
@@ -449,9 +449,12 @@ namespace ZXing.Client.Result
 
       private static void maybeAppendComponent(String[] components, int i, StringBuilder newName)
       {
-         if (components[i] != null)
+         if (!String.IsNullOrEmpty(components[i]))
          {
-            newName.Append(' ');
+            if (newName.Length > 0)
+            {
+               newName.Append(' ');
+            }
             newName.Append(components[i]);
          }
       }
