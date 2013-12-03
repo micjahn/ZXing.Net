@@ -307,10 +307,8 @@ namespace ZXing.Client.Result
             {
 #if WindowsCE
                fragment = Encoding.Default.GetString(fragmentBytes, 0, fragmentBytes.Length);
-#elif (WINDOWS_PHONE70 || WINDOWS_PHONE71 || WINDOWS_PHONE80 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
-               fragment = Encoding.UTF8.GetString(fragmentBytes, 0, fragmentBytes.Length);
 #else
-               fragment = Encoding.Default.GetString(fragmentBytes);
+               fragment = Encoding.UTF8.GetString(fragmentBytes, 0, fragmentBytes.Length);
 #endif
             }
             else
@@ -321,7 +319,6 @@ namespace ZXing.Client.Result
                }
                catch (Exception )
                {
-                  // Yikes, well try anyway:
 #if WindowsCE
                   // WindowsCE doesn't support all encodings. But it is device depended.
                   // So we try here the some different ones
@@ -334,10 +331,8 @@ namespace ZXing.Client.Result
                      fragment = Encoding.Default.GetString(fragmentBytes, 0, fragmentBytes.Length);
                   }
                   fragment = Encoding.Default.GetString(fragmentBytes, 0, fragmentBytes.Length);
-#elif (WINDOWS_PHONE70 || WINDOWS_PHONE71 || WINDOWS_PHONE80 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
-                  fragment = Encoding.UTF8.GetString(fragmentBytes, 0, fragmentBytes.Length);
 #else
-                  fragment = Encoding.Default.GetString(fragmentBytes);
+                  fragment = Encoding.UTF8.GetString(fragmentBytes, 0, fragmentBytes.Length);
 #endif
                }
             }

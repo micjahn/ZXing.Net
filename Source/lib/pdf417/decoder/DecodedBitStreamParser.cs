@@ -126,16 +126,12 @@ namespace ZXing.PDF417.Internal
                   codeIndex = textCompaction(codewords, codeIndex, result);
                   break;
                case BYTE_COMPACTION_MODE_LATCH:
+               case BYTE_COMPACTION_MODE_LATCH_6:
+               case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
                   codeIndex = byteCompaction(code, codewords, codeIndex, result);
                   break;
                case NUMERIC_COMPACTION_MODE_LATCH:
                   codeIndex = numericCompaction(codewords, codeIndex, result);
-                  break;
-               case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                  codeIndex = byteCompaction(code, codewords, codeIndex, result);
-                  break;
-               case BYTE_COMPACTION_MODE_LATCH_6:
-                  codeIndex = byteCompaction(code, codewords, codeIndex, result);
                   break;
                case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
                   codeIndex = decodeMacroBlock(codewords, codeIndex, resultMetadata);
@@ -272,21 +268,10 @@ namespace ZXing.PDF417.Internal
                      textCompactionData[index++] = TEXT_COMPACTION_MODE_LATCH;
                      break;
                   case BYTE_COMPACTION_MODE_LATCH:
-                     codeIndex--;
-                     end = true;
-                     break;
+                  case BYTE_COMPACTION_MODE_LATCH_6:
                   case NUMERIC_COMPACTION_MODE_LATCH:
-                     codeIndex--;
-                     end = true;
-                     break;
                   case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
-                     codeIndex--;
-                     end = true;
-                     break;
                   case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
-                     codeIndex--;
-                     end = true;
-                     break;
                   case MACRO_PDF417_TERMINATOR:
                      codeIndex--;
                      end = true;
@@ -302,10 +287,6 @@ namespace ZXing.PDF417.Internal
                      code = codewords[codeIndex++];
                      byteCompactionData[index] = code;
                      index++;
-                     break;
-                  case BYTE_COMPACTION_MODE_LATCH_6:
-                     codeIndex--;
-                     end = true;
                      break;
                }
             }

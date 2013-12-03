@@ -45,13 +45,7 @@ namespace ZXing.Client.Result
             // ExtendedProductParsedResult NOT created. Not a RSS Expanded barcode
             return null;
          }
-         // Really neither of these should happen:
          String rawText = result.Text;
-         if (rawText == null)
-         {
-            // ExtendedProductParsedResult NOT created. Input text is NULL
-            return null;
-         }
 
          String productID = null;
          String sscc = null;
