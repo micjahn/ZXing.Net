@@ -124,11 +124,6 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
 
       internal static int extractNumericValueFromBitArray(BitArray information, int pos, int bits)
       {
-         if (bits > 32)
-         {
-            throw new ArgumentException("extractNumberValueFromBitArray can't handle more than 32 bits");
-         }
-
          int value = 0;
          for (int i = 0; i < bits; ++i)
          {

@@ -34,26 +34,21 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
    /// </summary>
    internal sealed class DecodedNumeric : DecodedObject
    {
-      private int firstDigit;
-      private int secondDigit;
+      private readonly int firstDigit;
+      private readonly int secondDigit;
 
       internal static int FNC1 = 10;
 
       internal DecodedNumeric(int newPosition, int firstDigit, int secondDigit)
          : base(newPosition)
       {
+         if (firstDigit < 0 || firstDigit > 10 || secondDigit < 0 || secondDigit > 10)
+         {
+            throw FormatException.Instance;
+         }
+         
          this.firstDigit = firstDigit;
          this.secondDigit = secondDigit;
-
-         if (this.firstDigit < 0 || this.firstDigit > 10)
-         {
-            throw new ArgumentException("Invalid firstDigit: " + firstDigit);
-         }
-
-         if (this.secondDigit < 0 || this.secondDigit > 10)
-         {
-            throw new ArgumentException("Invalid secondDigit: " + secondDigit);
-         }
       }
 
       internal int getFirstDigit()
