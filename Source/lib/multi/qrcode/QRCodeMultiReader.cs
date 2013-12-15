@@ -30,6 +30,7 @@ namespace ZXing.Multi.QrCode
    public sealed class QRCodeMultiReader : QRCodeReader, MultipleBarcodeReader
    {
       private static readonly Result[] EMPTY_RESULT_ARRAY = new Result[0];
+      private static readonly ResultPoint[] NO_POINTS = new ResultPoint[0];
 
       /// <summary>
       /// Decodes the multiple.
@@ -82,8 +83,12 @@ namespace ZXing.Multi.QrCode
             }
             results.Add(result);
          }
+         if (results.Count == 0)
+         {
+            return EMPTY_RESULT_ARRAY;
+         }
          results = ProcessStructuredAppend(results);
-         return results.Count == 0 ? EMPTY_RESULT_ARRAY : results.ToArray();
+         return results.ToArray();
       }
 
       private List<Result> ProcessStructuredAppend(List<Result> results)
@@ -117,19 +122,44 @@ namespace ZXing.Multi.QrCode
          saResults.Sort(SaSequenceSort);
          var concatedText = String.Empty;
          var rawBytesLen = 0;
+         int byteSegmentLength = 0;
          foreach (var saResult in saResults)
          {
             concatedText += saResult.Text;
             rawBytesLen += saResult.RawBytes.Length;
+            if (saResult.ResultMetadata.ContainsKey(ResultMetadataType.BYTE_SEGMENTS))
+            {
+               foreach (var segment in (IEnumerable<byte[]>) saResult.ResultMetadata[ResultMetadataType.BYTE_SEGMENTS])
+               {
+                  byteSegmentLength += segment.Length;
+               }
+            }
          }
          var newRawBytes = new byte[rawBytesLen];
-         var newRawBytesIndex = 0;
+         byte[] newByteSegment = new byte[byteSegmentLength];
+         int newRawBytesIndex = 0;
+         int byteSegmentIndex = 0;
          foreach (var saResult in saResults)
          {
             Array.Copy(saResult.RawBytes, 0, newRawBytes, newRawBytesIndex, saResult.RawBytes.Length);
             newRawBytesIndex += saResult.RawBytes.Length;
+            if (saResult.ResultMetadata.ContainsKey(ResultMetadataType.BYTE_SEGMENTS))
+            {
+               foreach (var segment in (IEnumerable<byte[]>) saResult.ResultMetadata[ResultMetadataType.BYTE_SEGMENTS])
+               {
+                  Array.Copy(segment, 0, newByteSegment, byteSegmentIndex, segment.Length);
+                  byteSegmentIndex += segment.Length;
+               }
+            }
          }
-         newResults.Add(new Result(concatedText, newRawBytes, new ResultPoint[0], BarcodeFormat.QR_CODE));
+         Result newResult = new Result(concatedText, newRawBytes, NO_POINTS, BarcodeFormat.QR_CODE);
+         if (byteSegmentLength > 0)
+         {
+            var byteSegmentList = new List<byte[]>();
+            byteSegmentList.Add(newByteSegment);
+            newResult.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegmentList);
+         }
+         newResults.Add(newResult);
          return newResults;
       }
 

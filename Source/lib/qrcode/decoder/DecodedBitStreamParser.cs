@@ -163,16 +163,11 @@ namespace ZXing.QrCode.Internal
 #else
          var resultString = result.ToString().Replace("\r\n", "\n").Replace("\n", Environment.NewLine);
 #endif
-         return symbolSequence > -1 ?
-                   new DecoderResult(bytes,
-                                     resultString,
-                                     byteSegments.Count == 0 ? null : byteSegments,
-                                     ecLevel == null ? null : ecLevel.ToString(),
-                                     symbolSequence, parityData)
-                   : new DecoderResult(bytes,
-                                       resultString,
-                                       byteSegments.Count == 0 ? null : byteSegments,
-                                       ecLevel == null ? null : ecLevel.ToString());
+         return new DecoderResult(bytes,
+                                  resultString,
+                                  byteSegments.Count == 0 ? null : byteSegments,
+                                  ecLevel == null ? null : ecLevel.ToString(),
+                                  symbolSequence, parityData);
       }
 
       /// <summary>
