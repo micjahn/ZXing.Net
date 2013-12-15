@@ -246,6 +246,10 @@ namespace ZXing.OneD
          if (startPatternInfo == null)
             return null;
          int startCode = startPatternInfo[2];
+         
+         var rawCodes = new List<byte>(20);
+         rawCodes.Add((byte)startCode);
+
          int codeSet;
          switch (startCode)
          {
@@ -266,7 +270,6 @@ namespace ZXing.OneD
          bool isNextShifted = false;
 
          var result = new StringBuilder(20);
-         var rawCodes = new List<byte>(20);
 
          int lastStart = startPatternInfo[0];
          int nextStart = startPatternInfo[1];
