@@ -105,6 +105,9 @@ namespace ZXing.Aztec
             result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
          }
 
+         result.putMetadata(ResultMetadataType.AZTEC_EXTRA_METADATA,
+                            new AztecResultMetadata(detectorResult.Compact, detectorResult.NbDatablocks, detectorResult.NbLayers));
+
          return result;
       }
 

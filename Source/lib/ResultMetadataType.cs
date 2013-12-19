@@ -92,6 +92,11 @@ namespace ZXing
       /// <summary>
       /// PDF417-specific metadata
       /// </summary>
-      PDF417_EXTRA_METADATA
+      PDF417_EXTRA_METADATA,
+
+      /// <summary>
+      /// Aztec-specific metadata
+      /// </summary>
+      AZTEC_EXTRA_METADATA
    }
 }

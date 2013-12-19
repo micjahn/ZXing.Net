@@ -112,6 +112,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="aztec\AztecResultMetadata.cs" />
     <Compile Include="aztec\AztecWriter.cs" />
     <Compile Include="aztec\encoder\AztecCode.cs" />
     <Compile Include="aztec\encoder\AztecEncodingOptions.cs" />
