@@ -108,7 +108,7 @@ namespace ZXing
 #endif
          Func<LuminanceSource, Binarizer> createBinarizer
          )
-         : base(reader, createLuminanceSource, createBinarizer)
+         : base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer)
       {
       }
 
@@ -144,7 +144,7 @@ namespace ZXing
          Func<LuminanceSource, Binarizer> createBinarizer,
          Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource
          )
-         : base(reader, createLuminanceSource, createBinarizer, createRGBLuminanceSource)
+         : base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer, createRGBLuminanceSource)
       {
       }
    }
