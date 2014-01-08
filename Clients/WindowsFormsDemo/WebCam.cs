@@ -105,7 +105,7 @@ namespace WindowsFormsDemo
             // Start previewing the image from the camera
             SendMessage(hHwnd, WM_CAP_SET_PREVIEW, -1, 0);
             // Resize window to fit in picturebox
-            SetWindowPos(hHwnd, HWND_BOTTOM, 0, 0, Container.Height, Container.Width, SWP_NOMOVE | SWP_NOZORDER);
+            SetWindowPos(hHwnd, HWND_BOTTOM, 0, 0, Container.Width, Container.Height, SWP_NOMOVE | SWP_NOZORDER);
          }
          else
          {
