@@ -29,7 +29,6 @@ namespace ZXing.Multi.QrCode
    /// </summary>
    public sealed class QRCodeMultiReader : QRCodeReader, MultipleBarcodeReader
    {
-      private static readonly Result[] EMPTY_RESULT_ARRAY = new Result[0];
       private static readonly ResultPoint[] NO_POINTS = new ResultPoint[0];
 
       /// <summary>
@@ -85,7 +84,7 @@ namespace ZXing.Multi.QrCode
          }
          if (results.Count == 0)
          {
-            return EMPTY_RESULT_ARRAY;
+            return null;
          }
          results = ProcessStructuredAppend(results);
          return results.ToArray();
