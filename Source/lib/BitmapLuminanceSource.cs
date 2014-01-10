@@ -91,6 +91,11 @@ namespace ZXing
                {
                   pixelWidth = 40;
                }
+               if ((int)bitmap.PixelFormat == 8207 ||
+                   (bitmap.Flags & (int)ImageFlags.ColorSpaceCmyk) == (int)ImageFlags.ColorSpaceCmyk)
+               {
+                  pixelWidth = 41;
+               }
 #endif
 
                for (int y = 0; y < height; y++)
@@ -189,6 +194,21 @@ namespace ZXing
                               // luminance = (byte)(luminance * alpha + 255 * (1 - alpha));
                               var alpha = buffer[x + 3];
                               luminance = (byte) (((luminance*alpha) >> 8) + (255*(255 - alpha) >> 8) + 1);
+                              luminances[offset] = luminance;
+                              offset++;
+                           }
+                        }
+                        break;
+                     case 41:
+                        // CMYK color space
+                        {
+                           var maxIndex = 4 * width;
+                           for (int x = 0; x < maxIndex; x += 4)
+                           {
+                              var luminance = (byte) (255 - ((BChannelWeight*buffer[x] +
+                                                              GChannelWeight*buffer[x + 1] +
+                                                              RChannelWeight*buffer[x + 2]) >> ChannelWeight));
+                              // Ignore value of k at the moment
                               luminances[offset] = luminance;
                               offset++;
                            }
