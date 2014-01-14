@@ -114,6 +114,22 @@ namespace ZXing
    }
 #endif
 
+#if PORTABLE
+   /// <summary>
+   /// A smart class to encode some content to a barcode image
+   /// </summary>
+   public class BarcodeWriter : BarcodeWriterGeneric<byte[]>, IBarcodeWriter
+   {
+      /// <summary>
+      /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.
+      /// </summary>
+      public BarcodeWriter()
+      {
+         Renderer = new RawRenderer();
+      }
+   }
+#endif
+
    /// <summary>
    /// A smart class to encode some content to a svg barcode image
    /// </summary>
