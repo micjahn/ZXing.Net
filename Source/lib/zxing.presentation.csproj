@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\Build\Debug\net4.0\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET40</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET40;WPF</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <BaseAddress>301989888</BaseAddress>
@@ -27,7 +27,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\Build\Release\net4.0\</OutputPath>
-    <DefineConstants>TRACE;NET40</DefineConstants>
+    <DefineConstants>TRACE;NET40;WPF</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\Build\Release\net4.0\zxing.presentation.XML</DocumentationFile>
@@ -48,8 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="presentation\BarcodeReader.cs" />
+    <Compile Include="presentation\BarcodeWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BitmapSourceLuminanceSource.cs" />
+    <Compile Include="renderer\WriteableBitmapRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Key\private.snk">

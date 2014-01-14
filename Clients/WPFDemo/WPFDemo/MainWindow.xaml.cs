@@ -21,8 +21,9 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 using Microsoft.Win32;
-
-using ZXing.Presentation;
+using ZXing;
+using BarcodeReader = ZXing.Presentation.BarcodeReader;
+using BarcodeWriter = ZXing.Presentation.BarcodeWriter;
 
 namespace WPFDemo
 {
@@ -36,6 +37,10 @@ namespace WPFDemo
       public MainWindow()
       {
          InitializeComponent();
+
+         foreach (var format in MultiFormatWriter.SupportedWriters)
+            cmbEncoderType.Items.Add(format);
+         cmbEncoderType.SelectedItem = BarcodeFormat.QR_CODE;
       }
 
       private void btnSelectFile_Click(object sender, RoutedEventArgs e)
@@ -74,6 +79,22 @@ namespace WPFDemo
          {
             imageBarcode.Source = new BitmapImage(new Uri(txtBarcodeImageFile.Text));
          }
+      }
+
+      private void btnEncode_Click(object sender, RoutedEventArgs e)
+      {
+         var writer = new BarcodeWriter
+            {
+               Format = (BarcodeFormat) cmbEncoderType.SelectedItem,
+               Options = new ZXing.Common.EncodingOptions
+                  {
+                     Height = (int) imageBarcodeEncoder.Height,
+                     Width = (int) imageBarcodeEncoder.Width,
+                     Margin = 0
+                  }
+            };
+         var image = writer.Write(txtBarcodeContentEncode.Text);
+         imageBarcodeEncoder.Source = image;
       }
    }
 }

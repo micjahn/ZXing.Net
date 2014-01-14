@@ -200,8 +200,13 @@ namespace ZXing.Rendering
 #else
          int foreground = Foreground.A << 24 | Foreground.R << 16 | Foreground.G << 8 | Foreground.B;
          int background = Background.A << 24 | Background.R << 16 | Background.G << 8 | Background.B;
+#if WPF
+         var bmp = new WriteableBitmap(width, height, 100.0, 100.0, PixelFormats.Bgra32, null);
+         var pixels = new int[width*height];
+#else
          var bmp = new WriteableBitmap(width, height);
          var pixels = bmp.Pixels;
+#endif
          var index = 0;
 
          for (int y = 0; y < matrix.Height - emptyArea; y++)
@@ -229,7 +234,11 @@ namespace ZXing.Rendering
                pixels[index++] = background;
             }
          }
+#if WPF
+         bmp.WritePixels(new Int32Rect(0, 0, width, height), pixels, bmp.BackBufferStride, 0);
+#else
          bmp.Invalidate();
+#endif
 #endif
 
          /* doesn't correctly work at the moment
