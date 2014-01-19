@@ -59,6 +59,7 @@
          this.txtContentWebCam = new System.Windows.Forms.TextBox();
          this.txtTypeWebCam = new System.Windows.Forms.TextBox();
          this.picWebCam = new System.Windows.Forms.PictureBox();
+         this.btnExtendedResult = new System.Windows.Forms.Button();
          this.tabCtrlMain.SuspendLayout();
          this.tabPageDecoder.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.picBarcode)).BeginInit();
@@ -115,6 +116,7 @@
          // 
          // tabPageDecoder
          // 
+         this.tabPageDecoder.Controls.Add(this.btnExtendedResult);
          this.tabPageDecoder.Controls.Add(this.btnDecodingOptions);
          this.tabPageDecoder.Controls.Add(this.labDuration);
          this.tabPageDecoder.Controls.Add(this.labBarcodeText);
@@ -419,6 +421,19 @@
          this.picWebCam.TabIndex = 8;
          this.picWebCam.TabStop = false;
          // 
+         // btnExtendedResult
+         // 
+         this.btnExtendedResult.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+         this.btnExtendedResult.Location = new System.Drawing.Point(272, 79);
+         this.btnExtendedResult.Name = "btnExtendedResult";
+         this.btnExtendedResult.Size = new System.Drawing.Size(75, 23);
+         this.btnExtendedResult.TabIndex = 12;
+         this.btnExtendedResult.Text = "Result";
+         this.btnExtendedResult.UseVisualStyleBackColor = true;
+         this.btnExtendedResult.Visible = false;
+         this.btnExtendedResult.Click += new System.EventHandler(this.btnExtendedResult_Click);
+         // 
          // WindowsFormsDemoForm
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -477,6 +492,7 @@
       private System.Windows.Forms.Button btnEncodeDecode;
       private System.Windows.Forms.Button btnEncodeOptions;
       private System.Windows.Forms.Button btnDecodingOptions;
+      private System.Windows.Forms.Button btnExtendedResult;
    }
 }
 

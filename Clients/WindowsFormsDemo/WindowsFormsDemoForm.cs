@@ -34,6 +34,7 @@ namespace WindowsFormsDemo
       private Timer webCamTimer;
       private readonly BarcodeReader barcodeReader;
       private readonly IList<ResultPoint> resultPoints;
+      private readonly IList<Result> lastResults;
       private EncodingOptions EncodingOptions { get; set; }
       private Type Renderer { get; set; }
       private bool TryMultipleBarcodes { get; set; }
@@ -59,13 +60,20 @@ namespace WindowsFormsDemo
                                          {
                                             txtType.Text = result.BarcodeFormat.ToString();
                                             txtContent.Text += result.Text + Environment.NewLine;
+                                            lastResults.Add(result);
                                             var parsedResult = ResultParser.parseResult(result);
                                             if (parsedResult != null)
                                             {
+                                               btnExtendedResult.Visible = !(parsedResult is TextParsedResult);
                                                txtContent.Text += "\r\n\r\nParsed result:\r\n" + parsedResult.DisplayResult + Environment.NewLine + Environment.NewLine;
+                                            }
+                                            else
+                                            {
+                                               btnExtendedResult.Visible = false;
                                             }
                                          };
          resultPoints = new List<ResultPoint>();
+         lastResults = new List<Result>();
          Renderer = typeof (BitmapRenderer);
       }
 
@@ -117,6 +125,7 @@ namespace WindowsFormsDemo
       private void Decode(Bitmap image, bool tryMultipleBarcodes, IList<BarcodeFormat> possibleFormats)
       {
          resultPoints.Clear();
+         lastResults.Clear();
          txtContent.Text = String.Empty;
 
          var timerStart = DateTime.Now.Ticks;
@@ -383,6 +392,18 @@ namespace WindowsFormsDemo
                TryMultipleBarcodes = dlg.MultipleBarcodes;
                TryOnlyMultipleQRCodes = dlg.MultipleBarcodesOnlyQR;
             }
+         }
+      }
+
+      private void btnExtendedResult_Click(object sender, EventArgs e)
+      {
+         if (lastResults.Count < 1)
+            return;
+         var parsedResult = ResultParser.parseResult(lastResults[0]);
+         using (var dlg = new ExtendedResultForm())
+         {
+            dlg.Result = parsedResult;
+            dlg.ShowDialog(this);
          }
       }
    }
