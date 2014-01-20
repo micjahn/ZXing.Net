@@ -21,12 +21,15 @@
          </TabItem>
          <TabItem Header="Encode" Name="tabItemEncode">
             <Grid>
-               <Image Height="224" HorizontalAlignment="Left" Margin="12,75,0,0" Name="imageBarcodeEncoder" Stretch="None" VerticalAlignment="Top" Width="200" />
-               <Button Content="Encode" Height="23" HorizontalAlignment="Left" Margin="416,75,0,0" Name="btnEncode" VerticalAlignment="Top" Width="75" Click="btnEncode_Click" />
-               <Label Content="Barcode Type" Height="28" HorizontalAlignment="Left" Margin="226,105,0,0" Name="label4" VerticalAlignment="Top" Width="95" />
-               <Label Content="Content" Height="28" HorizontalAlignment="Left" Margin="226,168,0,0" Name="label5" VerticalAlignment="Top" Width="95" />
-               <TextBox Height="97" HorizontalAlignment="Left" Margin="226,202,0,0" Name="txtBarcodeContentEncode" VerticalAlignment="Top" Width="265"  />
-               <ComboBox Height="23" HorizontalAlignment="Left" Margin="226,139,0,0" Name="cmbEncoderType" VerticalAlignment="Top" Width="265" />
+               <Image Height="224" HorizontalAlignment="Left" Margin="6,40,0,0" Name="imageBarcodeEncoder" Stretch="None" VerticalAlignment="Top" Width="200" />
+               <Path Name="imageBarcodeEncoderGeometry" Fill="Black" Width="200" Height="224" Margin="6,40,298,49" />
+               <Button Content="Encode" Height="23" HorizontalAlignment="Left" Margin="416,269,0,0" Name="btnEncode" VerticalAlignment="Top" Width="75" Click="btnEncode_Click" />
+               <Label Content="Barcode Type" Height="28" HorizontalAlignment="Left" Margin="226,6,0,0" Name="label4" VerticalAlignment="Top" Width="95" />
+               <Label Content="Content" Height="28" HorizontalAlignment="Left" Margin="226,132,0,0" Name="label5" VerticalAlignment="Top" Width="95" />
+               <TextBox Height="97" HorizontalAlignment="Left" Margin="226,166,0,0" Name="txtBarcodeContentEncode" VerticalAlignment="Top" Width="265"  />
+               <ComboBox Height="23" HorizontalAlignment="Left" Margin="226,40,0,0" Name="cmbEncoderType" VerticalAlignment="Top" Width="265" />
+               <ComboBox Height="23" HorizontalAlignment="Left" Margin="226,103,0,0" Name="cmbRendererType" VerticalAlignment="Top" Width="265" />
+               <Label Content="Renderer Type" Height="28" HorizontalAlignment="Left" Margin="226,69,0,0" Name="label6" VerticalAlignment="Top" Width="95" />
             </Grid>
          </TabItem>
       </TabControl>

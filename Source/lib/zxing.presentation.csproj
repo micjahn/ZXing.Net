@@ -49,8 +49,10 @@
   <ItemGroup>
     <Compile Include="presentation\BarcodeReader.cs" />
     <Compile Include="presentation\BarcodeWriter.cs" />
+    <Compile Include="presentation\BarcodeWriterGeometry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BitmapSourceLuminanceSource.cs" />
+    <Compile Include="renderer\GeometryRenderer.cs" />
     <Compile Include="renderer\WriteableBitmapRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
