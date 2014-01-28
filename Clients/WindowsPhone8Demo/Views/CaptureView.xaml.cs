@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using WindowsPhone8Demo.ViewModels;
 
 namespace WindowsPhone8Demo.Views
 {
@@ -15,6 +16,11 @@ namespace WindowsPhone8Demo.Views
         public CaptureView()
         {
             InitializeComponent();
+        }
+
+        private void PhoneApplicationPage_OrientationChanged(object sender, OrientationChangedEventArgs e)
+        {
+           ((CaptureViewModel)DataContext).Orientation = this.Orientation;
         }
     }
 }

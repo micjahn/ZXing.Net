@@ -28,6 +28,7 @@ using Windows.Foundation;
 using Windows.Phone.Media.Capture;
 using WindowsPhone8Demo.Annotations;
 using ZXing;
+using Microsoft.Phone.Controls;
 
 namespace WindowsPhone8Demo.ViewModels
 {
@@ -37,10 +38,18 @@ namespace WindowsPhone8Demo.ViewModels
         private CompositeTransform _compositeTransform;
         private PhotoCaptureDevice _photoCaptureDevice;
         private Size _captureResolution;
+        private Size _previewResolution;
         private ObservableCollection<Result> _results;
+        private Result _lastResult;
+        private Task<Result> _runningScan;
+        private byte[] _previewBuffer;
+        private byte[] _rotatedPreviewBuffer;
+        private BarcodeReader _barcodeReader;
+        private PageOrientation _orientation;
 
         public CaptureViewModel()
         {
+            _orientation = PageOrientation.Portrait;
             InitializeAndGo();
         }
 
@@ -48,39 +57,100 @@ namespace WindowsPhone8Demo.ViewModels
         private async void InitializeAndGo()
         {
             Results = new ObservableCollection<Result>();
+            var sensorLocation = CameraSensorLocation.Front;
+            if (PhotoCaptureDevice.AvailableSensorLocations.Contains(CameraSensorLocation.Back))
+                sensorLocation = CameraSensorLocation.Back;
 
-            CaptureResolution = await GetBestCaptureResolution();
-            await InitializePhotoCaptureDevice(CaptureResolution);
+            PreviewResolution = GetBestPreviewResolution(sensorLocation);
+            CaptureResolution = await GetBestCaptureResolution(sensorLocation, PreviewResolution);
+            await InitializePhotoCaptureDevice(sensorLocation, CaptureResolution, PreviewResolution);
 
             await StartCapturingAsync();
 
+            _previewBuffer = new byte[(int)PreviewResolution.Width * (int)PreviewResolution.Height];
+            _rotatedPreviewBuffer = new byte[(int)PreviewResolution.Width * (int)PreviewResolution.Height];
+            _barcodeReader = new BarcodeReader();
+
+            PhotoCaptureDevice.PreviewFrameAvailable += PreviewFrame;
+
             while (true)
             {
-                Results.Add(await GetBarcodeAsync());
+                if (PhotoCaptureDevice.IsFocusSupported(sensorLocation))
+                    await PhotoCaptureDevice.FocusAsync();
+                else
+                    System.Threading.Thread.Sleep(200);
             }
         }
-
-        private async Task<Result> GetBarcodeAsync()
+        public void PreviewFrame(ICameraCaptureDevice device, object obj)
         {
-            await PhotoCaptureDevice.FocusAsync();
-            return await DetectBarcodeAsync();
+            if (_runningScan != null)
+                return;
+            _runningScan = new Task<Result>(AnalysePreview);
+            _runningScan.Start();
+        }
+
+        private Result AnalysePreview()
+        {
+            var resultTask = DetectBarcodeAsync();
+            resultTask.Wait();
+            var result = resultTask.Result;
+            if (result != null)
+            {
+                if (_lastResult == null ||
+                    _lastResult.Text != result.Text)
+                {
+                    _lastResult = result;
+                    System.Windows.Deployment.Current.Dispatcher.BeginInvoke(() =>
+                      {
+                          Results.Add(result);
+                      });
+                }
+
+            }
+
+            _runningScan = null;
+
+            return result;
         }
 
         private async Task<Result> DetectBarcodeAsync()
         {
-            var width = (int)CaptureResolution.Width;
-            var height = (int)CaptureResolution.Height;
-            var previewBuffer = new byte[width * height];
+            var width = (int)PreviewResolution.Width;
+            var height = (int)PreviewResolution.Height;
 
-            PhotoCaptureDevice.GetPreviewBufferY(previewBuffer);
+            var rotation = PhotoCaptureDevice.SensorRotationInDegrees;
+            LuminanceSource luminanceSource = null;
 
-            var barcodeReader = new BarcodeReader();
-            barcodeReader.TryHarder = true;
-            //barcodeReader.TryInverted = true;
-            //barcodeReader.AutoRotate = true;
+            PhotoCaptureDevice.GetPreviewBufferY(_previewBuffer);
 
-            var result = barcodeReader.Decode(previewBuffer, width, height, RGBLuminanceSource.BitmapFormat.Gray8);
+            if ((Orientation & PageOrientation.Portrait) == PageOrientation.Portrait)
+            {
+                luminanceSource = new RGBLuminanceSource(RotateClockwise(_previewBuffer, width, height), height, width, RGBLuminanceSource.BitmapFormat.Gray8);
+            }
+            else
+            {
+                luminanceSource = new RGBLuminanceSource(_previewBuffer, width, height, RGBLuminanceSource.BitmapFormat.Gray8);
+            }
+
+            var result = _barcodeReader.Decode(luminanceSource);
             return result;
+        }
+
+        private byte[] RotateClockwise(byte[] buffer, int width, int height)
+        {
+            var newWidth = height;
+            var newHeight = width;
+            for (var yold = 0; yold < height; yold++)
+            {
+                for (var xold = 0; xold < width; xold++)
+                {
+                    var xnew = newWidth - yold - 1;
+                    var ynew = xold;
+                    _rotatedPreviewBuffer[ynew * newWidth + xnew] = buffer[yold * width + xold];
+                }
+            }
+
+            return _rotatedPreviewBuffer;
         }
 
         private async Task StartCapturingAsync()
@@ -89,36 +159,60 @@ namespace WindowsPhone8Demo.ViewModels
             var memoryStream = new MemoryStream();
             sequence.Frames[0].CaptureStream = memoryStream.AsOutputStream();
 
-            PhotoCaptureDevice.SetProperty(KnownCameraPhotoProperties.FlashMode, FlashState.Off);
-            PhotoCaptureDevice.SetProperty(KnownCameraPhotoProperties.SceneMode, CameraSceneMode.Macro);
+            try
+            {
+                PhotoCaptureDevice.SetProperty(KnownCameraPhotoProperties.FlashMode, FlashState.Off);
+                PhotoCaptureDevice.SetProperty(KnownCameraPhotoProperties.SceneMode, CameraSceneMode.Macro);
+            }
+            catch
+            {
+                // one or more properties not supported
+            }
 
             await PhotoCaptureDevice.PrepareCaptureSequenceAsync(sequence);
         }
 
-        private async Task<Size> GetBestCaptureResolution()
+        private async Task<Size> GetBestCaptureResolution(CameraSensorLocation sensorLocation, Size previewResolution)
         {
             // The last size in the AvailableCaptureResolutions is the lowest available
-            var captureResolutions = PhotoCaptureDevice.GetAvailableCaptureResolutions(CameraSensorLocation.Back);
-            var previewResolutions = PhotoCaptureDevice.GetAvailablePreviewResolutions(CameraSensorLocation.Back);
+            var captureResolutions = PhotoCaptureDevice.GetAvailableCaptureResolutions(sensorLocation);
+            var previewResolutions = PhotoCaptureDevice.GetAvailablePreviewResolutions(sensorLocation);
 
-            Size resolution = await Task.Factory.StartNew(() => captureResolutions.Last(
-                c => (c.Width > 1000.0 || c.Height > 1000.0) && previewResolutions.Any(p => (c.Width / c.Height).Equals(p.Width / p.Height))));
+            Size resolution = await Task.Factory.StartNew(() => captureResolutions.LastOrDefault(
+                c => (c.Width > 1000.0 || c.Height > 1000.0) && (c.Width / c.Height).Equals(previewResolution.Width / previewResolution.Height)));
+            if (resolution == default(Size))
+                return previewResolution;
             return resolution;
         }
 
-        private async Task InitializePhotoCaptureDevice(Size size)
+        private Size GetBestPreviewResolution(CameraSensorLocation sensorLocation)
         {
-            PhotoCaptureDevice = await PhotoCaptureDevice.OpenAsync(CameraSensorLocation.Back, size);
+            var previewResolutions = PhotoCaptureDevice.GetAvailablePreviewResolutions(sensorLocation);
+            var result = new Size(640, 480);
+
+            foreach (var previewResolution in previewResolutions)
+            {
+                if (previewResolution.Width * previewResolution.Height > result.Width * result.Height)
+                    result = previewResolution;
+            }
+
+            return result;
+        }
+
+        private async Task InitializePhotoCaptureDevice(CameraSensorLocation sensorLocation, Size size, Size previewSize)
+        {
+            PhotoCaptureDevice = await PhotoCaptureDevice.OpenAsync(sensorLocation, size);
+            await PhotoCaptureDevice.SetPreviewResolutionAsync(previewSize);
 
             CompositeTransform = new CompositeTransform();
             CompositeTransform.CenterX = .5;
             CompositeTransform.CenterY = .5;
-            CompositeTransform.Rotation = PhotoCaptureDevice.SensorRotationInDegrees - 90;
+            CompositeTransform.Rotation = PhotoCaptureDevice.SensorRotationInDegrees -
+               ((Orientation & PageOrientation.Landscape) == PageOrientation.Landscape ? 90 : 0);
 
             VideoBrush = new VideoBrush();
             VideoBrush.RelativeTransform = CompositeTransform;
             VideoBrush.Stretch = Stretch.Fill;
-            // IMPORTANT: You need to add a namespace Microsoft.Devices to be able to 
             VideoBrush.SetSource(PhotoCaptureDevice);
         }
         #endregion
@@ -168,6 +262,17 @@ namespace WindowsPhone8Demo.ViewModels
             }
         }
 
+        public Size PreviewResolution
+        {
+            get { return _previewResolution; }
+            set
+            {
+                if (value.Equals(_previewResolution)) return;
+                _previewResolution = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ObservableCollection<Result> Results
         {
             get { return _results; }
@@ -176,6 +281,23 @@ namespace WindowsPhone8Demo.ViewModels
                 if (Equals(value, _results)) return;
                 _results = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public PageOrientation Orientation
+        {
+            get
+            {
+                return _orientation;
+            }
+            set
+            {
+                _orientation = value;
+                if (CompositeTransform != null)
+                {
+                    CompositeTransform.Rotation = PhotoCaptureDevice.SensorRotationInDegrees -
+                       ((_orientation & PageOrientation.Landscape) == PageOrientation.Landscape ? 90 : 0);
+                }
             }
         }
 
@@ -194,4 +316,3 @@ namespace WindowsPhone8Demo.ViewModels
         #endregion
     }
 }
-
