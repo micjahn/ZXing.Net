@@ -46,18 +46,19 @@ namespace WindowsPhone8Demo.ViewModels
         private byte[] _rotatedPreviewBuffer;
         private BarcodeReader _barcodeReader;
         private PageOrientation _orientation;
+        private bool stop;
+        private CameraSensorLocation sensorLocation;
 
         public CaptureViewModel()
         {
             _orientation = PageOrientation.Portrait;
-            InitializeAndGo();
         }
 
         #region Methods
-        private async void InitializeAndGo()
+        public async void InitializeAndGo()
         {
             Results = new ObservableCollection<Result>();
-            var sensorLocation = CameraSensorLocation.Front;
+            sensorLocation = CameraSensorLocation.Front;
             if (PhotoCaptureDevice.AvailableSensorLocations.Contains(CameraSensorLocation.Back))
                 sensorLocation = CameraSensorLocation.Back;
 
@@ -73,15 +74,32 @@ namespace WindowsPhone8Demo.ViewModels
 
             PhotoCaptureDevice.PreviewFrameAvailable += PreviewFrame;
 
-            while (true)
+            stop = false;
+            var focusingTask = new Task(Focusing);
+            focusingTask.Start();
+        }
+
+        public void Stop()
+        {
+            stop = true;
+        }
+
+        private async void Focusing()
+        {
+            while (!stop)
             {
                 if (PhotoCaptureDevice.IsFocusSupported(sensorLocation))
                     await PhotoCaptureDevice.FocusAsync();
                 else
                     System.Threading.Thread.Sleep(200);
             }
+
+            PhotoCaptureDevice.PreviewFrameAvailable -= PreviewFrame;
+            PhotoCaptureDevice.Dispose();
+            PhotoCaptureDevice = null;
         }
-        public void PreviewFrame(ICameraCaptureDevice device, object obj)
+
+        private void PreviewFrame(ICameraCaptureDevice device, object obj)
         {
             if (_runningScan != null)
                 return;
@@ -123,16 +141,24 @@ namespace WindowsPhone8Demo.ViewModels
 
             PhotoCaptureDevice.GetPreviewBufferY(_previewBuffer);
 
-            if ((Orientation & PageOrientation.Portrait) == PageOrientation.Portrait)
-            {
-                luminanceSource = new RGBLuminanceSource(RotateClockwise(_previewBuffer, width, height), height, width, RGBLuminanceSource.BitmapFormat.Gray8);
-            }
-            else
-            {
-                luminanceSource = new RGBLuminanceSource(_previewBuffer, width, height, RGBLuminanceSource.BitmapFormat.Gray8);
-            }
-
+            luminanceSource = new RGBLuminanceSource(_previewBuffer, width, height, RGBLuminanceSource.BitmapFormat.Gray8);
             var result = _barcodeReader.Decode(luminanceSource);
+            if (result == null)
+            {
+                // ok, one try with rotation by 90 degrees
+                if ((Orientation & PageOrientation.Portrait) == PageOrientation.Portrait)
+                {
+                    // if we are in potrait orientation it's better to rotate clockwise
+                    // to get it in the right direction
+                    luminanceSource = new RGBLuminanceSource(RotateClockwise(_previewBuffer, width, height), height, width, RGBLuminanceSource.BitmapFormat.Gray8);
+                }
+                else
+                {
+                    // in landscape we try counter clockwise until we know it better
+                    luminanceSource = luminanceSource.rotateCounterClockwise();
+                }
+                result = _barcodeReader.Decode(luminanceSource);
+            }
             return result;
         }
 
@@ -207,8 +233,13 @@ namespace WindowsPhone8Demo.ViewModels
             CompositeTransform = new CompositeTransform();
             CompositeTransform.CenterX = .5;
             CompositeTransform.CenterY = .5;
-            CompositeTransform.Rotation = PhotoCaptureDevice.SensorRotationInDegrees -
-               ((Orientation & PageOrientation.Landscape) == PageOrientation.Landscape ? 90 : 0);
+            CompositeTransform.Rotation = PhotoCaptureDevice.SensorRotationInDegrees
+                - (Orientation == PageOrientation.LandscapeLeft ? 90 : 0)
+                + (Orientation == PageOrientation.LandscapeRight ? 90 : 0);
+            if (sensorLocation == CameraSensorLocation.Front)
+            {
+                CompositeTransform.ScaleX = -1;
+            }
 
             VideoBrush = new VideoBrush();
             VideoBrush.RelativeTransform = CompositeTransform;
@@ -293,10 +324,17 @@ namespace WindowsPhone8Demo.ViewModels
             set
             {
                 _orientation = value;
-                if (CompositeTransform != null)
+                if (CompositeTransform != null &&
+                    PhotoCaptureDevice != null)
                 {
-                    CompositeTransform.Rotation = PhotoCaptureDevice.SensorRotationInDegrees -
-                       ((_orientation & PageOrientation.Landscape) == PageOrientation.Landscape ? 90 : 0);
+                    CompositeTransform.Rotation = PhotoCaptureDevice.SensorRotationInDegrees
+                        - (Orientation == PageOrientation.LandscapeLeft ? 90 : 0)
+                        + (Orientation == PageOrientation.LandscapeRight ? 90 : 0);
+
+                    if (sensorLocation == CameraSensorLocation.Front)
+                    {
+                        CompositeTransform.ScaleX = -1;
+                    }
                 }
             }
         }

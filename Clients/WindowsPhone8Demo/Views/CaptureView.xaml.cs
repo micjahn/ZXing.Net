@@ -22,5 +22,19 @@ namespace WindowsPhone8Demo.Views
         {
            ((CaptureViewModel)DataContext).Orientation = this.Orientation;
         }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            ((CaptureViewModel)DataContext).InitializeAndGo();
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            ((CaptureViewModel)DataContext).Stop();
+        }
     }
 }
