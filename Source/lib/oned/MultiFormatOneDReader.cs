@@ -49,8 +49,9 @@ namespace ZXing.OneD
             {
                readers.Add(new MultiFormatUPCEANReader(hints));
             }
-            if (possibleFormats.Contains(BarcodeFormat.MSI) || possibleFormats.Contains(BarcodeFormat.All_1D))
+            if (possibleFormats.Contains(BarcodeFormat.MSI))
             {
+               // MSI needs to be activated explicit
                bool useMsiCheckDigit = (hints.ContainsKey(DecodeHintType.ASSUME_MSI_CHECK_DIGIT)
                                           ? (bool)hints[DecodeHintType.ASSUME_MSI_CHECK_DIGIT]
                                           : false);
@@ -95,12 +96,9 @@ namespace ZXing.OneD
                                        (bool) hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT];
             bool useCode39ExtendedMode = hints != null && hints.ContainsKey(DecodeHintType.USE_CODE_39_EXTENDED_MODE) &&
                                          (bool) hints[DecodeHintType.USE_CODE_39_EXTENDED_MODE];
-            bool useMsiCheckDigit = ((hints != null && hints.ContainsKey(DecodeHintType.ASSUME_MSI_CHECK_DIGIT))
-                                        ? (bool) hints[DecodeHintType.ASSUME_MSI_CHECK_DIGIT]
-                                        : true);
+            // MSI needs to be activated explicit
 
             readers.Add(new MultiFormatUPCEANReader(hints));
-            readers.Add(new MSIReader(useMsiCheckDigit));
             readers.Add(new Code39Reader(useCode39CheckDigit, useCode39ExtendedMode));
             readers.Add(new CodaBarReader());
             readers.Add(new Code93Reader());
