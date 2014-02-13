@@ -26,6 +26,7 @@ namespace ZXing.OneD
    {
       private static readonly char[] START_END_CHARS = {'A', 'B', 'C', 'D'};
       private static readonly char[] ALT_START_END_CHARS = {'T', 'N', '*', 'E'};
+      private static readonly char[] CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED = { '/', ':', '+', '.' };
 
       public override bool[] encode(String contents)
       {
@@ -51,16 +52,13 @@ namespace ZXing.OneD
 
          // The start character and the end character are decoded to 10 length each.
          int resultLength = 20;
-         char[] charsWhichAreTenLengthEachAfterDecoded = {'/', ':', '+', '.'};
          for (int i = 1; i < contents.Length - 1; i++)
          {
-            if (Char.IsDigit(contents[i]) || contents[i] == '-'
-                || contents[i] == '$')
+            if (Char.IsDigit(contents[i]) || contents[i] == '-' || contents[i] == '$')
             {
                resultLength += 9;
             }
-            else if (CodaBarReader.arrayContains(
-               charsWhichAreTenLengthEachAfterDecoded, contents[i]))
+            else if (CodaBarReader.arrayContains(CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED, contents[i]))
             {
                resultLength += 10;
             }
@@ -77,9 +75,9 @@ namespace ZXing.OneD
          for (int index = 0; index < contents.Length; index++)
          {
             char c = Char.ToUpper(contents[index]);
-            if (index == contents.Length - 1)
+            if (index == 0 || index == contents.Length - 1)
             {
-               // The end chars are not in the CodaBarReader.ALPHABET.
+               // The start/end chars are not in the CodaBarReader.ALPHABET.
                switch (c)
                {
                   case 'T':
