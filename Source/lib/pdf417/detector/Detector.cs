@@ -85,7 +85,8 @@ namespace ZXing.PDF417.Internal
          List<ResultPoint[]> barcodeCoordinates = detect(multiple, bitMatrix);
          if (barcodeCoordinates.Count == 0)
          {
-            rotate180(bitMatrix);
+            bitMatrix = (BitMatrix)bitMatrix.Clone();
+            bitMatrix.rotate180();
             barcodeCoordinates = detect(multiple, bitMatrix);
          }
          return new PDF417DetectorResult(bitMatrix, barcodeCoordinates);
@@ -152,44 +153,6 @@ namespace ZXing.PDF417.Internal
             }
          }
          return barcodeCoordinates;
-      }
-
-      // The following could go to the BitMatrix class (maybe in a more efficient version using the BitMatrix internal
-      // data structures)
-      /// <summary>
-      /// Rotate180s the specified bit matrix.
-      /// </summary>
-      /// <param name="bitMatrix">bit matrix to rotate</param>
-      internal static void rotate180(BitMatrix bitMatrix)
-      {
-         int width = bitMatrix.Width;
-         int height = bitMatrix.Height;
-         BitArray firstRowBitArray = new BitArray(width);
-         BitArray secondRowBitArray = new BitArray(width);
-         BitArray tmpBitArray = new BitArray(width);
-         for (int y = 0; y < height + 1 >> 1; y++)
-         {
-
-            firstRowBitArray = bitMatrix.getRow(y, firstRowBitArray);
-            bitMatrix.setRow(y, mirror(bitMatrix.getRow(height - 1 - y, secondRowBitArray), tmpBitArray));
-            bitMatrix.setRow(height - 1 - y, mirror(firstRowBitArray, tmpBitArray));
-         }
-      }
-
-      /// <summary>
-      /// Copies the bits from the input to the result BitArray in reverse order.
-      /// </summary>
-      /// <param name="input">Input.</param>
-      /// <param name="result">Result.</param>
-      internal static BitArray mirror(BitArray input, BitArray result)
-      {
-         result.clear();
-         int size = input.Size;
-         for (int i = 0; i < size; i++)
-         {
-            result[size - 1 - i] = input[i];
-         }
-         return result;
       }
 
       /// <summary>

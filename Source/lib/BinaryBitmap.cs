@@ -170,5 +170,17 @@ namespace ZXing
          LuminanceSource newSource = binarizer.LuminanceSource.rotateCounterClockwise45();
          return new BinaryBitmap(binarizer.createBinarizer(newSource));
       }
+
+      /// <summary>
+      /// Returns a <see cref="System.String"/> that represents this instance.
+      /// </summary>
+      /// <returns>
+      /// A <see cref="System.String"/> that represents this instance.
+      /// </returns>
+      public override string ToString()
+      {
+         var blackMatrix = BlackMatrix;
+         return blackMatrix != null ? blackMatrix.ToString() : String.Empty;
+      }
    }
 }

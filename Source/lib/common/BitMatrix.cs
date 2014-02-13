@@ -19,24 +19,17 @@ using System;
 namespace ZXing.Common
 {
    /// <summary>
-   /// <p>Represents a 2D matrix of bits. In function arguments below, and throughout the common
+   ///   <p>Represents a 2D matrix of bits. In function arguments below, and throughout the common
    /// module, x is the column position, and y is the row position. The ordering is always x, y.
    /// The origin is at the top-left.</p>
-   /// 
-   /// <p>Internally the bits are represented in a 1-D array of 32-bit ints. However, each row begins
+   ///   <p>Internally the bits are represented in a 1-D array of 32-bit ints. However, each row begins
    /// with a new int. This is done intentionally so that we can copy out a row into a BitArray very
    /// efficiently.</p>
-   /// 
-   /// <p>The ordering of bits is row-major. Within each int, the least significant bits are used first,
+   ///   <p>The ordering of bits is row-major. Within each int, the least significant bits are used first,
    /// meaning they represent lower x values. This is compatible with BitArray's implementation.</p>
-   /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>  dswitkin@google.com (Daniel Switkin)
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
+   /// <author>dswitkin@google.com (Daniel Switkin)</author>
    public sealed partial class BitMatrix
    {
       private readonly int width;
@@ -99,6 +92,14 @@ namespace ZXing.Common
          this.height = height;
          this.rowSize = (width + 31) >> 5;
          bits = new int[rowSize * height];
+      }
+
+      private BitMatrix(int width, int height, int rowSize, int[] bits)
+      {
+         this.width = width;
+         this.height = height;
+         this.rowSize = rowSize;
+         this.bits = bits;
       }
 
       /// <summary> <p>Gets the requested bit, where true means black.</p>
@@ -203,6 +204,10 @@ namespace ZXing.Common
          {
             row = new BitArray(width);
          }
+         else
+         {
+            row.clear();
+         }
          int offset = y * rowSize;
          for (int x = 0; x < rowSize; x++)
          {
@@ -219,6 +224,26 @@ namespace ZXing.Common
       public void setRow(int y, BitArray row)
       {
          Array.Copy(row.Array, 0, bits, y * rowSize, rowSize);
+      }
+
+      /// <summary>
+      /// Modifies this {@code BitMatrix} to represent the same but rotated 180 degrees
+      /// </summary>
+      public void rotate180()
+      {
+         var width = Width;
+         var height = Height;
+         var topRow = new BitArray(width);
+         var bottomRow = new BitArray(width);
+         for (int i = 0; i < (height + 1)/2; i++)
+         {
+            topRow = getRow(i, topRow);
+            bottomRow = getRow(height - 1 - i, bottomRow);
+            topRow.reverse();
+            bottomRow.reverse();
+            setRow(i, bottomRow);
+            setRow(height - 1 - i, topRow);
+         }
       }
 
       /// <summary>
@@ -371,7 +396,7 @@ namespace ZXing.Common
          hash = 31 * hash + rowSize;
          foreach (var bit in bits)
          {
-            hash = 31 * hash + bit;
+            hash = 31 * hash + bit.GetHashCode();
          }
          return hash;
       }
@@ -392,6 +417,11 @@ namespace ZXing.Common
 #endif
          }
          return result.ToString();
+      }
+
+      public object Clone()
+      {
+         return new BitMatrix(width, height, rowSize, (int[])bits.Clone());
       }
    }
 }

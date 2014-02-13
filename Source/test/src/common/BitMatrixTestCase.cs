@@ -25,6 +25,7 @@ namespace ZXing.Common.Test
    [TestFixture]
    public sealed class BitMatrixTestCase
    {
+      private static readonly int[] BIT_MATRIX_POINTS = {1, 2, 2, 0, 3, 1};
 
       [Test]
       public void testGetSet()
@@ -35,7 +36,7 @@ namespace ZXing.Common.Test
          {
             for (int x = 0; x < 33; x++)
             {
-               if (y * x % 3 == 0)
+               if (y*x%3 == 0)
                {
                   matrix[x, y] = true;
                }
@@ -45,7 +46,7 @@ namespace ZXing.Common.Test
          {
             for (int x = 0; x < 33; x++)
             {
-               Assert.AreEqual(y * x % 3 == 0, matrix[x, y]);
+               Assert.AreEqual(y*x%3 == 0, matrix[x, y]);
             }
          }
       }
@@ -143,6 +144,67 @@ namespace ZXing.Common.Test
             Assert.AreEqual(on, array2[x]);
             Assert.AreEqual(on, array3[x]);
          }
+      }
+
+      [Test]
+      public void testRotate180Simple()
+      {
+         var matrix = new BitMatrix(3, 3);
+         matrix[0, 0] = true;
+         matrix[0, 1] = true;
+         matrix[1, 2] = true;
+         matrix[2, 1] = true;
+
+         matrix.rotate180();
+
+         Assert.IsTrue(matrix[2, 2]);
+         Assert.IsTrue(matrix[2, 1]);
+         Assert.IsTrue(matrix[1, 0]);
+         Assert.IsTrue(matrix[0, 1]);
+      }
+
+      [Test]
+      public void testRotate180()
+      {
+         testRotate180(7, 4);
+         testRotate180(7, 5);
+         testRotate180(8, 4);
+         testRotate180(8, 5);
+      }
+
+      private static void testRotate180(int width, int height)
+      {
+         var input = getInput(width, height);
+         input.rotate180();
+         var expected = getExpected(width, height);
+
+         for (int y = 0; y < height; y++)
+         {
+            for (int x = 0; x < width; x++)
+            {
+               Assert.AreEqual(expected[x, y], input[x, y], "(" + x + ',' + y + ')');
+            }
+         }
+      }
+
+      private static BitMatrix getExpected(int width, int height)
+      {
+         var result = new BitMatrix(width, height);
+         for (int i = 0; i < BIT_MATRIX_POINTS.Length; i += 2)
+         {
+            result[width - 1 - BIT_MATRIX_POINTS[i], height - 1 - BIT_MATRIX_POINTS[i + 1]] = true;
+         }
+         return result;
+      }
+
+      private static BitMatrix getInput(int width, int height)
+      {
+         var result = new BitMatrix(width, height);
+         for (int i = 0; i < BIT_MATRIX_POINTS.Length; i += 2)
+         {
+            result[BIT_MATRIX_POINTS[i], BIT_MATRIX_POINTS[i + 1]] = true;
+         }
+         return result;
       }
    }
 }

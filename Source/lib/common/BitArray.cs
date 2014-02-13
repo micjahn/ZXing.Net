@@ -72,6 +72,13 @@ namespace ZXing.Common
          this.bits = makeArray(size);
       }
 
+      // For testing only
+      private BitArray(int[] bits, int size)
+      {
+         this.bits = bits;
+         this.size = size;
+      }
+
       private void ensureCapacity(int size)
       {
          if (size > bits.Length << 5)
@@ -409,6 +416,50 @@ namespace ZXing.Common
          return new int[(size + 31) >> 5];
       }
 
+      /// <summary>
+      /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
+      /// </summary>
+      /// <param name="o">The <see cref="System.Object"/> to compare with this instance.</param>
+      /// <returns>
+      ///   <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+      /// </returns>
+      public override bool Equals(Object o)
+      {
+         var other = o as BitArray;
+         if (other == null)
+            return false;
+         if (size != other.size)
+            return false;
+         for (var index = 0; index < size; index++)
+         {
+            if (bits[index] != other.bits[index])
+               return false;
+         }
+         return true;
+      }
+
+      /// <summary>
+      /// Returns a hash code for this instance.
+      /// </summary>
+      /// <returns>
+      /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+      /// </returns>
+      public override int GetHashCode()
+      {
+         var hash = size;
+         foreach (var bit in bits)
+         {
+            hash = 31 * hash + bit.GetHashCode();
+         }
+         return hash;
+      }
+
+      /// <summary>
+      /// Returns a <see cref="System.String"/> that represents this instance.
+      /// </summary>
+      /// <returns>
+      /// A <see cref="System.String"/> that represents this instance.
+      /// </returns>
       public override String ToString()
       {
          var result = new System.Text.StringBuilder(size);
@@ -421,6 +472,17 @@ namespace ZXing.Common
             result.Append(this[i] ? 'X' : '.');
          }
          return result.ToString();
+      }
+
+      /// <summary>
+      /// Erstellt ein neues Objekt, das eine Kopie der aktuellen Instanz darstellt.
+      /// </summary>
+      /// <returns>
+      /// Ein neues Objekt, das eine Kopie dieser Instanz darstellt.
+      /// </returns>
+      public object Clone()
+      {
+         return new BitArray((int[])bits.Clone(), size);
       }
    }
 }
