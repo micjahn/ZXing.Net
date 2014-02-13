@@ -27,7 +27,7 @@ namespace ZXing.Common.Detector
    /// <author>David Olivier</author>
    public sealed class WhiteRectangleDetector
    {
-      private const int INIT_SIZE = 30;
+      private const int INIT_SIZE = 10;
       private const int CORR = 1;
 
       private readonly BitMatrix image;
@@ -80,20 +80,15 @@ namespace ZXing.Common.Detector
          return instance;
       }
 
+
       /// <summary>
       /// Initializes a new instance of the <see cref="WhiteRectangleDetector"/> class.
       /// </summary>
       /// <param name="image">The image.</param>
       /// <exception cref="ArgumentException">if image is too small</exception>
       internal WhiteRectangleDetector(BitMatrix image)
+         : this(image, INIT_SIZE, image.Width/2, image.Height/2)
       {
-         this.image = image;
-         height = image.Height;
-         width = image.Width;
-         leftInit = (width - INIT_SIZE) >> 1;
-         rightInit = (width + INIT_SIZE) >> 1;
-         upInit = (height - INIT_SIZE) >> 1;
-         downInit = (height + INIT_SIZE) >> 1;
       }
 
       /// <summary>
@@ -108,7 +103,7 @@ namespace ZXing.Common.Detector
          this.image = image;
          height = image.Height;
          width = image.Width;
-         int halfsize = initSize >> 1;
+         int halfsize = initSize / 2;
          leftInit = x - halfsize;
          rightInit = x + halfsize;
          upInit = y - halfsize;
