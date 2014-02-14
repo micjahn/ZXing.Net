@@ -31,7 +31,7 @@ namespace ZXing.Client.Result
    /// </author>
    sealed class EmailDoCoMoResultParser : AbstractDoCoMoResultParser
    {
-      private static readonly Regex ATEXT_ALPHANUMERIC = new Regex("^[a-zA-Z0-9@.!#$%&'*+\\-/=?^_`{|}~]+$"
+      private static readonly Regex ATEXT_ALPHANUMERIC = new Regex(@"\A(?:" + "[a-zA-Z0-9@.!#$%&'*+\\-/=?^_`{|}~]+" + @")\z"
 #if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
          , RegexOptions.Compiled);
 #else

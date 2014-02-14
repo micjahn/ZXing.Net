@@ -27,10 +27,10 @@ namespace ZXing.Client.Result
    {
 #if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE
       private static readonly Regex IOQ = new Regex("[IOQ]");
-      private static readonly Regex AZ09 = new Regex("[A-Z0-9]{17}");
+      private static readonly Regex AZ09 = new Regex(@"\A(?:" + "[A-Z0-9]{17}" + @")\z");
 #else
       private static readonly Regex IOQ = new Regex("[IOQ]", RegexOptions.Compiled);
-      private static readonly Regex AZ09 = new Regex("[A-Z0-9]{17}", RegexOptions.Compiled);
+      private static readonly Regex AZ09 = new Regex(@"\A(?:" + "[A-Z0-9]{17}" + @")\z", RegexOptions.Compiled);
 #endif
 
       public override ParsedResult parse(ZXing.Result result)

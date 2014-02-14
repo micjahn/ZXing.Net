@@ -31,7 +31,7 @@ namespace ZXing.Client.Result
    {
 #if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE
       private static readonly Regex BEGIN_VCARD = new Regex("BEGIN:VCARD", RegexOptions.IgnoreCase);
-      private static readonly Regex VCARD_LIKE_DATE = new Regex("\\d{4}-?\\d{2}-?\\d{2}");
+      private static readonly Regex VCARD_LIKE_DATE = new Regex(@"\A(?:" + "\\d{4}-?\\d{2}-?\\d{2}" + @")\z");
       private static readonly Regex CR_LF_SPACE_TAB = new Regex("\r\n[ \t]");
       private static readonly Regex NEWLINE_ESCAPE = new Regex("\\\\[nN]");
       private static readonly Regex VCARD_ESCAPES = new Regex("\\\\([,;\\\\])");
@@ -42,7 +42,7 @@ namespace ZXing.Client.Result
       private static readonly Regex SEMICOLON_OR_COMMA = new Regex("[;,]");
 #else
       private static readonly Regex BEGIN_VCARD = new Regex("BEGIN:VCARD", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-      private static readonly Regex VCARD_LIKE_DATE = new Regex("\\d{4}-?\\d{2}-?\\d{2}", RegexOptions.Compiled);
+      private static readonly Regex VCARD_LIKE_DATE = new Regex(@"\A(?:" + "\\d{4}-?\\d{2}-?\\d{2}" + @")\z", RegexOptions.Compiled);
       private static readonly Regex CR_LF_SPACE_TAB = new Regex("\r\n[ \t]", RegexOptions.Compiled);
       private static readonly Regex NEWLINE_ESCAPE = new Regex("\\\\[nN]", RegexOptions.Compiled);
       private static readonly Regex VCARD_ESCAPES = new Regex("\\\\([,;\\\\])", RegexOptions.Compiled);

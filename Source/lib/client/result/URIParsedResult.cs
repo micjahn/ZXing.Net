@@ -73,26 +73,15 @@ namespace ZXing.Client.Result
          }
          return uri;
       }
-
       private static bool isColonFollowedByPortNumber(String uri, int protocolEnd)
       {
-         int nextSlash = uri.IndexOf('/', protocolEnd + 1);
+         int start = protocolEnd + 1;
+         int nextSlash = uri.IndexOf('/', start);
          if (nextSlash < 0)
          {
             nextSlash = uri.Length;
          }
-         if (nextSlash <= protocolEnd + 1)
-         {
-            return false;
-         }
-         for (int x = protocolEnd + 1; x < nextSlash; x++)
-         {
-            if (uri[x] < '0' || uri[x] > '9')
-            {
-               return false;
-            }
-         }
-         return true;
+         return ResultParser.isSubstringOfDigits(uri, start, nextSlash - start);
       }
    }
 }

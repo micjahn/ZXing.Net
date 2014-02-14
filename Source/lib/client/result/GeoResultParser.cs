@@ -32,7 +32,7 @@ namespace ZXing.Client.Result
    /// </author>
    sealed class GeoResultParser : ResultParser
    {
-      private static readonly Regex GEO_URL_PATTERN = new Regex("geo:([\\-0-9.]+),([\\-0-9.]+)(?:,([\\-0-9.]+))?(?:\\?(.*))?"
+      private static readonly Regex GEO_URL_PATTERN = new Regex(@"\A(?:" + "geo:([\\-0-9.]+),([\\-0-9.]+)(?:,([\\-0-9.]+))?(?:\\?(.*))?" + @")\z"
 #if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
          , RegexOptions.Compiled | RegexOptions.IgnoreCase);
 #else

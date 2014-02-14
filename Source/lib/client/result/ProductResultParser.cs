@@ -44,14 +44,9 @@ namespace ZXing.Client.Result
             return null;
          }
 
-         int length = rawText.Length;
-         for (int x = 0; x < length; x++)
+         if (!isStringOfDigits(rawText, rawText.Length))
          {
-            char c = rawText[x];
-            if (c < '0' || c > '9')
-            {
-               return null;
-            }
+            return null;
          }
          // Not actually checking the checksum again here    
 

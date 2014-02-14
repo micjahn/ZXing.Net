@@ -55,13 +55,11 @@ namespace ZXing.Client.Result
                                               };
 
 #if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE
-      private static readonly Regex DIGITS = new Regex("\\d*");
-      private static readonly Regex ALPHANUM = new Regex("[a-zA-Z0-9]*");
+      private static readonly Regex DIGITS = new Regex(@"\A(?:" + "\\d+" + @")\z");
       private static readonly Regex AMPERSAND = new Regex("&");
       private static readonly Regex EQUALS = new Regex("=");
 #else
-      private static readonly Regex DIGITS = new Regex("\\d*", RegexOptions.Compiled);
-      private static readonly Regex ALPHANUM = new Regex("[a-zA-Z0-9]*", RegexOptions.Compiled);
+      private static readonly Regex DIGITS = new Regex(@"\A(?:" + "\\d+" + @")\z", RegexOptions.Compiled);
       private static readonly Regex AMPERSAND = new Regex("&", RegexOptions.Compiled);
       private static readonly Regex EQUALS = new Regex("=", RegexOptions.Compiled);
 #endif
@@ -170,29 +168,19 @@ namespace ZXing.Client.Result
          return -1;
       }
 
-      protected static bool isStringOfDigits(String value, int length)
+      internal static bool isStringOfDigits(String value, int length)
       {
-         return value != null && length == value.Length && DIGITS.Match(value).Success;
+         return value != null && length > 0 && length == value.Length && DIGITS.Match(value).Success;
       }
 
-      protected static bool isSubstringOfDigits(String value, int offset, int length)
+      internal static bool isSubstringOfDigits(String value, int offset, int length)
       {
-         if (value == null)
+         if (value == null || length <= 0)
          {
             return false;
          }
          int max = offset + length;
-         return value.Length >= max && DIGITS.Match(value.Substring(offset, length)).Success;
-      }
-
-      protected static bool isSubstringOfAlphaNumeric(String value, int offset, int length)
-      {
-         if (value == null)
-         {
-            return false;
-         }
-         int max = offset + length;
-         return value.Length >= max && ALPHANUM.Match(value.Substring(offset, length)).Success;
+         return value.Length >= max && DIGITS.Match(value, offset, length).Success;
       }
 
       internal static IDictionary<string, string> parseNameValuePairs(String uri)

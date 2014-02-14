@@ -24,7 +24,7 @@ namespace ZXing.Client.Result
    ///<author>Sean Owen</author>
    public sealed class CalendarParsedResult : ParsedResult
    {
-      private static readonly Regex RFC2445_DURATION = new Regex("P(?:(\\d+)W)?(?:(\\d+)D)?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?"
+      private static readonly Regex RFC2445_DURATION = new Regex(@"\A(?:" + "P(?:(\\d+)W)?(?:(\\d+)D)?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?" + @")\z"
 #if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
 , RegexOptions.Compiled);
 #else
@@ -39,7 +39,7 @@ namespace ZXing.Client.Result
                                                                        1000L, // 1 second
                                                                     };
 
-      private static readonly Regex DATE_TIME = new Regex("[0-9]{8}(T[0-9]{6}Z?)?"
+      private static readonly Regex DATE_TIME = new Regex(@"\A(?:" + "[0-9]{8}(T[0-9]{6}Z?)?" + @")\z"
 #if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
 , RegexOptions.Compiled);
 #else
