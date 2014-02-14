@@ -34,5 +34,6 @@ namespace ZXing.Client.Result
       CALENDAR,
       WIFI,
       ISBN,
+      VIN
    }
 }

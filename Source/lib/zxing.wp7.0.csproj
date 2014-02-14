@@ -115,6 +115,8 @@
     <Compile Include="client\result\URLTOResultParser.cs" />
     <Compile Include="client\result\VCardResultParser.cs" />
     <Compile Include="client\result\VEventResultParser.cs" />
+    <Compile Include="client\result\VINParsedResult.cs" />
+    <Compile Include="client\result\VINResultParser.cs" />
     <Compile Include="client\result\WifiParsedResult.cs" />
     <Compile Include="client\result\WifiResultParser.cs" />
     <Compile Include="common\BigInteger\Base10BigInteger.cs" />

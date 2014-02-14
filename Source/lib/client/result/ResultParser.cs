@@ -50,7 +50,8 @@ namespace ZXing.Client.Result
                                                  new URIResultParser(),
                                                  new ISBNResultParser(),
                                                  new ProductResultParser(),
-                                                 new ExpandedProductResultParser()
+                                                 new ExpandedProductResultParser(),
+                                                 new VINResultParser(),
                                               };
 
 #if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE

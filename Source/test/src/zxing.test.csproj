@@ -95,6 +95,7 @@
     <Compile Include="client\result\SMSMMSParsedResultTestCase.cs" />
     <Compile Include="client\result\TelParsedResultTestCase.cs" />
     <Compile Include="client\result\URIParsedResultTestCase.cs" />
+    <Compile Include="client\result\VINParsedResultTestCase.cs" />
     <Compile Include="client\result\WifiParsedResultTestCase.cs" />
     <Compile Include="common\AbstractBlackBoxTestCase.cs">
       <SubType>Code</SubType>
