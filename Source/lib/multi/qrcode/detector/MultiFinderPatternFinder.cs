@@ -241,6 +241,7 @@ namespace ZXing.Multi.QrCode.Internal
       public FinderPatternInfo[] findMulti(IDictionary<DecodeHintType, object> hints)
       {
          bool tryHarder = hints != null && hints.ContainsKey(DecodeHintType.TRY_HARDER);
+         bool pureBarcode = hints != null && hints.ContainsKey(DecodeHintType.PURE_BARCODE);
          BitMatrix image = Image;
          int maxI = image.Height;
          int maxJ = image.Width;
@@ -284,7 +285,7 @@ namespace ZXing.Multi.QrCode.Internal
                   { // Counting black pixels
                      if (currentState == 4)
                      { // A winner?
-                        if (foundPatternCross(stateCount) && handlePossibleCenter(stateCount, i, j))
+                        if (foundPatternCross(stateCount) && handlePossibleCenter(stateCount, i, j, pureBarcode))
                         { // Yes
                            // Clear state to start looking again
                            currentState = 0;
@@ -318,7 +319,7 @@ namespace ZXing.Multi.QrCode.Internal
 
             if (foundPatternCross(stateCount))
             {
-               handlePossibleCenter(stateCount, i, maxJ);
+               handlePossibleCenter(stateCount, i, maxJ, pureBarcode);
             } // end if foundPatternCross
          } // for i=iSkip-1 ...
          FinderPattern[][] patternInfo = selectMutipleBestPatterns();

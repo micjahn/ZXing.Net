@@ -94,6 +94,7 @@ namespace ZXing.QrCode.Internal
       internal virtual FinderPatternInfo find(IDictionary<DecodeHintType, object> hints)
       {
          bool tryHarder = hints != null && hints.ContainsKey(DecodeHintType.TRY_HARDER);
+         bool pureBarcode = hints != null && hints.ContainsKey(DecodeHintType.PURE_BARCODE);
          int maxI = image.Height;
          int maxJ = image.Width;
          // We are looking for black/white/black/white/black modules in
@@ -144,7 +145,7 @@ namespace ZXing.QrCode.Internal
                         if (foundPatternCross(stateCount))
                         {
                            // Yes
-                           bool confirmed = handlePossibleCenter(stateCount, i, j);
+                           bool confirmed = handlePossibleCenter(stateCount, i, j, pureBarcode);
                            if (confirmed)
                            {
                               // Start examining every other line. Checking each line turned out to be too
@@ -215,7 +216,7 @@ namespace ZXing.QrCode.Internal
             }
             if (foundPatternCross(stateCount))
             {
-               bool confirmed = handlePossibleCenter(stateCount, i, maxJ);
+               bool confirmed = handlePossibleCenter(stateCount, i, maxJ, pureBarcode);
                if (confirmed)
                {
                   iSkip = stateCount[0];
@@ -290,6 +291,102 @@ namespace ZXing.QrCode.Internal
             crossCheckStateCount[4] = 0;
             return crossCheckStateCount;
          }
+      }
+
+      /// <summary>
+      /// After a vertical and horizontal scan finds a potential finder pattern, this method
+      /// "cross-cross-cross-checks" by scanning down diagonally through the center of the possible
+      /// finder pattern to see if the same proportion is detected.
+      /// </summary>
+      /// <param name="startI">row where a finder pattern was detected</param>
+      /// <param name="centerJ">center of the section that appears to cross a finder pattern</param>
+      /// <param name="maxCount">maximum reasonable number of modules that should be observed in any reading state, based on the results of the horizontal scan</param>
+      /// <param name="originalStateCountTotal">The original state count total.</param>
+      /// <returns>true if proportions are withing expected limits</returns>
+      private bool crossCheckDiagonal(int startI, int centerJ, int maxCount, int originalStateCountTotal)
+      {
+         int maxI = image.Height;
+         int maxJ = image.Width;
+         int[] stateCount = CrossCheckStateCount;
+
+         // Start counting up, left from center finding black center mass
+         int i = 0;
+         while (startI - i >= 0 && image[centerJ - i, startI - i])
+         {
+            stateCount[2]++;
+            i++;
+         }
+
+         if ((startI - i < 0) || (centerJ - i < 0))
+         {
+            return false;
+         }
+
+         // Continue up, left finding white space
+         while ((startI - i >= 0) && (centerJ - i >= 0) && !image[centerJ - i, startI - i] && stateCount[1] <= maxCount)
+         {
+            stateCount[1]++;
+            i++;
+         }
+
+         // If already too many modules in this state or ran off the edge:
+         if ((startI - i < 0) || (centerJ - i < 0) || stateCount[1] > maxCount)
+         {
+            return false;
+         }
+
+         // Continue up, left finding black border
+         while ((startI - i >= 0) && (centerJ - i >= 0) && image[centerJ - i, startI - i] && stateCount[0] <= maxCount)
+         {
+            stateCount[0]++;
+            i++;
+         }
+         if (stateCount[0] > maxCount)
+         {
+            return false;
+         }
+
+         // Now also count down, right from center
+         i = 1;
+         while ((startI + i < maxI) && (centerJ + i < maxJ) && image[centerJ + i, startI + i])
+         {
+            stateCount[2]++;
+            i++;
+         }
+
+         // Ran off the edge?
+         if ((startI + i >= maxI) || (centerJ + i >= maxJ))
+         {
+            return false;
+         }
+
+         while ((startI + i < maxI) && (centerJ + i < maxJ) && !image[centerJ + i, startI + i] && stateCount[3] < maxCount)
+         {
+            stateCount[3]++;
+            i++;
+         }
+
+         if ((startI + i >= maxI) || (centerJ + i >= maxJ) || stateCount[3] >= maxCount)
+         {
+            return false;
+         }
+
+         while ((startI + i < maxI) && (centerJ + i < maxJ) && image[centerJ + i, startI + i] && stateCount[4] < maxCount)
+         {
+            stateCount[4]++;
+            i++;
+         }
+
+         if (stateCount[4] >= maxCount)
+         {
+            return false;
+         }
+
+         // If we found a finder-pattern-like section, but its size is more than 100% different than
+         // the original, assume it's a false positive
+         int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
+         return Math.Abs(stateCountTotal - originalStateCountTotal) < 2*originalStateCountTotal &&
+                foundPatternCross(stateCount);
       }
 
       /// <summary>
@@ -460,26 +557,25 @@ namespace ZXing.QrCode.Internal
          return foundPatternCross(stateCount) ? centerFromEnd(stateCount, j) : null;
       }
 
-      /// <summary> <p>This is called when a horizontal scan finds a possible alignment pattern. It will
+      /// <summary>
+      ///   <p>This is called when a horizontal scan finds a possible alignment pattern. It will
       /// cross check with a vertical scan, and if successful, will, ah, cross-cross-check
       /// with another horizontal scan. This is needed primarily to locate the real horizontal
-      /// center of the pattern in cases of extreme skew.</p>
-      /// 
+      /// center of the pattern in cases of extreme skew.
+      /// And then we cross-cross-cross check with another diagonal scan.</p>
       /// If that succeeds the finder pattern location is added to a list that tracks
       /// the number of times each location has been nearly-matched as a finder pattern.
       /// Each additional find is more evidence that the location is in fact a finder
       /// pattern center
-      /// 
       /// </summary>
-      /// <param name="stateCount">reading state module counts from horizontal scan
-      /// </param>
-      /// <param name="i">row where finder pattern may be found
-      /// </param>
-      /// <param name="j">end of possible finder pattern in row
-      /// </param>
-      /// <returns> true if a finder pattern candidate was found this time
+      /// <param name="stateCount">reading state module counts from horizontal scan</param>
+      /// <param name="i">row where finder pattern may be found</param>
+      /// <param name="j">end of possible finder pattern in row</param>
+      /// <param name="pureBarcode">if set to <c>true</c> [pure barcode].</param>
+      /// <returns>
+      /// true if a finder pattern candidate was found this time
       /// </returns>
-      protected bool handlePossibleCenter(int[] stateCount, int i, int j)
+      protected bool handlePossibleCenter(int[] stateCount, int i, int j, bool pureBarcode)
       {
          int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] +
              stateCount[4];
@@ -491,7 +587,8 @@ namespace ZXing.QrCode.Internal
          {
             // Re-cross check
             centerJ = crossCheckHorizontal((int)centerJ.Value, (int)centerI.Value, stateCount[2], stateCountTotal);
-            if (centerJ != null)
+            if (centerJ != null &&
+               (!pureBarcode || crossCheckDiagonal((int) centerI, (int) centerJ, stateCount[2], stateCountTotal)))
             {
                float estimatedModuleSize = stateCountTotal / 7.0f;
                bool found = false;
