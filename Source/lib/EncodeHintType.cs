@@ -46,6 +46,7 @@ namespace ZXing
       /// <see cref="ZXing.QrCode.Internal.ErrorCorrectionLevel" />
       /// For Aztec it is of type <see cref="System.Int32" />, representing the minimal percentage of error correction words. 
       /// Note: an Aztec symbol should have a minimum of 25% EC words.
+      /// For PDF417 it is of type <see cref="ZXing.PDF417.Internal.PDF417ErrorCorrectionLevel"/> or <see cref="System.Int32" /> (between 0 and 8),
       /// </summary>
       ERROR_CORRECTION,
 

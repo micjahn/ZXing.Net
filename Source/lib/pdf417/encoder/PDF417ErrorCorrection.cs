@@ -28,14 +28,13 @@ namespace ZXing.PDF417.Internal
    /// PDF417 error correction code following the algorithm described in ISO/IEC 15438:2001(E) in
    /// chapter 4.10.
    /// </summary>
-   internal sealed class PDF417ErrorCorrection
+   internal static class PDF417ErrorCorrection
    {
-
       /// <summary>
       /// Tables of coefficients for calculating error correction words
       /// (see annex F, ISO/IEC 15438:2001(E))
       /// </summary>
-      private static int[][] EC_COEFFICIENTS =
+      private static readonly int[][] EC_COEFFICIENTS =
          {
             new[] {27, 917},
             new[] {522, 568, 723, 809},
@@ -147,17 +146,12 @@ namespace ZXing.PDF417.Internal
                }
          };
 
-      private PDF417ErrorCorrection()
-      {
-      }
-
       /// <summary>
       /// Determines the number of error correction codewords for a specified error correction
       /// level.
-      ///
+      /// </summary>
       /// <param name="errorCorrectionLevel">the error correction level (0-8)</param>
       /// <returns>the number of codewords generated for error correction</returns>
-      /// </summary>
       internal static int getErrorCorrectionCodewordCount(int errorCorrectionLevel)
       {
          if (errorCorrectionLevel < 0 || errorCorrectionLevel > 8)
@@ -170,10 +164,9 @@ namespace ZXing.PDF417.Internal
       /// <summary>
       /// Returns the recommended minimum error correction level as described in annex E of
       /// ISO/IEC 15438:2001(E).
-      ///
+      /// </summary>
       /// <param name="n">the number of data codewords</param>
       /// <returns>the recommended minimum error correction level</returns>
-      /// </summary>
       internal static int getRecommendedMinimumErrorCorrectionLevel(int n)
       {
          if (n <= 0)
@@ -201,11 +194,10 @@ namespace ZXing.PDF417.Internal
 
       /// <summary>
       /// Generates the error correction codewords according to 4.10 in ISO/IEC 15438:2001(E).
-      ///
+      /// </summary>
       /// <param name="dataCodewords">the data codewords</param>
       /// <param name="errorCorrectionLevel">the error correction level (0-8)</param>
       /// <returns>the String representing the error correction codewords</returns>
-      /// </summary>
       internal static String generateErrorCorrection(String dataCodewords, int errorCorrectionLevel)
       {
          int k = getErrorCorrectionCodewordCount(errorCorrectionLevel);
@@ -237,5 +229,21 @@ namespace ZXing.PDF417.Internal
          }
          return sb.ToString();
       }
+   }
+
+   /// <summary>
+   /// defines the level of the error correction / count of error correction codewords
+   /// </summary>
+   public enum PDF417ErrorCorrectionLevel
+   {
+      L0 = 0,
+      L1,
+      L2,
+      L3,
+      L4,
+      L5,
+      L6,
+      L7,
+      L8
    }
 }

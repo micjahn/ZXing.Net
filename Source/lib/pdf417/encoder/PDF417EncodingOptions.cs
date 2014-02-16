@@ -76,5 +76,29 @@ namespace ZXing.PDF417
          }
          set { Hints[EncodeHintType.PDF417_DIMENSIONS] = value; }
       }
+
+      /// <summary>
+      /// Specifies what degree of error correction to use
+      /// </summary>
+      public PDF417ErrorCorrectionLevel ErrorCorrection
+      {
+         get
+         {
+            if (Hints.ContainsKey(EncodeHintType.ERROR_CORRECTION))
+            {
+               var value = Hints[EncodeHintType.ERROR_CORRECTION];
+               if (value is PDF417ErrorCorrectionLevel)
+               {
+                  return (PDF417ErrorCorrectionLevel)value;
+               }
+               if (value is int)
+               {
+                  return (PDF417ErrorCorrectionLevel)Enum.Parse(typeof(PDF417ErrorCorrectionLevel), value.ToString(), true);
+               }
+            }
+            return PDF417ErrorCorrectionLevel.L2;
+         }
+         set { Hints[EncodeHintType.ERROR_CORRECTION] = value; }
+      }
    }
 }
