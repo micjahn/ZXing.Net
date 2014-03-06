@@ -60,6 +60,9 @@ namespace ZXing.PDF417.Internal
                                          int maxCodewordWidth)
       {
          BoundingBox boundingBox = BoundingBox.Create(image, imageTopLeft, imageBottomLeft, imageTopRight, imageBottomRight);
+         if (boundingBox == null)
+            return null;
+
          DetectionResultRowIndicatorColumn leftRowIndicatorColumn = null;
          DetectionResultRowIndicatorColumn rightRowIndicatorColumn = null;
          DetectionResult detectionResult = null;
@@ -238,7 +241,7 @@ namespace ZXing.PDF417.Internal
          }
          if (rightRowIndicatorColumn == null || rightRowIndicatorColumn.getBarcodeMetadata() == null)
          {
-            return leftRowIndicatorColumn == null ? null : leftRowIndicatorColumn.getBarcodeMetadata();
+            return leftRowIndicatorColumn.getBarcodeMetadata();
          }
          BarcodeMetadata leftBarcodeMetadata = leftRowIndicatorColumn.getBarcodeMetadata();
          BarcodeMetadata rightBarcodeMetadata = rightRowIndicatorColumn.getBarcodeMetadata();

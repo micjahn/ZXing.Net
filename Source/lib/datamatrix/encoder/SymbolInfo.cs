@@ -24,7 +24,7 @@ namespace ZXing.Datamatrix.Encoder
    /// </summary>
    public class SymbolInfo
    {
-      public static readonly SymbolInfo[] PROD_SYMBOLS = {
+      internal static readonly SymbolInfo[] PROD_SYMBOLS = {
                                                          new SymbolInfo(false, 3, 5, 8, 8, 1),
                                                          new SymbolInfo(false, 5, 7, 10, 10, 1),
                                                          /*rect*/new SymbolInfo(true, 5, 7, 16, 6, 1),

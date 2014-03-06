@@ -124,12 +124,6 @@ namespace ZXing.PDF417.Internal
       {
          return imageRow - Box.MinY;
       }
-      /*
-      private int codewordIndexToImageRow(int codewordIndex)
-      {
-         return Box.MinY + codewordIndex;
-      }
-      */
 
       /// <summary>
       /// Sets the codeword for an image row
