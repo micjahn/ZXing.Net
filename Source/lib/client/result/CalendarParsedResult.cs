@@ -26,37 +26,26 @@ namespace ZXing.Client.Result
    {
       private static readonly Regex RFC2445_DURATION = new Regex(@"\A(?:" + "P(?:(\\d+)W)?(?:(\\d+)D)?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?" + @")\z"
 #if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
-, RegexOptions.Compiled);
+                                                                 , RegexOptions.Compiled);
 #else
 );
 #endif
 
-      private static readonly long[] RFC2445_DURATION_FIELD_UNITS = {
-                                                                       7*24*60*60*1000L, // 1 week
-                                                                       24*60*60*1000L, // 1 day
-                                                                       60*60*1000L, // 1 hour
-                                                                       60*1000L, // 1 minute
-                                                                       1000L, // 1 second
-                                                                    };
+      private static readonly long[] RFC2445_DURATION_FIELD_UNITS =
+         {
+            7*24*60*60*1000L, // 1 week
+            24*60*60*1000L, // 1 day
+            60*60*1000L, // 1 hour
+            60*1000L, // 1 minute
+            1000L, // 1 second
+         };
 
       private static readonly Regex DATE_TIME = new Regex(@"\A(?:" + "[0-9]{8}(T[0-9]{6}Z?)?" + @")\z"
 #if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
-, RegexOptions.Compiled);
+                                                          , RegexOptions.Compiled);
 #else
 );
 #endif
-
-      private const string DATE_FORMAT = "yyyyMMdd";
-
-      //static CalendarParsedResult()
-      //{
-      //   // For dates without a time, for purposes of interacting with Android, the resulting timestamp
-      //   // needs to be midnight of that day in GMT. See:
-      //   // http://code.google.com/p/android/issues/detail?id=8330
-      //   DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
-      //}
-
-      private const string DATE_TIME_FORMAT = "yyyyMMdd'T'HHmmss";
 
       private readonly String summary;
       private readonly DateTime start;
@@ -95,7 +84,7 @@ namespace ZXing.Client.Result
          if (endString == null)
          {
             long durationMS = parseDurationMS(durationString);
-            end = durationMS < 0L ? null : (DateTime?)start + new TimeSpan(0, 0, 0, 0, (int)durationMS);
+            end = durationMS < 0L ? null : (DateTime?) start + new TimeSpan(0, 0, 0, 0, (int) durationMS);
          }
          else
          {
@@ -215,7 +204,7 @@ namespace ZXing.Client.Result
          if (when.Length == 8)
          {
             // Show only year/month/day
-            return DateTime.ParseExact(when, DATE_FORMAT, CultureInfo.InvariantCulture);
+            return DateTime.ParseExact(when, buildDateFormat(), CultureInfo.InvariantCulture);
          }
          else
          {
@@ -223,12 +212,12 @@ namespace ZXing.Client.Result
             DateTime date;
             if (when.Length == 16 && when[15] == 'Z')
             {
-               date = DateTime.ParseExact(when.Substring(0, 15), DATE_TIME_FORMAT, CultureInfo.InvariantCulture);
+               date = DateTime.ParseExact(when.Substring(0, 15), buildDateTimeFormat(), CultureInfo.InvariantCulture);
                date = TimeZoneInfo.ConvertTime(date, TimeZoneInfo.Local);
             }
             else
             {
-               date = DateTime.ParseExact(when, DATE_TIME_FORMAT, CultureInfo.InvariantCulture);
+               date = DateTime.ParseExact(when, buildDateTimeFormat(), CultureInfo.InvariantCulture);
             }
             return date;
          }
@@ -262,10 +251,27 @@ namespace ZXing.Client.Result
             String fieldValue = m.Groups[i + 1].Value;
             if (!String.IsNullOrEmpty(fieldValue))
             {
-               durationMS += RFC2445_DURATION_FIELD_UNITS[i] * Int32.Parse(fieldValue);
+               durationMS += RFC2445_DURATION_FIELD_UNITS[i]*Int32.Parse(fieldValue);
             }
          }
          return durationMS;
+      }
+
+      private static string buildDateFormat()
+      {
+         //DateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
+         //// For dates without a time, for purposes of interacting with Android, the resulting timestamp
+         //// needs to be midnight of that day in GMT. See:
+         //// http://code.google.com/p/android/issues/detail?id=8330
+         //format.setTimeZone(TimeZone.getTimeZone("GMT"));
+         //return format;
+         // not sure how to handle this correctly in .Net
+         return "yyyyMMdd";
+      }
+
+      private static string buildDateTimeFormat()
+      {
+         return "yyyyMMdd'T'HHmmss";
       }
    }
 }
