@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 
+using System;
 using System.Collections.Generic;
 
 namespace ZXing
@@ -111,5 +112,14 @@ namespace ZXing
       /// to not be. Doesn't matter what it maps to; use <see cref="bool" />.
       /// </summary>
       RETURN_CODABAR_START_END,
+
+      /// <summary>
+      /// Allowed extension lengths for EAN or UPC barcodes. Other formats will ignore this.
+      /// Maps to an <see cref="Array.int" /> of the allowed extension lengths, for example [2], [5], or [2, 5].
+      /// If it is optional to have an extension, do not set this hint. If this is set,
+      /// and a UPC or EAN barcode is found but an extension is not, then no result will be returned
+      /// at all.
+      /// </summary>
+      ALLOWED_EAN_EXTENSIONS
    }
 }

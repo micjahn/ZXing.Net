@@ -151,8 +151,7 @@ namespace ZXing.OneD
                               int[] startGuardRange,
                               IDictionary<DecodeHintType, object> hints)
       {
-
-         ResultPointCallback resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK) ? null :
+         var resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK) ? null :
              (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
 
          if (resultPointCallback != null)
@@ -162,9 +161,9 @@ namespace ZXing.OneD
             ));
          }
 
-         StringBuilder result = decodeRowStringBuffer;
+         var result = decodeRowStringBuffer;
          result.Length = 0;
-         int endStart = decodeMiddle(row, startGuardRange, result);
+         var endStart = decodeMiddle(row, startGuardRange, result);
          if (endStart < 0)
             return null;
 
@@ -175,7 +174,7 @@ namespace ZXing.OneD
             ));
          }
 
-         int[] endRange = decodeEnd(row, endStart);
+         var endRange = decodeEnd(row, endStart);
          if (endRange == null)
             return null;
 
@@ -189,14 +188,14 @@ namespace ZXing.OneD
 
          // Make sure there is a quiet zone at least as big as the end pattern after the barcode. The
          // spec might want more whitespace, but in practice this is the maximum we can count on.
-         int end = endRange[1];
-         int quietEnd = end + (end - endRange[0]);
+         var end = endRange[1];
+         var quietEnd = end + (end - endRange[0]);
          if (quietEnd >= row.Size || !row.isRange(end, quietEnd, false))
          {
             return null;
          }
 
-         String resultString = result.ToString();
+         var resultString = result.ToString();
          // UPC/EAN should never be less than 8 chars anyway
          if (resultString.Length < 8)
          {
@@ -207,10 +206,10 @@ namespace ZXing.OneD
             return null;
          }
 
-         float left = (startGuardRange[1] + startGuardRange[0]) / 2.0f;
-         float right = (endRange[1] + endRange[0]) / 2.0f;
-         BarcodeFormat format = BarcodeFormat;
-         Result decodeResult = new Result(resultString,
+         var left = (startGuardRange[1] + startGuardRange[0]) / 2.0f;
+         var right = (endRange[1] + endRange[0]) / 2.0f;
+         var format = BarcodeFormat;
+         var decodeResult = new Result(resultString,
                                           null, // no natural byte representation for these barcodes
                                           new ResultPoint[]
                                              {
@@ -219,12 +218,31 @@ namespace ZXing.OneD
                                              },
                                           format);
 
-         Result extensionResult = extensionReader.decodeRow(rowNumber, row, endRange[1]);
+         var extensionResult = extensionReader.decodeRow(rowNumber, row, endRange[1]);
          if (extensionResult != null)
          {
             decodeResult.putMetadata(ResultMetadataType.UPC_EAN_EXTENSION, extensionResult.Text);
             decodeResult.putAllMetadata(extensionResult.ResultMetadata);
             decodeResult.addResultPoints(extensionResult.ResultPoints);
+            int extensionLength = extensionResult.Text.Length;
+            int[] allowedExtensions = hints != null && hints.ContainsKey(DecodeHintType.ALLOWED_EAN_EXTENSIONS) ? 
+               (int[]) hints[DecodeHintType.ALLOWED_EAN_EXTENSIONS] : null;
+            if (allowedExtensions != null)
+            {
+               bool valid = false;
+               foreach (int length in allowedExtensions)
+               {
+                  if (extensionLength == length)
+                  {
+                     valid = true;
+                     break;
+                  }
+               }
+               if (!valid)
+               {
+                  return null;
+               }
+            }
          }
 
          if (format == BarcodeFormat.EAN_13 || format == BarcodeFormat.UPC_A)
