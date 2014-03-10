@@ -130,6 +130,11 @@ namespace ZXing.Common.Detector
          bool aBlackPointFoundOnBorder = true;
          bool atLeastOneBlackPointFoundOnBorder = false;
 
+         bool atLeastOneBlackPointFoundOnRight = false;
+         bool atLeastOneBlackPointFoundOnBottom = false;
+         bool atLeastOneBlackPointFoundOnLeft = false;
+         bool atLeastOneBlackPointFoundOnTop = false;
+
          while (aBlackPointFoundOnBorder)
          {
 
@@ -139,13 +144,18 @@ namespace ZXing.Common.Detector
             // .   |
             // .....
             bool rightBorderNotWhite = true;
-            while (rightBorderNotWhite && right < width)
+            while ((rightBorderNotWhite || !atLeastOneBlackPointFoundOnRight) && right < width)
             {
                rightBorderNotWhite = containsBlackPoint(up, down, right, false);
                if (rightBorderNotWhite)
                {
                   right++;
                   aBlackPointFoundOnBorder = true;
+                  atLeastOneBlackPointFoundOnRight = true;
+               }
+               else if (!atLeastOneBlackPointFoundOnRight)
+               {
+                  right++;
                }
             }
 
@@ -159,13 +169,18 @@ namespace ZXing.Common.Detector
             // .   .
             // .___.
             bool bottomBorderNotWhite = true;
-            while (bottomBorderNotWhite && down < height)
+            while ((bottomBorderNotWhite || !atLeastOneBlackPointFoundOnBottom) && down < height)
             {
                bottomBorderNotWhite = containsBlackPoint(left, right, down, true);
                if (bottomBorderNotWhite)
                {
                   down++;
                   aBlackPointFoundOnBorder = true;
+                  atLeastOneBlackPointFoundOnBottom = true;
+               }
+               else if (!atLeastOneBlackPointFoundOnBottom)
+               {
+                  down++;
                }
             }
 
@@ -179,13 +194,18 @@ namespace ZXing.Common.Detector
             // |   .
             // .....
             bool leftBorderNotWhite = true;
-            while (leftBorderNotWhite && left >= 0)
+            while ((leftBorderNotWhite || !atLeastOneBlackPointFoundOnLeft) && left >= 0)
             {
                leftBorderNotWhite = containsBlackPoint(up, down, left, false);
                if (leftBorderNotWhite)
                {
                   left--;
                   aBlackPointFoundOnBorder = true;
+                  atLeastOneBlackPointFoundOnLeft = true;
+               }
+               else if (!atLeastOneBlackPointFoundOnLeft)
+               {
+                  left--;
                }
             }
 
@@ -199,13 +219,18 @@ namespace ZXing.Common.Detector
             // .   .
             // .....
             bool topBorderNotWhite = true;
-            while (topBorderNotWhite && up >= 0)
+            while ((topBorderNotWhite  || !atLeastOneBlackPointFoundOnTop) && up >= 0)
             {
                topBorderNotWhite = containsBlackPoint(left, right, up, true);
                if (topBorderNotWhite)
                {
                   up--;
                   aBlackPointFoundOnBorder = true;
+                  atLeastOneBlackPointFoundOnTop = true;
+               }
+               else if (!atLeastOneBlackPointFoundOnTop)
+               {
+                  up--;
                }
             }
 
