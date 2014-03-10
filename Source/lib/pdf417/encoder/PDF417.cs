@@ -526,6 +526,8 @@ namespace ZXing.PDF417.Internal
       private BarcodeMatrix barcodeMatrix;
       private bool compact;
       private Compaction compaction;
+      private Encoding encoding;
+      private bool disableEci;
       private int minCols;
       private int maxCols;
       private int maxRows;
@@ -540,6 +542,8 @@ namespace ZXing.PDF417.Internal
       {
          this.compact = compact;
          compaction = Compaction.AUTO;
+         encoding = PDF417HighLevelEncoder.DEFAULT_ENCODING;
+         disableEci = false;
          minCols = 2;
          maxCols = 30;
          maxRows = 30;
@@ -675,7 +679,7 @@ namespace ZXing.PDF417.Internal
 
          //1. step: High-level encoding
          int errorCorrectionCodeWords = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
-         String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, compaction);
+         String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, compaction, encoding, disableEci);
          int sourceCodeWords = highLevel.Length;
 
          int[] dimension = determineDimensions(sourceCodeWords, errorCorrectionCodeWords);
@@ -793,6 +797,35 @@ namespace ZXing.PDF417.Internal
       internal void setCompact(bool compact)
       {
          this.compact = compact;
+      }
+
+      /// <summary>
+      /// Sets output encoding.
+      /// </summary>
+      internal void setEncoding(String encodingname)
+      {
+#if WindowsCE
+         try
+         {
+            this.encoding = Encoding.GetEncoding(encodingname)
+         }
+         catch (PlatformNotSupportedException)
+         {
+            // WindowsCE doesn't support all encodings. But it is device depended.
+            // So we try here the some different ones
+            this.encoding = Encoding.GetEncoding(1252);
+         }
+#else
+         this.encoding = Encoding.GetEncoding(encodingname);
+#endif
+      }
+
+      /// <summary>
+      /// Sets the disable eci.
+      /// </summary>
+      internal void setDisableEci(bool disabled)
+      {
+         this.disableEci = disabled;
       }
    }
 }

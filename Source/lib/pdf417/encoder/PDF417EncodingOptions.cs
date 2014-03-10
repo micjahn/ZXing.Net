@@ -100,5 +100,56 @@ namespace ZXing.PDF417
          }
          set { Hints[EncodeHintType.ERROR_CORRECTION] = value; }
       }
+
+      /// <summary>
+      /// Specifies what character encoding to use where applicable (type {@link String})
+      /// </summary>
+      public string CharacterSet
+      {
+         get
+         {
+            if (Hints.ContainsKey(EncodeHintType.CHARACTER_SET))
+            {
+               return (string)Hints[EncodeHintType.CHARACTER_SET];
+            }
+            return null;
+         }
+         set
+         {
+            if (value == null)
+            {
+               if (Hints.ContainsKey(EncodeHintType.CHARACTER_SET))
+                  Hints.Remove(EncodeHintType.CHARACTER_SET);
+            }
+            else
+            {
+               Hints[EncodeHintType.CHARACTER_SET] = value;
+            }
+         }
+      }
+
+      /// <summary>
+      /// Explicitly disables ECI segment when generating PDF417 Code
+      /// That is against the specification but some
+      /// readers have problems if the charset is switched from
+      /// CP437 (default) to UTF-8 with the necessary ECI segment.
+      /// If you set the property to true you can use different encodings
+      /// and the ECI segment is omitted.
+      /// </summary>
+      public bool DisableECI
+      {
+         get
+         {
+            if (Hints.ContainsKey(EncodeHintType.DISABLE_ECI))
+            {
+               return (bool)Hints[EncodeHintType.DISABLE_ECI];
+            }
+            return false;
+         }
+         set
+         {
+            Hints[EncodeHintType.DISABLE_ECI] = value;
+         }
+      }
    }
 }

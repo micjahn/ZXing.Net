@@ -26,13 +26,15 @@ using BigIntegerLibrary;
 #endif
 using System.Text;
 
+using ZXing.Common;
+
 namespace ZXing.PDF417.Internal
 {
    /// <summary>
    /// PDF417 high-level encoder following the algorithm described in ISO/IEC 15438:2001(E) in
    /// annex P.
    /// </summary>
-   internal sealed class PDF417HighLevelEncoder
+   internal static class PDF417HighLevelEncoder
    {
       /// <summary>
       /// code for Text compaction
@@ -95,6 +97,21 @@ namespace ZXing.PDF417.Internal
       private const int LATCH_TO_BYTE = 924;
 
       /// <summary>
+      /// identifier for a user defined Extended Channel Interpretation (ECI)
+      /// </summary>
+      private const int ECI_USER_DEFINED = 925;
+
+      /// <summary>
+      /// identifier for a general purpose ECO format
+      /// </summary>
+      private const int ECI_GENERAL_PURPOSE = 926;
+
+      /// <summary>
+      /// identifier for an ECI of a character set of code page
+      /// </summary>
+      private const int ECI_CHARSET = 927;
+
+      /// <summary>
       /// Raw code table for text compaction Mixed sub-mode
       /// </summary>
       private static readonly sbyte[] TEXT_MIXED_RAW =
@@ -115,9 +132,7 @@ namespace ZXing.PDF417.Internal
       private static readonly sbyte[] MIXED = new sbyte[128];
       private static readonly sbyte[] PUNCTUATION = new sbyte[128];
 
-      private PDF417HighLevelEncoder()
-      {
-      }
+      internal static Encoding DEFAULT_ENCODING;
 
       static PDF417HighLevelEncoder()
       {
@@ -142,30 +157,22 @@ namespace ZXing.PDF417.Internal
                PUNCTUATION[b] = i;
             }
          }
-      }
-
-      /// <summary>
-      /// Converts the message to a byte array using the default encoding (cp437) as defined by the
-      /// specification
-      ///
-      /// <param name="msg">the message</param>
-      /// <returns>the byte array of the message</returns>
-      /// </summary>
-      private static byte[] getBytesForMessage(String msg)
-      {
 #if WindowsCE
          try
          {
-            return Encoding.GetEncoding("CP437").GetBytes(msg);
+            DEFAULT_ENCODING = Encoding.GetEncoding("CP437")
          }
          catch (PlatformNotSupportedException)
          {
             // WindowsCE doesn't support all encodings. But it is device depended.
             // So we try here the some different ones
-            return Encoding.GetEncoding(1252).GetBytes(msg);
+            DEFAULT_ENCODING = Encoding.GetEncoding(1252);
          }
+#elif !SILVERLIGHT || WINDOWS
+         DEFAULT_ENCODING = Encoding.GetEncoding("CP437");
 #else
-         return Encoding.GetEncoding("CP437").GetBytes(msg);
+         // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
+         DEFAULT_ENCODING = Encoding.GetEncoding("UTF-8");
 #endif
       }
 
@@ -177,18 +184,26 @@ namespace ZXing.PDF417.Internal
       /// <param name="msg">the message</param>
       /// <returns>the encoded message (the char values range from 0 to 928)</returns>
       /// </summary>
-      internal static String encodeHighLevel(String msg, Compaction compaction)
+      internal static String encodeHighLevel(String msg, Compaction compaction, Encoding encoding, bool disableEci)
       {
-         byte[] bytes = null; //Fill later and only if needed
-
          //the codewords 0..928 are encoded as Unicode characters
-         StringBuilder sb = new StringBuilder(msg.Length);
+         var sb = new StringBuilder(msg.Length);
+
+         if (!DEFAULT_ENCODING.Equals(encoding) && !disableEci)
+         {
+            CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding.WebName);
+            if (eci != null)
+            {
+               encodingECI(eci.Value, sb);
+            }
+         }
 
          int len = msg.Length;
          int p = 0;
          int textSubMode = SUBMODE_ALPHA;
 
          // User selected encoding mode
+         byte[] bytes = null; //Fill later and only if needed
          if (compaction == Compaction.TEXT)
          {
             encodeText(msg, p, len, sb, textSubMode);
@@ -196,7 +211,7 @@ namespace ZXing.PDF417.Internal
          }
          else if (compaction == Compaction.BYTE)
          {
-            bytes = getBytesForMessage(msg);
+            bytes = encoding.GetBytes(msg);
             encodeBinary(bytes, p, bytes.Length, BYTE_COMPACTION, sb);
 
          }
@@ -238,7 +253,7 @@ namespace ZXing.PDF417.Internal
                   {
                      if (bytes == null)
                      {
-                        bytes = getBytesForMessage(msg);
+                        bytes = encoding.GetBytes(msg);
                      }
                      int b = determineConsecutiveBinaryCount(msg, bytes, p);
                      if (b == 0)
@@ -726,6 +741,30 @@ namespace ZXing.PDF417.Internal
             idx++;
          }
          return idx - startpos;
+      }
+
+      private static void encodingECI(int eci, StringBuilder sb)
+      {
+         if (eci >= 0 && eci < 900)
+         {
+            sb.Append((char) ECI_CHARSET);
+            sb.Append((char) eci);
+         }
+         else if (eci < 810900)
+         {
+            sb.Append((char) ECI_GENERAL_PURPOSE);
+            sb.Append((char) (eci/900 - 1));
+            sb.Append((char) (eci%900));
+         }
+         else if (eci < 811800)
+         {
+            sb.Append((char) ECI_USER_DEFINED);
+            sb.Append((char) (810900 - eci));
+         }
+         else
+         {
+            throw new WriterException("ECI number not in valid range from 0..811799, but was " + eci);
+         }
       }
    }
 }

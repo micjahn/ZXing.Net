@@ -89,6 +89,23 @@ namespace ZXing.PDF417
                   errorCorrectionLevel = (int)value;
                }
             }
+            if (hints.ContainsKey(EncodeHintType.CHARACTER_SET))
+            {
+#if !SILVERLIGHT || WINDOWS_PHONE
+               var encoding = (String)hints[EncodeHintType.CHARACTER_SET];
+               if (encoding != null)
+               {
+                  encoder.setEncoding(encoding);
+               }
+#else
+               // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
+               encoder.setEncoding("UTF-8");
+#endif
+            }
+            if (hints.ContainsKey(EncodeHintType.DISABLE_ECI))
+            {
+               encoder.setDisableEci((bool)hints[EncodeHintType.DISABLE_ECI]);
+            }
          }
 
          return bitMatrixFromEncoder(encoder, contents, width, height, margin, errorCorrectionLevel);
