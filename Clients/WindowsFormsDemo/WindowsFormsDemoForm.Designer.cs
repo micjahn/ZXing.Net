@@ -33,6 +33,7 @@
          this.labBarcodeImageFile = new System.Windows.Forms.Label();
          this.tabCtrlMain = new System.Windows.Forms.TabControl();
          this.tabPageDecoder = new System.Windows.Forms.TabPage();
+         this.btnExtendedResult = new System.Windows.Forms.Button();
          this.btnDecodingOptions = new System.Windows.Forms.Button();
          this.labDuration = new System.Windows.Forms.Label();
          this.labBarcodeText = new System.Windows.Forms.Label();
@@ -59,7 +60,6 @@
          this.txtContentWebCam = new System.Windows.Forms.TextBox();
          this.txtTypeWebCam = new System.Windows.Forms.TextBox();
          this.picWebCam = new System.Windows.Forms.PictureBox();
-         this.btnExtendedResult = new System.Windows.Forms.Button();
          this.tabCtrlMain.SuspendLayout();
          this.tabPageDecoder.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.picBarcode)).BeginInit();
@@ -135,6 +135,18 @@
          this.tabPageDecoder.TabIndex = 0;
          this.tabPageDecoder.Text = "Decoder";
          this.tabPageDecoder.UseVisualStyleBackColor = true;
+         // 
+         // btnExtendedResult
+         // 
+         this.btnExtendedResult.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+         this.btnExtendedResult.Location = new System.Drawing.Point(272, 79);
+         this.btnExtendedResult.Name = "btnExtendedResult";
+         this.btnExtendedResult.Size = new System.Drawing.Size(75, 23);
+         this.btnExtendedResult.TabIndex = 12;
+         this.btnExtendedResult.Text = "Result";
+         this.btnExtendedResult.UseVisualStyleBackColor = true;
+         this.btnExtendedResult.Visible = false;
+         this.btnExtendedResult.Click += new System.EventHandler(this.btnExtendedResult_Click);
          // 
          // btnDecodingOptions
          // 
@@ -420,19 +432,6 @@
          this.picWebCam.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
          this.picWebCam.TabIndex = 8;
          this.picWebCam.TabStop = false;
-         // 
-         // btnExtendedResult
-         // 
-         this.btnExtendedResult.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-         this.btnExtendedResult.Location = new System.Drawing.Point(272, 79);
-         this.btnExtendedResult.Name = "btnExtendedResult";
-         this.btnExtendedResult.Size = new System.Drawing.Size(75, 23);
-         this.btnExtendedResult.TabIndex = 12;
-         this.btnExtendedResult.Text = "Result";
-         this.btnExtendedResult.UseVisualStyleBackColor = true;
-         this.btnExtendedResult.Visible = false;
-         this.btnExtendedResult.Click += new System.EventHandler(this.btnExtendedResult_Click);
          // 
          // WindowsFormsDemoForm
          // 
