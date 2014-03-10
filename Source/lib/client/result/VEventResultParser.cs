@@ -75,6 +75,10 @@ namespace ZXing.Client.Result
          else
          {
             int semicolon = geoString.IndexOf(';');
+            if (semicolon < 0)
+            {
+               return null;
+            }
 #if WindowsCE
             try { latitude = Double.Parse(geoString.Substring(0, semicolon), NumberStyles.Float, CultureInfo.InvariantCulture); }
             catch { return null; }
