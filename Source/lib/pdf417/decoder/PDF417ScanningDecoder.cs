@@ -235,16 +235,19 @@ namespace ZXing.PDF417.Internal
       private static BarcodeMetadata getBarcodeMetadata(DetectionResultRowIndicatorColumn leftRowIndicatorColumn,
                                                         DetectionResultRowIndicatorColumn rightRowIndicatorColumn)
       {
-         if (leftRowIndicatorColumn == null || leftRowIndicatorColumn.getBarcodeMetadata() == null)
+
+         BarcodeMetadata leftBarcodeMetadata;
+         if (leftRowIndicatorColumn == null ||
+             (leftBarcodeMetadata = leftRowIndicatorColumn.getBarcodeMetadata()) == null)
          {
             return rightRowIndicatorColumn == null ? null : rightRowIndicatorColumn.getBarcodeMetadata();
          }
-         if (rightRowIndicatorColumn == null || rightRowIndicatorColumn.getBarcodeMetadata() == null)
+         BarcodeMetadata rightBarcodeMetadata;
+         if (rightRowIndicatorColumn == null ||
+             (rightBarcodeMetadata = rightRowIndicatorColumn.getBarcodeMetadata()) == null)
          {
-            return leftRowIndicatorColumn.getBarcodeMetadata();
+            return leftBarcodeMetadata;
          }
-         BarcodeMetadata leftBarcodeMetadata = leftRowIndicatorColumn.getBarcodeMetadata();
-         BarcodeMetadata rightBarcodeMetadata = rightRowIndicatorColumn.getBarcodeMetadata();
 
          if (leftBarcodeMetadata.ColumnCount != rightBarcodeMetadata.ColumnCount &&
              leftBarcodeMetadata.ErrorCorrectionLevel != rightBarcodeMetadata.ErrorCorrectionLevel &&
