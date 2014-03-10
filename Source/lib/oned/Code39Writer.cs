@@ -59,13 +59,13 @@ namespace ZXing.OneD
       /// </summary>
       /// <param name="contents"></param>
       /// <returns></returns>
-      override public bool[] encode(String contents)
+      public override bool[] encode(String contents)
       {
          int length = contents.Length;
          if (length > 80)
          {
             throw new ArgumentException(
-                "Requested contents should be less than 80 digits long, but got " + length);
+               "Requested contents should be less than 80 digits long, but got " + length);
          }
          for (int i = 0; i < length; i++)
          {
@@ -92,10 +92,10 @@ namespace ZXing.OneD
          var result = new bool[codeWidth];
          toIntArray(Code39Reader.CHARACTER_ENCODINGS[39], widths);
          int pos = appendPattern(result, 0, widths, true);
-         int[] narrowWhite = { 1 };
+         int[] narrowWhite = {1};
          pos += appendPattern(result, pos, narrowWhite, false);
          //append next character to bytematrix
-         for (int i = length - 1; i >= 0; i--)
+         for (int i = 0; i < length; i++)
          {
             int indexInString = Code39Reader.ALPHABET_STRING.IndexOf(contents[i]);
             toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
@@ -111,7 +111,7 @@ namespace ZXing.OneD
       {
          for (int i = 0; i < 9; i++)
          {
-            int temp = a & (1 << i);
+            int temp = a & (1 << (8 - i));
             toReturn[i] = temp == 0 ? 1 : 2;
          }
       }
