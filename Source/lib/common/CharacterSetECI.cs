@@ -64,11 +64,11 @@ namespace ZXing.Common
          addCharacterSet(17, new[] { "ISO-8859-15", "ISO8859_15" });
          addCharacterSet(18, new[] { "ISO-8859-3", "ISO-8859-16", "ISO8859_16" }); // use ISO-8859-3 because ISO-8859-16 isn't supported
          addCharacterSet(20, new[] { "SJIS", "Shift_JIS" });
-         addCharacterSet(21, new[] { "windows-1250", "CP1250" });
-         addCharacterSet(22, new[] { "windows-1251", "CP1251" });
-         addCharacterSet(23, new[] { "windows-1252", "CP1252" });
-         addCharacterSet(24, new[] { "windows-1256", "CP1256" });
-         addCharacterSet(25, new[] { "UTF-16BE", "UnicodeBig" });
+         addCharacterSet(21, new[] { "WINDOWS-1250", "CP1250" });
+         addCharacterSet(22, new[] { "WINDOWS-1251", "CP1251" });
+         addCharacterSet(23, new[] { "WINDOWS-1252", "CP1252" });
+         addCharacterSet(24, new[] { "WINDOWS-1256", "CP1256" });
+         addCharacterSet(25, new[] { "UTF-16BE", "UNICODEBIG" });
          addCharacterSet(26, new[] { "UTF-8", "UTF8" });
          addCharacterSet(27, "US-ASCII");
          addCharacterSet(170, "US-ASCII");
@@ -122,7 +122,7 @@ namespace ZXing.Common
       /// </returns>
       public static CharacterSetECI getCharacterSetECIByName(String name)
       {
-         return NAME_TO_ECI[name];
+         return NAME_TO_ECI[name.ToUpper()];
       }
    }
 }
