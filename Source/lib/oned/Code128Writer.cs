@@ -117,58 +117,35 @@ namespace ZXing.OneD
             if (newCodeSet == codeSet)
             {
                // Encode the current character
-               if (codeSet == CODE_CODE_B)
+               // First handle escapes
+               switch (contents[position])
                {
-                  switch (contents[position])
-                  {
-                     case ESCAPE_FNC_1:
-                        patternIndex = CODE_FNC_1;
-                        position++;
-                        break;
-                     case ESCAPE_FNC_2:
-                        patternIndex = CODE_FNC_2;
-                        position++;
-                        break;
-                     case ESCAPE_FNC_3:
-                        patternIndex = CODE_FNC_3;
-                        position++;
-                        break;
-                     case ESCAPE_FNC_4:
-                        patternIndex = CODE_FNC_4_B;
-                        position++;
-                        break;
-                     default:
+                  case ESCAPE_FNC_1:
+                     patternIndex = CODE_FNC_1;
+                     break;
+                  case ESCAPE_FNC_2:
+                     patternIndex = CODE_FNC_2;
+                     break;
+                  case ESCAPE_FNC_3:
+                     patternIndex = CODE_FNC_3;
+                     break;
+                  case ESCAPE_FNC_4:
+                     patternIndex = CODE_FNC_4_B; // FIXME if this ever outputs Code A
+                     break;
+                  default:
+                     // Then handle normal characters otherwise
+                     if (codeSet == CODE_CODE_B)
+                     {
                         patternIndex = contents[position] - ' ';
-                        position += 1;
-                        break;
-                  }
-               }
-               else
-               { // CODE_CODE_C
-                  switch (contents[position])
-                  {
-                     case ESCAPE_FNC_1:
-                        patternIndex = CODE_FNC_1;
-                        position++;
-                        break;
-                     case ESCAPE_FNC_2:
-                        patternIndex = CODE_FNC_2;
-                        position++;
-                        break;
-                     case ESCAPE_FNC_3:
-                        patternIndex = CODE_FNC_3;
-                        position++;
-                        break;
-                     case ESCAPE_FNC_4:
-                        patternIndex = CODE_FNC_4_B; // FIXME if this ever outputs Code A
-                        position++;
-                        break;
-                     default:
+                     }
+                     else
+                     { // CODE_CODE_C
                         patternIndex = Int32.Parse(contents.Substring(position, 2));
-                        position += 2;
-                        break;
-                  }
+                        position++; // Also incremented below
+                     }
+                     break;
                }
+               position++;
             }
             else
             {

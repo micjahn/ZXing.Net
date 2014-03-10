@@ -136,6 +136,7 @@
     <Compile Include="oned\Code128BlackBox1TestCase.cs" />
     <Compile Include="oned\Code128BlackBox2TestCase.cs" />
     <Compile Include="oned\Code128BlackBox3TestCase.cs" />
+    <Compile Include="oned\Code128WriterTestCase.cs" />
     <Compile Include="oned\Code39BlackBox1TestCase.cs" />
     <Compile Include="oned\Code39BlackBox3TestCase.cs" />
     <Compile Include="oned\Code39ExtendedBlackBox2TestCase.cs" />
