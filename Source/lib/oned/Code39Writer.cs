@@ -94,7 +94,7 @@ namespace ZXing.OneD
          int pos = appendPattern(result, 0, widths, true);
          int[] narrowWhite = {1};
          pos += appendPattern(result, pos, narrowWhite, false);
-         //append next character to bytematrix
+         //append next character to byte matrix
          for (int i = 0; i < length; i++)
          {
             int indexInString = Code39Reader.ALPHABET_STRING.IndexOf(contents[i]);
@@ -103,7 +103,7 @@ namespace ZXing.OneD
             pos += appendPattern(result, pos, narrowWhite, false);
          }
          toIntArray(Code39Reader.CHARACTER_ENCODINGS[39], widths);
-         pos += appendPattern(result, pos, widths, true);
+         appendPattern(result, pos, widths, true);
          return result;
       }
 
