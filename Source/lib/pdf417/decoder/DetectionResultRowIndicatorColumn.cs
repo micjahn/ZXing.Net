@@ -170,8 +170,13 @@ namespace ZXing.PDF417.Internal
          {
             if (codeword != null)
             {
-               result[codeword.RowNumber]++;
-            }
+               int rowNumber = codeword.RowNumber;
+               if (rowNumber >= result.Length)
+               {
+                  return null;
+               }
+               result[rowNumber]++;
+            } // else throw exception? (or return null)
          }
          return result;
       }
