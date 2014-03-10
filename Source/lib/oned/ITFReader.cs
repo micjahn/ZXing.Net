@@ -45,7 +45,11 @@ namespace ZXing.OneD
       private const int W = 3; // Pixel width of a wide line
       private const int N = 1; // Pixed width of a narrow line
 
-      private static readonly int[] DEFAULT_ALLOWED_LENGTHS = { 48, 44, 24, 20, 18, 16, 14, 12, 10, 8, 6 };
+      /// <summary>
+      /// Valid ITF lengths. Anything longer than the largest value is also allowed.
+      /// </summary>
+      private static readonly int[] DEFAULT_ALLOWED_LENGTHS = { 6, 8, 10, 12, 14 };
+      private const int LARGEST_DEFAULT_ALLOWED_LENGTH = 14;
 
       // Stores the actual narrow line width of the image being decoded.
       private int narrowLineWidth = -1;
@@ -104,31 +108,44 @@ namespace ZXing.OneD
          String resultString = result.ToString();
 
          int[] allowedLengths = null;
+         int maxAllowedLength = LARGEST_DEFAULT_ALLOWED_LENGTH;
          if (hints != null && hints.ContainsKey(DecodeHintType.ALLOWED_LENGTHS))
          {
             allowedLengths = (int[]) hints[DecodeHintType.ALLOWED_LENGTHS];
-
+            maxAllowedLength = 0;
          }
          if (allowedLengths == null)
          {
             allowedLengths = DEFAULT_ALLOWED_LENGTHS;
+            maxAllowedLength = LARGEST_DEFAULT_ALLOWED_LENGTH;
          }
 
          // To avoid false positives with 2D barcodes (and other patterns), make
-         // an assumption that the decoded string must be 6, 10 or 14 digits.
+         // an assumption that the decoded string must be a 'standard' length if it's short
          int length = resultString.Length;
-         bool lengthOK = false;
-         foreach (int allowedLength in allowedLengths)
-         {
-            if (length == allowedLength)
-            {
-               lengthOK = true;
-               break;
-            }
-         }
+         bool lengthOK = length > LARGEST_DEFAULT_ALLOWED_LENGTH;
          if (!lengthOK)
          {
-            return null;
+            foreach (int allowedLength in allowedLengths)
+            {
+               if (length == allowedLength)
+               {
+                  lengthOK = true;
+                  break;
+               }
+               if (allowedLength > maxAllowedLength)
+               {
+                  maxAllowedLength = allowedLength;
+               }
+            }
+            if (!lengthOK && length > maxAllowedLength)
+            {
+               lengthOK = true;
+            }
+            if (!lengthOK)
+            {
+               return null;
+            }
          }
 
          var resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK)
