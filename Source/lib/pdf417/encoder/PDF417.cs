@@ -807,7 +807,7 @@ namespace ZXing.PDF417.Internal
 #if WindowsCE
          try
          {
-            this.encoding = Encoding.GetEncoding(encodingname)
+            this.encoding = Encoding.GetEncoding(encodingname);
          }
          catch (PlatformNotSupportedException)
          {

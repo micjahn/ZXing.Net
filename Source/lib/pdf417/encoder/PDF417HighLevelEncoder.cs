@@ -160,7 +160,7 @@ namespace ZXing.PDF417.Internal
 #if WindowsCE
          try
          {
-            DEFAULT_ENCODING = Encoding.GetEncoding("CP437")
+            DEFAULT_ENCODING = Encoding.GetEncoding("CP437");
          }
          catch (PlatformNotSupportedException)
          {
