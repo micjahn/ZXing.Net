@@ -35,7 +35,7 @@ namespace BigIntegerLibrary
         /// <summary>
         /// The array of digits of the number.
         /// </summary>
-        private long[] digits;
+        private DigitContainer digits;
 
         /// <summary>
         /// The actual number of digits of the number.
@@ -74,7 +74,7 @@ namespace BigIntegerLibrary
         /// </summary>
         public Base10BigInteger()
         {
-            digits = new long[MaxSize];
+            digits = new DigitContainer();
             size = 1;
             digits[size] = 0;
             sign = Sign.Positive;
@@ -86,7 +86,7 @@ namespace BigIntegerLibrary
         /// <param name="n">The base-10 long to be converted</param>
         public Base10BigInteger(long n)
         {
-            digits = new long[MaxSize];
+            digits = new DigitContainer();
             sign = Sign.Positive;
 
             if (n == 0)
@@ -119,7 +119,7 @@ namespace BigIntegerLibrary
         /// <param name="n">The Base10BigInteger to be copied</param>
         public Base10BigInteger(Base10BigInteger n)
         {
-            digits = new long[MaxSize];
+            digits = new DigitContainer();
             size = n.size;
             sign = n.sign;
 
@@ -733,5 +733,34 @@ namespace BigIntegerLibrary
 #endregion
 
 
-    }
+
+      private class DigitContainer
+      {
+         private readonly long[][] digits;
+         private const int ChunkSize = 32;
+         private const int ChunkSizeDivisionShift = 5;
+         private const int ChunkCount = Base10BigInteger.MaxSize >> ChunkSizeDivisionShift;
+
+         public DigitContainer()
+         {
+            digits = new long[ChunkCount][];
+         }
+
+         public long this[int index]
+         {
+            get
+            {
+               var chunkIndex = index >> ChunkSizeDivisionShift;
+               var chunk = digits[chunkIndex];
+               return chunk == null ? 0 : chunk[index%ChunkSize];
+            }
+            set
+            {
+               var chunkIndex = index >> ChunkSizeDivisionShift;
+               var chunk = digits[chunkIndex] ?? (digits[chunkIndex] = new long[ChunkSize]);
+               chunk[index%ChunkSize] = value;
+            }
+         }
+      }
+   }
 }

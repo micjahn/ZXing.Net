@@ -61,7 +61,7 @@ namespace BigIntegerLibrary
         /// <summary>
         /// The array of digits of the number.
         /// </summary>
-        private long[] digits;
+        private DigitContainer digits;
 
         /// <summary>
         /// The actual number of digits of the number.
@@ -84,7 +84,7 @@ namespace BigIntegerLibrary
         /// </summary>
         public BigInteger()
         {
-            digits = new long[MaxSize];
+            digits = new DigitContainer();
             size = 1;
             digits[size] = 0;
             sign = Sign.Positive;
@@ -96,7 +96,7 @@ namespace BigIntegerLibrary
         /// <param name="n">The base-10 long to be converted</param>
         public BigInteger(long n)
         {
-            digits = new long[MaxSize];
+            digits = new DigitContainer();
             sign = Sign.Positive;
 
             if (n == 0)
@@ -129,7 +129,7 @@ namespace BigIntegerLibrary
         /// <param name="n">The BigInteger to be copied</param>
         public BigInteger(BigInteger n)
         {
-            digits = new long[MaxSize];
+            digits = new DigitContainer();
             size = n.size;
             sign = n.sign;
 
@@ -164,7 +164,7 @@ namespace BigIntegerLibrary
 
             sign = numberSign;
 
-            digits = new long[MaxSize];
+            digits = new DigitContainer();
             size = number.size;
             for (i = 0; i < number.size; i++)
                 digits[i] = number.digits[i];
@@ -181,7 +181,7 @@ namespace BigIntegerLibrary
             if (byteArray.Length / 4 > MaxSize)
                 throw new BigIntegerException("The byte array's content exceeds the maximum size of a BigInteger.", null);
 
-            digits = new long[MaxSize];
+            digits = new DigitContainer();
             sign = Sign.Positive;
 
             for (int i = 0; i < byteArray.Length; i += 2)
@@ -218,7 +218,7 @@ namespace BigIntegerLibrary
                 sign = Sign.Negative;
 
             size = (int)info.GetValue("size", typeof(short));
-            digits = new long[MaxSize];
+            digits = new DigitContainer();
 
             int i;
             for (i = 0; i < size; i++)
@@ -1296,11 +1296,11 @@ namespace BigIntegerLibrary
         /// </summary>
         private static long Trial(BigInteger r, BigInteger d, int k, int m)
         {
-            long d2, km = k + m, r3, res;
+            int km = k + m;
 
-            r3 = ((long)r.digits[km] * NumberBase + (long)r.digits[km - 1]) * NumberBase + (long)r.digits[km - 2];
-            d2 = (long)d.digits[m - 1] * NumberBase + (long)d.digits[m - 2];
-            res = r3 / d2;
+            var r3 = (r.digits[km] * NumberBase + r.digits[km - 1]) * NumberBase + r.digits[km - 2];
+            var d2 = d.digits[m - 1] * NumberBase + d.digits[m - 2];
+            var res = r3 / d2;
             if (res < NumberBase - 1)
                 return (int)res;
             else
@@ -1311,5 +1311,33 @@ namespace BigIntegerLibrary
         #endregion
 
 
-    }
+      private class DigitContainer
+      {
+         private readonly long[][] digits;
+         private const int ChunkSize = 16;
+         private const int ChunkSizeDivisionShift = 4;
+         private const int ChunkCount = BigInteger.MaxSize >> ChunkSizeDivisionShift;
+
+         public DigitContainer()
+         {
+            digits = new long[ChunkCount][];
+         }
+
+         public long this[int index]
+         {
+            get
+            {
+               var chunkIndex = index >> ChunkSizeDivisionShift;
+               var chunk = digits[chunkIndex];
+               return chunk == null ? 0 : chunk[index%ChunkSize];
+            }
+            set
+            {
+               var chunkIndex = index >> ChunkSizeDivisionShift;
+               var chunk = digits[chunkIndex] ?? (digits[chunkIndex] = new long[ChunkSize]);
+               chunk[index%ChunkSize] = value;
+            }
+         }
+      }
+   }
 }
