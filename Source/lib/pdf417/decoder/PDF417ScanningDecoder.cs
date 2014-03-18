@@ -515,7 +515,7 @@ namespace ZXing.PDF417.Internal
          codeword = detectionResult.DetectionResultColumns[barcodeColumn].getCodewordNearby(imageRow);
          if (codeword != null)
          {
-            return leftToRight ? codeword.EndX : codeword.StartX;
+            return leftToRight ? codeword.StartX : codeword.EndX;
          }
          if (isValidBarcodeColumn(detectionResult, barcodeColumn - offset))
          {
