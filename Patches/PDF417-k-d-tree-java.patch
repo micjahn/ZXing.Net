@@ -1,0 +1,1045 @@
+ .../java/ags/utils/dataStructures/BinaryHeap.java  | 156 +++++++++++
+ .../ags/utils/dataStructures/IntervalHeap.java     | 310 +++++++++++++++++++++
+ .../java/ags/utils/dataStructures/MaxHeap.java     |  13 +
+ .../java/ags/utils/dataStructures/MinHeap.java     |  13 +
+ .../main/java/ags/utils/dataStructures/Pair.java   |  13 +
+ .../trees/thirdGenKD/DistanceFunction.java         |   7 +
+ .../dataStructures/trees/thirdGenKD/KdNode.java    | 183 ++++++++++++
+ .../dataStructures/trees/thirdGenKD/KdTree.java    |  92 ++++++
+ .../trees/thirdGenKD/NearestNeighborIterator.java  |  68 +++++
+ .../SquareEuclideanDistanceFunction.java           |  36 +++
+ .../pdf417/decoder/PDF417CodewordDecoder.java      |  37 +--
+ 11 files changed, 903 insertions(+), 25 deletions(-)
+
+diff --git a/core/src/main/java/ags/utils/dataStructures/BinaryHeap.java b/core/src/main/java/ags/utils/dataStructures/BinaryHeap.java
+new file mode 100644
+index 0000000..411efb7
+--- /dev/null
++++ b/core/src/main/java/ags/utils/dataStructures/BinaryHeap.java
+@@ -0,0 +1,156 @@
++package ags.utils.dataStructures;
++
++import java.util.Arrays;
++
++/**
++ * An implementation of an implicit binary heap. Min-heap and max-heap both supported 
++ */
++public abstract class BinaryHeap<T> {
++    protected static final int defaultCapacity = 64;
++    private final int direction;
++    private Object[] data;
++    private double[] keys;
++    private int capacity;
++    private int size;
++
++    protected BinaryHeap(int capacity, int direction) {
++        this.direction = direction;
++        this.data = new Object[capacity];
++        this.keys = new double[capacity];
++        this.capacity = capacity;
++        this.size = 0;
++    }
++
++    public void offer(double key, T value) {
++        // If move room is needed, double array size
++        if (size >= capacity) {
++            capacity *= 2;
++            data = Arrays.copyOf(data, capacity);
++            keys = Arrays.copyOf(keys, capacity);
++        }
++
++        // Insert new value at the end
++        data[size] = value;
++        keys[size] = key;
++        siftUp(size);
++        size++;
++    }
++
++    protected void removeTip() {
++        if (size == 0) {
++            throw new IllegalStateException();
++        }
++
++        size--;
++        data[0] = data[size];
++        keys[0] = keys[size];
++        data[size] = null;
++        siftDown(0);
++    }
++    
++    protected void replaceTip(double key, T value) {
++        if (size == 0) {
++            throw new IllegalStateException();
++        }
++
++        data[0] = value;
++        keys[0] = key;
++        siftDown(0);
++    }
++
++    @SuppressWarnings("unchecked")
++    protected T getTip() {
++        if (size == 0) {
++            throw new IllegalStateException();
++        }
++
++        return (T) data[0];
++    }
++
++    protected double getTipKey() {
++        if (size == 0) {
++            throw new IllegalStateException();
++        }
++
++        return keys[0];
++    }
++
++    private void siftUp(int c) {
++        for (int p = (c - 1) / 2; c != 0 && direction*keys[c] > direction*keys[p]; c = p, p = (c - 1) / 2) {
++            Object pData = data[p];
++            double pDist = keys[p];
++            data[p] = data[c];
++            keys[p] = keys[c];
++            data[c] = pData;
++            keys[c] = pDist;
++        }
++    }
++
++    private void siftDown(int p) {
++        for (int c = p * 2 + 1; c < size; p = c, c = p * 2 + 1) {
++            if (c + 1 < size && direction*keys[c] < direction*keys[c + 1]) {
++                c++;
++            }
++            if (direction*keys[p] < direction*keys[c]) {
++                // Swap the points
++                Object pData = data[p];
++                double pDist = keys[p];
++                data[p] = data[c];
++                keys[p] = keys[c];
++                data[c] = pData;
++                keys[c] = pDist;
++            } else {
++                break;
++            }
++        }
++    }
++
++    public int size() {
++        return size;
++    }
++
++    public int capacity() {
++        return capacity;
++    }
++
++    public static final class Max<T> extends BinaryHeap<T> implements MaxHeap<T> {
++        public Max() {
++            super(defaultCapacity, 1);
++        }
++        public Max(int capacity) {
++            super(capacity, 1);
++        }
++        public void removeMax() {
++            removeTip();
++        }
++        public void replaceMax(double key, T value) {
++            replaceTip(key, value);
++        }
++        public T getMax() {
++            return getTip();
++        }
++        public double getMaxKey() {
++            return getTipKey();
++        }
++    }
++    public static final class Min<T> extends BinaryHeap<T> implements MinHeap<T> {
++        public Min() {
++            super(defaultCapacity, -1);
++        }
++        public Min(int capacity) {
++            super(capacity, -1);
++        }
++        public void removeMin() {
++            removeTip();
++        }
++        public void replaceMin(double key, T value) {
++            replaceTip(key, value);
++        }
++        public T getMin() {
++            return getTip();
++        }
++        public double getMinKey() {
++            return getTipKey();
++        }
++    }
++}
+\ No newline at end of file
+diff --git a/core/src/main/java/ags/utils/dataStructures/IntervalHeap.java b/core/src/main/java/ags/utils/dataStructures/IntervalHeap.java
+new file mode 100644
+index 0000000..9723a86
+--- /dev/null
++++ b/core/src/main/java/ags/utils/dataStructures/IntervalHeap.java
+@@ -0,0 +1,310 @@
++package ags.utils.dataStructures;
++
++import java.util.Arrays;
++
++/**
++ * An implementation of an implicit binary interval heap.
++ */
++public class IntervalHeap<T> implements MinHeap<T>, MaxHeap<T> {
++    private static final int defaultCapacity = 64;
++    private Object[] data;
++    private double[] keys;
++    private int capacity;
++    private int size;
++
++    public IntervalHeap() {
++        this(defaultCapacity);
++    }
++
++    public IntervalHeap(int capacity) {
++        this.data = new Object[capacity];
++        this.keys = new double[capacity];
++        this.capacity = capacity;
++        this.size = 0;
++    }
++
++    public void offer(double key, T value) {
++        // If move room is needed, double array size
++        if (size >= capacity) {
++            capacity *= 2;
++            data = Arrays.copyOf(data, capacity);
++            keys = Arrays.copyOf(keys, capacity);
++        }
++
++        // Insert new value at the end
++        size++;
++        data[size-1] = value;
++        keys[size-1] = key;
++        siftInsertedValueUp();
++    }
++
++    public void removeMin() {
++        if (size == 0) {
++            throw new IllegalStateException();
++        }
++
++        size--;
++        data[0] = data[size];
++        keys[0] = keys[size];
++        data[size] = null;
++        siftDownMin(0);
++    }
++
++    public void replaceMin(double key, T value) {
++        if (size == 0) {
++            throw new IllegalStateException();
++        }
++
++        data[0] = value;
++        keys[0] = key;
++        if (size > 1) {
++            // Swap with pair if necessary
++            if (keys[1] < key) {
++                swap(0, 1);
++            }
++            siftDownMin(0);
++        }
++    }
++
++    public void removeMax() {
++        if (size == 0) {
++            throw new IllegalStateException();
++        } else if (size == 1) {
++            removeMin();
++            return;
++        }
++
++        size--;
++        data[1] = data[size];
++        keys[1] = keys[size];
++        data[size] = null;
++        siftDownMax(1);
++    }
++
++    public void replaceMax(double key, T value) {
++        if (size == 0) {
++            throw new IllegalStateException();
++        } else if (size == 1) {
++            replaceMin(key, value);
++            return;
++        }
++
++        data[1] = value;
++        keys[1] = key;
++        // Swap with pair if necessary
++        if (key < keys[0]) {
++            swap(0, 1);
++        }
++        siftDownMax(1);
++    }
++
++    @SuppressWarnings("unchecked")
++    public T getMin() {
++        if (size == 0) {
++            throw new IllegalStateException();
++        }
++
++        return (T) data[0];
++    }
++
++    @SuppressWarnings("unchecked")
++    public T getMax() {
++        if (size == 0) {
++            throw new IllegalStateException();
++        } else if (size == 1) {
++            return (T) data[0];
++        }
++
++        return (T) data[1];
++    }
++
++    public double getMinKey() {
++        if (size == 0) {
++            throw new IllegalStateException();
++        }
++
++        return keys[0];
++    }
++
++    public double getMaxKey() {
++        if (size == 0) {
++            throw new IllegalStateException();
++        } else if (size == 1) {
++            return keys[0];
++        }
++
++        return keys[1];
++    }
++
++    private int swap(int x, int y) {
++        Object yData = data[y];
++        double yDist = keys[y];
++        data[y] = data[x];
++        keys[y] = keys[x];
++        data[x] = yData;
++        keys[x] = yDist;
++        return y;
++    }
++
++    /**
++     * Min-side (u % 2 == 0):
++     * - leftchild:  2u + 2
++     * - rightchild: 2u + 4
++     * - parent:     (x/2-1)&~1
++     *
++     * Max-side (u % 2 == 1):
++     * - leftchild:  2u + 1
++     * - rightchild: 2u + 3
++     * - parent:     (x/2-1)|1
++     */
++
++    private void siftInsertedValueUp() {
++        int u = size-1;
++        if (u == 0) {
++            // Do nothing if it's the only element!
++        }
++        else if (u == 1) {
++            // If it is the second element, just sort it with it's pair
++            if  (keys[u] < keys[u-1]) { // If less than it's pair
++                swap(u, u-1); // Swap with it's pair
++            }
++        }
++        else if (u % 2 == 1) {
++            // Already paired. Ensure pair is ordered right
++            int p = (u/2-1)|1; // The larger value of the parent pair
++            if  (keys[u] < keys[u-1]) { // If less than it's pair
++                u = swap(u, u-1); // Swap with it's pair
++                if (keys[u] < keys[p-1]) { // If smaller than smaller parent pair
++                    // Swap into min-heap side
++                    u = swap(u, p-1);
++                    siftUpMin(u);
++                }
++            } else {
++                if (keys[u] > keys[p]) { // If larger that larger parent pair
++                    // Swap into max-heap side
++                    u = swap(u, p);
++                    siftUpMax(u);
++                }
++            }
++        } else {
++            // Inserted in the lower-value slot without a partner
++            int p = (u/2-1)|1; // The larger value of the parent pair
++            if (keys[u] > keys[p]) { // If larger that larger parent pair
++                // Swap into max-heap side
++                u = swap(u, p);
++                siftUpMax(u);
++            } else if (keys[u] < keys[p-1]) { // If smaller than smaller parent pair
++                // Swap into min-heap side
++                u = swap(u, p-1);
++                siftUpMin(u);
++            }
++        }
++    }
++
++    private void siftUpMin(int c) {
++        // Min-side parent: (x/2-1)&~1
++        for (int p = (c/2-1)&~1; p >= 0 && keys[c] < keys[p]; c = p, p = (c/2-1)&~1) {
++            swap(c, p);
++        }
++    }
++
++    private void siftUpMax(int c) {
++        // Max-side parent: (x/2-1)|1
++        for (int p = (c/2-1)|1; p >= 0 && keys[c] > keys[p]; c = p, p = (c/2-1)|1) {
++            swap(c, p);
++        }
++    }
++
++    private void siftDownMin(int p) {
++        for (int c = p * 2 + 2; c < size; p = c, c = p * 2 + 2) {
++            if (c + 2 < size && keys[c + 2] < keys[c]) {
++                c += 2;
++            }
++            if (keys[c] < keys[p]) {
++                swap(p, c);
++                // Swap with pair if necessary
++                if (c+1 < size && keys[c+1] < keys[c]) {
++                    swap(c, c+1);
++                }
++            } else {
++                break;
++            }
++        }
++    }
++
++    private void siftDownMax(int p) {
++        for (int c = p * 2 + 1; c <= size; p = c, c = p * 2 + 1) {
++            if (c == size) {
++                // If the left child only has half a pair
++                if (keys[c - 1] > keys[p]) {
++                    swap(p, c - 1);
++                }
++                break;
++            } else if (c + 2 == size) {
++                // If there is only room for a right child lower pair
++                if (keys[c + 1] > keys[c]) {
++                    if (keys[c + 1] > keys[p]) {
++                       swap(p, c + 1);
++                    }
++                    break;
++                }
++            } else if (c + 2 < size) {
++                // If there is room for a right child upper pair
++                if (keys[c + 2] > keys[c]) {
++                    c += 2;
++                }
++            }
++            if (keys[c] > keys[p]) {
++                swap(p, c);
++                // Swap with pair if necessary
++                if (keys[c-1] > keys[c]) {
++                    swap(c, c-1);
++                }
++            } else {
++                break;
++            }
++        }
++    }
++
++    public int size() {
++        return size;
++    }
++
++    public int capacity() {
++        return capacity;
++    }
++
++    @Override
++    public String toString() {
++        java.text.DecimalFormat twoPlaces = new java.text.DecimalFormat("0.00");
++        StringBuffer str = new StringBuffer(IntervalHeap.class.getCanonicalName());
++        str.append(", size: ").append(size()).append(" capacity: ").append(capacity());
++        int i = 0, p = 2;
++        while (i < size()) {
++            int x = 0;
++            str.append("\t");
++            while ((i+x) < size() && x < p) {
++                str.append(twoPlaces.format(keys[i + x])).append(", ");
++                x++;
++            }
++            str.append("\n");
++            i += x;
++            p *= 2;
++        }
++        return str.toString();
++    }
++
++    private boolean validateHeap() {
++        // Validate left-right
++        for (int i = 0; i < size-1; i+= 2) {
++            if (keys[i] > keys[i+1]) return false;
++        }
++        // Validate within parent interval
++        for (int i = 2; i < size; i++) {
++            double maxParent = keys[(i/2-1)|1];
++            double minParent = keys[(i/2-1)&~1];
++            if (keys[i] > maxParent || keys[i] < minParent) return false;
++        }
++        return true;
++    }
++}
+\ No newline at end of file
+diff --git a/core/src/main/java/ags/utils/dataStructures/MaxHeap.java b/core/src/main/java/ags/utils/dataStructures/MaxHeap.java
+new file mode 100644
+index 0000000..9967c27
+--- /dev/null
++++ b/core/src/main/java/ags/utils/dataStructures/MaxHeap.java
+@@ -0,0 +1,13 @@
++package ags.utils.dataStructures;
++
++/**
++ *
++ */
++public interface MaxHeap<T> {
++    public int size();
++    public void offer(double key, T value);
++    public void replaceMax(double key, T value);
++    public void removeMax();
++    public T getMax();
++    public double getMaxKey();
++}
+\ No newline at end of file
+diff --git a/core/src/main/java/ags/utils/dataStructures/MinHeap.java b/core/src/main/java/ags/utils/dataStructures/MinHeap.java
+new file mode 100644
+index 0000000..18525c2
+--- /dev/null
++++ b/core/src/main/java/ags/utils/dataStructures/MinHeap.java
+@@ -0,0 +1,13 @@
++package ags.utils.dataStructures;
++
++/**
++ *
++ */
++public interface MinHeap<T> {
++    public int size();
++    public void offer(double key, T value);
++    public void replaceMin(double key, T value);
++    public void removeMin();
++    public T getMin();
++    public double getMinKey();
++}
+diff --git a/core/src/main/java/ags/utils/dataStructures/Pair.java b/core/src/main/java/ags/utils/dataStructures/Pair.java
+new file mode 100644
+index 0000000..6b5528a
+--- /dev/null
++++ b/core/src/main/java/ags/utils/dataStructures/Pair.java
+@@ -0,0 +1,13 @@
++package ags.utils.dataStructures;
++
++/**
++ *
++ */
++public final class Pair<T> {
++    public final T first, second;
++
++    public Pair(T first, T second) {
++        this.first = first;
++        this.second = second;
++    }
++}
+\ No newline at end of file
+diff --git a/core/src/main/java/ags/utils/dataStructures/trees/thirdGenKD/DistanceFunction.java b/core/src/main/java/ags/utils/dataStructures/trees/thirdGenKD/DistanceFunction.java
+new file mode 100644
+index 0000000..f202f34
+--- /dev/null
++++ b/core/src/main/java/ags/utils/dataStructures/trees/thirdGenKD/DistanceFunction.java
+@@ -0,0 +1,7 @@
++package ags.utils.dataStructures.trees.thirdGenKD;
++
++public interface DistanceFunction {
++    public double distance(double[] p1, double[] p2);
++    public double distanceToRect(double[] point, double[] min, double[] max);
++}
++
+diff --git a/core/src/main/java/ags/utils/dataStructures/trees/thirdGenKD/KdNode.java b/core/src/main/java/ags/utils/dataStructures/trees/thirdGenKD/KdNode.java
+new file mode 100644
+index 0000000..f59d148
+--- /dev/null
++++ b/core/src/main/java/ags/utils/dataStructures/trees/thirdGenKD/KdNode.java
+@@ -0,0 +1,183 @@
++package ags.utils.dataStructures.trees.thirdGenKD;
++
++import java.util.Arrays;
++
++/**
++ *
++ */
++class KdNode<T> {
++    // All types
++    protected int dimensions;
++    protected int bucketCapacity;
++    protected int size;
++
++    // Leaf only
++    protected double[][] points;
++    protected Object[] data;
++
++    // Stem only
++    protected KdNode<T> left, right;
++    protected int splitDimension;
++    protected double splitValue;
++
++    // Bounds
++    protected double[] minBound, maxBound;
++    protected boolean singlePoint;
++
++    protected KdNode(int dimensions, int bucketCapacity) {
++        // Init base
++        this.dimensions = dimensions;
++        this.bucketCapacity = bucketCapacity;
++        this.size = 0;
++        this.singlePoint = true;
++
++        // Init leaf elements
++        this.points = new double[bucketCapacity+1][];
++        this.data = new Object[bucketCapacity+1];
++    }
++
++    /* -------- SIMPLE GETTERS -------- */
++
++    public int size() {
++        return size;
++    }
++
++    public boolean isLeaf() {
++        return points != null;
++    }
++
++    /* -------- OPERATIONS -------- */
++
++    public void addPoint(double[] point, T value) {
++        KdNode<T> cursor = this;
++        while (!cursor.isLeaf()) {
++            cursor.extendBounds(point);
++            cursor.size++;
++            if (point[cursor.splitDimension] > cursor.splitValue) {
++                cursor = cursor.right;
++            }
++            else {
++                cursor = cursor.left;
++            }
++        }
++        cursor.addLeafPoint(point, value);
++    }
++
++    /* -------- INTERNAL OPERATIONS -------- */
++
++    public void addLeafPoint(double[] point, T value) {
++        // Add the data point
++        points[size] = point;
++        data[size] = value;
++        extendBounds(point);
++        size++;
++
++        if (size == points.length - 1) {
++            // If the node is getting too large
++            if (calculateSplit()) {
++                // If the node successfully had it's split value calculated, split node
++                splitLeafNode();
++            } else {
++                // If the node could not be split, enlarge node
++                increaseLeafCapacity();
++            }
++        }
++    }
++
++    private boolean checkBounds(double[] point) {
++        for (int i = 0; i < dimensions; i++) {
++            if (point[i] > maxBound[i]) return false;
++            if (point[i] < minBound[i]) return false;
++        }
++        return true;
++    }
++
++    private void extendBounds(double[] point) {
++        if (minBound == null) {
++            minBound = Arrays.copyOf(point, dimensions);
++            maxBound = Arrays.copyOf(point, dimensions);
++            return;
++        }
++
++        for (int i = 0; i < dimensions; i++) {
++            if (Double.isNaN(point[i])) {
++                if (!Double.isNaN(minBound[i]) || !Double.isNaN(maxBound[i])) {
++                    singlePoint = false;
++                }
++                minBound[i] = Double.NaN;
++                maxBound[i] = Double.NaN;
++            }
++            else if (minBound[i] > point[i]) {
++                minBound[i] = point[i];
++                singlePoint = false;
++            }
++            else if (maxBound[i] < point[i]) {
++                maxBound[i] = point[i];
++                singlePoint = false;
++            }
++        }
++    }
++
++    private void increaseLeafCapacity() {
++        points = Arrays.copyOf(points, points.length*2);
++        data = Arrays.copyOf(data, data.length*2);
++    }
++
++    private boolean calculateSplit() {
++        if (singlePoint) return false;
++
++        double width = 0;
++        for (int i = 0; i < dimensions; i++) {
++            double dwidth = (maxBound[i] - minBound[i]);
++            if (Double.isNaN(dwidth)) dwidth = 0;
++            if (dwidth > width) {
++                splitDimension = i;
++                width = dwidth;
++            }
++        }
++
++        if (width == 0) {
++            return false;
++        }
++
++        // Start the split in the middle of the variance
++        splitValue = (minBound[splitDimension] + maxBound[splitDimension]) * 0.5;
++
++        // Never split on infinity or NaN
++        if (splitValue == Double.POSITIVE_INFINITY) {
++            splitValue = Double.MAX_VALUE;
++        }
++        else if (splitValue == Double.NEGATIVE_INFINITY) {
++            splitValue = -Double.MAX_VALUE;
++        }
++
++        // Don't let the split value be the same as the upper value as
++        // can happen due to rounding errors!
++        if (splitValue == maxBound[splitDimension]) {
++            splitValue = minBound[splitDimension];
++        }
++
++        // Success
++        return true;
++    }
++
++    private void splitLeafNode() {
++        right = new KdNode<T>(dimensions, bucketCapacity);
++        left = new KdNode<T>(dimensions, bucketCapacity);
++
++        // Move locations into children
++        for (int i = 0; i < size; i++) {
++            double[] oldLocation = points[i];
++            Object oldData = data[i];
++            if (oldLocation[splitDimension] > splitValue) {
++                right.addLeafPoint(oldLocation, (T) oldData);
++            }
++            else {
++                left.addLeafPoint(oldLocation, (T) oldData);
++            }
++        }
++
++        points = null;
++        data = null;
++    }
++}
+diff --git a/core/src/main/java/ags/utils/dataStructures/trees/thirdGenKD/KdTree.java b/core/src/main/java/ags/utils/dataStructures/trees/thirdGenKD/KdTree.java
+new file mode 100644
+index 0000000..a530374
+--- /dev/null
++++ b/core/src/main/java/ags/utils/dataStructures/trees/thirdGenKD/KdTree.java
+@@ -0,0 +1,92 @@
++package ags.utils.dataStructures.trees.thirdGenKD;
++
++import ags.utils.dataStructures.BinaryHeap;
++import ags.utils.dataStructures.MaxHeap;
++import ags.utils.dataStructures.MinHeap;
++
++/**
++ *
++ */
++public class KdTree<T> extends KdNode<T> {
++    public KdTree(int dimensions) {
++        this(dimensions, 24);
++    }
++
++    public KdTree(int dimensions, int bucketCapacity) {
++        super(dimensions, bucketCapacity);
++    }
++
++    public NearestNeighborIterator<T> getNearestNeighborIterator(double[] searchPoint, int maxPointsReturned, DistanceFunction distanceFunction) {
++        return new NearestNeighborIterator<T>(this, searchPoint, maxPointsReturned, distanceFunction);
++    }
++
++    public MaxHeap<T> findNearestNeighbors(double[] searchPoint, int maxPointsReturned, DistanceFunction distanceFunction) {
++        BinaryHeap.Min<KdNode<T>> pendingPaths = new BinaryHeap.Min<KdNode<T>>();
++        BinaryHeap.Max<T> evaluatedPoints = new BinaryHeap.Max<T>();
++        int pointsRemaining = Math.min(maxPointsReturned, size());
++        pendingPaths.offer(0, this);
++
++        while (pendingPaths.size() > 0 && (evaluatedPoints.size() < pointsRemaining || (pendingPaths.getMinKey() < evaluatedPoints.getMaxKey()))) {
++            nearestNeighborSearchStep(pendingPaths, evaluatedPoints, pointsRemaining, distanceFunction, searchPoint);
++        }
++
++        return evaluatedPoints;
++    }
++
++    @SuppressWarnings("unchecked")
++    protected static <T> void nearestNeighborSearchStep (
++            MinHeap<KdNode<T>> pendingPaths, MaxHeap<T> evaluatedPoints, int desiredPoints,
++            DistanceFunction distanceFunction, double[] searchPoint) {
++        // If there are pending paths possibly closer than the nearest evaluated point, check it out
++        KdNode<T> cursor = pendingPaths.getMin();
++        pendingPaths.removeMin();
++
++        // Descend the tree, recording paths not taken
++        while (!cursor.isLeaf()) {
++            KdNode<T> pathNotTaken;
++            if (searchPoint[cursor.splitDimension] > cursor.splitValue) {
++                pathNotTaken = cursor.left;
++                cursor = cursor.right;
++            }
++            else {
++                pathNotTaken = cursor.right;
++                cursor = cursor.left;
++            }
++            double otherDistance = distanceFunction.distanceToRect(searchPoint, pathNotTaken.minBound, pathNotTaken.maxBound);
++            // Only add a path if we either need more points or it's closer than furthest point on list so far
++            if (evaluatedPoints.size() < desiredPoints || otherDistance <= evaluatedPoints.getMaxKey()) {
++                pendingPaths.offer(otherDistance, pathNotTaken);
++            }
++        }
++
++        if (cursor.singlePoint) {
++            double nodeDistance = distanceFunction.distance(cursor.points[0], searchPoint);
++            // Only add a point if either need more points or it's closer than furthest on list so far
++            if (evaluatedPoints.size() < desiredPoints || nodeDistance <= evaluatedPoints.getMaxKey()) {
++                for (int i = 0; i < cursor.size(); i++) {
++                    T value = (T) cursor.data[i];
++
++                    // If we don't need any more, replace max
++                    if (evaluatedPoints.size() == desiredPoints) {
++                        evaluatedPoints.replaceMax(nodeDistance, value);
++                    } else {
++                        evaluatedPoints.offer(nodeDistance, value);
++                    }
++                }
++            }
++        } else {
++            // Add the points at the cursor
++            for (int i = 0; i < cursor.size(); i++) {
++                double[] point = cursor.points[i];
++                T value = (T) cursor.data[i];
++                double distance = distanceFunction.distance(point, searchPoint);
++                // Only add a point if either need more points or it's closer than furthest on list so far
++                if (evaluatedPoints.size() < desiredPoints) {
++                    evaluatedPoints.offer(distance, value);
++                } else if (distance < evaluatedPoints.getMaxKey()) {
++                    evaluatedPoints.replaceMax(distance, value);
++                }
++            }
++        }
++    }
++}
+diff --git a/core/src/main/java/ags/utils/dataStructures/trees/thirdGenKD/NearestNeighborIterator.java b/core/src/main/java/ags/utils/dataStructures/trees/thirdGenKD/NearestNeighborIterator.java
+new file mode 100644
+index 0000000..1097bf6
+--- /dev/null
++++ b/core/src/main/java/ags/utils/dataStructures/trees/thirdGenKD/NearestNeighborIterator.java
+@@ -0,0 +1,68 @@
++package ags.utils.dataStructures.trees.thirdGenKD;
++
++import ags.utils.dataStructures.BinaryHeap;
++import ags.utils.dataStructures.IntervalHeap;
++import ags.utils.dataStructures.MinHeap;
++
++import java.util.Arrays;
++import java.util.Iterator;
++
++/**
++ *
++ */
++public class NearestNeighborIterator<T> implements Iterator<T>, Iterable<T> {
++    private DistanceFunction distanceFunction;
++    private double[] searchPoint;
++    private MinHeap<KdNode<T>> pendingPaths;
++    private IntervalHeap<T> evaluatedPoints;
++    private int pointsRemaining;
++    private double lastDistanceReturned;
++
++    protected NearestNeighborIterator(KdNode<T> treeRoot, double[] searchPoint, int maxPointsReturned, DistanceFunction distanceFunction) {
++        this.searchPoint = Arrays.copyOf(searchPoint, searchPoint.length);
++        this.pointsRemaining = Math.min(maxPointsReturned, treeRoot.size());
++        this.distanceFunction = distanceFunction;
++        this.pendingPaths = new BinaryHeap.Min<KdNode<T>>();
++        this.pendingPaths.offer(0, treeRoot);
++        this.evaluatedPoints = new IntervalHeap<T>();
++    }
++
++    /* -------- INTERFACE IMPLEMENTATION -------- */
++
++    @Override
++    public boolean hasNext() {
++        return pointsRemaining > 0;
++    }
++
++    @Override
++    public T next() {
++        if (!hasNext()) {
++            throw new IllegalStateException("NearestNeighborIterator has reached end!");
++        }
++
++        while (pendingPaths.size() > 0 && (evaluatedPoints.size() == 0 || (pendingPaths.getMinKey() < evaluatedPoints.getMinKey()))) {
++            KdTree.nearestNeighborSearchStep(pendingPaths, evaluatedPoints, pointsRemaining, distanceFunction, searchPoint);
++        }
++
++        // Return the smallest distance point
++        pointsRemaining--;
++        lastDistanceReturned = evaluatedPoints.getMinKey();
++        T value = evaluatedPoints.getMin();
++        evaluatedPoints.removeMin();
++        return value;
++    }
++
++    public double distance() {
++        return lastDistanceReturned;
++    }
++
++    @Override
++    public void remove() {
++        throw new UnsupportedOperationException();
++    }
++
++    @Override
++    public Iterator<T> iterator() {
++        return this;
++    }
++}
+diff --git a/core/src/main/java/ags/utils/dataStructures/trees/thirdGenKD/SquareEuclideanDistanceFunction.java b/core/src/main/java/ags/utils/dataStructures/trees/thirdGenKD/SquareEuclideanDistanceFunction.java
+new file mode 100644
+index 0000000..838c41b
+--- /dev/null
++++ b/core/src/main/java/ags/utils/dataStructures/trees/thirdGenKD/SquareEuclideanDistanceFunction.java
+@@ -0,0 +1,36 @@
++package ags.utils.dataStructures.trees.thirdGenKD;
++
++/**
++ *
++ */
++public class SquareEuclideanDistanceFunction implements DistanceFunction {
++    @Override
++    public double distance(double[] p1, double[] p2) {
++        double d = 0;
++
++        for (int i = 0; i < p1.length; i++) {
++            double diff = (p1[i] - p2[i]);
++            d += diff * diff;
++        }
++
++        return d;
++    }
++
++    @Override
++    public double distanceToRect(double[] point, double[] min, double[] max) {
++        double d = 0;
++
++        for (int i = 0; i < point.length; i++) {
++            double diff = 0;
++            if (point[i] > max[i]) {
++                diff = (point[i] - max[i]);
++            }
++            else if (point[i] < min[i]) {
++                diff = (point[i] - min[i]);
++            }
++            d += diff * diff;
++        }
++
++        return d;
++    }
++}
+\ No newline at end of file
+diff --git a/core/src/main/java/com/google/zxing/pdf417/decoder/PDF417CodewordDecoder.java b/core/src/main/java/com/google/zxing/pdf417/decoder/PDF417CodewordDecoder.java
+index 017f3f3..29efffb 100644
+--- a/core/src/main/java/com/google/zxing/pdf417/decoder/PDF417CodewordDecoder.java
++++ b/core/src/main/java/com/google/zxing/pdf417/decoder/PDF417CodewordDecoder.java
+@@ -17,6 +17,7 @@
+ package com.google.zxing.pdf417.decoder;
+ 
+ import com.google.zxing.pdf417.PDF417Common;
++import ags.utils.dataStructures.trees.thirdGenKD.*;
+ 
+ /**
+  * @author Guenther Grau
+@@ -24,14 +25,15 @@ import com.google.zxing.pdf417.PDF417Common;
+  */
+ final class PDF417CodewordDecoder {
+ 
+-  private static final float[][] RATIOS_TABLE = 
+-      new float[PDF417Common.SYMBOL_TABLE.length][PDF417Common.BARS_IN_MODULE];
+-
++  private static final KdTree<Integer> RATIOS_TREE = new KdTree<Integer>(8);
++  private static final DistanceFunction NEARESTNEIGHBORFUNCTION = new SquareEuclideanDistanceFunction();
++  
+   static {
+-    // Pre-computes the symbol ratio table.
++    // Pre-computes the symbol ratio tree.
+     for (int i = 0; i < PDF417Common.SYMBOL_TABLE.length; i++) {
+       int currentSymbol = PDF417Common.SYMBOL_TABLE[i];
+       int currentBit = currentSymbol & 0x1;
++      double[] curEntry = new double[PDF417Common.BARS_IN_MODULE];
+       for (int j = 0; j < PDF417Common.BARS_IN_MODULE; j++) {
+         float size = 0.0f;
+         while ((currentSymbol & 0x1) == currentBit) {
+@@ -39,8 +41,9 @@ final class PDF417CodewordDecoder {
+           currentSymbol >>= 1;
+         }
+         currentBit = currentSymbol & 0x1;
+-        RATIOS_TABLE[i][PDF417Common.BARS_IN_MODULE - j - 1] = size / PDF417Common.MODULES_IN_CODEWORD;
++        curEntry[PDF417Common.BARS_IN_MODULE - j - 1] = size / PDF417Common.MODULES_IN_CODEWORD;
+       }
++      RATIOS_TREE.addPoint(curEntry, PDF417Common.SYMBOL_TABLE[i]);
+     }
+   }
+ 
+@@ -90,28 +93,12 @@ final class PDF417CodewordDecoder {
+ 
+   private static int getClosestDecodedValue(int[] moduleBitCount) {
+     int bitCountSum = PDF417Common.getBitCountSum(moduleBitCount);
+-    float[] bitCountRatios = new float[PDF417Common.BARS_IN_MODULE];
++    double[] bitCountRatios = new double[PDF417Common.BARS_IN_MODULE];
+     for (int i = 0; i < bitCountRatios.length; i++) {
+-      bitCountRatios[i] = moduleBitCount[i] / (float) bitCountSum;
+-    }
+-    float bestMatchError = Float.MAX_VALUE;
+-    int bestMatch = -1;
+-    for (int j = 0; j < RATIOS_TABLE.length; j++) {
+-      float error = 0.0f;
+-      float[] ratioTableRow = RATIOS_TABLE[j];
+-      for (int k = 0; k < PDF417Common.BARS_IN_MODULE; k++) {
+-        float diff = ratioTableRow[k] - bitCountRatios[k];
+-        error += diff * diff;
+-        if (error >= bestMatchError) {
+-          break;
+-        }
+-      }
+-      if (error < bestMatchError) {
+-        bestMatchError = error;
+-        bestMatch = PDF417Common.SYMBOL_TABLE[j];
+-      }
++      bitCountRatios[i] = moduleBitCount[i] / (double) bitCountSum;
+     }
+-    return bestMatch;
++    NearestNeighborIterator<Integer> result = RATIOS_TREE.getNearestNeighborIterator(bitCountRatios, 1, NEARESTNEIGHBORFUNCTION);
++    return result.next();
+   }
+ 
+ }
