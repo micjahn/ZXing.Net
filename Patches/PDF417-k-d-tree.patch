@@ -1,0 +1,2879 @@
+Index: Source/lib/common/KDTree/DistanceFunctions.cs
+===================================================================
+--- Source/lib/common/KDTree/DistanceFunctions.cs	(revision 0)
++++ Source/lib/common/KDTree/DistanceFunctions.cs	(working copy)
+@@ -0,0 +1,77 @@
++﻿
++using System;
++using System.Collections.Generic;
++using System.Linq;
++using System.Text;
++
++namespace KDTree
++{
++    /// <summary>
++    /// An interface which enables flexible distance functions.
++    /// </summary>
++    public interface DistanceFunctions
++    {
++        /// <summary>
++        /// Compute a distance between two n-dimensional points.
++        /// </summary>
++        /// <param name="p1">The first point.</param>
++        /// <param name="p2">The second point.</param>
++        /// <returns>The n-dimensional distance.</returns>
++        double Distance(double[] p1, double[] p2);
++
++        /// <summary>
++        /// Find the shortest distance from a point to an axis aligned rectangle in n-dimensional space.
++        /// </summary>
++        /// <param name="point">The point of interest.</param>
++        /// <param name="min">The minimum coordinate of the rectangle.</param>
++        /// <param name="max">The maximum coorindate of the rectangle.</param>
++        /// <returns>The shortest n-dimensional distance between the point and rectangle.</returns>
++        double DistanceToRectangle(double[] point, double[] min, double[] max);
++    }
++
++    /// <summary>
++    /// A distance function for our KD-Tree which returns squared euclidean distances.
++    /// </summary>
++    public class SquareEuclideanDistanceFunction : DistanceFunctions
++    {
++        /// <summary>
++        /// Find the squared distance between two n-dimensional points.
++        /// </summary>
++        /// <param name="p1">The first point.</param>
++        /// <param name="p2">The second point.</param>
++        /// <returns>The n-dimensional squared distance.</returns>
++        public double Distance(double[] p1, double[] p2)
++        {
++            double fSum = 0;
++            for (int i = 0; i < p1.Length; i++)
++            {
++                double fDifference = (p1[i] - p2[i]);
++                fSum += fDifference * fDifference;
++            }
++            return fSum;
++        }
++
++        /// <summary>
++        /// Find the shortest distance from a point to an axis aligned rectangle in n-dimensional space.
++        /// </summary>
++        /// <param name="point">The point of interest.</param>
++        /// <param name="min">The minimum coordinate of the rectangle.</param>
++        /// <param name="max">The maximum coorindate of the rectangle.</param>
++        /// <returns>The shortest squared n-dimensional squared distance between the point and rectangle.</returns>
++        public double DistanceToRectangle(double[] point, double[] min, double[] max)
++        {
++            double fSum = 0;
++            double fDifference = 0;
++            for (int i = 0; i < point.Length; ++i)
++            {
++                fDifference = 0;
++                if (point[i] > max[i])
++                    fDifference = (point[i] - max[i]);
++                else if (point[i] < min[i])
++                    fDifference = (point[i] - min[i]);
++                fSum += fDifference * fDifference;
++            }
++            return fSum;
++        }
++    }
++}
+Index: Source/lib/common/KDTree/IntervalHeap.cs
+===================================================================
+--- Source/lib/common/KDTree/IntervalHeap.cs	(revision 0)
++++ Source/lib/common/KDTree/IntervalHeap.cs	(working copy)
+@@ -0,0 +1,474 @@
++﻿using System;
++using System.Collections;
++using System.Collections.Generic;
++using System.Linq;
++using System.Text;
++
++namespace KDTree
++{
++    /// <summary>
++    /// A binary interval heap is double-ended priority queue is a priority queue that it allows
++    /// for efficient removal of both the maximum and minimum element.
++    /// </summary>
++    /// <typeparam name="T">The data type contained at each key.</typeparam>
++    /// <remarks>This is based on this: https://bitbucket.org/rednaxela/knn-benchmark/src/tip/ags/utils/dataStructures/trees/thirdGenKD/ </remarks>
++    public class IntervalHeap<T>
++    {
++        /// <summary>
++        /// The default size for a new interval heap.
++        /// </summary>
++        private const int DEFAULT_SIZE = 64;
++
++        /// <summary>
++        /// The internal data array which contains the stored objects.
++        /// </summary>
++        private T[] tData;
++
++        /// <summary>
++        /// The array of keys which 
++        /// </summary>
++        private double[] tKeys;
++
++        /// <summary>
++        /// Construct a new interval heap with the default capacity.
++        /// </summary>
++        public IntervalHeap() : this(DEFAULT_SIZE)
++        {
++        }
++
++        /// <summary>
++        /// Construct a new interval heap with a custom capacity.
++        /// </summary>
++        /// <param name="capacity"></param>
++        public IntervalHeap(int capacity)
++        {
++            this.tData = new T[capacity];
++            this.tKeys = new double[capacity];
++            this.Capacity = capacity;
++            this.Size = 0;
++        }
++
++        /// <summary>
++        /// The number of items in this interval heap.
++        /// </summary>
++        public int Size { get; private set; }
++
++        /// <summary>
++        /// The current capacity of this interval heap.
++        /// </summary>
++        public int Capacity { get; private set; }
++
++        /// <summary>
++        /// Get the data with the smallest key.
++        /// </summary>
++        public T Min
++        {
++            get
++            {
++                if (Size == 0)
++                    throw new Exception();
++                return tData[0];
++            }
++        }
++
++        /// <summary>
++        /// Get the data with the largest key.
++        /// </summary>
++        public T Max
++        {
++            get
++            {
++                if (Size == 0)
++                {
++                    throw new Exception();
++                }
++                else if (Size == 1)
++                {
++                    return tData[0];
++                }
++
++                return tData[1];
++            }
++        }
++
++        /// <summary>
++        /// Get the smallest key.
++        /// </summary>
++        public double MinKey
++        {
++            get
++            {
++                if (Size == 0)
++                    throw new Exception();
++                return tKeys[0];
++            }
++        }
++
++        /// <summary>
++        /// Get the largest key.
++        /// </summary>
++        public double MaxKey
++        {
++            get
++            {
++                if (Size == 0)
++                {
++                    throw new Exception();
++                }
++                else if (Size == 1)
++                {
++                    return tKeys[0];
++                }
++
++                return tKeys[1];
++            }
++        }
++
++        /// <summary>
++        /// Insert a new data item at a given key.
++        /// </summary>
++        /// <param name="key">The value which represents our data (i.e. a distance).</param>
++        /// <param name="value">The data we want to store.</param>
++        public void Insert(double key, T value)
++        {
++            // If more room is needed, double the array size.
++            if (Size >= Capacity)
++            {
++                // Double the capacity.
++                Capacity *= 2;
++
++                // Expand the data array.
++                var newData = new T[Capacity];
++                Array.Copy(tData, newData, tData.Length);
++                tData = newData;
++
++                // Expand the key array.
++                var newKeys = new double[Capacity];
++                Array.Copy(tKeys, newKeys, tKeys.Length);
++                tKeys = newKeys;
++            }
++
++            // Insert the new value at the end.
++            Size++;
++            tData[Size-1] = value;
++            tKeys[Size-1] = key;
++
++            // Ensure it is in the right place.
++            SiftInsertedValueUp();
++        }
++
++        /// <summary>
++        /// Remove the item with the smallest key from the queue.
++        /// </summary>
++        public void RemoveMin()
++        {
++            // Check for errors.
++            if (Size == 0)
++                throw new Exception();
++
++            // Remove the item by 
++            Size--;
++            tData[0] = tData[Size];
++            tKeys[0] = tKeys[Size];
++            tData[Size] = default(T);
++            SiftDownMin(0);
++        }
++
++        /// <summary>
++        /// Replace the item with the smallest key in the queue.
++        /// </summary>
++        /// <param name="key">The new minimum key.</param>
++        /// <param name="value">The new minumum data value.</param>
++        public void ReplaceMin(double key, T value)
++        {
++            // Check for errors.
++            if (Size == 0)
++                throw new Exception();
++
++            // Add the data.
++            tData[0] = value;
++            tKeys[0] = key;
++
++            // If we have more than one item.
++            if (Size > 1)
++            {
++                // Swap with pair if necessary.
++                if (tKeys[1] < key)
++                    Swap(0, 1);
++                SiftDownMin(0);
++            }
++        }
++
++        /// <summary>
++        /// Remove the item with the largest key in the queue.
++        /// </summary>
++        public void RemoveMax()
++        {
++            // If we have no items in the queue.
++            if (Size == 0)
++            {
++                throw new Exception();
++            }
++
++            // If we have one item, remove the min.
++            else if (Size == 1)
++            {
++                RemoveMin();
++                return;
++            }
++
++            // Remove the max.
++            Size--;
++            tData[1] = tData[Size];
++            tKeys[1] = tKeys[Size];
++            tData[Size] = default(T);
++            SiftDownMax(1);
++        }
++
++        /// <summary>
++        /// Swap out the item with the largest key in the queue.
++        /// </summary>
++        /// <param name="key">The new key for the largest item.</param>
++        /// <param name="value">The new data for the largest item.</param>
++        public void ReplaceMax(double key, T value)
++        {
++            if (Size == 0)
++            {
++                throw new Exception();
++            }
++            else if (Size == 1)
++            {
++                ReplaceMin(key, value);
++                return;
++            }
++
++            tData[1] = value;
++            tKeys[1] = key;
++            // Swap with pair if necessary
++            if (key < tKeys[0]) {
++                Swap(0, 1);
++            }
++            SiftDownMax(1);
++        }
++
++
++        /// <summary>
++        /// Internal helper method which swaps two values in the arrays.
++        /// This swaps both data and key entries.
++        /// </summary>
++        /// <param name="x">The first index.</param>
++        /// <param name="y">The second index.</param>
++        /// <returns>The second index.</returns>
++        private int Swap(int x, int y)
++        {
++            // Store temp.
++            T yData = tData[y];
++            double yDist = tKeys[y];
++
++            // Swap
++            tData[y] = tData[x];
++            tKeys[y] = tKeys[x];
++            tData[x] = yData;
++            tKeys[x] = yDist;
++
++            // Return.
++            return y;
++        }
++
++        /**
++         * Min-side (u % 2 == 0):
++         * - leftchild:  2u + 2
++         * - rightchild: 2u + 4
++         * - parent:     (x/2-1)&~1
++         *
++         * Max-side (u % 2 == 1):
++         * - leftchild:  2u + 1
++         * - rightchild: 2u + 3
++         * - parent:     (x/2-1)|1
++         */
++
++        /// <summary>
++        /// Place a newly inserted element a into the correct tree position.
++        /// </summary>
++        private void SiftInsertedValueUp()
++        {
++            // Work out where the element was inserted.
++            int u = Size-1;
++
++            // If it is the only element, nothing to do.
++            if (u == 0)
++            {
++            }
++
++            // If it is the second element, sort with it's pair.
++            else if (u == 1)
++            {
++                // Swap if less than paired item.
++                if  (tKeys[u] < tKeys[u-1])
++                    Swap(u, u-1);
++            }
++
++            // If it is on the max side, 
++            else if (u % 2 == 1)
++            {
++                // Already paired. Ensure pair is ordered right
++                int p = (u/2-1)|1; // The larger value of the parent pair
++                if  (tKeys[u] < tKeys[u-1])
++                { // If less than it's pair
++                    u = Swap(u, u-1); // Swap with it's pair
++                    if (tKeys[u] < tKeys[p-1])
++                    { // If smaller than smaller parent pair
++                        // Swap into min-heap side
++                        u = Swap(u, p-1);
++                        SiftUpMin(u);
++                    }
++                }
++                else
++                {
++                    if (tKeys[u] > tKeys[p])
++                    { // If larger that larger parent pair
++                        // Swap into max-heap side
++                        u = Swap(u, p);
++                        SiftUpMax(u);
++                    }
++                }
++            }
++            else
++            {
++                // Inserted in the lower-value slot without a partner
++                int p = (u/2-1)|1; // The larger value of the parent pair
++                if (tKeys[u] > tKeys[p])
++                { // If larger that larger parent pair
++                    // Swap into max-heap side
++                    u = Swap(u, p);
++                    SiftUpMax(u);
++                }
++                else if (tKeys[u] < tKeys[p-1])
++                { // If smaller than smaller parent pair
++                    // Swap into min-heap side
++                    u = Swap(u, p-1);
++                    SiftUpMin(u);
++                }
++            }
++        }
++
++        /// <summary>
++        /// Bubble elements up the min side of the tree.
++        /// </summary>
++        /// <param name="iChild">The child index.</param>
++        private void SiftUpMin(int iChild)
++        {
++            // Min-side parent: (x/2-1)&~1
++            for (int iParent = (iChild/2-1)&~1; 
++                iParent >= 0 && tKeys[iChild] < tKeys[iParent]; 
++                iChild = iParent, iParent = (iChild/2-1)&~1)
++            {
++                Swap(iChild, iParent);
++            }
++        }
++
++        /// <summary>
++        /// Bubble elements up the max side of the tree.
++        /// </summary>
++        /// <param name="iChild">The child index.</param>
++        private void SiftUpMax(int iChild)
++        {
++            // Max-side parent: (x/2-1)|1
++            for (int iParent = (iChild/2-1)|1; 
++                iParent >= 0 && tKeys[iChild] > tKeys[iParent]; 
++                iChild = iParent, iParent = (iChild/2-1)|1)
++            {
++                Swap(iChild, iParent);
++            }
++        }
++
++        /// <summary>
++        /// Bubble elements down the min side of the tree.
++        /// </summary>
++        /// <param name="iParent">The parent index.</param>
++        private void SiftDownMin(int iParent)
++        {
++            // For each child of the parent.
++            for (int iChild = iParent * 2 + 2; iChild < Size; iParent = iChild, iChild = iParent * 2 + 2)
++            {
++                // If the next child is less than the current child, select the next one.
++                if (iChild + 2 < Size && tKeys[iChild + 2] < tKeys[iChild])
++                {
++                    iChild += 2;
++                }
++
++                // If it is less than our parent swap.
++                if (tKeys[iChild] < tKeys[iParent])
++                {
++                    Swap(iParent, iChild);
++
++                    // Swap the pair if necessary.
++                    if (iChild+1 < Size && tKeys[iChild+1] < tKeys[iChild])
++                    {
++                        Swap(iChild, iChild+1);
++                    }
++                }
++                else
++                {
++                    break;
++                }
++            }
++        }
++
++        /// <summary>
++        /// Bubble elements down the max side of the tree.
++        /// </summary>
++        /// <param name="iParent"></param>
++        private void SiftDownMax(int iParent)
++        {
++            // For each child on the max side of the tree.
++            for (int iChild = iParent * 2 + 1; iChild <= Size; iParent = iChild, iChild = iParent * 2 + 1)
++            {
++                // If the child is the last one (and only has half a pair).
++                if (iChild == Size)
++                {
++                    // CHeck if we need to swap with th parent.
++                    if (tKeys[iChild - 1] > tKeys[iParent])
++                        Swap(iParent, iChild - 1);
++                    break;
++                }
++
++                // If there is only room for a right child lower pair.
++                else if (iChild + 2 == Size)
++                {
++                    // Swap the children.
++                    if (tKeys[iChild + 1] > tKeys[iChild])
++                    {
++                        // Swap with the parent.
++                        if (tKeys[iChild + 1] > tKeys[iParent])
++                           Swap(iParent, iChild + 1);
++                        break;
++                    }
++                }
++
++                // 
++                else if (iChild + 2 < Size)
++                {
++                    // If there is room for a right child upper pair
++                    if (tKeys[iChild + 2] > tKeys[iChild])
++                    {
++                        iChild += 2;
++                    }
++                }
++                if (tKeys[iChild] > tKeys[iParent])
++                {
++                    Swap(iParent, iChild);
++                    // Swap with pair if necessary
++                    if (tKeys[iChild-1] > tKeys[iChild])
++                    {
++                        Swap(iChild, iChild-1);
++                    }
++                }
++                else
++                {
++                    break;
++                }
++            }
++        }
++    }
++}
+\ No newline at end of file
+Index: Source/lib/common/KDTree/KDNode.cs
+===================================================================
+--- Source/lib/common/KDTree/KDNode.cs	(revision 0)
++++ Source/lib/common/KDTree/KDNode.cs	(working copy)
+@@ -0,0 +1,301 @@
++﻿using System;
++using System.Collections.Generic;
++using System.Linq;
++using System.Text;
++
++namespace KDTree
++{
++    /// <summary>
++    /// A KD-Tree node which supports a generic number of dimensions.  All data items
++    /// need the same number of dimensions.
++    /// This node splits based on the largest range of any dimension.
++    /// </summary>
++    /// <typeparam name="T">The generic data type this structure contains.</typeparam>
++    /// <remarks>This is based on this: https://bitbucket.org/rednaxela/knn-benchmark/src/tip/ags/utils/dataStructures/trees/thirdGenKD/ </remarks>
++    public class KDNode<T>
++    {
++        #region Internal properties and constructor
++        // All types
++        /// <summary>
++        /// The number of dimensions for this node.
++        /// </summary>
++        protected internal int iDimensions;
++
++        /// <summary>
++        /// The maximum capacity of this node.
++        /// </summary>
++        protected internal int iBucketCapacity;
++
++        // Leaf only
++        /// <summary>
++        /// The array of locations.  [index][dimension]
++        /// </summary>
++        protected internal double[][] tPoints;
++
++        /// <summary>
++        /// The array of data values. [index]
++        /// </summary>
++        protected internal T[] tData;
++
++        // Stem only
++        /// <summary>
++        /// The left and right children.
++        /// </summary>
++        protected internal KDNode<T> pLeft, pRight;
++        /// <summary>
++        /// The split dimension.
++        /// </summary>
++        protected internal int iSplitDimension;
++        /// <summary>
++        /// The split value (larger go into the right, smaller go into left)
++        /// </summary>
++        protected internal double fSplitValue;
++
++        // Bounds
++        /// <summary>
++        /// The min and max bound for this node.  All dimensions.
++        /// </summary>
++        protected internal double[] tMinBound, tMaxBound;
++
++        /// <summary>
++        /// Does this node represent only one point.
++        /// </summary>
++        protected internal bool bSinglePoint;
++
++        /// <summary>
++        /// Protected method which constructs a new KDNode.
++        /// </summary>
++        /// <param name="iDimensions">The number of dimensions for this node (all the same in the tree).</param>
++        /// <param name="iBucketCapacity">The initial capacity of the bucket.</param>
++        protected KDNode(int iDimensions, int iBucketCapacity)
++        {
++            // Variables.
++            this.iDimensions = iDimensions;
++            this.iBucketCapacity = iBucketCapacity;
++            this.Size = 0;
++            this.bSinglePoint = true;
++
++            // Setup leaf elements.
++            this.tPoints = new double[iBucketCapacity+1][];
++            this.tData = new T[iBucketCapacity+1];
++        }
++        #endregion
++
++        #region External Operations
++        /// <summary>
++        /// The number of items in this leaf node and all children.
++        /// </summary>
++        public int Size { get; private set; }
++
++        /// <summary>
++        /// Is this KDNode a leaf or not?
++        /// </summary>
++        public bool IsLeaf { get { return tPoints != null; } }
++
++        /// <summary>
++        /// Insert a new point into this leaf node.
++        /// </summary>
++        /// <param name="tPoint">The position which represents the data.</param>
++        /// <param name="kValue">The value of the data.</param>
++        public void AddPoint(double[] tPoint, T kValue)
++        {
++            // Find the correct leaf node.
++            KDNode<T> pCursor = this;
++            while (!pCursor.IsLeaf)
++            {
++                // Extend the size of the leaf.
++                pCursor.ExtendBounds(tPoint);
++                pCursor.Size++;
++
++                // If it is larger select the right, or lower,  select the left.
++                if (tPoint[pCursor.iSplitDimension] > pCursor.fSplitValue)
++                {
++                    pCursor = pCursor.pRight;
++                }
++                else
++                {
++                    pCursor = pCursor.pLeft;
++                }
++            }
++
++            // Insert it into the leaf.
++            pCursor.AddLeafPoint(tPoint, kValue);
++        }
++        #endregion
++
++        #region Internal Operations
++        /// <summary>
++        /// Insert the point into the leaf.
++        /// </summary>
++        /// <param name="tPoint">The point to insert the data at.</param>
++        /// <param name="kValue">The value at the point.</param>
++        private void AddLeafPoint(double[] tPoint, T kValue)
++        {
++            // Add the data point to this node.
++            tPoints[Size] = tPoint;
++            tData[Size] = kValue;
++            ExtendBounds(tPoint);
++            Size++;
++
++            // Split if the node is getting too large in terms of data.
++            if (Size == tPoints.Length - 1)
++            {
++                // If the node is getting too physically large.
++                if (CalculateSplit())
++                {
++                    // If the node successfully had it's split value calculated, split node.
++                    SplitLeafNode();
++                }
++                else
++                {
++                    // If the node could not be split, enlarge node data capacity.
++                    IncreaseLeafCapacity();
++                }
++            }
++        }
++
++        /// <summary>
++        /// If the point lies outside the boundaries, return false else true.
++        /// </summary>
++        /// <param name="tPoint">The point.</param>
++        /// <returns>True if the point is inside the boundaries, false outside.</returns>
++        private bool CheckBounds(double[] tPoint)
++        {
++            for (int i = 0; i < iDimensions; ++i)
++            {
++                if (tPoint[i] > tMaxBound[i]) return false;
++                if (tPoint[i] < tMinBound[i]) return false;
++            }
++            return true;
++        }
++
++        /// <summary>
++        /// Extend this node to contain a new point.
++        /// </summary>
++        /// <param name="tPoint">The point to contain.</param>
++        private void ExtendBounds(double[] tPoint)
++        {
++            // If we don't have bounds, create them using the new point then bail.
++            if (tMinBound == null) 
++            {
++                tMinBound = new double[iDimensions];
++                tMaxBound = new double[iDimensions];
++                Array.Copy(tPoint, tMinBound, iDimensions);
++                Array.Copy(tPoint, tMaxBound, iDimensions);
++                return;
++            }
++
++            // For each dimension.
++            for (int i = 0; i < iDimensions; ++i)
++            {
++                if (Double.IsNaN(tPoint[i]))
++                {
++                    if (!Double.IsNaN(tMinBound[i]) || !Double.IsNaN(tMaxBound[i]))
++                        bSinglePoint = false;
++                    
++                    tMinBound[i] = Double.NaN;
++                    tMaxBound[i] = Double.NaN;
++                }
++                else if (tMinBound[i] > tPoint[i])
++                {
++                    tMinBound[i] = tPoint[i];
++                    bSinglePoint = false;
++                }
++                else if (tMaxBound[i] < tPoint[i])
++                {
++                    tMaxBound[i] = tPoint[i];
++                    bSinglePoint = false;
++                }
++            }
++        }
++
++        /// <summary>
++        /// Double the capacity of this leaf.
++        /// </summary>
++        private void IncreaseLeafCapacity()
++        {   
++            Array.Resize<double[]>(ref tPoints, tPoints.Length * 2);
++            Array.Resize<T>(ref tData, tData.Length * 2);
++        }
++
++        /// <summary>
++        /// Work out if this leaf node should split.  If it should, a new split value and dimension is calculated
++        /// based on the dimension with the largest range.
++        /// </summary>
++        /// <returns>True if the node split, false if not.</returns>
++        private bool CalculateSplit()
++        {
++            // Don't split if we are just one point.
++            if (bSinglePoint)
++                return false;
++
++            // Find the dimension with the largest range.  This will be our split dimension.
++            double fWidth = 0;
++            for (int i = 0; i < iDimensions; i++)
++            {
++                double fDelta = (tMaxBound[i] - tMinBound[i]);
++                if (Double.IsNaN(fDelta))
++                    fDelta = 0;
++
++                if (fDelta > fWidth)
++                {
++                    iSplitDimension = i;
++                    fWidth = fDelta;
++                }
++            }
++
++            // If we are not wide (i.e. all the points are in one place), don't split.
++            if (fWidth == 0)
++                return false;
++
++            // Split in the middle of the node along the widest dimension.
++            fSplitValue = (tMinBound[iSplitDimension] + tMaxBound[iSplitDimension]) * 0.5;
++
++            // Never split on infinity or NaN.
++            if (fSplitValue == Double.PositiveInfinity)
++                fSplitValue = Double.MaxValue;
++            else if (fSplitValue == Double.NegativeInfinity)
++                fSplitValue = Double.MinValue;
++            
++            // Don't let the split value be the same as the upper value as
++            // can happen due to rounding errors!
++            if (fSplitValue == tMaxBound[iSplitDimension])
++                fSplitValue = tMinBound[iSplitDimension];
++
++            // Success
++            return true;
++        }
++
++        /// <summary>
++        /// Split this leaf node by creating left and right children, then moving all the children of
++        /// this node into the respective buckets.
++        /// </summary>
++        private void SplitLeafNode()
++        {
++            // Create the new children.
++            pRight = new KDNode<T>(iDimensions, iBucketCapacity);
++            pLeft  = new KDNode<T>(iDimensions, iBucketCapacity);
++
++            // Move each item in this leaf into the children.
++            for (int i = 0; i < Size; ++i)
++            {
++                // Store.
++                double[] tOldPoint = tPoints[i];
++                T kOldData = tData[i];
++
++                // If larger, put it in the right.
++                if (tOldPoint[iSplitDimension] > fSplitValue)
++                    pRight.AddLeafPoint(tOldPoint, kOldData);
++
++                // If smaller, put it in the left.
++                else
++                    pLeft.AddLeafPoint(tOldPoint, kOldData);
++            }
++
++            // Wipe the data from this KDNode.
++            tPoints = null;
++            tData = null;
++        }
++        #endregion
++    }
++}
+Index: Source/lib/common/KDTree/KDTree.cs
+===================================================================
+--- Source/lib/common/KDTree/KDTree.cs	(revision 0)
++++ Source/lib/common/KDTree/KDTree.cs	(working copy)
+@@ -0,0 +1,62 @@
++﻿using System;
++using System.Collections;
++using System.Collections.Generic;
++using System.Linq;
++using System.Text;
++
++namespace KDTree
++{
++
++    /// <summary>
++    /// A KDTree class represents the root of a variable-dimension KD-Tree.
++    /// </summary>
++    /// <typeparam name="T">The generic data type we want this tree to contain.</typeparam>
++    /// <remarks>This is based on this: https://bitbucket.org/rednaxela/knn-benchmark/src/tip/ags/utils/dataStructures/trees/thirdGenKD/ </remarks>
++    public class KDTree<T> : KDNode<T>
++    {
++        /// <summary>
++        /// Create a new KD-Tree given a number of dimensions.
++        /// </summary>
++        /// <param name="iDimensions">The number of data sorting dimensions. i.e. 3 for a 3D point.</param>
++        public KDTree(int iDimensions)
++            : base(iDimensions, 24)
++        {
++        }
++
++        /// <summary>
++        /// Create a new KD-Tree given a number of dimensions and initial bucket capacity.
++        /// </summary>
++        /// <param name="iDimensions">The number of data sorting dimensions. i.e. 3 for a 3D point.</param>
++        /// <param name="iBucketCapacity">The default number of items that can be stored in each node.</param>
++        public KDTree(int iDimensions, int iBucketCapacity)
++            : base(iDimensions, iBucketCapacity)
++        {
++        }
++
++        /// <summary>
++        /// Get the nearest neighbours to a point in the kd tree using a square euclidean distance function.
++        /// </summary>
++        /// <param name="tSearchPoint">The point of interest.</param>
++        /// <param name="iMaxReturned">The maximum number of points which can be returned by the iterator.</param>
++        /// <param name="fDistance">A threshold distance to apply.  Optional.  Negative values mean that it is not applied.</param>
++        /// <returns>A new nearest neighbour iterator with the given parameters.</returns>
++        public NearestNeighbour<T> NearestNeighbors(double[] tSearchPoint, int iMaxReturned, double fDistance = -1)
++        {
++            DistanceFunctions distanceFunction = new SquareEuclideanDistanceFunction();
++            return NearestNeighbors(tSearchPoint, distanceFunction, iMaxReturned, fDistance);
++        }
++
++        /// <summary>
++        /// Get the nearest neighbours to a point in the kd tree using a user defined distance function.
++        /// </summary>
++        /// <param name="tSearchPoint">The point of interest.</param>
++        /// <param name="iMaxReturned">The maximum number of points which can be returned by the iterator.</param>
++        /// <param name="kDistanceFunction">The distance function to use.</param>
++        /// <param name="fDistance">A threshold distance to apply.  Optional.  Negative values mean that it is not applied.</param>
++        /// <returns>A new nearest neighbour iterator with the given parameters.</returns>
++        public NearestNeighbour<T> NearestNeighbors(double[] tSearchPoint, DistanceFunctions kDistanceFunction, int iMaxReturned, double fDistance)
++        {
++            return new NearestNeighbour<T>(this, tSearchPoint, kDistanceFunction, iMaxReturned, fDistance);
++        }
++    }
++}
+\ No newline at end of file
+Index: Source/lib/common/KDTree/MinHeap.cs
+===================================================================
+--- Source/lib/common/KDTree/MinHeap.cs	(revision 0)
++++ Source/lib/common/KDTree/MinHeap.cs	(working copy)
+@@ -0,0 +1,189 @@
++﻿using System;
++using System.Collections;
++using System.Collections.Generic;
++
++namespace KDTree
++{
++    /// <summary>
++    /// A MinHeap is a smallest-first queue based around a binary heap so it is quick to insert / remove items.
++    /// </summary>
++    /// <typeparam name="T">The type of data this MinHeap stores.</typeparam>
++    /// <remarks>This is based on this: https://bitbucket.org/rednaxela/knn-benchmark/src/tip/ags/utils/dataStructures/trees/thirdGenKD/ </remarks>
++    public class MinHeap<T>
++    {
++        /// <summary>
++        /// The default size for a min heap.
++        /// </summary>
++        private static int DEFAULT_SIZE = 64;
++
++        /// <summary>
++        /// The data array.  This stores the data items in the heap.
++        /// </summary>
++        private T[] tData;
++
++        /// <summary>
++        /// The key array.  This determines how items are ordered. Smallest first.
++        /// </summary>
++        private double[] tKeys;
++
++        /// <summary>
++        /// Create a new min heap with the default capacity.
++        /// </summary>
++        public MinHeap() : this(DEFAULT_SIZE)
++        {
++        }
++
++        /// <summary>
++        /// Create a new min heap with a given capacity.
++        /// </summary>
++        /// <param name="iCapacity"></param>
++        public MinHeap(int iCapacity)
++        {
++            this.tData = new T[iCapacity];
++            this.tKeys = new double[iCapacity];
++            this.Capacity = iCapacity;
++            this.Size = 0;
++        }
++
++        /// <summary>
++        /// The number of items in this queue.
++        /// </summary>
++        public int Size { get; private set; }
++
++        /// <summary>
++        /// The amount of space in this queue.
++        /// </summary>
++        public int Capacity { get; private set; }
++
++        /// <summary>
++        /// Insert a new element.
++        /// </summary>
++        /// <param name="key">The key which represents its position in the priority queue (ie. distance).</param>
++        /// <param name="value">The value to be stored at the key.</param>
++        public void Insert(double key, T value)
++        {
++            // If we need more room, double the space.
++            if (Size >= Capacity)
++            {
++                // Calcualte the new capacity.
++                Capacity *= 2;
++
++                // Copy the data array.
++                var newData = new T[Capacity];
++                Array.Copy(tData, newData, tData.Length);
++                tData = newData;
++
++                // Copy the key array.
++                var newKeys = new double[Capacity];
++                Array.Copy(tKeys, newKeys, tKeys.Length);
++                tKeys = newKeys;
++            }
++
++            // Insert new value at the end
++            tData[Size] = value;
++            tKeys[Size] = key;
++            SiftUp(Size);
++            Size++;
++        }
++
++        /// <summary>
++        /// Remove the smallest element.
++        /// </summary>
++        public void RemoveMin()
++        {
++            if (Size == 0)
++                throw new Exception();
++
++            Size--;
++            tData[0] = tData[Size];
++            tKeys[0] = tKeys[Size];
++            tData[Size] = default(T);
++            SiftDown(0);
++        }
++
++        /// <summary>
++        /// Get the data stored at the minimum element.
++        /// </summary>
++        public T Min
++        {
++            get
++            {
++                if (Size == 0)
++                    throw new Exception();
++
++                return tData[0];
++            }
++        }
++
++        /// <summary>
++        /// Get the key which represents the minimum element.
++        /// </summary>
++        public double MinKey
++        {
++            get
++            {
++                if (Size == 0)
++                    throw new Exception();
++
++                return tKeys[0];
++            }
++        }
++
++        /// <summary>
++        /// Bubble a child item up the tree.
++        /// </summary>
++        /// <param name="iChild"></param>
++        private void SiftUp(int iChild)
++        {
++            // For each parent above the child, if the parent is smaller then bubble it up.
++            for (int iParent = (iChild - 1) / 2; 
++                iChild != 0 && tKeys[iChild] < tKeys[iParent]; 
++                iChild = iParent, iParent = (iChild - 1) / 2)
++            {
++                T kData = tData[iParent];
++                double dDist = tKeys[iParent];
++
++                tData[iParent] = tData[iChild];
++                tKeys[iParent] = tKeys[iChild];
++
++                tData[iChild] = kData;
++                tKeys[iChild] = dDist;
++            }
++        }
++
++        /// <summary>
++        /// Bubble a parent down through the children so it goes in the right place.
++        /// </summary>
++        /// <param name="iParent">The index of the parent.</param>
++        private void SiftDown(int iParent)
++        {
++            // For each child.
++            for (int iChild = iParent * 2 + 1; iChild < Size; iParent = iChild, iChild = iParent * 2 + 1)
++            {
++                // If the child is larger, select the next child.
++                if (iChild + 1 < Size && tKeys[iChild] > tKeys[iChild + 1])
++                    iChild++;
++
++                // If the parent is larger than the largest child, swap.
++                if (tKeys[iParent] > tKeys[iChild])
++                {
++                    // Swap the points
++                    T pData = tData[iParent];
++                    double pDist = tKeys[iParent];
++
++                    tData[iParent] = tData[iChild];
++                    tKeys[iParent] = tKeys[iChild];
++
++                    tData[iChild] = pData;
++                    tKeys[iChild] = pDist;
++                }
++
++                // TODO: REMOVE THE BREAK
++                else
++                {
++                    break;
++                }
++            }
++        }
++    }
++}
+\ No newline at end of file
+Index: Source/lib/common/KDTree/NearestNeighbour.cs
+===================================================================
+--- Source/lib/common/KDTree/NearestNeighbour.cs	(revision 0)
++++ Source/lib/common/KDTree/NearestNeighbour.cs	(working copy)
+@@ -0,0 +1,229 @@
++﻿using System;
++using System.Collections;
++using System.Collections.Generic;
++using System.Linq;
++using System.Text;
++
++namespace KDTree
++{
++    /// <summary>
++    /// A NearestNeighbour iterator for the KD-tree which intelligently iterates and captures relevant data in the search space.
++    /// </summary>
++    /// <typeparam name="T">The type of data the iterator should handle.</typeparam>
++    public class NearestNeighbour<T> : IEnumerator
++    {
++        /// <summary>The point from which are searching in n-dimensional space.</summary>
++        private double[] tSearchPoint;
++        /// <summary>A distance function which is used to compare nodes and value positions.</summary>
++        private DistanceFunctions kDistanceFunction;
++        /// <summary>The tree nodes which have yet to be evaluated.</summary>
++        private MinHeap<KDNode<T>> pPending;
++        /// <summary>The values which have been evaluated and selected.</summary>
++        private IntervalHeap<T> pEvaluated;
++        /// <summary>The root of the kd tree to begin searching from.</summary>
++        private KDNode<T> pRoot = null;
++
++        /// <summary>The max number of points we can return through this iterator.</summary>
++        private int iMaxPointsReturned = 0;
++        /// <summary>The number of points we can still test before conclusion.</summary>
++        private int iPointsRemaining;
++        /// <summary>Threshold to apply to tree iteration.  Negative numbers mean no threshold applied.</summary>
++        private double fThreshold;
++
++        /// <summary>Current value distance.</summary>
++        private double _CurrentDistance = -1;
++        /// <summary>Current value reference.</summary>
++        private T _Current = default(T);
++
++        /// <summary>
++        /// Construct a new nearest neighbour iterator.
++        /// </summary>
++        /// <param name="pRoot">The root of the tree to begin searching from.</param>
++        /// <param name="tSearchPoint">The point in n-dimensional space to search.</param>
++        /// <param name="kDistance">The distance function used to evaluate the points.</param>
++        /// <param name="iMaxPoints">The max number of points which can be returned by this iterator.  Capped to max in tree.</param>
++        /// <param name="fThreshold">Threshold to apply to the search space.  Negative numbers indicate that no threshold is applied.</param>
++        public NearestNeighbour(KDNode<T> pRoot, double[] tSearchPoint, DistanceFunctions kDistance, int iMaxPoints, double fThreshold)
++        {
++            // Check the dimensionality of the search point.
++            if (tSearchPoint.Length != pRoot.iDimensions)
++                throw new Exception("Dimensionality of search point and kd-tree are not the same.");
++
++            // Store the search point.
++            this.tSearchPoint = new double[tSearchPoint.Length];
++            Array.Copy(tSearchPoint, this.tSearchPoint, tSearchPoint.Length);
++
++            // Store the point count, distance function and tree root.
++            this.iPointsRemaining = Math.Min(iMaxPoints, pRoot.Size);
++            this.fThreshold = fThreshold;
++            this.kDistanceFunction = kDistance;
++            this.pRoot = pRoot;
++            this.iMaxPointsReturned = iMaxPoints;
++            _CurrentDistance = -1;
++
++            // Create an interval heap for the points we check.
++            this.pEvaluated = new IntervalHeap<T>();
++
++            // Create a min heap for the things we need to check.
++            this.pPending = new MinHeap<KDNode<T>>();
++            this.pPending.Insert(0, pRoot);
++        }
++
++        /// <summary>
++        /// Check for the next iterator item.
++        /// </summary>
++        /// <returns>True if we have one, false if not.</returns>
++        public bool MoveNext()
++        {
++            // Bail if we are finished.
++            if (iPointsRemaining == 0)
++            {
++                _Current = default(T);
++                return false;
++            }
++
++            // While we still have paths to evaluate.
++            while (pPending.Size > 0 && (pEvaluated.Size == 0 || (pPending.MinKey < pEvaluated.MinKey)))
++            {
++                // If there are pending paths possibly closer than the nearest evaluated point, check it out
++                KDNode<T> pCursor = pPending.Min;
++                pPending.RemoveMin();
++
++                // Descend the tree, recording paths not taken
++                while (!pCursor.IsLeaf)
++                {
++                    KDNode<T> pNotTaken;
++
++                    // If the seach point is larger, select the right path.
++                    if (tSearchPoint[pCursor.iSplitDimension] > pCursor.fSplitValue)
++                    {
++                        pNotTaken = pCursor.pLeft;
++                        pCursor = pCursor.pRight;
++                    }
++                    else
++                    {
++                        pNotTaken = pCursor.pRight;
++                        pCursor = pCursor.pLeft;
++                    }
++
++                    // Calculate the shortest distance between the search point and the min and max bounds of the kd-node.
++                    double fDistance = kDistanceFunction.DistanceToRectangle(tSearchPoint, pNotTaken.tMinBound, pNotTaken.tMaxBound);
++
++                    // If it is greater than the threshold, skip.
++                    if (fThreshold >= 0 && fDistance > fThreshold)
++                    {
++                        //pPending.Insert(fDistance, pNotTaken);
++                        continue;
++                    }
++
++                    // Only add the path we need more points or the node is closer than furthest point on list so far.
++                    if (pEvaluated.Size < iPointsRemaining || fDistance <= pEvaluated.MaxKey)
++                    {
++                        pPending.Insert(fDistance, pNotTaken);
++                    }
++                }
++
++                // If all the points in this KD node are in one place.
++                if (pCursor.bSinglePoint)
++                {
++                    // Work out the distance between this point and the search point.
++                    double fDistance = kDistanceFunction.Distance(pCursor.tPoints[0], tSearchPoint);
++
++                    // Skip if the point exceeds the threshold.
++                    // Technically this should never happen, but be prescise.
++                    if (fThreshold >= 0 && fDistance >= fThreshold)
++                        continue;
++
++                    // Add the point if either need more points or it's closer than furthest on list so far.
++                    if (pEvaluated.Size < iPointsRemaining || fDistance <= pEvaluated.MaxKey)
++                    {
++                        for (int i = 0; i < pCursor.Size; ++i)
++                        {
++                            // If we don't need any more, replace max
++                            if (pEvaluated.Size == iPointsRemaining)
++                                pEvaluated.ReplaceMax(fDistance, pCursor.tData[i]);
++
++                            // Otherwise insert.
++                            else
++                                pEvaluated.Insert(fDistance, pCursor.tData[i]);
++                        }
++                    }
++                }
++
++                // If the points in the KD node are spread out.
++                else
++                {
++                    // Treat the distance of each point seperately.
++                    for (int i = 0; i < pCursor.Size; ++i)
++                    {
++                        // Compute the distance between the points.
++                        double fDistance = kDistanceFunction.Distance(pCursor.tPoints[i], tSearchPoint);
++
++                        // Skip if it exceeds the threshold.
++                        if (fThreshold >= 0 && fDistance >= fThreshold)
++                            continue;
++
++                        // Insert the point if we have more to take.
++                        if (pEvaluated.Size < iPointsRemaining)
++                            pEvaluated.Insert(fDistance, pCursor.tData[i]);
++
++                        // Otherwise replace the max.
++                        else if (fDistance < pEvaluated.MaxKey)
++                            pEvaluated.ReplaceMax(fDistance, pCursor.tData[i]);
++                    }
++                }
++            }
++
++            // Select the point with the smallest distance.
++            if (pEvaluated.Size == 0)
++                return false;
++
++            iPointsRemaining--;
++            _CurrentDistance = pEvaluated.MinKey;
++            _Current = pEvaluated.Min;
++            pEvaluated.RemoveMin();
++            return true;
++        }
++
++        /// <summary>
++        /// Reset the iterator.
++        /// </summary>
++        public void Reset()
++        {
++            // Store the point count and the distance function.
++            this.iPointsRemaining = Math.Min(iMaxPointsReturned, pRoot.Size);
++            _CurrentDistance = -1;
++
++            // Create an interval heap for the points we check.
++            this.pEvaluated = new IntervalHeap<T>();
++
++            // Create a min heap for the things we need to check.
++            this.pPending = new MinHeap<KDNode<T>>();
++            this.pPending.Insert(0, pRoot);
++        }
++
++        /// <summary>
++        /// Return the current value referenced by the iterator as an object.
++        /// </summary>
++        object IEnumerator.Current
++        {
++            get { return _Current; }
++        }
++
++        /// <summary>
++        /// Return the distance of the current value to the search point.
++        /// </summary>
++        public double CurrentDistance
++        {
++            get { return _CurrentDistance; }
++        }
++
++        /// <summary>
++        /// Return the current value referenced by the iterator.
++        /// </summary>
++        public T Current
++        {
++            get { return _Current; }
++        }
++    }
++}
+Index: Source/lib/common/KDTree/DistanceFunctions.cs
+===================================================================
+--- Source/lib/common/KDTree/DistanceFunctions.cs	(revision 0)
++++ Source/lib/common/KDTree/DistanceFunctions.cs	(working copy)
+@@ -0,0 +1,77 @@
++﻿
++using System;
++using System.Collections.Generic;
++using System.Linq;
++using System.Text;
++
++namespace KDTree
++{
++    /// <summary>
++    /// An interface which enables flexible distance functions.
++    /// </summary>
++    public interface DistanceFunctions
++    {
++        /// <summary>
++        /// Compute a distance between two n-dimensional points.
++        /// </summary>
++        /// <param name="p1">The first point.</param>
++        /// <param name="p2">The second point.</param>
++        /// <returns>The n-dimensional distance.</returns>
++        double Distance(double[] p1, double[] p2);
++
++        /// <summary>
++        /// Find the shortest distance from a point to an axis aligned rectangle in n-dimensional space.
++        /// </summary>
++        /// <param name="point">The point of interest.</param>
++        /// <param name="min">The minimum coordinate of the rectangle.</param>
++        /// <param name="max">The maximum coorindate of the rectangle.</param>
++        /// <returns>The shortest n-dimensional distance between the point and rectangle.</returns>
++        double DistanceToRectangle(double[] point, double[] min, double[] max);
++    }
++
++    /// <summary>
++    /// A distance function for our KD-Tree which returns squared euclidean distances.
++    /// </summary>
++    public class SquareEuclideanDistanceFunction : DistanceFunctions
++    {
++        /// <summary>
++        /// Find the squared distance between two n-dimensional points.
++        /// </summary>
++        /// <param name="p1">The first point.</param>
++        /// <param name="p2">The second point.</param>
++        /// <returns>The n-dimensional squared distance.</returns>
++        public double Distance(double[] p1, double[] p2)
++        {
++            double fSum = 0;
++            for (int i = 0; i < p1.Length; i++)
++            {
++                double fDifference = (p1[i] - p2[i]);
++                fSum += fDifference * fDifference;
++            }
++            return fSum;
++        }
++
++        /// <summary>
++        /// Find the shortest distance from a point to an axis aligned rectangle in n-dimensional space.
++        /// </summary>
++        /// <param name="point">The point of interest.</param>
++        /// <param name="min">The minimum coordinate of the rectangle.</param>
++        /// <param name="max">The maximum coorindate of the rectangle.</param>
++        /// <returns>The shortest squared n-dimensional squared distance between the point and rectangle.</returns>
++        public double DistanceToRectangle(double[] point, double[] min, double[] max)
++        {
++            double fSum = 0;
++            double fDifference = 0;
++            for (int i = 0; i < point.Length; ++i)
++            {
++                fDifference = 0;
++                if (point[i] > max[i])
++                    fDifference = (point[i] - max[i]);
++                else if (point[i] < min[i])
++                    fDifference = (point[i] - min[i]);
++                fSum += fDifference * fDifference;
++            }
++            return fSum;
++        }
++    }
++}
+Index: Source/lib/common/KDTree/IntervalHeap.cs
+===================================================================
+--- Source/lib/common/KDTree/IntervalHeap.cs	(revision 0)
++++ Source/lib/common/KDTree/IntervalHeap.cs	(working copy)
+@@ -0,0 +1,474 @@
++﻿using System;
++using System.Collections;
++using System.Collections.Generic;
++using System.Linq;
++using System.Text;
++
++namespace KDTree
++{
++    /// <summary>
++    /// A binary interval heap is double-ended priority queue is a priority queue that it allows
++    /// for efficient removal of both the maximum and minimum element.
++    /// </summary>
++    /// <typeparam name="T">The data type contained at each key.</typeparam>
++    /// <remarks>This is based on this: https://bitbucket.org/rednaxela/knn-benchmark/src/tip/ags/utils/dataStructures/trees/thirdGenKD/ </remarks>
++    public class IntervalHeap<T>
++    {
++        /// <summary>
++        /// The default size for a new interval heap.
++        /// </summary>
++        private const int DEFAULT_SIZE = 64;
++
++        /// <summary>
++        /// The internal data array which contains the stored objects.
++        /// </summary>
++        private T[] tData;
++
++        /// <summary>
++        /// The array of keys which 
++        /// </summary>
++        private double[] tKeys;
++
++        /// <summary>
++        /// Construct a new interval heap with the default capacity.
++        /// </summary>
++        public IntervalHeap() : this(DEFAULT_SIZE)
++        {
++        }
++
++        /// <summary>
++        /// Construct a new interval heap with a custom capacity.
++        /// </summary>
++        /// <param name="capacity"></param>
++        public IntervalHeap(int capacity)
++        {
++            this.tData = new T[capacity];
++            this.tKeys = new double[capacity];
++            this.Capacity = capacity;
++            this.Size = 0;
++        }
++
++        /// <summary>
++        /// The number of items in this interval heap.
++        /// </summary>
++        public int Size { get; private set; }
++
++        /// <summary>
++        /// The current capacity of this interval heap.
++        /// </summary>
++        public int Capacity { get; private set; }
++
++        /// <summary>
++        /// Get the data with the smallest key.
++        /// </summary>
++        public T Min
++        {
++            get
++            {
++                if (Size == 0)
++                    throw new Exception();
++                return tData[0];
++            }
++        }
++
++        /// <summary>
++        /// Get the data with the largest key.
++        /// </summary>
++        public T Max
++        {
++            get
++            {
++                if (Size == 0)
++                {
++                    throw new Exception();
++                }
++                else if (Size == 1)
++                {
++                    return tData[0];
++                }
++
++                return tData[1];
++            }
++        }
++
++        /// <summary>
++        /// Get the smallest key.
++        /// </summary>
++        public double MinKey
++        {
++            get
++            {
++                if (Size == 0)
++                    throw new Exception();
++                return tKeys[0];
++            }
++        }
++
++        /// <summary>
++        /// Get the largest key.
++        /// </summary>
++        public double MaxKey
++        {
++            get
++            {
++                if (Size == 0)
++                {
++                    throw new Exception();
++                }
++                else if (Size == 1)
++                {
++                    return tKeys[0];
++                }
++
++                return tKeys[1];
++            }
++        }
++
++        /// <summary>
++        /// Insert a new data item at a given key.
++        /// </summary>
++        /// <param name="key">The value which represents our data (i.e. a distance).</param>
++        /// <param name="value">The data we want to store.</param>
++        public void Insert(double key, T value)
++        {
++            // If more room is needed, double the array size.
++            if (Size >= Capacity)
++            {
++                // Double the capacity.
++                Capacity *= 2;
++
++                // Expand the data array.
++                var newData = new T[Capacity];
++                Array.Copy(tData, newData, tData.Length);
++                tData = newData;
++
++                // Expand the key array.
++                var newKeys = new double[Capacity];
++                Array.Copy(tKeys, newKeys, tKeys.Length);
++                tKeys = newKeys;
++            }
++
++            // Insert the new value at the end.
++            Size++;
++            tData[Size-1] = value;
++            tKeys[Size-1] = key;
++
++            // Ensure it is in the right place.
++            SiftInsertedValueUp();
++        }
++
++        /// <summary>
++        /// Remove the item with the smallest key from the queue.
++        /// </summary>
++        public void RemoveMin()
++        {
++            // Check for errors.
++            if (Size == 0)
++                throw new Exception();
++
++            // Remove the item by 
++            Size--;
++            tData[0] = tData[Size];
++            tKeys[0] = tKeys[Size];
++            tData[Size] = default(T);
++            SiftDownMin(0);
++        }
++
++        /// <summary>
++        /// Replace the item with the smallest key in the queue.
++        /// </summary>
++        /// <param name="key">The new minimum key.</param>
++        /// <param name="value">The new minumum data value.</param>
++        public void ReplaceMin(double key, T value)
++        {
++            // Check for errors.
++            if (Size == 0)
++                throw new Exception();
++
++            // Add the data.
++            tData[0] = value;
++            tKeys[0] = key;
++
++            // If we have more than one item.
++            if (Size > 1)
++            {
++                // Swap with pair if necessary.
++                if (tKeys[1] < key)
++                    Swap(0, 1);
++                SiftDownMin(0);
++            }
++        }
++
++        /// <summary>
++        /// Remove the item with the largest key in the queue.
++        /// </summary>
++        public void RemoveMax()
++        {
++            // If we have no items in the queue.
++            if (Size == 0)
++            {
++                throw new Exception();
++            }
++
++            // If we have one item, remove the min.
++            else if (Size == 1)
++            {
++                RemoveMin();
++                return;
++            }
++
++            // Remove the max.
++            Size--;
++            tData[1] = tData[Size];
++            tKeys[1] = tKeys[Size];
++            tData[Size] = default(T);
++            SiftDownMax(1);
++        }
++
++        /// <summary>
++        /// Swap out the item with the largest key in the queue.
++        /// </summary>
++        /// <param name="key">The new key for the largest item.</param>
++        /// <param name="value">The new data for the largest item.</param>
++        public void ReplaceMax(double key, T value)
++        {
++            if (Size == 0)
++            {
++                throw new Exception();
++            }
++            else if (Size == 1)
++            {
++                ReplaceMin(key, value);
++                return;
++            }
++
++            tData[1] = value;
++            tKeys[1] = key;
++            // Swap with pair if necessary
++            if (key < tKeys[0]) {
++                Swap(0, 1);
++            }
++            SiftDownMax(1);
++        }
++
++
++        /// <summary>
++        /// Internal helper method which swaps two values in the arrays.
++        /// This swaps both data and key entries.
++        /// </summary>
++        /// <param name="x">The first index.</param>
++        /// <param name="y">The second index.</param>
++        /// <returns>The second index.</returns>
++        private int Swap(int x, int y)
++        {
++            // Store temp.
++            T yData = tData[y];
++            double yDist = tKeys[y];
++
++            // Swap
++            tData[y] = tData[x];
++            tKeys[y] = tKeys[x];
++            tData[x] = yData;
++            tKeys[x] = yDist;
++
++            // Return.
++            return y;
++        }
++
++        /**
++         * Min-side (u % 2 == 0):
++         * - leftchild:  2u + 2
++         * - rightchild: 2u + 4
++         * - parent:     (x/2-1)&~1
++         *
++         * Max-side (u % 2 == 1):
++         * - leftchild:  2u + 1
++         * - rightchild: 2u + 3
++         * - parent:     (x/2-1)|1
++         */
++
++        /// <summary>
++        /// Place a newly inserted element a into the correct tree position.
++        /// </summary>
++        private void SiftInsertedValueUp()
++        {
++            // Work out where the element was inserted.
++            int u = Size-1;
++
++            // If it is the only element, nothing to do.
++            if (u == 0)
++            {
++            }
++
++            // If it is the second element, sort with it's pair.
++            else if (u == 1)
++            {
++                // Swap if less than paired item.
++                if  (tKeys[u] < tKeys[u-1])
++                    Swap(u, u-1);
++            }
++
++            // If it is on the max side, 
++            else if (u % 2 == 1)
++            {
++                // Already paired. Ensure pair is ordered right
++                int p = (u/2-1)|1; // The larger value of the parent pair
++                if  (tKeys[u] < tKeys[u-1])
++                { // If less than it's pair
++                    u = Swap(u, u-1); // Swap with it's pair
++                    if (tKeys[u] < tKeys[p-1])
++                    { // If smaller than smaller parent pair
++                        // Swap into min-heap side
++                        u = Swap(u, p-1);
++                        SiftUpMin(u);
++                    }
++                }
++                else
++                {
++                    if (tKeys[u] > tKeys[p])
++                    { // If larger that larger parent pair
++                        // Swap into max-heap side
++                        u = Swap(u, p);
++                        SiftUpMax(u);
++                    }
++                }
++            }
++            else
++            {
++                // Inserted in the lower-value slot without a partner
++                int p = (u/2-1)|1; // The larger value of the parent pair
++                if (tKeys[u] > tKeys[p])
++                { // If larger that larger parent pair
++                    // Swap into max-heap side
++                    u = Swap(u, p);
++                    SiftUpMax(u);
++                }
++                else if (tKeys[u] < tKeys[p-1])
++                { // If smaller than smaller parent pair
++                    // Swap into min-heap side
++                    u = Swap(u, p-1);
++                    SiftUpMin(u);
++                }
++            }
++        }
++
++        /// <summary>
++        /// Bubble elements up the min side of the tree.
++        /// </summary>
++        /// <param name="iChild">The child index.</param>
++        private void SiftUpMin(int iChild)
++        {
++            // Min-side parent: (x/2-1)&~1
++            for (int iParent = (iChild/2-1)&~1; 
++                iParent >= 0 && tKeys[iChild] < tKeys[iParent]; 
++                iChild = iParent, iParent = (iChild/2-1)&~1)
++            {
++                Swap(iChild, iParent);
++            }
++        }
++
++        /// <summary>
++        /// Bubble elements up the max side of the tree.
++        /// </summary>
++        /// <param name="iChild">The child index.</param>
++        private void SiftUpMax(int iChild)
++        {
++            // Max-side parent: (x/2-1)|1
++            for (int iParent = (iChild/2-1)|1; 
++                iParent >= 0 && tKeys[iChild] > tKeys[iParent]; 
++                iChild = iParent, iParent = (iChild/2-1)|1)
++            {
++                Swap(iChild, iParent);
++            }
++        }
++
++        /// <summary>
++        /// Bubble elements down the min side of the tree.
++        /// </summary>
++        /// <param name="iParent">The parent index.</param>
++        private void SiftDownMin(int iParent)
++        {
++            // For each child of the parent.
++            for (int iChild = iParent * 2 + 2; iChild < Size; iParent = iChild, iChild = iParent * 2 + 2)
++            {
++                // If the next child is less than the current child, select the next one.
++                if (iChild + 2 < Size && tKeys[iChild + 2] < tKeys[iChild])
++                {
++                    iChild += 2;
++                }
++
++                // If it is less than our parent swap.
++                if (tKeys[iChild] < tKeys[iParent])
++                {
++                    Swap(iParent, iChild);
++
++                    // Swap the pair if necessary.
++                    if (iChild+1 < Size && tKeys[iChild+1] < tKeys[iChild])
++                    {
++                        Swap(iChild, iChild+1);
++                    }
++                }
++                else
++                {
++                    break;
++                }
++            }
++        }
++
++        /// <summary>
++        /// Bubble elements down the max side of the tree.
++        /// </summary>
++        /// <param name="iParent"></param>
++        private void SiftDownMax(int iParent)
++        {
++            // For each child on the max side of the tree.
++            for (int iChild = iParent * 2 + 1; iChild <= Size; iParent = iChild, iChild = iParent * 2 + 1)
++            {
++                // If the child is the last one (and only has half a pair).
++                if (iChild == Size)
++                {
++                    // CHeck if we need to swap with th parent.
++                    if (tKeys[iChild - 1] > tKeys[iParent])
++                        Swap(iParent, iChild - 1);
++                    break;
++                }
++
++                // If there is only room for a right child lower pair.
++                else if (iChild + 2 == Size)
++                {
++                    // Swap the children.
++                    if (tKeys[iChild + 1] > tKeys[iChild])
++                    {
++                        // Swap with the parent.
++                        if (tKeys[iChild + 1] > tKeys[iParent])
++                           Swap(iParent, iChild + 1);
++                        break;
++                    }
++                }
++
++                // 
++                else if (iChild + 2 < Size)
++                {
++                    // If there is room for a right child upper pair
++                    if (tKeys[iChild + 2] > tKeys[iChild])
++                    {
++                        iChild += 2;
++                    }
++                }
++                if (tKeys[iChild] > tKeys[iParent])
++                {
++                    Swap(iParent, iChild);
++                    // Swap with pair if necessary
++                    if (tKeys[iChild-1] > tKeys[iChild])
++                    {
++                        Swap(iChild, iChild-1);
++                    }
++                }
++                else
++                {
++                    break;
++                }
++            }
++        }
++    }
++}
+\ No newline at end of file
+Index: Source/lib/common/KDTree/KDNode.cs
+===================================================================
+--- Source/lib/common/KDTree/KDNode.cs	(revision 0)
++++ Source/lib/common/KDTree/KDNode.cs	(working copy)
+@@ -0,0 +1,301 @@
++﻿using System;
++using System.Collections.Generic;
++using System.Linq;
++using System.Text;
++
++namespace KDTree
++{
++    /// <summary>
++    /// A KD-Tree node which supports a generic number of dimensions.  All data items
++    /// need the same number of dimensions.
++    /// This node splits based on the largest range of any dimension.
++    /// </summary>
++    /// <typeparam name="T">The generic data type this structure contains.</typeparam>
++    /// <remarks>This is based on this: https://bitbucket.org/rednaxela/knn-benchmark/src/tip/ags/utils/dataStructures/trees/thirdGenKD/ </remarks>
++    public class KDNode<T>
++    {
++        #region Internal properties and constructor
++        // All types
++        /// <summary>
++        /// The number of dimensions for this node.
++        /// </summary>
++        protected internal int iDimensions;
++
++        /// <summary>
++        /// The maximum capacity of this node.
++        /// </summary>
++        protected internal int iBucketCapacity;
++
++        // Leaf only
++        /// <summary>
++        /// The array of locations.  [index][dimension]
++        /// </summary>
++        protected internal double[][] tPoints;
++
++        /// <summary>
++        /// The array of data values. [index]
++        /// </summary>
++        protected internal T[] tData;
++
++        // Stem only
++        /// <summary>
++        /// The left and right children.
++        /// </summary>
++        protected internal KDNode<T> pLeft, pRight;
++        /// <summary>
++        /// The split dimension.
++        /// </summary>
++        protected internal int iSplitDimension;
++        /// <summary>
++        /// The split value (larger go into the right, smaller go into left)
++        /// </summary>
++        protected internal double fSplitValue;
++
++        // Bounds
++        /// <summary>
++        /// The min and max bound for this node.  All dimensions.
++        /// </summary>
++        protected internal double[] tMinBound, tMaxBound;
++
++        /// <summary>
++        /// Does this node represent only one point.
++        /// </summary>
++        protected internal bool bSinglePoint;
++
++        /// <summary>
++        /// Protected method which constructs a new KDNode.
++        /// </summary>
++        /// <param name="iDimensions">The number of dimensions for this node (all the same in the tree).</param>
++        /// <param name="iBucketCapacity">The initial capacity of the bucket.</param>
++        protected KDNode(int iDimensions, int iBucketCapacity)
++        {
++            // Variables.
++            this.iDimensions = iDimensions;
++            this.iBucketCapacity = iBucketCapacity;
++            this.Size = 0;
++            this.bSinglePoint = true;
++
++            // Setup leaf elements.
++            this.tPoints = new double[iBucketCapacity+1][];
++            this.tData = new T[iBucketCapacity+1];
++        }
++        #endregion
++
++        #region External Operations
++        /// <summary>
++        /// The number of items in this leaf node and all children.
++        /// </summary>
++        public int Size { get; private set; }
++
++        /// <summary>
++        /// Is this KDNode a leaf or not?
++        /// </summary>
++        public bool IsLeaf { get { return tPoints != null; } }
++
++        /// <summary>
++        /// Insert a new point into this leaf node.
++        /// </summary>
++        /// <param name="tPoint">The position which represents the data.</param>
++        /// <param name="kValue">The value of the data.</param>
++        public void AddPoint(double[] tPoint, T kValue)
++        {
++            // Find the correct leaf node.
++            KDNode<T> pCursor = this;
++            while (!pCursor.IsLeaf)
++            {
++                // Extend the size of the leaf.
++                pCursor.ExtendBounds(tPoint);
++                pCursor.Size++;
++
++                // If it is larger select the right, or lower,  select the left.
++                if (tPoint[pCursor.iSplitDimension] > pCursor.fSplitValue)
++                {
++                    pCursor = pCursor.pRight;
++                }
++                else
++                {
++                    pCursor = pCursor.pLeft;
++                }
++            }
++
++            // Insert it into the leaf.
++            pCursor.AddLeafPoint(tPoint, kValue);
++        }
++        #endregion
++
++        #region Internal Operations
++        /// <summary>
++        /// Insert the point into the leaf.
++        /// </summary>
++        /// <param name="tPoint">The point to insert the data at.</param>
++        /// <param name="kValue">The value at the point.</param>
++        private void AddLeafPoint(double[] tPoint, T kValue)
++        {
++            // Add the data point to this node.
++            tPoints[Size] = tPoint;
++            tData[Size] = kValue;
++            ExtendBounds(tPoint);
++            Size++;
++
++            // Split if the node is getting too large in terms of data.
++            if (Size == tPoints.Length - 1)
++            {
++                // If the node is getting too physically large.
++                if (CalculateSplit())
++                {
++                    // If the node successfully had it's split value calculated, split node.
++                    SplitLeafNode();
++                }
++                else
++                {
++                    // If the node could not be split, enlarge node data capacity.
++                    IncreaseLeafCapacity();
++                }
++            }
++        }
++
++        /// <summary>
++        /// If the point lies outside the boundaries, return false else true.
++        /// </summary>
++        /// <param name="tPoint">The point.</param>
++        /// <returns>True if the point is inside the boundaries, false outside.</returns>
++        private bool CheckBounds(double[] tPoint)
++        {
++            for (int i = 0; i < iDimensions; ++i)
++            {
++                if (tPoint[i] > tMaxBound[i]) return false;
++                if (tPoint[i] < tMinBound[i]) return false;
++            }
++            return true;
++        }
++
++        /// <summary>
++        /// Extend this node to contain a new point.
++        /// </summary>
++        /// <param name="tPoint">The point to contain.</param>
++        private void ExtendBounds(double[] tPoint)
++        {
++            // If we don't have bounds, create them using the new point then bail.
++            if (tMinBound == null) 
++            {
++                tMinBound = new double[iDimensions];
++                tMaxBound = new double[iDimensions];
++                Array.Copy(tPoint, tMinBound, iDimensions);
++                Array.Copy(tPoint, tMaxBound, iDimensions);
++                return;
++            }
++
++            // For each dimension.
++            for (int i = 0; i < iDimensions; ++i)
++            {
++                if (Double.IsNaN(tPoint[i]))
++                {
++                    if (!Double.IsNaN(tMinBound[i]) || !Double.IsNaN(tMaxBound[i]))
++                        bSinglePoint = false;
++                    
++                    tMinBound[i] = Double.NaN;
++                    tMaxBound[i] = Double.NaN;
++                }
++                else if (tMinBound[i] > tPoint[i])
++                {
++                    tMinBound[i] = tPoint[i];
++                    bSinglePoint = false;
++                }
++                else if (tMaxBound[i] < tPoint[i])
++                {
++                    tMaxBound[i] = tPoint[i];
++                    bSinglePoint = false;
++                }
++            }
++        }
++
++        /// <summary>
++        /// Double the capacity of this leaf.
++        /// </summary>
++        private void IncreaseLeafCapacity()
++        {   
++            Array.Resize<double[]>(ref tPoints, tPoints.Length * 2);
++            Array.Resize<T>(ref tData, tData.Length * 2);
++        }
++
++        /// <summary>
++        /// Work out if this leaf node should split.  If it should, a new split value and dimension is calculated
++        /// based on the dimension with the largest range.
++        /// </summary>
++        /// <returns>True if the node split, false if not.</returns>
++        private bool CalculateSplit()
++        {
++            // Don't split if we are just one point.
++            if (bSinglePoint)
++                return false;
++
++            // Find the dimension with the largest range.  This will be our split dimension.
++            double fWidth = 0;
++            for (int i = 0; i < iDimensions; i++)
++            {
++                double fDelta = (tMaxBound[i] - tMinBound[i]);
++                if (Double.IsNaN(fDelta))
++                    fDelta = 0;
++
++                if (fDelta > fWidth)
++                {
++                    iSplitDimension = i;
++                    fWidth = fDelta;
++                }
++            }
++
++            // If we are not wide (i.e. all the points are in one place), don't split.
++            if (fWidth == 0)
++                return false;
++
++            // Split in the middle of the node along the widest dimension.
++            fSplitValue = (tMinBound[iSplitDimension] + tMaxBound[iSplitDimension]) * 0.5;
++
++            // Never split on infinity or NaN.
++            if (fSplitValue == Double.PositiveInfinity)
++                fSplitValue = Double.MaxValue;
++            else if (fSplitValue == Double.NegativeInfinity)
++                fSplitValue = Double.MinValue;
++            
++            // Don't let the split value be the same as the upper value as
++            // can happen due to rounding errors!
++            if (fSplitValue == tMaxBound[iSplitDimension])
++                fSplitValue = tMinBound[iSplitDimension];
++
++            // Success
++            return true;
++        }
++
++        /// <summary>
++        /// Split this leaf node by creating left and right children, then moving all the children of
++        /// this node into the respective buckets.
++        /// </summary>
++        private void SplitLeafNode()
++        {
++            // Create the new children.
++            pRight = new KDNode<T>(iDimensions, iBucketCapacity);
++            pLeft  = new KDNode<T>(iDimensions, iBucketCapacity);
++
++            // Move each item in this leaf into the children.
++            for (int i = 0; i < Size; ++i)
++            {
++                // Store.
++                double[] tOldPoint = tPoints[i];
++                T kOldData = tData[i];
++
++                // If larger, put it in the right.
++                if (tOldPoint[iSplitDimension] > fSplitValue)
++                    pRight.AddLeafPoint(tOldPoint, kOldData);
++
++                // If smaller, put it in the left.
++                else
++                    pLeft.AddLeafPoint(tOldPoint, kOldData);
++            }
++
++            // Wipe the data from this KDNode.
++            tPoints = null;
++            tData = null;
++        }
++        #endregion
++    }
++}
+Index: Source/lib/common/KDTree/KDTree.cs
+===================================================================
+--- Source/lib/common/KDTree/KDTree.cs	(revision 0)
++++ Source/lib/common/KDTree/KDTree.cs	(working copy)
+@@ -0,0 +1,62 @@
++﻿using System;
++using System.Collections;
++using System.Collections.Generic;
++using System.Linq;
++using System.Text;
++
++namespace KDTree
++{
++
++    /// <summary>
++    /// A KDTree class represents the root of a variable-dimension KD-Tree.
++    /// </summary>
++    /// <typeparam name="T">The generic data type we want this tree to contain.</typeparam>
++    /// <remarks>This is based on this: https://bitbucket.org/rednaxela/knn-benchmark/src/tip/ags/utils/dataStructures/trees/thirdGenKD/ </remarks>
++    public class KDTree<T> : KDNode<T>
++    {
++        /// <summary>
++        /// Create a new KD-Tree given a number of dimensions.
++        /// </summary>
++        /// <param name="iDimensions">The number of data sorting dimensions. i.e. 3 for a 3D point.</param>
++        public KDTree(int iDimensions)
++            : base(iDimensions, 24)
++        {
++        }
++
++        /// <summary>
++        /// Create a new KD-Tree given a number of dimensions and initial bucket capacity.
++        /// </summary>
++        /// <param name="iDimensions">The number of data sorting dimensions. i.e. 3 for a 3D point.</param>
++        /// <param name="iBucketCapacity">The default number of items that can be stored in each node.</param>
++        public KDTree(int iDimensions, int iBucketCapacity)
++            : base(iDimensions, iBucketCapacity)
++        {
++        }
++
++        /// <summary>
++        /// Get the nearest neighbours to a point in the kd tree using a square euclidean distance function.
++        /// </summary>
++        /// <param name="tSearchPoint">The point of interest.</param>
++        /// <param name="iMaxReturned">The maximum number of points which can be returned by the iterator.</param>
++        /// <param name="fDistance">A threshold distance to apply.  Optional.  Negative values mean that it is not applied.</param>
++        /// <returns>A new nearest neighbour iterator with the given parameters.</returns>
++        public NearestNeighbour<T> NearestNeighbors(double[] tSearchPoint, int iMaxReturned, double fDistance = -1)
++        {
++            DistanceFunctions distanceFunction = new SquareEuclideanDistanceFunction();
++            return NearestNeighbors(tSearchPoint, distanceFunction, iMaxReturned, fDistance);
++        }
++
++        /// <summary>
++        /// Get the nearest neighbours to a point in the kd tree using a user defined distance function.
++        /// </summary>
++        /// <param name="tSearchPoint">The point of interest.</param>
++        /// <param name="iMaxReturned">The maximum number of points which can be returned by the iterator.</param>
++        /// <param name="kDistanceFunction">The distance function to use.</param>
++        /// <param name="fDistance">A threshold distance to apply.  Optional.  Negative values mean that it is not applied.</param>
++        /// <returns>A new nearest neighbour iterator with the given parameters.</returns>
++        public NearestNeighbour<T> NearestNeighbors(double[] tSearchPoint, DistanceFunctions kDistanceFunction, int iMaxReturned, double fDistance)
++        {
++            return new NearestNeighbour<T>(this, tSearchPoint, kDistanceFunction, iMaxReturned, fDistance);
++        }
++    }
++}
+\ No newline at end of file
+Index: Source/lib/common/KDTree/MinHeap.cs
+===================================================================
+--- Source/lib/common/KDTree/MinHeap.cs	(revision 0)
++++ Source/lib/common/KDTree/MinHeap.cs	(working copy)
+@@ -0,0 +1,189 @@
++﻿using System;
++using System.Collections;
++using System.Collections.Generic;
++
++namespace KDTree
++{
++    /// <summary>
++    /// A MinHeap is a smallest-first queue based around a binary heap so it is quick to insert / remove items.
++    /// </summary>
++    /// <typeparam name="T">The type of data this MinHeap stores.</typeparam>
++    /// <remarks>This is based on this: https://bitbucket.org/rednaxela/knn-benchmark/src/tip/ags/utils/dataStructures/trees/thirdGenKD/ </remarks>
++    public class MinHeap<T>
++    {
++        /// <summary>
++        /// The default size for a min heap.
++        /// </summary>
++        private static int DEFAULT_SIZE = 64;
++
++        /// <summary>
++        /// The data array.  This stores the data items in the heap.
++        /// </summary>
++        private T[] tData;
++
++        /// <summary>
++        /// The key array.  This determines how items are ordered. Smallest first.
++        /// </summary>
++        private double[] tKeys;
++
++        /// <summary>
++        /// Create a new min heap with the default capacity.
++        /// </summary>
++        public MinHeap() : this(DEFAULT_SIZE)
++        {
++        }
++
++        /// <summary>
++        /// Create a new min heap with a given capacity.
++        /// </summary>
++        /// <param name="iCapacity"></param>
++        public MinHeap(int iCapacity)
++        {
++            this.tData = new T[iCapacity];
++            this.tKeys = new double[iCapacity];
++            this.Capacity = iCapacity;
++            this.Size = 0;
++        }
++
++        /// <summary>
++        /// The number of items in this queue.
++        /// </summary>
++        public int Size { get; private set; }
++
++        /// <summary>
++        /// The amount of space in this queue.
++        /// </summary>
++        public int Capacity { get; private set; }
++
++        /// <summary>
++        /// Insert a new element.
++        /// </summary>
++        /// <param name="key">The key which represents its position in the priority queue (ie. distance).</param>
++        /// <param name="value">The value to be stored at the key.</param>
++        public void Insert(double key, T value)
++        {
++            // If we need more room, double the space.
++            if (Size >= Capacity)
++            {
++                // Calcualte the new capacity.
++                Capacity *= 2;
++
++                // Copy the data array.
++                var newData = new T[Capacity];
++                Array.Copy(tData, newData, tData.Length);
++                tData = newData;
++
++                // Copy the key array.
++                var newKeys = new double[Capacity];
++                Array.Copy(tKeys, newKeys, tKeys.Length);
++                tKeys = newKeys;
++            }
++
++            // Insert new value at the end
++            tData[Size] = value;
++            tKeys[Size] = key;
++            SiftUp(Size);
++            Size++;
++        }
++
++        /// <summary>
++        /// Remove the smallest element.
++        /// </summary>
++        public void RemoveMin()
++        {
++            if (Size == 0)
++                throw new Exception();
++
++            Size--;
++            tData[0] = tData[Size];
++            tKeys[0] = tKeys[Size];
++            tData[Size] = default(T);
++            SiftDown(0);
++        }
++
++        /// <summary>
++        /// Get the data stored at the minimum element.
++        /// </summary>
++        public T Min
++        {
++            get
++            {
++                if (Size == 0)
++                    throw new Exception();
++
++                return tData[0];
++            }
++        }
++
++        /// <summary>
++        /// Get the key which represents the minimum element.
++        /// </summary>
++        public double MinKey
++        {
++            get
++            {
++                if (Size == 0)
++                    throw new Exception();
++
++                return tKeys[0];
++            }
++        }
++
++        /// <summary>
++        /// Bubble a child item up the tree.
++        /// </summary>
++        /// <param name="iChild"></param>
++        private void SiftUp(int iChild)
++        {
++            // For each parent above the child, if the parent is smaller then bubble it up.
++            for (int iParent = (iChild - 1) / 2; 
++                iChild != 0 && tKeys[iChild] < tKeys[iParent]; 
++                iChild = iParent, iParent = (iChild - 1) / 2)
++            {
++                T kData = tData[iParent];
++                double dDist = tKeys[iParent];
++
++                tData[iParent] = tData[iChild];
++                tKeys[iParent] = tKeys[iChild];
++
++                tData[iChild] = kData;
++                tKeys[iChild] = dDist;
++            }
++        }
++
++        /// <summary>
++        /// Bubble a parent down through the children so it goes in the right place.
++        /// </summary>
++        /// <param name="iParent">The index of the parent.</param>
++        private void SiftDown(int iParent)
++        {
++            // For each child.
++            for (int iChild = iParent * 2 + 1; iChild < Size; iParent = iChild, iChild = iParent * 2 + 1)
++            {
++                // If the child is larger, select the next child.
++                if (iChild + 1 < Size && tKeys[iChild] > tKeys[iChild + 1])
++                    iChild++;
++
++                // If the parent is larger than the largest child, swap.
++                if (tKeys[iParent] > tKeys[iChild])
++                {
++                    // Swap the points
++                    T pData = tData[iParent];
++                    double pDist = tKeys[iParent];
++
++                    tData[iParent] = tData[iChild];
++                    tKeys[iParent] = tKeys[iChild];
++
++                    tData[iChild] = pData;
++                    tKeys[iChild] = pDist;
++                }
++
++                // TODO: REMOVE THE BREAK
++                else
++                {
++                    break;
++                }
++            }
++        }
++    }
++}
+\ No newline at end of file
+Index: Source/lib/common/KDTree/NearestNeighbour.cs
+===================================================================
+--- Source/lib/common/KDTree/NearestNeighbour.cs	(revision 0)
++++ Source/lib/common/KDTree/NearestNeighbour.cs	(working copy)
+@@ -0,0 +1,229 @@
++﻿using System;
++using System.Collections;
++using System.Collections.Generic;
++using System.Linq;
++using System.Text;
++
++namespace KDTree
++{
++    /// <summary>
++    /// A NearestNeighbour iterator for the KD-tree which intelligently iterates and captures relevant data in the search space.
++    /// </summary>
++    /// <typeparam name="T">The type of data the iterator should handle.</typeparam>
++    public class NearestNeighbour<T> : IEnumerator
++    {
++        /// <summary>The point from which are searching in n-dimensional space.</summary>
++        private double[] tSearchPoint;
++        /// <summary>A distance function which is used to compare nodes and value positions.</summary>
++        private DistanceFunctions kDistanceFunction;
++        /// <summary>The tree nodes which have yet to be evaluated.</summary>
++        private MinHeap<KDNode<T>> pPending;
++        /// <summary>The values which have been evaluated and selected.</summary>
++        private IntervalHeap<T> pEvaluated;
++        /// <summary>The root of the kd tree to begin searching from.</summary>
++        private KDNode<T> pRoot = null;
++
++        /// <summary>The max number of points we can return through this iterator.</summary>
++        private int iMaxPointsReturned = 0;
++        /// <summary>The number of points we can still test before conclusion.</summary>
++        private int iPointsRemaining;
++        /// <summary>Threshold to apply to tree iteration.  Negative numbers mean no threshold applied.</summary>
++        private double fThreshold;
++
++        /// <summary>Current value distance.</summary>
++        private double _CurrentDistance = -1;
++        /// <summary>Current value reference.</summary>
++        private T _Current = default(T);
++
++        /// <summary>
++        /// Construct a new nearest neighbour iterator.
++        /// </summary>
++        /// <param name="pRoot">The root of the tree to begin searching from.</param>
++        /// <param name="tSearchPoint">The point in n-dimensional space to search.</param>
++        /// <param name="kDistance">The distance function used to evaluate the points.</param>
++        /// <param name="iMaxPoints">The max number of points which can be returned by this iterator.  Capped to max in tree.</param>
++        /// <param name="fThreshold">Threshold to apply to the search space.  Negative numbers indicate that no threshold is applied.</param>
++        public NearestNeighbour(KDNode<T> pRoot, double[] tSearchPoint, DistanceFunctions kDistance, int iMaxPoints, double fThreshold)
++        {
++            // Check the dimensionality of the search point.
++            if (tSearchPoint.Length != pRoot.iDimensions)
++                throw new Exception("Dimensionality of search point and kd-tree are not the same.");
++
++            // Store the search point.
++            this.tSearchPoint = new double[tSearchPoint.Length];
++            Array.Copy(tSearchPoint, this.tSearchPoint, tSearchPoint.Length);
++
++            // Store the point count, distance function and tree root.
++            this.iPointsRemaining = Math.Min(iMaxPoints, pRoot.Size);
++            this.fThreshold = fThreshold;
++            this.kDistanceFunction = kDistance;
++            this.pRoot = pRoot;
++            this.iMaxPointsReturned = iMaxPoints;
++            _CurrentDistance = -1;
++
++            // Create an interval heap for the points we check.
++            this.pEvaluated = new IntervalHeap<T>();
++
++            // Create a min heap for the things we need to check.
++            this.pPending = new MinHeap<KDNode<T>>();
++            this.pPending.Insert(0, pRoot);
++        }
++
++        /// <summary>
++        /// Check for the next iterator item.
++        /// </summary>
++        /// <returns>True if we have one, false if not.</returns>
++        public bool MoveNext()
++        {
++            // Bail if we are finished.
++            if (iPointsRemaining == 0)
++            {
++                _Current = default(T);
++                return false;
++            }
++
++            // While we still have paths to evaluate.
++            while (pPending.Size > 0 && (pEvaluated.Size == 0 || (pPending.MinKey < pEvaluated.MinKey)))
++            {
++                // If there are pending paths possibly closer than the nearest evaluated point, check it out
++                KDNode<T> pCursor = pPending.Min;
++                pPending.RemoveMin();
++
++                // Descend the tree, recording paths not taken
++                while (!pCursor.IsLeaf)
++                {
++                    KDNode<T> pNotTaken;
++
++                    // If the seach point is larger, select the right path.
++                    if (tSearchPoint[pCursor.iSplitDimension] > pCursor.fSplitValue)
++                    {
++                        pNotTaken = pCursor.pLeft;
++                        pCursor = pCursor.pRight;
++                    }
++                    else
++                    {
++                        pNotTaken = pCursor.pRight;
++                        pCursor = pCursor.pLeft;
++                    }
++
++                    // Calculate the shortest distance between the search point and the min and max bounds of the kd-node.
++                    double fDistance = kDistanceFunction.DistanceToRectangle(tSearchPoint, pNotTaken.tMinBound, pNotTaken.tMaxBound);
++
++                    // If it is greater than the threshold, skip.
++                    if (fThreshold >= 0 && fDistance > fThreshold)
++                    {
++                        //pPending.Insert(fDistance, pNotTaken);
++                        continue;
++                    }
++
++                    // Only add the path we need more points or the node is closer than furthest point on list so far.
++                    if (pEvaluated.Size < iPointsRemaining || fDistance <= pEvaluated.MaxKey)
++                    {
++                        pPending.Insert(fDistance, pNotTaken);
++                    }
++                }
++
++                // If all the points in this KD node are in one place.
++                if (pCursor.bSinglePoint)
++                {
++                    // Work out the distance between this point and the search point.
++                    double fDistance = kDistanceFunction.Distance(pCursor.tPoints[0], tSearchPoint);
++
++                    // Skip if the point exceeds the threshold.
++                    // Technically this should never happen, but be prescise.
++                    if (fThreshold >= 0 && fDistance >= fThreshold)
++                        continue;
++
++                    // Add the point if either need more points or it's closer than furthest on list so far.
++                    if (pEvaluated.Size < iPointsRemaining || fDistance <= pEvaluated.MaxKey)
++                    {
++                        for (int i = 0; i < pCursor.Size; ++i)
++                        {
++                            // If we don't need any more, replace max
++                            if (pEvaluated.Size == iPointsRemaining)
++                                pEvaluated.ReplaceMax(fDistance, pCursor.tData[i]);
++
++                            // Otherwise insert.
++                            else
++                                pEvaluated.Insert(fDistance, pCursor.tData[i]);
++                        }
++                    }
++                }
++
++                // If the points in the KD node are spread out.
++                else
++                {
++                    // Treat the distance of each point seperately.
++                    for (int i = 0; i < pCursor.Size; ++i)
++                    {
++                        // Compute the distance between the points.
++                        double fDistance = kDistanceFunction.Distance(pCursor.tPoints[i], tSearchPoint);
++
++                        // Skip if it exceeds the threshold.
++                        if (fThreshold >= 0 && fDistance >= fThreshold)
++                            continue;
++
++                        // Insert the point if we have more to take.
++                        if (pEvaluated.Size < iPointsRemaining)
++                            pEvaluated.Insert(fDistance, pCursor.tData[i]);
++
++                        // Otherwise replace the max.
++                        else if (fDistance < pEvaluated.MaxKey)
++                            pEvaluated.ReplaceMax(fDistance, pCursor.tData[i]);
++                    }
++                }
++            }
++
++            // Select the point with the smallest distance.
++            if (pEvaluated.Size == 0)
++                return false;
++
++            iPointsRemaining--;
++            _CurrentDistance = pEvaluated.MinKey;
++            _Current = pEvaluated.Min;
++            pEvaluated.RemoveMin();
++            return true;
++        }
++
++        /// <summary>
++        /// Reset the iterator.
++        /// </summary>
++        public void Reset()
++        {
++            // Store the point count and the distance function.
++            this.iPointsRemaining = Math.Min(iMaxPointsReturned, pRoot.Size);
++            _CurrentDistance = -1;
++
++            // Create an interval heap for the points we check.
++            this.pEvaluated = new IntervalHeap<T>();
++
++            // Create a min heap for the things we need to check.
++            this.pPending = new MinHeap<KDNode<T>>();
++            this.pPending.Insert(0, pRoot);
++        }
++
++        /// <summary>
++        /// Return the current value referenced by the iterator as an object.
++        /// </summary>
++        object IEnumerator.Current
++        {
++            get { return _Current; }
++        }
++
++        /// <summary>
++        /// Return the distance of the current value to the search point.
++        /// </summary>
++        public double CurrentDistance
++        {
++            get { return _CurrentDistance; }
++        }
++
++        /// <summary>
++        /// Return the current value referenced by the iterator.
++        /// </summary>
++        public T Current
++        {
++            get { return _Current; }
++        }
++    }
++}
+Index: Source/lib/pdf417/decoder/PDF417CodewordDecoder.cs
+===================================================================
+--- Source/lib/pdf417/decoder/PDF417CodewordDecoder.cs	(revision 88245)
++++ Source/lib/pdf417/decoder/PDF417CodewordDecoder.cs	(working copy)
+@@ -24,9 +24,9 @@
+    public static class PDF417CodewordDecoder
+    {
+       /// <summary>
+-      /// The ratios table
++      /// The ratios tree
+       /// </summary>
+-      private static readonly float[][] RATIOS_TABLE; // = new float[PDF417Common.SYMBOL_TABLE.Length][PDF417Common.BARS_IN_MODULE];
++      private static readonly KDTree.KDTree<int> RATIOS_TREE = new KDTree.KDTree<int>(8);
+ 
+       /// <summary>
+       /// Initializes the <see cref="ZXing.PDF417.Internal.PDF417CodewordDecoder"/> class & Pre-computes the symbol ratio table.
+@@ -33,22 +33,15 @@
+       /// </summary>
+       static PDF417CodewordDecoder()
+       {
+-         // Jagged arrays in Java assign the memory automatically, but C# has no equivalent. (Jon Skeet says so!)
+-         // http://stackoverflow.com/a/5313879/266252
+-         RATIOS_TABLE = new float[PDF417Common.SYMBOL_TABLE.Length][];
+-         for (int s = 0; s < RATIOS_TABLE.Length; s++)
+-         {
+-            RATIOS_TABLE[s] = new float[PDF417Common.BARS_IN_MODULE];
+-         }
+-
+          // Pre-computes the symbol ratio table.
+-         for (int i = 0; i < PDF417Common.SYMBOL_TABLE.Length; i++)
++         for (var i = 0; i < PDF417Common.SYMBOL_TABLE.Length; i++)
+          {
+-            int currentSymbol = PDF417Common.SYMBOL_TABLE[i];
+-            int currentBit = currentSymbol & 0x1;
+-            for (int j = 0; j < PDF417Common.BARS_IN_MODULE; j++)
++            var currentSymbol = PDF417Common.SYMBOL_TABLE[i];
++            var currentBit = currentSymbol & 0x1;
++            var curEntry = new double[PDF417Common.BARS_IN_MODULE];
++            for (var j = 0; j < PDF417Common.BARS_IN_MODULE; j++)
+             {
+-               float size = 0.0f;
++               var size = 0.0f;
+                while ((currentSymbol & 0x1) == currentBit)
+                {
+                   size += 1.0f;
+@@ -55,8 +48,9 @@
+                   currentSymbol >>= 1;
+                }
+                currentBit = currentSymbol & 0x1;
+-               RATIOS_TABLE[i][PDF417Common.BARS_IN_MODULE - j - 1] = size/PDF417Common.MODULES_IN_CODEWORD;
++               curEntry[PDF417Common.BARS_IN_MODULE - j - 1] = size / PDF417Common.MODULES_IN_CODEWORD;
+             }
++            RATIOS_TREE.AddPoint(curEntry, PDF417Common.SYMBOL_TABLE[i]);
+          }
+       }
+ 
+@@ -137,34 +131,15 @@
+       /// <param name="moduleBitCount">Module bit count.</param>
+       private static int getClosestDecodedValue(int[] moduleBitCount)
+       {
+-         int bitCountSum = PDF417Common.getBitCountSum(moduleBitCount);
+-         float[] bitCountRatios = new float[PDF417Common.BARS_IN_MODULE];
++         var bitCountSum = PDF417Common.getBitCountSum(moduleBitCount);
++         var bitCountRatios = new double[PDF417Common.BARS_IN_MODULE];
+          for (int i = 0; i < bitCountRatios.Length; i++)
+          {
+-            bitCountRatios[i] = moduleBitCount[i]/(float) bitCountSum;
++            bitCountRatios[i] = moduleBitCount[i] / (double)bitCountSum;
+          }
+-         float bestMatchError = float.MaxValue;
+-         int bestMatch = PDF417Common.INVALID_CODEWORD;
+-         for (int j = 0; j < RATIOS_TABLE.Length; j++)
+-         {
+-            float error = 0.0f;
+-            float[] ratioTableRow = RATIOS_TABLE[j];
+-            for (int k = 0; k < PDF417Common.BARS_IN_MODULE; k++)
+-            {
+-               float diff = ratioTableRow[k] - bitCountRatios[k];
+-               error += diff*diff;
+-               if (error >= bestMatchError)
+-               {
+-                  break;
+-               }
+-            }
+-            if (error < bestMatchError)
+-            {
+-               bestMatchError = error;
+-               bestMatch = PDF417Common.SYMBOL_TABLE[j];
+-            }
+-         }
+-         return bestMatch;
++         var result = RATIOS_TREE.NearestNeighbors(bitCountRatios, 1);
++         result.MoveNext();
++         return result.Current;
+       }
+    }
+ }
+\ No newline at end of file
+Index: Source/lib/zxing.csproj
+===================================================================
+--- Source/lib/zxing.csproj	(revision 88245)
++++ Source/lib/zxing.csproj	(working copy)
+@@ -192,6 +192,12 @@
+     <Compile Include="common\GlobalHistogramBinarizer.cs" />
+     <Compile Include="common\GridSampler.cs" />
+     <Compile Include="common\HybridBinarizer.cs" />
++    <Compile Include="common\KDTree\DistanceFunctions.cs" />
++    <Compile Include="common\KDTree\IntervalHeap.cs" />
++    <Compile Include="common\KDTree\KDNode.cs" />
++    <Compile Include="common\KDTree\KDTree.cs" />
++    <Compile Include="common\KDTree\MinHeap.cs" />
++    <Compile Include="common\KDTree\NearestNeighbour.cs" />
+     <Compile Include="common\PerspectiveTransform.cs" />
+     <Compile Include="common\reedsolomon\GenericGF.cs" />
+     <Compile Include="common\reedsolomon\GenericGFPoly.cs" />
+Index: Source/lib/zxing.sl5.csproj
+===================================================================
+--- Source/lib/zxing.sl5.csproj	(revision 88245)
++++ Source/lib/zxing.sl5.csproj	(working copy)
+@@ -151,6 +151,12 @@
+     <Compile Include="common\GlobalHistogramBinarizer.cs" />
+     <Compile Include="common\GridSampler.cs" />
+     <Compile Include="common\HybridBinarizer.cs" />
++    <Compile Include="common\KDTree\DistanceFunctions.cs" />
++    <Compile Include="common\KDTree\IntervalHeap.cs" />
++    <Compile Include="common\KDTree\KDNode.cs" />
++    <Compile Include="common\KDTree\KDTree.cs" />
++    <Compile Include="common\KDTree\MinHeap.cs" />
++    <Compile Include="common\KDTree\NearestNeighbour.cs" />
+     <Compile Include="common\PerspectiveTransform.cs" />
+     <Compile Include="common\reedsolomon\GenericGF.cs" />
+     <Compile Include="common\reedsolomon\GenericGFPoly.cs" />
+Index: Source/lib/zxing.unity.csproj
+===================================================================
+--- Source/lib/zxing.unity.csproj	(revision 88245)
++++ Source/lib/zxing.unity.csproj	(working copy)
+@@ -130,6 +130,12 @@
+     <Compile Include="common\GlobalHistogramBinarizer.cs" />
+     <Compile Include="common\GridSampler.cs" />
+     <Compile Include="common\HybridBinarizer.cs" />
++    <Compile Include="common\KDTree\DistanceFunctions.cs" />
++    <Compile Include="common\KDTree\IntervalHeap.cs" />
++    <Compile Include="common\KDTree\KDNode.cs" />
++    <Compile Include="common\KDTree\KDTree.cs" />
++    <Compile Include="common\KDTree\MinHeap.cs" />
++    <Compile Include="common\KDTree\NearestNeighbour.cs" />
+     <Compile Include="common\PerspectiveTransform.cs" />
+     <Compile Include="common\reedsolomon\GenericGF.cs" />
+     <Compile Include="common\reedsolomon\GenericGFPoly.cs" />
