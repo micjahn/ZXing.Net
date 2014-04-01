@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.12.0.0</version>
+    <version>0.14.0.0</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <licenseUrl>http://zxingnet.codeplex.com/license</licenseUrl>
@@ -13,14 +13,16 @@
     <description>ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.
 It has been ported by hand with a lot of optimizations and improvements.
 
-It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, Windows RT Class Library and Components, Silverlight 4, Silverlight 5, Windows Phone 7.0, Windows Phone 7.1 and Windows Phone 8.0 and Xamarin.Android</description>
+It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, .Net 4.5, Windows RT Class Library and Components, Silverlight 4, Silverlight 5, Windows Phone 7.0, Windows Phone 7.1 and Windows Phone 8.0 and Xamarin.Android</description>
     <summary>ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.</summary>
-    <releaseNotes>* sync with rev. 2875 of the java version
-* new PDF417 decoder
-* improved Aztec decoder
-* global speed improvements
-* direct Kinect support for ColorImageFrame
-* better Structured Append support
+    <releaseNotes>* changes of the java version are reflected until 2014/03/13
+* basic support for CMYK color space
+* new BarcodeWriter for WPF
+* compatibility fixes for PCL and WinRT components
+* MSI is disabled by default because of to many false-positives
+* VIN support for the ResultParser
+* new option for the error correction level of PDF417 for rendering
+* basic ECI support for PDF417
 * many other small bug fixes and improvements</releaseNotes>
     <tags>ZXing barcode scanning 1D 2D UPC-A UPC-E EAN-8 EAN-13 QR ITF Codabar RSS-14 Data Matrix PDF 417 PDF417 Aztec</tags>
   </metadata>
