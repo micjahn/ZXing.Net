@@ -24,7 +24,7 @@ namespace ZXing.OneD.Test
    public sealed class MSIBlackBox1TestCase : AbstractBlackBoxTestCase
    {
       public MSIBlackBox1TestCase()
-         : base("test/data/blackbox/msi-1", new MultiFormatReader(), BarcodeFormat.MSI)
+         : base("test/data/blackbox/msi-1", new MSIReader(), BarcodeFormat.MSI)
       {
          addTest(5, 5, 0.0f);
          addTest(5, 5, 180.0f);
