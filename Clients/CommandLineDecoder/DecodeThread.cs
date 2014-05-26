@@ -181,12 +181,15 @@ namespace CommandLineDecoder
                int[] crop = config.Crop;
                source = new BitmapLuminanceSource(image).crop(crop[0], crop[1], crop[2], crop[3]);
             }
-            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
             if (config.DumpBlackPoint)
             {
+               var bitmap = new BinaryBitmap(new HybridBinarizer(source));
                dumpBlackPoint(uri, image, bitmap, source);
             }
-            Result result = new MultiFormatReader().decode(bitmap, hints);
+            var reader = new BarcodeReader {AutoRotate = config.AutoRotate};
+            foreach (var entry in hints)
+               reader.Options.Hints.Add(entry.Key, entry.Value);
+            Result result = reader.Decode(source);
             if (result != null)
             {
                if (config.Brief)
@@ -243,16 +246,16 @@ namespace CommandLineDecoder
                int[] crop = config.Crop;
                source = new BitmapLuminanceSource(image).crop(crop[0], crop[1], crop[2], crop[3]);
             }
-            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
             if (config.DumpBlackPoint)
             {
+               var bitmap = new BinaryBitmap(new HybridBinarizer(source));
                dumpBlackPoint(uri, image, bitmap, source);
             }
 
-            MultiFormatReader multiFormatReader = new MultiFormatReader();
-            GenericMultipleBarcodeReader reader = new GenericMultipleBarcodeReader(
-               multiFormatReader);
-            Result[] results = reader.decodeMultiple(bitmap, hints);
+            var reader = new BarcodeReader {AutoRotate = config.AutoRotate};
+            foreach (var entry in hints)
+               reader.Options.Hints.Add(entry.Key, entry.Value);
+            Result[] results = reader.DecodeMultiple(source);
             if (results != null && results.Length > 0)
             {
                if (config.Brief)

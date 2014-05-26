@@ -33,6 +33,7 @@ namespace CommandLineDecoder
       public bool Recursive { get; set; }
       public int[] Crop { get; set; }
       public int Threads { get; set; }
+      public bool AutoRotate { get; set; }
 
       public Config()
       {

@@ -72,6 +72,10 @@ namespace CommandLineDecoder
             {
                config.Recursive = true;
             }
+            else if ("--autorotate".Equals(arg))
+            {
+               config.AutoRotate = true;
+            }
             else if (arg.StartsWith("--crop"))
             {
                int[] crop = new int[4];
