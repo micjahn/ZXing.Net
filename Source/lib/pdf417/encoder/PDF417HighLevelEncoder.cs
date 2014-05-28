@@ -168,7 +168,7 @@ namespace ZXing.PDF417.Internal
             // So we try here the some different ones
             DEFAULT_ENCODING = Encoding.GetEncoding(1252);
          }
-#elif !SILVERLIGHT || WINDOWS
+#elif (!SILVERLIGHT || WINDOWS) && !MONOTOUCH
          DEFAULT_ENCODING = Encoding.GetEncoding("CP437");
 #else
          // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
