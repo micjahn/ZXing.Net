@@ -63,7 +63,7 @@ namespace ZXing.PDF417.Internal
       private const int PAL = 29;
 
       private static readonly char[] PUNCT_CHARS = {
-                                                      ';', '<', '>', '@', '[', '\\', '}', '_', '`', '~', '!',
+                                                      ';', '<', '>', '@', '[', '\\', ']', '_', '`', '~', '!',
                                                       '\r', '\t', ',', ':', '\n', '-', '.', '$', '/', '"', '|', '*',
                                                       '(', ')', '?', '{', '}', '\''
                                                    };
@@ -691,11 +691,14 @@ namespace ZXing.PDF417.Internal
                // while in Numeric Compaction mode) serves  to terminate the
                // current Numeric Compaction mode grouping as described in 5.4.4.2,
                // and then to start a new one grouping.
-               String s = decodeBase900toBase10(numericCodewords, count);
-               if (s == null)
-                  return -1;
-               result.Append(s);
-               count = 0;
+               if (count > 0)
+               {
+                  String s = decodeBase900toBase10(numericCodewords, count);
+                  if (s == null)
+                     return -1;
+                  result.Append(s);
+                  count = 0;
+               }
             }
          }
          return codeIndex;
