@@ -77,7 +77,7 @@ namespace ZXing
                var ptrInBitmap = data.Scan0;
 
 #if !WindowsCE
-               // prepare palette for 1 and 8 bit indexed bitmaps
+               // prepare palette for 1, 4 and 8 bit indexed bitmaps
                var luminancePalette = new byte[bitmap.Palette.Entries.Length];
                for (var index = 0; index < bitmap.Palette.Entries.Length; index++)
                {
@@ -102,7 +102,7 @@ namespace ZXing
                {
                   // copy a scanline not the whole bitmap because of memory usage
                   Marshal.Copy(ptrInBitmap, buffer, 0, stride);
-#if NET40
+#if NET40 || NET45
                   ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
 #else
                   ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
@@ -112,12 +112,26 @@ namespace ZXing
                   {
 #if !WindowsCE
                      case 0:
-                        for (int x = 0; x*8 < width; x++)
+                        if (bitmap.PixelFormat == PixelFormat.Format4bppIndexed)
                         {
-                           for (int subX = 0; subX < 8 && 8*x + subX < width; subX++)
+                           for (int sourceX = 0, destX = 0; destX < width; sourceX++, destX += 2)
                            {
-                              var index = (buffer[x] >> (7 - subX)) & 1;
-                              luminances[offset + 8*x + subX] = luminancePalette[index];
+                              var sourceValue = buffer[sourceX];
+                              var index = sourceValue & 15;
+                              luminances[offset + destX + 1] = luminancePalette[index];
+                              index = (sourceValue >> 4) & 15;
+                              luminances[offset + destX] = luminancePalette[index];
+                           }
+                        }
+                        else
+                        {
+                           for (int x = 0; x*8 < width; x++)
+                           {
+                              for (int subX = 0; subX < 8 && 8*x + subX < width; subX++)
+                              {
+                                 var index = (buffer[x] >> (7 - subX)) & 1;
+                                 luminances[offset + 8*x + subX] = luminancePalette[index];
+                              }
                            }
                         }
                         break;
