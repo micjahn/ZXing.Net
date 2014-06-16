@@ -132,7 +132,7 @@ namespace ZXing.PDF417.Internal
       private static readonly sbyte[] MIXED = new sbyte[128];
       private static readonly sbyte[] PUNCTUATION = new sbyte[128];
 
-      internal static Encoding DEFAULT_ENCODING;
+      internal static String[] DEFAULT_ENCODING_NAMES = new [] {"CP437", "IBM437"};
 
       static PDF417HighLevelEncoder()
       {
@@ -157,39 +157,25 @@ namespace ZXing.PDF417.Internal
                PUNCTUATION[b] = i;
             }
          }
-#if WindowsCE
-         try
-         {
-            DEFAULT_ENCODING = Encoding.GetEncoding("CP437");
-         }
-         catch (PlatformNotSupportedException)
-         {
-            // WindowsCE doesn't support all encodings. But it is device depended.
-            // So we try here the some different ones
-            DEFAULT_ENCODING = Encoding.GetEncoding(1252);
-         }
-#elif (!SILVERLIGHT || WINDOWS) && !MONOTOUCH
-         DEFAULT_ENCODING = Encoding.GetEncoding("CP437");
-#else
-         // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
-         DEFAULT_ENCODING = Encoding.GetEncoding("UTF-8");
-#endif
       }
 
       /// <summary>
       /// Performs high-level encoding of a PDF417 message using the algorithm described in annex P
       /// of ISO/IEC 15438:2001(E). If byte compaction has been selected, then only byte compaction
       /// is used.
-      ///
-      /// <param name="msg">the message</param>
-      /// <returns>the encoded message (the char values range from 0 to 928)</returns>
       /// </summary>
+      /// <param name="msg">the message</param>
+      /// <param name="compaction">compaction mode to use</param>
+      /// <param name="encoding">character encoding used to encode in default or byte compaction
+      /// or null for default / not applicable</param>
+      /// <param name="disableEci">if true, don't add an ECI segment for different encodings than default</param>
+      /// <returns>the encoded message (the char values range from 0 to 928)</returns>
       internal static String encodeHighLevel(String msg, Compaction compaction, Encoding encoding, bool disableEci)
       {
          //the codewords 0..928 are encoded as Unicode characters
          var sb = new StringBuilder(msg.Length);
 
-         if (!DEFAULT_ENCODING.Equals(encoding) && !disableEci)
+         if (encoding != null && !disableEci && !Contains(DEFAULT_ENCODING_NAMES, encoding.WebName))
          {
             CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding.WebName);
             if (eci != null)
@@ -211,7 +197,7 @@ namespace ZXing.PDF417.Internal
          }
          else if (compaction == Compaction.BYTE)
          {
-            bytes = encoding.GetBytes(msg);
+            bytes = toBytes(msg, encoding);
             encodeBinary(bytes, p, bytes.Length, BYTE_COMPACTION, sb);
 
          }
@@ -253,7 +239,7 @@ namespace ZXing.PDF417.Internal
                   {
                      if (bytes == null)
                      {
-                        bytes = encoding.GetBytes(msg);
+                        bytes = toBytes(msg, encoding);
                      }
                      int b = determineConsecutiveBinaryCount(msg, bytes, p);
                      if (b == 0)
@@ -279,6 +265,74 @@ namespace ZXing.PDF417.Internal
          }
 
          return sb.ToString();
+      }
+
+      private static bool Contains(string[] stringArray, string lookFor)
+      {
+         var result = false;
+         lookFor = lookFor.ToUpper();
+         for (var index = 0; index < stringArray.Length; index++)
+         {
+            if (stringArray[index] == lookFor)
+            {
+               result = true;
+               break;
+            }
+         }
+
+         return result;
+      }
+
+      private static byte[] toBytes(String msg, Encoding encoding)
+      {
+         // Defer instantiating default Charset until needed, since it may be for an unsupported
+         // encoding. For example the default of Cp437 doesn't seem to exist on Android.
+         if (encoding == null)
+         {
+            for (var index = 0; index < DEFAULT_ENCODING_NAMES.Length; index++)
+            {
+               String encodingName = DEFAULT_ENCODING_NAMES[index];
+               try
+               {
+
+                  encoding = Encoding.GetEncoding(encodingName);
+               }
+               catch (Exception )
+               {
+                  // continue
+               }
+            }
+            if (encoding == null)
+            {
+               // Fallbacks
+               try
+               {
+#if WindowsCE
+                  try
+                  {
+                     encoding = Encoding.GetEncoding("CP437");
+                  }
+                  catch (PlatformNotSupportedException)
+                  {
+                     // WindowsCE doesn't support all encodings. But it is device depended.
+                     // So we try here the some different ones
+                     encoding = Encoding.GetEncoding(1252);
+                  }
+#elif (!SILVERLIGHT || WINDOWS) && !MONOTOUCH
+                  encoding = Encoding.GetEncoding("CP437");
+#else
+                  // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
+                  encoding = Encoding.GetEncoding("UTF-8");
+#endif
+
+               }
+               catch (Exception uce)
+               {
+                  throw new WriterException("No support for any encoding: " + DEFAULT_ENCODING_NAMES, uce);
+               }
+            }
+         }
+         return encoding.GetBytes(msg);
       }
 
       /// <summary>

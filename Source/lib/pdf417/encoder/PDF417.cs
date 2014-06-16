@@ -542,7 +542,7 @@ namespace ZXing.PDF417.Internal
       {
          this.compact = compact;
          compaction = Compaction.AUTO;
-         encoding = PDF417HighLevelEncoder.DEFAULT_ENCODING;
+         encoding = null; // use default
          disableEci = false;
          minCols = 2;
          maxCols = 30;
