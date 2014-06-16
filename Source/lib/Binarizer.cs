@@ -62,7 +62,7 @@ namespace ZXing
       /// and passed in with each call for performance. However it is legal to keep more than one row
       /// at a time if needed.
       /// </summary>
-      /// <param name="y">The row to fetch, 0 &lt;= y &lt; bitmap height.</param>
+      /// <param name="y">The row to fetch, which must be in [0, bitmap height)</param>
       /// <param name="row">An optional preallocated array. If null or too small, it will be ignored.
       /// If used, the Binarizer will call BitArray.clear(). Always use the returned object.
       /// </param>

@@ -19,19 +19,14 @@ using ZXing.Common;
 
 namespace ZXing
 {
-
-   /// <summary> This class is the core bitmap class used by ZXing to represent 1 bit data. Reader objects
+   /// <summary>
+   /// This class is the core bitmap class used by ZXing to represent 1 bit data. Reader objects
    /// accept a BinaryBitmap and attempt to decode it.
-   /// 
    /// </summary>
-   /// <author>  dswitkin@google.com (Daniel Switkin)
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
-
+   /// <author>dswitkin@google.com (Daniel Switkin)</author>
    public sealed class BinaryBitmap
    {
-      private Binarizer binarizer;
+      private readonly Binarizer binarizer;
       private BitMatrix matrix;
 
       public BinaryBitmap(Binarizer binarizer)
@@ -43,7 +38,17 @@ namespace ZXing
          this.binarizer = binarizer;
       }
 
-      /// <returns> The width of the bitmap.
+      internal BinaryBitmap(BitMatrix matrix)
+      {
+         if (matrix == null)
+         {
+            throw new ArgumentException("matrix must be non-null.");
+         }
+         this.matrix = matrix;
+      }
+
+      /// <returns>
+      /// The width of the bitmap.
       /// </returns>
       public int Width
       {
@@ -53,7 +58,8 @@ namespace ZXing
          }
 
       }
-      /// <returns> The height of the bitmap.
+      /// <returns>
+      /// The height of the bitmap.
       /// </returns>
       public int Height
       {
@@ -64,31 +70,28 @@ namespace ZXing
 
       }
 
-      /// <summary> Converts one row of luminance data to 1 bit data. May actually do the conversion, or return
+      /// <summary>
+      /// Converts one row of luminance data to 1 bit data. May actually do the conversion, or return
       /// cached data. Callers should assume this method is expensive and call it as seldom as possible.
       /// This method is intended for decoding 1D barcodes and may choose to apply sharpening.
-      /// 
       /// </summary>
-      /// <param name="y">The row to fetch, 0 &lt;= y &lt; bitmap height.
-      /// </param>
+      /// <param name="y">The row to fetch, which must be in [0, bitmap height).</param>
       /// <param name="row">An optional preallocated array. If null or too small, it will be ignored.
       /// If used, the Binarizer will call BitArray.clear(). Always use the returned object.
       /// </param>
-      /// <returns> The array of bits for this row (true means black).
-      /// </returns>
+      /// <returns> The array of bits for this row (true means black).</returns>
       public BitArray getBlackRow(int y, BitArray row)
       {
          return binarizer.getBlackRow(y, row);
       }
 
-      /// <summary> Converts a 2D array of luminance data to 1 bit. As above, assume this method is expensive
+      /// <summary>
+      /// Converts a 2D array of luminance data to 1 bit. As above, assume this method is expensive
       /// and do not call it repeatedly. This method is intended for decoding 2D barcodes and may or
       /// may not apply sharpening. Therefore, a row from this matrix may not be identical to one
       /// fetched using getBlackRow(), so don't mix and match between them.
-      /// 
       /// </summary>
-      /// <returns> The 2D array of bits for the image (true means black).
-      /// </returns>
+      /// <returns> The 2D array of bits for the image (true means black).</returns>
       public BitMatrix BlackMatrix
       {
          get
@@ -98,15 +101,12 @@ namespace ZXing
             // 1. This work will never be done if the caller only installs 1D Reader objects, or if a
             //    1D Reader finds a barcode before the 2D Readers run.
             // 2. This work will only be done once even if the caller installs multiple 2D Readers.
-            if (matrix == null)
-            {
-               matrix = binarizer.BlackMatrix;
-            }
-            return matrix;
+            return matrix ?? (matrix = binarizer.BlackMatrix);
          }
       }
 
-      /// <returns> Whether this bitmap can be cropped.
+      /// <returns>
+      /// Whether this bitmap can be cropped.
       /// </returns>
       public bool CropSupported
       {
@@ -114,30 +114,25 @@ namespace ZXing
          {
             return binarizer.LuminanceSource.CropSupported;
          }
-
       }
 
-      /// <summary> Returns a new object with cropped image data. Implementations may keep a reference to the
+      /// <summary>
+      /// Returns a new object with cropped image data. Implementations may keep a reference to the
       /// original data rather than a copy. Only callable if isCropSupported() is true.
-      /// 
       /// </summary>
-      /// <param name="left">The left coordinate, 0 &lt;= left &lt; getWidth().
-      /// </param>
-      /// <param name="top">The top coordinate, 0 &lt;= top &lt;= getHeight().
-      /// </param>
-      /// <param name="width">The width of the rectangle to crop.
-      /// </param>
-      /// <param name="height">The height of the rectangle to crop.
-      /// </param>
-      /// <returns> A cropped version of this object.
-      /// </returns>
+      /// <param name="left">The left coordinate, which must be in [0, Width)</param>
+      /// <param name="top">The top coordinate, which must be in [0, Height)</param>
+      /// <param name="width">The width of the rectangle to crop.</param>
+      /// <param name="height">The height of the rectangle to crop.</param>
+      /// <returns> A cropped version of this object.</returns>
       public BinaryBitmap crop(int left, int top, int width, int height)
       {
          var newSource = binarizer.LuminanceSource.crop(left, top, width, height);
          return new BinaryBitmap(binarizer.createBinarizer(newSource));
       }
 
-      /// <returns> Whether this bitmap supports counter-clockwise rotation.
+      /// <returns>
+      /// Whether this bitmap supports counter-clockwise rotation.
       /// </returns>
       public bool RotateSupported
       {
@@ -150,10 +145,9 @@ namespace ZXing
 
       /// <summary>
       /// Returns a new object with rotated image data by 90 degrees counterclockwise.
-      /// Only callable if {@link #isRotateSupported()} is true.
+      /// Only callable if <see cref="RotateSupported"/> is true.
       /// </summary>
-      /// <returns> A rotated version of this object.
-      /// </returns>
+      /// <returns>A rotated version of this object.</returns>
       public BinaryBitmap rotateCounterClockwise()
       {
          var newSource = binarizer.LuminanceSource.rotateCounterClockwise();
@@ -162,7 +156,7 @@ namespace ZXing
 
       /// <summary>
       /// Returns a new object with rotated image data by 45 degrees counterclockwise.
-      /// Only callable if {@link #isRotateSupported()} is true.
+      /// Only callable if <see cref="RotateSupported"/> is true.
       /// </summary>
       /// <returns>A rotated version of this object.</returns>
       public BinaryBitmap rotateCounterClockwise45()

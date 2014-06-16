@@ -94,11 +94,19 @@ namespace ZXing.Common
          bits = new int[rowSize * height];
       }
 
-      private BitMatrix(int width, int height, int rowSize, int[] bits)
+      internal BitMatrix(int width, int height, int rowSize, int[] bits)
       {
          this.width = width;
          this.height = height;
          this.rowSize = rowSize;
+         this.bits = bits;
+      }
+
+      internal BitMatrix(int width, int height, int[] bits)
+      {
+         this.width = width;
+         this.height = height;
+         this.rowSize = (width + 31) >> 5;
          this.bits = bits;
       }
 

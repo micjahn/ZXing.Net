@@ -23,7 +23,6 @@ namespace ZXing.OneD
 {
    /// <summary>
    ///   <p>Implements decoding of the UPC-E format.</p>
-   ///   <p/>
    ///   <p><a href="http://www.barcodeisland.com/upce.phtml">This</a>is a great reference for
    /// UPC-E information.</p>
    ///   <author>Sean Owen</author>
