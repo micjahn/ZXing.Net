@@ -65,12 +65,15 @@ namespace ZXing.PDF417.Internal.EC
          }
 
          ModulusPoly knownErrors = field.One;
-         foreach (int erasure in erasures)
+         if (erasures != null)
          {
-            int b = field.exp(received.Length - 1 - erasure);
-            // Add (1 - bx) term:
-            ModulusPoly term = new ModulusPoly(field, new int[] {field.subtract(0, b), 1});
-            knownErrors = knownErrors.multiply(term);
+            foreach (int erasure in erasures)
+            {
+               int b = field.exp(received.Length - 1 - erasure);
+               // Add (1 - bx) term:
+               ModulusPoly term = new ModulusPoly(field, new int[] {field.subtract(0, b), 1});
+               knownErrors = knownErrors.multiply(term);
+            }
          }
 
          ModulusPoly syndrome = new ModulusPoly(field, S);
