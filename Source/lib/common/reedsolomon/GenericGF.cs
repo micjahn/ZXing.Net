@@ -37,8 +37,6 @@ namespace ZXing.Common.ReedSolomon
       public static GenericGF AZTEC_DATA_8 = DATA_MATRIX_FIELD_256;
       public static GenericGF MAXICODE_FIELD_64 = AZTEC_DATA_6;
 
-      private const int INITIALIZATION_THRESHOLD = 0;
-
       private int[] expTable;
       private int[] logTable;
       private GenericGFPoly zero;
@@ -46,7 +44,6 @@ namespace ZXing.Common.ReedSolomon
       private readonly int size;
       private readonly int primitive;
       private readonly int generatorBase;
-      private bool initialized = false;
 
       /// <summary>
       /// Create a representation of GF(size) using the given primitive polynomial.
@@ -64,14 +61,6 @@ namespace ZXing.Common.ReedSolomon
          this.size = size;
          this.generatorBase = genBase;
 
-         if (size <= INITIALIZATION_THRESHOLD)
-         {
-            initialize();
-         }
-      }
-
-      private void initialize()
-      {
          expTable = new int[size];
          logTable = new int[size];
          int x = 1;
@@ -92,22 +81,12 @@ namespace ZXing.Common.ReedSolomon
          // logTable[0] == 0 but this should never be used
          zero = new GenericGFPoly(this, new int[] { 0 });
          one = new GenericGFPoly(this, new int[] { 1 });
-         initialized = true;
-      }
-
-      private void checkInit()
-      {
-         if (!initialized)
-         {
-            initialize();
-         }
       }
 
       internal GenericGFPoly Zero
       {
          get
          {
-            checkInit();
             return zero;
          }
       }
@@ -116,7 +95,6 @@ namespace ZXing.Common.ReedSolomon
       {
          get
          {
-            checkInit();
             return one;
          }
       }
@@ -129,8 +107,6 @@ namespace ZXing.Common.ReedSolomon
       /// <returns>the monomial representing coefficient * x^degree</returns>
       internal GenericGFPoly buildMonomial(int degree, int coefficient)
       {
-         checkInit();
-
          if (degree < 0)
          {
             throw new ArgumentException();
@@ -159,8 +135,6 @@ namespace ZXing.Common.ReedSolomon
       /// <returns>2 to the power of a in GF(size)</returns>
       internal int exp(int a)
       {
-         checkInit();
-
          return expTable[a];
       }
 
@@ -171,8 +145,6 @@ namespace ZXing.Common.ReedSolomon
       /// <returns>base 2 log of a in GF(size)</returns>
       internal int log(int a)
       {
-         checkInit();
-
          if (a == 0)
          {
             throw new ArgumentException();
@@ -186,8 +158,6 @@ namespace ZXing.Common.ReedSolomon
       /// <returns>multiplicative inverse of a</returns>
       internal int inverse(int a)
       {
-         checkInit();
-
          if (a == 0)
          {
             throw new ArithmeticException();
@@ -203,8 +173,6 @@ namespace ZXing.Common.ReedSolomon
       /// <returns>product of a and b in GF(size)</returns>
       internal int multiply(int a, int b)
       {
-         checkInit();
-
          if (a == 0 || b == 0)
          {
             return 0;

@@ -59,7 +59,7 @@ namespace ZXing.Common.ReedSolomon
             }
             if (firstNonZero == coefficientsLength)
             {
-               this.coefficients = field.Zero.coefficients;
+               this.coefficients = new int[]{0};
             }
             else
             {
