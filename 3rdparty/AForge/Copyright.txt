@@ -2,7 +2,7 @@ AForge.NET Framework
 http://www.aforgenet.com/framework
 ==================================
 
-Copyright © AForge.NET, 2006-2012
+Copyright © AForge.NET, 2006-2013
 contacts@aforgenet.com
 
 AForge.NET is a C# framework designed for developers and researchers

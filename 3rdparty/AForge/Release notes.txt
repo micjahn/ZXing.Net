@@ -1,3 +1,121 @@
+AForge.NET Framework 2.2.5 release notes
+----------------------------------------
+17.07.2013.
+
+!!!IMPORTANT!!!
+
+The version updates licensing of AForge.Video.FFMPEG component, which is now released
+under GPL v3 license (due to dependency on GPL build of FFMPEG library). The rest of
+the framework remains LGPL v3 licensed.
+
+
+Version updates and fixes:
+
+* Fixed registered issues/requests:
+  - Issue 159: IAMCameraControl support and Microsoft LifeCam frame size fix
+  - Issue 293: FilterInfo properties modifier change
+  - Issue 296: AForge.Imaging.Filters mono support
+  - Issue 297: OtsuThreshold Filter problem
+  - Issue 302: Sobel filter crashes on 228x240 32bit PNG
+  - Issue 304: Building AForge.Video.ffmpeg.dll with spaces in path names. Fix included.
+  - Issue 311: add support for 32bpp RGB to motion processing
+  - Issue 314: IActivationFunction implementing ICloneable
+  - Issue 317: Screen capture IVideoSource
+  - Issue 326: Camera Control to set focus, exposure, and manual control
+  - Issue 329: Support for keeping aspect ratio in VideoSourcePlayer
+  - Issue 331: AForge.Math.Geometry.GrahamConvexHull FindHull
+  - Issue 337: UnmanagedImage should call AddMemoryPressure and RemoveMemoryPressure
+  - Issue 341: ContrastCorrection wrong if factor == 1
+  - Issue 349: Implement Serializable for Matrix and Vector classes
+
+
+* AForge
+  - Added SquaredDistanceTo() method to Point/IntPoint/DoublePoint, which returns square of Euclidean distance.
+
+  - Small fix to AForge.Parallel.For() - don't keep reference to for-loop's delegate, so GC could collect when needed.
+  
+  
+* AForge.Math  
+  - Fixed GrahamConvexHull so it handles correctly lists with 1 point only. Unit test is added.  
+  
+  - Added [Serializable] attribute to Vector3/4 and Matrix3x3/4x4 structures.
+    
+  
+* AForge.Imaging
+  - Set minimum allowed value for ColorFactor, ColorPower, SpatialFactor and SpatialPower properties of
+    BilateralSmoothing to 1.
+  
+  - Added ProcessGapsWithImageBorders property to Horizontal/Vertical Run Length Smoothing filter, which
+    allows to set if gaps between image borders and objects should be also filled or skipped.
+    
+  - Fixed setting DPI resolution of result image which was failing before on Mono.
+  
+  - Fixed OtsuThreshold bug, which was leading to wrong threshold calculation for images with highest intensity 
+    maller than 255.
+    
+  - Fixed blobs' color standard deviation calculation for 8bpp grayscale images.
+
+  - Fixed Sobel edge detector so it does not write beyond image buffer when doing intensity scaling step.
+  
+  - Added 32 bpp RGB pixel format to the list of supported formats for motion processing classes.
+  
+  - Minor fix for HSL to RGB conversion to make sure Alpha byte is always set to 255.
+  
+  - Allow creating instance of replace channel filters without specifying image for the channel to replace.
+  
+  - Added usage System.GC.RemoveMemoryPressuró()/AddMemoryPressure() to UnmanagedImage allocate/deallocation code.
+  
+  - Fixed factor check in Contrast Correction image processing filter.
+
+
+* AForge.Neuro
+  - Added implementation of ICloneable interface to activation functions.
+
+
+* AForge.Video
+  - Increased buffer size for JPEG/MJEPG stream reader classes.
+  
+  - Added ScreenCaptureStream class which captures specified rectangle of the screen. Added demo of its
+    usage to Player sample application.
+
+
+* AForge.Video.DirechShow
+  - Updated FilterInfo class, so Name and MonikerString are no longer read only fields but read only properties.
+
+  - Added locking for access to video/snapshot capabilities cache and available inputs cache, so those are
+    not access simultaneously from multiple threads.
+    
+  - Fixed setting crossbar's video input for devices which may have multiple inputs of the same type (like capture boards).
+  
+  - Refactoring setting of video/snapshot resolution in VideoCaptureDevice, so user can specify only values
+    from the list of supported.
+    
+  - A workaround introduced for Windows 8 issues when ICaptureGraphBuilder2::RenderStream() fails on 12 bpp format.
+    Such formats are simply ignored for now.
+    
+  - Added code for setting/getting camera properties.
+
+
+* AForge.Video.FFMPEG
+  - Fixed post build step for AForge.Video.FFMPEG, so it builds fine when path name contains spaces.
+  
+  - Updating version of FFMPEG library being used to 2012-01-27 - the last version before API got changed.
+
+
+* AForge.Controls
+  - Merged the fix which adds property allowing to keep aspect ratio in VideoSourcePlayer.
+  
+  
+* AForge.Robotics.TeRK
+  - The Qwerk class is marked as deprecated.
+
+
+* AForge.Robotics.Lego
+  - The RCXBrick class is marked as deprecated.
+
+
+
+
 AForge.NET Framework 2.2.4.1 release notes
 ----------------------------------------
 28.02.2012.
