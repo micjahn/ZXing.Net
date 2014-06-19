@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 
+using System;
 using ZXing.Common;
 
 namespace ZXing.QrCode.Internal
@@ -365,6 +366,9 @@ namespace ZXing.QrCode.Internal
       /// <returns></returns>
       public static int calculateBCHCode(int value, int poly)
       {
+         if (poly == 0)
+            throw new ArgumentException("0 polynominal", "poly");
+
          // If poly is "1 1111 0010 0101" (version info poly), msbSetInPoly is 13. We'll subtract 1
          // from 13 to make it 12.
          int msbSetInPoly = findMSBSet(poly);

@@ -107,6 +107,9 @@ namespace ZXing.Maxicode.Internal
 
       private static int getInt(byte[] bytes, byte[] x)
       {
+         if (x.Length == 0)
+            throw new ArgumentException("x");
+
          int val = 0;
          for (int i = 0; i < x.Length; i++)
          {
