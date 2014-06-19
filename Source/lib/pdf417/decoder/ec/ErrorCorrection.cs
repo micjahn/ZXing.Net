@@ -38,9 +38,9 @@ namespace ZXing.PDF417.Internal.EC
       /// <summary>
       /// Decodes the specified received.
       /// </summary>
-      /// <param name="received">The received.</param>
-      /// <param name="numECCodewords">The num EC codewords.</param>
-      /// <param name="erasures">The erasures.</param>
+      /// <param name="received">received codewords</param>
+      /// <param name="numECCodewords">number of those codewords used for EC</param>
+      /// <param name="erasures">location of erasures</param>
       /// <param name="errorLocationsCount">The error locations count.</param>
       /// <returns></returns>
       public bool decode(int[] received, int numECCodewords, int[] erasures, out int errorLocationsCount)

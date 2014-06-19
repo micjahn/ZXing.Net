@@ -61,10 +61,10 @@ namespace ZXing.Common.Detector
       /// <summary>
       /// Creates a WhiteRectangleDetector instance
       /// </summary>
-      /// <param name="image">The image.</param>
-      /// <param name="initSize">Size of the init.</param>
-      /// <param name="x">The x.</param>
-      /// <param name="y">The y.</param>
+      /// <param name="image">barcode image to find a rectangle in</param>
+      /// <param name="initSize">initial size of search area around center</param>
+      /// <param name="x">x position of search center</param>
+      /// <param name="y">y position of search center</param>
       /// <returns>
       /// null, if image is too small, otherwise a WhiteRectangleDetector instance
       /// </returns>

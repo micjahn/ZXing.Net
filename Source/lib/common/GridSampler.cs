@@ -25,15 +25,11 @@ namespace ZXing.Common
    /// 
    /// The implementation used can be controlled by calling {@link #setGridSampler(GridSampler)}
    /// with an instance of a class which implements this interface.
-   /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author> Sean Owen</author>
    public abstract class GridSampler
    {
-      /// <returns> the current implementation of {@link GridSampler}
+      /// <returns> the current implementation of <see cref="GridSampler"/>
       /// </returns>
       public static GridSampler Instance
       {
@@ -46,15 +42,13 @@ namespace ZXing.Common
 
       private static GridSampler gridSampler = new DefaultGridSampler();
 
-      /// <summary> Sets the implementation of {@link GridSampler} used by the library. One global
+      /// <summary> Sets the implementation of <see cref="GridSampler"/> used by the library. One global
       /// instance is stored, which may sound problematic. But, the implementation provided
       /// ought to be appropriate for the entire platform, and all uses of this library
       /// in the whole lifetime of the JVM. For instance, an Android activity can swap in
       /// an implementation that takes advantage of native platform libraries.
-      /// 
       /// </summary>
-      /// <param name="newGridSampler">The platform-specific object to install.
-      /// </param>
+      /// <param name="newGridSampler">The platform-specific object to install.</param>
       public static void setGridSampler(GridSampler newGridSampler)
       {
          if (newGridSampler == null)
@@ -64,32 +58,43 @@ namespace ZXing.Common
          gridSampler = newGridSampler;
       }
 
-      /// <summary> <p>Samples an image for a square matrix of bits of the given dimension. This is used to extract
+      /// <summary>
+      ///   <p>Samples an image for a square matrix of bits of the given dimension. This is used to extract
       /// the black/white modules of a 2D barcode like a QR Code found in an image. Because this barcode
       /// may be rotated or perspective-distorted, the caller supplies four points in the source image
       /// that define known points in the barcode, so that the image may be sampled appropriately.</p>
-      /// 
-      /// <p>The last eight "from" parameters are four X/Y coordinate pairs of locations of points in
+      ///   <p>The last eight "from" parameters are four X/Y coordinate pairs of locations of points in
       /// the image that define some significant points in the image to be sample. For example,
       /// these may be the location of finder pattern in a QR Code.</p>
-      /// 
-      /// <p>The first eight "to" parameters are four X/Y coordinate pairs measured in the destination
-      /// {@link BitMatrix}, from the top left, where the known points in the image given by the "from"
+      ///   <p>The first eight "to" parameters are four X/Y coordinate pairs measured in the destination
+      /// <see cref="BitMatrix"/>, from the top left, where the known points in the image given by the "from"
       /// parameters map to.</p>
-      /// 
-      /// <p>These 16 parameters define the transformation needed to sample the image.</p>
-      /// 
+      ///   <p>These 16 parameters define the transformation needed to sample the image.</p>
       /// </summary>
-      /// <param name="image">image to sample
-      /// </param>
-      /// <param name="dimension">width/height of {@link BitMatrix} to sample from image
-      /// </param>
-      /// <returns> {@link BitMatrix} representing a grid of points sampled from the image within a region
+      /// <param name="image">image to sample</param>
+      /// <param name="dimensionX">The dimension X.</param>
+      /// <param name="dimensionY">The dimension Y.</param>
+      /// <param name="p1ToX">The p1 preimage X.</param>
+      /// <param name="p1ToY">The p1 preimage  Y.</param>
+      /// <param name="p2ToX">The p2 preimage  X.</param>
+      /// <param name="p2ToY">The p2 preimage  Y.</param>
+      /// <param name="p3ToX">The p3 preimage  X.</param>
+      /// <param name="p3ToY">The p3 preimage  Y.</param>
+      /// <param name="p4ToX">The p4 preimage  X.</param>
+      /// <param name="p4ToY">The p4 preimage  Y.</param>
+      /// <param name="p1FromX">The p1 image X.</param>
+      /// <param name="p1FromY">The p1 image Y.</param>
+      /// <param name="p2FromX">The p2 image X.</param>
+      /// <param name="p2FromY">The p2 image Y.</param>
+      /// <param name="p3FromX">The p3 image X.</param>
+      /// <param name="p3FromY">The p3 image Y.</param>
+      /// <param name="p4FromX">The p4 image X.</param>
+      /// <param name="p4FromY">The p4 image Y.</param>
+      /// <returns>
+      /// <see cref="BitMatrix"/> representing a grid of points sampled from the image within a region
       /// defined by the "from" parameters
       /// </returns>
       /// <throws>  ReaderException if image can't be sampled, for example, if the transformation defined </throws>
-      /// <summary>   by the given points is invalid or results in sampling outside the image boundaries
-      /// </summary>
       public abstract BitMatrix sampleGrid(BitMatrix image, int dimensionX, int dimensionY, float p1ToX, float p1ToY, float p2ToX, float p2ToY, float p3ToX, float p3ToY, float p4ToX, float p4ToY, float p1FromX, float p1FromY, float p2FromX, float p2FromY, float p3FromX, float p3FromY, float p4FromX, float p4FromY);
 
       public virtual BitMatrix sampleGrid(BitMatrix image, int dimensionX, int dimensionY, PerspectiveTransform transform)

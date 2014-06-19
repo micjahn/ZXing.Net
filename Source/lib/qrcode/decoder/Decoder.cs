@@ -45,7 +45,7 @@ namespace ZXing.QrCode.Internal
       /// "true" is taken to mean a black module.</p>
       /// </summary>
       /// <param name="image">booleans representing white/black QR Code modules</param>
-      /// <param name="hints">The hints.</param>
+      /// <param name="hints">decoding hints that should be used to influence decoding</param>
       /// <returns>
       /// text and bytes encoded within the QR Code
       /// </returns>
@@ -67,7 +67,7 @@ namespace ZXing.QrCode.Internal
       ///   <p>Decodes a QR Code represented as a {@link BitMatrix}. A 1 or "true" is taken to mean a black module.</p>
       /// </summary>
       /// <param name="bits">booleans representing white/black QR Code modules</param>
-      /// <param name="hints">The hints.</param>
+      /// <param name="hints">decoding hints that should be used to influence decoding</param>
       /// <returns>
       /// text and bytes encoded within the QR Code
       /// </returns>

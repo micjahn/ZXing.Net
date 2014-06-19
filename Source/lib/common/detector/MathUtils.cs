@@ -24,8 +24,8 @@ namespace ZXing.Common.Detector
       /// Ends up being a bit faster than {@link Math#round(float)}. This merely rounds its
       /// argument to the nearest int, where x.5 rounds up to x+1.
       /// </summary>
-      /// <param name="d">The d.</param>
-      /// <returns></returns>
+      /// <param name="d">real value to round</param>
+      /// <returns>nearest <c>int</c></returns>
       public static int round(float d)
       {
          return (int)(d + 0.5f);

@@ -571,7 +571,7 @@ namespace ZXing.QrCode.Internal
       /// <param name="stateCount">reading state module counts from horizontal scan</param>
       /// <param name="i">row where finder pattern may be found</param>
       /// <param name="j">end of possible finder pattern in row</param>
-      /// <param name="pureBarcode">if set to <c>true</c> [pure barcode].</param>
+      /// <param name="pureBarcode">true if in "pure barcode" mode</param>
       /// <returns>
       /// true if a finder pattern candidate was found this time
       /// </returns>

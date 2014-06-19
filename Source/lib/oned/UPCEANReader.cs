@@ -142,10 +142,15 @@ namespace ZXing.OneD
       }
 
       /// <summary>
-      /// <p>Like decodeRow(int, BitArray, java.util.Map), but
+      ///   <p>Like decodeRow(int, BitArray, java.util.Map), but
       /// allows caller to inform method about where the UPC/EAN start pattern is
       /// found. This allows this to be computed once and reused across many implementations.</p>
       /// </summary>
+      /// <param name="rowNumber">row index into the image</param>
+      /// <param name="row">encoding of the row of the barcode image</param>
+      /// <param name="startGuardRange">start/end column where the opening start pattern was found</param>
+      /// <param name="hints">optional hints that influence decoding</param>
+      /// <returns><see cref="Result"/> encapsulating the result of decoding a barcode in the row</returns>
       virtual public Result decodeRow(int rowNumber,
                               BitArray row,
                               int[] startGuardRange,
@@ -258,8 +263,9 @@ namespace ZXing.OneD
       }
 
       /// <summary>
-      /// <returns>see checkStandardUPCEANChecksum(String)</returns>
       /// </summary>
+      /// <param name="s">string of digits to check</param>
+      /// <returns>see <see cref="checkStandardUPCEANChecksum(String)"/></returns>
       virtual protected bool checkChecksum(String s)
       {
          return checkStandardUPCEANChecksum(s);
@@ -408,8 +414,8 @@ namespace ZXing.OneD
 
       /// <summary>
       /// Get the format of this decoder.
-      /// <returns>The 1D format.</returns>
       /// </summary>
+      /// <returns>The 1D format.</returns>
       internal abstract BarcodeFormat BarcodeFormat { get; }
 
       /// <summary>

@@ -144,8 +144,8 @@ namespace ZXing.Common
       /// <summary>
       /// see getNextSet(int)
       /// </summary>
-      /// <param name="from"></param>
-      /// <returns></returns>
+      /// <param name="from">index to start looking for unset bit</param>
+      /// <returns>index of next unset bit, or <see cref="Size"/> if none are unset until the end</returns>
       public int getNextUnset(int from)
       {
          if (from >= size)
@@ -310,8 +310,8 @@ namespace ZXing.Common
       /// least-significant. For example, appending 6 bits from 0x000001E will append the bits
       /// 0, 1, 1, 1, 1, 0 in that order.
       /// </summary>
-      /// <param name="value">The value.</param>
-      /// <param name="numBits">The num bits.</param>
+      /// <param name="value"><see cref="int"/> containing bits to append</param>
+      /// <param name="numBits">bits from value to append</param>
       public void appendBits(int value, int numBits)
       {
          if (numBits < 0 || numBits > 32)

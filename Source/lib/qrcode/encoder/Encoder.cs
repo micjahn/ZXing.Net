@@ -61,8 +61,9 @@ namespace ZXing.QrCode.Internal
       /// Note that there is no way to encode bytes in MODE_KANJI. We might want to add EncodeWithMode()
       /// with which clients can specify the encoding mode. For now, we don't need the functionality.
       /// </summary>
-      /// <param name="content">The content.</param>
-      /// <param name="ecLevel">The ec level.</param>
+      /// <param name="content">text to encode</param>
+      /// <param name="ecLevel">error correction level to use</param>
+      /// <returns><see cref="QRCode"/> representing the encoded QR code</returns>
       public static QRCode encode(String content, ErrorCorrectionLevel ecLevel)
       {
          return encode(content, ecLevel, null);

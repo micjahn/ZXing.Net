@@ -124,6 +124,7 @@ namespace ZXing
       /// Orders an array of three ResultPoints in an order [A,B,C] such that AB is less than AC and
       /// BC is less than AC and the angle between BC and BA is less than 180 degrees.
       /// </summary>
+      /// <param name="patterns">array of three <see cref="ResultPoint" /> to order</param>
       public static void orderBestPatterns(ResultPoint[] patterns)
       {
          // Find distances between pattern centers
@@ -169,6 +170,11 @@ namespace ZXing
       }
 
 
+      /// <summary>
+      /// calculates the distance between two points
+      /// </summary>
+      /// <param name="pattern1">first pattern</param>
+      /// <param name="pattern2">second pattern</param>
       /// <returns>
       /// distance between two points
       /// </returns>

@@ -176,7 +176,7 @@ namespace ZXing.Aztec.Internal
       /// <summary>
       /// Convert the text represented by this High Level Encoder into a BitArray.
       /// </summary>
-      /// <returns></returns>
+      /// <returns>text represented by this encoder encoded as a <see cref="BitArray"/></returns>
       public BitArray encode()
       {
          ICollection<State> states = new Collection<State>();

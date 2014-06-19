@@ -100,12 +100,8 @@ namespace ZXing.Common
          }
       }
 
-      /// <param name="value">character set ECI value
-      /// </param>
-      /// <returns> {@link CharacterSetECI} representing ECI of given value, or null if it is legal but
-      /// unsupported
-      /// </returns>
-      /// <throws>  IllegalArgumentException if ECI value is invalid </throws>
+      /// <param name="value">character set ECI value</param>
+      /// <returns><see cref="CharacterSetECI"/> representing ECI of given value, or null if it is legal but unsupported</returns>
       public static CharacterSetECI getCharacterSetECIByValue(int value)
       {
          if (value < 0 || value >= 900)
@@ -115,11 +111,8 @@ namespace ZXing.Common
          return VALUE_TO_ECI[value];
       }
 
-      /// <param name="name">character set ECI encoding name
-      /// </param>
-      /// <returns> {@link CharacterSetECI} representing ECI for character encoding, or null if it is legal
-      /// but unsupported
-      /// </returns>
+      /// <param name="name">character set ECI encoding name</param>
+      /// <returns><see cref="CharacterSetECI"/> representing ECI for character encoding, or null if it is legalbut unsupported</returns>
       public static CharacterSetECI getCharacterSetECIByName(String name)
       {
          return NAME_TO_ECI[name.ToUpper()];

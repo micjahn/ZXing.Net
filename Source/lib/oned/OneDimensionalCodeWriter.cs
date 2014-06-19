@@ -81,8 +81,8 @@ namespace ZXing.OneD
       }
 
       /// <summary>
-      /// <returns>a byte array of horizontal pixels (0 = white, 1 = black)</returns>
       /// </summary>
+      /// <returns>a byte array of horizontal pixels (0 = white, 1 = black)</returns>
       private static BitMatrix renderResult(bool[] code, int width, int height, int sidesMargin)
       {
          int inputWidth = code.Length;
@@ -108,10 +108,12 @@ namespace ZXing.OneD
 
       /// <summary>
       /// Appends the given pattern to the target array starting at pos.
-      ///
+      /// </summary>
+      /// <param name="target">encode black/white pattern into this array</param>
+      /// <param name="pos">position to start encoding at in <c>target</c></param>
+      /// <param name="pattern">lengths of black/white runs to encode</param>
       /// <param name="startColor">starting color - false for white, true for black</param>
       /// <returns>the number of elements added to target.</returns>
-      /// </summary>
       protected static int appendPattern(bool[] target, int pos, int[] pattern, bool startColor)
       {
          bool color = startColor;
@@ -144,9 +146,9 @@ namespace ZXing.OneD
       /// <summary>
       /// Encode the contents to bool array expression of one-dimensional barcode.
       /// Start code and end code should be included in result, and side margins should not be included.
-      ///
-      /// <returns>a {@code bool[]} of horizontal pixels (false = white, true = black)</returns>
       /// </summary>
+      /// <param name="contents">barcode contents to encode</param>
+      /// <returns>a <c>bool[]</c> of horizontal pixels (false = white, true = black)</returns>
       public abstract bool[] encode(String contents);
 
       /// <summary>

@@ -674,6 +674,7 @@ namespace ZXing.PDF417.Internal
       /// Generates the barcode logic.
       /// </summary>
       /// <param name="msg">the message to encode</param>
+      /// <param name="errorCorrectionLevel">PDF417 error correction level to use</param>
       internal void generateBarcodeLogic(String msg, int errorCorrectionLevel)
       {
 
@@ -775,6 +776,10 @@ namespace ZXing.PDF417.Internal
       /// <summary>
       /// Sets max/min row/col values
       /// </summary>
+      /// <param name="maxCols">maximum allowed columns</param>
+      /// <param name="minCols">minimum allowed columns</param>
+      /// <param name="maxRows">maximum allowed rows</param>
+      /// <param name="minRows">minimum allowed rows</param>
       internal void setDimensions(int maxCols, int minCols, int maxRows, int minRows)
       {
          this.maxCols = maxCols;
@@ -784,8 +789,9 @@ namespace ZXing.PDF417.Internal
       }
 
       /// <summary>
-      /// Sets compaction to values stored in <see cref="Compaction" />enum
+      /// Sets compaction to values stored in <see cref="Compaction"/>enum
       /// </summary>
+      /// <param name="compaction">compaction mode to use</param>
       internal void setCompaction(Compaction compaction)
       {
          this.compaction = compaction;
@@ -794,6 +800,7 @@ namespace ZXing.PDF417.Internal
       /// <summary>
       /// Sets compact to be true or false
       /// </summary>
+      /// <param name="compact">if true, enables compaction</param>
       internal void setCompact(bool compact)
       {
          this.compact = compact;
@@ -802,6 +809,7 @@ namespace ZXing.PDF417.Internal
       /// <summary>
       /// Sets output encoding.
       /// </summary>
+      /// <param name="encodingname">sets character encoding to use</param>
       internal void setEncoding(String encodingname)
       {
 #if WindowsCE
@@ -823,6 +831,7 @@ namespace ZXing.PDF417.Internal
       /// <summary>
       /// Sets the disable eci.
       /// </summary>
+      /// <param name="disabled">if set to <c>true</c> don't add an ECI segment for different encodings than default.</param>
       internal void setDisableEci(bool disabled)
       {
          this.disableEci = disabled;

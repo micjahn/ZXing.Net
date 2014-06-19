@@ -69,8 +69,8 @@ namespace ZXing.Client.Result
       /// of information (email, URL, etc.) and return a {@link ParsedResult} encapsulating
       /// the result of parsing.
       /// </summary>
-      /// <param name="theResult">The result.</param>
-      /// <returns></returns>
+      /// <param name="theResult">the raw <see cref="Result"/> to parse</param>
+      /// <returns><see cref="ParsedResult" /> encapsulating the parsing result</returns>
       public abstract ParsedResult parse(ZXing.Result theResult);
 
       public static ParsedResult parseResult(ZXing.Result theResult)

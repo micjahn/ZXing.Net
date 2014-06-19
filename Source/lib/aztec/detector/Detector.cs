@@ -57,7 +57,7 @@ namespace ZXing.Aztec.Internal
       /// <summary>
       /// Detects an Aztec Code in an image.
       /// </summary>
-      /// <param name="isMirror">if set to <c>true</c> [is mirror].</param>
+      /// <param name="isMirror">if true, image is a mirror-image of original.</param>
       /// <returns>
       /// encapsulating results of detecting an Aztec Code
       /// </returns>

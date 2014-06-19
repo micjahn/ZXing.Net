@@ -68,12 +68,14 @@ namespace ZXing.PDF417.Internal
       private const int BARCODE_MIN_HEIGHT = 10;
 
       /// <summary>
-      /// <p>Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.</p>
+      ///   <p>Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.</p>
       /// </summary>
-      /// <param name="image">Image.</param>
-      /// <param name="hints">Hints.</param>
-      /// <param name="multiple">If set to <c>true</c> multiple.</param>
-      /// <returns><see cref="PDF417DetectorResult"/> encapsulating results of detecting a PDF417 code </returns>
+      /// <param name="image">barcode image to decode</param>
+      /// <param name="hints">optional hints to detector</param>
+      /// <param name="multiple">if true, then the image is searched for multiple codes. If false, then at most one code will be found and returned</param>
+      /// <returns>
+      ///   <see cref="PDF417DetectorResult"/> encapsulating results of detecting a PDF417 code
+      /// </returns>
       public static PDF417DetectorResult detect(BinaryBitmap image, IDictionary<DecodeHintType, object> hints, bool multiple)
       {
          // TODO detection improvement, tryHarder could try several different luminance thresholds/blackpoints or even 

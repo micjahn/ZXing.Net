@@ -64,7 +64,7 @@ namespace ZXing.QrCode.Internal
       }
 
       /// <summary>
-      ///   <p>Detects a QR Code in an image, simply.</p>
+      ///   <p>Detects a QR Code in an image.</p>
       /// </summary>
       /// <returns>
       ///   <see cref="DetectorResult"/> encapsulating results of detecting a QR Code
@@ -75,7 +75,7 @@ namespace ZXing.QrCode.Internal
       }
 
       /// <summary>
-      ///   <p>Detects a QR Code in an image, simply.</p>
+      ///   <p>Detects a QR Code in an image.</p>
       /// </summary>
       /// <param name="hints">optional hints to detector</param>
       /// <returns>
@@ -235,9 +235,14 @@ namespace ZXing.QrCode.Internal
          return true;
       }
 
-      /// <summary> <p>Computes an average estimated module size based on estimated derived from the positions
+      /// <summary>
+      ///   <p>Computes an average estimated module size based on estimated derived from the positions
       /// of the three finder patterns.</p>
       /// </summary>
+      /// <param name="topLeft">detected top-left finder pattern center</param>
+      /// <param name="topRight">detected top-right finder pattern center</param>
+      /// <param name="bottomLeft">detected bottom-left finder pattern center</param>
+      /// <returns>estimated module size</returns>
       protected internal virtual float calculateModuleSize(ResultPoint topLeft, ResultPoint topRight, ResultPoint bottomLeft)
       {
          // Take the average

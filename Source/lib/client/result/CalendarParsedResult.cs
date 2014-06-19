@@ -142,7 +142,7 @@ namespace ZXing.Client.Result
       }
 
       /// <summary>
-      /// May return null if the event has no duration.
+      /// event end <see cref="DateTime"/>, or null if event has no duration
       /// </summary>
       public DateTime? End
       {

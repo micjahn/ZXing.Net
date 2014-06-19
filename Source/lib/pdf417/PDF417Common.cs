@@ -89,7 +89,7 @@ namespace ZXing.PDF417
       /// Translate the symbol into a codeword
       /// </summary>
       /// <returns>the codeword corresponding to the symbol.</returns>
-      /// <param name="symbol">the symbol from the barcode..</param>
+      /// <param name="symbol">encoded symbol to translate to a codeword</param>
       public static int getCodeword(long symbol)
       {
          long sym = symbol & 0x3FFFF;
