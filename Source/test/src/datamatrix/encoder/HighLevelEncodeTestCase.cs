@@ -197,6 +197,8 @@ namespace ZXing.Datamatrix.Test
          visualized = encodeHighLevel("ABC>ABC123>ABCDEF");
          Assert.AreEqual("238 89 233 14 192 100 207 44 31 96 82 254 70 71 129 237", visualized);
 
+         visualized = encodeHighLevel("ABC>900>8123567");
+         Assert.AreEqual("238 89 233 14 141 25 93 254 142 165 197 129", visualized);
       }
 
       [Test]

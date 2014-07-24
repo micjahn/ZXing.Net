@@ -45,8 +45,9 @@ namespace ZXing.Datamatrix.Encoder
                int newMode = HighLevelEncoder.lookAheadTest(context.Message, context.Pos, currentMode);
                if (newMode != currentMode)
                {
+                  handleEOD(context, buffer);
                   context.signalEncoderChange(newMode);
-                  break;
+                  return;
                }
             }
          }
@@ -95,19 +96,24 @@ namespace ZXing.Datamatrix.Encoder
          {
             context.writeCodeword(HighLevelEncoder.X12_UNLATCH);
             context.Pos -= 2;
+            context.signalEncoderChange(Encodation.ASCII);
          }
          else if (count == 1)
          {
             context.Pos--;
-            context.writeCodeword(HighLevelEncoder.X12_UNLATCH);
-            if (available < 1)
+            if (context.RemainingCharacters > 1)
             {
-               context.updateSymbolInfo();
+               context.writeCodeword(HighLevelEncoder.X12_UNLATCH);
+               if (available < 1)
+               {
+                  context.updateSymbolInfo();
+               }
             }
+            context.signalEncoderChange(Encodation.ASCII);
          }
          else if (count == 0)
          {
-            if (context.RemainingCharacters > 0)
+            if (context.RemainingCharacters > 1)
             {
                context.writeCodeword(HighLevelEncoder.X12_UNLATCH);
                if (available < 1)
