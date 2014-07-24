@@ -28,7 +28,8 @@ namespace ZXing.Datamatrix.Encoder
       override public void encode(EncoderContext context)
       {
          //step C
-         StringBuilder buffer = new StringBuilder();
+         var buffer = new StringBuilder();
+         int currentMode = EncodingMode;
          while (context.HasMoreCharacters)
          {
             char c = context.CurrentChar;
@@ -41,8 +42,8 @@ namespace ZXing.Datamatrix.Encoder
             {
                writeNextTriplet(context, buffer);
 
-               int newMode = HighLevelEncoder.lookAheadTest(context.Message, context.Pos, EncodingMode);
-               if (newMode != EncodingMode)
+               int newMode = HighLevelEncoder.lookAheadTest(context.Message, context.Pos, currentMode);
+               if (newMode != currentMode)
                {
                   context.signalEncoderChange(newMode);
                   break;
@@ -94,17 +95,26 @@ namespace ZXing.Datamatrix.Encoder
          {
             context.writeCodeword(HighLevelEncoder.X12_UNLATCH);
             context.Pos -= 2;
-            context.signalEncoderChange(Encodation.ASCII);
          }
          else if (count == 1)
          {
             context.Pos--;
-            if (available > 1)
+            context.writeCodeword(HighLevelEncoder.X12_UNLATCH);
+            if (available < 1)
+            {
+               context.updateSymbolInfo();
+            }
+         }
+         else if (count == 0)
+         {
+            if (context.RemainingCharacters > 0)
             {
                context.writeCodeword(HighLevelEncoder.X12_UNLATCH);
+               if (available < 1)
+               {
+                  context.updateSymbolInfo();
+               }
             }
-            //NOP - No unlatch necessary
-            context.signalEncoderChange(Encodation.ASCII);
          }
       }
    }
