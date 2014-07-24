@@ -106,6 +106,7 @@
     <Compile Include="common\BitSourceBuilder.cs" />
     <Compile Include="common\BitSourceTestCase.cs" />
     <Compile Include="common\CharacterSetECITestCase.cs" />
+    <Compile Include="common\detector\MathUtilsTestCase.cs" />
     <Compile Include="common\PerspectiveTransformTestCase.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonTestCase.cs" />
     <Compile Include="common\StringUtilsTestCase.cs" />
