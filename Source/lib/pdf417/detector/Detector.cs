@@ -83,11 +83,14 @@ namespace ZXing.PDF417.Internal
          //boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
 
          BitMatrix bitMatrix = image.BlackMatrix;
+         if (bitMatrix == null)
+            return null;
 
          List<ResultPoint[]> barcodeCoordinates = detect(multiple, bitMatrix);
-         if (barcodeCoordinates.Count == 0)
+         if (barcodeCoordinates == null ||
+             barcodeCoordinates.Count == 0)
          {
-            bitMatrix = (BitMatrix)bitMatrix.Clone();
+            bitMatrix = (BitMatrix) bitMatrix.Clone();
             bitMatrix.rotate180();
             barcodeCoordinates = detect(multiple, bitMatrix);
          }
@@ -420,6 +423,7 @@ namespace ZXing.PDF417.Internal
             totalVariance += variance;
          }
          return totalVariance/total;
+
       }
    }
 }

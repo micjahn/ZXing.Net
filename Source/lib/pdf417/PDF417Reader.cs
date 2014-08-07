@@ -107,24 +107,27 @@ namespace ZXing.PDF417
       /// <param name="multiple">If set to <c>true</c> multiple.</param>
       private static Result[] decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints, bool multiple)
       {
-         List<Result> results = new List<Result>();
-         PDF417DetectorResult detectorResult = Detector.detect(image, hints, multiple);
-         foreach (ResultPoint[] points in detectorResult.Points)
+         var results = new List<Result>();
+         var detectorResult = Detector.detect(image, hints, multiple);
+         if (detectorResult != null)
          {
-            DecoderResult decoderResult = PDF417ScanningDecoder.decode(detectorResult.Bits, points[4], points[5],
-                                                                       points[6], points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
-            if (decoderResult == null)
+            foreach (var points in detectorResult.Points)
             {
-               continue;
+               var decoderResult = PDF417ScanningDecoder.decode(detectorResult.Bits, points[4], points[5],
+                                                                points[6], points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
+               if (decoderResult == null)
+               {
+                  continue;
+               }
+               var result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.PDF_417);
+               result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.ECLevel);
+               var pdf417ResultMetadata = (PDF417ResultMetadata) decoderResult.Other;
+               if (pdf417ResultMetadata != null)
+               {
+                  result.putMetadata(ResultMetadataType.PDF417_EXTRA_METADATA, pdf417ResultMetadata);
+               }
+               results.Add(result);
             }
-            Result result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.PDF_417);
-            result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.ECLevel);
-            PDF417ResultMetadata pdf417ResultMetadata = (PDF417ResultMetadata) decoderResult.Other;
-            if (pdf417ResultMetadata != null)
-            {
-               result.putMetadata(ResultMetadataType.PDF417_EXTRA_METADATA, pdf417ResultMetadata);
-            }
-            results.Add(result);
          }
          return results.ToArray();
       }
