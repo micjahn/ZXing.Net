@@ -16,6 +16,14 @@
 
 using ZXing.Common;
 
+#if MONOTOUCH
+#if __UNIFIED__
+using UIKit;
+#else
+using MonoTouch.UIKit;
+#endif
+#endif
+
 namespace ZXing
 {
    /// <summary>
@@ -34,11 +42,11 @@ namespace ZXing
       /// <summary>
       /// Creates a visual representation of the contents
       /// </summary>
-      MonoTouch.UIKit.UIImage Write(string contents);
+      UIImage Write(string contents);
       /// <summary>
       /// Returns a rendered instance of the barcode which is given by a BitMatrix.
       /// </summary>
-      MonoTouch.UIKit.UIImage Write(BitMatrix matrix);
+      UIImage Write(BitMatrix matrix);
 #endif
 
 #if MONOANDROID

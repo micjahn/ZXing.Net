@@ -117,7 +117,11 @@ namespace ZXing
       Result[] DecodeMultiple(LuminanceSource luminanceSource);
 
 #if MONOTOUCH
+      #if __UNIFIED__
+      Result[] DecodeMultiple(UIKit.UIImage barcodeImage);
+      #else
       Result[] DecodeMultiple(MonoTouch.UIKit.UIImage barcodeImage);
+      #endif
 #elif MONOANDROID
       Result[] DecodeMultiple(Android.Graphics.Bitmap barcodeImage);
 #else

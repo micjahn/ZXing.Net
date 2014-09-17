@@ -18,7 +18,9 @@ using System;
 #if !PORTABLE
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
+#if !__UNIFIED__
 using System.Drawing;
+#endif
 #else
 using UnityEngine;
 #endif
@@ -32,15 +34,22 @@ using System.Windows.Media.Imaging;
 using Android.Graphics;
 #endif
 
+#if MONOTOUCH
+#if __UNIFIED__
+using UIKit;
+#else
+using MonoTouch.UIKit;
+#endif
+#endif
 namespace ZXing
 {
    /// <summary>
    /// A smart class to decode the barcode inside a bitmap object
    /// </summary>
 #if MONOTOUCH
-   public class BarcodeReader : BarcodeReaderGeneric<MonoTouch.UIKit.UIImage>, IBarcodeReader, IMultipleBarcodeReader
+   public class BarcodeReader : BarcodeReaderGeneric<UIImage>, IBarcodeReader, IMultipleBarcodeReader
    {
-      private static readonly Func<MonoTouch.UIKit.UIImage, LuminanceSource> defaultCreateLuminanceSource = 
+      private static readonly Func<UIImage, LuminanceSource> defaultCreateLuminanceSource =
          (img) => new RGBLuminanceSource(img);
 #else
 #if !PORTABLE
@@ -88,7 +97,7 @@ namespace ZXing
       /// If null then HybridBinarizer is used</param>
       public BarcodeReader(Reader reader,
 #if MONOTOUCH
-         Func<MonoTouch.UIKit.UIImage, LuminanceSource> createLuminanceSource,
+         Func<UIImage, LuminanceSource> createLuminanceSource,
 #elif MONOANDROID
          Func<Android.Graphics.Bitmap, LuminanceSource> createLuminanceSource,
 #else
@@ -123,7 +132,7 @@ namespace ZXing
       /// If null then HybridBinarizer is used</param>
       public BarcodeReader(Reader reader,
 #if MONOTOUCH
-         Func<MonoTouch.UIKit.UIImage, LuminanceSource> createLuminanceSource,
+         Func<UIImage, LuminanceSource> createLuminanceSource,
 #elif MONOANDROID
          Func<Android.Graphics.Bitmap, LuminanceSource> createLuminanceSource,
 #else

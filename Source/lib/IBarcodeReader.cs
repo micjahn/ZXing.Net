@@ -121,7 +121,11 @@ namespace ZXing
       /// </summary>
       /// <param name="barcodeBitmap">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
+      #if __UNIFIED__
+      Result Decode(UIKit.UIImage barcodeImage);
+      #else
       Result Decode(MonoTouch.UIKit.UIImage barcodeImage);
+      #endif
 #elif MONOANDROID
       /// <summary>
       /// Decodes the specified barcode bitmap.

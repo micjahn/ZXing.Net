@@ -16,13 +16,20 @@
 
 using ZXing.Rendering;
 
+#if MONOTOUCH
+#if __UNIFIED__
+using UIKit;
+#else
+using MonoTouch.UIKit;
+#endif
+#endif
 namespace ZXing
 {
 #if MONOTOUCH
    /// <summary>
    /// A smart class to encode some content to a barcode image
    /// </summary>
-   public class BarcodeWriter : BarcodeWriterGeneric<MonoTouch.UIKit.UIImage>, IBarcodeWriter
+   public class BarcodeWriter : BarcodeWriterGeneric<UIImage>, IBarcodeWriter
    {
       /// <summary>
       /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.
