@@ -254,7 +254,11 @@ namespace ZXing.PDF417.Internal
                      else
                      {
                         //Mode latch performed by encodeBinary()
-                        encodeBinary(bytes, p, b, encodingMode, sb);
+                        encodeBinary(bytes,
+                                     toBytes(msg.Substring(0, p), encoding).Length,
+                                     toBytes(msg.Substring(p, b), encoding).Length,
+                                     encodingMode,
+                                     sb);
                         encodingMode = BYTE_COMPACTION;
                         textSubMode = SUBMODE_ALPHA; //Reset after latch
                      }
@@ -748,6 +752,7 @@ namespace ZXing.PDF417.Internal
       {
          int len = msg.Length;
          int idx = startpos;
+         int idxb = idx;  // bytes index (may differ from idx for utf-8 and other unicode encodings)
          while (idx < len)
          {
             char ch = msg[idx];
@@ -788,11 +793,14 @@ namespace ZXing.PDF417.Internal
             //Check if character is encodable
             //Sun returns a ASCII 63 (?) for a character that cannot be mapped. Let's hope all
             //other VMs do the same
-            if (bytes[idx] == 63 && ch != '?')
+            if (bytes[idxb] == 63 && ch != '?')
             {
                throw new WriterException("Non-encodable character detected: " + ch + " (Unicode: " + (int) ch + ')');
             }
             idx++;
+            idxb++;
+            if (ch >= 256)  // for non-ascii symbols
+                idxb++;
          }
          return idx - startpos;
       }
