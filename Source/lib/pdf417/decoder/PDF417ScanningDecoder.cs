@@ -486,7 +486,7 @@ namespace ZXing.PDF417.Internal
       /// <param name="barcodeColumn">Barcode column.</param>
       private static bool isValidBarcodeColumn(DetectionResult detectionResult, int barcodeColumn)
       {
-         return (barcodeColumn >= 0) && (barcodeColumn <= detectionResult.DetectionResultColumns.Length + 1);
+         return (barcodeColumn >= 0) && (barcodeColumn < detectionResult.DetectionResultColumns.Length);
       }
 
       /// <summary>
