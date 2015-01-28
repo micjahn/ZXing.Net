@@ -132,7 +132,7 @@ namespace ZXing.PDF417.Internal
       private static readonly sbyte[] MIXED = new sbyte[128];
       private static readonly sbyte[] PUNCTUATION = new sbyte[128];
 
-      internal static String[] DEFAULT_ENCODING_NAMES = new [] {"CP437", "IBM437"};
+      internal static string DEFAULT_ENCODING_NAME = "ISO-8859-1";
 
       static PDF417HighLevelEncoder()
       {
@@ -175,7 +175,7 @@ namespace ZXing.PDF417.Internal
          //the codewords 0..928 are encoded as Unicode characters
          var sb = new StringBuilder(msg.Length);
 
-         if (encoding != null && !disableEci && !Contains(DEFAULT_ENCODING_NAMES, encoding.WebName))
+         if (encoding != null && !disableEci && String.Compare(DEFAULT_ENCODING_NAME, encoding.WebName, StringComparison.Ordinal) != 0)
          {
             CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding.WebName);
             if (eci != null)
@@ -290,21 +290,16 @@ namespace ZXing.PDF417.Internal
       private static byte[] toBytes(String msg, Encoding encoding)
       {
          // Defer instantiating default Charset until needed, since it may be for an unsupported
-         // encoding. For example the default of Cp437 doesn't seem to exist on Android.
+         // encoding.
          if (encoding == null)
          {
-            for (var index = 0; index < DEFAULT_ENCODING_NAMES.Length; index++)
+            try
             {
-               String encodingName = DEFAULT_ENCODING_NAMES[index];
-               try
-               {
-
-                  encoding = Encoding.GetEncoding(encodingName);
-               }
-               catch (Exception )
-               {
-                  // continue
-               }
+               encoding = Encoding.GetEncoding(DEFAULT_ENCODING_NAME);
+            }
+            catch (Exception )
+            {
+               // continue
             }
             if (encoding == null)
             {
@@ -314,16 +309,14 @@ namespace ZXing.PDF417.Internal
 #if WindowsCE
                   try
                   {
-                     encoding = Encoding.GetEncoding("CP437");
+                     encoding = Encoding.GetEncoding(1252);
                   }
                   catch (PlatformNotSupportedException)
                   {
                      // WindowsCE doesn't support all encodings. But it is device depended.
-                     // So we try here the some different ones
-                     encoding = Encoding.GetEncoding(1252);
+                     // So we try here some different ones
+                     encoding = Encoding.GetEncoding("CP437");
                   }
-#elif (!SILVERLIGHT || WINDOWS) && !MONOTOUCH
-                  encoding = Encoding.GetEncoding("CP437");
 #else
                   // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
                   encoding = Encoding.GetEncoding("UTF-8");
@@ -332,7 +325,7 @@ namespace ZXing.PDF417.Internal
                }
                catch (Exception uce)
                {
-                  throw new WriterException("No support for any encoding: " + DEFAULT_ENCODING_NAMES, uce);
+                  throw new WriterException("No support for any encoding: " + DEFAULT_ENCODING_NAME, uce);
                }
             }
          }
