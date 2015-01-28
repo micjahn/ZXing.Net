@@ -19,16 +19,14 @@ using System.Text.RegularExpressions;
 
 namespace ZXing.Client.Result
 {
-   /// <summary> Tries to parse results that are a URI of some kind.
-   /// 
+   /// <summary>
+   /// Tries to parse results that are a URI of some kind.
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    sealed class URIResultParser : ResultParser
    {
-      private static readonly Regex URL_WITH_PROTOCOL_PATTERN = new Regex("[a-zA-Z0-9]{2,}:"
+      // See http://www.ietf.org/rfc/rfc2396.txt
+      private static readonly Regex URL_WITH_PROTOCOL_PATTERN = new Regex("[a-zA-Z][a-zA-Z0-9+-.]+:"
 #if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
 , RegexOptions.Compiled);
 #else
