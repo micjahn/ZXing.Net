@@ -18,6 +18,7 @@ using System.Collections.Generic;
 
 using ZXing.Aztec;
 using ZXing.Datamatrix;
+using ZXing.IMB;
 using ZXing.Maxicode;
 using ZXing.OneD;
 using ZXing.PDF417;
@@ -147,6 +148,10 @@ namespace ZXing
                if (formats.Contains(BarcodeFormat.MAXICODE))
                {
                   readers.Add(new MaxiCodeReader());
+               }
+               if (formats.Contains(BarcodeFormat.IMB))
+               {
+                  readers.Add(new IMBReader());
                }
                // At end in "try harder" mode
                if (addOneDReader && tryHarder)

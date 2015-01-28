@@ -151,6 +151,7 @@
     <Compile Include="oned\EAN8BlackBox1TestCase.cs" />
     <Compile Include="oned\EAN8WriterTestCase.cs" />
     <Compile Include="oned\EANManufacturerOrgSupportTest.cs" />
+    <Compile Include="imb\IMBBlackBox1TestCase.cs" />
     <Compile Include="oned\ITFBlackBox1TestCase.cs" />
     <Compile Include="oned\ITFBlackBox2TestCase.cs" />
     <Compile Include="oned\MSIBlackBox1TestCase.cs" />

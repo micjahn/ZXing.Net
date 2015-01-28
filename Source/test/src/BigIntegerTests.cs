@@ -49,5 +49,31 @@ namespace ZXing.Test
 
          Assert.AreEqual(systemResult.ToString(), libraryResult.ToString());
       }
+
+      [TestCase(0)]
+      [TestCase(1)]
+      [TestCase(int.MaxValue)]
+      [TestCase(987345)]
+      [TestCase(-1)]
+      [TestCase(int.MinValue)]
+      [TestCase(-987345)]
+      public void Conversion_Of_Int_To_BigInteger_And_Back_Should_Give_The_Same_Value(int number)
+      {
+         var bigInt = new BigInteger(number);
+         var castBack = (int) bigInt;
+         Assert.That(castBack, Is.EqualTo(number));
+      }
+
+      [TestCase((ulong)0)]
+      [TestCase((ulong)1)]
+      [TestCase(ulong.MaxValue)]
+      [TestCase((ulong)987345)]
+      [TestCase(ulong.MinValue)]
+      public void Conversion_Of_Int_To_BigInteger_And_Back_Should_Give_The_Same_Value(ulong number)
+      {
+         var bigInt = new BigInteger(number);
+         var castBack = (ulong)bigInt;
+         Assert.That(castBack, Is.EqualTo(number));
+      }
    }
 }

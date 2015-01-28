@@ -80,9 +80,12 @@ namespace ZXing
       /// <summary>Plessey</summary>
       PLESSEY = 262144,
 
+      /// <summary>Intelligent Mail barcode</summary>
+      IMB = 524288,
+
       /// <summary>
       /// UPC_A | UPC_E | EAN_13 | EAN_8 | CODABAR | CODE_39 | CODE_93 | CODE_128 | ITF | RSS_14 | RSS_EXPANDED
-      /// without MSI (to many false-positives)
+      /// without MSI (to many false-positives) and IMB (not enough tested, and it looks more like a 2D)
       /// </summary>
       All_1D = UPC_A | UPC_E | EAN_13 | EAN_8 | CODABAR | CODE_39 | CODE_93 | CODE_128 | ITF | RSS_14 | RSS_EXPANDED
    }

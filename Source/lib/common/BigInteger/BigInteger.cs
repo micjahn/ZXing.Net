@@ -917,6 +917,40 @@ namespace BigIntegerLibrary
         }
 
         /// <summary>
+        /// Implicit conversion operator from int to BigInteger.
+        /// </summary>
+        /// <param name="n">The int to be converted to a BigInteger</param>
+        /// <returns>The BigInteger converted from the given int</returns>
+        public static implicit operator BigInteger(int n)
+        {
+           return new BigInteger(n);
+        }
+
+        public static explicit operator int(BigInteger value)
+        {
+           long result = 0;
+           for (var index = value.size - 1; index >= 0; index--)
+           {
+              result *= NumberBase;
+              result += value.digits[index];
+           }
+
+           return value.sign == Sign.Negative ? -1 * (int)result : (int)result;
+        }
+
+        public static explicit operator ulong(BigInteger value)
+        {
+           ulong result = 0;
+           for (var index = value.size - 1; index >= 0; index--)
+           {
+              result *= NumberBase;
+              result += (ulong)value.digits[index];
+           }
+
+           return result;
+        }
+
+        /// <summary>
         /// Equality test between two BigIntegers.
         /// </summary>
         /// <param name="a">The 1st BigInteger</param>

@@ -121,7 +121,7 @@ namespace ZXing.OneD
       /// <param name="image">The image to decode</param>
       /// <param name="hints">Any hints that were requested</param>
       /// <returns>The contents of the decoded barcode</returns>
-      private Result doDecode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
+      virtual protected Result doDecode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
       {
          int width = image.Width;
          int height = image.Height;

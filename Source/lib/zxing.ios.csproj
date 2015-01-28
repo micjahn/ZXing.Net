@@ -56,6 +56,7 @@
     <Compile Include="IBarcodeReaderGeneric.cs" />
     <Compile Include="IBarcodeWriter.cs" />
     <Compile Include="IBarcodeWriterGeneric.cs" />
+    <Compile Include="imb\IMBReader.cs" />
     <Compile Include="IMultipleBarcodeReader.cs" />
     <Compile Include="IMultipleBarcodeReaderGeneric.cs" />
     <Compile Include="InvertedLuminanceSource.cs" />
