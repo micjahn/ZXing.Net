@@ -258,7 +258,10 @@ namespace ZXing.Aztec.Internal
 
          int numDataCodewords = ddata.NbDatablocks;
          int numCodewords = rawbits.Length/codewordSize;
-         int offset = rawbits.Length%codewordSize;
+         if (numCodewords < numDataCodewords)
+            return null;
+
+         int offset = rawbits.Length % codewordSize;
          int numECCodewords = numCodewords - numDataCodewords;
 
          int[] dataWords = new int[numCodewords];

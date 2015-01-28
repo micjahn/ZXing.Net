@@ -1,2 +1,10 @@
 * making all tests green
 * analyze revision 2394
+* analyze zxing java checkin
+  SHA-1: 408c3848b10fab8e823dc71d306fb44f62896419
+  * Replace FP math faked in integers with plain floating-point math
+  -->it gives poor results with the nunit tests
+* analyze zxing java checkin
+  SHA-1: 8af98a573fc6c5db3dd1f2f790824b918c1b7239
+  * Replace bit shifts that are really multiplication and division with simple operators now
+  -->needs good testing, benchmarking
