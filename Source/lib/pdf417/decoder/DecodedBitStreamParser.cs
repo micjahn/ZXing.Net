@@ -121,6 +121,8 @@ namespace ZXing.PDF417.Internal
          int codeIndex = 1;
          int code = codewords[codeIndex++];
          var resultMetadata = new PDF417ResultMetadata();
+         Encoding encoding = null;
+
          while (codeIndex < codewords[0])
          {
             switch (code)
@@ -131,56 +133,14 @@ namespace ZXing.PDF417.Internal
                case BYTE_COMPACTION_MODE_LATCH:
                case BYTE_COMPACTION_MODE_LATCH_6:
                case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                  codeIndex = byteCompaction(code, codewords, codeIndex, result);
+                  codeIndex = byteCompaction(code, codewords, encoding ?? (encoding = getEncoding(PDF417HighLevelEncoder.DEFAULT_ENCODING_NAME)), codeIndex, result);
                   break;
                case NUMERIC_COMPACTION_MODE_LATCH:
                   codeIndex = numericCompaction(codewords, codeIndex, result);
                   break;
                case ECI_CHARSET:
                   var charsetECI = CharacterSetECI.getCharacterSetECIByValue(codewords[codeIndex++]);
-                  Encoding encoding;
-                  try
-                  {
-                     encoding = Encoding.GetEncoding(charsetECI.EncodingName);
-                  }
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || MONOANDROID || MONOTOUCH)
-                  catch (ArgumentException)
-                  {
-                     try
-                     {
-                        // Silverlight only supports a limited number of character sets, trying fallback to UTF-8
-                        encoding = Encoding.GetEncoding("UTF-8");
-                     }
-                     catch (Exception)
-                     {
-                     }
-                  }
-#endif
-#if WindowsCE
-                  catch (PlatformNotSupportedException)
-                  {
-                     try
-                     {
-                        // WindowsCE doesn't support all encodings. But it is device depended.
-                        // So we try here the some different ones
-                        if (encoding == "ISO-8859-1")
-                        {
-                           encoding = Encoding.GetEncoding(1252);
-                        }
-                        else
-                        {
-                           encoding = Encoding.GetEncoding("UTF-8");
-                        }
-                     }
-                     catch (Exception)
-                     {
-                     }
-                  }
-#endif
-                  catch (Exception)
-                  {
-                  }
-                  // TODO actually use charset!
+                  encoding = getEncoding(charsetECI.EncodingName);
                   break;
                case ECI_GENERAL_PURPOSE:
                   // Can't do anything with generic ECI; skip its 2 characters
@@ -225,6 +185,56 @@ namespace ZXing.PDF417.Internal
          var decoderResult = new DecoderResult(null, result.ToString(), null, ecLevel);
          decoderResult.Other = resultMetadata;
          return decoderResult;
+      }
+
+      private static Encoding getEncoding(string encodingName)
+      {
+         Encoding encoding = null;
+
+         try
+         {
+            encoding = Encoding.GetEncoding(encodingName);
+         }
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || MONOANDROID || MONOTOUCH)
+         catch (ArgumentException)
+         {
+            try
+            {
+               // Silverlight only supports a limited number of character sets, trying fallback to UTF-8
+               encoding = Encoding.GetEncoding("UTF-8");
+            }
+            catch (Exception)
+            {
+            }
+         }
+#endif
+#if WindowsCE
+         catch (PlatformNotSupportedException)
+         {
+            try
+            {
+               // WindowsCE doesn't support all encodings. But it is device depended.
+               // So we try here the some different ones
+               if (encoding == "ISO-8859-1")
+               {
+                  encoding = Encoding.GetEncoding(1252);
+               }
+               else
+               {
+                  encoding = Encoding.GetEncoding("UTF-8");
+               }
+            }
+            catch (Exception)
+            {
+            }
+         }
+#endif
+         catch (Exception)
+         {
+            return null;
+         }
+
+         return encoding;
       }
 
       private static int decodeMacroBlock(int[] codewords, int codeIndex, PDF417ResultMetadata resultMetadata)
@@ -415,6 +425,7 @@ namespace ZXing.PDF417.Internal
                      }
                      else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE)
                      {
+                        // TODO Does this need to use the current character encoding? See other occurrences below
                         result.Append((char)byteCompactionData[i]);
                      }
                      else if (subModeCh == TEXT_COMPACTION_MODE_LATCH)
@@ -589,19 +600,20 @@ namespace ZXing.PDF417.Internal
       ///
       /// <param name="mode">The byte compaction mode i.e. 901 or 924</param>
       /// <param name="codewords">The array of codewords (data + error)</param>
+      /// <param name="encoding">Currently active character encoding</param>
       /// <param name="codeIndex">The current index into the codeword array.</param>
       /// <param name="result">The decoded data is appended to the result.</param>
       /// <returns>The next index into the codeword array.</returns>
       /// </summary>
-      private static int byteCompaction(int mode, int[] codewords, int codeIndex, StringBuilder result)
+      private static int byteCompaction(int mode, int[] codewords, Encoding encoding, int codeIndex, StringBuilder result)
       {
+         var decodedBytes = new System.IO.MemoryStream();
          if (mode == BYTE_COMPACTION_MODE_LATCH)
          {
             // Total number of Byte Compaction characters to be encoded
             // is not a multiple of 6
             int count = 0;
             long value = 0;
-            char[] decodedData = new char[6];
             int[] byteCompactedCodewords = new int[6];
             bool end = false;
             int nextCode = codewords[codeIndex++];
@@ -631,10 +643,9 @@ namespace ZXing.PDF417.Internal
                      // Convert to Base 256
                      for (int j = 0; j < 6; ++j)
                      {
-                        decodedData[5 - j] = (char) (value%256);
-                        value >>= 8;
+                        decodedBytes.WriteByte((byte)(value >> (8 * (5 - j))));
                      }
-                     result.Append(decodedData);
+                     value = 0;
                      count = 0;
                   }
                }
@@ -649,7 +660,7 @@ namespace ZXing.PDF417.Internal
             // as one byte per codeword, without compaction.
             for (int i = 0; i < count; i++)
             {
-               result.Append((char)byteCompactedCodewords[i]);
+               decodedBytes.WriteByte((byte)byteCompactedCodewords[i]);
             }
          }
          else if (mode == BYTE_COMPACTION_MODE_LATCH_6)
@@ -686,17 +697,18 @@ namespace ZXing.PDF417.Internal
                {
                   // Decode every 5 codewords
                   // Convert to Base 256
-                  char[] decodedData = new char[6];
                   for (int j = 0; j < 6; ++j)
                   {
-                     decodedData[5 - j] = (char)(value & 0xFF);
+                     decodedBytes.WriteByte((byte)(value >> (8 * (5 - j))));
                      value >>= 8;
                   }
-                  result.Append(decodedData);
+                  value = 0;
                   count = 0;
                }
             }
          }
+         var bytes = decodedBytes.ToArray();
+         result.Append(encoding.GetString(bytes, 0, bytes.Length));
          return codeIndex;
       }
 
