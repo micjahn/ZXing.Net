@@ -40,10 +40,10 @@ using System.Runtime.InteropServices;
 #if MONOTOUCH
 [assembly: AssemblyTitle("zxing.net for mono touch")]
 #endif
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 22.05.2014 10:21:55)")]
+[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 31.05.2014 22:04:54)")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyProduct("ZXing.Net")]
-[assembly: AssemblyCopyright("Copyright © 2012-2014")]
+[assembly: AssemblyCopyright("Copyright © 2012-2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 #if !PORTABLE
