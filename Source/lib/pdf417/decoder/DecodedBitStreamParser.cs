@@ -48,6 +48,9 @@ namespace ZXing.PDF417.Internal
       private const int BYTE_COMPACTION_MODE_LATCH = 901;
       private const int NUMERIC_COMPACTION_MODE_LATCH = 902;
       private const int BYTE_COMPACTION_MODE_LATCH_6 = 924;
+      private const int ECI_USER_DEFINED = 925;
+      private const int ECI_GENERAL_PURPOSE = 926;
+      private const int ECI_CHARSET = 927;
       private const int BEGIN_MACRO_PDF417_CONTROL_BLOCK = 928;
       private const int BEGIN_MACRO_PDF417_OPTIONAL_FIELD = 923;
       private const int MACRO_PDF417_TERMINATOR = 922;
@@ -132,6 +135,60 @@ namespace ZXing.PDF417.Internal
                   break;
                case NUMERIC_COMPACTION_MODE_LATCH:
                   codeIndex = numericCompaction(codewords, codeIndex, result);
+                  break;
+               case ECI_CHARSET:
+                  var charsetECI = CharacterSetECI.getCharacterSetECIByValue(codewords[codeIndex++]);
+                  Encoding encoding;
+                  try
+                  {
+                     encoding = Encoding.GetEncoding(charsetECI.EncodingName);
+                  }
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || MONOANDROID || MONOTOUCH)
+                  catch (ArgumentException)
+                  {
+                     try
+                     {
+                        // Silverlight only supports a limited number of character sets, trying fallback to UTF-8
+                        encoding = Encoding.GetEncoding("UTF-8");
+                     }
+                     catch (Exception)
+                     {
+                     }
+                  }
+#endif
+#if WindowsCE
+                  catch (PlatformNotSupportedException)
+                  {
+                     try
+                     {
+                        // WindowsCE doesn't support all encodings. But it is device depended.
+                        // So we try here the some different ones
+                        if (encoding == "ISO-8859-1")
+                        {
+                           encoding = Encoding.GetEncoding(1252);
+                        }
+                        else
+                        {
+                           encoding = Encoding.GetEncoding("UTF-8");
+                        }
+                     }
+                     catch (Exception)
+                     {
+                     }
+                  }
+#endif
+                  catch (Exception)
+                  {
+                  }
+                  // TODO actually use charset!
+                  break;
+               case ECI_GENERAL_PURPOSE:
+                  // Can't do anything with generic ECI; skip its 2 characters
+                  codeIndex += 2;
+                  break;
+               case ECI_USER_DEFINED:
+                  // Can't do anything with user ECI; skip its 1 character
+                  codeIndex++;
                   break;
                case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
                   codeIndex = decodeMacroBlock(codewords, codeIndex, resultMetadata);
