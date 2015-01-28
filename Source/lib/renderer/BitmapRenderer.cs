@@ -123,7 +123,9 @@ namespace ZXing.Rendering
          // create the bitmap and lock the bits because we need the stride
          // which is the width of the image and possible padding bytes
          var bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+#if !WindowsCE
          bmp.SetResolution(96, 96);
+#endif
          var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
          try
          {
