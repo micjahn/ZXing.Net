@@ -92,44 +92,12 @@ namespace ZXing.PDF417
       /// <param name="symbol">encoded symbol to translate to a codeword</param>
       public static int getCodeword(long symbol)
       {
-         long sym = symbol & 0x3FFFF;
-         int i = findCodewordIndex(sym);
-         if (i == -1)
+         int i = System.Array.BinarySearch(SYMBOL_TABLE, (int)(symbol & 0x3FFFF));
+         if (i < 0)
          {
-            return INVALID_CODEWORD;
+            return -1;
          }
          return (CODEWORD_TABLE[i] - 1)%NUMBER_OF_CODEWORDS;
-      }
-
-      /// <summary>
-      /// Use a binary search to find the index of the codeword corresponding to
-      /// this symbol.
-      /// </summary>
-      /// <returns>the index into the codeword table.</returns>
-      /// <param name="symbol">the symbol from the barcode.</param>
-      private static int findCodewordIndex(long symbol)
-      {
-         int first = 0;
-         int upto = SYMBOL_TABLE.Length;
-         while (first < upto)
-         {
-            // NOTE: Converted Java's '>>>' to '(int)((unit)x >>y)' in C#
-            // http://stackoverflow.com/q/1880172/266252
-            int mid = (int) ((uint) (first + upto) >> 1); // Compute mid point. (i.e. bitshift == divide by 2)
-            if (symbol < SYMBOL_TABLE[mid])
-            {
-               upto = mid; // continue search in bottom half.
-            }
-            else if (symbol > SYMBOL_TABLE[mid])
-            {
-               first = mid + 1; // continue search in top half.
-            }
-            else
-            {
-               return mid; // Found it. return position
-            }
-         }
-         return -1;
       }
 
       /// <summary>
