@@ -338,6 +338,9 @@ namespace ZXing.PDF417.Internal
       private static DecoderResult createDecoderResult(DetectionResult detectionResult)
       {
          BarcodeValue[][] barcodeMatrix = createBarcodeMatrix(detectionResult);
+         if (barcodeMatrix == null)
+            return null;
+
          if (!adjustCodewordCount(detectionResult, barcodeMatrix))
          {
             return null;
@@ -448,7 +451,7 @@ namespace ZXing.PDF417.Internal
       private static BarcodeValue[][] createBarcodeMatrix(DetectionResult detectionResult)
       {
          // Manually setup Jagged Array in C#
-         BarcodeValue[][] barcodeMatrix = new BarcodeValue[detectionResult.RowCount][];
+         var barcodeMatrix = new BarcodeValue[detectionResult.RowCount][];
          for (int row = 0; row < barcodeMatrix.Length; row++)
          {
             barcodeMatrix[row] = new BarcodeValue[detectionResult.ColumnCount + 2];
@@ -458,23 +461,30 @@ namespace ZXing.PDF417.Internal
             }
          }
 
-         int column = -1;
+         int column = 0;
          foreach (DetectionResultColumn detectionResultColumn in detectionResult.getDetectionResultColumns())
          {
-            column++;
-            if (detectionResultColumn == null)
+            if (detectionResultColumn != null)
             {
-               continue;
-            }
-            foreach (Codeword codeword in detectionResultColumn.Codewords)
-            {
-               if (codeword == null || codeword.RowNumber == -1)
+               foreach (Codeword codeword in detectionResultColumn.Codewords)
                {
-                  continue;
+                  if (codeword != null)
+                  {
+                     int rowNumber = codeword.RowNumber;
+                     if (rowNumber >= 0)
+                     {
+                        if (rowNumber >= barcodeMatrix.Length)
+                        {
+                           return null;
+                        }
+                        barcodeMatrix[rowNumber][column].setValue(codeword.Value);
+                     }
+                  }
                }
-               barcodeMatrix[codeword.RowNumber][column].setValue(codeword.Value);
             }
+            column++;
          }
+
          return barcodeMatrix;
       }
 
