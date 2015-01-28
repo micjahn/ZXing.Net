@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 using ZXing;
@@ -40,6 +41,20 @@ namespace WindowsFormsDemo
 
          chkMultipleDecode.Checked = multipleBarcodes;
          chkMultipleDecodeOnlyQR.Checked = multipleBarcodesOnlyQR;
+
+         foreach (var val in Enum.GetValues(typeof (BarcodeFormat)))
+         {
+            var valBarcode = (BarcodeFormat) val;
+            if (valBarcode == BarcodeFormat.PLESSEY)
+               continue;
+            var selectedByDefault = valBarcode != BarcodeFormat.MSI &&
+                                    valBarcode != BarcodeFormat.IMB;
+            if (reader.Options.PossibleFormats != null)
+            {
+               selectedByDefault = reader.Options.PossibleFormats.Contains(valBarcode);
+            }
+            dataGridViewBarcodeFormats.Rows.Add(selectedByDefault, val.ToString());
+         }
       }
 
       protected override void OnLoad(EventArgs e)
@@ -58,6 +73,17 @@ namespace WindowsFormsDemo
          reader.Options.TryHarder = chkTryHarder.Checked;
          reader.AutoRotate = chkAutoRotate.Checked;
          reader.Options.PureBarcode = chkPureBarcode.Checked;
+         reader.Options.PossibleFormats = new List<BarcodeFormat>();
+
+         foreach (DataGridViewRow row in dataGridViewBarcodeFormats.Rows)
+         {
+            if (((bool) (row.Cells[0].Value)))
+            {
+               reader.Options.PossibleFormats.Add(
+                  (BarcodeFormat)Enum.Parse(typeof(BarcodeFormat), row.Cells[1].Value.ToString()));
+            }
+         }
+         
          Close();
       }
    }

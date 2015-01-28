@@ -130,7 +130,9 @@ namespace WindowsFormsDemo
 
          var timerStart = DateTime.Now.Ticks;
          Result[] results = null;
-         barcodeReader.Options.PossibleFormats = possibleFormats;
+         var previousFormats = barcodeReader.Options.PossibleFormats;
+         if (possibleFormats != null)
+            barcodeReader.Options.PossibleFormats = possibleFormats;
          if (tryMultipleBarcodes)
             results = barcodeReader.DecodeMultiple(image);
          else
@@ -143,11 +145,13 @@ namespace WindowsFormsDemo
          }
          var timerStop = DateTime.Now.Ticks;
 
+         barcodeReader.Options.PossibleFormats = previousFormats;
+
          if (results == null)
          {
             txtContent.Text = "No barcode recognized";
          }
-         labDuration.Text = new TimeSpan(timerStop - timerStart).Milliseconds.ToString("0 ms");
+         labDuration.Text = new TimeSpan(timerStop - timerStart).ToString();
 
          if (results != null)
          {

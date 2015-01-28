@@ -35,6 +35,10 @@
          this.chkPureBarcode = new System.Windows.Forms.CheckBox();
          this.chkMultipleDecode = new System.Windows.Forms.CheckBox();
          this.chkMultipleDecodeOnlyQR = new System.Windows.Forms.CheckBox();
+         this.dataGridViewBarcodeFormats = new System.Windows.Forms.DataGridView();
+         this.ColumnSelected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+         this.ColumnBarcodeFormat = new System.Windows.Forms.DataGridViewTextBoxColumn();
+         ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBarcodeFormats)).BeginInit();
          this.SuspendLayout();
          // 
          // chkAutoRotate
@@ -70,7 +74,7 @@
          // btnOk
          // 
          this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-         this.btnOk.Location = new System.Drawing.Point(160, 150);
+         this.btnOk.Location = new System.Drawing.Point(420, 149);
          this.btnOk.Name = "btnOk";
          this.btnOk.Size = new System.Drawing.Size(112, 23);
          this.btnOk.TabIndex = 6;
@@ -108,12 +112,45 @@
          this.chkMultipleDecodeOnlyQR.Text = "only QR Codes (special case)";
          this.chkMultipleDecodeOnlyQR.UseVisualStyleBackColor = true;
          // 
+         // dataGridViewBarcodeFormats
+         // 
+         this.dataGridViewBarcodeFormats.AllowUserToAddRows = false;
+         this.dataGridViewBarcodeFormats.AllowUserToDeleteRows = false;
+         this.dataGridViewBarcodeFormats.AllowUserToResizeColumns = false;
+         this.dataGridViewBarcodeFormats.AllowUserToResizeRows = false;
+         this.dataGridViewBarcodeFormats.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+         this.dataGridViewBarcodeFormats.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnSelected,
+            this.ColumnBarcodeFormat});
+         this.dataGridViewBarcodeFormats.Location = new System.Drawing.Point(201, 12);
+         this.dataGridViewBarcodeFormats.Name = "dataGridViewBarcodeFormats";
+         this.dataGridViewBarcodeFormats.Size = new System.Drawing.Size(331, 131);
+         this.dataGridViewBarcodeFormats.TabIndex = 7;
+         // 
+         // ColumnSelected
+         // 
+         this.ColumnSelected.Frozen = true;
+         this.ColumnSelected.HeaderText = "Selected";
+         this.ColumnSelected.Name = "ColumnSelected";
+         this.ColumnSelected.Width = 60;
+         // 
+         // ColumnBarcodeFormat
+         // 
+         this.ColumnBarcodeFormat.Frozen = true;
+         this.ColumnBarcodeFormat.HeaderText = "Barcode format";
+         this.ColumnBarcodeFormat.Name = "ColumnBarcodeFormat";
+         this.ColumnBarcodeFormat.ReadOnly = true;
+         this.ColumnBarcodeFormat.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+         this.ColumnBarcodeFormat.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+         this.ColumnBarcodeFormat.Width = 300;
+         // 
          // DecodingOptionsForm
          // 
          this.AcceptButton = this.btnOk;
          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-         this.ClientSize = new System.Drawing.Size(284, 184);
+         this.ClientSize = new System.Drawing.Size(546, 184);
+         this.Controls.Add(this.dataGridViewBarcodeFormats);
          this.Controls.Add(this.chkMultipleDecodeOnlyQR);
          this.Controls.Add(this.chkMultipleDecode);
          this.Controls.Add(this.chkPureBarcode);
@@ -121,10 +158,11 @@
          this.Controls.Add(this.chkTryInverted);
          this.Controls.Add(this.chkTryHarder);
          this.Controls.Add(this.chkAutoRotate);
-         this.MaximumSize = new System.Drawing.Size(300, 222);
-         this.MinimumSize = new System.Drawing.Size(300, 222);
+         this.MaximumSize = new System.Drawing.Size(562, 222);
+         this.MinimumSize = new System.Drawing.Size(562, 222);
          this.Name = "DecodingOptionsForm";
-         this.Text = "DecodingOptionsForm";
+         this.Text = "Options";
+         ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBarcodeFormats)).EndInit();
          this.ResumeLayout(false);
          this.PerformLayout();
 
@@ -139,5 +177,8 @@
       private System.Windows.Forms.CheckBox chkPureBarcode;
       private System.Windows.Forms.CheckBox chkMultipleDecode;
       private System.Windows.Forms.CheckBox chkMultipleDecodeOnlyQR;
+      private System.Windows.Forms.DataGridView dataGridViewBarcodeFormats;
+      private System.Windows.Forms.DataGridViewCheckBoxColumn ColumnSelected;
+      private System.Windows.Forms.DataGridViewTextBoxColumn ColumnBarcodeFormat;
    }
 }
