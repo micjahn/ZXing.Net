@@ -700,7 +700,6 @@ namespace ZXing.PDF417.Internal
                   for (int j = 0; j < 6; ++j)
                   {
                      decodedBytes.WriteByte((byte)(value >> (8 * (5 - j))));
-                     value >>= 8;
                   }
                   value = 0;
                   count = 0;
