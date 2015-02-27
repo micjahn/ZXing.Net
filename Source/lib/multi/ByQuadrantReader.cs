@@ -30,16 +30,39 @@ namespace ZXing.Multi
    {
       private readonly Reader @delegate;
 
+      /// <summary>
+      /// Initializes a new instance of the <see cref="ByQuadrantReader"/> class.
+      /// </summary>
+      /// <param name="delegate">The @delegate.</param>
       public ByQuadrantReader(Reader @delegate)
       {
          this.@delegate = @delegate;
       }
 
+      /// <summary>
+      /// Locates and decodes a barcode in some format within an image.
+      /// </summary>
+      /// <param name="image">image of barcode to decode</param>
+      /// <returns>
+      /// String which the barcode encodes
+      /// </returns>
       public Result decode(BinaryBitmap image)
       {
          return decode(image, null);
       }
 
+      /// <summary>
+      /// Locates and decodes a barcode in some format within an image. This method also accepts
+      /// hints, each possibly associated to some data, which may help the implementation decode.
+      /// </summary>
+      /// <param name="image">image of barcode to decode</param>
+      /// <param name="hints">passed as a <see cref="IDictionary{TKey, TValue}"/> from <see cref="DecodeHintType"/>
+      /// to arbitrary data. The
+      /// meaning of the data depends upon the hint type. The implementation may or may not do
+      /// anything with these hints.</param>
+      /// <returns>
+      /// String which the barcode encodes
+      /// </returns>
       public Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
       {
          int width = image.Width;
@@ -47,35 +70,59 @@ namespace ZXing.Multi
          int halfWidth = width/2;
          int halfHeight = height/2;
 
-         var topLeft = image.crop(0, 0, halfWidth, halfHeight);
-         var result = @delegate.decode(topLeft, hints);
+         // No need to call makeAbsolute as results will be relative to original top left here
+         var result = @delegate.decode(image.crop(0, 0, halfWidth, halfHeight), hints);
          if (result != null)
             return result;
 
-         var topRight = image.crop(halfWidth, 0, halfWidth, halfHeight);
-         result = @delegate.decode(topRight, hints);
+         result = @delegate.decode(image.crop(halfWidth, 0, halfWidth, halfHeight), hints);
          if (result != null)
+         {
+            makeAbsolute(result.ResultPoints, halfWidth, 0);
             return result;
+         }
 
-         var bottomLeft = image.crop(0, halfHeight, halfWidth, halfHeight);
-         result = @delegate.decode(bottomLeft, hints);
+         result = @delegate.decode(image.crop(0, halfHeight, halfWidth, halfHeight), hints);
          if (result != null)
+         {
+            makeAbsolute(result.ResultPoints, 0, halfHeight);
             return result;
+         }
 
-         var bottomRight = image.crop(halfWidth, halfHeight, halfWidth, halfHeight);
-         result = @delegate.decode(bottomRight, hints);
+         result = @delegate.decode(image.crop(halfWidth, halfHeight, halfWidth, halfHeight), hints);
          if (result != null)
+         {
+            makeAbsolute(result.ResultPoints, halfWidth, halfHeight);
             return result;
+         }
 
          int quarterWidth = halfWidth/2;
          int quarterHeight = halfHeight/2;
          var center = image.crop(quarterWidth, quarterHeight, halfWidth, halfHeight);
-         return @delegate.decode(center, hints);
+         result = @delegate.decode(center, hints);
+         makeAbsolute(result.ResultPoints, quarterWidth, quarterHeight);
+         return result;
       }
 
+      /// <summary>
+      /// Resets any internal state the implementation has after a decode, to prepare it
+      /// for reuse.
+      /// </summary>
       public void reset()
       {
          @delegate.reset();
+      }
+
+      private static void makeAbsolute(ResultPoint[] points, int leftOffset, int topOffset)
+      {
+         if (points != null)
+         {
+            for (int i = 0; i < points.Length; i++)
+            {
+               ResultPoint relative = points[i];
+               points[i] = new ResultPoint(relative.X + leftOffset, relative.Y + topOffset);
+            }
+         }
       }
    }
 }
