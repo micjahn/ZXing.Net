@@ -766,21 +766,6 @@ namespace ZXing.PDF417.Internal
             {
                return idx - startpos;
             }
-            int textCount = 0;
-            while (textCount < 5 && isText(ch))
-            {
-               textCount++;
-               int i = idx + textCount;
-               if (i >= len)
-               {
-                  break;
-               }
-               ch = msg[i];
-            }
-            if (textCount >= 5)
-            {
-               return idx - startpos;
-            }
             ch = msg[idx];
 
             //Check if character is encodable
