@@ -26,46 +26,42 @@ namespace ZXing.PDF417.Internal.Test
    /// </summary>
    public sealed class ErrorCorrectionTestCase : AbstractErrorCorrectionTestCase
    {
-
-      /** See ISO 15438, Annex Q */
-      //private static final int[] PDF417_TEST =
-      //    { 5, 453, 178, 121, 239 };
-      //private static final int[] PDF417_TEST_WITH_EC =
-      //    { 5, 453, 178, 121, 239, 452, 327, 657, 619 };
-
       private static readonly int[] PDF417_TEST =
-      { 48,901, 56,141,627,856,330, 69,244,900,
-       852,169,843,895,852,895,913,154,845,778,
-       387, 89,869,901,219,474,543,650,169,201,
-         9,160, 35, 70,900,900,900,900,900,900,
-       900,900,900,900,900,900,900,900};
+         {
+            48, 901, 56, 141, 627, 856, 330, 69, 244, 900,
+            852, 169, 843, 895, 852, 895, 913, 154, 845, 778,
+            387, 89, 869, 901, 219, 474, 543, 650, 169, 201,
+            9, 160, 35, 70, 900, 900, 900, 900, 900, 900,
+            900, 900, 900, 900, 900, 900, 900, 900
+         };
+
       private static readonly int[] PDF417_TEST_WITH_EC =
-      { 48,901, 56,141,627,856,330, 69,244,900,
-       852,169,843,895,852,895,913,154,845,778,
-       387, 89,869,901,219,474,543,650,169,201,
-         9,160, 35, 70,900,900,900,900,900,900,
-       900,900,900,900,900,900,900,900,769,843,
-       591,910,605,206,706,917,371,469, 79,718,
-        47,777,249,262,193,620,597,477,450,806,
-       908,309,153,871,686,838,185,674, 68,679,
-       691,794,497,479,234,250,496, 43,347,582,
-       882,536,322,317,273,194,917,237,420,859,
-       340,115,222,808,866,836,417,121,833,459,
-        64,159};
+         {
+            48, 901, 56, 141, 627, 856, 330, 69, 244, 900,
+            852, 169, 843, 895, 852, 895, 913, 154, 845, 778,
+            387, 89, 869, 901, 219, 474, 543, 650, 169, 201,
+            9, 160, 35, 70, 900, 900, 900, 900, 900, 900,
+            900, 900, 900, 900, 900, 900, 900, 900, 769, 843,
+            591, 910, 605, 206, 706, 917, 371, 469, 79, 718,
+            47, 777, 249, 262, 193, 620, 597, 477, 450, 806,
+            908, 309, 153, 871, 686, 838, 185, 674, 68, 679,
+            691, 794, 497, 479, 234, 250, 496, 43, 347, 582,
+            882, 536, 322, 317, 273, 194, 917, 237, 420, 859,
+            340, 115, 222, 808, 866, 836, 417, 121, 833, 459,
+            64, 159
+         };
+
       private static readonly int ECC_BYTES = PDF417_TEST_WITH_EC.Length - PDF417_TEST.Length;
-      // Example is EC level 1 (s=1). The number of erasures (l) and substitutions (f) must obey:
-      // l + 2f <= 2^(s+1) - 3
-      private const int EC_LEVEL = 5;
-      private const int ERROR_LIMIT = (1 << (EC_LEVEL + 1)) - 3;
-      private const int MAX_ERRORS = ERROR_LIMIT / 2;
-      //private static final int MAX_ERASURES = ERROR_LIMIT;
+      private static readonly int ERROR_LIMIT = ECC_BYTES;
+      private static readonly int MAX_ERRORS = ERROR_LIMIT/2;
+      private static readonly int MAX_ERASURES = ERROR_LIMIT;
 
       private readonly ErrorCorrection ec = new ErrorCorrection();
 
       [Test]
       public void testNoError()
       {
-         int[] received = (int[])PDF417_TEST_WITH_EC.Clone();
+         int[] received = (int[]) PDF417_TEST_WITH_EC.Clone();
          // no errors
          checkDecode(received);
       }
@@ -76,7 +72,7 @@ namespace ZXing.PDF417.Internal.Test
          Random random = getRandom();
          for (int i = 0; i < PDF417_TEST_WITH_EC.Length; i++)
          {
-            int[] received = (int[])PDF417_TEST_WITH_EC.Clone();
+            int[] received = (int[]) PDF417_TEST_WITH_EC.Clone();
             received[i] = random.Next(256);
             checkDecode(received);
          }
@@ -87,8 +83,9 @@ namespace ZXing.PDF417.Internal.Test
       {
          Random random = getRandom();
          foreach (int test in PDF417_TEST)
-         { // # iterations is kind of arbitrary
-            int[] received = (int[])PDF417_TEST_WITH_EC.Clone();
+         {
+            // # iterations is kind of arbitrary
+            int[] received = (int[]) PDF417_TEST_WITH_EC.Clone();
             corrupt(received, MAX_ERRORS, random);
             checkDecode(received);
          }
@@ -97,36 +94,33 @@ namespace ZXing.PDF417.Internal.Test
       [Test]
       public void testTooManyErrors()
       {
-         int[] received = (int[])PDF417_TEST_WITH_EC.Clone();
+         int[] received = (int[]) PDF417_TEST_WITH_EC.Clone();
          Random random = getRandom();
-         corrupt(received, MAX_ERRORS + 3, random); // +3 since the algo can actually correct 2 more than it should here
+         corrupt(received, MAX_ERRORS + 1, random);
          Assert.IsFalse(checkDecode(received));
       }
 
-      /*
-      @Test
-      public void testMaxErasures() throws ChecksumException {
-        Random random = getRandom();
-        for (int test : PDF417_TEST) { // # iterations is kind of arbitrary
-          int[] received = PDF417_TEST_WITH_EC.clone();
-          int[] erasures = erase(received, MAX_ERASURES, random);
-          checkDecode(received, erasures);
-        }
+      [Test]
+      public void testMaxErasures()
+      {
+         Random random = getRandom();
+         foreach (int test in PDF417_TEST)
+         {
+            // # iterations is kind of arbitrary
+            int[] received = (int[]) PDF417_TEST_WITH_EC.Clone();
+            int[] erasures = erase(received, MAX_ERASURES, random);
+            checkDecode(received, erasures);
+         }
       }
 
-      @Test
-      public void testTooManyErasures() {
-        Random random = getRandom();
-        int[] received = PDF417_TEST_WITH_EC.clone();
-        int[] erasures = erase(received, MAX_ERASURES + 1, random);
-        try {
-          checkDecode(received, erasures);
-          fail("Should not have decoded");
-        } catch (ChecksumException ce) {
-          // good
-        }
+      [Test]
+      public void testTooManyErasures()
+      {
+         Random random = getRandom();
+         int[] received = (int[]) PDF417_TEST_WITH_EC.Clone();
+         int[] erasures = erase(received, MAX_ERASURES + 1, random);
+         Assert.That(checkDecode(received, erasures), Is.Not.True, "Should not have decoded");
       }
-       */
 
       private bool checkDecode(int[] received)
       {

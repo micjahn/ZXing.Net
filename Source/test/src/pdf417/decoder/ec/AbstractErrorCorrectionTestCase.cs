@@ -17,6 +17,7 @@
 using System;
 
 using NUnit.Framework;
+using ZXing.Common.ReedSolomon.Test;
 
 namespace ZXing.PDF417.Internal.Test
 {
@@ -27,23 +28,9 @@ namespace ZXing.PDF417.Internal.Test
    {
       public static void corrupt(int[] received, int howMany, Random random)
       {
-         var corrupted = new System.Collections.BitArray(received.Length);
-         // BitSet corrupted = new BitSet(received.Length);
-         for (int j = 0; j < howMany; j++)
-         {
-            int location = random.Next(received.Length);
-            if (corrupted[location])
-            {
-               j--;
-            }
-            else
-            {
-               corrupted[location] = true;
-               received[location] = random.Next(929);
-            }
-         }
+         ReedSolomonTestCase.corrupt(received, howMany, random, 929);
       }
-      /*
+
       public static int[] erase(int[] received, int howMany, Random random)
       {
          var erased = new System.Collections.BitArray(received.Length);
@@ -66,24 +53,10 @@ namespace ZXing.PDF417.Internal.Test
          }
          return erasures;
       }
-      */
+
       public static Random getRandom()
       {
-         return new Random((int)DateTime.Now.Ticks);
-         // return new SecureRandom(new byte[] { (byte)0xDE, (byte)0xAD, (byte)0xBE, (byte)0xEF });
+         return new Random(0);
       }
-      /*
-      public static void assertArraysEqual(int[] expected,
-                                    int expectedOffset,
-                                    int[] actual,
-                                    int actualOffset,
-                                    int length)
-      {
-         for (int i = 0; i < length; i++)
-         {
-            Assert.AreEqual(expected[expectedOffset + i], actual[actualOffset + i]);
-         }
-      }
-      */
    }
 }

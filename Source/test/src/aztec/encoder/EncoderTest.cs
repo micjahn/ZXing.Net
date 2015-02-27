@@ -45,6 +45,13 @@ namespace ZXing.Aztec.Test
          );
 
       private static readonly ResultPoint[] NO_POINTS = new ResultPoint[0];
+      private static Random random;
+
+      [SetUp]
+      public void beforeTest()
+      {
+         random = new Random(0);
+      }
 
       // real life tests
 
@@ -129,20 +136,23 @@ namespace ZXing.Aztec.Test
       [Test]
       public void testAztecWriter()
       {
-         testWriter("\u20AC 1 sample data.", "ISO-8859-1", 25, true, 2);
-         testWriter("\u20AC 1 sample data.", "ISO-8859-15", 25, true, 2);
-         testWriter("\u20AC 1 sample data.", "UTF-8", 25, true, 2);
-         testWriter("\u20AC 1 sample data.", "UTF-8", 100, true, 3);
-         testWriter("\u20AC 1 sample data.", "UTF-8", 300, true, 4);
-         testWriter("\u20AC 1 sample data.", "UTF-8", 500, false, 5);
-         // Test AztecWriter defaults
-         var data = "In ut magna vel mauris malesuada";
-         var writer = new AztecWriter();
-         var matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
-         var aztec = Internal.Encoder.encode(LATIN_1.GetBytes(data),
-                                             Internal.Encoder.DEFAULT_EC_PERCENT, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
-         var expectedMatrix = aztec.Matrix;
-         Assert.AreEqual(matrix, expectedMatrix);
+         for (int i = 0; i < 1000; i++)
+         {
+            testWriter("\u20AC 1 sample data.", "ISO-8859-1", 25, true, 2);
+            testWriter("\u20AC 1 sample data.", "ISO-8859-15", 25, true, 2);
+            testWriter("\u20AC 1 sample data.", "UTF-8", 25, true, 2);
+            testWriter("\u20AC 1 sample data.", "UTF-8", 100, true, 3);
+            testWriter("\u20AC 1 sample data.", "UTF-8", 300, true, 4);
+            testWriter("\u20AC 1 sample data.", "UTF-8", 500, false, 5);
+            // Test AztecWriter defaults
+            const string data = "In ut magna vel mauris malesuada";
+            var writer = new AztecWriter();
+            var matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
+            var aztec = Internal.Encoder.encode(Encoding.GetEncoding("ISO8859-1").GetBytes(data),
+                Internal.Encoder.DEFAULT_EC_PERCENT, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
+            var expectedMatrix = aztec.Matrix;
+            Assert.AreEqual(matrix, expectedMatrix);
+         }
       }
 
       // synthetic tests (encode-decode round-trip)
@@ -527,8 +537,8 @@ namespace ZXing.Aztec.Test
          var r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers);
          var res = new Internal.Decoder().decode(r);
          Assert.AreEqual(expectedData, res.Text);
-         // Check error correction by introducing up to eccPercent errors
-         int ecWords = aztec.CodeWords*eccPercent/100;
+         // Check error correction by introducing up to eccPercent/2 errors
+         int ecWords = aztec.CodeWords * eccPercent / 100 / 2;
          var random = getPseudoRandom();
          for (int i = 0; i < ecWords; i++)
          {
@@ -548,8 +558,7 @@ namespace ZXing.Aztec.Test
 
       private static Random getPseudoRandom()
       {
-         //return new SecureRandom(new byte[] {(byte) 0xDE, (byte) 0xAD, (byte) 0xBE, (byte) 0xEF});
-         return new Random((int) DateTime.Now.Ticks);
+         return random;
       }
 
       private static void testModeMessage(bool compact, int layers, int words, String expected)

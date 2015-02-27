@@ -34,38 +34,25 @@ namespace ZXing
 		{
 			get
 			{
-				return instance;
+				return new ReaderException();
 			}
 			
 		}
 		
-		// TODO: Currently we throw up to 400 ReaderExceptions while scanning a single 240x240 image before
-		// rejecting it. This involves a lot of overhead and memory allocation, and affects both performance
-		// and latency on continuous scan clients. In the future, we should change all the decoders not to
-		// throw exceptions for routine events, like not finding a barcode on a given row. Instead, we
-		// should return error codes back to the callers, and simply delete this class. In the mean time, I
-		// have altered this class to be as lightweight as possible, by ignoring the exception string, and
-		// by disabling the generation of stack traces, which is especially time consuming. These are just
-		// temporary measures, pending the big cleanup.
-		
-		//UPGRADE_NOTE: Final was removed from the declaration of 'instance '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-		private static readonly ReaderException instance = new ReaderException();
-		
-		// EXCEPTION TRACKING SUPPORT
-		// Identifies who is throwing exceptions and how often. To use:
-		//
-		// 1. Uncomment these lines and the code below which uses them.
-		// 2. Uncomment the two corresponding lines in j2se/CommandLineRunner.decode()
-		// 3. Change core to build as Java 1.5 temporarily
-		//  private static int exceptionCount = 0;
-		//  private static Map<String,Integer> throwers = new HashMap<String,Integer>(32);
-
       /// <summary>
       /// Initializes a new instance of the <see cref="ReaderException"/> class.
       /// </summary>
 		protected ReaderException()
 		{
-			// do nothing
 		}
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="ReaderException"/> class.
+      /// </summary>
+      /// <param name="innerException">The inner exception.</param>
+      protected ReaderException(Exception innerException)
+         : base(innerException.Message, innerException)
+      {
+      }
 	}
 }

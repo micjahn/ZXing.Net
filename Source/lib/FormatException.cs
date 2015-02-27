@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+using System;
+
 namespace ZXing
 {
    /// <summary>
@@ -22,18 +24,26 @@ namespace ZXing
    /// been due to a mis-detection.
    /// <author>Sean Owen</author>
    /// </summary>
+   [Serializable]
    public sealed class FormatException : ReaderException
    {
-      private static readonly FormatException instance = new FormatException();
-
       private FormatException()
       {
-         // do nothing
+      }
+
+      private FormatException(Exception innerException)
+         : base(innerException)
+      {
       }
 
       new public static FormatException Instance
       {
-         get { return instance; }
+         get { return new FormatException(); }
+      }
+
+      public static FormatException getInstance(Exception innerExc)
+      {
+         return new FormatException(innerExc);
       }
    }
 }

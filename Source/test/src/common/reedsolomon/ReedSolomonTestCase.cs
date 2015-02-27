@@ -395,7 +395,7 @@ namespace ZXing.Common.ReedSolomon.Test
          testEncodeDecodeRandom(GenericGF.AZTEC_DATA_12, 3072, 1023);
       }
 
-      private static void corrupt(int[] received, int howMany, Random random, int max)
+      public static void corrupt(int[] received, int howMany, Random random, int max)
       {
          //BitSet corrupted = new BitSet(received.Length);
          var corrupted = new BitArray(received.Length);

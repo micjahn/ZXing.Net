@@ -15,6 +15,7 @@
 */
 
 using System;
+using System.Text;
 
 namespace ZXing.Common
 {
@@ -41,22 +42,16 @@ namespace ZXing.Common
       /// </returns>
       public int Width
       {
-         get
-         {
-            return width;
-         }
-
+         get { return width; }
       }
+
       /// <returns> The height of the matrix
       /// </returns>
       public int Height
       {
-         get
-         {
-            return height;
-         }
-
+         get { return height; }
       }
+
       /// <summary> This method is for compatibility with older code. It's only logical to call if the matrix
       /// is square, so I'm throwing if that's not the case.
       /// 
@@ -69,11 +64,19 @@ namespace ZXing.Common
          {
             if (width != height)
             {
-               throw new System.ArgumentException("Can't call getDimension() on a non-square matrix");
+               throw new ArgumentException("Can't call Dimension on a non-square matrix");
             }
             return width;
          }
 
+      }
+
+      /// <returns>
+      /// The rowsize of the matrix
+      /// </returns>
+      public int RowSize
+      {
+         get { return rowSize; }
       }
 
       // A helper to construct a square matrix.
@@ -91,7 +94,7 @@ namespace ZXing.Common
          this.width = width;
          this.height = height;
          this.rowSize = (width + 31) >> 5;
-         bits = new int[rowSize * height];
+         bits = new int[rowSize*height];
       }
 
       internal BitMatrix(int width, int height, int rowSize, int[] bits)
@@ -110,6 +113,81 @@ namespace ZXing.Common
          this.bits = bits;
       }
 
+      public static BitMatrix parse(String stringRepresentation, String setString, String unsetString)
+      {
+         int pos = 0;
+         if (stringRepresentation == null)
+         {
+            throw new ArgumentException();
+         }
+
+         bool[] bits = new bool[stringRepresentation.Length];
+         int bitsPos = 0;
+         int rowStartPos = 0;
+         int rowLength = -1;
+         int nRows = 0;
+         while (pos < stringRepresentation.Length)
+         {
+            if (stringRepresentation.Substring(pos, 1).Equals("\n") || stringRepresentation.Substring(pos, 1).Equals("\r"))
+            {
+               if (bitsPos > rowStartPos)
+               {
+                  if (rowLength == -1)
+                  {
+                     rowLength = bitsPos - rowStartPos;
+                  }
+                  else if (bitsPos - rowStartPos != rowLength)
+                  {
+                     throw new ArgumentException("row lengths do not match");
+                  }
+                  rowStartPos = bitsPos;
+                  nRows++;
+               }
+               pos++;
+            }
+            else if (stringRepresentation.Substring(pos, setString.Length).Equals(setString))
+            {
+               pos += setString.Length;
+               bits[bitsPos] = true;
+               bitsPos++;
+            }
+            else if (stringRepresentation.Substring(pos, unsetString.Length).Equals(unsetString))
+            {
+               pos += unsetString.Length;
+               bits[bitsPos] = false;
+               bitsPos++;
+            }
+            else
+            {
+               throw new ArgumentException("illegal character encountered: " + stringRepresentation.Substring(pos));
+            }
+         }
+
+         // no EOL at end?
+         if (bitsPos > rowStartPos)
+         {
+            if (rowLength == -1)
+            {
+               rowLength = bitsPos - rowStartPos;
+            }
+            else if (bitsPos - rowStartPos != rowLength)
+            {
+               throw new ArgumentException("row lengths do not match");
+            }
+            nRows++;
+         }
+
+         BitMatrix matrix = new BitMatrix(rowLength, nRows);
+         for (int i = 0; i < bitsPos; i++)
+         {
+            if (bits[i])
+            {
+               matrix[i%rowLength, i/rowLength] = true;
+            }
+         }
+         return matrix;
+      }
+
       /// <summary> <p>Gets the requested bit, where true means black.</p>
       /// 
       /// </summary>
@@ -123,15 +201,20 @@ namespace ZXing.Common
       {
          get
          {
-            int offset = y * rowSize + (x >> 5);
-            return (((int)((uint)(bits[offset]) >> (x & 0x1f))) & 1) != 0;
+            int offset = y*rowSize + (x >> 5);
+            return (((int) ((uint) (bits[offset]) >> (x & 0x1f))) & 1) != 0;
          }
          set
          {
             if (value)
             {
-               int offset = y * rowSize + (x >> 5);
+               int offset = y*rowSize + (x >> 5);
                bits[offset] |= 1 << (x & 0x1f);
+            }
+            else
+            {
+               int offset = y*rowSize + (x/32);
+               bits[offset] &= ~(1 << (x & 0x1f));
             }
          }
       }
@@ -145,8 +228,32 @@ namespace ZXing.Common
       /// </param>
       public void flip(int x, int y)
       {
-         int offset = y * rowSize + (x >> 5);
+         int offset = y*rowSize + (x >> 5);
          bits[offset] ^= 1 << (x & 0x1f);
+      }
+
+      /// <summary>
+      /// <p>XOR for {@link BitMatrix}.</p>
+      /// Flip the bit in this {@link BitMatrix} if the corresponding mask bit is set.
+      /// </summary>
+      /// <param name="mask">The mask.</param>
+      public void xor(BitMatrix mask)
+      {
+         if (width != mask.Width || height != mask.Height
+             || rowSize != mask.RowSize)
+         {
+            throw new ArgumentException("input matrix dimensions do not match");
+         }
+         BitArray rowArray = new BitArray(width/32 + 1);
+         for (int y = 0; y < height; y++)
+         {
+            int offset = y*rowSize;
+            int[] row = mask.getRow(y, rowArray).Array;
+            for (int x = 0; x < rowSize; x++)
+            {
+               bits[offset + x] ^= row[x];
+            }
+         }
       }
 
       /// <summary> Clears all bits (sets to false).</summary>
@@ -188,7 +295,7 @@ namespace ZXing.Common
          }
          for (int y = top; y < bottom; y++)
          {
-            int offset = y * rowSize;
+            int offset = y*rowSize;
             for (int x = left; x < right; x++)
             {
                bits[offset + (x >> 5)] |= 1 << (x & 0x1f);
@@ -216,7 +323,7 @@ namespace ZXing.Common
          {
             row.clear();
          }
-         int offset = y * rowSize;
+         int offset = y*rowSize;
          for (int x = 0; x < rowSize; x++)
          {
             row.setBulk(x << 5, bits[offset + x]);
@@ -231,7 +338,7 @@ namespace ZXing.Common
       /// <param name="row">{@link BitArray} to copy from</param>
       public void setRow(int y, BitArray row)
       {
-         Array.Copy(row.Array, 0, bits, y * rowSize, rowSize);
+         Array.Copy(row.Array, 0, bits, y*rowSize, rowSize);
       }
 
       /// <summary>
@@ -269,7 +376,7 @@ namespace ZXing.Common
          {
             for (int x32 = 0; x32 < rowSize; x32++)
             {
-               int theBits = bits[y * rowSize + x32];
+               int theBits = bits[y*rowSize + x32];
                if (theBits != 0)
                {
                   if (y < top)
@@ -280,28 +387,28 @@ namespace ZXing.Common
                   {
                      bottom = y;
                   }
-                  if (x32 * 32 < left)
+                  if (x32*32 < left)
                   {
                      int bit = 0;
                      while ((theBits << (31 - bit)) == 0)
                      {
                         bit++;
                      }
-                     if ((x32 * 32 + bit) < left)
+                     if ((x32*32 + bit) < left)
                      {
-                        left = x32 * 32 + bit;
+                        left = x32*32 + bit;
                      }
                   }
-                  if (x32 * 32 + 31 > right)
+                  if (x32*32 + 31 > right)
                   {
                      int bit = 31;
-                     while (((int)((uint)theBits >> bit)) == 0) // (theBits >>> bit)
+                     while (((int) ((uint) theBits >> bit)) == 0) // (theBits >>> bit)
                      {
                         bit--;
                      }
-                     if ((x32 * 32 + bit) > right)
+                     if ((x32*32 + bit) > right)
                      {
-                        right = x32 * 32 + bit;
+                        right = x32*32 + bit;
                      }
                   }
                }
@@ -316,7 +423,7 @@ namespace ZXing.Common
             return null;
          }
 
-         return new [] { left, top, widthTmp, heightTmp };
+         return new[] {left, top, widthTmp, heightTmp};
       }
 
       /// <summary>
@@ -334,8 +441,8 @@ namespace ZXing.Common
          {
             return null;
          }
-         int y = bitsOffset / rowSize;
-         int x = (bitsOffset % rowSize) << 5;
+         int y = bitsOffset/rowSize;
+         int x = (bitsOffset%rowSize) << 5;
 
          int theBits = bits[bitsOffset];
          int bit = 0;
@@ -344,7 +451,7 @@ namespace ZXing.Common
             bit++;
          }
          x += bit;
-         return new[] { x, y };
+         return new[] {x, y};
       }
 
       public int[] getBottomRightOnBit()
@@ -359,28 +466,35 @@ namespace ZXing.Common
             return null;
          }
 
-         int y = bitsOffset / rowSize;
-         int x = (bitsOffset % rowSize) << 5;
+         int y = bitsOffset/rowSize;
+         int x = (bitsOffset%rowSize) << 5;
 
          int theBits = bits[bitsOffset];
          int bit = 31;
 
-         while (((int)((uint)theBits >> bit)) == 0) // (theBits >>> bit)
+         while (((int) ((uint) theBits >> bit)) == 0) // (theBits >>> bit)
          {
             bit--;
          }
          x += bit;
 
-         return new int[] { x, y };
+         return new int[] {x, y};
       }
 
+      /// <summary>
+      /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
+      /// </summary>
+      /// <param name="obj">The <see cref="System.Object"/> to compare with this instance.</param>
+      /// <returns>
+      ///   <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+      /// </returns>
       public override bool Equals(object obj)
       {
          if (!(obj is BitMatrix))
          {
             return false;
          }
-         BitMatrix other = (BitMatrix)obj;
+         var other = (BitMatrix) obj;
          if (width != other.width || height != other.height ||
              rowSize != other.rowSize || bits.Length != other.bits.Length)
          {
@@ -396,40 +510,79 @@ namespace ZXing.Common
          return true;
       }
 
+      /// <summary>
+      /// Returns a hash code for this instance.
+      /// </summary>
+      /// <returns>
+      /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+      /// </returns>
       public override int GetHashCode()
       {
          int hash = width;
-         hash = 31 * hash + width;
-         hash = 31 * hash + height;
-         hash = 31 * hash + rowSize;
+         hash = 31*hash + width;
+         hash = 31*hash + height;
+         hash = 31*hash + rowSize;
          foreach (var bit in bits)
          {
-            hash = 31 * hash + bit.GetHashCode();
+            hash = 31*hash + bit.GetHashCode();
          }
          return hash;
       }
 
+      /// <summary>
+      /// Returns a <see cref="System.String"/> that represents this instance.
+      /// </summary>
+      /// <returns>
+      /// A <see cref="System.String"/> that represents this instance.
+      /// </returns>
       public override String ToString()
       {
-         var result = new System.Text.StringBuilder(height * (width + 1));
+         return ToString("X ", "  ", Environment.NewLine);
+      }
+
+      /// <summary>
+      /// Returns a <see cref="System.String"/> that represents this instance.
+      /// </summary>
+      /// <param name="setString">The set string.</param>
+      /// <param name="unsetString">The unset string.</param>
+      /// <returns>
+      /// A <see cref="System.String"/> that represents this instance.
+      /// </returns>
+      public String ToString(String setString, String unsetString)
+      {
+         return ToString(setString, unsetString, Environment.NewLine);
+      }
+
+      /// <summary>
+      /// Returns a <see cref="System.String"/> that represents this instance.
+      /// </summary>
+      /// <param name="setString">The set string.</param>
+      /// <param name="unsetString">The unset string.</param>
+      /// <param name="lineSeparator">The line separator.</param>
+      /// <returns>
+      /// A <see cref="System.String"/> that represents this instance.
+      /// </returns>
+      public String ToString(String setString, String unsetString, String lineSeparator)
+      {
+         var result = new StringBuilder(height*(width + 1));
          for (int y = 0; y < height; y++)
          {
             for (int x = 0; x < width; x++)
             {
-               result.Append(this[x, y] ? "X " : "  ");
+               result.Append(this[x, y] ? setString : unsetString);
             }
-#if WindowsCE
-            result.Append("\r\n");
-#else
-            result.AppendLine("");
-#endif
+            result.Append(lineSeparator);
          }
          return result.ToString();
       }
 
+      /// <summary>
+      /// Clones this instance.
+      /// </summary>
+      /// <returns></returns>
       public object Clone()
       {
-         return new BitMatrix(width, height, rowSize, (int[])bits.Clone());
+         return new BitMatrix(width, height, rowSize, (int[]) bits.Clone());
       }
    }
 }

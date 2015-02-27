@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System;
 using NUnit.Framework;
 
 namespace ZXing.Common.Test
@@ -30,11 +31,11 @@ namespace ZXing.Common.Test
       [Test]
       public void testGetSet()
       {
-         BitMatrix matrix = new BitMatrix(33);
+         var matrix = new BitMatrix(33);
          Assert.AreEqual(33, matrix.Height);
-         for (int y = 0; y < 33; y++)
+         for (var y = 0; y < 33; y++)
          {
-            for (int x = 0; x < 33; x++)
+            for (var x = 0; x < 33; x++)
             {
                if (y*x%3 == 0)
                {
@@ -42,9 +43,9 @@ namespace ZXing.Common.Test
                }
             }
          }
-         for (int y = 0; y < 33; y++)
+         for (var y = 0; y < 33; y++)
          {
-            for (int x = 0; x < 33; x++)
+            for (var x = 0; x < 33; x++)
             {
                Assert.AreEqual(y*x%3 == 0, matrix[x, y]);
             }
@@ -54,11 +55,11 @@ namespace ZXing.Common.Test
       [Test]
       public void testSetRegion()
       {
-         BitMatrix matrix = new BitMatrix(5);
+         var matrix = new BitMatrix(5);
          matrix.setRegion(1, 1, 3, 3);
-         for (int y = 0; y < 5; y++)
+         for (var y = 0; y < 5; y++)
          {
-            for (int x = 0; x < 5; x++)
+            for (var x = 0; x < 5; x++)
             {
                Assert.AreEqual(y >= 1 && y <= 3 && x >= 1 && x <= 3, matrix[x, y]);
             }
@@ -68,7 +69,7 @@ namespace ZXing.Common.Test
       [Test]
       public void testRectangularMatrix()
       {
-         BitMatrix matrix = new BitMatrix(75, 20);
+         var matrix = new BitMatrix(75, 20);
          Assert.AreEqual(75, matrix.Width);
          Assert.AreEqual(20, matrix.Height);
          matrix[10, 0] = true;
@@ -96,15 +97,15 @@ namespace ZXing.Common.Test
       [Test]
       public void testRectangularSetRegion()
       {
-         BitMatrix matrix = new BitMatrix(320, 240);
+         var matrix = new BitMatrix(320, 240);
          Assert.AreEqual(320, matrix.Width);
          Assert.AreEqual(240, matrix.Height);
          matrix.setRegion(105, 22, 80, 12);
 
          // Only bits in the region should be on
-         for (int y = 0; y < 240; y++)
+         for (var y = 0; y < 240; y++)
          {
-            for (int x = 0; x < 320; x++)
+            for (var x = 0; x < 320; x++)
             {
                Assert.AreEqual(y >= 22 && y < 34 && x >= 105 && x < 185, matrix[x, y]);
             }
@@ -114,7 +115,7 @@ namespace ZXing.Common.Test
       [Test]
       public void testGetRow()
       {
-         BitMatrix matrix = new BitMatrix(102, 5);
+         var matrix = new BitMatrix(102, 5);
          for (int x = 0; x < 102; x++)
          {
             if ((x & 0x03) == 0)
@@ -124,22 +125,22 @@ namespace ZXing.Common.Test
          }
 
          // Should allocate
-         BitArray array = matrix.getRow(2, null);
+         var array = matrix.getRow(2, null);
          Assert.AreEqual(102, array.Size);
 
          // Should reallocate
-         BitArray array2 = new BitArray(60);
+         var array2 = new BitArray(60);
          array2 = matrix.getRow(2, array2);
          Assert.AreEqual(102, array2.Size);
 
          // Should use provided object, with original BitArray size
-         BitArray array3 = new BitArray(200);
+         var array3 = new BitArray(200);
          array3 = matrix.getRow(2, array3);
          Assert.AreEqual(200, array3.Size);
 
-         for (int x = 0; x < 102; x++)
+         for (var x = 0; x < 102; x++)
          {
-            bool on = (x & 0x03) == 0;
+            var on = (x & 0x03) == 0;
             Assert.AreEqual(on, array[x]);
             Assert.AreEqual(on, array2[x]);
             Assert.AreEqual(on, array3[x]);
@@ -170,6 +171,106 @@ namespace ZXing.Common.Test
          testRotate180(7, 5);
          testRotate180(8, 4);
          testRotate180(8, 5);
+      }
+
+
+      [Test]
+      public void testParse()
+      {
+         var emptyMatrix = new BitMatrix(3, 3);
+         var fullMatrix = new BitMatrix(3, 3);
+         fullMatrix.setRegion(0, 0, 3, 3);
+         var centerMatrix = new BitMatrix(3, 3);
+         centerMatrix.setRegion(1, 1, 1, 1);
+         var emptyMatrix24 = new BitMatrix(2, 4);
+
+         Assert.AreEqual(emptyMatrix, BitMatrix.parse("   \n   \n   \n", "x", " "));
+         Assert.AreEqual(emptyMatrix, BitMatrix.parse("   \n   \r\r\n   \n\r", "x", " "));
+         Assert.AreEqual(emptyMatrix, BitMatrix.parse("   \n   \n   ", "x", " "));
+
+         Assert.AreEqual(fullMatrix, BitMatrix.parse("xxx\nxxx\nxxx\n", "x", " "));
+
+         Assert.AreEqual(centerMatrix, BitMatrix.parse("   \n x \n   \n", "x", " "));
+         Assert.AreEqual(centerMatrix, BitMatrix.parse("      \n  x   \n      \n", "x ", "  "));
+         try
+         {
+            Assert.AreEqual(centerMatrix, BitMatrix.parse("   \n xy\n   \n", "x", " "));
+            Assert.Fail();
+         }
+         catch (ArgumentException)
+         {
+         }
+
+         Assert.AreEqual(emptyMatrix24, BitMatrix.parse("  \n  \n  \n  \n", "x", " "));
+
+         Assert.AreEqual(centerMatrix, BitMatrix.parse(centerMatrix.ToString("x", ".", "\n"), "x", "."));
+      }
+
+      [Test]
+      public void testUnset()
+      {
+         var emptyMatrix = new BitMatrix(3, 3);
+         var matrix = (BitMatrix) emptyMatrix.Clone();
+         matrix[1, 1] = true;
+         Assert.AreNotEqual(emptyMatrix, matrix);
+         matrix[1, 1] = false;
+         Assert.AreEqual(emptyMatrix, matrix);
+         matrix[1, 1] = false;
+         Assert.AreEqual(emptyMatrix, matrix);
+      }
+
+      [Test]
+      public void testXOR()
+      {
+         var emptyMatrix = new BitMatrix(3, 3);
+         var fullMatrix = new BitMatrix(3, 3);
+         fullMatrix.setRegion(0, 0, 3, 3);
+         var centerMatrix = new BitMatrix(3, 3);
+         centerMatrix.setRegion(1, 1, 1, 1);
+         var invertedCenterMatrix = (BitMatrix) fullMatrix.Clone();
+         invertedCenterMatrix[1, 1] = false;
+         var badMatrix = new BitMatrix(4, 4);
+
+         testXOR(emptyMatrix, emptyMatrix, emptyMatrix);
+         testXOR(emptyMatrix, centerMatrix, centerMatrix);
+         testXOR(emptyMatrix, fullMatrix, fullMatrix);
+
+         testXOR(centerMatrix, emptyMatrix, centerMatrix);
+         testXOR(centerMatrix, centerMatrix, emptyMatrix);
+         testXOR(centerMatrix, fullMatrix, invertedCenterMatrix);
+
+         testXOR(invertedCenterMatrix, emptyMatrix, invertedCenterMatrix);
+         testXOR(invertedCenterMatrix, centerMatrix, fullMatrix);
+         testXOR(invertedCenterMatrix, fullMatrix, centerMatrix);
+
+         testXOR(fullMatrix, emptyMatrix, fullMatrix);
+         testXOR(fullMatrix, centerMatrix, invertedCenterMatrix);
+         testXOR(fullMatrix, fullMatrix, emptyMatrix);
+
+         try
+         {
+            ((BitMatrix) emptyMatrix.Clone()).xor(badMatrix);
+            Assert.Fail();
+         }
+         catch (ArgumentException)
+         {
+         }
+
+         try
+         {
+            ((BitMatrix) badMatrix.Clone()).xor(emptyMatrix);
+            Assert.Fail();
+         }
+         catch (ArgumentException)
+         {
+         }
+      }
+
+      private static void testXOR(BitMatrix dataMatrix, BitMatrix flipMatrix, BitMatrix expectedMatrix)
+      {
+         var matrix = (BitMatrix) dataMatrix.Clone();
+         matrix.xor(flipMatrix);
+         Assert.AreEqual(expectedMatrix, matrix);
       }
 
       private static void testRotate180(int width, int height)
