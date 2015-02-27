@@ -118,6 +118,10 @@ namespace ZXing.Multi
          for (int i = 0; i < resultPoints.Length; i++)
          {
             ResultPoint point = resultPoints[i];
+            if (point == null)
+            {
+               continue;
+            }
             float x = point.X;
             float y = point.Y;
             if (x < minX)
