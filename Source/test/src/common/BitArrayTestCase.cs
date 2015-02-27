@@ -124,7 +124,7 @@ namespace ZXing.Common.Test
       [Test]
       public void testGetNextSet5()
       {
-         Random r = new Random((int)DateTime.Now.Ticks);
+         Random r = new Random(0x0EADBEEF);
          for (int i = 0; i < 10; i++)
          {
             BitArray array = new BitArray(1 + r.Next(100));

@@ -56,7 +56,7 @@ namespace ZXing.PDF417.Internal.Test
 
       public static Random getRandom()
       {
-         return new Random(0);
+         return new Random(0x0EADBEEF);
       }
    }
 }

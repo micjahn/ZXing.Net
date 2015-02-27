@@ -45,13 +45,6 @@ namespace ZXing.Aztec.Test
          );
 
       private static readonly ResultPoint[] NO_POINTS = new ResultPoint[0];
-      private static Random random;
-
-      [SetUp]
-      public void beforeTest()
-      {
-         random = new Random(0);
-      }
 
       // real life tests
 
@@ -558,7 +551,7 @@ namespace ZXing.Aztec.Test
 
       private static Random getPseudoRandom()
       {
-         return random;
+         return new Random(0x0EADBEEF);
       }
 
       private static void testModeMessage(bool compact, int layers, int words, String expected)

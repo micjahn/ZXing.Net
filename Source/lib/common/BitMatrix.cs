@@ -115,7 +115,6 @@ namespace ZXing.Common
 
       public static BitMatrix parse(String stringRepresentation, String setString, String unsetString)
       {
-         int pos = 0;
          if (stringRepresentation == null)
          {
             throw new ArgumentException();
@@ -126,9 +125,11 @@ namespace ZXing.Common
          int rowStartPos = 0;
          int rowLength = -1;
          int nRows = 0;
+         int pos = 0;
          while (pos < stringRepresentation.Length)
          {
-            if (stringRepresentation.Substring(pos, 1).Equals("\n") || stringRepresentation.Substring(pos, 1).Equals("\r"))
+            if (stringRepresentation.Substring(pos, 1).Equals("\n") || 
+                stringRepresentation.Substring(pos, 1).Equals("\r"))
             {
                if (bitsPos > rowStartPos)
                {
@@ -233,8 +234,8 @@ namespace ZXing.Common
       }
 
       /// <summary>
-      /// <p>XOR for {@link BitMatrix}.</p>
-      /// Flip the bit in this {@link BitMatrix} if the corresponding mask bit is set.
+      /// Exclusive-or (XOR): Flip the bit in this {@code BitMatrix} if the corresponding
+      /// mask bit is set.
       /// </summary>
       /// <param name="mask">The mask.</param>
       public void xor(BitMatrix mask)
@@ -244,7 +245,7 @@ namespace ZXing.Common
          {
             throw new ArgumentException("input matrix dimensions do not match");
          }
-         BitArray rowArray = new BitArray(width/32 + 1);
+         var rowArray = new BitArray(width/32 + 1);
          for (int y = 0; y < height; y++)
          {
             int offset = y*rowSize;
