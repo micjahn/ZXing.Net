@@ -25,7 +25,7 @@ namespace ZXing.Datamatrix.Internal
    ///
    /// <author>bbrown@google.com (Brian Brown)</author>
    /// </summary>
-   sealed class DataBlock
+   internal sealed class DataBlock
    {
       private readonly int numDataCodewords;
       private readonly byte[] codewords;
@@ -47,7 +47,7 @@ namespace ZXing.Datamatrix.Internal
       ///         Data Matrix Code
       /// </summary>
       internal static DataBlock[] getDataBlocks(byte[] rawCodewords,
-                                       Version version)
+                                                Version version)
       {
          // Figure out the number and size of data blocks used by this version
          Version.ECBlocks ecBlocks = version.getECBlocks();
@@ -106,8 +106,9 @@ namespace ZXing.Datamatrix.Internal
          {
             for (int j = 0; j < numResultBlocks; j++)
             {
-               int iOffset = specialVersion && j > 7 ? i - 1 : i;
-               result[j].codewords[iOffset] = rawCodewords[rawCodewordsOffset++];
+               int jOffset = specialVersion ? (j + 8)%numResultBlocks : j;
+               int iOffset = specialVersion && jOffset > 7 ? i - 1 : i;
+               result[jOffset].codewords[iOffset] = rawCodewords[rawCodewordsOffset++];
             }
          }
 
