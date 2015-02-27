@@ -20,12 +20,12 @@ namespace ZXing.Datamatrix.Encoder
 {
    internal sealed class X12Encoder : C40Encoder
    {
-      override public int EncodingMode
+      public override int EncodingMode
       {
          get { return Encodation.X12; }
       }
 
-      override public void encode(EncoderContext context)
+      public override void encode(EncoderContext context)
       {
          //step C
          var buffer = new StringBuilder();
@@ -38,23 +38,22 @@ namespace ZXing.Datamatrix.Encoder
             encodeChar(c, buffer);
 
             int count = buffer.Length;
-            if ((count % 3) == 0)
+            if ((count%3) == 0)
             {
                writeNextTriplet(context, buffer);
 
                int newMode = HighLevelEncoder.lookAheadTest(context.Message, context.Pos, currentMode);
                if (newMode != currentMode)
                {
-                  handleEOD(context, buffer);
                   context.signalEncoderChange(newMode);
-                  return;
+                  break;
                }
             }
          }
          handleEOD(context, buffer);
       }
 
-      override protected int encodeChar(char c, StringBuilder sb)
+      protected override int encodeChar(char c, StringBuilder sb)
       {
          if (c == '\r')
          {
@@ -74,11 +73,11 @@ namespace ZXing.Datamatrix.Encoder
          }
          else if (c >= '0' && c <= '9')
          {
-            sb.Append((char)(c - 48 + 4));
+            sb.Append((char) (c - 48 + 4));
          }
          else if (c >= 'A' && c <= 'Z')
          {
-            sb.Append((char)(c - 65 + 14));
+            sb.Append((char) (c - 65 + 14));
          }
          else
          {
@@ -87,41 +86,17 @@ namespace ZXing.Datamatrix.Encoder
          return 1;
       }
 
-      override protected void handleEOD(EncoderContext context, StringBuilder buffer)
+      protected override void handleEOD(EncoderContext context, StringBuilder buffer)
       {
          context.updateSymbolInfo();
          int available = context.SymbolInfo.dataCapacity - context.CodewordCount;
          int count = buffer.Length;
-         if (count == 2)
-         {
+         context.Pos -= count;
+         if (context.RemainingCharacters > 1 || available > 1 ||
+             context.RemainingCharacters != available)
             context.writeCodeword(HighLevelEncoder.X12_UNLATCH);
-            context.Pos -= 2;
+         if (context.NewEncoding < 0)
             context.signalEncoderChange(Encodation.ASCII);
-         }
-         else if (count == 1)
-         {
-            context.Pos--;
-            if (context.RemainingCharacters > 1)
-            {
-               context.writeCodeword(HighLevelEncoder.X12_UNLATCH);
-               if (available < 1)
-               {
-                  context.updateSymbolInfo();
-               }
-            }
-            context.signalEncoderChange(Encodation.ASCII);
-         }
-         else if (count == 0)
-         {
-            if (context.RemainingCharacters > 1)
-            {
-               context.writeCodeword(HighLevelEncoder.X12_UNLATCH);
-               if (available < 1)
-               {
-                  context.updateSymbolInfo();
-               }
-            }
-         }
       }
    }
 }
