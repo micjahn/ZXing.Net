@@ -31,28 +31,29 @@ namespace ZXing.Client.Result
    /// <author>Sean Owen</author>
    public abstract class ResultParser
    {
-      private static readonly ResultParser[] PARSERS = {
-                                                 new BookmarkDoCoMoResultParser(),
-                                                 new AddressBookDoCoMoResultParser(),
-                                                 new EmailDoCoMoResultParser(),
-                                                 new AddressBookAUResultParser(),
-                                                 new VCardResultParser(),
-                                                 new BizcardResultParser(),
-                                                 new VEventResultParser(),
-                                                 new EmailAddressResultParser(),
-                                                 new SMTPResultParser(),
-                                                 new TelResultParser(),
-                                                 new SMSMMSResultParser(),
-                                                 new SMSTOMMSTOResultParser(),
-                                                 new GeoResultParser(),
-                                                 new WifiResultParser(),
-                                                 new URLTOResultParser(),
-                                                 new URIResultParser(),
-                                                 new ISBNResultParser(),
-                                                 new ProductResultParser(),
-                                                 new ExpandedProductResultParser(),
-                                                 new VINResultParser(),
-                                              };
+      private static readonly ResultParser[] PARSERS =
+         {
+            new BookmarkDoCoMoResultParser(),
+            new AddressBookDoCoMoResultParser(),
+            new EmailDoCoMoResultParser(),
+            new AddressBookAUResultParser(),
+            new VCardResultParser(),
+            new BizcardResultParser(),
+            new VEventResultParser(),
+            new EmailAddressResultParser(),
+            new SMTPResultParser(),
+            new TelResultParser(),
+            new SMSMMSResultParser(),
+            new SMSTOMMSTOResultParser(),
+            new GeoResultParser(),
+            new WifiResultParser(),
+            new URLTOResultParser(),
+            new URIResultParser(),
+            new ISBNResultParser(),
+            new ProductResultParser(),
+            new ExpandedProductResultParser(),
+            new VINResultParser(),
+         };
 
 #if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE
       private static readonly Regex DIGITS = new Regex(@"\A(?:" + "\\d+" + @")\z");
@@ -73,6 +74,11 @@ namespace ZXing.Client.Result
       /// <returns><see cref="ParsedResult" /> encapsulating the parsing result</returns>
       public abstract ParsedResult parse(ZXing.Result theResult);
 
+      /// <summary>
+      /// Parses the result.
+      /// </summary>
+      /// <param name="theResult">The result.</param>
+      /// <returns></returns>
       public static ParsedResult parseResult(ZXing.Result theResult)
       {
          foreach (var parser in PARSERS)
@@ -107,12 +113,12 @@ namespace ZXing.Client.Result
          }
       }
 
-      protected static String[] maybeWrap(System.String value_Renamed)
+      protected static String[] maybeWrap(String value)
       {
-         return value_Renamed == null ? null : new System.String[] { value_Renamed };
+         return value == null ? null : new[] { value };
       }
 
-      protected static String unescapeBackslash(System.String escaped)
+      protected static String unescapeBackslash(String escaped)
       {
          if (escaped != null)
          {
@@ -226,7 +232,6 @@ namespace ZXing.Client.Result
          int max = rawText.Length;
          while (i < max)
          {
-            //UPGRADE_WARNING: Method 'java.lang.String.indexOf' was converted to 'System.String.IndexOf' which may throw an exception. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1101'"
             i = rawText.IndexOf(prefix, i);
             if (i < 0)
             {
@@ -237,7 +242,6 @@ namespace ZXing.Client.Result
             bool done = false;
             while (!done)
             {
-               //UPGRADE_WARNING: Method 'java.lang.String.indexOf' was converted to 'System.String.IndexOf' which may throw an exception. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1101'"
                i = rawText.IndexOf(endChar, i);
                if (i < 0)
                {
@@ -245,9 +249,9 @@ namespace ZXing.Client.Result
                   i = rawText.Length;
                   done = true;
                }
-               else if (rawText[i - 1] == '\\')
+               else if (countPrecedingBackslashes(rawText, i)%2 != 0)
                {
-                  // semicolon was escaped so continue
+                  // semicolon was escaped (odd count of preceding backslashes) so continue
                   i++;
                }
                else
@@ -276,6 +280,23 @@ namespace ZXing.Client.Result
             return null;
          }
          return SupportClass.toStringArray(matches);
+      }
+
+      private static int countPrecedingBackslashes(String s, int pos)
+      {
+         int count = 0;
+         for (int i = pos - 1; i >= 0; i--)
+         {
+            if (s[i] == '\\')
+            {
+               count++;
+            }
+            else
+            {
+               break;
+            }
+         }
+         return count;
       }
 
       internal static String matchSinglePrefixedField(String prefix, String rawText, char endChar, bool trim)
@@ -334,7 +355,7 @@ namespace ZXing.Client.Result
                      unescaped.Append(escapedArray[i - 1]);
                      unescaped.Append(escapedArray[i]);
                   }
-                  unescaped.Append((char)((firstDigitValue << 4) + secondDigitValue));
+                  unescaped.Append((char) ((firstDigitValue << 4) + secondDigitValue));
                }
             }
             else

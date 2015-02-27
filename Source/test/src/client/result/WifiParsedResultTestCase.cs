@@ -68,6 +68,12 @@ namespace ZXing.Client.Result.Test
          doTest("WIFI:S:TenChars;P:hello\\:there;T:WEP;;", "TenChars", "hello:there", "WEP");
       }
 
+      [Test]
+      public void testEscape()
+      {
+         doTest("WIFI:T:WPA;S:test;P:my_password\\\\;;", "test", "my_password\\", "WPA");
+      }
+
       /// <summary>
       /// Given the string contents for the barcode, check that it matches our expectations
       /// </summary>
@@ -76,12 +82,12 @@ namespace ZXing.Client.Result.Test
                                  String password,
                                  String type)
       {
-         ZXing.Result fakeResult = new ZXing.Result(contents, null, null, BarcodeFormat.QR_CODE);
-         ParsedResult result = ResultParser.parseResult(fakeResult);
+         var fakeResult = new ZXing.Result(contents, null, null, BarcodeFormat.QR_CODE);
+         var result = ResultParser.parseResult(fakeResult);
 
          // Ensure it is a wifi code
          Assert.AreEqual(ParsedResultType.WIFI, result.Type);
-         WifiParsedResult wifiResult = (WifiParsedResult)result;
+         var wifiResult = (WifiParsedResult)result;
 
          Assert.AreEqual(ssid, wifiResult.Ssid);
          Assert.AreEqual(password, wifiResult.Password);
