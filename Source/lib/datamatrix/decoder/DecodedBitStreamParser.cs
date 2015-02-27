@@ -47,32 +47,39 @@ namespace ZXing.Datamatrix.Internal
       /// See ISO 16022:2006, Annex C Table C.1
       /// The C40 Basic Character Set (*'s used for placeholders for the shift values)
       /// </summary>
-      private static readonly char[] C40_BASIC_SET_CHARS = {
-                                                              '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                                                              'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-                                                              'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-                                                           };
+      private static readonly char[] C40_BASIC_SET_CHARS =
+         {
+            '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+            'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+         };
 
-      private static readonly char[] C40_SHIFT2_SET_CHARS = {
-                                                               '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.',
-                                                               '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_'
-                                                            };
+      private static readonly char[] C40_SHIFT2_SET_CHARS =
+         {
+            '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.',
+            '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_'
+         };
 
       /// <summary>
       /// See ISO 16022:2006, Annex C Table C.2
       /// The Text Basic Character Set (*'s used for placeholders for the shift values)
       /// </summary>
-      private static readonly char[] TEXT_BASIC_SET_CHARS = {
-                                                               '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                                                               'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-                                                               'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
-                                                            };
+      private static readonly char[] TEXT_BASIC_SET_CHARS =
+         {
+            '*', '*', '*', ' ', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+            'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+         };
 
-      private static readonly char[] TEXT_SHIFT3_SET_CHARS = {
-                                                                '`', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-                                                                'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{',
-                                                                '|', '}', '~', (char) 127
-                                                             };
+      // Shift 2 for Text is the same encoding as C40
+      private static readonly char[] TEXT_SHIFT2_SET_CHARS = C40_SHIFT2_SET_CHARS;
+
+      private static readonly char[] TEXT_SHIFT3_SET_CHARS =
+         {
+            '`', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+            'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{',
+            '|', '}', '~', (char) 127
+         };
 
       internal static DecoderResult decode(byte[] bytes)
       {
@@ -143,44 +150,50 @@ namespace ZXing.Datamatrix.Internal
                return false;
             }
             else if (oneByte <= 128)
-            {  // ASCII data (ASCII value + 1)
+            {
+               // ASCII data (ASCII value + 1)
                if (upperShift)
                {
                   oneByte += 128;
                   //upperShift = false;
                }
-               result.Append((char)(oneByte - 1));
+               result.Append((char) (oneByte - 1));
                mode = Mode.ASCII_ENCODE;
                return true;
             }
             else if (oneByte == 129)
-            {  // Pad
+            {
+               // Pad
                mode = Mode.PAD_ENCODE;
                return true;
             }
             else if (oneByte <= 229)
-            {  // 2-digit data 00-99 (Numeric Value + 130)
+            {
+               // 2-digit data 00-99 (Numeric Value + 130)
                int value = oneByte - 130;
                if (value < 10)
-               { // padd with '0' for single digit values
+               {
+                  // pad with '0' for single digit values
                   result.Append('0');
                }
                result.Append(value);
             }
             else if (oneByte == 230)
-            {  // Latch to C40 encodation
+            {
+               // Latch to C40 encodation
                mode = Mode.C40_ENCODE;
                return true;
             }
             else if (oneByte == 231)
-            {  // Latch to Base 256 encodation
+            {
+               // Latch to Base 256 encodation
                mode = Mode.BASE256_ENCODE;
                return true;
             }
             else if (oneByte == 232)
             {
                // FNC1
-               result.Append((char)29); // translate as ASCII 29
+               result.Append((char) 29); // translate as ASCII 29
             }
             else if (oneByte == 233 || oneByte == 234)
             {
@@ -189,42 +202,50 @@ namespace ZXing.Datamatrix.Internal
                //throw ReaderException.Instance;
             }
             else if (oneByte == 235)
-            {  // Upper Shift (shift to Extended ASCII)
+            {
+               // Upper Shift (shift to Extended ASCII)
                upperShift = true;
             }
             else if (oneByte == 236)
-            {  // 05 Macro
+            {
+               // 05 Macro
                result.Append("[)>\u001E05\u001D");
                resultTrailer.Insert(0, "\u001E\u0004");
             }
             else if (oneByte == 237)
-            {  // 06 Macro
+            {
+               // 06 Macro
                result.Append("[)>\u001E06\u001D");
                resultTrailer.Insert(0, "\u001E\u0004");
             }
             else if (oneByte == 238)
-            {  // Latch to ANSI X12 encodation
+            {
+               // Latch to ANSI X12 encodation
                mode = Mode.ANSIX12_ENCODE;
                return true;
             }
             else if (oneByte == 239)
-            {  // Latch to Text encodation
+            {
+               // Latch to Text encodation
                mode = Mode.TEXT_ENCODE;
                return true;
             }
             else if (oneByte == 240)
-            {  // Latch to EDIFACT encodation
+            {
+               // Latch to EDIFACT encodation
                mode = Mode.EDIFACT_ENCODE;
                return true;
             }
             else if (oneByte == 241)
-            {  // ECI Character
+            {
+               // ECI Character
                // TODO(bbrown): I think we need to support ECI
                //throw ReaderException.Instance;
                // Ignore this symbol for now
             }
             else if (oneByte >= 242)
-            {  // Not to be used in ASCII encodation
+            {
+               // Not to be used in ASCII encodation
                // ... but work around encoders that end with 254, latch back to ASCII
                if (oneByte != 254 || bits.available() != 0)
                {
@@ -258,7 +279,7 @@ namespace ZXing.Datamatrix.Internal
             }
             int firstByte = bits.readBits(8);
             if (firstByte == 254)
-            { 
+            {
                // Unlatch codeword
                return true;
             }
@@ -280,7 +301,7 @@ namespace ZXing.Datamatrix.Internal
                         char c40char = C40_BASIC_SET_CHARS[cValue];
                         if (upperShift)
                         {
-                           result.Append((char)(c40char + 128));
+                           result.Append((char) (c40char + 128));
                            upperShift = false;
                         }
                         else
@@ -296,12 +317,12 @@ namespace ZXing.Datamatrix.Internal
                   case 1:
                      if (upperShift)
                      {
-                        result.Append((char)(cValue + 128));
+                        result.Append((char) (cValue + 128));
                         upperShift = false;
                      }
                      else
                      {
-                        result.Append((char)cValue);
+                        result.Append((char) cValue);
                      }
                      shift = 0;
                      break;
@@ -311,7 +332,7 @@ namespace ZXing.Datamatrix.Internal
                         char c40char = C40_SHIFT2_SET_CHARS[cValue];
                         if (upperShift)
                         {
-                           result.Append((char)(c40char + 128));
+                           result.Append((char) (c40char + 128));
                            upperShift = false;
                         }
                         else
@@ -320,11 +341,13 @@ namespace ZXing.Datamatrix.Internal
                         }
                      }
                      else if (cValue == 27)
-                     {  // FNC1
-                        result.Append((char)29); // translate as ASCII 29
+                     {
+                        // FNC1
+                        result.Append((char) 29); // translate as ASCII 29
                      }
                      else if (cValue == 30)
-                     {  // Upper Shift
+                     {
+                        // Upper Shift
                         upperShift = true;
                      }
                      else
@@ -336,12 +359,12 @@ namespace ZXing.Datamatrix.Internal
                   case 3:
                      if (upperShift)
                      {
-                        result.Append((char)(cValue + 224));
+                        result.Append((char) (cValue + 224));
                         upperShift = false;
                      }
                      else
                      {
-                        result.Append((char)(cValue + 96));
+                        result.Append((char) (cValue + 96));
                      }
                      shift = 0;
                      break;
@@ -375,7 +398,7 @@ namespace ZXing.Datamatrix.Internal
             }
             int firstByte = bits.readBits(8);
             if (firstByte == 254)
-            {  
+            {
                // Unlatch codeword
                return true;
             }
@@ -397,7 +420,7 @@ namespace ZXing.Datamatrix.Internal
                         char textChar = TEXT_BASIC_SET_CHARS[cValue];
                         if (upperShift)
                         {
-                           result.Append((char)(textChar + 128));
+                           result.Append((char) (textChar + 128));
                            upperShift = false;
                         }
                         else
@@ -413,36 +436,38 @@ namespace ZXing.Datamatrix.Internal
                   case 1:
                      if (upperShift)
                      {
-                        result.Append((char)(cValue + 128));
+                        result.Append((char) (cValue + 128));
                         upperShift = false;
                      }
                      else
                      {
-                        result.Append((char)cValue);
+                        result.Append((char) cValue);
                      }
                      shift = 0;
                      break;
                   case 2:
                      // Shift 2 for Text is the same encoding as C40
-                     if (cValue < C40_SHIFT2_SET_CHARS.Length)
+                     if (cValue < TEXT_SHIFT2_SET_CHARS.Length)
                      {
-                        char c40char = C40_SHIFT2_SET_CHARS[cValue];
+                        char textChar = TEXT_SHIFT2_SET_CHARS[cValue];
                         if (upperShift)
                         {
-                           result.Append((char)(c40char + 128));
+                           result.Append((char) (textChar + 128));
                            upperShift = false;
                         }
                         else
                         {
-                           result.Append(c40char);
+                           result.Append(textChar);
                         }
                      }
                      else if (cValue == 27)
-                     {  // FNC1
-                        result.Append((char)29); // translate as ASCII 29
+                     {
+                        // FNC1
+                        result.Append((char) 29); // translate as ASCII 29
                      }
                      else if (cValue == 30)
-                     {  // Upper Shift
+                     {
+                        // Upper Shift
                         upperShift = true;
                      }
                      else
@@ -457,7 +482,7 @@ namespace ZXing.Datamatrix.Internal
                         char textChar = TEXT_SHIFT3_SET_CHARS[cValue];
                         if (upperShift)
                         {
-                           result.Append((char)(textChar + 128));
+                           result.Append((char) (textChar + 128));
                            upperShift = false;
                         }
                         else
@@ -499,7 +524,8 @@ namespace ZXing.Datamatrix.Internal
             }
             int firstByte = bits.readBits(8);
             if (firstByte == 254)
-            {  // Unlatch codeword
+            {
+               // Unlatch codeword
                return true;
             }
 
@@ -509,28 +535,34 @@ namespace ZXing.Datamatrix.Internal
             {
                int cValue = cValues[i];
                if (cValue == 0)
-               {  // X12 segment terminator <CR>
+               {
+                  // X12 segment terminator <CR>
                   result.Append('\r');
                }
                else if (cValue == 1)
-               {  // X12 segment separator *
+               {
+                  // X12 segment separator *
                   result.Append('*');
                }
                else if (cValue == 2)
-               {  // X12 sub-element separator >
+               {
+                  // X12 sub-element separator >
                   result.Append('>');
                }
                else if (cValue == 3)
-               {  // space
+               {
+                  // space
                   result.Append(' ');
                }
                else if (cValue < 14)
-               {  // 0 - 9
-                  result.Append((char)(cValue + 44));
+               {
+                  // 0 - 9
+                  result.Append((char) (cValue + 44));
                }
                else if (cValue < 40)
-               {  // A - Z
-                  result.Append((char)(cValue + 51));
+               {
+                  // A - Z
+                  result.Append((char) (cValue + 51));
                }
                else
                {
@@ -545,12 +577,12 @@ namespace ZXing.Datamatrix.Internal
       private static void parseTwoBytes(int firstByte, int secondByte, int[] result)
       {
          int fullBitValue = (firstByte << 8) + secondByte - 1;
-         int temp = fullBitValue / 1600;
+         int temp = fullBitValue/1600;
          result[0] = temp;
-         fullBitValue -= temp * 1600;
-         temp = fullBitValue / 40;
+         fullBitValue -= temp*1600;
+         temp = fullBitValue/40;
          result[1] = temp;
-         result[2] = fullBitValue - temp * 40;
+         result[2] = fullBitValue - temp*40;
       }
 
       /// <summary>
@@ -572,7 +604,8 @@ namespace ZXing.Datamatrix.Internal
 
                // Check for the unlatch character
                if (edifactValue == 0x1F)
-               {  // 011111
+               {
+                  // 011111
                   // Read rest of byte, which should be 0, and stop
                   int bitsLeft = 8 - bits.BitOffset;
                   if (bitsLeft != 8)
@@ -583,10 +616,11 @@ namespace ZXing.Datamatrix.Internal
                }
 
                if ((edifactValue & 0x20) == 0)
-               {  // no 1 in the leading (6th) bit
-                  edifactValue |= 0x40;  // Add a leading 01 to the 6 bit binary value
+               {
+                  // no 1 in the leading (6th) bit
+                  edifactValue |= 0x40; // Add a leading 01 to the 6 bit binary value
                }
-               result.Append((char)edifactValue);
+               result.Append((char) edifactValue);
             }
          } while (bits.available() > 0);
 
@@ -605,8 +639,9 @@ namespace ZXing.Datamatrix.Internal
          int d1 = unrandomize255State(bits.readBits(8), codewordPosition++);
          int count;
          if (d1 == 0)
-         {  // Read the remainder of the symbol
-            count = bits.available() / 8;
+         {
+            // Read the remainder of the symbol
+            count = bits.available()/8;
          }
          else if (d1 < 250)
          {
@@ -614,7 +649,7 @@ namespace ZXing.Datamatrix.Internal
          }
          else
          {
-            count = 250 * (d1 - 249) + unrandomize255State(bits.readBits(8), codewordPosition++);
+            count = 250*(d1 - 249) + unrandomize255State(bits.readBits(8), codewordPosition++);
          }
 
          // We're seeing NegativeArraySizeException errors from users.
@@ -632,7 +667,7 @@ namespace ZXing.Datamatrix.Internal
             {
                return false;
             }
-            bytes[i] = (byte)unrandomize255State(bits.readBits(8), codewordPosition++);
+            bytes[i] = (byte) unrandomize255State(bits.readBits(8), codewordPosition++);
          }
          byteSegments.Add(bytes);
          try
@@ -659,9 +694,9 @@ namespace ZXing.Datamatrix.Internal
       /// See ISO 16022:2006, Annex B, B.2
       /// </summary>
       private static int unrandomize255State(int randomizedBase256Codeword,
-                                              int base256CodewordPosition)
+                                             int base256CodewordPosition)
       {
-         int pseudoRandomNumber = ((149 * base256CodewordPosition) % 255) + 1;
+         int pseudoRandomNumber = ((149*base256CodewordPosition)%255) + 1;
          int tempVariable = randomizedBase256Codeword - pseudoRandomNumber;
          return tempVariable >= 0 ? tempVariable : tempVariable + 256;
       }
