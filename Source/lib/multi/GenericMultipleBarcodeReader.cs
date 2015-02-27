@@ -162,12 +162,15 @@ namespace ZXing.Multi
 
       private static Result translateResultPoints(Result result, int xOffset, int yOffset)
       {
-         ResultPoint[] oldResultPoints = result.ResultPoints;
-         ResultPoint[] newResultPoints = new ResultPoint[oldResultPoints.Length];
+         var oldResultPoints = result.ResultPoints;
+         var newResultPoints = new ResultPoint[oldResultPoints.Length];
          for (int i = 0; i < oldResultPoints.Length; i++)
          {
-            ResultPoint oldPoint = oldResultPoints[i];
-            newResultPoints[i] = new ResultPoint(oldPoint.X + xOffset, oldPoint.Y + yOffset);
+            var oldPoint = oldResultPoints[i];
+            if (oldPoint != null)
+            {
+               newResultPoints[i] = new ResultPoint(oldPoint.X + xOffset, oldPoint.Y + yOffset);
+            }
          }
          var newResult = new Result(result.Text, result.RawBytes, newResultPoints, result.BarcodeFormat);
          newResult.putAllMetadata(result.ResultMetadata);
