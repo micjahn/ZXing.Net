@@ -55,7 +55,7 @@ namespace ZXing.Datamatrix
          // Try to get force shape & min / max size
          var shape = SymbolShapeHint.FORCE_NONE;
          var defaultEncodation = Encodation.ASCII;
-         Dimension minSize = null;
+         var minSize = new Dimension(width, height);
          Dimension maxSize = null;
          if (hints != null)
          {
