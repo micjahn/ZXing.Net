@@ -48,8 +48,11 @@ namespace ZXing.Client.Result
                subject = subject.Substring(0, colon);
             }
          }
-         String mailtoURI = "mailto:" + emailAddress;
-         return new EmailAddressParsedResult(emailAddress, subject, body, mailtoURI);
+         return new EmailAddressParsedResult(new [] {emailAddress},
+                                             null,
+                                             null,
+                                             subject,
+                                             body);
       }
    }
 }

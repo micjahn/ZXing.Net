@@ -36,12 +36,60 @@ namespace ZXing.Client.Result.Test
       }
 
       [Test]
+      public void testTos()
+      {
+         doTest("mailto:srowen@example.org,bob@example.org",
+                new String[] {"srowen@example.org", "bob@example.org"},
+                null, null, null, null);
+         doTest("mailto:?to=srowen@example.org,bob@example.org",
+                new String[] {"srowen@example.org", "bob@example.org"},
+                null, null, null, null);
+      }
+
+      [Test]
+      public void testCCs()
+      {
+         doTest("mailto:?cc=srowen@example.org",
+                null,
+                new String[] {"srowen@example.org"},
+                null, null, null);
+         doTest("mailto:?cc=srowen@example.org,bob@example.org",
+                null,
+                new String[] {"srowen@example.org", "bob@example.org"},
+                null, null, null);
+      }
+
+      [Test]
+      public void testBCCs()
+      {
+         doTest("mailto:?bcc=srowen@example.org",
+                null, null,
+                new String[] {"srowen@example.org"},
+                null, null);
+         doTest("mailto:?bcc=srowen@example.org,bob@example.org",
+                null, null,
+                new String[] {"srowen@example.org", "bob@example.org"},
+                null, null);
+      }
+
+      [Test]
+      public void testAll()
+      {
+         doTest("mailto:bob@example.org?cc=foo@example.org&bcc=srowen@example.org&subject=baz&body=buzz",
+                new String[] {"bob@example.org"},
+                new String[] {"foo@example.org"},
+                new String[] {"srowen@example.org"},
+                "baz",
+                "buzz");
+      }
+
+      [Test]
       public void testEmailDocomo()
       {
          doTest("MATMSG:TO:srowen@example.org;;", "srowen@example.org", null, null);
          doTest("MATMSG:TO:srowen@example.org;SUB:Stuff;;", "srowen@example.org", "Stuff", null);
          doTest("MATMSG:TO:srowen@example.org;SUB:Stuff;BODY:This is some text;;", "srowen@example.org",
-             "Stuff", "This is some text");
+                "Stuff", "This is some text");
       }
 
       [Test]
@@ -54,16 +102,27 @@ namespace ZXing.Client.Result.Test
       }
 
       private static void doTest(String contents,
-                                 String email,
+                                 String to,
                                  String subject,
                                  String body)
       {
-         ZXing.Result fakeResult = new ZXing.Result(contents, null, null, BarcodeFormat.QR_CODE);
-         ParsedResult result = ResultParser.parseResult(fakeResult);
+         doTest(contents, new String[] {to}, null, null, subject, body);
+      }
+
+      private static void doTest(String contents,
+                                 String[] tos,
+                                 String[] ccs,
+                                 String[] bccs,
+                                 String subject,
+                                 String body)
+      {
+         var fakeResult = new ZXing.Result(contents, null, null, BarcodeFormat.QR_CODE);
+         var result = ResultParser.parseResult(fakeResult);
          Assert.AreEqual(ParsedResultType.EMAIL_ADDRESS, result.Type);
-         EmailAddressParsedResult emailResult = (EmailAddressParsedResult)result;
-         Assert.AreEqual(email, emailResult.EmailAddress);
-         Assert.AreEqual("mailto:" + email, emailResult.MailtoURI);
+         var emailResult = (EmailAddressParsedResult)result;
+         Assert.AreEqual(tos, emailResult.Tos);
+         Assert.AreEqual(ccs, emailResult.CCs);
+         Assert.AreEqual(bccs, emailResult.BCCs);
          Assert.AreEqual(subject, emailResult.Subject);
          Assert.AreEqual(body, emailResult.Body);
       }

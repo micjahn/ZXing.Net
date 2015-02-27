@@ -22,21 +22,43 @@ namespace ZXing.Client.Result
    /// <author>Sean Owen</author>
    public sealed class EmailAddressParsedResult : ParsedResult
    {
-      public String EmailAddress { get; private set; }
+      public String EmailAddress
+      {
+         get
+         {
+            return Tos == null || Tos.Length == 0 ? null : Tos[0];
+         }
+      }
+      public String[] Tos { get; private set; }
+      public String[] CCs { get; private set; }
+      public String[] BCCs { get; private set; }
       public String Subject { get; private set; }
       public String Body { get; private set; }
-      public String MailtoURI { get; private set; }
+      [Obsolete("deprecated without replacement")]
+      public String MailtoURI { get { return "mailto:"; } }
 
-      internal EmailAddressParsedResult(String emailAddress, String subject, String body, String mailtoURI)
+      internal EmailAddressParsedResult(String to)
+         : this(new[] {to}, null, null, null, null)
+      {
+      }
+
+      internal EmailAddressParsedResult(String[] tos,
+                               String[] ccs,
+                               String[] bccs,
+                               String subject,
+                               String body)
          : base(ParsedResultType.EMAIL_ADDRESS)
       {
-         EmailAddress = emailAddress;
+         Tos = tos;
+         CCs = ccs;
+         BCCs = bccs;
          Subject = subject;
          Body = body;
-         MailtoURI = mailtoURI;
 
          var result = new StringBuilder(30);
-         maybeAppend(EmailAddress, result);
+         maybeAppend(Tos, result);
+         maybeAppend(CCs, result);
+         maybeAppend(BCCs, result);
          maybeAppend(Subject, result);
          maybeAppend(Body, result);
          displayResultValue = result.ToString();

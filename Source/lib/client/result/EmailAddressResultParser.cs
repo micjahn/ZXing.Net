@@ -15,58 +15,82 @@
 */
 
 using System;
+using System.Text.RegularExpressions;
 
 namespace ZXing.Client.Result
 {
-   /// <summary> Represents a result that encodes an e-mail address, either as a plain address
+   /// <summary>
+   /// Represents a result that encodes an e-mail address, either as a plain address
    /// like "joe@example.org" or a mailto: URL like "mailto:joe@example.org".
-   /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
-   sealed class EmailAddressResultParser : ResultParser
+   /// <author>Sean Owen</author>
+   internal sealed class EmailAddressResultParser : ResultParser
    {
-      override public ParsedResult parse(ZXing.Result result)
+      private static readonly Regex COMMA = new Regex(","
+#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
+                                             , RegexOptions.Compiled);
+#else
+);
+#endif
+
+      public override ParsedResult parse(ZXing.Result result)
       {
          String rawText = result.Text;
          if (rawText == null)
          {
             return null;
          }
-         String emailAddress;
+
          if (rawText.ToLower().StartsWith("mailto:"))
          {
             // If it starts with mailto:, assume it is definitely trying to be an email address
-            emailAddress = rawText.Substring(7);
-            int queryStart = emailAddress.IndexOf('?');
+            String hostEmail = rawText.Substring(7);
+            int queryStart = hostEmail.IndexOf('?');
             if (queryStart >= 0)
             {
-               emailAddress = emailAddress.Substring(0, queryStart);
+               hostEmail = hostEmail.Substring(0, queryStart);
             }
-            emailAddress = urlDecode(emailAddress);
+            hostEmail = urlDecode(hostEmail);
+            String[] tos = null;
+            if (!String.IsNullOrEmpty(hostEmail))
+            {
+               tos = COMMA.Split(hostEmail);
+            }
             var nameValues = parseNameValuePairs(rawText);
+            String[] ccs = null;
+            String[] bccs = null;
             String subject = null;
             String body = null;
             if (nameValues != null)
             {
-               if (String.IsNullOrEmpty(emailAddress))
+               if (tos == null)
                {
-                  emailAddress = nameValues["to"];
+                  String tosString;
+                  if (nameValues.TryGetValue("to", out tosString) && tosString != null)
+                  {
+                     tos = COMMA.Split(tosString);
+                  }
                }
-               subject = nameValues["subject"];
-               body = nameValues["body"];
+               String ccString;
+               if (nameValues.TryGetValue("cc", out ccString) && ccString != null)
+               {
+                  ccs = COMMA.Split(ccString);
+               }
+               String bccString;
+               if (nameValues.TryGetValue("bcc", out bccString) && bccString != null)
+               {
+                  bccs = COMMA.Split(bccString);
+               }
+               nameValues.TryGetValue("subject", out subject);
+               nameValues.TryGetValue("body", out body);
             }
-            return new EmailAddressParsedResult(emailAddress, subject, body, rawText);
+            return new EmailAddressParsedResult(tos, ccs, bccs, subject, body);
          }
-
          if (!EmailDoCoMoResultParser.isBasicallyValidEmailAddress(rawText))
          {
             return null;
          }
-         emailAddress = rawText;
-         return new EmailAddressParsedResult(emailAddress, null, null, "mailto:" + emailAddress);
+         return new EmailAddressParsedResult(rawText);
       }
    }
 }
