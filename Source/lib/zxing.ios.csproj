@@ -63,7 +63,6 @@
     <Compile Include="LuminanceSource.cs" />
     <Compile Include="MultiFormatReader.cs" />
     <Compile Include="MultiFormatWriter.cs" />
-    <Compile Include="NotFoundException.cs" />
     <Compile Include="PlanarYUVLuminanceSource.cs" />
     <Compile Include="Reader.cs" />
     <Compile Include="ReaderException.cs" />
@@ -300,6 +299,8 @@
     <Compile Include="qrcode\encoder\QRCode.cs" />
     <Compile Include="qrcode\encoder\QrCodeEncodingOptions.cs" />
     <Compile Include="renderer\IBarcodeRenderer.cs" />
+    <Compile Include="renderer\PixelData.cs" />
+    <Compile Include="renderer\PixelDataRenderer.cs" />
     <Compile Include="renderer\SVGRenderer.cs" />
     <Compile Include="xamarin\Color.cs" />
     <Compile Include="xamarin\ColorConverter.cs" />

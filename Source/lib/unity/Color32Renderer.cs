@@ -27,6 +27,30 @@ namespace ZXing
    public class Color32Renderer : IBarcodeRenderer<Color32[]>
    {
       /// <summary>
+      /// Gets or sets the foreground color.
+      /// </summary>
+      /// <value>
+      /// The foreground color.
+      /// </value>
+      public Color32 Foreground { get; set; }
+      /// <summary>
+      /// Gets or sets the background color.
+      /// </summary>
+      /// <value>
+      /// The background color.
+      /// </value>
+      public Color32 Background { get; set; }
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Color32Renderer"/> class.
+      /// </summary>
+      public Color32Renderer()
+      {
+         Foreground = Color.black;
+         Background = Color.white;
+      }
+
+      /// <summary>
       /// Renders the specified matrix.
       /// </summary>
       /// <param name="matrix">The matrix.</param>
@@ -50,8 +74,8 @@ namespace ZXing
       {
          var result = new Color32[matrix.Width * matrix.Height];
          var offset = matrix.Height - 1;
-         const byte black = 0;
-         const byte white = 255;
+         var foreground = Foreground;
+         var background = Background;
 
          for (int y = 0; y < matrix.Height; y++)
          {
@@ -64,9 +88,9 @@ namespace ZXing
                {
                   int bit = (bits[x] >> i) & 1;
                   if (bit == 1)
-                     result[256 * y + x * 32 + i] = new Color32(black, black, black, 255);
+                     result[256 * y + x * 32 + i] = new Color32(foreground.r, foreground.g, foreground.b, foreground.a);
                   else
-                     result[256 * y + x * 32 + i] = new Color32(white, white, white, 255);
+                     result[256 * y + x * 32 + i] = new Color32(background.r, background.g, background.b, background.a);
                }
             }
          }

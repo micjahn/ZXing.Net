@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2014 ZXing.Net authors
+ * Copyright 2012 ZXing.Net authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,35 @@
  * limitations under the License.
  */
 
+
 using System;
+#if UNITY
+using UnityEngine;
+using Color = UnityEngine.Color32;
+#elif MONOANDROID
+using Android.Graphics;
+#elif PORTABLE
+#elif (NET45 || NET40 || NET35 || NET20 || WindowsCE)
+using System.Drawing;
+#elif NETFX_CORE
+using Windows.UI.Xaml.Media.Imaging;
+#else
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+#endif
 
 using ZXing.Common;
+using ZXing.OneD;
 
 namespace ZXing.Rendering
 {
    /// <summary>
-   /// Renders a <see cref="BitMatrix" /> to a byte array with ARGB 32bit data
+   /// Renders a <see cref="BitMatrix" /> to an byte array with pixel data (4 byte per pixel, BGRA)
    /// </summary>
-   [Obsolete("please use PixelDataRenderer instead")]
-   public class RawRenderer : IBarcodeRenderer<byte[]>
+   public sealed class PixelDataRenderer : IBarcodeRenderer<PixelData>
    {
+#if PORTABLE
       public struct Color
       {
          public static Color Black = new Color(0);
@@ -44,7 +61,7 @@ namespace ZXing.Rendering
             B = (byte)((color & 0x000000FF));
          }
       }
-
+#endif
       /// <summary>
       /// Gets or sets the foreground color.
       /// </summary>
@@ -61,12 +78,20 @@ namespace ZXing.Rendering
       public Color Background { get; set; }
 
       /// <summary>
-      /// Initializes a new instance of the <see cref="RawRenderer"/> class.
+      /// Initializes a new instance of the <see cref="PixelDataRenderer"/> class.
       /// </summary>
-      public RawRenderer()
+      public PixelDataRenderer()
       {
+#if UNITY
+         Foreground = UnityEngine.Color.black;
+         Background = UnityEngine.Color.white;
+#elif (NET45 || NET40 || NET35 || NET20 || WindowsCE || PORTABLE || MONOANDROID)
          Foreground = Color.Black;
          Background = Color.White;
+#else
+         Foreground = Colors.Black;
+         Background = Colors.White;
+#endif
       }
 
       /// <summary>
@@ -76,7 +101,7 @@ namespace ZXing.Rendering
       /// <param name="format">The format.</param>
       /// <param name="content">The content.</param>
       /// <returns></returns>
-      public byte[] Render(BitMatrix matrix, BarcodeFormat format, string content)
+      public PixelData Render(BitMatrix matrix, BarcodeFormat format, string content)
       {
          return Render(matrix, format, content, null);
       }
@@ -89,10 +114,10 @@ namespace ZXing.Rendering
       /// <param name="content">The content.</param>
       /// <param name="options">The options.</param>
       /// <returns></returns>
-      virtual public byte[] Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+      public PixelData Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
       {
          int width = matrix.Width;
-         int height = matrix.Height;
+         int heigth = matrix.Height;
          bool outputContent = (options == null || !options.PureBarcode) &&
                               !String.IsNullOrEmpty(content) && (format == BarcodeFormat.CODE_39 ||
                                                                  format == BarcodeFormat.CODE_128 ||
@@ -112,19 +137,19 @@ namespace ZXing.Rendering
             {
                width = options.Width;
             }
-            if (options.Height > height)
+            if (options.Height > heigth)
             {
-               height = options.Height;
+               heigth = options.Height;
             }
             // calculating the scaling factor
             pixelsize = width / matrix.Width;
-            if (pixelsize > height / matrix.Height)
+            if (pixelsize > heigth / matrix.Height)
             {
-               pixelsize = height / matrix.Height;
+               pixelsize = heigth / matrix.Height;
             }
          }
 
-         var pixels = new byte[width*height*4];
+         var pixels = new byte[width * heigth * 4];
          var index = 0;
 
          for (int y = 0; y < matrix.Height - emptyArea; y++)
@@ -136,33 +161,54 @@ namespace ZXing.Rendering
                   var color = matrix[x, y] ? Foreground : Background;
                   for (var pixelsizeWidth = 0; pixelsizeWidth < pixelsize; pixelsizeWidth++)
                   {
-                     pixels[index++] = color.A;
-                     pixels[index++] = color.R;
-                     pixels[index++] = color.G;
+#if UNITY
+                     pixels[index++] = color.b;
+                     pixels[index++] = color.g;
+                     pixels[index++] = color.r;
+                     pixels[index++] = color.a;
+#else
                      pixels[index++] = color.B;
+                     pixels[index++] = color.G;
+                     pixels[index++] = color.R;
+                     pixels[index++] = color.A;
+#endif
                   }
                }
                for (var x = pixelsize * matrix.Width; x < width; x++)
                {
-                  pixels[index++] = Background.A;
-                  pixels[index++] = Background.R;
-                  pixels[index++] = Background.G;
+#if UNITY
+                  pixels[index++] = Background.b;
+                  pixels[index++] = Background.g;
+                  pixels[index++] = Background.r;
+                  pixels[index++] = Background.a;
+#else
                   pixels[index++] = Background.B;
+                  pixels[index++] = Background.G;
+                  pixels[index++] = Background.R;
+                  pixels[index++] = Background.A;
+#endif
                }
             }
          }
-         for (int y = matrix.Height * pixelsize - emptyArea; y < height; y++)
+         for (int y = matrix.Height * pixelsize - emptyArea; y < heigth; y++)
          {
             for (var x = 0; x < width; x++)
             {
-               pixels[index++] = Background.A;
-               pixels[index++] = Background.R;
-               pixels[index++] = Background.G;
+#if UNITY
+               pixels[index++] = Background.b;
+               pixels[index++] = Background.g;
+               pixels[index++] = Background.r;
+               pixels[index++] = Background.a;
+#else
                pixels[index++] = Background.B;
+               pixels[index++] = Background.G;
+               pixels[index++] = Background.R;
+               pixels[index++] = Background.A;
+#endif
             }
          }
 
-         return pixels;
+         return new PixelData(width, heigth, pixels);
       }
    }
 }

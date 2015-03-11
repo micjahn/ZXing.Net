@@ -217,7 +217,7 @@ namespace ZXing.PDF417.Internal
             {
                // WindowsCE doesn't support all encodings. But it is device depended.
                // So we try here the some different ones
-               if (encoding == "ISO-8859-1")
+               if (encodingName == "ISO-8859-1")
                {
                   encoding = Encoding.GetEncoding(1252);
                }
