@@ -68,7 +68,16 @@ namespace ZXing.Rendering
 #endif
 
 #if NETFX_CORE
-      using Windows.UI.Xaml.Media.Imaging;
+      public Windows.UI.Xaml.Media.Imaging.WriteableBitmap ToBitmap()
+      {
+         var bmp = new Windows.UI.Xaml.Media.Imaging.WriteableBitmap(Width, Height);
+         using (var stream = System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.AsStream(bmp.PixelBuffer))
+         {
+            stream.Write(Pixels, 0, Pixels.Length);
+         }
+         bmp.Invalidate();
+         return bmp;
+      }
 #endif
 
 #if SILVERLIGHT

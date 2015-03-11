@@ -25,6 +25,8 @@ using Android.Graphics;
 #elif (NET45 || NET40 || NET35 || NET20 || WindowsCE)
 using System.Drawing;
 #elif NETFX_CORE
+using Windows.UI;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 #else
 using System.Windows;
