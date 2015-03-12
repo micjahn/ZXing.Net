@@ -239,8 +239,128 @@ namespace ZXing.Common
             }
          }
       }
+
       /// <summary>
-      /// Initializes a new instance of the <see cref="EncodingOptions"/> class.
+      /// Assume the barcode is being processed as a GS1 barcode, and modify behavior as needed.
+      /// For example this affects FNC1 handling for Code 128 (aka GS1-128).
+      /// </summary>
+      /// <value>
+      ///   <c>true</c> if it should assume GS1; otherwise, <c>false</c>.
+      /// </value>
+      public bool AssumeGS1
+      {
+         get
+         {
+            if (Hints.ContainsKey(DecodeHintType.ASSUME_GS1))
+               return (bool)Hints[DecodeHintType.ASSUME_GS1];
+            return false;
+         }
+         set
+         {
+            if (value)
+            {
+               Hints[DecodeHintType.ASSUME_GS1] = true;
+            }
+            else
+            {
+               if (Hints.ContainsKey(DecodeHintType.ASSUME_GS1))
+               {
+                  Hints.Remove(DecodeHintType.ASSUME_GS1);
+               }
+            }
+         }
+      }
+
+      /// <summary>
+      /// Assume MSI codes employ a check digit. Maps to <see cref="bool" />.
+      /// </summary>
+      /// <value>
+      ///   <c>true</c> if it should assume a MSI check digit; otherwise, <c>false</c>.
+      /// </value>
+      public bool AssumeMSICheckDigit
+      {
+         get
+         {
+            if (Hints.ContainsKey(DecodeHintType.ASSUME_MSI_CHECK_DIGIT))
+               return (bool)Hints[DecodeHintType.ASSUME_MSI_CHECK_DIGIT];
+            return false;
+         }
+         set
+         {
+            if (value)
+            {
+               Hints[DecodeHintType.ASSUME_MSI_CHECK_DIGIT] = true;
+            }
+            else
+            {
+               if (Hints.ContainsKey(DecodeHintType.ASSUME_MSI_CHECK_DIGIT))
+               {
+                  Hints.Remove(DecodeHintType.ASSUME_MSI_CHECK_DIGIT);
+               }
+            }
+         }
+      }
+
+      /// <summary>
+      /// Allowed lengths of encoded data -- reject anything else. Maps to an int[].
+      /// </summary>
+      public int[] AllowedLengths
+      {
+         get
+         {
+            if (Hints.ContainsKey(DecodeHintType.ALLOWED_LENGTHS))
+               return (int[])Hints[DecodeHintType.ALLOWED_LENGTHS];
+            return null;
+         }
+         set
+         {
+            if (value != null && value.Length > 0)
+            {
+               Hints[DecodeHintType.ALLOWED_LENGTHS] = value;
+            }
+            else
+            {
+               if (Hints.ContainsKey(DecodeHintType.ALLOWED_LENGTHS))
+               {
+                  Hints.Remove(DecodeHintType.ALLOWED_LENGTHS);
+               }
+            }
+         }
+      }
+
+      /// <summary>
+      /// Allowed extension lengths for EAN or UPC barcodes. Other formats will ignore this.
+      /// Maps to an <see cref="Array.int" /> of the allowed extension lengths, for example [2], [5], or [2, 5].
+      /// If it is optional to have an extension, do not set this hint. If this is set,
+      /// and a UPC or EAN barcode is found but an extension is not, then no result will be returned
+      /// at all.
+      /// </summary>
+      public int[] AllowedEANExtensions
+      {
+         get
+         {
+            if (Hints.ContainsKey(DecodeHintType.ALLOWED_EAN_EXTENSIONS))
+               return (int[])Hints[DecodeHintType.ALLOWED_EAN_EXTENSIONS];
+            return null;
+         }
+         set
+         {
+            if (value != null && value.Length > 0)
+            {
+               Hints[DecodeHintType.ALLOWED_EAN_EXTENSIONS] = value;
+            }
+            else
+            {
+               if (Hints.ContainsKey(DecodeHintType.ALLOWED_EAN_EXTENSIONS))
+               {
+                  Hints.Remove(DecodeHintType.ALLOWED_EAN_EXTENSIONS);
+               }
+            }
+         }
+      }
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="DecodingOptions"/> class.
       /// </summary>
       public DecodingOptions()
       {
