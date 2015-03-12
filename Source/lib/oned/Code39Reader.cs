@@ -32,6 +32,14 @@ namespace ZXing.OneD
       private static readonly char[] ALPHABET = ALPHABET_STRING.ToCharArray();
 
       /// <summary>
+      /// Returns a string with all possible characters
+      /// </summary>
+      public static string Alphabet
+      {
+         get { return ALPHABET_STRING; }
+      }
+
+      /// <summary>
       /// These represent the encodings of characters, as patterns of wide and narrow bars.
       /// The 9 least-significant bits of each int correspond to the pattern of wide and narrow,
       /// with 1s representing "wide" and 0s representing narrow.
