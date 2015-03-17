@@ -24,7 +24,6 @@ using System.Net;
 using ZXing;
 using ZXing.Client.Result;
 using ZXing.Common;
-using ZXing.Multi;
 
 namespace CommandLineDecoder
 {
@@ -56,7 +55,7 @@ namespace CommandLineDecoder
                break;
             }
 
-            if (File.Exists(input))
+            if (config.BitmapFromClipboard != null || File.Exists(input))
             {
                try
                {
@@ -159,67 +158,82 @@ namespace CommandLineDecoder
 
       private Result decode(Uri uri, string originalInput, IDictionary<DecodeHintType, object> hints)
       {
-         Bitmap image;
+         Bitmap image = null;
          try
          {
-            image = (Bitmap) Bitmap.FromFile(uri.LocalPath);
+            if (originalInput == ".")
+            {
+               image = config.BitmapFromClipboard;
+            }
+            else
+            {
+               image = (Bitmap)Bitmap.FromFile(uri.LocalPath);
+            }
          }
          catch (Exception)
          {
             throw new FileNotFoundException("Resource not found: " + uri);
          }
 
+         if (image == null)
+            return null;
+
          using (image)
          {
-            LuminanceSource source;
-            if (config.Crop == null)
-            {
-               source = new BitmapLuminanceSource(image);
-            }
-            else
-            {
-               int[] crop = config.Crop;
-               source = new BitmapLuminanceSource(image).crop(crop[0], crop[1], crop[2], crop[3]);
-            }
-            if (config.DumpBlackPoint)
-            {
-               var bitmap = new BinaryBitmap(new HybridBinarizer(source));
-               dumpBlackPoint(uri, image, bitmap, source);
-            }
-            var reader = new BarcodeReader {AutoRotate = config.AutoRotate};
-            foreach (var entry in hints)
-               reader.Options.Hints.Add(entry.Key, entry.Value);
-            Result result = reader.Decode(source);
-            if (result != null)
-            {
-               if (config.Brief)
-               {
-                  Console.Out.WriteLine(uri + ": Success");
-               }
-               else
-               {
-                  ParsedResult parsedResult = ResultParser.parseResult(result);
-                  var resultString = originalInput + " (format: " + result.BarcodeFormat + ", type: " + parsedResult.Type + "):" + Environment.NewLine;
-                  for (int i = 0; i < result.ResultPoints.Length; i++)
-                  {
-                     ResultPoint rp = result.ResultPoints[i];
-                     Console.Out.WriteLine("  Point " + i + ": (" + rp.X + ',' + rp.Y + ')');
-                  }
-                  resultString += "Raw result:" + Environment.NewLine + result.Text + Environment.NewLine;
-                  resultString += "Parsed result:" + Environment.NewLine + parsedResult.DisplayResult + Environment.NewLine;
+            return decode(uri, image, originalInput, hints);
+         }
+      }
 
-                  Console.Out.WriteLine(resultString);
-                  ResultString = resultString;
-               }
+      private Result decode(Uri uri, Bitmap image, string originalInput, IDictionary<DecodeHintType, object> hints)
+      {
+         LuminanceSource source;
+         if (config.Crop == null)
+         {
+            source = new BitmapLuminanceSource(image);
+         }
+         else
+         {
+            int[] crop = config.Crop;
+            source = new BitmapLuminanceSource(image).crop(crop[0], crop[1], crop[2], crop[3]);
+         }
+         if (config.DumpBlackPoint)
+         {
+            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+            dumpBlackPoint(uri, image, bitmap, source);
+         }
+         var reader = new BarcodeReader {AutoRotate = config.AutoRotate};
+         foreach (var entry in hints)
+            reader.Options.Hints.Add(entry.Key, entry.Value);
+         Result result = reader.Decode(source);
+         if (result != null)
+         {
+            if (config.Brief)
+            {
+               Console.Out.WriteLine(uri + ": Success");
             }
             else
             {
-               var resultString = originalInput + ": No barcode found";
+               ParsedResult parsedResult = ResultParser.parseResult(result);
+               var resultString = originalInput + " (format: " + result.BarcodeFormat + ", type: " + parsedResult.Type + "):" + Environment.NewLine;
+               for (int i = 0; i < result.ResultPoints.Length; i++)
+               {
+                  ResultPoint rp = result.ResultPoints[i];
+                  Console.Out.WriteLine("  Point " + i + ": (" + rp.X + ',' + rp.Y + ')');
+               }
+               resultString += "Raw result:" + Environment.NewLine + result.Text + Environment.NewLine;
+               resultString += "Parsed result:" + Environment.NewLine + parsedResult.DisplayResult + Environment.NewLine;
+
                Console.Out.WriteLine(resultString);
                ResultString = resultString;
             }
-            return result;
          }
+         else
+         {
+            var resultString = originalInput + ": No barcode found";
+            Console.Out.WriteLine(resultString);
+            ResultString = resultString;
+         }
+         return result;
       }
 
       private Result[] decodeMulti(Uri uri, string originalInput, IDictionary<DecodeHintType, object> hints)

@@ -15,6 +15,7 @@
  */
 
 using System.Collections.Generic;
+using System.Drawing;
 
 using ZXing;
 
@@ -34,6 +35,7 @@ namespace CommandLineDecoder
       public int[] Crop { get; set; }
       public int Threads { get; set; }
       public bool AutoRotate { get; set; }
+      public Bitmap BitmapFromClipboard { get; set; }
 
       public Config()
       {

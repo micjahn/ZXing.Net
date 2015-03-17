@@ -16,9 +16,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Threading;
+using System.Windows.Forms;
 
 using ZXing;
 
@@ -94,6 +96,18 @@ namespace CommandLineDecoder
                   config.Threads = threadsCount;
                }
             }
+            else if ("--get_from_clipboard".Equals(arg))
+            {
+               config.BitmapFromClipboard = (Bitmap)Clipboard.GetImage();
+               if (config.BitmapFromClipboard == null)
+               {
+                  Console.Error.WriteLine("There is no image in the clipboard.");
+                  Environment.ExitCode = 1;
+                  return;
+               }
+               // Dummy
+               inputs.addInput(".");
+            }
             else if (arg.StartsWith("-"))
             {
                Console.Error.WriteLine("Unknown command line option " + arg);
@@ -136,7 +150,7 @@ namespace CommandLineDecoder
             completeResult += decodeObject.ResultString;
             completeResult += Environment.NewLine;
          }
-         System.Windows.Forms.Clipboard.SetText(completeResult);
+         Clipboard.SetText(completeResult);
 
          int total = inputs.getInputCount();
          if (total > 1)
@@ -234,6 +248,7 @@ namespace CommandLineDecoder
          Console.Out.WriteLine("  --recursive: Descend into subdirectories");
          Console.Out.WriteLine("  --crop=left,top,width,height: Only examine cropped region of input image(s)");
          Console.Out.WriteLine("  --threads=n: The number of threads to use while decoding");
+         Console.Out.WriteLine("  --get_from_clipboard: Get the image from the clipboard instead loading from a file");
       }
    }
 }
