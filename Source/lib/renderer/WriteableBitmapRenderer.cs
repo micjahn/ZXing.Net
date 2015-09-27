@@ -201,7 +201,7 @@ namespace ZXing.Rendering
          int foreground = Foreground.A << 24 | Foreground.R << 16 | Foreground.G << 8 | Foreground.B;
          int background = Background.A << 24 | Background.R << 16 | Background.G << 8 | Background.B;
 #if WPF
-         var bmp = new WriteableBitmap(width, height, 100.0, 100.0, PixelFormats.Bgra32, null);
+         var bmp = new WriteableBitmap(width, height, 96.0, 96.0, PixelFormats.Bgra32, null);
          var pixels = new int[width*height];
 #else
          var bmp = new WriteableBitmap(width, height);
