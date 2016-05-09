@@ -189,7 +189,6 @@ namespace ZXing.PDF417.Internal
          int textSubMode = SUBMODE_ALPHA;
 
          // User selected encoding mode
-         byte[] bytes = null; //Fill later and only if needed
          if (compaction == Compaction.TEXT)
          {
             encodeText(msg, p, len, sb, textSubMode);
@@ -197,7 +196,7 @@ namespace ZXing.PDF417.Internal
          }
          else if (compaction == Compaction.BYTE)
          {
-            bytes = toBytes(msg, encoding);
+            var bytes = toBytes(msg, encoding);
             encodeBinary(bytes, p, bytes.Length, BYTE_COMPACTION, sb);
 
          }
@@ -210,6 +209,7 @@ namespace ZXing.PDF417.Internal
          else
          {
             int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
+            byte[] bytes = null;
             while (p < len)
             {
                int n = determineConsecutiveDigitCount(msg, p);
@@ -240,7 +240,7 @@ namespace ZXing.PDF417.Internal
                      if (bytes == null)
                      {
                         bytes = toBytes(msg, encoding);
-                     }
+                     } 
                      int b = determineConsecutiveBinaryCount(msg, bytes, p, encoding);
                      if (b == 0)
                      {
@@ -329,6 +329,7 @@ namespace ZXing.PDF417.Internal
                }
             }
          }
+
          return encoding;
       }
 
@@ -778,10 +779,7 @@ namespace ZXing.PDF417.Internal
                return idx - startpos;
             }
             ch = msg[idx];
-
-            //Check if character is encodable
-            //Sun returns a ASCII 63 (?) for a character that cannot be mapped. Let's hope all
-            //other VMs do the same
+            // .Net fallback strategie: REPLACEMENT_CHARACTER 0x3F
             if (bytes[idxb] == 63 && ch != '?')
             {
                throw new WriterException("Non-encodable character detected: " + ch + " (Unicode: " + (int) ch + ')');
