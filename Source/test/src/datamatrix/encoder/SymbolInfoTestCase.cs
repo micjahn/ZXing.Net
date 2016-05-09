@@ -33,29 +33,29 @@ namespace ZXing.Datamatrix.Test
       {
          SymbolInfo info = SymbolInfo.lookup(3);
          Assert.AreEqual(5, info.errorCodewords);
-         Assert.AreEqual(8, info.getMatrixWidth());
-         Assert.AreEqual(8, info.getMatrixHeight());
+         Assert.AreEqual(8, info.matrixWidth);
+         Assert.AreEqual(8, info.matrixHeight);
          Assert.AreEqual(10, info.getSymbolWidth());
          Assert.AreEqual(10, info.getSymbolHeight());
 
          info = SymbolInfo.lookup(3, SymbolShapeHint.FORCE_RECTANGLE);
          Assert.AreEqual(7, info.errorCodewords);
-         Assert.AreEqual(16, info.getMatrixWidth());
-         Assert.AreEqual(6, info.getMatrixHeight());
+         Assert.AreEqual(16, info.matrixWidth);
+         Assert.AreEqual(6, info.matrixHeight);
          Assert.AreEqual(18, info.getSymbolWidth());
          Assert.AreEqual(8, info.getSymbolHeight());
 
          info = SymbolInfo.lookup(9);
          Assert.AreEqual(11, info.errorCodewords);
-         Assert.AreEqual(14, info.getMatrixWidth());
-         Assert.AreEqual(6, info.getMatrixHeight());
+         Assert.AreEqual(14, info.matrixWidth);
+         Assert.AreEqual(6, info.matrixHeight);
          Assert.AreEqual(32, info.getSymbolWidth());
          Assert.AreEqual(8, info.getSymbolHeight());
 
          info = SymbolInfo.lookup(9, SymbolShapeHint.FORCE_SQUARE);
          Assert.AreEqual(12, info.errorCodewords);
-         Assert.AreEqual(14, info.getMatrixWidth());
-         Assert.AreEqual(14, info.getMatrixHeight());
+         Assert.AreEqual(14, info.matrixWidth);
+         Assert.AreEqual(14, info.matrixHeight);
          Assert.AreEqual(16, info.getSymbolWidth());
          Assert.AreEqual(16, info.getSymbolHeight());
 

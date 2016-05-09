@@ -75,8 +75,8 @@ namespace ZXing.Datamatrix.Encoder
       private readonly bool rectangular;
       internal readonly int dataCapacity;
       internal readonly int errorCodewords;
-      private readonly int matrixWidth;
-      private readonly int matrixHeight;
+      public readonly int matrixWidth;
+      public readonly int matrixHeight;
       private readonly int dataRegions;
       private readonly int rsBlockData;
       private readonly int rsBlockError;
@@ -202,16 +202,6 @@ namespace ZXing.Datamatrix.Encoder
             default:
                throw new InvalidOperationException("Cannot handle this number of data regions");
          }
-      }
-
-      public int getMatrixWidth()
-      {
-         return matrixWidth;
-      }
-
-      public int getMatrixHeight()
-      {
-         return matrixHeight;
       }
       
       public int getSymbolDataWidth()
