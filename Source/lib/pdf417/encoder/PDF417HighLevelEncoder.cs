@@ -241,7 +241,7 @@ namespace ZXing.PDF417.Internal
                      {
                         bytes = toBytes(msg, encoding);
                      }
-                     int b = determineConsecutiveBinaryCount(msg, bytes, p);
+                     int b = determineConsecutiveBinaryCount(msg, bytes, p, encoding);
                      if (b == 0)
                      {
                         b = 1;
@@ -287,7 +287,7 @@ namespace ZXing.PDF417.Internal
          return result;
       }
 
-      private static byte[] toBytes(String msg, Encoding encoding)
+      private static Encoding getEncoder(Encoding encoding)
       {
          // Defer instantiating default Charset until needed, since it may be for an unsupported
          // encoding.
@@ -297,7 +297,7 @@ namespace ZXing.PDF417.Internal
             {
                encoding = Encoding.GetEncoding(DEFAULT_ENCODING_NAME);
             }
-            catch (Exception )
+            catch (Exception)
             {
                // continue
             }
@@ -329,7 +329,17 @@ namespace ZXing.PDF417.Internal
                }
             }
          }
-         return encoding.GetBytes(msg);
+         return encoding;
+      }
+
+      private static byte[] toBytes(String msg, Encoding encoding)
+      {
+         return getEncoder(encoding).GetBytes(msg);
+      }
+
+      private static byte[] toBytes(char msg, Encoding encoding)
+      {
+         return getEncoder(encoding).GetBytes(new []{msg});
       }
 
       /// <summary>
@@ -741,11 +751,12 @@ namespace ZXing.PDF417.Internal
       /// <param name="startpos">the start position within the message</param>
       /// <returns>the requested character count</returns>
       /// </summary>
-      private static int determineConsecutiveBinaryCount(String msg, byte[] bytes, int startpos)
+      private static int determineConsecutiveBinaryCount(String msg, byte[] bytes, int startpos, Encoding encoding)
       {
          int len = msg.Length;
          int idx = startpos;
          int idxb = idx;  // bytes index (may differ from idx for utf-8 and other unicode encodings)
+         encoding = getEncoder(encoding);
          while (idx < len)
          {
             char ch = msg[idx];
@@ -777,7 +788,7 @@ namespace ZXing.PDF417.Internal
             }
             idx++;
             idxb++;
-            if (ch >= 256)  // for non-ascii symbols
+            if (toBytes(ch, encoding).Length > 1)  // for non-ascii symbols
                 idxb++;
          }
          return idx - startpos;

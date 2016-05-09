@@ -31,6 +31,21 @@ namespace ZXing.PDF417.Internal.Test
       }
 
       [Test]
+      public void testEncodeAutoWithSpecialChars()
+      {
+         //Just check if this does not throw an exception
+         PDF417HighLevelEncoder.encodeHighLevel(
+            "1%§s ?aG$", Compaction.AUTO, Encoding.UTF8, false);
+      }
+ 
+      [Test]
+      public void testEncodeIso88591WithSpecialChars()
+      {
+	      // Just check if this does not throw an exception
+         PDF417HighLevelEncoder.encodeHighLevel("asdfg§asd", Compaction.AUTO, Encoding.GetEncoding("ISO8859-1"), false);
+      }
+
+      [Test]
       public void testEncodeText()
       {
          var encoded = PDF417HighLevelEncoder.encodeHighLevel(
