@@ -475,7 +475,8 @@ namespace ZXing.PDF417.Internal
                      {
                         if (rowNumber >= barcodeMatrix.Length)
                         {
-                           return null;
+                           // We have more rows than the barcode metadata allows for, ignore them.
+                           continue;
                         }
                         barcodeMatrix[rowNumber][column].setValue(codeword.Value);
                      }

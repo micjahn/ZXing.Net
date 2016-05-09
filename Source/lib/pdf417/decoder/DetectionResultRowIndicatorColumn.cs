@@ -173,7 +173,8 @@ namespace ZXing.PDF417.Internal
                int rowNumber = codeword.RowNumber;
                if (rowNumber >= result.Length)
                {
-                  return null;
+                  // We have more rows than the barcode metadata allows for, ignore them.
+                  continue;
                }
                result[rowNumber]++;
             } // else throw exception? (or return null)
