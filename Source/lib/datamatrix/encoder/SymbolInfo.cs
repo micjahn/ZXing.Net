@@ -75,8 +75,8 @@ namespace ZXing.Datamatrix.Encoder
       private readonly bool rectangular;
       internal readonly int dataCapacity;
       internal readonly int errorCodewords;
-      public readonly int matrixWidth;
-      public readonly int matrixHeight;
+      private readonly int matrixWidth;
+      private readonly int matrixHeight;
       private readonly int dataRegions;
       private readonly int rsBlockData;
       private readonly int rsBlockError;
@@ -204,6 +204,16 @@ namespace ZXing.Datamatrix.Encoder
          }
       }
 
+      public int getMatrixWidth()
+      {
+         return matrixWidth;
+      }
+
+      public int getMatrixHeight()
+      {
+         return matrixHeight;
+      }
+      
       public int getSymbolDataWidth()
       {
          return getHorizontalDataRegions() * matrixWidth;

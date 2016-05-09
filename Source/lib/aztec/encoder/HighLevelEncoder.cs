@@ -283,16 +283,16 @@ namespace ZXing.Aztec.Internal
                   // any other mode except possibly digit (which uses only 4 bits).  Any
                   // other latch would be equally successful *after* this character, and
                   // so wouldn't save any bits.
-                  State latch_state = stateNoBinary.latchAndAppend(mode, charInMode);
-                  result.Add(latch_state);
+                  var latchState = stateNoBinary.latchAndAppend(mode, charInMode);
+                  result.Add(latchState);
                }
                // Try generating the character by switching to its mode.
                if (!charInCurrentTable && SHIFT_TABLE[state.Mode][mode] >= 0)
                {
                   // It never makes sense to temporarily shift to another mode if the
                   // character exists in the current mode.  That can never save bits.
-                  State shift_state = stateNoBinary.shiftAndAppend(mode, charInMode);
-                  result.Add(shift_state);
+                  var shiftState = stateNoBinary.shiftAndAppend(mode, charInMode);
+                  result.Add(shiftState);
                }
             }
          }
@@ -301,7 +301,7 @@ namespace ZXing.Aztec.Internal
             // It's never worthwhile to go into binary shift mode if you're not already
             // in binary shift mode, and the character exists in your current mode.
             // That can never save bits over just outputting the char in the current mode.
-            State binaryState = state.addBinaryShiftChar(index);
+            var binaryState = state.addBinaryShiftChar(index);
             result.Add(binaryState);
          }
       }
@@ -330,10 +330,10 @@ namespace ZXing.Aztec.Internal
          if (pairCode == 3 || pairCode == 4)
          {
             // both characters are in DIGITS.  Sometimes better to just add two digits
-            State digit_state = stateNoBinary
+            var digitState = stateNoBinary
                .latchAndAppend(MODE_DIGIT, 16 - pairCode) // period or comma in DIGIT
                .latchAndAppend(MODE_DIGIT, 1); // space in DIGIT
-            result.Add(digit_state);
+            result.Add(digitState);
          }
          if (state.BinaryShiftByteCount > 0)
          {

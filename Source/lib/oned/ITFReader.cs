@@ -353,9 +353,6 @@ namespace ZXing.OneD
                                             int rowOffset,
                                             int[] pattern)
       {
-
-         // TODO: This is very similar to implementation in UPCEANReader. Consider if they can be
-         // merged to a single method.
          int patternLength = pattern.Length;
          int[] counters = new int[patternLength];
          int width = row.Size;
