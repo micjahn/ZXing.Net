@@ -39,6 +39,7 @@ namespace CommandLineDecoder
 
          Config config = new Config();
          Inputs inputs = new Inputs();
+         var copyResultToClipboard = false;
 
          foreach (var arg in args)
          {
@@ -108,6 +109,10 @@ namespace CommandLineDecoder
                // Dummy
                inputs.addInput(".");
             }
+            else if ("--copy_to_clipboard".Equals(arg))
+            {
+               copyResultToClipboard = true;
+            }
             else if (arg.StartsWith("-"))
             {
                Console.Error.WriteLine("Unknown command line option " + arg);
@@ -144,13 +149,16 @@ namespace CommandLineDecoder
             successful += threads[thread].getSuccessful();
          }
 
-         var completeResult = String.Empty;
-         foreach (var decodeObject in decodeObjects)
+         if (copyResultToClipboard)
          {
-            completeResult += decodeObject.ResultString;
-            completeResult += Environment.NewLine;
+            var completeResult = String.Empty;
+            foreach (var decodeObject in decodeObjects)
+            {
+               completeResult += decodeObject.ResultString;
+               completeResult += Environment.NewLine;
+            }
+            Clipboard.SetText(completeResult);
          }
-         Clipboard.SetText(completeResult);
 
          int total = inputs.getInputCount();
          if (total > 1)
