@@ -34,6 +34,11 @@ namespace ZXing.PDF417
       private const int WHITE_SPACE = 30;
 
       /// <summary>
+      /// default error correction level
+      /// </summary>
+      private const int DEFAULT_ERROR_CORRECTION_LEVEL = 2;
+
+      /// <summary>
       /// </summary>
       /// <param name="contents">The contents to encode in the barcode</param>
       /// <param name="format">The barcode format to generate</param>
@@ -56,7 +61,7 @@ namespace ZXing.PDF417
 
          var encoder = new Internal.PDF417();
          var margin = WHITE_SPACE;
-         var errorCorrectionLevel = 2;
+         var errorCorrectionLevel = DEFAULT_ERROR_CORRECTION_LEVEL;
 
          if (hints != null)
          {
@@ -108,7 +113,7 @@ namespace ZXing.PDF417
             }
          }
 
-         return bitMatrixFromEncoder(encoder, contents, width, height, margin, errorCorrectionLevel);
+         return bitMatrixFromEncoder(encoder, contents, errorCorrectionLevel, width, height, margin);
       }
 
       /// <summary>
@@ -134,10 +139,10 @@ namespace ZXing.PDF417
       /// </summary>
       private static BitMatrix bitMatrixFromEncoder(Internal.PDF417 encoder,
                                                     String contents,
+                                                    int errorCorrectionLevel,
                                                     int width,
                                                     int height,
-                                                    int margin,
-                                                    int errorCorrectionLevel)
+                                                    int margin)
       {
          encoder.generateBarcodeLogic(contents, errorCorrectionLevel);
 
