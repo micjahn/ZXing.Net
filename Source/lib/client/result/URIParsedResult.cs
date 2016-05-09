@@ -61,14 +61,10 @@ namespace ZXing.Client.Result
       private static String massageURI(String uri)
       {
          int protocolEnd = uri.IndexOf(':');
-         if (protocolEnd < 0)
+         if (protocolEnd < 0 || isColonFollowedByPortNumber(uri, protocolEnd))
          {
-            // No protocol, assume http
-            uri = "http://" + uri;
-         }
-         else if (isColonFollowedByPortNumber(uri, protocolEnd))
-         {
-            // Found a colon, but it looks like it is after the host, so the protocol is still missing
+            // No protocol, or found a colon, but it looks like it is after the host, so the protocol is still missing,
+            // so assume http
             uri = "http://" + uri;
          }
          return uri;
