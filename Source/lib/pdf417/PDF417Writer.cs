@@ -141,9 +141,8 @@ namespace ZXing.PDF417
       {
          encoder.generateBarcodeLogic(contents, errorCorrectionLevel);
 
-         const int lineThickness = 2;
          const int aspectRatio = 4;
-         sbyte[][] originalScale = encoder.BarcodeMatrix.getScaledMatrix(lineThickness, aspectRatio*lineThickness);
+         sbyte[][] originalScale = encoder.BarcodeMatrix.getScaledMatrix(1, aspectRatio);
          bool rotated = false;
          if ((height > width) ^ (originalScale[0].Length < originalScale.Length))
          {
@@ -167,7 +166,7 @@ namespace ZXing.PDF417
          if (scale > 1)
          {
             sbyte[][] scaledMatrix =
-               encoder.BarcodeMatrix.getScaledMatrix(scale*lineThickness, scale*aspectRatio*lineThickness);
+               encoder.BarcodeMatrix.getScaledMatrix(scale, scale*aspectRatio);
             if (rotated)
             {
                scaledMatrix = rotateArray(scaledMatrix);
