@@ -143,10 +143,6 @@ namespace ZXing.Common.Test
                   expected++;
                }
                int actual = array.getNextSet(query);
-               if (actual != expected)
-               {
-                  array.getNextSet(query);
-               }
                Assert.AreEqual(expected, actual);
             }
          }

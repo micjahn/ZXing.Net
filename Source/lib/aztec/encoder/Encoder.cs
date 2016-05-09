@@ -381,7 +381,7 @@ namespace ZXing.Aztec.Internal
             case 12:
                return GenericGF.AZTEC_DATA_12;
             default:
-               return null;
+               throw new ArgumentException("Unsupported word size " + wordSize);
          }
       }
 
