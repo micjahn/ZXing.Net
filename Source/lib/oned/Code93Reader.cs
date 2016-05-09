@@ -288,14 +288,27 @@ namespace ZXing.OneD
                      }
                      break;
                   case 'b':
-                     // %A to %E map to control codes ESC to US
                      if (next >= 'A' && next <= 'E')
                      {
+                        // %A to %E map to control codes ESC to USep
                         decodedChar = (char)(next - 38);
                      }
-                     else if (next >= 'F' && next <= 'W')
+                     else if (next >= 'F' && next <= 'J') {
+                       // %F to %J map to ; < = > ?
+                       decodedChar = (char) (next - 11);
+                     } 
+                     else if (next >= 'K' && next <= 'O') {
+                       // %K to %O map to [ \ ] ^ _
+                       decodedChar = (char) (next + 16);
+                     } 
+                     else if (next >= 'P' && next <= 'S') {
+                       // %P to %S map to { | } ~
+                       decodedChar = (char) (next + 43);
+                     } 
+                     else if (next >= 'T' && next <= 'Z')
                      {
-                        decodedChar = (char)(next - 11);
+                        // %T to %Z all map to DEL (127)
+                        decodedChar = (char)127;
                      }
                      else
                      {
