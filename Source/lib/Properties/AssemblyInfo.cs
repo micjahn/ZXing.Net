@@ -43,7 +43,7 @@ using System.Runtime.InteropServices;
 #if MONOTOUCH
 [assembly: AssemblyTitle("zxing.net for mono touch")]
 #endif
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 06.02.2015 22:39:28)")]
+[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 03.05.2015 21:47:43)")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyProduct("ZXing.Net")]
 [assembly: AssemblyCopyright("Copyright © 2012-2015")]
