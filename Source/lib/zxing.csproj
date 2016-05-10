@@ -230,6 +230,7 @@
     <Compile Include="InvertedLuminanceSource.cs" />
     <Compile Include="oned\Code128EncodingOptions.cs" />
     <Compile Include="imb\IMBReader.cs" />
+    <Compile Include="oned\Code93Writer.cs" />
     <Compile Include="oned\MSIReader.cs" />
     <Compile Include="oned\MSIWriter.cs" />
     <Compile Include="oned\PlesseyWriter.cs" />
