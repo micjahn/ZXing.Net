@@ -59,7 +59,8 @@ namespace ZXing.OneD
 
          forceCodesetB = (hints != null &&
                           hints.ContainsKey(EncodeHintType.CODE128_FORCE_CODESET_B) &&
-                          (bool) hints[EncodeHintType.CODE128_FORCE_CODESET_B]);
+                          hints[EncodeHintType.CODE128_FORCE_CODESET_B] != null &&
+                          Convert.ToBoolean(hints[EncodeHintType.CODE128_FORCE_CODESET_B].ToString()));
 
          return base.encode(contents, format, width, height, hints);
       }

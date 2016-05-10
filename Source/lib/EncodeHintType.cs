@@ -45,6 +45,7 @@ namespace ZXing
       /// Type depends on the encoder. For example for QR codes it's type
       /// <see cref="ZXing.QrCode.Internal.ErrorCorrectionLevel" />
       /// For Aztec it is of type <see cref="System.Int32" />, representing the minimal percentage of error correction words. 
+      /// In all cases, it can also be a <see cref="System.String" /> representation of the desired value as well.
       /// Note: an Aztec symbol should have a minimum of 25% EC words.
       /// For PDF417 it is of type <see cref="ZXing.PDF417.Internal.PDF417ErrorCorrectionLevel"/> or <see cref="System.Int32" /> (between 0 and 8),
       /// </summary>
@@ -60,19 +61,21 @@ namespace ZXing
       /// Specifies margin, in pixels, to use when generating the barcode. The meaning can vary
       /// by format; for example it controls margin before and after the barcode horizontally for
       /// most 1D formats.
-      /// type: <see cref="System.Int32" />
+      /// type: <see cref="System.Int32" />, or <see cref="System.String" /> representation of the integer value
       /// </summary>
       MARGIN,
 
       /// <summary>
-      /// Specifies whether to use compact mode for PDF417.
-      /// type: <see cref="System.Boolean" />
+      /// Specifies whether to use compact mode for PDF417
+      /// type: <see cref="System.Boolean" />, or "true" or "false"
+      /// <see cref="System.String" /> value
       /// </summary>
       PDF417_COMPACT,
 
       /// <summary>
       /// Specifies what compaction mode to use for PDF417.
-      /// type: <see cref="ZXing.PDF417.Internal.Compaction" />
+      /// type: <see cref="ZXing.PDF417.Internal.Compaction" /> or <see cref="System.String" /> value of one of its
+      /// enum values
       /// </summary>
       PDF417_COMPACTION,
 
@@ -121,10 +124,11 @@ namespace ZXing
       DATA_MATRIX_DEFAULT_ENCODATION,
 
       /// <summary>
-      /// Specifies the required number of layers for an Aztec code:
-      /// a negative number (-1, -2, -3, -4) specifies a compact Aztec code
+      /// Specifies the required number of layers for an Aztec code.
+      /// A negative number (-1, -2, -3, -4) specifies a compact Aztec code
       /// 0 indicates to use the minimum number of layers (the default)
-      /// a positive number (1, 2, .. 32) specifies a normal (non-compact) Aztec code
+      /// A positive number (1, 2, .. 32) specifies a normal (non-compact) Aztec code
+      /// type: <see cref="System.Int32" />, or <see cref="System.String" /> representation of the integer value
       /// </summary>
       AZTEC_LAYERS,
    }

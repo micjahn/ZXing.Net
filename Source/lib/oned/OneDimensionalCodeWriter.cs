@@ -69,10 +69,10 @@ namespace ZXing.OneD
          int sidesMargin = DefaultMargin;
          if (hints != null)
          {
-            var sidesMarginInt = hints.ContainsKey(EncodeHintType.MARGIN) ? (int)hints[EncodeHintType.MARGIN] : (int?)null;
+            var sidesMarginInt = hints.ContainsKey(EncodeHintType.MARGIN) ? hints[EncodeHintType.MARGIN] : null;
             if (sidesMarginInt != null)
             {
-               sidesMargin = sidesMarginInt.Value;
+               sidesMargin = Convert.ToInt32(sidesMarginInt);
             }
          }
 

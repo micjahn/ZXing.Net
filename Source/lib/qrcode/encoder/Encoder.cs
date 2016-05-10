@@ -110,7 +110,7 @@ namespace ZXing.QrCode.Internal
             CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding);
             if (eci != null)
             {
-               var eciIsExplicitDisabled = (hints != null && hints.ContainsKey(EncodeHintType.DISABLE_ECI) ? (bool)hints[EncodeHintType.DISABLE_ECI] : false);
+               var eciIsExplicitDisabled = (hints != null && hints.ContainsKey(EncodeHintType.DISABLE_ECI) && hints[EncodeHintType.DISABLE_ECI] != null && Convert.ToBoolean(hints[EncodeHintType.DISABLE_ECI].ToString()));
                if (!eciIsExplicitDisabled)
                {
                   appendECI(eci, headerBits);

@@ -65,13 +65,15 @@ namespace ZXing.PDF417
 
          if (hints != null)
          {
-            if (hints.ContainsKey(EncodeHintType.PDF417_COMPACT))
+            if (hints.ContainsKey(EncodeHintType.PDF417_COMPACT) && hints[EncodeHintType.PDF417_COMPACT] != null)
             {
-               encoder.setCompact((Boolean) hints[EncodeHintType.PDF417_COMPACT]);
+               encoder.setCompact(Convert.ToBoolean(hints[EncodeHintType.PDF417_COMPACT].ToString()));
             }
-            if (hints.ContainsKey(EncodeHintType.PDF417_COMPACTION))
+            if (hints.ContainsKey(EncodeHintType.PDF417_COMPACTION) && hints[EncodeHintType.PDF417_COMPACTION] != null)
             {
-               encoder.setCompaction((Compaction) hints[EncodeHintType.PDF417_COMPACTION]);
+               Compaction compactionEnum;
+               if (Enum.TryParse(hints[EncodeHintType.PDF417_COMPACTION].ToString(), out compactionEnum))
+                  encoder.setCompaction(compactionEnum);
             }
             if (hints.ContainsKey(EncodeHintType.PDF417_DIMENSIONS))
             {
@@ -81,17 +83,23 @@ namespace ZXing.PDF417
                                      dimensions.MaxRows,
                                      dimensions.MinRows);
             }
-            if (hints.ContainsKey(EncodeHintType.MARGIN))
+            if (hints.ContainsKey(EncodeHintType.MARGIN) && hints[EncodeHintType.MARGIN] != null)
             {
-               margin = (int)(hints[EncodeHintType.MARGIN]);
+               margin = Convert.ToInt32(hints[EncodeHintType.MARGIN].ToString());
             }
-            if (hints.ContainsKey(EncodeHintType.ERROR_CORRECTION))
+            if (hints.ContainsKey(EncodeHintType.ERROR_CORRECTION) && hints[EncodeHintType.ERROR_CORRECTION] != null)
             {
                var value = hints[EncodeHintType.ERROR_CORRECTION];
                if (value is PDF417ErrorCorrectionLevel ||
                    value is int)
                {
                   errorCorrectionLevel = (int)value;
+               }
+               else
+               {
+                  PDF417ErrorCorrectionLevel errorCorrectionLevelEnum;
+                  if (Enum.TryParse(value.ToString(), out errorCorrectionLevelEnum))
+                     errorCorrectionLevel = (int)errorCorrectionLevelEnum;
                }
             }
             if (hints.ContainsKey(EncodeHintType.CHARACTER_SET))
@@ -107,9 +115,9 @@ namespace ZXing.PDF417
                encoder.setEncoding("UTF-8");
 #endif
             }
-            if (hints.ContainsKey(EncodeHintType.DISABLE_ECI))
+            if (hints.ContainsKey(EncodeHintType.DISABLE_ECI) && hints[EncodeHintType.DISABLE_ECI] != null)
             {
-               encoder.setDisableEci((bool)hints[EncodeHintType.DISABLE_ECI]);
+               encoder.setDisableEci(Convert.ToBoolean(hints[EncodeHintType.DISABLE_ECI].ToString()));
             }
          }
 

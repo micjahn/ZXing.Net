@@ -81,15 +81,42 @@ namespace ZXing.QrCode
          int quietZone = QUIET_ZONE_SIZE;
          if (hints != null)
          {
-            var requestedECLevel = hints.ContainsKey(EncodeHintType.ERROR_CORRECTION) ? (ErrorCorrectionLevel)hints[EncodeHintType.ERROR_CORRECTION] : null;
-            if (requestedECLevel != null)
+            if (hints.ContainsKey(EncodeHintType.ERROR_CORRECTION))
             {
-               errorCorrectionLevel = requestedECLevel;
+               var requestedECLevel = hints[EncodeHintType.ERROR_CORRECTION];
+               if (requestedECLevel != null)
+               {
+                  errorCorrectionLevel = requestedECLevel as ErrorCorrectionLevel;
+                  if (errorCorrectionLevel == null)
+                  {
+                     switch (requestedECLevel.ToString().ToUpper())
+                     {
+                        case "L":
+                           errorCorrectionLevel = ErrorCorrectionLevel.L;
+                           break;
+                        case "M":
+                           errorCorrectionLevel = ErrorCorrectionLevel.M;
+                           break;
+                        case "Q":
+                           errorCorrectionLevel = ErrorCorrectionLevel.Q;
+                           break;
+                        case "H":
+                           errorCorrectionLevel = ErrorCorrectionLevel.H;
+                           break;
+                        default:
+                           errorCorrectionLevel = ErrorCorrectionLevel.L;
+                           break;
+                     }
+                  }
+               }
             }
-            var quietZoneInt = hints.ContainsKey(EncodeHintType.MARGIN) ? (int)hints[EncodeHintType.MARGIN] : (int?)null;
-            if (quietZoneInt != null)
+            if (hints.ContainsKey(EncodeHintType.MARGIN))
             {
-               quietZone = quietZoneInt.Value;
+               var quietZoneInt = hints[EncodeHintType.MARGIN];
+               if (quietZoneInt != null)
+               {
+                  quietZone = Convert.ToInt32(quietZoneInt.ToString());
+               }
             }
          }
 
