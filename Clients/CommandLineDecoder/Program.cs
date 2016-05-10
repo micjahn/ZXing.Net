@@ -257,6 +257,7 @@ namespace CommandLineDecoder
          Console.Out.WriteLine("  --crop=left,top,width,height: Only examine cropped region of input image(s)");
          Console.Out.WriteLine("  --threads=n: The number of threads to use while decoding");
          Console.Out.WriteLine("  --get_from_clipboard: Get the image from the clipboard instead loading from a file");
+         Console.Out.WriteLine("  --copy_to_clipboard: copy the scanned content of the barcode to the clipboard");
       }
    }
 }
