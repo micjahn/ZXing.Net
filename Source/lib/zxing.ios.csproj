@@ -217,6 +217,7 @@
     <Compile Include="oned\UPCEANReader.cs" />
     <Compile Include="oned\UPCEANWriter.cs" />
     <Compile Include="oned\UPCEReader.cs" />
+    <Compile Include="oned\UPCEWriter.cs" />
     <Compile Include="oned\rss\AbstractRSSReader.cs" />
     <Compile Include="oned\rss\DataCharacter.cs" />
     <Compile Include="oned\rss\FinderPattern.cs" />

@@ -234,6 +234,7 @@
     <Compile Include="oned\MSIWriter.cs" />
     <Compile Include="oned\PlesseyWriter.cs" />
     <Compile Include="oned\rss\expanded\ExpandedRow.cs" />
+    <Compile Include="oned\UPCEWriter.cs" />
     <Compile Include="pdf417\decoder\BarcodeMetadata.cs" />
     <Compile Include="pdf417\decoder\BarcodeValue.cs" />
     <Compile Include="pdf417\decoder\BoundingBox.cs" />

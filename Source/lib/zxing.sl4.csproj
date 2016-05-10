@@ -271,6 +271,7 @@
     <Compile Include="oned\UPCEANReader.cs" />
     <Compile Include="oned\UPCEANWriter.cs" />
     <Compile Include="oned\UPCEReader.cs" />
+    <Compile Include="oned\UPCEWriter.cs" />
     <Compile Include="pdf417\decoder\BarcodeMetadata.cs" />
     <Compile Include="pdf417\decoder\BarcodeValue.cs" />
     <Compile Include="pdf417\decoder\BoundingBox.cs" />

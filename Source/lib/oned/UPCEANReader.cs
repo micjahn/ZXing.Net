@@ -49,6 +49,11 @@ namespace ZXing.OneD
       internal static int[] MIDDLE_PATTERN = { 1, 1, 1, 1, 1 };
 
       /// <summary>
+      /// end guard pattern.
+      /// </summary>
+      internal static int[] END_PATTERN = {1, 1, 1, 1, 1, 1};
+
+      /// <summary>
       /// "Odd", or "L" patterns used to encode UPC/EAN digits.
       /// </summary>
       internal static int[][] L_PATTERNS = {

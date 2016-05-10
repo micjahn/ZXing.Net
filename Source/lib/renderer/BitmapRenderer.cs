@@ -97,6 +97,7 @@ namespace ZXing.Rendering
                                                                  format == BarcodeFormat.CODABAR ||
                                                                  format == BarcodeFormat.ITF ||
                                                                  format == BarcodeFormat.UPC_A ||
+                                                                 format == BarcodeFormat.UPC_E ||
                                                                  format == BarcodeFormat.MSI ||
                                                                  format == BarcodeFormat.PLESSEY);
          int emptyArea = outputContent && matrix.Height > 16 ? 16 : 0;
