@@ -29,7 +29,8 @@ namespace ZXing.OneD
    public sealed class Code39Reader : OneDReader
    {
       internal static String ALPHABET_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. *$/+%";
-      private static readonly char[] ALPHABET = ALPHABET_STRING.ToCharArray();
+      // Note this lacks '*' compared to ALPHABET_STRING
+      private static readonly String CHECK_DIGIT_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%";
 
       /// <summary>
       /// Returns a string with all possible characters
@@ -52,7 +53,7 @@ namespace ZXing.OneD
                                                     0x0A8, 0x0A2, 0x08A, 0x02A // $-%
                                                  };
 
-      private static readonly int ASTERISK_ENCODING = CHARACTER_ENCODINGS[39];
+      internal static readonly int ASTERISK_ENCODING = CHARACTER_ENCODINGS[39];
 
       private readonly bool usingCheckDigit;
       private readonly bool extendedMode;
@@ -169,9 +170,9 @@ namespace ZXing.OneD
             int total = 0;
             for (int i = 0; i < max; i++)
             {
-               total += ALPHABET_STRING.IndexOf(decodeRowResult[i]);
+               total += CHECK_DIGIT_STRING.IndexOf(decodeRowResult[i]);
             }
-            if (decodeRowResult[max] != ALPHABET[total % 43])
+            if (decodeRowResult[max] != CHECK_DIGIT_STRING[total % 43])
             {
                return null;
             }
@@ -339,7 +340,7 @@ namespace ZXing.OneD
          {
             if (CHARACTER_ENCODINGS[i] == pattern)
             {
-               c = ALPHABET[i];
+               c = ALPHABET_STRING[i];
                return true;
             }
          }
