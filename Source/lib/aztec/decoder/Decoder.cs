@@ -425,7 +425,7 @@ namespace ZXing.Aztec.Internal
       /// </summary>
       /// <param name="boolArr"></param>
       /// <returns></returns>
-      public static byte[] convertBoolArrayToByteArray(bool[] boolArr)
+      internal static byte[] convertBoolArrayToByteArray(bool[] boolArr)
       {
          byte[] byteArr = new byte[(boolArr.Length + 7)/8];
          for (int i = 0; i < byteArr.Length; i++)
