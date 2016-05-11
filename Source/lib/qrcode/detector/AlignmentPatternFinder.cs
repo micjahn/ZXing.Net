@@ -116,7 +116,7 @@ namespace ZXing.QrCode.Internal
                   if (currentState == 1)
                   {
                      // Counting black pixels
-                     stateCount[currentState]++;
+                     stateCount[1]++;
                   }
                   else
                   {

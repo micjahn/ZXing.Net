@@ -117,7 +117,7 @@ namespace ZXing.Datamatrix.Encoder
       {
          int pseudoRandom = ((149 * codewordPosition) % 253) + 1;
          int tempVariable = ch + pseudoRandom;
-         return tempVariable <= 254 ? (char)tempVariable : (char)(tempVariable - 254);
+         return (char)(tempVariable <= 254 ? tempVariable : tempVariable - 254);
       }
 
       /// <summary>

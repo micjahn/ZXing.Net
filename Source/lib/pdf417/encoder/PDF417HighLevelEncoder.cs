@@ -537,8 +537,7 @@ namespace ZXing.PDF417.Internal
          }
          else
          {
-            bool sixpack = ((count % 6) == 0);
-            if (sixpack)
+            if ((count % 6) == 0)
             {
                sb.Append((char)LATCH_TO_BYTE);
             }

@@ -65,7 +65,7 @@ namespace ZXing.Datamatrix.Encoder
 
       public void setBit(int col, int row, bool bit)
       {
-         bits[row * numcols + col] = bit ? (byte)1 : (byte)0;
+         bits[row * numcols + col] = (byte)(bit ? 1 : 0);
       }
 
       public bool hasBit(int col, int row)

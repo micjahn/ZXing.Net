@@ -656,8 +656,8 @@ namespace ZXing.PDF417.Internal
          int moduleNumber = 0;
          int increment = leftToRight ? 1 : -1;
          bool previousPixelValue = leftToRight;
-         while (((leftToRight && imageColumn < maxColumn) || (!leftToRight && imageColumn >= minColumn)) &&
-                moduleNumber < moduleBitCount.Length)
+         while ((leftToRight ? imageColumn < maxColumn : imageColumn >= minColumn) &&
+               moduleNumber < moduleBitCount.Length)
          {
             if (image[imageColumn, imageRow] == previousPixelValue)
             {
@@ -671,7 +671,8 @@ namespace ZXing.PDF417.Internal
             }
          }
          if (moduleNumber == moduleBitCount.Length ||
-             (((leftToRight && imageColumn == maxColumn) || (!leftToRight && imageColumn == minColumn)) && moduleNumber == moduleBitCount.Length - 1))
+            ((imageColumn == (leftToRight ? maxColumn : minColumn)) &&
+              moduleNumber == moduleBitCount.Length - 1))
          {
             return moduleBitCount;
          }
@@ -710,8 +711,8 @@ namespace ZXing.PDF417.Internal
          // there should be no black pixels before the start column. If there are, then we need to start earlier.
          for (int i = 0; i < 2; i++)
          {
-            while (((leftToRight && correctedStartColumn >= minColumn) || (!leftToRight && correctedStartColumn < maxColumn)) &&
-                   leftToRight == image[correctedStartColumn, imageRow])
+            while ((leftToRight ? correctedStartColumn >= minColumn : correctedStartColumn < maxColumn) &&
+                     leftToRight == image[correctedStartColumn, imageRow])
             {
                if (Math.Abs(codewordStartColumn - correctedStartColumn) > CODEWORD_SKEW_SIZE)
                {

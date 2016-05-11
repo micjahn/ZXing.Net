@@ -140,7 +140,7 @@ namespace ZXing.Common.Detector
                      if (lastRange[1] > centerX)
                      {
                         // straddle, choose one or the other based on direction
-                        return new ResultPoint(deltaY > 0 ? lastRange[0] : lastRange[1], lastY);
+                        return new ResultPoint(lastRange[deltaY > 0 ? 0 : 1], lastY);
                      }
                      return new ResultPoint(lastRange[0], lastY);
                   }
@@ -156,7 +156,7 @@ namespace ZXing.Common.Detector
                   {
                      if (lastRange[1] > centerY)
                      {
-                        return new ResultPoint(lastX, deltaX < 0 ? lastRange[0] : lastRange[1]);
+                        return new ResultPoint(lastX, lastRange[deltaX < 0 ? 0 : 1]);
                      }
                      return new ResultPoint(lastX, lastRange[0]);
                   }
