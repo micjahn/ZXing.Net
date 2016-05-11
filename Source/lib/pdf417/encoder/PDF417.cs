@@ -695,7 +695,7 @@ namespace ZXing.PDF417.Internal
          {
             // +1 for symbol length CW
             throw new WriterException(
-               "Encoded message contains to many code words, message to big (" + msg.Length + " bytes)");
+               "Encoded message contains too many code words, message too big (" + msg.Length + " bytes)");
          }
          int n = sourceCodeWords + pad + 1;
          StringBuilder sb = new StringBuilder(n);
