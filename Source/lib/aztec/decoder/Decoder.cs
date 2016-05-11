@@ -41,54 +41,54 @@ namespace ZXing.Aztec.Internal
       }
 
       private static readonly String[] UPPER_TABLE =
-         {
-            "CTRL_PS", " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P",
-            "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "CTRL_LL", "CTRL_ML", "CTRL_DL", "CTRL_BS"
-         };
+      {
+         "CTRL_PS", " ", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P",
+         "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "CTRL_LL", "CTRL_ML", "CTRL_DL", "CTRL_BS"
+      };
 
       private static readonly String[] LOWER_TABLE =
-         {
-            "CTRL_PS", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p",
-            "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "CTRL_US", "CTRL_ML", "CTRL_DL", "CTRL_BS"
-         };
+      {
+         "CTRL_PS", " ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p",
+         "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "CTRL_US", "CTRL_ML", "CTRL_DL", "CTRL_BS"
+      };
 
       private static readonly String[] MIXED_TABLE =
-         {
-            "CTRL_PS", " ", "\x1", "\x2", "\x3", "\x4", "\x5", "\x6", "\x7", "\b", "\t", "\n",
-            "\xD", "\f", "\r", "\x21", "\x22", "\x23", "\x24", "\x25", "@", "\\", "^", "_",
-            "`", "|", "~", "\xB1", "CTRL_LL", "CTRL_UL", "CTRL_PL", "CTRL_BS"
-         };
+      {
+         "CTRL_PS", " ", "\x1", "\x2", "\x3", "\x4", "\x5", "\x6", "\x7", "\b", "\t", "\n",
+         "\xD", "\f", "\r", "\x21", "\x22", "\x23", "\x24", "\x25", "@", "\\", "^", "_",
+         "`", "|", "~", "\xB1", "CTRL_LL", "CTRL_UL", "CTRL_PL", "CTRL_BS"
+      };
 
       private static readonly String[] PUNCT_TABLE =
-         {
-            "", "\r", "\r\n", ". ", ", ", ": ", "!", "\"", "#", "$", "%", "&", "'", "(", ")",
-            "*", "+", ",", "-", ".", "/", ":", ";", "<", "=", ">", "?", "[", "]", "{", "}", "CTRL_UL"
-         };
+      {
+         "", "\r", "\r\n", ". ", ", ", ": ", "!", "\"", "#", "$", "%", "&", "'", "(", ")",
+         "*", "+", ",", "-", ".", "/", ":", ";", "<", "=", ">", "?", "[", "]", "{", "}", "CTRL_UL"
+      };
 
       private static readonly String[] DIGIT_TABLE =
-         {
-            "CTRL_PS", " ", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ",", ".", "CTRL_UL", "CTRL_US"
-         };
+      {
+         "CTRL_PS", " ", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ",", ".", "CTRL_UL", "CTRL_US"
+      };
 
       private static readonly IDictionary<Table, String[]> codeTables = new Dictionary<Table, String[]>
-         {
-            {Table.UPPER, UPPER_TABLE},
-            {Table.LOWER, LOWER_TABLE},
-            {Table.MIXED, MIXED_TABLE},
-            {Table.PUNCT, PUNCT_TABLE},
-            {Table.DIGIT, DIGIT_TABLE},
-            {Table.BINARY, null}
-         };
+      {
+         {Table.UPPER, UPPER_TABLE},
+         {Table.LOWER, LOWER_TABLE},
+         {Table.MIXED, MIXED_TABLE},
+         {Table.PUNCT, PUNCT_TABLE},
+         {Table.DIGIT, DIGIT_TABLE},
+         {Table.BINARY, null}
+      };
 
       private static readonly IDictionary<char, Table> codeTableMap = new Dictionary<char, Table>
-         {
-            {'U', Table.UPPER},
-            {'L', Table.LOWER},
-            {'M', Table.MIXED},
-            {'P', Table.PUNCT},
-            {'D', Table.DIGIT},
-            {'B', Table.BINARY}
-         };
+      {
+         {'U', Table.UPPER},
+         {'L', Table.LOWER},
+         {'M', Table.MIXED},
+         {'P', Table.PUNCT},
+         {'D', Table.DIGIT},
+         {'B', Table.BINARY}
+      };
 
       private AztecDetectorResult ddata;
 
@@ -100,20 +100,22 @@ namespace ZXing.Aztec.Internal
       public DecoderResult decode(AztecDetectorResult detectorResult)
       {
          ddata = detectorResult;
-         BitMatrix matrix = detectorResult.Bits;
-         bool[] rawbits = extractBits(matrix);
+         var matrix = detectorResult.Bits;
+         var rawbits = extractBits(matrix);
          if (rawbits == null)
             return null;
 
-         bool[] correctedBits = correctBits(rawbits);
+         var correctedBits = correctBits(rawbits);
          if (correctedBits == null)
             return null;
 
-         String result = getEncodedData(correctedBits);
+         var result = getEncodedData(correctedBits);
          if (result == null)
             return null;
 
-         return new DecoderResult(null, result, null, null);
+         var rawBytes = convertBoolArrayToByteArray(correctedBits);
+
+         return new DecoderResult(rawBytes, result, null, null);
       }
 
       // This method is used for testing the high-level encoder
@@ -261,7 +263,7 @@ namespace ZXing.Aztec.Internal
          if (numCodewords < numDataCodewords)
             return null;
 
-         int offset = rawbits.Length % codewordSize;
+         int offset = rawbits.Length%codewordSize;
          int numECCodewords = numCodewords - numDataCodewords;
 
          int[] dataWords = new int[numCodewords];
@@ -326,7 +328,7 @@ namespace ZXing.Aztec.Internal
       {
          bool compact = ddata.Compact;
          int layers = ddata.NbLayers;
-         int baseMatrixSize = (compact ? 11 : 14) + layers * 4; // not including alignment lines
+         int baseMatrixSize = (compact ? 11 : 14) + layers*4; // not including alignment lines
          int[] alignmentMap = new int[baseMatrixSize];
          bool[] rawbits = new bool[totalBitsInLayer(layers, compact)];
 
@@ -351,7 +353,7 @@ namespace ZXing.Aztec.Internal
          }
          for (int i = 0, rowOffset = 0; i < layers; i++)
          {
-            int rowSize = (layers - i) * 4 + (compact ? 9 : 12);
+            int rowSize = (layers - i)*4 + (compact ? 9 : 12);
             // The top-left most point of this layer is <low, low> (not including alignment lines)
             int low = i*2;
             // The bottom-right most point of this layer is <high, high> (not including alignment lines)
@@ -400,6 +402,37 @@ namespace ZXing.Aztec.Internal
             }
          }
          return res;
+      }
+
+      /// <summary>
+      /// Reads a code of length 8 in an array of bits, padding with zeros
+      /// </summary>
+      /// <param name="rawbits"></param>
+      /// <param name="startIndex"></param>
+      /// <returns></returns>
+      private static byte readByte(bool[] rawbits, int startIndex)
+      {
+         int n = rawbits.Length - startIndex;
+         if (n >= 8)
+         {
+            return (byte) readCode(rawbits, startIndex, 8);
+         }
+         return (byte) (readCode(rawbits, startIndex, n) << (8 - n));
+      }
+
+      /// <summary>
+      /// Packs a bit array into bytes, most significant bit first
+      /// </summary>
+      /// <param name="boolArr"></param>
+      /// <returns></returns>
+      public static byte[] convertBoolArrayToByteArray(bool[] boolArr)
+      {
+         byte[] byteArr = new byte[(boolArr.Length + 7)/8];
+         for (int i = 0; i < byteArr.Length; i++)
+         {
+            byteArr[i] = readByte(boolArr, 8*i);
+         }
+         return byteArr;
       }
 
       private static int totalBitsInLayer(int layers, bool compact)
