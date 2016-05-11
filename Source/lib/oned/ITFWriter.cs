@@ -70,7 +70,7 @@ namespace ZXing.OneD
          int length = contents.Length;
          if (length % 2 != 0)
          {
-            throw new ArgumentException("The lenght of the input should be even");
+            throw new ArgumentException("The length of the input should be even");
          } 
          if (length > 80)
          {
