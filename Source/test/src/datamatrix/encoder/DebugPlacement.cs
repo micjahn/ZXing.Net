@@ -28,17 +28,6 @@ namespace ZXing.Datamatrix.Test
       {
       }
 
-      public String toBitFieldString()
-      {
-         var bits = Bits;
-         var sb = new StringBuilder(bits.Length);
-         foreach (byte bit in bits)
-         {
-            sb.Append(bit == 1 ? '1' : '0');
-         }
-         return sb.ToString();
-      }
-
       internal String[] toBitFieldStringArray()
       {
          var bits = Bits;

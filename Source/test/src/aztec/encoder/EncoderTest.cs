@@ -37,7 +37,11 @@ namespace ZXing.Aztec.Test
    public sealed class EncoderTest
    {
       private static readonly Encoding LATIN_1 = Encoding.GetEncoding("ISO-8859-1");
-
+      private static readonly Regex SPACES = new Regex("\\s+"
+#if !SILVERLIGHT
+                                                     , RegexOptions.Compiled
+#endif
+         );
       private static readonly Regex DOTX = new Regex("[^.X]"
 #if !SILVERLIGHT
                                                      , RegexOptions.Compiled
@@ -557,15 +561,14 @@ namespace ZXing.Aztec.Test
       private static void testModeMessage(bool compact, int layers, int words, String expected)
       {
          BitArray @in = Internal.Encoder.generateModeMessage(compact, layers, words);
-         Assert.AreEqual(expected.Replace(" ", ""), @in.ToString().Replace(" ", ""), "generateModeMessage() failed");
+         Assert.AreEqual(stripSpace(expected), stripSpace(@in.ToString()), "generateModeMessage() failed");
       }
 
       private static void testStuffBits(int wordSize, String bits, String expected)
       {
          BitArray @in = toBitArray(bits);
          BitArray stuffed = Internal.Encoder.stuffBits(@in, wordSize);
-         Assert.AreEqual(expected.Replace(" ", ""),
-                         stuffed.ToString().Replace(" ", ""), "stuffBits() failed for input string: " + bits);
+         Assert.AreEqual(stripSpace(expected), stripSpace(stuffed.ToString()), "stuffBits() failed for input string: " + bits);
       }
 
       private static BitArray toBitArray(string bits)
@@ -592,17 +595,22 @@ namespace ZXing.Aztec.Test
       private static void testHighLevelEncodeString(String s, String expectedBits)
       {
          BitArray bits = new HighLevelEncoder(LATIN_1.GetBytes(s)).encode();
-         String receivedBits = bits.ToString().Replace(" ", "");
-         Assert.AreEqual(expectedBits.Replace(" ", ""), receivedBits, "highLevelEncode() failed for input string: " + s);
+         String receivedBits = stripSpace(bits.ToString());
+         Assert.AreEqual(stripSpace(expectedBits), receivedBits, "highLevelEncode() failed for input string: " + s);
          Assert.AreEqual(s, Internal.Decoder.highLevelDecode(toBooleanArray(bits)));
       }
 
       private static void testHighLevelEncodeString(String s, int expectedReceivedBits)
       {
          BitArray bits = new HighLevelEncoder(LATIN_1.GetBytes(s)).encode();
-         int receivedBitCount = bits.ToString().Replace(" ", "").Length;
+         int receivedBitCount = stripSpace(bits.ToString()).Length;
          Assert.AreEqual(expectedReceivedBits, receivedBitCount, "highLevelEncode() failed for input string: " + s);
          Assert.AreEqual(s, Internal.Decoder.highLevelDecode(toBooleanArray(bits)));
+      }
+
+      private static String stripSpace(String s)
+      {
+         return SPACES.Replace(s, "");
       }
    }
 }

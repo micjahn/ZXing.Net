@@ -71,7 +71,7 @@ namespace ZXing.PDF417.Test
          testPDF417BlackBoxCountingResults(true);
       }
 
-      public SummaryResults testPDF417BlackBoxCountingResults(bool assertOnFailure)
+      private SummaryResults testPDF417BlackBoxCountingResults(bool assertOnFailure)
       {
          Assert.IsFalse(testResults.Count == 0);
 
@@ -79,9 +79,7 @@ namespace ZXing.PDF417.Test
          int testCount = testResults.Count;
 
          int[] passedCounts = new int[testCount];
-         int[] misreadCounts = new int[testCount];
          int[] tryHarderCounts = new int[testCount];
-         int[] tryHaderMisreadCounts = new int[testCount];
 
          foreach (KeyValuePair<String, List<String>> testImageGroup in imageFiles)
          {
@@ -154,8 +152,6 @@ namespace ZXing.PDF417.Test
          // Print the results of all tests first
          int totalFound = 0;
          int totalMustPass = 0;
-         int totalMisread = 0;
-         int totalMaxMisread = 0;
 
          int numberOfTests = imageFiles.Count;
          for (int x = 0; x < testResults.Count; x++)
@@ -164,17 +160,10 @@ namespace ZXing.PDF417.Test
             log.InfoFormat("Rotation {0} degrees:", (int) testResult.Rotation);
             log.InfoFormat(" {0} of {1} images passed ({2} required)", passedCounts[x], numberOfTests,
                            testResult.MustPassCount);
-            int failed = numberOfTests - passedCounts[x];
-            log.InfoFormat(" {0} failed due to misreads, {1} not detected", misreadCounts[x], failed - misreadCounts[x]);
             log.InfoFormat(" {0} of {1} images passed with try harder ({2} required)", tryHarderCounts[x],
                            numberOfTests, testResult.TryHarderCount);
-            failed = numberOfTests - tryHarderCounts[x];
-            log.InfoFormat(" {0} failed due to misreads, {1} not detected", tryHaderMisreadCounts[x], failed -
-                                                                                                      tryHaderMisreadCounts[x]);
             totalFound += passedCounts[x] + tryHarderCounts[x];
             totalMustPass += testResult.MustPassCount + testResult.TryHarderCount;
-            totalMisread += misreadCounts[x] + tryHaderMisreadCounts[x];
-            totalMaxMisread += testResult.MaxMisreads + testResult.MaxTryHarderMisreads;
          }
 
          int totalTests = numberOfTests*testCount*2;
@@ -190,15 +179,6 @@ namespace ZXing.PDF417.Test
             log.WarnFormat("--- Test failed by {0} images", totalMustPass - totalFound);
          }
 
-         if (totalMisread < totalMaxMisread)
-         {
-            log.WarnFormat("+++ Test expects too many misreads by {0} images", totalMaxMisread - totalMisread);
-         }
-         else if (totalMisread > totalMaxMisread)
-         {
-            log.WarnFormat("--- Test had too many misreads by {0} images", totalMisread - totalMaxMisread);
-         }
-
          // Then run through again and assert if any failed
          if (assertOnFailure)
          {
@@ -208,9 +188,6 @@ namespace ZXing.PDF417.Test
                String label = "Rotation " + testResult.Rotation + " degrees: Too many images failed";
                Assert.IsTrue(passedCounts[x] >= testResult.MustPassCount, label);
                Assert.IsTrue(tryHarderCounts[x] >= testResult.TryHarderCount, "Try harder, " + label);
-               label = "Rotation " + testResult.Rotation + " degrees: Too many images misread";
-               Assert.IsTrue(misreadCounts[x] <= testResult.MaxMisreads, label);
-               Assert.IsTrue(tryHaderMisreadCounts[x] <= testResult.MaxTryHarderMisreads, "Try harder, " + label);
             }
          }
          return new SummaryResults(totalFound, totalMustPass, totalTests);
