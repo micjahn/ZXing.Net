@@ -30,15 +30,19 @@ namespace ZXing.OneD.Test
       private const String FNC3 = "10111100010";
       private const String FNC4 = "10111101110";
       private const String START_CODE_B = "11010010000";
+      private const String START_CODE_C = "11010011100";
+      private const String SWITCH_CODE_B = "10111101110";
       private const String QUIET_SPACE = "00000";
       private const String STOP = "1100011101011";
 
       private Writer writer;
+      private Code128Reader reader;
 
       [SetUp]
       public void setup()
       {
          writer = new Code128Writer();
+         reader = new Code128Reader();
       }
 
       [Test]
@@ -73,13 +77,26 @@ namespace ZXing.OneD.Test
       public void testEncodeWithFunc1()
       {
          const string toEncode = "\u00f1" + "123";
-         //                                                       "1"            "2"             "3"          check digit 61
-         var expected = QUIET_SPACE + START_CODE_B + FNC1 + "10011100110" + "11001110010" + "11001011100" + "11001000010" + STOP + QUIET_SPACE;
+         //                                                       "12"                           "3"          check digit 92
+         var expected = QUIET_SPACE + START_CODE_C + FNC1 + "10110011100" + SWITCH_CODE_B + "11001011100" + "10101111000" + STOP + QUIET_SPACE;
 
          var result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
          var actual = matrixToString(result);
 
+         Assert.AreEqual(expected, actual);
+      }
+
+      [Test]
+      public void testRoundtrip()
+      {
+         var toEncode = "\u00f1" + "10958" + "\u00f1" + "17160526";
+         var expected = "1095817160526";
+
+         var encResult = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
+         var row = encResult.getRow(0, null);
+         var rtResult = reader.decodeRow(0, row, null);
+         var actual = rtResult.Text;
          Assert.AreEqual(expected, actual);
       }
 
