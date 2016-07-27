@@ -196,7 +196,7 @@ namespace ZXing.Rendering
 
       private static void FindMaximumRectangle(BitMatrix matrix, BitMatrix processed, int startPosX, int startPosY, int endPosY, out int endPosX)
       {
-         endPosX = startPosX + 1;
+         endPosX = startPosX;
 
          for (int x = startPosX + 1; x < matrix.Width; x++)
          {
