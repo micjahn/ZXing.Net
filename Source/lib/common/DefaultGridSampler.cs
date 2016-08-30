@@ -58,14 +58,26 @@ namespace ZXing.Common
                return null;
             try
             {
+               var imageWidth = image.Width;
+               var imageHeight = image.Height;
+
                for (int x = 0; x < max; x += 2)
                {
-                  //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-                  bits[x >> 1, y] = image[(int)points[x], (int)points[x + 1]];
+                  var imagex = (int)points[x];
+                  var imagey = (int)points[x + 1];
+
+                  if (imagex < 0 || imagex >= imageWidth || imagey < 0 || imagey >= imageHeight)
+                  {
+                     return null;
+                  }
+
+                  bits[x >> 1, y] = image[imagex, imagey];
                }
             }
             catch (System.IndexOutOfRangeException)
             {
+               // java version:
+               // 
                // This feels wrong, but, sometimes if the finder patterns are misidentified, the resulting
                // transform gets "twisted" such that it maps a straight line of points to a set of points
                // whose endpoints are in bounds, but others are not. There is probably some mathematical
