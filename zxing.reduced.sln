@@ -22,6 +22,32 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{2E
 	EndProjectSection
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 7
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs05
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Clients\\SilverlightDemo\\SilverlightDemo.csproj
+		SccProjectTopLevelParentUniqueName1 = zxing.reduced.sln
+		SccProjectName1 = Clients/SilverlightDemo
+		SccLocalPath1 = Clients\\SilverlightDemo
+		SccProjectUniqueName2 = Clients\\WindowsFormsDemo\\WindowsFormsDemo.csproj
+		SccProjectTopLevelParentUniqueName2 = zxing.reduced.sln
+		SccProjectName2 = Clients/WindowsFormsDemo
+		SccLocalPath2 = Clients\\WindowsFormsDemo
+		SccProjectUniqueName3 = Source\\lib\\zxing.csproj
+		SccProjectName3 = Source/lib
+		SccLocalPath3 = Source\\lib
+		SccProjectUniqueName4 = Source\\lib\\zxing.presentation.csproj
+		SccProjectName4 = Source/lib
+		SccLocalPath4 = Source\\lib
+		SccProjectUniqueName5 = Source\\lib\\zxing.sl5.csproj
+		SccProjectName5 = Source/lib
+		SccLocalPath5 = Source\\lib
+		SccProjectUniqueName6 = Source\\test\\src\\zxing.test.csproj
+		SccProjectName6 = Source/test/src
+		SccLocalPath6 = Source\\test\\src
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release with Documentation|Any CPU = Release with Documentation|Any CPU
