@@ -178,9 +178,8 @@ namespace ZXing.QrCode.Internal
 
          // Get the data mask for the format used in this QR Code. This will exclude
          // some bits from reading as we wind through the bit matrix.
-         DataMask dataMask = DataMask.forReference(formatInfo.DataMask);
          int dimension = bitMatrix.Height;
-         dataMask.unmaskBitMatrix(bitMatrix, dimension);
+         DataMask.unmaskBitMatrix(formatInfo.DataMask, bitMatrix, dimension);
 
          BitMatrix functionPattern = version.buildFunctionPattern();
 
@@ -242,9 +241,8 @@ namespace ZXing.QrCode.Internal
          {
             return; // We have no format information, and have no data mask
          }
-         DataMask dataMask = DataMask.forReference(parsedFormatInfo.DataMask);
          int dimension = bitMatrix.Height;
-         dataMask.unmaskBitMatrix(bitMatrix, dimension);
+         DataMask.unmaskBitMatrix(parsedFormatInfo.DataMask, bitMatrix, dimension);
       }
 
       /**

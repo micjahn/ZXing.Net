@@ -220,17 +220,34 @@ namespace ZXing.Common
          }
       }
 
-      /// <summary> <p>Flips the given bit.</p>
-      /// 
+      /// <summary>
+      /// <p>Flips the given bit.</p>
       /// </summary>
-      /// <param name="x">The horizontal component (i.e. which column)
-      /// </param>
-      /// <param name="y">The vertical component (i.e. which row)
-      /// </param>
+      /// <param name="x">The horizontal component (i.e. which column)</param>
+      /// <param name="y">The vertical component (i.e. which row)</param>
       public void flip(int x, int y)
       {
          int offset = y*rowSize + (x >> 5);
          bits[offset] ^= 1 << (x & 0x1f);
+      }
+
+      /// <summary>
+      /// flip all of the bits, if shouldBeFlipped is true for the coordinates
+      /// </summary>
+      /// <param name="shouldBeFlipped">should return true, if the bit at a given coordinate should be flipped</param>
+      public void flipWhen(Func<int, int, bool> shouldBeFlipped)
+      {
+         for (var y = 0; y < height; y++)
+         {
+            for (var x = 0; x < width; x++)
+            {
+               if (shouldBeFlipped(y, x))
+               {
+                  int offset = y * rowSize + (x >> 5);
+                  bits[offset] ^= 1 << (x & 0x1f);
+               }
+            }
+         }
       }
 
       /// <summary>

@@ -65,17 +65,9 @@ namespace ZXing.PDF417.Internal
       private const int PS = 29;
       private const int PAL = 29;
 
-      private static readonly char[] PUNCT_CHARS = {
-                                                      ';', '<', '>', '@', '[', '\\', ']', '_', '`', '~', '!',
-                                                      '\r', '\t', ',', ':', '\n', '-', '.', '$', '/', '"', '|', '*',
-                                                      '(', ')', '?', '{', '}', '\''
-                                                   };
+      private static readonly char[] PUNCT_CHARS = ";<>@[\\]_`~!\r\t,:\n-.$/\"|*()?{}'".ToCharArray();
 
-      private static readonly char[] MIXED_CHARS = {
-                                                      '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '&',
-                                                      '\r', '\t', ',', ':', '#', '-', '.', '$', '/', '+', '%', '*',
-                                                      '=', '^'
-                                                   };
+      private static readonly char[] MIXED_CHARS = "0123456789&\r\t,:#-.$/+%*=^".ToCharArray();
 
 #if SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NETFX_CORE
       /// <summary>
