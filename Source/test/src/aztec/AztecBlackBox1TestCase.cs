@@ -26,10 +26,10 @@ namespace ZXing.Aztec.Test
       public AztecBlackBox1TestCase()
          : base("test/data/blackbox/aztec-1", new AztecReader(), BarcodeFormat.AZTEC)
       {
-         addTest(12, 12, 0.0f);
-         addTest(12, 12, 90.0f);
-         addTest(12, 12, 180.0f);
-         addTest(12, 12, 270.0f);
+         addTest(13, 13, 0.0f);
+         addTest(13, 13, 90.0f);
+         addTest(13, 13, 180.0f);
+         addTest(13, 13, 270.0f);
       }
    }
 }

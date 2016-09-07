@@ -185,6 +185,10 @@ namespace ZXing.Aztec.Internal
                if (str.StartsWith("CTRL_"))
                {
                   // Table changes
+                  // ISO/IEC 24778:2008 prescibes ending a shift sequence in the mode from which it was invoked.
+                  // That's including when that mode is a shift.
+                  // Our test case dlusbs.png for issue #642 exercises that.
+                  latchTable = shiftTable;  // Latch the current mode, so as to return to Upper after U/S B/S
                   shiftTable = getTable(str[5]);
                   strTable = codeTables[shiftTable];
                   if (str[6] == 'L')
