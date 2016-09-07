@@ -19,6 +19,9 @@ using System.Text;
 
 namespace ZXing.Client.Result
 {
+   /// <summary>
+   /// Represents a parsed result that encodes a Vehicle Identification Number (VIN).
+   /// </summary>
    public class VINParsedResult : ParsedResult
    {
       public String VIN { get; private set; }

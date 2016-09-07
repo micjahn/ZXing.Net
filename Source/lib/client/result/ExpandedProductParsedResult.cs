@@ -30,7 +30,7 @@ using System.Collections.Generic;
 namespace ZXing.Client.Result
 {
    /// <summary>
-   /// 
+   /// Represents a parsed result that encodes extended product information as encoded by the RSS format, like weight, price, dates, etc.
    /// </summary>
    /// <author> Antonio Manuel Benjumea Conde, Servinform, S.A.</author>
    /// <author> Agustín Delgado, Servinform, S.A.</author>

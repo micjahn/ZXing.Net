@@ -688,7 +688,7 @@ namespace ZXing.OneD.RSS.Expanded
          }//counters[] has the pixels of the module
 
          const int numModules = 17; //left and right data characters have all the same length
-         float elementWidth = (float)count(counters) / (float)numModules;
+         float elementWidth = (float)ZXing.Common.Detector.MathUtils.sum(counters) / (float)numModules;
 
          // Sanity check: element width for pattern and the character should match
          float expectedElementWidth = (pattern.StartEnd[1] - pattern.StartEnd[0]) / 15.0f;
@@ -789,8 +789,8 @@ namespace ZXing.OneD.RSS.Expanded
 
       private bool adjustOddEvenCounts(int numModules)
       {
-         int oddSum = count(getOddCounts());
-         int evenSum = count(getEvenCounts());
+         int oddSum = ZXing.Common.Detector.MathUtils.sum(getOddCounts());
+         int evenSum = ZXing.Common.Detector.MathUtils.sum(getEvenCounts());
          int mismatch = oddSum + evenSum - numModules;
          bool oddParityBad = (oddSum & 0x01) == 1;
          bool evenParityBad = (evenSum & 0x01) == 0;

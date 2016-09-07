@@ -19,7 +19,8 @@ using ZXing.Common;
 namespace ZXing.Aztec.Internal
 {
    /// <summary>
-   /// The class contains all information about the Aztec code which was found
+   /// Extends <see cref="DetectorResult" /> with more information specific to the Aztec format,
+   /// like the number of layers and whether it's compact.
    /// </summary>
    public class AztecDetectorResult : DetectorResult
    {

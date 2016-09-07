@@ -19,6 +19,9 @@ using System.Text;
 
 namespace ZXing.Client.Result
 {
+   /// <summary>
+   /// Represents a parsed result that encodes an SMS message, including recipients, subject and body text.
+   /// </summary>
    /// <author>Sean Owen</author>
    public sealed class SMSParsedResult : ParsedResult
    {

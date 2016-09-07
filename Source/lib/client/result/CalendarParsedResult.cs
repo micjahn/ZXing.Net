@@ -21,6 +21,9 @@ using System.Text.RegularExpressions;
 
 namespace ZXing.Client.Result
 {
+   /// <summary>
+   /// Represents a parsed result that encodes a calendar event at a certain time, optionally with attendees and a location.
+   /// </summary>
    ///<author>Sean Owen</author>
    public sealed class CalendarParsedResult : ParsedResult
    {

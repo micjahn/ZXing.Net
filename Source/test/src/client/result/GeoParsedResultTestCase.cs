@@ -28,7 +28,7 @@ namespace ZXing.Client.Result.Test
    [TestFixture]
    public sealed class GeoParsedResultTestCase
    {
-      private static double EPSILON = 0.0000000001;
+      private static double EPSILON = 1.0E-10;
 
       [Test]
       public void testGeo()

@@ -21,6 +21,8 @@ namespace ZXing.Common.Detector.Test
    [TestFixture]
    public class MathUtilsTestCase
    {
+      private static float EPSILON = 1.0E-8f;
+
       [Test]
       public void testRound()
       {
@@ -46,6 +48,25 @@ namespace ZXing.Common.Detector.Test
          Assert.That(MathUtils.round(float.NegativeInfinity), Is.EqualTo(int.MinValue));
 
          Assert.That(MathUtils.round(float.NaN), Is.EqualTo(0));
+      }
+
+      [Test]
+      public void testDistance()
+      {
+         Assert.AreEqual((float)System.Math.Sqrt(8.0), MathUtils.distance(1.0f, 2.0f, 3.0f, 4.0f), EPSILON);
+         Assert.AreEqual(0.0f, MathUtils.distance(1.0f, 2.0f, 1.0f, 2.0f), EPSILON);
+
+         Assert.AreEqual((float)System.Math.Sqrt(8.0), MathUtils.distance(1, 2, 3, 4), EPSILON);
+         Assert.AreEqual(0.0f, MathUtils.distance(1, 2, 1, 2), EPSILON);
+      }
+
+      [Test]
+      public void testSum()
+      {
+         Assert.That(MathUtils.sum(new int[] { }), Is.EqualTo(0));
+         Assert.That(MathUtils.sum(new int[] { 1 }), Is.EqualTo(1));
+         Assert.That(MathUtils.sum(new int[] { 1, 3 }), Is.EqualTo(4));
+         Assert.That(MathUtils.sum(new int[] { -1, 1 }), Is.EqualTo(0));
       }
    }
 }

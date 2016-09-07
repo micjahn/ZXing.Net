@@ -77,18 +77,17 @@ namespace ZXing.QrCode.Internal.Test
 
       private static void testMaskAcrossDimensions(int reference, Func<int, int, bool> condition)
       {
-         DataMask mask = DataMask.forReference(reference);
          for (int version = 1; version <= 40; version++)
          {
             int dimension = 17 + 4 * version;
-            testMask(mask, dimension, condition);
+            testMask(reference, dimension, condition);
          }
       }
 
-      private static void testMask(DataMask mask, int dimension, Func<int, int, bool> condition)
+      private static void testMask(int reference, int dimension, Func<int, int, bool> condition)
       {
          BitMatrix bits = new BitMatrix(dimension);
-         mask.unmaskBitMatrix(bits, dimension);
+         DataMask.unmaskBitMatrix(reference, bits, dimension);
          for (int i = 0; i < dimension; i++)
          {
             for (int j = 0; j < dimension; j++)

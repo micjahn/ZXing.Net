@@ -19,7 +19,7 @@ using System;
 namespace ZXing.OneD.RSS
 {
    /// <summary>
-   /// 
+   /// Encapsulates an RSS barcode finder pattern, including its start/end position and row.
    /// </summary>
    public sealed class FinderPattern
    {

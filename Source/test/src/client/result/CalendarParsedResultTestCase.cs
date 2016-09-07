@@ -29,7 +29,7 @@ namespace ZXing.Client.Result.Test
    [TestFixture]
    public sealed class CalendarParsedResultTestCase
    {
-      private const double EPSILON = 0.0000000001;
+      private const double EPSILON = 1.0E-10;
 
       private const string DATE_TIME_FORMAT = "yyyyMMdd'T'HHmmss'Z'";
 

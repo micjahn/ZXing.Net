@@ -20,6 +20,9 @@ using System.Text;
 
 namespace ZXing.Client.Result
 {
+   /// <summary>
+   /// Represents a parsed result that encodes a geographic coordinate, with latitude, longitude and altitude.
+   /// </summary>
    /// <author>Sean Owen</author>
    public sealed class GeoParsedResult : ParsedResult
    {

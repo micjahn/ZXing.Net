@@ -18,6 +18,9 @@ using System;
 
 namespace ZXing.Common.Detector
 {
+   /// <summary>
+   /// General math-related and numeric utility functions.
+   /// </summary>
    public static class MathUtils
    {
       /// <summary>
@@ -37,6 +40,14 @@ namespace ZXing.Common.Detector
          return (int)(d + (d < 0.0f ? -0.5f : 0.5f));
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="aX"></param>
+      /// <param name="aY"></param>
+      /// <param name="bX"></param>
+      /// <param name="bY"></param>
+      /// <returns>Euclidean distance between points A and B</returns>
       public static float distance(float aX, float aY, float bX, float bY)
       {
          float xDiff = aX - bX;
@@ -44,11 +55,33 @@ namespace ZXing.Common.Detector
          return (float)Math.Sqrt(xDiff * xDiff + yDiff * yDiff);
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="aX"></param>
+      /// <param name="aY"></param>
+      /// <param name="bX"></param>
+      /// <param name="bY"></param>
+      /// <returns>Euclidean distance between points A and B</returns>
       public static float distance(int aX, int aY, int bX, int bY)
       {
          int xDiff = aX - bX;
          int yDiff = aY - bY;
          return (float)Math.Sqrt(xDiff * xDiff + yDiff * yDiff);
+      }
+
+      /// <summary>
+      /// </summary>
+      /// <param name="array">values to sum</param>
+      /// <returns>sum of values in array</returns>
+      public static int sum(int[] array)
+      {
+         int count = 0;
+         foreach (int a in array)
+         {
+            count += a;
+         }
+         return count;
       }
    }
 }

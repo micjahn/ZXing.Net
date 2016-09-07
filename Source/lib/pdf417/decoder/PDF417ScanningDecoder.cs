@@ -588,7 +588,7 @@ namespace ZXing.PDF417.Internal
             return null;
          }
          int endColumn;
-         int codewordBitCount = PDF417Common.getBitCountSum(moduleBitCount);
+         int codewordBitCount = ZXing.Common.Detector.MathUtils.sum(moduleBitCount);
          if (leftToRight)
          {
             endColumn = startColumn + codewordBitCount;

@@ -20,7 +20,7 @@ using System.Text;
 namespace ZXing.Client.Result
 {
    /// <summary>
-   /// 
+   /// Represents a parsed result that encodes wifi network information, like SSID and password.
    /// </summary>
    /// <author>Vikram Aggarwal</author>
    public class WifiParsedResult : ParsedResult

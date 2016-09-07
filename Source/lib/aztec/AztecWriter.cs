@@ -24,7 +24,7 @@ using ZXing.Common;
 namespace ZXing.Aztec
 {
    /// <summary>
-   /// Generates Aztec 2D barcodes.
+   /// Renders an Aztec code as a <see cref="BitMatrix" />
    /// </summary>
    public sealed class AztecWriter : Writer
    {

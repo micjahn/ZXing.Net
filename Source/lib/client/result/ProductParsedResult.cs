@@ -18,6 +18,9 @@ using System;
 
 namespace ZXing.Client.Result
 {
+   /// <summary>
+   /// Represents a parsed result that encodes a product by an identifier of some kind.
+   /// </summary>
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    public sealed class ProductParsedResult : ParsedResult
    {

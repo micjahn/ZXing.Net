@@ -54,14 +54,10 @@ namespace ZXing.PDF417
       /// </summary>
       /// <returns>The bit count sum.</returns>
       /// <param name="moduleBitCount">Module bit count.</param>
+      [System.Obsolete]
       public static int getBitCountSum(int[] moduleBitCount)
       {
-         int bitCountSum = 0;
-         foreach (int count in moduleBitCount)
-         {
-            bitCountSum += count;
-         }
-         return bitCountSum;
+         return ZXing.Common.Detector.MathUtils.sum(moduleBitCount);
       }
 
       /// <summary>

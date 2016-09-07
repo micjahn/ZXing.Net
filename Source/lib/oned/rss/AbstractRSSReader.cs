@@ -19,7 +19,7 @@ using System;
 namespace ZXing.OneD.RSS
 {
    /// <summary>
-   /// 
+   /// Superclass of <see cref="OneDReader" /> implementations that read barcodes in the RSS family of formats.
    /// </summary>
    public abstract class AbstractRSSReader : OneDReader
    {
@@ -130,14 +130,10 @@ namespace ZXing.OneD.RSS
       /// </summary>
       /// <param name="array">The array.</param>
       /// <returns></returns>
+      [Obsolete]
       protected static int count(int[] array)
       {
-         int count = 0;
-         foreach (int a in array)
-         {
-            count += a;
-         }
-         return count;
+         return ZXing.Common.Detector.MathUtils.sum(array);
       }
 
       /// <summary>

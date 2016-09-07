@@ -19,6 +19,9 @@ using System.Text;
 
 namespace ZXing.Client.Result
 {
+   /// <summary>
+   /// Represents a parsed result that encodes contact information, like that in an address book entry.
+   /// </summary>
    /// <author>Sean Owen</author>
    public sealed class AddressBookParsedResult : ParsedResult
    {

@@ -19,6 +19,9 @@ using System.Text.RegularExpressions;
 
 namespace ZXing.Client.Result
 {
+   /// <summary>
+   /// A simple result type encapsulating a URI that has no further interpretation.
+   /// </summary>
    /// <author>Sean Owen</author>
    public sealed class URIParsedResult : ParsedResult
    {
