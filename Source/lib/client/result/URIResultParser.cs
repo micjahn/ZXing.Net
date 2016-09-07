@@ -33,7 +33,7 @@ namespace ZXing.Client.Result
 );
 #endif
       private static readonly Regex URL_WITHOUT_PROTOCOL_PATTERN = new Regex(
-           "([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,}" + // host name elements
+           "([a-zA-Z0-9\\-]+\\.){1,6}[a-zA-Z]{2,}" + // host name elements
            "(:\\d{1,5})?" + // maybe port
            "(/|\\?|$)" // query, path or nothing
 #if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
