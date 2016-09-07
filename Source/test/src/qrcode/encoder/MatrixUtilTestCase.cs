@@ -289,7 +289,7 @@ namespace ZXing.QrCode.Internal.Test
          // From http://www.swetake.com/qr/qr11.html
          Assert.AreEqual(0x214, MatrixUtil.calculateBCHCode(0x1b, 0x537));
 
-         // Encofing of version information.
+         // Encoding of version information.
          // From Appendix D in JISX0510:2004 (p 68)
          Assert.AreEqual(0xc94, MatrixUtil.calculateBCHCode(7, 0x1f25));
          Assert.AreEqual(0x5bc, MatrixUtil.calculateBCHCode(8, 0x1f25));
