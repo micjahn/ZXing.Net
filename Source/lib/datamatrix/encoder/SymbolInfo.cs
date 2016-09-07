@@ -166,14 +166,13 @@ namespace ZXing.Datamatrix.Encoder
          return null;
       }
 
-      int getHorizontalDataRegions()
+      private int getHorizontalDataRegions()
       {
          switch (dataRegions)
          {
             case 1:
                return 1;
             case 2:
-               return 2;
             case 4:
                return 2;
             case 16:
@@ -185,12 +184,11 @@ namespace ZXing.Datamatrix.Encoder
          }
       }
 
-      int getVerticalDataRegions()
+      private int getVerticalDataRegions()
       {
          switch (dataRegions)
          {
             case 1:
-               return 1;
             case 2:
                return 1;
             case 4:

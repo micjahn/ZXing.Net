@@ -227,7 +227,7 @@ namespace ZXing.OneD
       /// </summary>
       /// <param name="row">row of black/white values to search</param>
       /// <returns>Array, containing index of start of 'start block' and end of 'start block'</returns>
-      int[] decodeStart(BitArray row)
+      private int[] decodeStart(BitArray row)
       {
          int endStart = skipWhiteSpace(row);
          if (endStart < 0)
@@ -308,7 +308,7 @@ namespace ZXing.OneD
       /// <param name="row">row of black/white values to search</param>
       /// <returns>Array, containing index of start of 'end block' and end of 'end
       /// block' or null, if nothing found</returns>
-      int[] decodeEnd(BitArray row)
+      private int[] decodeEnd(BitArray row)
       {
          // For convenience, reverse the row and then
          // search from 'the start' for the end block

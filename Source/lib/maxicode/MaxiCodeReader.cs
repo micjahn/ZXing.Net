@@ -72,8 +72,7 @@ namespace ZXing.Maxicode
             return null;
          }
 
-         ResultPoint[] points = NO_POINTS;
-         Result result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.MAXICODE);
+         Result result = new Result(decoderResult.Text, decoderResult.RawBytes, NO_POINTS, BarcodeFormat.MAXICODE);
 
          var ecLevel = decoderResult.ECLevel;
          if (ecLevel != null)

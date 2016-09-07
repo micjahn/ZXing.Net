@@ -152,7 +152,7 @@ namespace ZXing
             for (int y = 0; y < height; y++)
             {
                int outputOffset = y * width;
-               Array.Copy(yuv, inputOffset, matrix, outputOffset, width);
+               Array.Copy(yuvData, inputOffset, matrix, outputOffset, width);
                inputOffset += dataWidth;
             }
             return matrix;

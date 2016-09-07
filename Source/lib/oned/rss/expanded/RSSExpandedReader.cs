@@ -165,8 +165,7 @@ namespace ZXing.OneD.RSS.Expanded
          }
 
          bool tryStackedDecode = rows.Count != 0;
-         bool wasReversed = false; // TODO: deal with reversed rows
-         storeRow(rowNumber, wasReversed);
+         storeRow(rowNumber, false); // TODO: deal with reversed rows
          if (tryStackedDecode)
          {
             // When the image is 180-rotated, then rows are sorted in wrong direction.

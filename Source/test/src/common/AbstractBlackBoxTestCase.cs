@@ -116,7 +116,7 @@ namespace ZXing.Common.Test
          testBlackBoxCountingResults(true);
       }
 
-      public SummaryResults testBlackBoxCountingResults(bool assertOnFailure)
+      private void testBlackBoxCountingResults(bool assertOnFailure)
       {
          Assert.IsFalse(testResults.Count == 0);
 
@@ -275,7 +275,6 @@ namespace ZXing.Common.Test
                Assert.IsTrue(tryHaderMisreadCounts[x] <= testResult.MaxTryHarderMisreads, "Try harder, " + label);
             }
          }
-         return new SummaryResults(totalFound, totalMustPass, totalTests);
       }
 
       private bool decode(BinaryBitmap source,

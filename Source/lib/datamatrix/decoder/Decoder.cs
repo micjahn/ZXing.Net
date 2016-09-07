@@ -83,8 +83,6 @@ namespace ZXing.Datamatrix.Internal
          // Separate into data blocks
          DataBlock[] dataBlocks = DataBlock.getDataBlocks(codewords, parser.Version);
 
-         int dataBlocksCount = dataBlocks.Length;
-
          // Count total number of data bytes
          int totalBytes = 0;
          foreach (var db in dataBlocks)
@@ -94,6 +92,7 @@ namespace ZXing.Datamatrix.Internal
          byte[] resultBytes = new byte[totalBytes];
 
          // Error-correct and copy data blocks together into a stream of bytes
+         int dataBlocksCount = dataBlocks.Length;
          for (int j = 0; j < dataBlocksCount; j++)
          {
             DataBlock dataBlock = dataBlocks[j];

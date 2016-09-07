@@ -174,7 +174,7 @@ namespace ZXing.Datamatrix.Internal
       /// <param name="numColumns">Number of columns in the mapping matrix</param>
       /// <returns>value of the given bit in the mapping matrix</returns>
       /// </summary>
-      bool readModule(int row, int column, int numRows, int numColumns)
+      private bool readModule(int row, int column, int numRows, int numColumns)
       {
          // Adjust the row and column indices based on boundary wrapping
          if (row < 0)
@@ -202,7 +202,7 @@ namespace ZXing.Datamatrix.Internal
       /// <param name="numColumns">Number of columns in the mapping matrix</param>
       /// <returns>byte from the utah shape</returns>
       /// </summary>
-      int readUtah(int row, int column, int numRows, int numColumns)
+      private int readUtah(int row, int column, int numRows, int numColumns)
       {
          int currentByte = 0;
          if (readModule(row - 2, column - 2, numRows, numColumns))
@@ -256,7 +256,7 @@ namespace ZXing.Datamatrix.Internal
       /// <param name="numColumns">Number of columns in the mapping matrix</param>
       /// <returns>byte from the Corner condition 1</returns>
       /// </summary>
-      int readCorner1(int numRows, int numColumns)
+      private int readCorner1(int numRows, int numColumns)
       {
          int currentByte = 0;
          if (readModule(numRows - 1, 0, numRows, numColumns))
@@ -310,7 +310,7 @@ namespace ZXing.Datamatrix.Internal
       /// <param name="numColumns">Number of columns in the mapping matrix</param>
       /// <returns>byte from the Corner condition 2</returns>
       /// </summary>
-      int readCorner2(int numRows, int numColumns)
+      private int readCorner2(int numRows, int numColumns)
       {
          int currentByte = 0;
          if (readModule(numRows - 3, 0, numRows, numColumns))
@@ -364,7 +364,7 @@ namespace ZXing.Datamatrix.Internal
       /// <param name="numColumns">Number of columns in the mapping matrix</param>
       /// <returns>byte from the Corner condition 3</returns>
       /// </summary>
-      int readCorner3(int numRows, int numColumns)
+      private int readCorner3(int numRows, int numColumns)
       {
          int currentByte = 0;
          if (readModule(numRows - 1, 0, numRows, numColumns))
@@ -418,7 +418,7 @@ namespace ZXing.Datamatrix.Internal
       /// <param name="numColumns">Number of columns in the mapping matrix</param>
       /// <returns>byte from the Corner condition 4</returns>
       /// </summary>
-      int readCorner4(int numRows, int numColumns)
+      private int readCorner4(int numRows, int numColumns)
       {
          int currentByte = 0;
          if (readModule(numRows - 3, 0, numRows, numColumns))
@@ -470,7 +470,7 @@ namespace ZXing.Datamatrix.Internal
       /// <param name="bitMatrix">Original <see cref="BitMatrix" />with alignment patterns</param>
       /// <returns>BitMatrix that has the alignment patterns removed</returns>
       /// </summary>
-      BitMatrix extractDataRegion(BitMatrix bitMatrix)
+      private BitMatrix extractDataRegion(BitMatrix bitMatrix)
       {
          int symbolSizeRows = version.getSymbolSizeRows();
          int symbolSizeColumns = version.getSymbolSizeColumns();
@@ -514,6 +514,5 @@ namespace ZXing.Datamatrix.Internal
          }
          return bitMatrixWithoutAlignment;
       }
-
    }
 }

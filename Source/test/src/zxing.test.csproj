@@ -77,7 +77,6 @@
     <Compile Include="..\..\lib\silverlight\BigInteger.cs">
       <Link>BigInteger.cs</Link>
     </Compile>
-    <Compile Include="AllPositiveBlackBoxTester.cs" />
     <Compile Include="aztec\AztecBlackBox1TestCase.cs" />
     <Compile Include="aztec\AztecBlackBox2TestCase.cs" />
     <Compile Include="aztec\decoder\DecoderTest.cs" />
@@ -111,9 +110,6 @@
     <Compile Include="common\PerspectiveTransformTestCase.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonTestCase.cs" />
     <Compile Include="common\StringUtilsTestCase.cs" />
-    <Compile Include="common\SummaryResults.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="common\TestResult.cs">
       <SubType>Code</SubType>
     </Compile>

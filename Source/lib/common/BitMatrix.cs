@@ -568,7 +568,7 @@ namespace ZXing.Common
       /// </returns>
       public String ToString(String setString, String unsetString)
       {
-         return ToString(setString, unsetString, Environment.NewLine);
+         return buildToString(setString, unsetString, Environment.NewLine);
       }
 
       /// <summary>
@@ -582,7 +582,12 @@ namespace ZXing.Common
       /// </returns>
       public String ToString(String setString, String unsetString, String lineSeparator)
       {
-         var result = new StringBuilder(height*(width + 1));
+         return buildToString(setString, unsetString, lineSeparator);
+      }
+
+      private String buildToString(String setString, String unsetString, String lineSeparator)
+      {
+         var result = new StringBuilder(height * (width + 1));
          for (int y = 0; y < height; y++)
          {
             for (int x = 0; x < width; x++)

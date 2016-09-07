@@ -43,7 +43,7 @@ namespace ZXing.PDF417.Internal
       /// <summary>
       /// Sets the Row Numbers as Inidicator Columns
       /// </summary>
-      public void setRowNumbers()
+      private void setRowNumbers()
       {
          foreach (var cw in Codewords)
          {
@@ -63,7 +63,7 @@ namespace ZXing.PDF417.Internal
       /// </summary>
       /// <returns>The indicator column row numbers.</returns>
       /// <param name="metadata">Metadata.</param>
-      public int adjustCompleteIndicatorColumnRowNumbers(BarcodeMetadata metadata)
+      public void adjustCompleteIndicatorColumnRowNumbers(BarcodeMetadata metadata)
       {
          var codewords = Codewords;
          setRowNumbers(); // Assign this as an indicator column
@@ -150,7 +150,7 @@ namespace ZXing.PDF417.Internal
             }
 
          }
-         return (int) (averageRowHeight + 0.5);
+         //return (int) (averageRowHeight + 0.5);
       }
 
       /// <summary>
@@ -186,7 +186,7 @@ namespace ZXing.PDF417.Internal
       /// Adjusts the in omplete indicator column row numbers.
       /// </summary>
       /// <param name="metadata">Metadata.</param>
-      public int adjustIncompleteIndicatorColumnRowNumbers(BarcodeMetadata metadata)
+      private void adjustIncompleteIndicatorColumnRowNumbers(BarcodeMetadata metadata)
       {
          // TODO maybe we should add missing codewords to store the correct row number to make
          // finding row numbers for other columns easier
@@ -243,7 +243,7 @@ namespace ZXing.PDF417.Internal
             }
 
          }
-         return (int) (averageRowHeight + 0.5);
+         // return (int) (averageRowHeight + 0.5);
       }
 
       /// <summary>

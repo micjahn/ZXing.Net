@@ -71,7 +71,7 @@ namespace ZXing.PDF417.Test
          testPDF417BlackBoxCountingResults(true);
       }
 
-      private SummaryResults testPDF417BlackBoxCountingResults(bool assertOnFailure)
+      private void testPDF417BlackBoxCountingResults(bool assertOnFailure)
       {
          Assert.IsFalse(testResults.Count == 0);
 
@@ -190,7 +190,6 @@ namespace ZXing.PDF417.Test
                Assert.IsTrue(tryHarderCounts[x] >= testResult.TryHarderCount, "Try harder, " + label);
             }
          }
-         return new SummaryResults(totalFound, totalMustPass, totalTests);
       }
 
       private static PDF417ResultMetadata getMeta(Result result)

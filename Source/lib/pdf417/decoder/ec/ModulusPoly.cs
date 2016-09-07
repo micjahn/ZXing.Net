@@ -116,7 +116,6 @@ namespace ZXing.PDF417.Internal.EC
             // Just return the x^0 coefficient
             return getCoefficient(0);
          }
-         int size = coefficients.Length;
          int result = 0;
          if (a == 1)
          {
@@ -128,6 +127,7 @@ namespace ZXing.PDF417.Internal.EC
             return result;
          }
          result = coefficients[0];
+         int size = coefficients.Length;
          for (int i = 1; i < size; i++)
          {
             result = field.add(field.multiply(a, result), coefficients[i]);

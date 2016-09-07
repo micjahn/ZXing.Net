@@ -166,40 +166,5 @@ namespace ZXing.OneD.RSS
          }
          return val;
       }
-      /*
-      internal static int[] elements(int[] eDist, int N, int K)
-      {
-         int[] widths = new int[eDist.Length + 2];
-         int twoK = K << 1;
-         widths[0] = 1;
-         int i;
-         int minEven = 10;
-         int barSum = 1;
-         for (i = 1; i < twoK - 2; i += 2)
-         {
-            widths[i] = eDist[i - 1] - widths[i - 1];
-            widths[i + 1] = eDist[i] - widths[i];
-            barSum += widths[i] + widths[i + 1];
-            if (widths[i] < minEven)
-            {
-               minEven = widths[i];
-            }
-         }
-         widths[twoK - 1] = N - barSum;
-         if (widths[twoK - 1] < minEven)
-         {
-            minEven = widths[twoK - 1];
-         }
-         if (minEven > 1)
-         {
-            for (i = 0; i < twoK; i += 2)
-            {
-               widths[i] += minEven - 1;
-               widths[i + 1] -= minEven - 1;
-            }
-         }
-         return widths;
-      }
-      */
    }
 }

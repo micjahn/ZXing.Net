@@ -63,12 +63,12 @@ namespace ZXing.Datamatrix.Encoder
          return bits[row * numcols + col] == 1;
       }
 
-      public void setBit(int col, int row, bool bit)
+      private void setBit(int col, int row, bool bit)
       {
          bits[row * numcols + col] = (byte)(bit ? 1 : 0);
       }
 
-      public bool hasBit(int col, int row)
+      private bool hasBit(int col, int row)
       {
          return bits[row * numcols + col] < 2;
       }

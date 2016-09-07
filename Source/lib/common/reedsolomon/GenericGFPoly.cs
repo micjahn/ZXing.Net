@@ -125,7 +125,6 @@ namespace ZXing.Common.ReedSolomon
             // Just return the x^0 coefficient
             return getCoefficient(0);
          }
-         int size = coefficients.Length;
          if (a == 1)
          {
             // Just the sum of the coefficients
@@ -136,6 +135,7 @@ namespace ZXing.Common.ReedSolomon
             return result;
          }
          result = coefficients[0];
+         int size = coefficients.Length;
          for (int i = 1; i < size; i++)
          {
             result = GenericGF.addOrSubtract(field.multiply(a, result), coefficients[i]);
