@@ -71,24 +71,41 @@ namespace ZXing.Common
          int[] localBuckets = buckets;
          for (int x = 0; x < width; x++)
          {
-            int pixel = localLuminances[x] & 0xff;
-            localBuckets[pixel >> LUMINANCE_SHIFT]++;
+            localBuckets[(localLuminances[x] & 0xff) >> LUMINANCE_SHIFT]++;
          }
          int blackPoint;
          if (!estimateBlackPoint(localBuckets, out blackPoint))
             return null;
 
-         int left = localLuminances[0] & 0xff;
-         int center = localLuminances[1] & 0xff;
-         for (int x = 1; x < width - 1; x++)
+         if (width < 3)
          {
-            int right = localLuminances[x + 1] & 0xff;
-            // A simple -1 4 -1 box filter with a weight of 2.
-            int luminance = ((center << 2) - left - right) >> 1;
-            row[x] = (luminance < blackPoint);
-            left = center;
-            center = right;
+            // Special case for very small images
+            for (int x = 0; x < width; x++)
+            {
+               if ((localLuminances[x] & 0xff) < blackPoint)
+               {
+                  row[x] = true;
+               }
+            }
          }
+         else
+         {
+            int left = localLuminances[0] & 0xff;
+            int center = localLuminances[1] & 0xff;
+            for (int x = 1; x < width - 1; x++)
+            {
+               int right = localLuminances[x + 1] & 0xff;
+               // A simple -1 4 -1 box filter with a weight of 2.
+               // ((center << 2) - left - right) >> 1
+               if (((center * 4) - left - right) / 2 < blackPoint)
+               {
+                  row[x] = true;
+               }
+               left = center;
+               center = right;
+            }
+         }
+      
          return row;
       }
 
