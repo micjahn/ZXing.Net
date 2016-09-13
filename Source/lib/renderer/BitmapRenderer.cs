@@ -46,6 +46,12 @@ namespace ZXing.Rendering
       public Color Background { get; set; }
 
       /// <summary>
+      /// Gets or sets the resolution which should be used to create the bitmap
+      /// If nothing is set the current system settings are used
+      /// </summary>
+      public float? DPI { get; set; }
+
+      /// <summary>
       /// Gets or sets the text font.
       /// </summary>
       /// <value>
@@ -101,56 +107,72 @@ namespace ZXing.Rendering
                                                                  format == BarcodeFormat.UPC_E ||
                                                                  format == BarcodeFormat.MSI ||
                                                                  format == BarcodeFormat.PLESSEY);
-         int emptyArea = outputContent && matrix.Height > 16 ? 16 : 0;
-         int pixelsize = 1;
-
-         if (options != null)
-         {
-            if (options.Width > width)
-            {
-               width = options.Width;
-            }
-            if (options.Height > height)
-            {
-               height = options.Height;
-            }
-            // calculating the scaling factor
-            pixelsize = width/matrix.Width;
-            if (pixelsize > height/matrix.Height)
-            {
-               pixelsize = height/matrix.Height;
-            }
-         }
-
          // create the bitmap and lock the bits because we need the stride
          // which is the width of the image and possible padding bytes
          var bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
 #if !WindowsCE
-         bmp.SetResolution(96, 96);
+         if (DPI != null)
+            bmp.SetResolution(DPI.Value, DPI.Value);
 #endif
-         var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
-         try
+         using (var g = Graphics.FromImage(bmp))
          {
-            var pixels = new byte[bmpData.Stride*height];
-            var padding = bmpData.Stride - (3*width);
-            var index = 0;
-            var color = Background;
+            var currentDpi = g.DpiY;
+            var textAreaHeight = (int)(16 * currentDpi / 96.0);
+            var emptyArea = outputContent && matrix.Height > textAreaHeight ? textAreaHeight : 0;
+            var pixelsize = 1;
 
-            for (int y = 0; y < matrix.Height - emptyArea; y++)
+            if (options != null)
             {
-               for (var pixelsizeHeight = 0; pixelsizeHeight < pixelsize; pixelsizeHeight++)
+               if (options.Width > width)
                {
-                  for (var x = 0; x < matrix.Width; x++)
+                  width = options.Width;
+               }
+               if (options.Height > height)
+               {
+                  height = options.Height;
+               }
+               // calculating the scaling factor
+               pixelsize = width / matrix.Width;
+               if (pixelsize > height / matrix.Height)
+               {
+                  pixelsize = height / matrix.Height;
+               }
+            }
+
+            var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+            try
+            {
+               var pixels = new byte[bmpData.Stride * height];
+               var padding = bmpData.Stride - (3 * width);
+               var index = 0;
+               var color = Background;
+
+               for (int y = 0; y < matrix.Height - emptyArea; y++)
+               {
+                  for (var pixelsizeHeight = 0; pixelsizeHeight < pixelsize; pixelsizeHeight++)
                   {
-                     color = matrix[x, y] ? Foreground : Background;
-                     for (var pixelsizeWidth = 0; pixelsizeWidth < pixelsize; pixelsizeWidth++)
+                     for (var x = 0; x < matrix.Width; x++)
                      {
-                        pixels[index++] = color.B;
-                        pixels[index++] = color.G;
-                        pixels[index++] = color.R;
+                        color = matrix[x, y] ? Foreground : Background;
+                        for (var pixelsizeWidth = 0; pixelsizeWidth < pixelsize; pixelsizeWidth++)
+                        {
+                           pixels[index++] = color.B;
+                           pixels[index++] = color.G;
+                           pixels[index++] = color.R;
+                        }
                      }
+                     for (var x = pixelsize * matrix.Width; x < width; x++)
+                     {
+                        pixels[index++] = Background.B;
+                        pixels[index++] = Background.G;
+                        pixels[index++] = Background.R;
+                     }
+                     index += padding;
                   }
-                  for (var x = pixelsize * matrix.Width; x < width; x++)
+               }
+               for (int y = matrix.Height * pixelsize - emptyArea; y < height; y++)
+               {
+                  for (var x = 0; x < width; x++)
                   {
                      pixels[index++] = Background.B;
                      pixels[index++] = Background.G;
@@ -158,51 +180,38 @@ namespace ZXing.Rendering
                   }
                   index += padding;
                }
+
+               //Copy the data from the byte array into BitmapData.Scan0
+               Marshal.Copy(pixels, 0, bmpData.Scan0, pixels.Length);
             }
-            for (int y = matrix.Height * pixelsize - emptyArea; y < height; y++)
+            finally
             {
-               for (var x = 0; x < width; x++)
+               //Unlock the pixels
+               bmp.UnlockBits(bmpData);
+            }
+
+            if (outputContent)
+            {
+               switch (format)
                {
-                  pixels[index++] = Background.B;
-                  pixels[index++] = Background.G;
-                  pixels[index++] = Background.R;
+                  case BarcodeFormat.EAN_8:
+                     if (content.Length < 8)
+                        content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+                     content = content.Insert(4, "   ");
+                     break;
+                  case BarcodeFormat.EAN_13:
+                     if (content.Length < 13)
+                        content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+                     content = content.Insert(7, "   ");
+                     content = content.Insert(1, "   ");
+                     break;
                }
-               index += padding;
-            }
-
-            //Copy the data from the byte array into BitmapData.Scan0
-            Marshal.Copy(pixels, 0, bmpData.Scan0, pixels.Length);
-         }
-         finally
-         {
-            //Unlock the pixels
-            bmp.UnlockBits(bmpData);
-         }
-
-         if (outputContent)
-         {
-            switch (format)
-            {
-               case BarcodeFormat.EAN_8:
-                  if (content.Length < 8)
-                     content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-                  content = content.Insert(4, "   ");
-                  break;
-               case BarcodeFormat.EAN_13:
-                  if (content.Length < 13)
-                     content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-                  content = content.Insert(7, "   ");
-                  content = content.Insert(1, "   ");
-                  break;
-            }
-            var font = TextFont ?? DefaultTextFont;
-            using (var g = Graphics.FromImage(bmp))
-            {
-               var drawFormat = new StringFormat {Alignment = StringAlignment.Center};
+               var font = TextFont ?? DefaultTextFont;
+               var drawFormat = new StringFormat { Alignment = StringAlignment.Center };
 #if WindowsCE
-               g.DrawString(content, font, Black, width / 2, height - 14, drawFormat);
+               g.DrawString(content, font, Black, width / 2, height - emptyArea + 1, drawFormat);
 #else
-               g.DrawString(content, font, Brushes.Black, width/2, height - 14, drawFormat);
+               g.DrawString(content, font, Brushes.Black, width / 2, height - emptyArea + 1, drawFormat);
 #endif
             }
          }
