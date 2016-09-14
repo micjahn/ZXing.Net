@@ -29,10 +29,6 @@ namespace ZXing.Rendering
    /// </summary>
    public class BitmapRenderer : IBarcodeRenderer<Bitmap>
    {
-#if WindowsCE
-      private static Brush Black = new SolidBrush(Color.Black);
-#endif
-
       /// <summary>
       /// Gets or sets the foreground color.
       /// </summary>
@@ -45,11 +41,19 @@ namespace ZXing.Rendering
       /// <value>The background color.</value>
       public Color Background { get; set; }
 
+#if !WindowsCE
       /// <summary>
       /// Gets or sets the resolution which should be used to create the bitmap
       /// If nothing is set the current system settings are used
       /// </summary>
-      public float? DPI { get; set; }
+      public float? DpiX { get; set; }
+
+      /// <summary>
+      /// Gets or sets the resolution which should be used to create the bitmap
+      /// If nothing is set the current system settings are used
+      /// </summary>
+      public float? DpiY { get; set; }
+#endif
 
       /// <summary>
       /// Gets or sets the text font.
@@ -59,7 +63,7 @@ namespace ZXing.Rendering
       /// </value>
       public Font TextFont { get; set; }
 
-      private static readonly Font DefaultTextFont = new Font("Arial", 10, FontStyle.Regular);
+      private static readonly Font DefaultTextFont = new Font("e", 10, FontStyle.Regular);
 
       /// <summary>
       /// Initializes a new instance of the <see cref="BitmapRenderer"/> class.
@@ -93,9 +97,9 @@ namespace ZXing.Rendering
       /// <returns></returns>
       virtual public Bitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
       {
-         int width = matrix.Width;
-         int height = matrix.Height;
-         bool outputContent = (options == null || !options.PureBarcode) &&
+         var width = matrix.Width;
+         var height = matrix.Height;
+         var outputContent = (options == null || !options.PureBarcode) &&
                               !String.IsNullOrEmpty(content) && (format == BarcodeFormat.CODE_39 ||
                                                                  format == BarcodeFormat.CODE_93 ||
                                                                  format == BarcodeFormat.CODE_128 ||
@@ -107,37 +111,36 @@ namespace ZXing.Rendering
                                                                  format == BarcodeFormat.UPC_E ||
                                                                  format == BarcodeFormat.MSI ||
                                                                  format == BarcodeFormat.PLESSEY);
+         if (options != null)
+         {
+            if (options.Width > width)
+            {
+               width = options.Width;
+            }
+            if (options.Height > height)
+            {
+               height = options.Height;
+            }
+         }
+
+         // calculating the scaling factor
+         var pixelsizeWidth = width / matrix.Width;
+         var pixelsizeHeight = height / matrix.Height;
+
          // create the bitmap and lock the bits because we need the stride
          // which is the width of the image and possible padding bytes
          var bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
 #if !WindowsCE
-         if (DPI != null)
-            bmp.SetResolution(DPI.Value, DPI.Value);
+         var dpiX = DpiX ?? DpiY;
+         var dpiY = DpiY ?? DpiX;
+         if (dpiX != null)
+            bmp.SetResolution(dpiX.Value, dpiY.Value);
 #endif
          using (var g = Graphics.FromImage(bmp))
          {
-            var currentDpi = g.DpiY;
+            var currentDpi = g.DpiX;
             var textAreaHeight = (int)(16 * currentDpi / 96.0);
-            var emptyArea = outputContent && matrix.Height > textAreaHeight ? textAreaHeight : 0;
-            var pixelsize = 1;
-
-            if (options != null)
-            {
-               if (options.Width > width)
-               {
-                  width = options.Width;
-               }
-               if (options.Height > height)
-               {
-                  height = options.Height;
-               }
-               // calculating the scaling factor
-               pixelsize = width / matrix.Width;
-               if (pixelsize > height / matrix.Height)
-               {
-                  pixelsize = height / matrix.Height;
-               }
-            }
+            var emptyArea = outputContent && height > textAreaHeight ? textAreaHeight : 0;
 
             var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
             try
@@ -147,21 +150,26 @@ namespace ZXing.Rendering
                var index = 0;
                var color = Background;
 
-               for (int y = 0; y < matrix.Height - emptyArea; y++)
+               // going through the lines of the matrix
+               for (int y = 0; y < matrix.Height; y++)
                {
-                  for (var pixelsizeHeight = 0; pixelsizeHeight < pixelsize; pixelsizeHeight++)
+                  // stretching the line by the scaling factor
+                  for (var pixelsizeHeightProcessed = 0; pixelsizeHeightProcessed < pixelsizeHeight; pixelsizeHeightProcessed++)
                   {
+                     // going through the columns of the current line
                      for (var x = 0; x < matrix.Width; x++)
                      {
                         color = matrix[x, y] ? Foreground : Background;
-                        for (var pixelsizeWidth = 0; pixelsizeWidth < pixelsize; pixelsizeWidth++)
+                        // stretching the columns by the scaling factor
+                        for (var pixelsizeWidthProcessed = 0; pixelsizeWidthProcessed < pixelsizeWidth; pixelsizeWidthProcessed++)
                         {
                            pixels[index++] = color.B;
                            pixels[index++] = color.G;
                            pixels[index++] = color.R;
                         }
                      }
-                     for (var x = pixelsize * matrix.Width; x < width; x++)
+                     // fill up to the right if the barcode doesn't fully fit in 
+                     for (var x = pixelsizeWidth * matrix.Width; x < width; x++)
                      {
                         pixels[index++] = Background.B;
                         pixels[index++] = Background.G;
@@ -170,7 +178,8 @@ namespace ZXing.Rendering
                      index += padding;
                   }
                }
-               for (int y = matrix.Height * pixelsize - emptyArea; y < height; y++)
+               // fill up to the bottom if the barcode doesn't fully fit in 
+               for (var y = pixelsizeHeight * matrix.Height; y < height; y++)
                {
                   for (var x = 0; x < width; x++)
                   {
@@ -179,6 +188,21 @@ namespace ZXing.Rendering
                      pixels[index++] = Background.R;
                   }
                   index += padding;
+               }
+               // fill the bottom area with the background color if the content should be written below the barcode
+               if (emptyArea > 0)
+               {
+                  index = (width * 3 + padding) * (height - emptyArea);
+                  for (int y = height - emptyArea; y < height; y++)
+                  {
+                     for (var x = 0; x < width; x++)
+                     {
+                        pixels[index++] = Background.B;
+                        pixels[index++] = Background.G;
+                        pixels[index++] = Background.R;
+                     }
+                     index += padding;
+                  }
                }
 
                //Copy the data from the byte array into BitmapData.Scan0
@@ -190,7 +214,7 @@ namespace ZXing.Rendering
                bmp.UnlockBits(bmpData);
             }
 
-            if (outputContent)
+            if (emptyArea > 0)
             {
                switch (format)
                {
@@ -207,12 +231,9 @@ namespace ZXing.Rendering
                      break;
                }
                var font = TextFont ?? DefaultTextFont;
+               var brush = new SolidBrush(Foreground);
                var drawFormat = new StringFormat { Alignment = StringAlignment.Center };
-#if WindowsCE
-               g.DrawString(content, font, Black, width / 2, height - emptyArea + 1, drawFormat);
-#else
-               g.DrawString(content, font, Brushes.Black, width / 2, height - emptyArea + 1, drawFormat);
-#endif
+               g.DrawString(content, font, brush, pixelsizeWidth * matrix.Width / 2, height - emptyArea + 1, drawFormat);
             }
          }
 
