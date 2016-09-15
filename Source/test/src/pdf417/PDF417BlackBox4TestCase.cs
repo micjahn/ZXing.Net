@@ -119,7 +119,7 @@ namespace ZXing.PDF417.Test
                   {
                      results.AddRange(decode(bitmap, false));
                   }
-                  catch (ReaderException ignored)
+                  catch (ReaderException )
                   {
                      // ignore
                   }

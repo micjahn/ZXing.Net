@@ -64,7 +64,7 @@ namespace ZXing.Datamatrix.Test
             SymbolInfo.lookup(1559);
             throw new AssertionException("There's no rectangular symbol for more than 1558 data codewords");
          }
-         catch (ArgumentException iae)
+         catch (ArgumentException )
          {
             //expected
          }
@@ -73,7 +73,7 @@ namespace ZXing.Datamatrix.Test
             SymbolInfo.lookup(50, SymbolShapeHint.FORCE_RECTANGLE);
             throw new AssertionException("There's no rectangular symbol for 50 data codewords");
          }
-         catch (ArgumentException iae)
+         catch (ArgumentException )
          {
             //expected
          }

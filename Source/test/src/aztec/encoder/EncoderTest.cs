@@ -433,7 +433,7 @@ namespace ZXing.Aztec.Test
             Internal.Encoder.encode(alphabet, 25, 33);
             Assert.Fail("Encode should have failed.  No such thing as 33 layers");
          }
-         catch (ArgumentException expected)
+         catch (ArgumentException )
          {
          }
 
@@ -442,7 +442,7 @@ namespace ZXing.Aztec.Test
             Internal.Encoder.encode(alphabet, 25, -1);
             Assert.Fail("Encode should have failed.  Text can't fit in 1-layer compact");
          }
-         catch (ArgumentException expected)
+         catch (ArgumentException )
          {
          }
       }
@@ -461,7 +461,7 @@ namespace ZXing.Aztec.Test
             Internal.Encoder.encode(data, 0, -4);
             Assert.Fail("Encode should have failed.  Text can't fit in 1-layer compact");
          }
-         catch (ArgumentException expected)
+         catch (ArgumentException )
          {
          }
 

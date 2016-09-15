@@ -21,18 +21,12 @@ using ZXing.Common;
 
 namespace ZXing.OneD
 {
-/**
- * This object renders a CODE93 code as a BitMatrix
- */
-
+   /// <summary>
+   /// This object renders a CODE93 code as a BitMatrix
+   /// </summary>
    public class Code93Writer : OneDimensionalCodeWriter
    {
-
-      public BitMatrix encode(String contents,
-         BarcodeFormat format,
-         int width,
-         int height,
-         IDictionary<EncodeHintType, object> hints)
+      public override BitMatrix encode(String contents, BarcodeFormat format, int width, int height, IDictionary<EncodeHintType, object> hints)
       {
          if (format != BarcodeFormat.CODE_93)
          {
@@ -99,7 +93,7 @@ namespace ZXing.OneD
          }
       }
 
-      protected static int appendPattern(bool[] target, int pos, int[] pattern, bool startColor)
+      protected static new int appendPattern(bool[] target, int pos, int[] pattern, bool startColor)
       {
          foreach (var bit in pattern)
          {
