@@ -63,7 +63,20 @@ namespace ZXing.Rendering
       /// </value>
       public Font TextFont { get; set; }
 
-      private static readonly Font DefaultTextFont = new Font("e", 10, FontStyle.Regular);
+      private static readonly Font DefaultTextFont;
+
+      static BitmapRenderer()
+      {
+         try
+         {
+            DefaultTextFont = new Font("Arial", 10, FontStyle.Regular);
+         }
+         catch (Exception exc)
+         {
+            // have to ignore, no better idea
+            System.Diagnostics.Trace.TraceError("default text font (Arial, 10, regular) couldn't be loaded: {0}", exc.Message);
+         }
+      }
 
       /// <summary>
       /// Initializes a new instance of the <see cref="BitmapRenderer"/> class.
@@ -216,24 +229,27 @@ namespace ZXing.Rendering
 
             if (emptyArea > 0)
             {
-               switch (format)
-               {
-                  case BarcodeFormat.EAN_8:
-                     if (content.Length < 8)
-                        content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-                     content = content.Insert(4, "   ");
-                     break;
-                  case BarcodeFormat.EAN_13:
-                     if (content.Length < 13)
-                        content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-                     content = content.Insert(7, "   ");
-                     content = content.Insert(1, "   ");
-                     break;
-               }
                var font = TextFont ?? DefaultTextFont;
-               var brush = new SolidBrush(Foreground);
-               var drawFormat = new StringFormat { Alignment = StringAlignment.Center };
-               g.DrawString(content, font, brush, pixelsizeWidth * matrix.Width / 2, height - emptyArea + 1, drawFormat);
+               if (font != null)
+               {
+                  switch (format)
+                  {
+                     case BarcodeFormat.EAN_8:
+                        if (content.Length < 8)
+                           content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+                        content = content.Insert(4, "   ");
+                        break;
+                     case BarcodeFormat.EAN_13:
+                        if (content.Length < 13)
+                           content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+                        content = content.Insert(7, "   ");
+                        content = content.Insert(1, "   ");
+                        break;
+                  }
+                  var brush = new SolidBrush(Foreground);
+                  var drawFormat = new StringFormat { Alignment = StringAlignment.Center };
+                  g.DrawString(content, font, brush, pixelsizeWidth * matrix.Width / 2, height - emptyArea + 1, drawFormat);
+               }
             }
          }
 
