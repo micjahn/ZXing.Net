@@ -112,18 +112,23 @@ namespace ZXing.Rendering
       {
          var width = matrix.Width;
          var height = matrix.Height;
-         var outputContent = (options == null || !options.PureBarcode) &&
-                              !String.IsNullOrEmpty(content) && (format == BarcodeFormat.CODE_39 ||
-                                                                 format == BarcodeFormat.CODE_93 ||
-                                                                 format == BarcodeFormat.CODE_128 ||
-                                                                 format == BarcodeFormat.EAN_13 ||
-                                                                 format == BarcodeFormat.EAN_8 ||
-                                                                 format == BarcodeFormat.CODABAR ||
-                                                                 format == BarcodeFormat.ITF ||
-                                                                 format == BarcodeFormat.UPC_A ||
-                                                                 format == BarcodeFormat.UPC_E ||
-                                                                 format == BarcodeFormat.MSI ||
-                                                                 format == BarcodeFormat.PLESSEY);
+         var font = TextFont ?? DefaultTextFont;
+         var emptyArea = 0;
+         var outputContent = font != null &&
+                             (options == null || !options.PureBarcode) &&
+                             !String.IsNullOrEmpty(content) &&
+                             (format == BarcodeFormat.CODE_39 ||
+                              format == BarcodeFormat.CODE_93 ||
+                              format == BarcodeFormat.CODE_128 ||
+                              format == BarcodeFormat.EAN_13 ||
+                              format == BarcodeFormat.EAN_8 ||
+                              format == BarcodeFormat.CODABAR ||
+                              format == BarcodeFormat.ITF ||
+                              format == BarcodeFormat.UPC_A ||
+                              format == BarcodeFormat.UPC_E ||
+                              format == BarcodeFormat.MSI ||
+                              format == BarcodeFormat.PLESSEY);
+
          if (options != null)
          {
             if (options.Width > width)
@@ -151,10 +156,6 @@ namespace ZXing.Rendering
 #endif
          using (var g = Graphics.FromImage(bmp))
          {
-            var currentDpi = g.DpiX;
-            var textAreaHeight = (int)(16 * currentDpi / 96.0);
-            var emptyArea = outputContent && height > textAreaHeight ? textAreaHeight : 0;
-
             var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
             try
             {
@@ -203,18 +204,25 @@ namespace ZXing.Rendering
                   index += padding;
                }
                // fill the bottom area with the background color if the content should be written below the barcode
-               if (emptyArea > 0)
+               if (outputContent)
                {
-                  index = (width * 3 + padding) * (height - emptyArea);
-                  for (int y = height - emptyArea; y < height; y++)
+                  var textAreaHeight = font.Height;
+                  
+                  emptyArea = height + 10 > textAreaHeight ? textAreaHeight : 0;
+
+                  if (emptyArea > 0)
                   {
-                     for (var x = 0; x < width; x++)
+                     index = (width * 3 + padding) * (height - emptyArea);
+                     for (int y = height - emptyArea; y < height; y++)
                      {
-                        pixels[index++] = Background.B;
-                        pixels[index++] = Background.G;
-                        pixels[index++] = Background.R;
+                        for (var x = 0; x < width; x++)
+                        {
+                           pixels[index++] = Background.B;
+                           pixels[index++] = Background.G;
+                           pixels[index++] = Background.R;
+                        }
+                        index += padding;
                      }
-                     index += padding;
                   }
                }
 
@@ -227,29 +235,26 @@ namespace ZXing.Rendering
                bmp.UnlockBits(bmpData);
             }
 
+            // output content text below the barcode
             if (emptyArea > 0)
             {
-               var font = TextFont ?? DefaultTextFont;
-               if (font != null)
+               switch (format)
                {
-                  switch (format)
-                  {
-                     case BarcodeFormat.EAN_8:
-                        if (content.Length < 8)
-                           content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-                        content = content.Insert(4, "   ");
-                        break;
-                     case BarcodeFormat.EAN_13:
-                        if (content.Length < 13)
-                           content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-                        content = content.Insert(7, "   ");
-                        content = content.Insert(1, "   ");
-                        break;
-                  }
-                  var brush = new SolidBrush(Foreground);
-                  var drawFormat = new StringFormat { Alignment = StringAlignment.Center };
-                  g.DrawString(content, font, brush, pixelsizeWidth * matrix.Width / 2, height - emptyArea + 1, drawFormat);
+                  case BarcodeFormat.EAN_8:
+                     if (content.Length < 8)
+                        content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+                     content = content.Insert(4, "   ");
+                     break;
+                  case BarcodeFormat.EAN_13:
+                     if (content.Length < 13)
+                        content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+                     content = content.Insert(7, "   ");
+                     content = content.Insert(1, "   ");
+                     break;
                }
+               var brush = new SolidBrush(Foreground);
+               var drawFormat = new StringFormat { Alignment = StringAlignment.Center };
+               g.DrawString(content, font, brush, pixelsizeWidth * matrix.Width / 2, height - emptyArea, drawFormat);
             }
          }
 
