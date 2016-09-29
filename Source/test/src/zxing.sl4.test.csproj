@@ -90,7 +90,6 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AllPositiveBlackBoxTester.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -118,7 +117,6 @@
     <Compile Include="common\PerspectiveTransformTestCase.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonTestCase.cs" />
     <Compile Include="common\StringUtilsTestCase.cs" />
-    <Compile Include="common\SummaryResults.cs" />
     <Compile Include="common\TestResult.cs" />
     <Compile Include="datamatrix\DataMatrixBlackBox1TestCase.cs" />
     <Compile Include="datamatrix\DataMatrixBlackBox2TestCase.cs" />
