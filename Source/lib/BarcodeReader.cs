@@ -60,6 +60,7 @@ namespace ZXing
       private static readonly Func<Bitmap, LuminanceSource> defaultCreateLuminanceSource =
          (bitmap) => new BitmapLuminanceSource(bitmap);
 #else
+   [System.CLSCompliant(false)]
    public class BarcodeReader : BarcodeReaderGeneric<Color32[]>, IBarcodeReader, IMultipleBarcodeReader
    {
       private static readonly Func<Color32[], int, int, LuminanceSource> defaultCreateLuminanceSource =

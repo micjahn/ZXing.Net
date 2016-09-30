@@ -38,6 +38,9 @@ namespace ZXing
    /// <summary>
    /// Interface for a smart class to decode multiple barcodes inside a bitmap object
    /// </summary>
+#if UNITY
+   [System.CLSCompliant(false)]
+#endif
    public interface IMultipleBarcodeReader
    {
       /// <summary>
@@ -140,6 +143,7 @@ namespace ZXing
       /// </summary>
       /// <param name="rawColor32">The image as Color32 array.</param>
       /// <returns>the result data or null</returns>
+      [System.CLSCompliant(false)]
       Result[] DecodeMultiple(Color32[] rawColor32, int width, int height);
 #endif
 #else

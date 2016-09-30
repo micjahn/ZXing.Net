@@ -40,7 +40,6 @@ using System.IO;
 using NUnit.Framework;
 using ZXing.Client.Result;
 using ZXing.Common;
-using ZXing.Test;
 
 namespace ZXing.OneD.RSS.Expanded.Test
 {

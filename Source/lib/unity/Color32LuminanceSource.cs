@@ -39,6 +39,7 @@ namespace ZXing
       /// <param name="color32s">The color32s.</param>
       /// <param name="width">The width.</param>
       /// <param name="height">The height.</param>
+      [System.CLSCompliant(false)]
       public Color32LuminanceSource(Color32[] color32s, int width, int height)
          : base(width, height)
       {
@@ -49,6 +50,7 @@ namespace ZXing
       /// Sets the pixels.
       /// </summary>
       /// <param name="color32s">The color32s.</param>
+      [System.CLSCompliant(false)]
       public void SetPixels(Color32[] color32s)
       {
          var z = 0;

@@ -32,6 +32,7 @@ namespace ZXing
       /// <value>
       /// The foreground color.
       /// </value>
+      [System.CLSCompliant(false)]
       public Color32 Foreground { get; set; }
       /// <summary>
       /// Gets or sets the background color.
@@ -39,6 +40,7 @@ namespace ZXing
       /// <value>
       /// The background color.
       /// </value>
+      [System.CLSCompliant(false)]
       public Color32 Background { get; set; }
 
       /// <summary>
@@ -57,6 +59,7 @@ namespace ZXing
       /// <param name="format">The format.</param>
       /// <param name="content">The content.</param>
       /// <returns></returns>
+      [System.CLSCompliant(false)]
       public Color32[] Render(BitMatrix matrix, BarcodeFormat format, string content)
       {
          return Render(matrix, format, content, null);
@@ -70,6 +73,7 @@ namespace ZXing
       /// <param name="content">The content.</param>
       /// <param name="options">The options.</param>
       /// <returns></returns>
+      [System.CLSCompliant(false)]
       public Color32[] Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
       {
          var result = new Color32[matrix.Width * matrix.Height];

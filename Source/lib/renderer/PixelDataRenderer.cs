@@ -70,6 +70,7 @@ namespace ZXing.Rendering
       /// <value>
       /// The foreground color.
       /// </value>
+      [System.CLSCompliant(false)]
       public Color Foreground { get; set; }
       /// <summary>
       /// Gets or sets the background color.
@@ -77,6 +78,7 @@ namespace ZXing.Rendering
       /// <value>
       /// The background color.
       /// </value>
+      [System.CLSCompliant(false)]
       public Color Background { get; set; }
 
       /// <summary>

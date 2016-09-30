@@ -24,7 +24,6 @@ using System.Drawing;
 using System.Windows.Media.Imaging;
 #endif
 using NUnit.Framework;
-using ZXing.Test;
 
 namespace ZXing.Common.Test
 {

@@ -68,9 +68,10 @@ namespace ZXing.Datamatrix
                }
                else
                {
-                  SymbolShapeHint requestedShapeEnum;
-                  if (Enum.TryParse(requestedShape.ToString(), out requestedShapeEnum))
-                     shape = requestedShapeEnum;
+                  if (Enum.IsDefined(typeof(SymbolShapeHint), requestedShape.ToString()))
+                  {
+                     shape = (SymbolShapeHint)Enum.Parse(typeof(SymbolShapeHint), requestedShape.ToString(), true);
+                  } 
                }
             }
             var requestedMinSize = hints.ContainsKey(EncodeHintType.MIN_SIZE) ? hints[EncodeHintType.MIN_SIZE] as Dimension : null;

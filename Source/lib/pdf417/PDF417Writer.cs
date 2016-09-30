@@ -71,9 +71,11 @@ namespace ZXing.PDF417
             }
             if (hints.ContainsKey(EncodeHintType.PDF417_COMPACTION) && hints[EncodeHintType.PDF417_COMPACTION] != null)
             {
-               Compaction compactionEnum;
-               if (Enum.TryParse(hints[EncodeHintType.PDF417_COMPACTION].ToString(), out compactionEnum))
+               if (Enum.IsDefined(typeof(Compaction), hints[EncodeHintType.PDF417_COMPACTION].ToString()))
+               {
+                  var compactionEnum = (Compaction)Enum.Parse(typeof(Compaction), hints[EncodeHintType.PDF417_COMPACTION].ToString(), true);
                   encoder.setCompaction(compactionEnum);
+               }
             }
             if (hints.ContainsKey(EncodeHintType.PDF417_DIMENSIONS))
             {
@@ -97,9 +99,11 @@ namespace ZXing.PDF417
                }
                else
                {
-                  PDF417ErrorCorrectionLevel errorCorrectionLevelEnum;
-                  if (Enum.TryParse(value.ToString(), out errorCorrectionLevelEnum))
+                  if (Enum.IsDefined(typeof(PDF417ErrorCorrectionLevel), value.ToString()))
+                  {
+                     var errorCorrectionLevelEnum = (PDF417ErrorCorrectionLevel)Enum.Parse(typeof(PDF417ErrorCorrectionLevel), value.ToString(), true);
                      errorCorrectionLevel = (int)errorCorrectionLevelEnum;
+                  }
                }
             }
             if (hints.ContainsKey(EncodeHintType.CHARACTER_SET))

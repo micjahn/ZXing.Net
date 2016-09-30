@@ -75,12 +75,14 @@ namespace ZXing.Rendering
       /// Gets or sets the foreground color.
       /// </summary>
       /// <value>The foreground color.</value>
+      [System.CLSCompliant(false)]
       public Color32 Foreground { get; set; }
 
       /// <summary>
       /// Gets or sets the background color.
       /// </summary>
       /// <value>The background color.</value>
+      [System.CLSCompliant(false)]
       public Color32 Background { get; set; }
 #endif
 
@@ -93,7 +95,7 @@ namespace ZXing.Rendering
          Foreground = Colors.Black;
          Background = Colors.White;
 #elif UNITY
-         Foreground = new Color(0, 0, 0, 255);
+         Foreground = new Color32(0, 0, 0, 255);
          Background = new Color32(255, 255, 255, 255);
 #else
          Foreground = Color.Black;

@@ -29,6 +29,9 @@ namespace ZXing
    /// <summary>
    /// Interface for a smart class to encode some content into a barcode
    /// </summary>
+#if UNITY
+   [System.CLSCompliant(false)]
+#endif
    public interface IBarcodeWriter
    {
       /// <summary>
@@ -64,10 +67,12 @@ namespace ZXing
       /// <summary>
       /// Creates a visual representation of the contents
       /// </summary>
+      [System.CLSCompliant(false)]
       UnityEngine.Color32[] Write(string contents);
       /// <summary>
       /// Returns a rendered instance of the barcode which is given by a BitMatrix.
       /// </summary>
+      [System.CLSCompliant(false)]
       UnityEngine.Color32[] Write(BitMatrix matrix);
 #endif
 
