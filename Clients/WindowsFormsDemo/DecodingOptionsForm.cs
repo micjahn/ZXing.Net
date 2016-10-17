@@ -65,6 +65,10 @@ namespace WindowsFormsDemo
          chkTryHarder.Checked = reader.Options.TryHarder;
          chkAutoRotate.Checked = reader.AutoRotate;
          chkPureBarcode.Checked = reader.Options.PureBarcode;
+
+         chkCode39CheckDigit.Checked = reader.Options.AssumeCode39CheckDigit;
+         chkCode39ExtendedMode.Checked = reader.Options.UseCode39ExtendedMode;
+         chkCode39ExtendedModeRelaxed.Checked = reader.Options.UseCode39RelaxedExtendedMode;
       }
 
       private void btnOk_Click(object sender, EventArgs e)
@@ -73,6 +77,11 @@ namespace WindowsFormsDemo
          reader.Options.TryHarder = chkTryHarder.Checked;
          reader.AutoRotate = chkAutoRotate.Checked;
          reader.Options.PureBarcode = chkPureBarcode.Checked;
+
+         reader.Options.AssumeCode39CheckDigit = chkCode39CheckDigit.Checked;
+         reader.Options.UseCode39ExtendedMode = chkCode39ExtendedMode.Checked;
+         reader.Options.UseCode39RelaxedExtendedMode = chkCode39ExtendedModeRelaxed.Checked;
+
          reader.Options.PossibleFormats = new List<BarcodeFormat>();
 
          foreach (DataGridViewRow row in dataGridViewBarcodeFormats.Rows)

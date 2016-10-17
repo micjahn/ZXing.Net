@@ -169,17 +169,8 @@ namespace ZXing.Common
          }
          set
          {
-            if (value)
-            {
-               Hints[DecodeHintType.USE_CODE_39_EXTENDED_MODE] = true;
-            }
-            else
-            {
-               if (Hints.ContainsKey(DecodeHintType.USE_CODE_39_EXTENDED_MODE))
-               {
-                  Hints.Remove(DecodeHintType.USE_CODE_39_EXTENDED_MODE);
-               }
-            }
+            // don't remove the hint. Otherwise it would not be possible to override the default behaviour of the Code39 reader
+            Hints[DecodeHintType.USE_CODE_39_EXTENDED_MODE] = value;
          }
       }
 
@@ -206,6 +197,36 @@ namespace ZXing.Common
                if (Hints.ContainsKey(DecodeHintType.RELAXED_CODE_39_EXTENDED_MODE))
                {
                   Hints.Remove(DecodeHintType.RELAXED_CODE_39_EXTENDED_MODE);
+               }
+            }
+         }
+      }
+
+      /// <summary>
+      /// Assume Code 39 codes employ a check digit. Maps to <see cref="bool" />.
+      /// </summary>
+      /// <value>
+      ///   <c>true</c> if it should assume a Code 39 check digit; otherwise, <c>false</c>.
+      /// </value>
+      public bool AssumeCode39CheckDigit
+      {
+         get
+         {
+            if (Hints.ContainsKey(DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT))
+               return (bool)Hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT];
+            return false;
+         }
+         set
+         {
+            if (value)
+            {
+               Hints[DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT] = true;
+            }
+            else
+            {
+               if (Hints.ContainsKey(DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT))
+               {
+                  Hints.Remove(DecodeHintType.ASSUME_CODE_39_CHECK_DIGIT);
                }
             }
          }
