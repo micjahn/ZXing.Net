@@ -1,0 +1,5 @@
+Source code repository of ZXing.Net is synced from codeplex to github with the following commands:
+
+git-tfs clone --authors=CodeplexGithubAuthorsMigration https://tfs.codeplex.com/tfs/TFS05/ $/ZXingNet/trunk
+git remote add origin https://github.com/micjahn/ZXing.Net.git
+git push --all origin
