@@ -9,6 +9,8 @@
     <xs:complexType name="dependency">
         <xs:attribute name="id" type="xs:string" use="required" />
         <xs:attribute name="version" type="xs:string" use="optional" />
+        <xs:attribute name="include" type="xs:string" use="optional" />
+        <xs:attribute name="exclude" type="xs:string" use="optional" />
     </xs:complexType>
 
     <xs:complexType name="dependencyGroup">
@@ -21,6 +23,14 @@
 
     <xs:complexType name="reference">
         <xs:attribute name="file" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="contentFileEntries">
+      <xs:attribute name="include" type="xs:string" use="required" />
+      <xs:attribute name="exclude" type="xs:string" use="optional" />
+      <xs:attribute name="buildAction" type="xs:string" use="optional" />
+      <xs:attribute name="copyToOutput" type="xs:boolean" use="optional" />
+      <xs:attribute name="flatten" type="xs:boolean" use="optional" />
     </xs:complexType>
 
     <xs:complexType name="referenceGroup">
@@ -46,12 +56,32 @@
                             <xs:element name="projectUrl" maxOccurs="1" minOccurs="0" type="xs:anyURI" />
                             <xs:element name="iconUrl" maxOccurs="1" minOccurs="0" type="xs:anyURI" />
                             <xs:element name="requireLicenseAcceptance" maxOccurs="1" minOccurs="0" type="xs:boolean" />
+                            <xs:element name="developmentDependency" maxOccurs="1" minOccurs="0" type="xs:boolean" />
                             <xs:element name="description" maxOccurs="1" minOccurs="1" type="xs:string" />
                             <xs:element name="summary" maxOccurs="1" minOccurs="0" type="xs:string" />
                             <xs:element name="releaseNotes" maxOccurs="1" minOccurs="0" type="xs:string" />
                             <xs:element name="copyright" maxOccurs="1" minOccurs="0" type="xs:string" />
                             <xs:element name="language" maxOccurs="1" minOccurs="0" type="xs:string" default="en-US" />
                             <xs:element name="tags" maxOccurs="1" minOccurs="0" type="xs:string" />
+                            <xs:element name="serviceable" maxOccurs="1" minOccurs="0" type="xs:boolean" />
+                            <xs:element name="repository" maxOccurs="1" minOccurs="0">
+                              <xs:complexType>
+                                <xs:attribute name="type" type="xs:string" use="optional" />
+                                <xs:attribute name="url" type="xs:anyURI" use="optional" />
+                              </xs:complexType>
+                            </xs:element>
+                            <xs:element name="packageTypes" maxOccurs="1" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="packageType" maxOccurs="unbounded" minOccurs="0">
+                                            <xs:complexType>
+                                                <xs:attribute name="name" type="xs:string" use="required" />
+                                                <xs:attribute name="version" type="xs:string" use="optional" />
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
                             <xs:element name="dependencies" maxOccurs="1" minOccurs="0">
                                 <xs:complexType>
                                     <xs:sequence>
@@ -84,6 +114,15 @@
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
+                          <xs:element name="contentFiles" maxOccurs="1" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                                  <xs:element name="files" type="contentFileEntries" />
+                                </xs:choice>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
                         </xs:all>
                         <xs:attribute name="minClientVersion" use="optional" type="xs:string" />
                     </xs:complexType>
