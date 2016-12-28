@@ -235,11 +235,14 @@ namespace ZXing.OneD.RSS
 
          if (outsideChar)
          {
-            recordPatternInReverse(row, pattern.StartEnd[0], counters);
+            if (!recordPatternInReverse(row, pattern.StartEnd[0], counters))
+               return null;
          }
          else
          {
-            recordPattern(row, pattern.StartEnd[1] + 1, counters);
+            if (!recordPattern(row, pattern.StartEnd[1] + 1, counters))
+               return null;
+            
             // reverse it
             for (int i = 0, j = counters.Length - 1; i < j; i++, j--)
             {
