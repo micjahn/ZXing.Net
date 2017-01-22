@@ -81,36 +81,37 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "zxing.portable.doc", "Sourc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.kinect", "Source\lib\zxing.kinect.csproj", "{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCVDemo", "Clients\OpenCVDemo\OpenCVDemo.csproj", "{8E24C71F-308A-43B7-9CC4-CBB561913310}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 24
+		SccNumberOfProjects = 25
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs05
-		SccProjectUniqueName0 = Source\\lib\\zxing.csproj
-		SccProjectName0 = Source/lib
-		SccLocalPath0 = Source\\lib
-		SccProjectUniqueName1 = Source\\test\\src\\zxing.test.csproj
-		SccProjectName1 = Source/test/src
-		SccLocalPath1 = Source\\test\\src
-		SccProjectUniqueName2 = Clients\\WindowsFormsDemo\\WindowsFormsDemo.csproj
-		SccProjectTopLevelParentUniqueName2 = zxing.sln
-		SccProjectName2 = Clients/WindowsFormsDemo
-		SccLocalPath2 = Clients\\WindowsFormsDemo
-		SccProjectUniqueName3 = Source\\test\\src\\zxing.sl4.test.csproj
-		SccProjectName3 = ../../Svn
-		SccAuxPath3 = Svn
-		SccLocalPath3 = Source\\test\\src
-		SccProjectUniqueName4 = Source\\lib\\zxing.sl5.csproj
-		SccProjectName4 = Source/lib
-		SccLocalPath4 = Source\\lib
-		SccProjectUniqueName5 = Clients\\SilverlightDemo\\SilverlightDemo.csproj
-		SccProjectTopLevelParentUniqueName5 = zxing.sln
-		SccProjectName5 = Clients/SilverlightDemo
-		SccLocalPath5 = Clients\\SilverlightDemo
-		SccProjectUniqueName6 = Source\\lib\\zxing.presentation.csproj
-		SccProjectName6 = Source/lib
-		SccLocalPath6 = Source\\lib
-		SccLocalPath7 = .
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Source\\lib\\zxing.csproj
+		SccProjectName1 = Source/lib
+		SccLocalPath1 = Source\\lib
+		SccProjectUniqueName2 = Source\\test\\src\\zxing.test.csproj
+		SccProjectName2 = Source/test/src
+		SccLocalPath2 = Source\\test\\src
+		SccProjectUniqueName3 = Clients\\WindowsFormsDemo\\WindowsFormsDemo.csproj
+		SccProjectTopLevelParentUniqueName3 = zxing.sln
+		SccProjectName3 = Clients/WindowsFormsDemo
+		SccLocalPath3 = Clients\\WindowsFormsDemo
+		SccProjectUniqueName4 = Source\\test\\src\\zxing.sl4.test.csproj
+		SccProjectName4 = Source/test/src
+		SccLocalPath4 = Source\\test\\src
+		SccProjectUniqueName5 = Source\\lib\\zxing.sl5.csproj
+		SccProjectName5 = Source/lib
+		SccLocalPath5 = Source\\lib
+		SccProjectUniqueName6 = Clients\\SilverlightDemo\\SilverlightDemo.csproj
+		SccProjectTopLevelParentUniqueName6 = zxing.sln
+		SccProjectName6 = Clients/SilverlightDemo
+		SccLocalPath6 = Clients\\SilverlightDemo
+		SccProjectUniqueName7 = Source\\lib\\zxing.presentation.csproj
+		SccProjectName7 = Source/lib
+		SccLocalPath7 = Source\\lib
 		SccProjectUniqueName8 = Clients\\AForgeDemo\\AForgeDemo.csproj
 		SccProjectTopLevelParentUniqueName8 = zxing.sln
 		SccProjectName8 = Clients/AForgeDemo
@@ -167,6 +168,10 @@ Global
 		SccProjectUniqueName23 = Source\\lib\\zxing.wp7.1.csproj
 		SccProjectName23 = Source/lib
 		SccLocalPath23 = Source\\lib
+		SccProjectUniqueName24 = Clients\\OpenCVDemo\\OpenCVDemo.csproj
+		SccProjectTopLevelParentUniqueName24 = zxing.sln
+		SccProjectName24 = Clients/OpenCVDemo
+		SccLocalPath24 = Clients\\OpenCVDemo
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -633,6 +638,21 @@ Global
 		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}.Release|x86.ActiveCfg = Release|Any CPU
+		{8E24C71F-308A-43B7-9CC4-CBB561913310}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{8E24C71F-308A-43B7-9CC4-CBB561913310}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{8E24C71F-308A-43B7-9CC4-CBB561913310}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{8E24C71F-308A-43B7-9CC4-CBB561913310}.Debug|x86.ActiveCfg = Debug|x86
+		{8E24C71F-308A-43B7-9CC4-CBB561913310}.Debug|x86.Build.0 = Debug|x86
+		{8E24C71F-308A-43B7-9CC4-CBB561913310}.Release with Documentation|Any CPU.ActiveCfg = Release|x86
+		{8E24C71F-308A-43B7-9CC4-CBB561913310}.Release with Documentation|Mixed Platforms.ActiveCfg = Release|x86
+		{8E24C71F-308A-43B7-9CC4-CBB561913310}.Release with Documentation|Mixed Platforms.Build.0 = Release|x86
+		{8E24C71F-308A-43B7-9CC4-CBB561913310}.Release with Documentation|x86.ActiveCfg = Release|x86
+		{8E24C71F-308A-43B7-9CC4-CBB561913310}.Release with Documentation|x86.Build.0 = Release|x86
+		{8E24C71F-308A-43B7-9CC4-CBB561913310}.Release|Any CPU.ActiveCfg = Release|x86
+		{8E24C71F-308A-43B7-9CC4-CBB561913310}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{8E24C71F-308A-43B7-9CC4-CBB561913310}.Release|Mixed Platforms.Build.0 = Release|x86
+		{8E24C71F-308A-43B7-9CC4-CBB561913310}.Release|x86.ActiveCfg = Release|x86
+		{8E24C71F-308A-43B7-9CC4-CBB561913310}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -646,6 +666,7 @@ Global
 		{4FE53DF1-45BB-4443-A1AE-B41D3B4D5FF1} = {DE3B6078-DB3E-4A14-9AD6-5CC97E4A67ED}
 		{02B5CDF3-298C-4558-B553-30DDE7CFC2B9} = {DE3B6078-DB3E-4A14-9AD6-5CC97E4A67ED}
 		{AF488075-40E9-48B1-8C5B-2FC5356C9233} = {DE3B6078-DB3E-4A14-9AD6-5CC97E4A67ED}
+		{8E24C71F-308A-43B7-9CC4-CBB561913310} = {DE3B6078-DB3E-4A14-9AD6-5CC97E4A67ED}
 		{7B604F37-11C5-499F-9CE2-943BAFB60552} = {4A65D793-76EE-4B99-AA5C-F3208C11EE33}
 		{F37668D8-6423-4019-90D9-3DA81EEC6A1A} = {4A65D793-76EE-4B99-AA5C-F3208C11EE33}
 	EndGlobalSection
