@@ -67,6 +67,36 @@ namespace ZXing.Common.Test
       }
 
       [Test]
+      public void testEnclosing()
+      {
+         BitMatrix matrix = new BitMatrix(5);
+         Assert.IsNull(matrix.getEnclosingRectangle());
+         matrix.setRegion(1, 1, 1, 1);
+         Assert.AreEqual(new int[] {1, 1, 1, 1}, matrix.getEnclosingRectangle());
+         matrix.setRegion(1, 1, 3, 2);
+         Assert.AreEqual(new int[] { 1, 1, 3, 2 }, matrix.getEnclosingRectangle());
+         matrix.setRegion(0, 0, 5, 5);
+         Assert.AreEqual(new int[] { 0, 0, 5, 5 }, matrix.getEnclosingRectangle());
+      }
+
+      [Test]
+      public void testOnBit()
+      {
+         BitMatrix matrix = new BitMatrix(5);
+         Assert.IsNull(matrix.getTopLeftOnBit());
+         Assert.IsNull(matrix.getBottomRightOnBit());
+         matrix.setRegion(1, 1, 1, 1);
+         Assert.AreEqual(new int[] { 1, 1 }, matrix.getTopLeftOnBit());
+         Assert.AreEqual(new int[] { 1, 1 }, matrix.getBottomRightOnBit());
+         matrix.setRegion(1, 1, 3, 2);
+         Assert.AreEqual(new int[] { 1, 1 }, matrix.getTopLeftOnBit());
+         Assert.AreEqual(new int[] { 3, 2 }, matrix.getBottomRightOnBit());
+         matrix.setRegion(0, 0, 5, 5);
+         Assert.AreEqual(new int[] { 0, 0 }, matrix.getTopLeftOnBit());
+         Assert.AreEqual(new int[] { 4, 4 }, matrix.getBottomRightOnBit());
+      }
+
+      [Test]
       public void testRectangularMatrix()
       {
          var matrix = new BitMatrix(75, 20);

@@ -165,6 +165,19 @@ namespace ZXing.Common.Test
       }
 
       [Test]
+      public void testSetRange()
+      {
+         BitArray array = new BitArray(64);
+         array.setRange(28, 36);
+         Assert.IsFalse(array[27]);
+         for (int i = 28; i < 36; i++)
+         {
+            Assert.IsTrue(array[i]);
+         }
+         Assert.IsFalse(array[36]);
+      }
+
+      [Test]
       public void testClear()
       {
          BitArray array = new BitArray(32);
@@ -177,6 +190,17 @@ namespace ZXing.Common.Test
          {
             Assert.IsFalse(array[i]);
          }
+      }
+
+      [Test]
+      public void testFlip()
+      {
+         BitArray array = new BitArray(32);
+         Assert.IsFalse(array[5]);
+         array.flip(5);
+         Assert.IsTrue(array[5]);
+         array.flip(5);
+         Assert.IsFalse(array[5]);
       }
 
       [Test]
@@ -213,6 +237,31 @@ namespace ZXing.Common.Test
          }
          Assert.IsTrue(array.isRange(0, 64, true));
          Assert.IsFalse(array.isRange(0, 64, false));
+      }
+
+      [Test]
+      public void testClone()
+      {
+         BitArray array = new BitArray(32);
+         var clone = (BitArray) array.Clone();
+         clone[0] = true;
+         Assert.IsFalse(array[0]);
+      }
+
+      [Test]
+      public void testEquals()
+      {
+         BitArray a = new BitArray(32);
+         BitArray b = new BitArray(32);
+         Assert.AreEqual(a, b);
+         Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
+         Assert.AreNotEqual(a, new BitArray(31));
+         a[16] = true;
+         Assert.AreNotEqual(a, new BitArray(31));
+         Assert.AreNotEqual(a.GetHashCode(), b.GetHashCode());
+         b[16] = true;
+         Assert.AreEqual(a, b);
+         Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
       }
 
 #if !SILVERLIGHT

@@ -284,6 +284,7 @@ namespace ZXing.PDF417.Internal.EC
          return new ModulusPoly(field, product);
       }
 
+      /*
       /// <summary>
       /// Divide by another modulus
       /// </summary>
@@ -317,6 +318,7 @@ namespace ZXing.PDF417.Internal.EC
 
          return new ModulusPoly[] { quotient, remainder };
       }
+      */
 
       /// <summary>
       /// Returns a <see cref="System.String"/> that represents the current <see cref="ZXing.PDF417.Internal.EC.ModulusPoly"/>.

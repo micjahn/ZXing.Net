@@ -438,7 +438,7 @@ namespace ZXing.Common
             return null;
          }
 
-         return new[] { left, top, right - left, bottom - top };
+         return new[] { left, top, right - left + 1, bottom - top + 1 };
       }
 
       /// <summary>

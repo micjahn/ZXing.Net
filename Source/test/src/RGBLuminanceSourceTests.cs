@@ -49,6 +49,53 @@ namespace ZXing.Test
             cropSamplePicRelResult = reader.ReadToEnd();
       }
 
+      private static readonly RGBLuminanceSource SOURCE = new RGBLuminanceSource(new byte[]
+      {
+         0x00, 0x00, 0x00, 0x7F, 0x7F, 0x7F, 0xFF, 0xFF, 0xFF,
+         0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF,
+         0x00, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0x00
+      }, 3, 3);
+
+      [Test]
+      public void testCrop()
+      {
+         Assert.IsTrue(SOURCE.CropSupported);
+         LuminanceSource cropped = SOURCE.crop(1, 1, 1, 1);
+         Assert.AreEqual(1, cropped.Height);
+         Assert.AreEqual(1, cropped.Width);
+         // java and .Net differs, not sure, why
+         //var expectedInJava = new byte[] {0x7F};
+         var expected = new byte[] { 0x95 };
+         Assert.AreEqual(expected, cropped.getRow(0, null));
+      }
+
+      [Test]
+      public void testMatrix()
+      {
+         // java and .Net differs, not sure, why
+         //var expectedInJava = new byte[] {0x00, 0x7F, 0xFF, 0x3F, 0x7F, 0x3F, 0x3F, 0x7F, 0x3F};
+         var expected = new byte[] {0x00, 0x7F, 0xFF, 0x4c, 0x95, 0x1c, 0x1c, 0x95, 0x4c};
+         Assert.AreEqual(expected, SOURCE.Matrix);
+      }
+
+      [Test]
+      public void testGetRow()
+      {
+         // java and .Net differs, not sure, why
+         //var expectedInJava = new byte[] {0x3F, 0x7F, 0x3F};
+         var expected = new byte[] {0x1c, 0x95, 0x4c};
+         Assert.AreEqual(expected, SOURCE.getRow(2, new byte[3]));
+      }
+
+      [Test]
+      public void testToString()
+      {
+         // java and .Net differs, not sure, why
+         //var expectedInJava = "#+ \n#+#\n#+#\n";
+         var expected = "#+ \n+.#\n#.+\n";
+         Assert.AreEqual(expected, SOURCE.ToString());
+      }
+
       [Test]
       public void RGBLuminanceSource_Should_Work_With_BitmapImage()
       {
