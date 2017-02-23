@@ -53,6 +53,11 @@ namespace ZXing
       public long Timestamp { get; private set; }
 
       /// <summary>
+      /// how many bits of <see cref="RawBytes"/> are valid; typically 8 times its length
+      /// </summary>
+      public int NumBits { get; private set; }
+
+      /// <summary>
       /// Initializes a new instance of the <see cref="Result"/> class.
       /// </summary>
       /// <param name="text">The text.</param>
@@ -63,7 +68,24 @@ namespace ZXing
                     byte[] rawBytes,
                     ResultPoint[] resultPoints,
                     BarcodeFormat format)
-         : this(text, rawBytes, resultPoints, format, DateTime.Now.Ticks)
+         : this(text, rawBytes, rawBytes == null ? 0 : 8 * rawBytes.Length, resultPoints, format, DateTime.Now.Ticks)
+      {
+      }
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Result"/> class.
+      /// </summary>
+      /// <param name="text">The text.</param>
+      /// <param name="rawBytes">The raw bytes.</param>
+      /// <param name="numBits"></param>
+      /// <param name="resultPoints">The result points.</param>
+      /// <param name="format">The format.</param>
+      public Result(String text,
+                    byte[] rawBytes,
+                    int numBits,
+                    ResultPoint[] resultPoints,
+                    BarcodeFormat format)
+         : this(text, rawBytes, numBits, resultPoints, format, DateTime.Now.Ticks)
       {
       }
 
@@ -76,6 +98,20 @@ namespace ZXing
       /// <param name="format">The format.</param>
       /// <param name="timestamp">The timestamp.</param>
       public Result(String text, byte[] rawBytes, ResultPoint[] resultPoints, BarcodeFormat format, long timestamp)
+         : this(text, rawBytes, rawBytes == null ? 0 : 8 * rawBytes.Length, resultPoints, format, timestamp)
+      {
+      }
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Result"/> class.
+      /// </summary>
+      /// <param name="text">The text.</param>
+      /// <param name="rawBytes">The raw bytes.</param>
+      /// <param name="numBits"></param>
+      /// <param name="resultPoints">The result points.</param>
+      /// <param name="format">The format.</param>
+      /// <param name="timestamp">The timestamp.</param>
+      public Result(String text, byte[] rawBytes, int numBits, ResultPoint[] resultPoints, BarcodeFormat format, long timestamp)
       {
          if (text == null && rawBytes == null)
          {
@@ -83,6 +119,7 @@ namespace ZXing
          }
          Text = text;
          RawBytes = rawBytes;
+         NumBits = numBits;
          ResultPoints = resultPoints;
          BarcodeFormat = format;
          ResultMetadata = null;

@@ -27,12 +27,29 @@ namespace ZXing.Common
    /// </summary>
    public sealed class DecoderResult
    {
+      /// <summary>
+      /// raw bytes representing the result, or null if not applicable
+      /// </summary>
       public byte[] RawBytes { get; private set; }
 
+      /// <summary>
+      /// how many bits of<see cref="RawBytes"/> are valid; typically 8 times its length
+      /// </summary>
+      public int NumBits { get; private set; }
+
+      /// <summary>
+      /// text representation of the result
+      /// </summary>
       public String Text { get; private set; }
 
+      /// <summary>
+      /// list of byte segments in the result, or null if not applicable
+      /// </summary>
       public IList<byte[]> ByteSegments { get; private set; }
 
+      /// <summary>
+      /// name of error correction level used, or null if not applicable
+      /// </summary>
       public String ECLevel { get; private set; }
 
       public bool StructuredAppend
@@ -40,10 +57,16 @@ namespace ZXing.Common
          get { return StructuredAppendParity >= 0 && StructuredAppendSequenceNumber >= 0; }
       }
 
+      /// <summary>
+      /// number of errors corrected, or null if not applicable
+      /// </summary>
       public int ErrorsCorrected { get; set; }
 
       public int StructuredAppendSequenceNumber { get; private set; }
 
+      /// <summary>
+      /// number of erasures corrected, or null if not applicable
+      /// </summary>
       public int Erasures { get; set; }
 
       public int StructuredAppendParity { get; private set; }
@@ -60,12 +83,23 @@ namespace ZXing.Common
       }
 
       public DecoderResult(byte[] rawBytes, String text, IList<byte[]> byteSegments, String ecLevel, int saSequence, int saParity)
+         : this(rawBytes, rawBytes == null ? 0 : 8 * rawBytes.Length, text, byteSegments, ecLevel, saSequence, saParity)
+      {
+      }
+
+      public DecoderResult(byte[] rawBytes, int numBits, String text, IList<byte[]> byteSegments, String ecLevel)
+         : this(rawBytes, numBits, text, byteSegments, ecLevel, -1, -1)
+      {
+      }
+
+      public DecoderResult(byte[] rawBytes, int numBits, String text, IList<byte[]> byteSegments, String ecLevel, int saSequence, int saParity)
       {
          if (rawBytes == null && text == null)
          {
             throw new ArgumentException();
          }
          RawBytes = rawBytes;
+         NumBits = numBits;
          Text = text;
          ByteSegments = byteSegments;
          ECLevel = ecLevel;

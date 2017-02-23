@@ -115,7 +115,7 @@ namespace ZXing.Aztec.Internal
 
          var rawBytes = convertBoolArrayToByteArray(correctedBits);
 
-         return new DecoderResult(rawBytes, result, null, null);
+         return new DecoderResult(rawBytes, correctedBits.Length, result, null, null);
       }
 
       // This method is used for testing the high-level encoder
