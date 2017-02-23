@@ -141,13 +141,13 @@ namespace ZXing.OneD
       /// <returns>
       ///   <see cref="Result"/>containing encoded string and start/end of barcode or null, if an error occurs or barcode cannot be found
       /// </returns>
-      override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
+      public override Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
          return decodeRow(rowNumber, row, findStartGuardPattern(row), hints);
       }
 
       /// <summary>
-      ///   <p>Like decodeRow(int, BitArray, java.util.Map), but
+      ///   <p>Like <see cref="decodeRow(int,ZXing.Common.BitArray,System.Collections.Generic.IDictionary{ZXing.DecodeHintType,object})"/>, but
       /// allows caller to inform method about where the UPC/EAN start pattern is
       /// found. This allows this to be computed once and reused across many implementations.</p>
       /// </summary>
@@ -156,7 +156,7 @@ namespace ZXing.OneD
       /// <param name="startGuardRange">start/end column where the opening start pattern was found</param>
       /// <param name="hints">optional hints that influence decoding</param>
       /// <returns><see cref="Result"/> encapsulating the result of decoding a barcode in the row</returns>
-      virtual public Result decodeRow(int rowNumber,
+      public virtual Result decodeRow(int rowNumber,
                               BitArray row,
                               int[] startGuardRange,
                               IDictionary<DecodeHintType, object> hints)
@@ -271,7 +271,7 @@ namespace ZXing.OneD
       /// </summary>
       /// <param name="s">string of digits to check</param>
       /// <returns>see <see cref="checkStandardUPCEANChecksum(String)"/></returns>
-      virtual protected bool checkChecksum(String s)
+      protected virtual bool checkChecksum(String s)
       {
          return checkStandardUPCEANChecksum(s);
       }
@@ -319,7 +319,7 @@ namespace ZXing.OneD
       /// <param name="row">The row.</param>
       /// <param name="endStart">The end start.</param>
       /// <returns></returns>
-      virtual protected int[] decodeEnd(BitArray row, int endStart)
+      protected virtual int[] decodeEnd(BitArray row, int endStart)
       {
          return findGuardPattern(row, endStart, false, START_END_PATTERN);
       }

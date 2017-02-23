@@ -107,7 +107,7 @@ namespace ZXing.Common.Detector
       /// <param name="maxWhiteRun">maximum run of white pixels that can still be considered to be within
       /// the barcode
       /// </param>
-      /// <returns> a {@link com.google.zxing.ResultPoint} encapsulating the corner that was found
+      /// <returns> a <see cref="ResultPoint"/> encapsulating the corner that was found
       /// </returns>
       private ResultPoint findCornerFromCenter(int centerX, int deltaX, int left, int right, int centerY, int deltaY, int top, int bottom, int maxWhiteRun)
       {
