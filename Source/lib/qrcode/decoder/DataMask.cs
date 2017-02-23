@@ -45,11 +45,11 @@ namespace ZXing.QrCode.Internal
                                                             /// <summary> 100: mask bits for which (x/2 + y/3) mod 2 == 0</summary>
                                                             new Func<int, int, bool>((i, j) => ((((int)((uint)i >> 1)) + (j / 3)) & 0x01) == 0),
                                                             /// <summary> 101: mask bits for which xy mod 2 + xy mod 3 == 0</summary>
-                                                            new Func<int, int, bool>((i, j) => {int temp = i * j; return (temp & 0x01) + (temp % 3) == 0;}),
+                                                            new Func<int, int, bool>((i, j) => (i * j) % 6 == 0),
                                                             /// <summary> 110: mask bits for which (xy mod 2 + xy mod 3) mod 2 == 0</summary>
-                                                            new Func<int, int, bool>((i, j) => {int temp = i * j; return (((temp & 0x01) + (temp % 3)) & 0x01) == 0;}),
+                                                            new Func<int, int, bool>((i, j) => {int temp = i * j; return ((temp + (temp % 3)) & 0x01) == 0;}),
                                                             /// <summary> 111: mask bits for which ((x+y)mod 2 + xy mod 3) mod 2 == 0</summary>
-                                                            new Func<int, int, bool>((i, j) => ((((i + j) & 0x01) + ((i * j) % 3)) & 0x01) == 0),
+                                                            new Func<int, int, bool>((i, j) => ((i + j + ((i * j) % 3)) & 0x01) == 0),
                                                          };
 
       /// <summary> <p>Implementations of this method reverse the data masking process applied to a QR Code and
