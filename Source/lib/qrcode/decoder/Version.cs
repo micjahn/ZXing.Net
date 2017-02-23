@@ -209,7 +209,7 @@ namespace ZXing.QrCode.Internal
             {
                if ((x == 0 && (y == 0 || y == max - 1)) || (x == max - 1 && y == 0))
                {
-                  // No alignment patterns near the three finder paterns
+                  // No alignment patterns near the three finder patterns
                   continue;
                }
                bitMatrix.setRegion(alignmentPatternCenters[y] - 2, i, 5, 5);
@@ -296,7 +296,7 @@ namespace ZXing.QrCode.Internal
          }
       }
 
-      /// <summary> <p>Encapsualtes the parameters for one error-correction block in one symbol version.
+      /// <summary> <p>Encapsulates the parameters for one error-correction block in one symbol version.
       /// This includes the number of data codewords, and the number of times a block with these
       /// parameters is used consecutively in the QR code version's format.</p>
       /// </summary>
