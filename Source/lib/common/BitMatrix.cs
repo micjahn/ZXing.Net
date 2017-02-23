@@ -432,16 +432,13 @@ namespace ZXing.Common
                }
             }
          }
-
-         int widthTmp = right - left;
-         int heightTmp = bottom - top;
-
-         if (widthTmp < 0 || heightTmp < 0)
+         
+         if (right < left || bottom < top)
          {
             return null;
          }
 
-         return new[] {left, top, widthTmp, heightTmp};
+         return new[] { left, top, right - left, bottom - top };
       }
 
       /// <summary>

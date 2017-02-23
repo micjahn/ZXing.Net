@@ -139,22 +139,22 @@ namespace ZXing.PDF417.Internal
          //Construct inverse lookups
          for (int idx = 0; idx < MIXED.Length; idx++)
             MIXED[idx] = -1;
-         for (sbyte i = 0; i < TEXT_MIXED_RAW.Length; i++)
+         for (int i = 0; i < TEXT_MIXED_RAW.Length; i++)
          {
             sbyte b = TEXT_MIXED_RAW[i];
             if (b > 0)
             {
-               MIXED[b] = i;
+               MIXED[b] = (sbyte)i;
             }
          }
          for (int idx = 0; idx < PUNCTUATION.Length; idx++)
             PUNCTUATION[idx] = -1;
-         for (sbyte i = 0; i < TEXT_PUNCTUATION_RAW.Length; i++)
+         for (int i = 0; i < TEXT_PUNCTUATION_RAW.Length; i++)
          {
             sbyte b = TEXT_PUNCTUATION_RAW[i];
             if (b > 0)
             {
-               PUNCTUATION[b] = i;
+               PUNCTUATION[b] = (sbyte)i;
             }
          }
       }

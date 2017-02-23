@@ -55,7 +55,7 @@ namespace ZXing.Datamatrix.Encoder
             {
                buffer[0] = (char)dataCount;
             }
-            else if (dataCount > 249 && dataCount <= 1555)
+            else if (dataCount <= 1555)
             {
                buffer[0] = (char)((dataCount / 250) + 249);
                buffer.Insert(1, new [] { (char)(dataCount % 250) });
