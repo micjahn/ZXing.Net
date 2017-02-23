@@ -292,10 +292,24 @@ namespace ZXing.Common.Test
             hints[DecodeHintType.TRY_HARDER] = true;
          }
 
+         // Try in 'pure' mode mostly to exercise PURE_BARCODE code paths for exceptions;
+         // not expected to pass, generally
+         Result result = null;
+         try
+         {
+            var pureHints = new Dictionary<DecodeHintType, object>();
+            pureHints[DecodeHintType.PURE_BARCODE] = true;
+            result = barcodeReader.decode(source, pureHints);
+         }
+         catch (ReaderException re)
+         {
+            // continue
+         }
+
          var multiReader = barcodeReader as MultipleBarcodeReader;
          if (multiReader != null)
          {
-            var expectedResults = expectedText.Split(new [] { Environment.NewLine }, StringSplitOptions.None);
+            var expectedResults = expectedText.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
             var results = multiReader.decodeMultiple(source, hints);
             if (results == null)
                throw ReaderException.Instance;
@@ -306,15 +320,15 @@ namespace ZXing.Common.Test
                   expectedResults.Length, results.Length);
                throw ReaderException.Instance;
             }
-            foreach (var result in results)
+            foreach (var oneResult in results)
             {
-               if (expectedFormat != result.BarcodeFormat)
+               if (expectedFormat != oneResult.BarcodeFormat)
                {
                   Log.InfoFormat("Format mismatch: expected '{0}' but got '{1}'{2}",
-                                    expectedFormat, result.BarcodeFormat, suffix);
+                     expectedFormat, oneResult.BarcodeFormat, suffix);
                   return false;
                }
-               String resultText = result.Text;
+               String resultText = oneResult.Text;
                bool found = false;
                foreach (var expectedResult in expectedResults)
                {
@@ -333,9 +347,9 @@ namespace ZXing.Common.Test
             foreach (var expectedResult in expectedResults)
             {
                bool found = false;
-               foreach (var result in results)
+               foreach (var oneResult in results)
                {
-                  String resultText = result.Text;
+                  String resultText = oneResult.Text;
                   if (expectedResult.Equals(resultText))
                   {
                      found = true;
@@ -351,14 +365,15 @@ namespace ZXing.Common.Test
          }
          else
          {
-            Result result = barcodeReader.decode(source, hints);
+            if (result == null)
+               result = barcodeReader.decode(source, hints);
             if (result == null)
                throw ReaderException.Instance;
 
             if (expectedFormat != result.BarcodeFormat)
             {
                Log.InfoFormat("Format mismatch: expected '{0}' but got '{1}'{2}",
-                                 expectedFormat, result.BarcodeFormat, suffix);
+                  expectedFormat, result.BarcodeFormat, suffix);
                return false;
             }
 
@@ -366,7 +381,7 @@ namespace ZXing.Common.Test
             if (!expectedText.Equals(resultText))
             {
                Log.InfoFormat("Content mismatch: expected '{0}' but got '{1}'{2}",
-                                 expectedText, resultText, suffix);
+                  expectedText, resultText, suffix);
                return false;
             }
 
@@ -380,7 +395,7 @@ namespace ZXing.Common.Test
                if (!expectedValue.Equals(actualValue))
                {
                   Log.InfoFormat("Metadata mismatch for key '{0}': expected '{1}' but got '{2}'",
-                                 key, expectedValue, actualValue);
+                     key, expectedValue, actualValue);
                   return false;
                }
             }

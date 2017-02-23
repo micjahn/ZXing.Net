@@ -58,10 +58,34 @@ namespace ZXing.Test
       {
          var source =
             new PlanarYUVLuminanceSource(YUV, COLS, ROWS, 1, 1, COLS - 2, ROWS - 2, false);
+         Assert.IsTrue(source.CropSupported);
+         byte[] cropMatrix = source.Matrix;
          for (int r = 0; r < ROWS - 2; r++)
          {
-            assertEquals(Y, (r + 1)*COLS + 1, source.getRow(r, null), 0, COLS - 2);
+            assertEquals(Y, (r + 1) * COLS + 1, cropMatrix, r * (COLS - 2), COLS - 2);
          }
+         for (int r = 0; r < ROWS - 2; r++)
+         {
+            assertEquals(Y, (r + 1) * COLS + 1, source.getRow(r, null), 0, COLS - 2);
+         }
+      }
+
+      [Test]
+      public void testThumbnail()
+      {
+         var source =
+            new PlanarYUVLuminanceSource(YUV, COLS, ROWS, 0, 0, COLS, ROWS, false);
+         Assert.AreEqual(
+            new int[]
+            {
+               (0x00FF0000 << 8) + 0x00808080,
+               (0x00FF0000 << 8) + 0x00818181,
+               (0x00FF0000 << 8) + 0x00838383,
+               (0x00FF0000 << 8) + 0x00808080,
+               (0x00FF0000 << 8) + 0x007F7F7F,
+               (0x00FF0000 << 8) + 0x007D7D7D
+            },
+            source.renderThumbnail());
       }
 
       private static void assertEquals(byte[] expected, int expectedFrom,
