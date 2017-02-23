@@ -129,13 +129,10 @@ namespace ZXing.QrCode.Internal
          Version version;
          if (hints != null && hints.ContainsKey(EncodeHintType.QR_VERSION))
          {
-            var requestedVersion = Version.getVersionForNumber(Convert.ToInt32(hints[EncodeHintType.QR_VERSION]));
-            var bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, requestedVersion);
-            if (willFit(bitsNeeded, requestedVersion, ecLevel))
-            {
-               version = requestedVersion;
-            }
-            else
+            int versionNumber = Int32.Parse(hints[EncodeHintType.QR_VERSION].ToString());
+            version = Version.getVersionForNumber(versionNumber);
+            int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, version);
+            if (!willFit(bitsNeeded, version, ecLevel))
             {
                throw new WriterException("Data too big for requested version");
             }
@@ -194,21 +191,17 @@ namespace ZXing.QrCode.Internal
          // Hard part: need to know version to know how many bits length takes. But need to know how many
          // bits it takes to know version. First we take a guess at version by assuming version will be
          // the minimum, 1:
-         int provisionalBitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, Version.getVersionForNumber(1));
-         Version provisionalVersion = chooseVersion(provisionalBitsNeeded, ecLevel);
+         var provisionalBitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, Version.getVersionForNumber(1));
+         var provisionalVersion = chooseVersion(provisionalBitsNeeded, ecLevel);
 
          // Use that guess to calculate the right version. I am still not sure this works in 100% of cases.
-         int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, provisionalVersion);
-         Version version = chooseVersion(bitsNeeded, ecLevel);
-         return version;
+         var bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, provisionalVersion);
+         return chooseVersion(bitsNeeded, ecLevel);
       }
 
       private static int calculateBitsNeeded(Mode mode, BitArray headerBits, BitArray dataBits, Version version)
       {
-         int bitsNeeded = headerBits.Size
-                          + mode.getCharacterCountBits(version)
-                          + dataBits.Size;
-         return bitsNeeded;
+         return headerBits.Size + mode.getCharacterCountBits(version) + dataBits.Size;
       }
 
       /// <summary>

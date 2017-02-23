@@ -133,8 +133,8 @@ namespace ZXing
       AZTEC_LAYERS,
 
       /// <summary>
-      /// Specifies the exact version of QR code to be encoded. An integer. If the data specified
-      /// cannot fit within the required version, a WriterException will be thrown.
+      /// Specifies the exact version of QR code to be encoded.
+      /// (Type <see cref="System.Int32" />, or <see cref="System.String" /> representation of the integer value).
       /// </summary>
       QR_VERSION
    }

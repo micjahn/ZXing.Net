@@ -136,18 +136,20 @@ namespace ZXing.QrCode.Internal.Test
       }
 
       [Test]
+      public void testEncodeWithVersionString()
+      {
+         var hints = new QrCodeEncodingOptions();
+         hints.Hints[EncodeHintType.QR_VERSION] = "7";
+         QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, hints.Hints);
+         Assert.IsTrue(qrCode.ToString().Contains(" version: 7\n"));
+      }
+
+      [Test]
+      [ExpectedException(typeof(WriterException))]
       public void testEncodeWithVersionTooSmall()
       {
          var hints = new QrCodeEncodingOptions {QrVersion = 3};
-         try
-         {
-            Encoder.encode("THISMESSAGEISTOOLONGFORAQRCODEVERSION3", ErrorCorrectionLevel.H, hints.Hints);
-            Assert.Fail();
-         }
-         catch (WriterException e)
-         {
-            Assert.AreEqual("Data too big for requested version", e.Message);
-         }
+         Encoder.encode("THISMESSAGEISTOOLONGFORAQRCODEVERSION3", ErrorCorrectionLevel.H, hints.Hints);
       }
 
       [Test]
