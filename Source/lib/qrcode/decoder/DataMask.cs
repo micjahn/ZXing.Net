@@ -44,11 +44,11 @@ namespace ZXing.QrCode.Internal
                                                             new Func<int, int, bool>((i, j) => (i + j) % 3 == 0),
                                                             /// <summary> 100: mask bits for which (x/2 + y/3) mod 2 == 0</summary>
                                                             new Func<int, int, bool>((i, j) => ((((int)((uint)i >> 1)) + (j / 3)) & 0x01) == 0),
-                                                            /// <summary> 101: mask bits for which xy mod 2 + xy mod 3 == 0</summary>
+                                                            /// <summary> 101: mask bits for which xy mod 2 + xy mod 3 == 0, equivalently, such that xy mod 6 == 0</summary>
                                                             new Func<int, int, bool>((i, j) => (i * j) % 6 == 0),
-                                                            /// <summary> 110: mask bits for which (xy mod 2 + xy mod 3) mod 2 == 0</summary>
-                                                            new Func<int, int, bool>((i, j) => {int temp = i * j; return ((temp + (temp % 3)) & 0x01) == 0;}),
-                                                            /// <summary> 111: mask bits for which ((x+y)mod 2 + xy mod 3) mod 2 == 0</summary>
+                                                            /// <summary> 110: mask bits for which (xy mod 2 + xy mod 3) mod 2 == 0, equivalently, such that xy mod 6 < 3</summary>
+                                                            new Func<int, int, bool>((i, j) => ((i * j) % 6) < 3),
+                                                            /// <summary> 111: mask bits for which ((x+y)mod 2 + xy mod 3) mod 2 == 0, equivalently, such that (x + y + xy mod 3) mod 2 == 0</summary>
                                                             new Func<int, int, bool>((i, j) => ((i + j + ((i * j) % 3)) & 0x01) == 0),
                                                          };
 
