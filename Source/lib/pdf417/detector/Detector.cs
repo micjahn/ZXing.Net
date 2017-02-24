@@ -321,21 +321,20 @@ namespace ZXing.PDF417.Internal
          int[] counters)
       {
          SupportClass.Fill(counters, 0);
-         int patternLength = pattern.Length;
-         bool isWhite = whiteFirst;
-         int patternStart = column;
-         int pixelDrift = 0;
+         var patternStart = column;
+         var pixelDrift = 0;
 
          // if there are black pixels left of the current pixel shift to the left, but only for MAX_PIXEL_DRIFT pixels 
          while (matrix[patternStart, row] && patternStart > 0 && pixelDrift++ < MAX_PIXEL_DRIFT)
          {
             patternStart--;
          }
-         int x = patternStart;
-         int counterPosition = 0;
-         for (; x < width; x++)
+         var x = patternStart;
+         var counterPosition = 0;
+         var patternLength = pattern.Length;
+         for (var isWhite = whiteFirst; x < width; x++)
          {
-            bool pixel = matrix[x, row];
+            var pixel = matrix[x, row];
             if (pixel ^ isWhite)
             {
                counters[counterPosition]++;
