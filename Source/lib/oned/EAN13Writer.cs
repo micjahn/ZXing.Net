@@ -66,29 +66,35 @@ namespace ZXing.OneD
       /// </summary>
       /// <param name="contents"></param>
       /// <returns></returns>
-      override public bool[] encode(String contents)
+      public override bool[] encode(String contents)
       {
-         if (contents.Length < 12 || contents.Length > 13)
+         int length = contents.Length;
+         switch (length)
          {
-            throw new ArgumentException(
-                "Requested contents should be 12 (without checksum digit) or 13 digits long, but got " + contents.Length);
-         }
-         foreach (var ch in contents)
-         {
-            if (!Char.IsDigit(ch))
-               throw new ArgumentException("Requested contents should only contain digits, but got '" + ch + "'");
-         }
-
-         if (contents.Length == 12)
-         {
-            contents = CalculateChecksumDigitModulo10(contents);
-         }
-         else
-         {
-            if (!UPCEANReader.checkStandardUPCEANChecksum(contents))
-            {
-               throw new ArgumentException("Contents do not pass checksum");
-            }
+            case 12:
+               // No check digit present, calculate it and add it
+               var check = UPCEANReader.getStandardUPCEANChecksum(contents);
+               if (check == null)
+               {
+                  throw new ArgumentException("Checksum can't be calculated");
+               }
+               contents += check.Value;
+               break;
+            case 13:
+               try
+               {
+                  if (!UPCEANReader.checkStandardUPCEANChecksum(contents))
+                  {
+                     throw new ArgumentException("Contents do not pass checksum");
+                  }
+               }
+               catch (FormatException ignored)
+               {
+                  throw new ArgumentException("Illegal contents", ignored);
+               }
+               break;
+            default:
+               throw new ArgumentException("Requested contents should be 12 (without checksum digit) or 13 digits long, but got " + contents.Length);
          }
 
          int firstDigit = Int32.Parse(contents.Substring(0, 1));
@@ -98,7 +104,7 @@ namespace ZXing.OneD
 
          pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);
 
-         // See {@link #EAN13Reader} for a description of how the first digit & left bars are encoded
+         // See EAN13Reader for a description of how the first digit & left bars are encoded
          for (int i = 1; i <= 6; i++)
          {
             int digit = Int32.Parse(contents.Substring(i, 1));

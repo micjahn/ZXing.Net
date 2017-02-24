@@ -33,5 +33,13 @@ namespace ZXing.OneD.Test
          var result = new EAN8Writer().encode("96385074", BarcodeFormat.EAN_8, testStr.Length, 0);
          Assert.AreEqual(testStr, BitMatrixTestCase.matrixToString(result));
       }
+
+      [Test]
+      public void testAddChecksumAndEncode()
+      {
+         var testStr = "0001010001011010111101111010110111010101001110111001010001001011100101000";
+         var result = new EAN8Writer().encode("9638507", BarcodeFormat.EAN_8, testStr.Length, 0);
+         Assert.AreEqual(testStr, BitMatrixTestCase.matrixToString(result));
+      }
    }
 }

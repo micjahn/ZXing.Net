@@ -290,27 +290,34 @@ namespace ZXing.OneD
             return false;
          }
 
+         int check = s[length - 1] - '0';
+         return getStandardUPCEANChecksum(s.Substring(0, length - 1)) == check;
+      }
+
+      internal static int? getStandardUPCEANChecksum(String s)
+      {
+         int length = s.Length;
          int sum = 0;
-         for (int i = length - 2; i >= 0; i -= 2)
+         for (int i = length - 1; i >= 0; i -= 2)
          {
-            int digit = (int)s[i] - (int)'0';
+            int digit = s[i] - '0';
             if (digit < 0 || digit > 9)
             {
-               return false;
+               throw new ArgumentException("Contents should only contain digits, but got '" + s[i] + "'");
             }
             sum += digit;
          }
          sum *= 3;
-         for (int i = length - 1; i >= 0; i -= 2)
+         for (int i = length - 2; i >= 0; i -= 2)
          {
-            int digit = (int)s[i] - (int)'0';
+            int digit = s[i] - '0';
             if (digit < 0 || digit > 9)
             {
-               return false;
+               throw new ArgumentException("Contents should only contain digits, but got '" + s[i] + "'");
             }
             sum += digit;
          }
-         return sum % 10 == 0;
+         return (1000 - sum)%10;
       }
 
       /// <summary>

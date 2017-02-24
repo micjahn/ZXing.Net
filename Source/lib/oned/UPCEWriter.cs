@@ -48,10 +48,33 @@ namespace ZXing.OneD
 
       public override bool[] encode(String contents)
       {
-         if (contents.Length != 8)
+         int length = contents.Length;
+         switch (length)
          {
-            throw new ArgumentException(
-               "Requested contents should be 8 digits long, but got " + contents.Length);
+            case 7:
+               // No check digit present, calculate it and add it
+               var check = UPCEANReader.getStandardUPCEANChecksum(contents);
+               if (check == null)
+               {
+                  throw new ArgumentException("Checksum can't be calculated");
+               }
+               contents += check.Value;
+               break;
+            case 8:
+               try
+               {
+                  if (!UPCEANReader.checkStandardUPCEANChecksum(contents))
+                  {
+                     throw new ArgumentException("Contents do not pass checksum");
+                  }
+               }
+               catch (FormatException ignored)
+               {
+                  throw new ArgumentException("Illegal contents", ignored);
+               }
+               break;
+            default:
+               throw new ArgumentException("Requested contents should be 8 digits long, but got " + length);
          }
 
          var checkDigit = int.Parse(contents.Substring(7, 1));

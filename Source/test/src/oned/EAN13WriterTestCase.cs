@@ -29,8 +29,18 @@ namespace ZXing.OneD.Test
       [Test]
       public void testEncode()
       {
-         var testStr = "00010100010110100111011001100100110111101001110101010110011011011001000010101110010011101000100101000";
+         var testStr =
+            "00010100010110100111011001100100110111101001110101010110011011011001000010101110010011101000100101000";
          var result = new EAN13Writer().encode("5901234123457", BarcodeFormat.EAN_13, testStr.Length, 0);
+         Assert.AreEqual(testStr, BitMatrixTestCase.matrixToString(result));
+      }
+
+      [Test]
+      public void testAddChecksumAndEncode()
+      {
+         var testStr =
+            "00010100010110100111011001100100110111101001110101010110011011011001000010101110010011101000100101000";
+         var result = new EAN13Writer().encode("590123412345", BarcodeFormat.EAN_13, testStr.Length, 0);
          Assert.AreEqual(testStr, BitMatrixTestCase.matrixToString(result));
       }
    }
