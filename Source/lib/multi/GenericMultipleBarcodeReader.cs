@@ -176,7 +176,7 @@ namespace ZXing.Multi
                newResultPoints[i] = new ResultPoint(oldPoint.X + xOffset, oldPoint.Y + yOffset);
             }
          }
-         var newResult = new Result(result.Text, result.RawBytes, newResultPoints, result.BarcodeFormat);
+         var newResult = new Result(result.Text, result.RawBytes, result.NumBits, newResultPoints, result.BarcodeFormat);
          newResult.putAllMetadata(result.ResultMetadata);
          return newResult;
       }

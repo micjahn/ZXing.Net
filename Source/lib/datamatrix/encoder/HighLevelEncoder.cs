@@ -289,12 +289,12 @@ namespace ZXing.Datamatrix.Encoder
             }
             else if (isExtendedASCII(c))
             {
-               charCounts[Encodation.ASCII] = (int)Math.Ceiling(charCounts[Encodation.ASCII]);
-               charCounts[Encodation.ASCII] += 2;
+               charCounts[Encodation.ASCII] = (float)Math.Ceiling(charCounts[Encodation.ASCII]);
+               charCounts[Encodation.ASCII] += 2.0f;
             }
             else
             {
-               charCounts[Encodation.ASCII] = (int)Math.Ceiling(charCounts[Encodation.ASCII]);
+               charCounts[Encodation.ASCII] = (float)Math.Ceiling(charCounts[Encodation.ASCII]);
                charCounts[Encodation.ASCII]++;
             }
 
@@ -357,7 +357,7 @@ namespace ZXing.Datamatrix.Encoder
             // step Q
             if (isSpecialB256(c))
             {
-               charCounts[Encodation.BASE256] += 4;
+               charCounts[Encodation.BASE256] += 4.0f;
             }
             else
             {

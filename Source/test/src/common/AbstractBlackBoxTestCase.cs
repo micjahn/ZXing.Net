@@ -55,17 +55,22 @@ namespace ZXing.Common.Test
       private readonly BarcodeFormat? expectedFormat;
       private readonly List<TestResult> testResults;
 
-      protected AbstractBlackBoxTestCase(String testBasePathSuffix,
-                                         Reader barcodeReader,
-                                         BarcodeFormat? expectedFormat)
+      public static String buildTestBase(String testBasePathSuffix)
       {
          // A little workaround to prevent aggravation in my IDE
          if (!Directory.Exists(testBasePathSuffix))
          {
             // try starting with 'core' since the test base is often given as the project root
-            testBasePathSuffix = Path.Combine("..\\..\\..\\Source", testBasePathSuffix);
+            return Path.Combine("..\\..\\..\\Source", testBasePathSuffix);
          }
-         this.testBase = testBasePathSuffix;
+         return testBasePathSuffix;
+      }
+
+      protected AbstractBlackBoxTestCase(String testBasePathSuffix,
+                                         Reader barcodeReader,
+                                         BarcodeFormat? expectedFormat)
+      {
+         this.testBase = buildTestBase(testBasePathSuffix);
          this.barcodeReader = barcodeReader;
          this.expectedFormat = expectedFormat;
          testResults = new List<TestResult>();
@@ -126,7 +131,7 @@ namespace ZXing.Common.Test
          int[] passedCounts = new int[testCount];
          int[] misreadCounts = new int[testCount];
          int[] tryHarderCounts = new int[testCount];
-         int[] tryHaderMisreadCounts = new int[testCount];
+         int[] tryHarderMisreadCounts = new int[testCount];
 
          foreach (var testImage in imageFiles)
          {
@@ -202,7 +207,7 @@ namespace ZXing.Common.Test
                   }
                   else
                   {
-                     tryHaderMisreadCounts[x]++;
+                     tryHarderMisreadCounts[x]++;
                      Log.Info("   with try-hard ... fail.");
                   }
                }
@@ -233,10 +238,10 @@ namespace ZXing.Common.Test
                               tryHarderCounts[x], imageFilesCount, testResult.TryHarderCount);
             failed = imageFilesCount - tryHarderCounts[x];
             Log.InfoFormat(" {0} failed due to misreads, {1} not detected",
-                              tryHaderMisreadCounts[x], failed - tryHaderMisreadCounts[x]);
+                              tryHarderMisreadCounts[x], failed - tryHarderMisreadCounts[x]);
             totalFound += passedCounts[x] + tryHarderCounts[x];
             totalMustPass += testResult.MustPassCount + testResult.TryHarderCount;
-            totalMisread += misreadCounts[x] + tryHaderMisreadCounts[x];
+            totalMisread += misreadCounts[x] + tryHarderMisreadCounts[x];
             totalMaxMisread += testResult.MaxMisreads + testResult.MaxTryHarderMisreads;
          }
 
@@ -272,7 +277,7 @@ namespace ZXing.Common.Test
                Assert.IsTrue(tryHarderCounts[x] >= testResult.TryHarderCount, "Try harder, " + label);
                label = "Rotation " + testResult.Rotation + " degrees: Too many images misread";
                Assert.IsTrue(misreadCounts[x] <= testResult.MaxMisreads, label);
-               Assert.IsTrue(tryHaderMisreadCounts[x] <= testResult.MaxTryHarderMisreads, "Try harder, " + label);
+               Assert.IsTrue(tryHarderMisreadCounts[x] <= testResult.MaxTryHarderMisreads, "Try harder, " + label);
             }
          }
       }
@@ -292,10 +297,24 @@ namespace ZXing.Common.Test
             hints[DecodeHintType.TRY_HARDER] = true;
          }
 
+         // Try in 'pure' mode mostly to exercise PURE_BARCODE code paths for exceptions;
+         // not expected to pass, generally
+         Result result = null;
+         try
+         {
+            var pureHints = new Dictionary<DecodeHintType, object>();
+            pureHints[DecodeHintType.PURE_BARCODE] = true;
+            result = barcodeReader.decode(source, pureHints);
+         }
+         catch (ReaderException re)
+         {
+            // continue
+         }
+
          var multiReader = barcodeReader as MultipleBarcodeReader;
          if (multiReader != null)
          {
-            var expectedResults = expectedText.Split(new [] { Environment.NewLine }, StringSplitOptions.None);
+            var expectedResults = expectedText.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
             var results = multiReader.decodeMultiple(source, hints);
             if (results == null)
                throw ReaderException.Instance;
@@ -306,15 +325,15 @@ namespace ZXing.Common.Test
                   expectedResults.Length, results.Length);
                throw ReaderException.Instance;
             }
-            foreach (var result in results)
+            foreach (var oneResult in results)
             {
-               if (expectedFormat != result.BarcodeFormat)
+               if (expectedFormat != oneResult.BarcodeFormat)
                {
                   Log.InfoFormat("Format mismatch: expected '{0}' but got '{1}'{2}",
-                                    expectedFormat, result.BarcodeFormat, suffix);
+                     expectedFormat, oneResult.BarcodeFormat, suffix);
                   return false;
                }
-               String resultText = result.Text;
+               String resultText = oneResult.Text;
                bool found = false;
                foreach (var expectedResult in expectedResults)
                {
@@ -333,9 +352,9 @@ namespace ZXing.Common.Test
             foreach (var expectedResult in expectedResults)
             {
                bool found = false;
-               foreach (var result in results)
+               foreach (var oneResult in results)
                {
-                  String resultText = result.Text;
+                  String resultText = oneResult.Text;
                   if (expectedResult.Equals(resultText))
                   {
                      found = true;
@@ -351,14 +370,15 @@ namespace ZXing.Common.Test
          }
          else
          {
-            Result result = barcodeReader.decode(source, hints);
+            if (result == null)
+               result = barcodeReader.decode(source, hints);
             if (result == null)
                throw ReaderException.Instance;
 
             if (expectedFormat != result.BarcodeFormat)
             {
                Log.InfoFormat("Format mismatch: expected '{0}' but got '{1}'{2}",
-                                 expectedFormat, result.BarcodeFormat, suffix);
+                  expectedFormat, result.BarcodeFormat, suffix);
                return false;
             }
 
@@ -366,7 +386,7 @@ namespace ZXing.Common.Test
             if (!expectedText.Equals(resultText))
             {
                Log.InfoFormat("Content mismatch: expected '{0}' but got '{1}'{2}",
-                                 expectedText, resultText, suffix);
+                  expectedText, resultText, suffix);
                return false;
             }
 
@@ -380,7 +400,7 @@ namespace ZXing.Common.Test
                if (!expectedValue.Equals(actualValue))
                {
                   Log.InfoFormat("Metadata mismatch for key '{0}': expected '{1}' but got '{2}'",
-                                 key, expectedValue, actualValue);
+                     key, expectedValue, actualValue);
                   return false;
                }
             }

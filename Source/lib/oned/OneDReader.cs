@@ -127,7 +127,6 @@ namespace ZXing.OneD
          int height = image.Height;
          BitArray row = new BitArray(width);
 
-         int middle = height >> 1;
          bool tryHarder = hints != null && hints.ContainsKey(DecodeHintType.TRY_HARDER);
          int rowStep = Math.Max(1, height >> (tryHarder ? 8 : 5));
          int maxLines;
@@ -140,6 +139,7 @@ namespace ZXing.OneD
             maxLines = 15; // 15 rows spaced 1/32 apart is roughly the middle half of the image
          }
 
+         int middle = height >> 1;
          for (int x = 0; x < maxLines; x++)
          {
 
@@ -252,8 +252,8 @@ namespace ZXing.OneD
          int i = start;
          while (i < end)
          {
-            if (row[i] ^ isWhite)
-            { // that is, exactly one is true
+            if (row[i] != isWhite)
+            {
                counters[counterPosition]++;
             }
             else

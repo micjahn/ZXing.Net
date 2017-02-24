@@ -79,12 +79,20 @@ namespace ZXing.Common
          get { return rowSize; }
       }
 
-      // A helper to construct a square matrix.
+      /// <summary>
+      /// Creates an empty square <see cref="BitMatrix"/>.
+      /// </summary>
+      /// <param name="dimension">height and width</param>
       public BitMatrix(int dimension)
          : this(dimension, dimension)
       {
       }
 
+      /// <summary>
+      /// Creates an empty square <see cref="BitMatrix"/>.
+      /// </summary>
+      /// <param name="width">bit matrix width</param>
+      /// <param name="height">bit matrix height</param>
       public BitMatrix(int width, int height)
       {
          if (width < 1 || height < 1)
@@ -111,6 +119,27 @@ namespace ZXing.Common
          this.height = height;
          this.rowSize = (width + 31) >> 5;
          this.bits = bits;
+      }
+
+      /// <summary>
+      /// Interprets a 2D array of booleans as a <see cref="BitMatrix"/>, where "true" means an "on" bit.
+      /// </summary>
+      /// <param name="image">bits of the image, as a row-major 2D array. Elements are arrays representing rows</param>
+      /// <returns><see cref="BitMatrix"/> representation of image</returns>
+      public static BitMatrix parse(bool[][] image)
+      {
+         var height = image.Length;
+         var width = image[0].Length;
+         var bits = new BitMatrix(width, height);
+         for (var i = 0; i < height; i++)
+         {
+            var imageI = image[i];
+            for (var j = 0; j < width; j++)
+            {
+               bits[j, i] = imageI[j];
+            }
+         }
+         return bits;
       }
 
       public static BitMatrix parse(String stringRepresentation, String setString, String unsetString)
@@ -432,16 +461,13 @@ namespace ZXing.Common
                }
             }
          }
-
-         int widthTmp = right - left;
-         int heightTmp = bottom - top;
-
-         if (widthTmp < 0 || heightTmp < 0)
+         
+         if (right < left || bottom < top)
          {
             return null;
          }
 
-         return new[] {left, top, widthTmp, heightTmp};
+         return new[] { left, top, right - left + 1, bottom - top + 1 };
       }
 
       /// <summary>

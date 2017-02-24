@@ -178,78 +178,57 @@ namespace ZXing.Datamatrix.Internal
                }
                result.Append(value);
             }
-            else if (oneByte == 230)
+            else
             {
-               // Latch to C40 encodation
-               mode = Mode.C40_ENCODE;
-               return true;
-            }
-            else if (oneByte == 231)
-            {
-               // Latch to Base 256 encodation
-               mode = Mode.BASE256_ENCODE;
-               return true;
-            }
-            else if (oneByte == 232)
-            {
-               // FNC1
-               result.Append((char) 29); // translate as ASCII 29
-            }
-            else if (oneByte == 233 || oneByte == 234)
-            {
-               // Structured Append, Reader Programming
-               // Ignore these symbols for now
-               //throw ReaderException.Instance;
-            }
-            else if (oneByte == 235)
-            {
-               // Upper Shift (shift to Extended ASCII)
-               upperShift = true;
-            }
-            else if (oneByte == 236)
-            {
-               // 05 Macro
-               result.Append("[)>\u001E05\u001D");
-               resultTrailer.Insert(0, "\u001E\u0004");
-            }
-            else if (oneByte == 237)
-            {
-               // 06 Macro
-               result.Append("[)>\u001E06\u001D");
-               resultTrailer.Insert(0, "\u001E\u0004");
-            }
-            else if (oneByte == 238)
-            {
-               // Latch to ANSI X12 encodation
-               mode = Mode.ANSIX12_ENCODE;
-               return true;
-            }
-            else if (oneByte == 239)
-            {
-               // Latch to Text encodation
-               mode = Mode.TEXT_ENCODE;
-               return true;
-            }
-            else if (oneByte == 240)
-            {
-               // Latch to EDIFACT encodation
-               mode = Mode.EDIFACT_ENCODE;
-               return true;
-            }
-            else if (oneByte == 241)
-            {
-               // ECI Character
-               // TODO(bbrown): I think we need to support ECI
-               //throw ReaderException.Instance;
-               // Ignore this symbol for now
-            }
-            else if (oneByte >= 242)
-            {
-               // Not to be used in ASCII encodation
-               // ... but work around encoders that end with 254, latch back to ASCII
-               if (oneByte != 254 || bits.available() != 0)
+               switch (oneByte)
                {
-                  return false;
+                  case 230: // Latch to C40 encodation
+                     mode = Mode.C40_ENCODE;
+                     return true;
+                  case 231: // Latch to Base 256 encodation
+                     mode = Mode.BASE256_ENCODE;
+                     return true;
+                  case 232: // FNC1
+                     result.Append((char) 29); // translate as ASCII 29
+                     break;
+                  case 233: // Structured Append
+                  case 234: // Reader Programming
+                     // Ignore these symbols for now
+                     //throw ReaderException.getInstance();
+                     break;
+                  case 235: // Upper Shift (shift to Extended ASCII)
+                     upperShift = true;
+                     break;
+                  case 236: // 05 Macro
+                     result.Append("[)>\u001E05\u001D");
+                     resultTrailer.Insert(0, "\u001E\u0004");
+                     break;
+                  case 237: // 06 Macro
+                     result.Append("[)>\u001E06\u001D");
+                     resultTrailer.Insert(0, "\u001E\u0004");
+                     break;
+                  case 238: // Latch to ANSI X12 encodation
+                     mode = Mode.ANSIX12_ENCODE;
+                     return true;
+                  case 239: // Latch to Text encodation
+                     mode = Mode.TEXT_ENCODE;
+                     return true;
+                  case 240: // Latch to EDIFACT encodation
+                     mode = Mode.EDIFACT_ENCODE;
+                     return true;
+                  case 241: // ECI Character
+                     // TODO(bbrown): I think we need to support ECI
+                     //throw ReaderException.getInstance();
+                     // Ignore this symbol for now
+                     break;
+                  default:
+                     // Not to be used in ASCII encodation
+                     // but work around encoders that end with 254, latch back to ASCII
+                     if (oneByte >= 242 && (oneByte != 254 || bits.available() != 0))
+                     {
+                        return false;
+                     }
+                     break;
                }
             }
          } while (bits.available() > 0);
@@ -340,19 +319,19 @@ namespace ZXing.Datamatrix.Internal
                            result.Append(c40char);
                         }
                      }
-                     else if (cValue == 27)
-                     {
-                        // FNC1
-                        result.Append((char) 29); // translate as ASCII 29
-                     }
-                     else if (cValue == 30)
-                     {
-                        // Upper Shift
-                        upperShift = true;
-                     }
                      else
                      {
-                        return false;
+                        switch (cValue)
+                        {
+                           case 27: // FNC1
+                              result.Append((char) 29); // translate as ASCII 29
+                              break;
+                           case 30: // Upper Shift
+                              upperShift = true;
+                              break;
+                           default:
+                              return false;
+                        }
                      }
                      shift = 0;
                      break;
@@ -460,19 +439,19 @@ namespace ZXing.Datamatrix.Internal
                            result.Append(textChar);
                         }
                      }
-                     else if (cValue == 27)
-                     {
-                        // FNC1
-                        result.Append((char) 29); // translate as ASCII 29
-                     }
-                     else if (cValue == 30)
-                     {
-                        // Upper Shift
-                        upperShift = true;
-                     }
                      else
                      {
-                        return false;
+                        switch (cValue)
+                        {
+                           case 27: // FNC1
+                              result.Append((char) 29); // translate as ASCII 29
+                              break;
+                           case 30: // Upper Shift
+                              upperShift = true;
+                              break;
+                           default:
+                              return false;
+                        }
                      }
                      shift = 0;
                      break;
@@ -534,39 +513,36 @@ namespace ZXing.Datamatrix.Internal
             for (int i = 0; i < 3; i++)
             {
                int cValue = cValues[i];
-               if (cValue == 0)
+               switch (cValue)
                {
-                  // X12 segment terminator <CR>
-                  result.Append('\r');
-               }
-               else if (cValue == 1)
-               {
-                  // X12 segment separator *
-                  result.Append('*');
-               }
-               else if (cValue == 2)
-               {
-                  // X12 sub-element separator >
-                  result.Append('>');
-               }
-               else if (cValue == 3)
-               {
-                  // space
-                  result.Append(' ');
-               }
-               else if (cValue < 14)
-               {
-                  // 0 - 9
-                  result.Append((char) (cValue + 44));
-               }
-               else if (cValue < 40)
-               {
-                  // A - Z
-                  result.Append((char) (cValue + 51));
-               }
-               else
-               {
-                  return false;
+                  case 0: // X12 segment terminator <CR>
+                     result.Append('\r');
+                     break;
+                  case 1: // X12 segment separator *
+                     result.Append('*');
+                     break;
+                  case 2: // X12 sub-element separator >
+                     result.Append('>');
+                     break;
+                  case 3: // space
+                     result.Append(' ');
+                     break;
+                  default:
+                     if (cValue < 14)
+                     {
+                        // 0 - 9
+                        result.Append((char) (cValue + 44));
+                     }
+                     else if (cValue < 40)
+                     {
+                        // A - Z
+                        result.Append((char) (cValue + 51));
+                     }
+                     else
+                     {
+                        return false;
+                     }
+                     break;
                }
             }
          } while (bits.available() > 0);

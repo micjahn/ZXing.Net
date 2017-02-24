@@ -26,6 +26,48 @@ namespace ZXing.Aztec.Test
       private static readonly ResultPoint[] NO_POINTS = new ResultPoint[0];
 
       [Test]
+      public void testAztecResult()
+      {
+         BitMatrix matrix = BitMatrix.parse(
+            "X X X X X     X X X       X X X     X X X     \n" +
+            "X X X     X X X     X X X X     X X X     X X \n" +
+            "  X   X X       X   X   X X X X     X     X X \n" +
+            "  X   X X     X X     X     X   X       X   X \n" +
+            "  X X   X X         X               X X     X \n" +
+            "  X X   X X X X X X X X X X X X X X X     X   \n" +
+            "  X X X X X                       X   X X X   \n" +
+            "  X   X   X   X X X X X X X X X   X X X   X X \n" +
+            "  X   X X X   X               X   X X       X \n" +
+            "  X X   X X   X   X X X X X   X   X X X X   X \n" +
+            "  X X   X X   X   X       X   X   X   X X X   \n" +
+            "  X   X   X   X   X   X   X   X   X   X   X   \n" +
+            "  X X X   X   X   X       X   X   X X   X X   \n" +
+            "  X X X X X   X   X X X X X   X   X X X   X X \n" +
+            "X X   X X X   X               X   X   X X   X \n" +
+            "  X       X   X X X X X X X X X   X   X     X \n" +
+            "  X X   X X                       X X   X X   \n" +
+            "  X X X   X X X X X X X X X X X X X X   X X   \n" +
+            "X     X     X     X X   X X               X X \n" +
+            "X   X X X X X   X X X X X     X   X   X     X \n" +
+            "X X X   X X X X           X X X       X     X \n" +
+            "X X     X X X     X X X X     X X X     X X   \n" +
+            "    X X X     X X X       X X X     X X X X   \n",
+            "X ", "  ");
+         AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, false, 30, 2);
+         DecoderResult result = new Decoder().decode(r);
+         Assert.AreEqual("88888TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", result.Text);
+         Assert.AreEqual(
+            new byte[]
+            {
+               245, 85, 85, 117, 107, 90, 214, 181, 173, 107, 
+               90, 214, 181, 173, 107, 90, 214, 181, 173, 107, 
+               90, 214, 176
+            },
+            result.RawBytes);
+         Assert.AreEqual(180, result.NumBits);
+      }
+
+      [Test]
       public void testDecodeTooManyErrors()
       {
          var matrix = BitMatrix.parse(""

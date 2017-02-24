@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using System;
 using NUnit.Framework;
-using ZXing.Common;
+
+using ZXing.Common.Test;
 
 namespace ZXing.OneD.Test
 {
@@ -26,15 +26,12 @@ namespace ZXing.OneD.Test
    [TestFixture]
    public sealed class EAN13WriterTestCase
    {
-      [Test]
-      public void testEncode()
+      [TestCase("5901234123457", "00001010001011010011101100110010011011110100111010101011001101101100100001010111001001110100010010100000", TestName = "EAN13testEncode")]
+      [TestCase("590123412345", "00001010001011010011101100110010011011110100111010101011001101101100100001010111001001110100010010100000", TestName = "EAN13testAddChecksumAndEncode")]
+      public void testEncode(string content, string encoding)
       {
-         String testStr = "00010100010110100111011001100100110111101001110101010110011011011001000010101110010011101000100101000";
-         BitMatrix result = new EAN13Writer().encode("5901234123457", BarcodeFormat.EAN_13, testStr.Length, 0);
-         for (int i = 0; i < testStr.Length; i++)
-         {
-            Assert.AreEqual(testStr[i] == '1', result[i, 0], "Element " + i);
-         }
+         var result = new EAN13Writer().encode(content, BarcodeFormat.EAN_13, encoding.Length, 0);
+         Assert.AreEqual(encoding, BitMatrixTestCase.matrixToString(result));
       }
    }
 }

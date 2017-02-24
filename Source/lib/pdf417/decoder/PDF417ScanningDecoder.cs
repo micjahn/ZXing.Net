@@ -309,7 +309,8 @@ namespace ZXing.PDF417.Internal
       /// <param name="barcodeMatrix">Barcode matrix.</param>
       private static bool adjustCodewordCount(DetectionResult detectionResult, BarcodeValue[][] barcodeMatrix)
       {
-         int[] numberOfCodewords = barcodeMatrix[0][1].getValue();
+         var barcodeMatrix01 = barcodeMatrix[0][1];
+         int[] numberOfCodewords = barcodeMatrix01.getValue();
          int calculatedNumberOfCodewords = detectionResult.ColumnCount*
                                            detectionResult.RowCount -
                                            getNumberOfECCodeWords(detectionResult.ErrorCorrectionLevel);
@@ -319,12 +320,12 @@ namespace ZXing.PDF417.Internal
             {
                return false;
             }
-            barcodeMatrix[0][1].setValue(calculatedNumberOfCodewords);
+            barcodeMatrix01.setValue(calculatedNumberOfCodewords);
          }
          else if (numberOfCodewords[0] != calculatedNumberOfCodewords)
          {
             // The calculated one is more reliable as it is derived from the row indicator columns
-            barcodeMatrix[0][1].setValue(calculatedNumberOfCodewords);
+            barcodeMatrix01.setValue(calculatedNumberOfCodewords);
          }
 
          return true;

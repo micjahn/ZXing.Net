@@ -238,30 +238,31 @@ namespace ZXing.PDF417.Internal
             // we must have at least two bytes left for the segment index
             return -1;
          }
-         int[] segmentIndexArray = new int[NUMBER_OF_SEQUENCE_CODEWORDS];
-         for (int i = 0; i < NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++)
+         var segmentIndexArray = new int[NUMBER_OF_SEQUENCE_CODEWORDS];
+         for (var i = 0; i < NUMBER_OF_SEQUENCE_CODEWORDS; i++, codeIndex++)
          {
             segmentIndexArray[i] = codewords[codeIndex];
          }
-         String s = decodeBase900toBase10(segmentIndexArray, NUMBER_OF_SEQUENCE_CODEWORDS);
+         var s = decodeBase900toBase10(segmentIndexArray, NUMBER_OF_SEQUENCE_CODEWORDS);
          if (s == null)
             return -1;
          resultMetadata.SegmentIndex = Int32.Parse(s);
 
-         StringBuilder fileId = new StringBuilder();
+         var fileId = new StringBuilder();
          codeIndex = textCompaction(codewords, codeIndex, fileId);
          resultMetadata.FileId = fileId.ToString();
 
-         if (codewords[codeIndex] == BEGIN_MACRO_PDF417_OPTIONAL_FIELD)
+         switch (codewords[codeIndex])
          {
-            codeIndex++;
-            int[] additionalOptionCodeWords = new int[codewords[0] - codeIndex];
-            int additionalOptionCodeWordsIndex = 0;
+            case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+               codeIndex++;
+               var additionalOptionCodeWords = new int[codewords[0] - codeIndex];
+               var additionalOptionCodeWordsIndex = 0;
 
-            bool end = false;
-            while ((codeIndex < codewords[0]) && !end)
-            {
-               int code = codewords[codeIndex++];
+               var end = false;
+               while ((codeIndex < codewords[0]) && !end)
+               {
+                  var code = codewords[codeIndex++];
                if (code < TEXT_COMPACTION_MODE_LATCH)
                {
                   additionalOptionCodeWords[additionalOptionCodeWordsIndex++] = code;
@@ -282,11 +283,11 @@ namespace ZXing.PDF417.Internal
             }
             resultMetadata.OptionalData = new int[additionalOptionCodeWordsIndex];
             Array.Copy(additionalOptionCodeWords, resultMetadata.OptionalData, additionalOptionCodeWordsIndex);
-         }
-         else if (codewords[codeIndex] == MACRO_PDF417_TERMINATOR)
-         {
+               break;
+            case MACRO_PDF417_TERMINATOR:
             resultMetadata.IsLastSegment = true;
             codeIndex++;
+               break;
          }
 
          return codeIndex;
@@ -399,32 +400,29 @@ namespace ZXing.PDF417.Internal
                   }
                   else
                   {
-                     if (subModeCh == 26)
+                     switch (subModeCh)
                      {
-                        ch = ' ';
-                     }
-                     else if (subModeCh == LL)
-                     {
-                        subMode = Mode.LOWER;
-                     }
-                     else if (subModeCh == ML)
-                     {
-                        subMode = Mode.MIXED;
-                     }
-                     else if (subModeCh == PS)
-                     {
-                        // Shift to punctuation
-                        priorToShiftMode = subMode;
-                        subMode = Mode.PUNCT_SHIFT;
-                     }
-                     else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE)
-                     {
-                        // TODO Does this need to use the current character encoding? See other occurrences below
-                        result.Append((char)byteCompactionData[i]);
-                     }
-                     else if (subModeCh == TEXT_COMPACTION_MODE_LATCH)
-                     {
-                        subMode = Mode.ALPHA;
+                        case 26:
+                           ch = ' ';
+                           break;
+                        case LL:
+                           subMode = Mode.LOWER;
+                           break;
+                        case ML:
+                           subMode = Mode.MIXED;
+                           break;
+                        case PS:
+                           // Shift to punctuation
+                           priorToShiftMode = subMode;
+                           subMode = Mode.PUNCT_SHIFT;
+                           break;
+                        case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+                           // TODO Does this need to use the current character encoding? See other occurrences below
+                           result.Append((char) byteCompactionData[i]);
+                           break;
+                        case TEXT_COMPACTION_MODE_LATCH:
+                           subMode = Mode.ALPHA;
+                           break;
                      }
                   }
                   break;
@@ -433,37 +431,35 @@ namespace ZXing.PDF417.Internal
                   // Lower (lowercase alphabetic)
                   if (subModeCh < 26)
                   {
-                     ch = (char)('a' + subModeCh);
+                     ch = (char) ('a' + subModeCh);
                   }
                   else
                   {
-                     if (subModeCh == 26)
+                     switch (subModeCh)
                      {
-                        ch = ' ';
-                     }
-                     else if (subModeCh == AS)
-                     {
-                        // Shift to alpha
-                        priorToShiftMode = subMode;
-                        subMode = Mode.ALPHA_SHIFT;
-                     }
-                     else if (subModeCh == ML)
-                     {
-                        subMode = Mode.MIXED;
-                     }
-                     else if (subModeCh == PS)
-                     {
-                        // Shift to punctuation
-                        priorToShiftMode = subMode;
-                        subMode = Mode.PUNCT_SHIFT;
-                     }
-                     else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE)
-                     {
-                        result.Append((char)byteCompactionData[i]);
-                     }
-                     else if (subModeCh == TEXT_COMPACTION_MODE_LATCH)
-                     {
-                        subMode = Mode.ALPHA;
+                        case 26:
+                           ch = ' ';
+                           break;
+                        case AS:
+                           // Shift to alpha
+                           priorToShiftMode = subMode;
+                           subMode = Mode.ALPHA_SHIFT;
+                           break;
+                        case ML:
+                           subMode = Mode.MIXED;
+                           break;
+                        case PS:
+                           // Shift to punctuation
+                           priorToShiftMode = subMode;
+                           subMode = Mode.PUNCT_SHIFT;
+                           break;
+                        case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+                           // TODO Does this need to use the current character encoding? See other occurrences below
+                           result.Append((char) byteCompactionData[i]);
+                           break;
+                        case TEXT_COMPACTION_MODE_LATCH:
+                           subMode = Mode.ALPHA;
+                           break;
                      }
                   }
                   break;
@@ -476,35 +472,31 @@ namespace ZXing.PDF417.Internal
                   }
                   else
                   {
-                     if (subModeCh == PL)
+                     switch (subModeCh)
                      {
-                        subMode = Mode.PUNCT;
-                     }
-                     else if (subModeCh == 26)
-                     {
-                        ch = ' ';
-                     }
-                     else if (subModeCh == LL)
-                     {
-                        subMode = Mode.LOWER;
-                     }
-                     else if (subModeCh == AL)
-                     {
-                        subMode = Mode.ALPHA;
-                     }
-                     else if (subModeCh == PS)
-                     {
-                        // Shift to punctuation
-                        priorToShiftMode = subMode;
-                        subMode = Mode.PUNCT_SHIFT;
-                     }
-                     else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE)
-                     {
-                        result.Append((char)byteCompactionData[i]);
-                     }
-                     else if (subModeCh == TEXT_COMPACTION_MODE_LATCH)
-                     {
-                        subMode = Mode.ALPHA;
+                        case PL:
+                           subMode = Mode.PUNCT;
+                           break;
+                        case 26:
+                           ch = ' ';
+                           break;
+                        case LL:
+                           subMode = Mode.LOWER;
+                           break;
+                        case AL:
+                           subMode = Mode.ALPHA;
+                           break;
+                        case PS:
+                           // Shift to punctuation
+                           priorToShiftMode = subMode;
+                           subMode = Mode.PUNCT_SHIFT;
+                           break;
+                        case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+                           result.Append((char) byteCompactionData[i]);
+                           break;
+                        case TEXT_COMPACTION_MODE_LATCH:
+                           subMode = Mode.ALPHA;
+                           break;
                      }
                   }
                   break;
@@ -517,17 +509,17 @@ namespace ZXing.PDF417.Internal
                   }
                   else
                   {
-                     if (subModeCh == PAL)
+                     switch (subModeCh)
                      {
-                        subMode = Mode.ALPHA;
-                     }
-                     else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE)
-                     {
-                        result.Append((char)byteCompactionData[i]);
-                     }
-                     else if (subModeCh == TEXT_COMPACTION_MODE_LATCH)
-                     {
-                        subMode = Mode.ALPHA;
+                        case PAL:
+                           subMode = Mode.ALPHA;
+                           break;
+                        case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+                           result.Append((char) byteCompactionData[i]);
+                           break;
+                        case TEXT_COMPACTION_MODE_LATCH:
+                           subMode = Mode.ALPHA;
+                           break;
                      }
                   }
                   break;
@@ -537,17 +529,18 @@ namespace ZXing.PDF417.Internal
                   subMode = priorToShiftMode;
                   if (subModeCh < 26)
                   {
-                     ch = (char)('A' + subModeCh);
+                     ch = (char) ('A' + subModeCh);
                   }
                   else
                   {
-                     if (subModeCh == 26)
+                     switch (subModeCh)
                      {
-                        ch = ' ';
-                     }
-                     else if (subModeCh == TEXT_COMPACTION_MODE_LATCH)
-                     {
-                        subMode = Mode.ALPHA;
+                        case 26:
+                           ch = ' ';
+                           break;
+                        case TEXT_COMPACTION_MODE_LATCH:
+                           subMode = Mode.ALPHA;
+                           break;
                      }
                   }
                   break;
@@ -561,19 +554,19 @@ namespace ZXing.PDF417.Internal
                   }
                   else
                   {
-                     if (subModeCh == PAL)
+                     switch (subModeCh)
                      {
-                        subMode = Mode.ALPHA;
-                     }
-                     else if (subModeCh == MODE_SHIFT_TO_BYTE_COMPACTION_MODE)
-                     {
-                        // PS before Shift-to-Byte is used as a padding character, 
-                        // see 5.4.2.4 of the specification
-                        result.Append((char)byteCompactionData[i]);
-                     }
-                     else if (subModeCh == TEXT_COMPACTION_MODE_LATCH)
-                     {
-                        subMode = Mode.ALPHA;
+                        case PAL:
+                           subMode = Mode.ALPHA;
+                           break;
+                        case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+                           // PS before Shift-to-Byte is used as a padding character,
+                           // see 5.4.2.4 of the specification
+                           result.Append((char) byteCompactionData[i]);
+                           break;
+                        case TEXT_COMPACTION_MODE_LATCH:
+                           subMode = Mode.ALPHA;
+                           break;
                      }
                   }
                   break;
@@ -601,107 +594,117 @@ namespace ZXing.PDF417.Internal
       /// </summary>
       private static int byteCompaction(int mode, int[] codewords, Encoding encoding, int codeIndex, StringBuilder result)
       {
-         var decodedBytes = new System.IO.MemoryStream();
-         if (mode == BYTE_COMPACTION_MODE_LATCH)
+         var count = 0;
+         var value = 0L;
+         var end = false;
+
+         using (var decodedBytes = new System.IO.MemoryStream())
          {
-            // Total number of Byte Compaction characters to be encoded
-            // is not a multiple of 6
-            int count = 0;
-            long value = 0;
-            int[] byteCompactedCodewords = new int[6];
-            bool end = false;
-            int nextCode = codewords[codeIndex++];
-            while ((codeIndex < codewords[0]) && !end)
+            switch (mode)
             {
-               byteCompactedCodewords[count++] = nextCode;
-               // Base 900
-               value = 900 * value + nextCode;
-               nextCode = codewords[codeIndex++];
-               // perhaps it should be ok to check only nextCode >= TEXT_COMPACTION_MODE_LATCH
-               if (nextCode == TEXT_COMPACTION_MODE_LATCH ||
-                   nextCode == BYTE_COMPACTION_MODE_LATCH ||
-                   nextCode == NUMERIC_COMPACTION_MODE_LATCH ||
-                   nextCode == BYTE_COMPACTION_MODE_LATCH_6 ||
-                   nextCode == BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
-                   nextCode == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
-                   nextCode == MACRO_PDF417_TERMINATOR)
-               {
-                  codeIndex--;
-                  end = true;
-               }
-               else
-               {
-                  if ((count%5 == 0) && (count > 0))
+               case BYTE_COMPACTION_MODE_LATCH:
+                  // Total number of Byte Compaction characters to be encoded
+                  // is not a multiple of 6
+
+                  int[] byteCompactedCodewords = new int[6];
+                  int nextCode = codewords[codeIndex++];
+                  while ((codeIndex < codewords[0]) && !end)
                   {
-                     // Decode every 5 codewords
-                     // Convert to Base 256
-                     for (int j = 0; j < 6; ++j)
+                     byteCompactedCodewords[count++] = nextCode;
+                     // Base 900
+                     value = 900*value + nextCode;
+                     nextCode = codewords[codeIndex++];
+                     // perhaps it should be ok to check only nextCode >= TEXT_COMPACTION_MODE_LATCH
+                     switch (nextCode)
                      {
-                        decodedBytes.WriteByte((byte)(value >> (8 * (5 - j))));
+                        case TEXT_COMPACTION_MODE_LATCH:
+                        case BYTE_COMPACTION_MODE_LATCH:
+                        case NUMERIC_COMPACTION_MODE_LATCH:
+                        case BYTE_COMPACTION_MODE_LATCH_6:
+                        case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
+                        case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+                        case MACRO_PDF417_TERMINATOR:
+                           codeIndex--;
+                           end = true;
+                           break;
+                        default:
+                           if ((count%5 == 0) && (count > 0))
+                           {
+                              // Decode every 5 codewords
+                              // Convert to Base 256
+                              for (int j = 0; j < 6; ++j)
+                              {
+                                 decodedBytes.WriteByte((byte) (value >> (8*(5 - j))));
+                              }
+                              value = 0;
+                              count = 0;
+                           }
+                           break;
                      }
-                     value = 0;
-                     count = 0;
                   }
-               }
+
+                  // if the end of all codewords is reached the last codeword needs to be added
+                  if (codeIndex == codewords[0] && nextCode < TEXT_COMPACTION_MODE_LATCH)
+                  {
+                     byteCompactedCodewords[count++] = nextCode;
+                  }
+
+                  // If Byte Compaction mode is invoked with codeword 901,
+                  // the last group of codewords is interpreted directly
+                  // as one byte per codeword, without compaction.
+                  for (int i = 0; i < count; i++)
+                  {
+                     decodedBytes.WriteByte((byte) byteCompactedCodewords[i]);
+                  }
+
+                  break;
+
+               case BYTE_COMPACTION_MODE_LATCH_6:
+                  // Total number of Byte Compaction characters to be encoded
+                  // is an integer multiple of 6
+                  while (codeIndex < codewords[0] && !end)
+                  {
+                     int code = codewords[codeIndex++];
+                     if (code < TEXT_COMPACTION_MODE_LATCH)
+                     {
+                        count++;
+                        // Base 900
+                        value = 900*value + code;
+                     }
+                     else
+                     {
+                        switch (code)
+                        {
+                           case TEXT_COMPACTION_MODE_LATCH:
+                           case BYTE_COMPACTION_MODE_LATCH:
+                           case NUMERIC_COMPACTION_MODE_LATCH:
+                           case BYTE_COMPACTION_MODE_LATCH_6:
+                           case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
+                           case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+                           case MACRO_PDF417_TERMINATOR:
+                              codeIndex--;
+                              end = true;
+                              break;
+                        }
+                     }
+                     if ((count%5 == 0) && (count > 0))
+                     {
+                        // Decode every 5 codewords
+                        // Convert to Base 256
+                        for (int j = 0; j < 6; ++j)
+                        {
+                           decodedBytes.WriteByte((byte) (value >> (8*(5 - j))));
+                        }
+                        value = 0;
+                        count = 0;
+                     }
+                  }
+                  break;
             }
 
-            // if the end of all codewords is reached the last codeword needs to be added
-            if (codeIndex == codewords[0] && nextCode < TEXT_COMPACTION_MODE_LATCH)
-               byteCompactedCodewords[count++] = nextCode;
-
-            // If Byte Compaction mode is invoked with codeword 901,
-            // the last group of codewords is interpreted directly
-            // as one byte per codeword, without compaction.
-            for (int i = 0; i < count; i++)
-            {
-               decodedBytes.WriteByte((byte)byteCompactedCodewords[i]);
-            }
+            var bytes = decodedBytes.ToArray();
+            result.Append(encoding.GetString(bytes, 0, bytes.Length));
          }
-         else if (mode == BYTE_COMPACTION_MODE_LATCH_6)
-         {
-            // Total number of Byte Compaction characters to be encoded
-            // is an integer multiple of 6
-            int count = 0;
-            long value = 0;
-            bool end = false;
-            while (codeIndex < codewords[0] && !end)
-            {
-               int code = codewords[codeIndex++];
-               if (code < TEXT_COMPACTION_MODE_LATCH)
-               {
-                  count++;
-                  // Base 900
-                  value = 900 * value + code;
-               }
-               else
-               {
-                  if (code == TEXT_COMPACTION_MODE_LATCH ||
-                      code == BYTE_COMPACTION_MODE_LATCH ||
-                      code == NUMERIC_COMPACTION_MODE_LATCH ||
-                      code == BYTE_COMPACTION_MODE_LATCH_6 ||
-                      code == BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
-                      code == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
-                      code == MACRO_PDF417_TERMINATOR)
-                  {
-                     codeIndex--;
-                     end = true;
-                  }
-               }
-               if ((count % 5 == 0) && (count > 0))
-               {
-                  // Decode every 5 codewords
-                  // Convert to Base 256
-                  for (int j = 0; j < 6; ++j)
-                  {
-                     decodedBytes.WriteByte((byte)(value >> (8 * (5 - j))));
-                  }
-                  value = 0;
-                  count = 0;
-               }
-            }
-         }
-         var bytes = decodedBytes.ToArray();
-         result.Append(encoding.GetString(bytes, 0, bytes.Length));
          return codeIndex;
       }
 
@@ -734,15 +737,17 @@ namespace ZXing.PDF417.Internal
             }
             else
             {
-               if (code == TEXT_COMPACTION_MODE_LATCH ||
-                   code == BYTE_COMPACTION_MODE_LATCH ||
-                   code == BYTE_COMPACTION_MODE_LATCH_6 ||
-                   code == BEGIN_MACRO_PDF417_CONTROL_BLOCK ||
-                   code == BEGIN_MACRO_PDF417_OPTIONAL_FIELD ||
-                   code == MACRO_PDF417_TERMINATOR)
+               switch (code)
                {
-                  codeIndex--;
-                  end = true;
+                  case TEXT_COMPACTION_MODE_LATCH:
+                  case BYTE_COMPACTION_MODE_LATCH:
+                  case BYTE_COMPACTION_MODE_LATCH_6:
+                  case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
+                  case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+                  case MACRO_PDF417_TERMINATOR:
+                     codeIndex--;
+                     end = true;
+                     break;
                }
             }
             if (count % MAX_NUMERIC_CODEWORDS == 0 ||

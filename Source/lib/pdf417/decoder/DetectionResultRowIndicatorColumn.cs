@@ -77,7 +77,7 @@ namespace ZXing.PDF417.Internal
 
          // We need to be careful using the average row height.  
          // Barcode could be skewed so that we have smaller and taller rows
-         float averageRowHeight = (lastRow - firstRow)/(float) metadata.RowCount;
+         //float averageRowHeight = (lastRow - firstRow)/(float) metadata.RowCount;
 
          // initialize loop
          int barcodeRow = -1;
@@ -200,7 +200,7 @@ namespace ZXing.PDF417.Internal
 
          // We need to be careful using the average row height.  
          // Barcode could be skewed so that we have smaller and taller rows
-         float averageRowHeight = (lastRow - firstRow)/(float) metadata.RowCount;
+         //float averageRowHeight = (lastRow - firstRow)/(float) metadata.RowCount;
          var codewords = Codewords;
 
          // initialize loop

@@ -55,33 +55,34 @@ namespace ZXing.Datamatrix.Encoder
 
       protected override int encodeChar(char c, StringBuilder sb)
       {
-         if (c == '\r')
+         switch (c)
          {
-            sb.Append('\u0000');
-         }
-         else if (c == '*')
-         {
-            sb.Append('\u0001');
-         }
-         else if (c == '>')
-         {
-            sb.Append('\u0002');
-         }
-         else if (c == ' ')
-         {
-            sb.Append('\u0003');
-         }
-         else if (c >= '0' && c <= '9')
-         {
-            sb.Append((char) (c - 48 + 4));
-         }
-         else if (c >= 'A' && c <= 'Z')
-         {
-            sb.Append((char) (c - 65 + 14));
-         }
-         else
-         {
-            HighLevelEncoder.illegalCharacter(c);
+            case '\r':
+               sb.Append('\u0000');
+               break;
+            case '*':
+               sb.Append('\u0001');
+               break;
+            case '>':
+               sb.Append('\u0002');
+               break;
+            case ' ':
+               sb.Append('\u0003');
+               break;
+            default:
+               if (c >= '0' && c <= '9')
+               {
+                  sb.Append((char) (c - 48 + 4));
+               }
+               else if (c >= 'A' && c <= 'Z')
+               {
+                  sb.Append((char) (c - 65 + 14));
+               }
+               else
+               {
+                  HighLevelEncoder.illegalCharacter(c);
+               }
+               break;
          }
          return 1;
       }

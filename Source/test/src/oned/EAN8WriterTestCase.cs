@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using System;
 using NUnit.Framework;
-using ZXing.Common;
+
+using ZXing.Common.Test;
 
 namespace ZXing.OneD.Test
 {
@@ -26,15 +26,12 @@ namespace ZXing.OneD.Test
    [TestFixture]
    public sealed class EAN8WriterTestCase
    {
-      [Test]
-      public void testEncode()
+      [TestCase("96385074", "0000001010001011010111101111010110111010101001110111001010001001011100101000000", TestName = "EAN8testEncode")]
+      [TestCase("9638507", "0000001010001011010111101111010110111010101001110111001010001001011100101000000", TestName = "EAN8testAddChecksumAndEncode")]
+      public void testEncode(string content, string encoding)
       {
-         String testStr = "0001010001011010111101111010110111010101001110111001010001001011100101000";
-         BitMatrix result = new EAN8Writer().encode("96385074", BarcodeFormat.EAN_8, testStr.Length, 0);
-         for (int i = 0; i < testStr.Length; i++)
-         {
-            Assert.AreEqual(testStr[i] == '1', result[i, 0], "Element " + i);
-         }
+         var result = new EAN8Writer().encode(content, BarcodeFormat.EAN_8, encoding.Length, 0);
+         Assert.AreEqual(encoding, BitMatrixTestCase.matrixToString(result));
       }
    }
 }

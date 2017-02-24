@@ -139,22 +139,22 @@ namespace ZXing.PDF417.Internal
          //Construct inverse lookups
          for (int idx = 0; idx < MIXED.Length; idx++)
             MIXED[idx] = -1;
-         for (sbyte i = 0; i < TEXT_MIXED_RAW.Length; i++)
+         for (int i = 0; i < TEXT_MIXED_RAW.Length; i++)
          {
             sbyte b = TEXT_MIXED_RAW[i];
             if (b > 0)
             {
-               MIXED[b] = i;
+               MIXED[b] = (sbyte)i;
             }
          }
          for (int idx = 0; idx < PUNCTUATION.Length; idx++)
             PUNCTUATION[idx] = -1;
-         for (sbyte i = 0; i < TEXT_PUNCTUATION_RAW.Length; i++)
+         for (int i = 0; i < TEXT_PUNCTUATION_RAW.Length; i++)
          {
             sbyte b = TEXT_PUNCTUATION_RAW[i];
             if (b > 0)
             {
-               PUNCTUATION[b] = i;
+               PUNCTUATION[b] = (sbyte)i;
             }
          }
       }
@@ -189,102 +189,82 @@ namespace ZXing.PDF417.Internal
          int textSubMode = SUBMODE_ALPHA;
 
          // User selected encoding mode
-         if (compaction == Compaction.TEXT)
+         switch (compaction)
          {
-            encodeText(msg, p, len, sb, textSubMode);
-
-         }
-         else if (compaction == Compaction.BYTE)
-         {
-            var bytes = toBytes(msg, encoding);
-            encodeBinary(bytes, p, bytes.Length, BYTE_COMPACTION, sb);
-
-         }
-         else if (compaction == Compaction.NUMERIC)
-         {
-            sb.Append((char) LATCH_TO_NUMERIC);
-            encodeNumeric(msg, p, len, sb);
-
-         }
-         else
-         {
-            int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
-            byte[] bytes = null;
-            while (p < len)
-            {
-               int n = determineConsecutiveDigitCount(msg, p);
-               if (n >= 13)
+            case Compaction.TEXT:
+               encodeText(msg, p, len, sb, textSubMode);
+               break;
+            case Compaction.BYTE:
+               var msgBytes = toBytes(msg, encoding);
+               encodeBinary(msgBytes, p, msgBytes.Length, BYTE_COMPACTION, sb);
+               break;
+            case Compaction.NUMERIC:
+               sb.Append((char) LATCH_TO_NUMERIC);
+               encodeNumeric(msg, p, len, sb);
+               break;
+            default:
+               int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
+               byte[] bytes = null;
+               while (p < len)
                {
-                  sb.Append((char) LATCH_TO_NUMERIC);
-                  encodingMode = NUMERIC_COMPACTION;
-                  textSubMode = SUBMODE_ALPHA; //Reset after latch
-                  encodeNumeric(msg, p, n, sb);
-                  p += n;
-               }
-               else
-               {
-                  int t = determineConsecutiveTextCount(msg, p);
-                  if (t >= 5 || n == len)
+                  int n = determineConsecutiveDigitCount(msg, p);
+                  if (n >= 13)
                   {
-                     if (encodingMode != TEXT_COMPACTION)
-                     {
-                        sb.Append((char) LATCH_TO_TEXT);
-                        encodingMode = TEXT_COMPACTION;
-                        textSubMode = SUBMODE_ALPHA; //start with submode alpha after latch
-                     }
-                     textSubMode = encodeText(msg, p, t, sb, textSubMode);
-                     p += t;
+                     sb.Append((char) LATCH_TO_NUMERIC);
+                     encodingMode = NUMERIC_COMPACTION;
+                     textSubMode = SUBMODE_ALPHA; //Reset after latch
+                     encodeNumeric(msg, p, n, sb);
+                     p += n;
                   }
                   else
                   {
-                     if (bytes == null)
+                     int t = determineConsecutiveTextCount(msg, p);
+                     if (t >= 5 || n == len)
                      {
-                        bytes = toBytes(msg, encoding);
-                     } 
-                     int b = determineConsecutiveBinaryCount(msg, bytes, p, encoding);
-                     if (b == 0)
-                     {
-                        b = 1;
-                     }
-                     if (b == 1 && encodingMode == TEXT_COMPACTION)
-                     {
-                        //Switch for one byte (instead of latch)
-                        encodeBinary(bytes, p, 1, TEXT_COMPACTION, sb);
+                        if (encodingMode != TEXT_COMPACTION)
+                        {
+                           sb.Append((char) LATCH_TO_TEXT);
+                           encodingMode = TEXT_COMPACTION;
+                           textSubMode = SUBMODE_ALPHA; //start with submode alpha after latch
+                        }
+                        textSubMode = encodeText(msg, p, t, sb, textSubMode);
+                        p += t;
                      }
                      else
                      {
-                        //Mode latch performed by encodeBinary()
-                        encodeBinary(bytes,
-                                     toBytes(msg.Substring(0, p), encoding).Length,
-                                     toBytes(msg.Substring(p, b), encoding).Length,
-                                     encodingMode,
-                                     sb);
-                        encodingMode = BYTE_COMPACTION;
-                        textSubMode = SUBMODE_ALPHA; //Reset after latch
+                        if (bytes == null)
+                        {
+                           bytes = toBytes(msg, encoding);
+                        }
+                        int b = determineConsecutiveBinaryCount(msg, bytes, p, encoding);
+                        if (b == 0)
+                        {
+                           b = 1;
+                        }
+                        if (b == 1 && encodingMode == TEXT_COMPACTION)
+                        {
+                           //Switch for one byte (instead of latch)
+                           encodeBinary(bytes, 0, 1, TEXT_COMPACTION, sb);
+                        }
+                        else
+                        {
+                           //Mode latch performed by encodeBinary()
+                           encodeBinary(bytes,
+                              toBytes(msg.Substring(0, p), encoding).Length,
+                              toBytes(msg.Substring(p, b), encoding).Length,
+                              encodingMode,
+                              sb);
+                           encodingMode = BYTE_COMPACTION;
+                           textSubMode = SUBMODE_ALPHA; //Reset after latch
+                        }
+                        p += b;
                      }
-                     p += b;
                   }
                }
-            }
+               break;
          }
 
          return sb.ToString();
-      }
-
-      private static bool Contains(string[] stringArray, string lookFor)
-      {
-         var result = false;
-         lookFor = lookFor.ToUpper();
-         for (var index = 0; index < stringArray.Length; index++)
-         {
-            if (stringArray[index] == lookFor)
-            {
-               result = true;
-               break;
-            }
-         }
-
-         return result;
       }
 
       private static Encoding getEncoder(Encoding encoding)

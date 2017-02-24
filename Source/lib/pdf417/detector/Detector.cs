@@ -321,22 +321,21 @@ namespace ZXing.PDF417.Internal
          int[] counters)
       {
          SupportClass.Fill(counters, 0);
-         int patternLength = pattern.Length;
-         bool isWhite = whiteFirst;
-         int patternStart = column;
-         int pixelDrift = 0;
+         var patternStart = column;
+         var pixelDrift = 0;
 
          // if there are black pixels left of the current pixel shift to the left, but only for MAX_PIXEL_DRIFT pixels 
          while (matrix[patternStart, row] && patternStart > 0 && pixelDrift++ < MAX_PIXEL_DRIFT)
          {
             patternStart--;
          }
-         int x = patternStart;
-         int counterPosition = 0;
-         for (; x < width; x++)
+         var x = patternStart;
+         var counterPosition = 0;
+         var patternLength = pattern.Length;
+         for (var isWhite = whiteFirst; x < width; x++)
          {
-            bool pixel = matrix[x, row];
-            if (pixel ^ isWhite)
+            var pixel = matrix[x, row];
+            if (pixel != isWhite)
             {
                counters[counterPosition]++;
             }
@@ -349,9 +348,9 @@ namespace ZXing.PDF417.Internal
                      return new int[] {patternStart, x};
                   }
                   patternStart += counters[0] + counters[1];
-                  Array.Copy(counters, 2, counters, 0, patternLength - 2);
-                  counters[patternLength - 2] = 0;
-                  counters[patternLength - 1] = 0;
+                  Array.Copy(counters, 2, counters, 0, counterPosition - 1);
+                  counters[counterPosition - 1] = 0;
+                  counters[counterPosition] = 0;
                   counterPosition--;
                }
                else
@@ -362,12 +361,10 @@ namespace ZXing.PDF417.Internal
                isWhite = !isWhite;
             }
          }
-         if (counterPosition == patternLength - 1)
+         if (counterPosition == patternLength - 1 &&
+             patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE)
          {
-            if (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE)
-            {
-               return new int[] {patternStart, x - 1};
-            }
+            return new int[] {patternStart, x - 1};
          }
          return null;
       }

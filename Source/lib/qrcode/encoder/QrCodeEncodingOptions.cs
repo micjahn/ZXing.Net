@@ -106,5 +106,33 @@ namespace ZXing.QrCode
             Hints[EncodeHintType.DISABLE_ECI] = value;
          }
       }
+
+      /// <summary>
+      /// Specifies the exact version of QR code to be encoded. An integer, range 1 to 40. If the data specified
+      /// cannot fit within the required version, a WriterException will be thrown.
+      /// </summary>
+      public int? QrVersion
+      {
+         get
+         {
+            if (Hints.ContainsKey(EncodeHintType.QR_VERSION))
+            {
+               return (int)Hints[EncodeHintType.QR_VERSION];
+            }
+            return null;
+         }
+         set
+         {
+            if (value == null)
+            {
+               if (Hints.ContainsKey(EncodeHintType.QR_VERSION))
+                  Hints.Remove(EncodeHintType.QR_VERSION);
+            }
+            else
+            {
+               Hints[EncodeHintType.QR_VERSION] = value.Value;
+            }
+         }
+      }
    }
 }

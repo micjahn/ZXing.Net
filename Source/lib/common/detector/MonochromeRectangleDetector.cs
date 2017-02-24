@@ -14,6 +14,8 @@
 * limitations under the License.
 */
 
+using System;
+
 namespace ZXing.Common.Detector
 {
    /// <summary> <p>A somewhat generic detector that looks for a barcode-like rectangular region within an image.
@@ -21,15 +23,13 @@ namespace ZXing.Common.Detector
    /// black. It returns the four corners of the region, as best it can determine.</p>
    /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
+   [Obsolete]
    public sealed class MonochromeRectangleDetector
    {
       private const int MAX_MODULES = 32;
 
-      private BitMatrix image;
+      private readonly BitMatrix image;
 
       public MonochromeRectangleDetector(BitMatrix image)
       {
@@ -107,7 +107,7 @@ namespace ZXing.Common.Detector
       /// <param name="maxWhiteRun">maximum run of white pixels that can still be considered to be within
       /// the barcode
       /// </param>
-      /// <returns> a {@link com.google.zxing.ResultPoint} encapsulating the corner that was found
+      /// <returns> a <see cref="ResultPoint"/> encapsulating the corner that was found
       /// </returns>
       private ResultPoint findCornerFromCenter(int centerX, int deltaX, int left, int right, int centerY, int deltaY, int top, int bottom, int maxWhiteRun)
       {

@@ -72,7 +72,7 @@ namespace ZXing.PDF417.Internal
       /// Returns the confience value for a given barcode value
       /// </summary>
       /// <param name="barcodeValue">Barcode value.</param>
-      public int getConfidence(int barcodeValue)
+      internal int getConfidence(int barcodeValue)
       {
          return values.ContainsKey(barcodeValue) ? values[barcodeValue] : 0;
       }

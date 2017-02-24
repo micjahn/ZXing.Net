@@ -123,7 +123,9 @@
     <Compile Include="datamatrix\encoder\HighLevelEncodeTestCase.cs" />
     <Compile Include="datamatrix\encoder\PlacementTestCase.cs" />
     <Compile Include="datamatrix\encoder\SymbolInfoTestCase.cs" />
+    <Compile Include="maxicode\Maxicode1TestCase.cs" />
     <Compile Include="multi\GenericMultipleBarcodeReaderTestCase.cs" />
+    <Compile Include="multi\MultiTestCase.cs" />
     <Compile Include="multi\qrcode\MultiQRCodeBlackBox1TestCase.cs" />
     <Compile Include="negative\FalsePositives2BlackBoxTestCase.cs" />
     <Compile Include="negative\FalsePositivesBlackBoxTestCase.cs" />
@@ -138,7 +140,9 @@
     <Compile Include="oned\Code39BlackBox1TestCase.cs" />
     <Compile Include="oned\Code39BlackBox3TestCase.cs" />
     <Compile Include="oned\Code39ExtendedBlackBox2TestCase.cs" />
+    <Compile Include="oned\Code39WriterTestCase.cs" />
     <Compile Include="oned\Code93BlackBox1TestCase.cs" />
+    <Compile Include="oned\Code93WriterTestCase.cs" />
     <Compile Include="oned\EAN13BlackBox1TestCase.cs" />
     <Compile Include="oned\EAN13BlackBox2TestCase.cs" />
     <Compile Include="oned\EAN13BlackBox3TestCase.cs" />
@@ -186,6 +190,7 @@
     <Compile Include="oned\UPCEBlackBox1TestCase.cs" />
     <Compile Include="oned\UPCEBlackBox2TestCase.cs" />
     <Compile Include="oned\UPCEBlackBox3ReflectiveTestCase.cs" />
+    <Compile Include="oned\UPCEWriterTestCase.cs" />
     <Compile Include="pdf417\decoder\ec\AbstractErrorCorrectionTestCase.cs" />
     <Compile Include="pdf417\decoder\ec\ErrorCorrectionTestCase.cs" />
     <Compile Include="pdf417\encoder\PDF417EncoderTestCase.cs" />
@@ -195,6 +200,7 @@
     <Compile Include="pdf417\PDF417BlackBox4TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBoxZTestCase.cs" />
     <Compile Include="pdf417\PDF417DecodedBitStreamParserTestCase.cs" />
+    <Compile Include="pdf417\PDF417WriterTestCase.cs" />
     <Compile Include="PlanarYUVLuminanceSourceTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="qrcode\decoder\DataMaskTestCase.cs" />

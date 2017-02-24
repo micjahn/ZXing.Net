@@ -30,21 +30,17 @@ namespace ZXing.Client.Result.Test
    {
       private static double EPSILON = 1.0E-10;
 
-      [Test]
-      public void testGeo()
-      {
-         doTest("geo:1,2", 1.0, 2.0, 0.0, null);
-         doTest("geo:80.33,-32.3344,3.35", 80.33, -32.3344, 3.35, null);
-         doTest("geo:-20.33,132.3344,0.01", -20.33, 132.3344, 0.01, null);
-         doTest("geo:-20.33,132.3344,0.01?q=foobar", -20.33, 132.3344, 0.01, "q=foobar");
-         doTest("GEO:-20.33,132.3344,0.01?q=foobar", -20.33, 132.3344, 0.01, "q=foobar");
-      }
-
-      private static void doTest(String contents,
+      [TestCase("geo:1,2", 1.0, 2.0, 0.0, null, "geo:1.0,2.0")]
+      [TestCase("geo:80.33,-32.3344,3.35", 80.33, -32.3344, 3.35, null, null)]
+      [TestCase("geo:-20.33,132.3344,0.01", -20.33, 132.3344, 0.01, null, null)]
+      [TestCase("geo:-20.33,132.3344,0.01?q=foobar", -20.33, 132.3344, 0.01, "q=foobar", null)]
+      [TestCase("GEO:-20.33,132.3344,0.01?q=foobar", -20.33, 132.3344, 0.01, "q=foobar", null)]
+      public void testGeo(String contents,
                                  double latitude,
                                  double longitude,
                                  double altitude,
-                                 String query)
+                                 String query,
+                                 String uri)
       {
          ZXing.Result fakeResult = new ZXing.Result(contents, null, null, BarcodeFormat.QR_CODE);
          ParsedResult result = ResultParser.parseResult(fakeResult);
@@ -54,6 +50,7 @@ namespace ZXing.Client.Result.Test
          Assert.AreEqual(longitude, geoResult.Longitude, EPSILON);
          Assert.AreEqual(altitude, geoResult.Altitude, EPSILON);
          Assert.AreEqual(query, geoResult.Query);
+         Assert.AreEqual(uri ?? contents.ToLower(), geoResult.GeoURI);
       }
    }
 }

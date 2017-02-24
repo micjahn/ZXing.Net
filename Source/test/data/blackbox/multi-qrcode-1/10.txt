@@ -1,0 +1,2 @@
+MEBKM:URL:http\://en.wikipedia.org/wiki/Main_Page;;
+MECARD:N:Google 411,;TEL:18665881077;;

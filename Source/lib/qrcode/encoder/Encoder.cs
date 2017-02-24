@@ -81,33 +81,35 @@ namespace ZXing.QrCode.Internal
                                 IDictionary<EncodeHintType, object> hints)
       {
          // Determine what character encoding has been specified by the caller, if any
+         bool hasEncodingHint = hints != null && hints.ContainsKey(EncodeHintType.CHARACTER_SET);
+
 #if !SILVERLIGHT || WINDOWS_PHONE
-         String encoding = hints == null || !hints.ContainsKey(EncodeHintType.CHARACTER_SET) ? null : (String)hints[EncodeHintType.CHARACTER_SET];
+         var encoding = hints == null || !hints.ContainsKey(EncodeHintType.CHARACTER_SET) ? null : (String)hints[EncodeHintType.CHARACTER_SET];
          if (encoding == null)
          {
             encoding = DEFAULT_BYTE_MODE_ENCODING;
          }
-         bool generateECI = !DEFAULT_BYTE_MODE_ENCODING.Equals(encoding);
+         var generateECI = hasEncodingHint || !DEFAULT_BYTE_MODE_ENCODING.Equals(encoding);
 #else
          // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
          const string encoding = "UTF-8";
          // caller of the method can only control if the ECI segment should be written
          // character set is fixed to UTF-8; but some scanners doesn't like the ECI segment
-         bool generateECI = (hints != null && hints.ContainsKey(EncodeHintType.CHARACTER_SET));
+         var generateECI = hasEncodingHint;
 #endif
 
          // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
          // multiple modes / segments even if that were more efficient. Twould be nice.
-         Mode mode = chooseMode(content, encoding);
+         var mode = chooseMode(content, encoding);
 
          // This will store the header information, like mode and
          // length, as well as "header" segments like an ECI segment.
-         BitArray headerBits = new BitArray();
+         var headerBits = new BitArray();
 
          // Append ECI segment if applicable
          if (mode == Mode.BYTE && generateECI)
          {
-            CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding);
+            var eci = CharacterSetECI.getCharacterSetECIByName(encoding);
             if (eci != null)
             {
                var eciIsExplicitDisabled = (hints != null && hints.ContainsKey(EncodeHintType.DISABLE_ECI) && hints[EncodeHintType.DISABLE_ECI] != null && Convert.ToBoolean(hints[EncodeHintType.DISABLE_ECI].ToString()));
@@ -123,45 +125,46 @@ namespace ZXing.QrCode.Internal
 
          // Collect data within the main segment, separately, to count its size if needed. Don't add it to
          // main payload yet.
-         BitArray dataBits = new BitArray();
+         var dataBits = new BitArray();
          appendBytes(content, mode, dataBits, encoding);
 
-         // Hard part: need to know version to know how many bits length takes. But need to know how many
-         // bits it takes to know version. First we take a guess at version by assuming version will be
-         // the minimum, 1:
+         Version version;
+         if (hints != null && hints.ContainsKey(EncodeHintType.QR_VERSION))
+         {
+            int versionNumber = Int32.Parse(hints[EncodeHintType.QR_VERSION].ToString());
+            version = Version.getVersionForNumber(versionNumber);
+            int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, version);
+            if (!willFit(bitsNeeded, version, ecLevel))
+            {
+               throw new WriterException("Data too big for requested version");
+            }
+         }
+         else
+         {
+            version = recommendVersion(ecLevel, mode, headerBits, dataBits);
+         }
 
-         int provisionalBitsNeeded = headerBits.Size
-             + mode.getCharacterCountBits(Version.getVersionForNumber(1))
-             + dataBits.Size;
-         Version provisionalVersion = chooseVersion(provisionalBitsNeeded, ecLevel);
-
-         // Use that guess to calculate the right version. I am still not sure this works in 100% of cases.
-         int bitsNeeded = headerBits.Size
-             + mode.getCharacterCountBits(provisionalVersion)
-             + dataBits.Size;
-         Version version = chooseVersion(bitsNeeded, ecLevel);
-
-         BitArray headerAndDataBits = new BitArray();
+         var headerAndDataBits = new BitArray();
          headerAndDataBits.appendBitArray(headerBits);
          // Find "length" of main segment and write it
-         int numLetters = mode == Mode.BYTE ? dataBits.SizeInBytes : content.Length;
+         var numLetters = mode == Mode.BYTE ? dataBits.SizeInBytes : content.Length;
          appendLengthInfo(numLetters, version, mode, headerAndDataBits);
          // Put data together into the overall payload
          headerAndDataBits.appendBitArray(dataBits);
 
-         Version.ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);
-         int numDataBytes = version.TotalCodewords - ecBlocks.TotalECCodewords;
+         var ecBlocks = version.getECBlocksForLevel(ecLevel);
+         var numDataBytes = version.TotalCodewords - ecBlocks.TotalECCodewords;
 
          // Terminate the bits properly.
          terminateBits(numDataBytes, headerAndDataBits);
 
          // Interleave data bits with error correction code.
-         BitArray finalBits = interleaveWithECBytes(headerAndDataBits,
+         var finalBits = interleaveWithECBytes(headerAndDataBits,
                                                     version.TotalCodewords,
                                                     numDataBytes,
                                                     ecBlocks.NumBlocks);
 
-         QRCode qrCode = new QRCode
+         var qrCode = new QRCode
                             {
                                ECLevel = ecLevel, 
                                Mode = mode,
@@ -169,9 +172,9 @@ namespace ZXing.QrCode.Internal
                             };
 
          //  Choose the mask pattern and set to "qrCode".
-         int dimension = version.DimensionForVersion;
-         ByteMatrix matrix = new ByteMatrix(dimension, dimension);
-         int maskPattern = chooseMaskPattern(finalBits, ecLevel, version, matrix);
+         var dimension = version.DimensionForVersion;
+         var matrix = new ByteMatrix(dimension, dimension);
+         var maskPattern = chooseMaskPattern(finalBits, ecLevel, version, matrix);
          qrCode.MaskPattern = maskPattern;
 
          // Build the matrix and set it to "qrCode".
@@ -179,6 +182,28 @@ namespace ZXing.QrCode.Internal
          qrCode.Matrix = matrix;
 
          return qrCode;
+      }
+
+      /// <summary>
+      /// Decides the smallest version of QR code that will contain all of the provided data.
+      /// </summary>
+      /// <exception cref="WriterException">if the data cannot fit in any version</exception>
+      private static Version recommendVersion(ErrorCorrectionLevel ecLevel, Mode mode, BitArray headerBits, BitArray dataBits)
+      {
+         // Hard part: need to know version to know how many bits length takes. But need to know how many
+         // bits it takes to know version. First we take a guess at version by assuming version will be
+         // the minimum, 1:
+         var provisionalBitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, Version.getVersionForNumber(1));
+         var provisionalVersion = chooseVersion(provisionalBitsNeeded, ecLevel);
+
+         // Use that guess to calculate the right version. I am still not sure this works in 100% of cases.
+         var bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, provisionalVersion);
+         return chooseVersion(bitsNeeded, ecLevel);
+      }
+
+      private static int calculateBitsNeeded(Mode mode, BitArray headerBits, BitArray dataBits, Version version)
+      {
+         return headerBits.Size + mode.getCharacterCountBits(version) + dataBits.Size;
       }
 
       /// <summary>
@@ -306,24 +331,31 @@ namespace ZXing.QrCode.Internal
 
       private static Version chooseVersion(int numInputBits, ErrorCorrectionLevel ecLevel)
       {
-         // In the following comments, we use numbers of Version 7-H.
          for (int versionNum = 1; versionNum <= 40; versionNum++)
          {
-            Version version = Version.getVersionForNumber(versionNum);
-            // numBytes = 196
-            int numBytes = version.TotalCodewords;
-            // getNumECBytes = 130
-            Version.ECBlocks ecBlocks = version.getECBlocksForLevel(ecLevel);
-            int numEcBytes = ecBlocks.TotalECCodewords;
-            // getNumDataBytes = 196 - 130 = 66
-            int numDataBytes = numBytes - numEcBytes;
-            int totalInputBytes = (numInputBits + 7) / 8;
-            if (numDataBytes >= totalInputBytes)
+            var version = Version.getVersionForNumber(versionNum);
+            if (willFit(numInputBits, version, ecLevel))
             {
                return version;
             }
          }
          throw new WriterException("Data too big");
+      }
+  
+      /// <summary></summary>
+      /// <returns>true if the number of input bits will fit in a code with the specified version and error correction level.</returns>
+      private static bool willFit(int numInputBits, Version version, ErrorCorrectionLevel ecLevel)
+      {
+         // In the following comments, we use numbers of Version 7-H.
+         // numBytes = 196
+         var numBytes = version.TotalCodewords;
+         // getNumECBytes = 130
+         var ecBlocks = version.getECBlocksForLevel(ecLevel);
+         var numEcBytes = ecBlocks.TotalECCodewords;
+         // getNumDataBytes = 196 - 130 = 66
+         var numDataBytes = numBytes - numEcBytes;
+         var totalInputBytes = (numInputBits + 7) / 8;
+         return numDataBytes >= totalInputBytes;
       }
 
       /// <summary>

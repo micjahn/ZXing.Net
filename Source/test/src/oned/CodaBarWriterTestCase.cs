@@ -18,6 +18,7 @@ using System;
 using System.Text;
 using NUnit.Framework;
 using ZXing.Common;
+using ZXing.Common.Test;
 
 namespace ZXing.OneD.Test
 {
@@ -56,12 +57,7 @@ namespace ZXing.OneD.Test
       private static void doTest(String input, String expected)
       {
          var result = encode(input);
-         var actual = new StringBuilder(result.Width);
-         for (int i = 0; i < result.Width; i++)
-         {
-            actual.Append(result[i, 0] ? '1' : '0');
-         }
-         Assert.AreEqual(expected, actual.ToString());
+         Assert.AreEqual(expected, BitMatrixTestCase.matrixToString(result));
       }
 
       private static BitMatrix encode(String input)

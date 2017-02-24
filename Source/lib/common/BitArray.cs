@@ -405,7 +405,7 @@ namespace ZXing.Common
             return false;
          if (size != other.size)
             return false;
-         for (var index = 0; index < size; index++)
+         for (var index = 0; index < bits.Length; index++)
          {
             if (bits[index] != other.bits[index])
                return false;

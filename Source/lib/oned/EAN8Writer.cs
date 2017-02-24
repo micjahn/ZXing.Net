@@ -53,8 +53,7 @@ namespace ZXing.OneD
       {
          if (format != BarcodeFormat.EAN_8)
          {
-            throw new ArgumentException("Can only encode EAN_8, but got "
-                + format);
+            throw new ArgumentException("Can only encode EAN_8, but got " + format);
          }
 
          return base.encode(contents, format, width, height, hints);
@@ -65,20 +64,36 @@ namespace ZXing.OneD
       /// <returns>
       /// a byte array of horizontal pixels (false = white, true = black)
       /// </returns>
-      override public bool[] encode(String contents)
+      public override bool[] encode(String contents)
       {
-         if (contents.Length < 7 || contents.Length > 8)
+         int length = contents.Length;
+         switch (length)
          {
-            throw new ArgumentException(
-                "Requested contents should be 7 (without checksum digit) or 8 digits long, but got " + contents.Length);
+            case 7:
+               // No check digit present, calculate it and add it
+               var check = UPCEANReader.getStandardUPCEANChecksum(contents);
+               if (check == null)
+               {
+                  throw new ArgumentException("Checksum can't be calculated");
+               }
+               contents += check.Value;
+               break;
+            case 8:
+               try
+               {
+                  if (!UPCEANReader.checkStandardUPCEANChecksum(contents))
+                  {
+                     throw new ArgumentException("Contents do not pass checksum");
+                  }
+               }
+               catch (FormatException ignored)
+               {
+                  throw new ArgumentException("Illegal contents", ignored);
+               }
+               break;
+            default:
+               throw new ArgumentException("Requested contents should be 7 (without checksum digit) or 8 digits long, but got " + contents.Length);
          }
-         foreach (var ch in contents)
-         {
-            if (!Char.IsDigit(ch))
-               throw new ArgumentException("Requested contents should only contain digits, but got '" + ch + "'");
-         }
-         if (contents.Length == 7)
-            contents = CalculateChecksumDigitModulo10(contents);
 
          var result = new bool[CODE_WIDTH];
          int pos = 0;

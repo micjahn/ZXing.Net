@@ -46,37 +46,37 @@ namespace ZXing.OneD
          //each character is encoded by 9 of 0/1's
          int[] widths = new int[9];
 
-         //lenght of code + 2 start/stop characters + 2 checksums, each of 9 bits, plus a termination bar
+         //length of code + 2 start/stop characters + 2 checksums, each of 9 bits, plus a termination bar
          int codeWidth = (contents.Length + 2 + 2)*9 + 1;
-
-         bool[] result = new bool[codeWidth];
 
          //start character (*)
          toIntArray(Code93Reader.CHARACTER_ENCODINGS[47], widths);
-         int pos = appendPattern(result, 0, widths, true);
+
+         bool[] result = new bool[codeWidth];
+         int pos = appendPattern(result, 0, widths);
 
          for (int i = 0; i < length; i++)
          {
             int indexInString = Code93Reader.ALPHABET_STRING.IndexOf(contents[i]);
             toIntArray(Code93Reader.CHARACTER_ENCODINGS[indexInString], widths);
-            pos += appendPattern(result, pos, widths, true);
+            pos += appendPattern(result, pos, widths);
          }
 
          //add two checksums
          int check1 = computeChecksumIndex(contents, 20);
          toIntArray(Code93Reader.CHARACTER_ENCODINGS[check1], widths);
-         pos += appendPattern(result, pos, widths, true);
+         pos += appendPattern(result, pos, widths);
 
          //append the contents to reflect the first checksum added
          contents += Code93Reader.ALPHABET_STRING[check1];
 
          int check2 = computeChecksumIndex(contents, 15);
          toIntArray(Code93Reader.CHARACTER_ENCODINGS[check2], widths);
-         pos += appendPattern(result, pos, widths, true);
+         pos += appendPattern(result, pos, widths);
 
          //end character (*)
          toIntArray(Code93Reader.CHARACTER_ENCODINGS[47], widths);
-         pos += appendPattern(result, pos, widths, true);
+         pos += appendPattern(result, pos, widths);
 
          //termination bar (single black bar)
          result[pos] = true;
@@ -93,7 +93,20 @@ namespace ZXing.OneD
          }
       }
 
-      protected static new int appendPattern(bool[] target, int pos, int[] pattern, bool startColor)
+      /// <summary>
+      /// </summary>
+      /// <param name="target">output to append to</param>
+      /// <param name="pos">start position</param>
+      /// <param name="pattern">pattern to append</param>
+      /// <param name="startColor">unused</param>
+      /// <returns>9</returns>
+      [Obsolete("without replacement; intended as an internal-only method")]
+      protected new static int appendPattern(bool[] target, int pos, int[] pattern, bool startColor)
+      {
+         return appendPattern(target, pos, pattern);
+      }
+
+      private static int appendPattern(bool[] target, int pos, int[] pattern)
       {
          foreach (var bit in pattern)
          {

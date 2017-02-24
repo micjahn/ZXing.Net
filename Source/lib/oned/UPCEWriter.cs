@@ -48,14 +48,43 @@ namespace ZXing.OneD
 
       public override bool[] encode(String contents)
       {
-         if (contents.Length != 8)
+         int length = contents.Length;
+         switch (length)
          {
-            throw new ArgumentException(
-               "Requested contents should be 8 digits long, but got " + contents.Length);
+            case 7:
+               // No check digit present, calculate it and add it
+               var check = UPCEANReader.getStandardUPCEANChecksum(UPCEReader.convertUPCEtoUPCA(contents));
+               if (check == null)
+               {
+                  throw new ArgumentException("Checksum can't be calculated");
+               }
+               contents += check.Value;
+               break;
+            case 8:
+               try
+               {
+                  if (!UPCEANReader.checkStandardUPCEANChecksum(contents))
+                  {
+                     throw new ArgumentException("Contents do not pass checksum");
+                  }
+               }
+               catch (FormatException ignored)
+               {
+                  throw new ArgumentException("Illegal contents", ignored);
+               }
+               break;
+            default:
+               throw new ArgumentException("Requested contents should be 8 digits long, but got " + length);
+         }
+
+         int firstDigit = int.Parse(contents.Substring(0, 1));
+         if (firstDigit != 0 && firstDigit != 1)
+         {
+            throw new ArgumentException("Number system must be 0 or 1");
          }
 
          var checkDigit = int.Parse(contents.Substring(7, 1));
-         var parities = UPCEReader.CHECK_DIGIT_ENCODINGS[checkDigit];
+         var parities = UPCEReader.NUMSYS_AND_CHECK_DIGIT_PATTERNS[firstDigit][checkDigit];
          var result = new bool[CODE_WIDTH];
          var pos = 0;
 

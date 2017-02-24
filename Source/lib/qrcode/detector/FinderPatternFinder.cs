@@ -784,7 +784,7 @@ namespace ZXing.QrCode.Internal
          {
             float dA = Math.Abs(y.EstimatedModuleSize - average);
             float dB = Math.Abs(x.EstimatedModuleSize - average);
-            return dA < dB ? -1 : dA == dB ? 0 : 1;
+            return dA < dB ? -1 : dA > dB ? 1 : 0;
          }
       }
 
@@ -804,7 +804,7 @@ namespace ZXing.QrCode.Internal
             {
                float dA = Math.Abs(y.EstimatedModuleSize - average);
                float dB = Math.Abs(x.EstimatedModuleSize - average);
-               return dA < dB ? 1 : dA == dB ? 0 : -1;
+               return dA < dB ? 1 : dA > dB ? -1 : 0;
             }
             return y.Count - x.Count;
          }

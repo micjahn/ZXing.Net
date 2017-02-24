@@ -15,11 +15,10 @@
  */
 
 using System;
-using System.Text;
 
 using NUnit.Framework;
 
-using ZXing.Common;
+using ZXing.Common.Test;
 
 namespace ZXing.OneD.Test
 {
@@ -54,7 +53,7 @@ namespace ZXing.OneD.Test
 
          var result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
-         var actual = matrixToString(result);
+         var actual = BitMatrixTestCase.matrixToString(result);
 
          Assert.AreEqual(expected, actual);
       }
@@ -68,7 +67,7 @@ namespace ZXing.OneD.Test
 
          var result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
-         var actual = matrixToString(result);
+         var actual = BitMatrixTestCase.matrixToString(result);
 
          Assert.AreEqual(expected, actual);
       }
@@ -82,7 +81,7 @@ namespace ZXing.OneD.Test
 
          var result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
-         var actual = matrixToString(result);
+         var actual = BitMatrixTestCase.matrixToString(result);
 
          Assert.AreEqual(expected, actual);
       }
@@ -109,19 +108,9 @@ namespace ZXing.OneD.Test
 
          var result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0);
 
-         var actual = matrixToString(result);
+         var actual = BitMatrixTestCase.matrixToString(result);
 
          Assert.AreEqual(expected, actual);
-      }
-
-      private String matrixToString(BitMatrix result)
-      {
-         var builder = new StringBuilder(result.Width);
-         for (int i = 0; i < result.Width; i++)
-         {
-            builder.Append(result[i, 0] ? '1' : '0');
-         }
-         return builder.ToString();
       }
    }
 }

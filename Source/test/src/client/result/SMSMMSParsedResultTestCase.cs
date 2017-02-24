@@ -15,7 +15,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 
 using NUnit.Framework;
 
@@ -29,36 +28,28 @@ namespace ZXing.Client.Result.Test
    [TestFixture]
    public sealed class SMSMMSParsedResultTestCase
    {
-      [Test]
-      public void testSMS()
-      {
-         doTest("sms:+15551212", "+15551212", null, null, null);
-         doTest("sms:+15551212?subject=foo&body=bar", "+15551212", "foo", "bar", null);
-         doTest("sms:+15551212;via=999333", "+15551212", null, null, "999333");
-      }
-
-      [Test]
-      public void testMMS()
-      {
-         doTest("mms:+15551212", "+15551212", null, null, null);
-         doTest("mms:+15551212?subject=foo&body=bar", "+15551212", "foo", "bar", null);
-         doTest("mms:+15551212;via=999333", "+15551212", null, null, "999333");
-      }
-
-      private static void doTest(String contents,
+      [TestCase("sms:+15551212", "+15551212", null, null, null, "sms:+15551212")]
+      [TestCase("sms:+15551212?subject=foo&body=bar", "+15551212", "foo", "bar", null, "sms:+15551212?body=bar&subject=foo")]
+      [TestCase("sms:+15551212;via=999333", "+15551212", null, null, "999333", "sms:+15551212;via=999333")]
+      [TestCase("mms:+15551212", "+15551212", null, null, null, "sms:+15551212")]
+      [TestCase("mms:+15551212?subject=foo&body=bar", "+15551212", "foo", "bar", null, "sms:+15551212?body=bar&subject=foo")]
+      [TestCase("mms:+15551212;via=999333", "+15551212", null, null, "999333", "sms:+15551212;via=999333")]
+      public void testSMSMMS(String contents,
                                  String number,
                                  String subject,
                                  String body,
-                                 String via)
+                                 String via,
+                                 String parsedURI)
       {
-         doTest(contents, new String[] { number }, subject, body, new String[] { via });
+         doTest(contents, new String[] { number }, subject, body, new String[] { via }, parsedURI);
       }
 
       private static void doTest(String contents,
                                  String[] numbers,
                                  String subject,
                                  String body,
-                                 String[] vias)
+                                 String[] vias,
+                                 String parsedURI)
       {
          ZXing.Result fakeResult = new ZXing.Result(contents, null, null, BarcodeFormat.QR_CODE);
          ParsedResult result = ResultParser.parseResult(fakeResult);
@@ -68,6 +59,7 @@ namespace ZXing.Client.Result.Test
          Assert.AreEqual(subject, smsResult.Subject);
          Assert.AreEqual(body, smsResult.Body);
          Assert.IsTrue(AddressBookParsedResultTestCase.AreEqual(vias, smsResult.Vias));
+         Assert.AreEqual(parsedURI, smsResult.SMSURI);
       }
    }
 }

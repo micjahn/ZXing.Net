@@ -141,13 +141,13 @@ namespace ZXing.OneD
       /// <returns>
       ///   <see cref="Result"/>containing encoded string and start/end of barcode or null, if an error occurs or barcode cannot be found
       /// </returns>
-      override public Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
+      public override Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
       {
          return decodeRow(rowNumber, row, findStartGuardPattern(row), hints);
       }
 
       /// <summary>
-      ///   <p>Like decodeRow(int, BitArray, java.util.Map), but
+      ///   <p>Like <see cref="decodeRow(int,ZXing.Common.BitArray,System.Collections.Generic.IDictionary{ZXing.DecodeHintType,object})"/>, but
       /// allows caller to inform method about where the UPC/EAN start pattern is
       /// found. This allows this to be computed once and reused across many implementations.</p>
       /// </summary>
@@ -156,7 +156,7 @@ namespace ZXing.OneD
       /// <param name="startGuardRange">start/end column where the opening start pattern was found</param>
       /// <param name="hints">optional hints that influence decoding</param>
       /// <returns><see cref="Result"/> encapsulating the result of decoding a barcode in the row</returns>
-      virtual public Result decodeRow(int rowNumber,
+      public virtual Result decodeRow(int rowNumber,
                               BitArray row,
                               int[] startGuardRange,
                               IDictionary<DecodeHintType, object> hints)
@@ -271,7 +271,7 @@ namespace ZXing.OneD
       /// </summary>
       /// <param name="s">string of digits to check</param>
       /// <returns>see <see cref="checkStandardUPCEANChecksum(String)"/></returns>
-      virtual protected bool checkChecksum(String s)
+      protected virtual bool checkChecksum(String s)
       {
          return checkStandardUPCEANChecksum(s);
       }
@@ -290,27 +290,34 @@ namespace ZXing.OneD
             return false;
          }
 
+         int check = s[length - 1] - '0';
+         return getStandardUPCEANChecksum(s.Substring(0, length - 1)) == check;
+      }
+
+      internal static int? getStandardUPCEANChecksum(String s)
+      {
+         int length = s.Length;
          int sum = 0;
-         for (int i = length - 2; i >= 0; i -= 2)
+         for (int i = length - 1; i >= 0; i -= 2)
          {
-            int digit = (int)s[i] - (int)'0';
+            int digit = s[i] - '0';
             if (digit < 0 || digit > 9)
             {
-               return false;
+               throw new ArgumentException("Contents should only contain digits, but got '" + s[i] + "'");
             }
             sum += digit;
          }
          sum *= 3;
-         for (int i = length - 1; i >= 0; i -= 2)
+         for (int i = length - 2; i >= 0; i -= 2)
          {
-            int digit = (int)s[i] - (int)'0';
+            int digit = s[i] - '0';
             if (digit < 0 || digit > 9)
             {
-               return false;
+               throw new ArgumentException("Contents should only contain digits, but got '" + s[i] + "'");
             }
             sum += digit;
          }
-         return sum % 10 == 0;
+         return (1000 - sum)%10;
       }
 
       /// <summary>
@@ -319,7 +326,7 @@ namespace ZXing.OneD
       /// <param name="row">The row.</param>
       /// <param name="endStart">The end start.</param>
       /// <returns></returns>
-      virtual protected int[] decodeEnd(BitArray row, int endStart)
+      protected virtual int[] decodeEnd(BitArray row, int endStart)
       {
          return findGuardPattern(row, endStart, false, START_END_PATTERN);
       }
@@ -356,7 +363,7 @@ namespace ZXing.OneD
          int patternStart = rowOffset;
          for (int x = rowOffset; x < width; x++)
          {
-            if (row[x] ^ isWhite)
+            if (row[x] != isWhite)
             {
                counters[counterPosition]++;
             }
@@ -369,9 +376,9 @@ namespace ZXing.OneD
                      return new int[] { patternStart, x };
                   }
                   patternStart += counters[0] + counters[1];
-                  Array.Copy(counters, 2, counters, 0, patternLength - 2);
-                  counters[patternLength - 2] = 0;
-                  counters[patternLength - 1] = 0;
+                  Array.Copy(counters, 2, counters, 0, counterPosition - 1);
+                  counters[counterPosition - 1] = 0;
+                  counters[counterPosition] = 0;
                   counterPosition--;
                }
                else

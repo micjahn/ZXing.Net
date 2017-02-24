@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Text;
 using NUnit.Framework;
 
 namespace ZXing.Common.Test
@@ -64,6 +65,36 @@ namespace ZXing.Common.Test
                Assert.AreEqual(y >= 1 && y <= 3 && x >= 1 && x <= 3, matrix[x, y]);
             }
          }
+      }
+
+      [Test]
+      public void testEnclosing()
+      {
+         BitMatrix matrix = new BitMatrix(5);
+         Assert.IsNull(matrix.getEnclosingRectangle());
+         matrix.setRegion(1, 1, 1, 1);
+         Assert.AreEqual(new int[] {1, 1, 1, 1}, matrix.getEnclosingRectangle());
+         matrix.setRegion(1, 1, 3, 2);
+         Assert.AreEqual(new int[] { 1, 1, 3, 2 }, matrix.getEnclosingRectangle());
+         matrix.setRegion(0, 0, 5, 5);
+         Assert.AreEqual(new int[] { 0, 0, 5, 5 }, matrix.getEnclosingRectangle());
+      }
+
+      [Test]
+      public void testOnBit()
+      {
+         BitMatrix matrix = new BitMatrix(5);
+         Assert.IsNull(matrix.getTopLeftOnBit());
+         Assert.IsNull(matrix.getBottomRightOnBit());
+         matrix.setRegion(1, 1, 1, 1);
+         Assert.AreEqual(new int[] { 1, 1 }, matrix.getTopLeftOnBit());
+         Assert.AreEqual(new int[] { 1, 1 }, matrix.getBottomRightOnBit());
+         matrix.setRegion(1, 1, 3, 2);
+         Assert.AreEqual(new int[] { 1, 1 }, matrix.getTopLeftOnBit());
+         Assert.AreEqual(new int[] { 3, 2 }, matrix.getBottomRightOnBit());
+         matrix.setRegion(0, 0, 5, 5);
+         Assert.AreEqual(new int[] { 0, 0 }, matrix.getTopLeftOnBit());
+         Assert.AreEqual(new int[] { 4, 4 }, matrix.getBottomRightOnBit());
       }
 
       [Test]
@@ -264,6 +295,17 @@ namespace ZXing.Common.Test
          catch (ArgumentException)
          {
          }
+      }
+
+      public static String matrixToString(BitMatrix result)
+      {
+         Assert.AreEqual(1, result.Height);
+         StringBuilder builder = new StringBuilder(result.Width);
+         for (int i = 0; i < result.Width; i++)
+         {
+            builder.Append(result[i, 0] ? '1' : '0');
+         }
+         return builder.ToString();
       }
 
       private static void testXOR(BitMatrix dataMatrix, BitMatrix flipMatrix, BitMatrix expectedMatrix)

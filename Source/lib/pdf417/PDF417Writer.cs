@@ -161,7 +161,7 @@ namespace ZXing.PDF417
          const int aspectRatio = 4;
          sbyte[][] originalScale = encoder.BarcodeMatrix.getScaledMatrix(1, aspectRatio);
          bool rotated = false;
-         if ((height > width) ^ (originalScale[0].Length < originalScale.Length))
+         if ((height > width) != (originalScale[0].Length < originalScale.Length))
          {
             originalScale = rotateArray(originalScale);
             rotated = true;
@@ -188,9 +188,9 @@ namespace ZXing.PDF417
             {
                scaledMatrix = rotateArray(scaledMatrix);
             }
-            return bitMatrixFrombitArray(scaledMatrix, margin);
+            return bitMatrixFromBitArray(scaledMatrix, margin);
          }
-         return bitMatrixFrombitArray(originalScale, margin);
+         return bitMatrixFromBitArray(originalScale, margin);
       }
 
       /// <summary>
@@ -199,12 +199,12 @@ namespace ZXing.PDF417
       /// <param name="input">a byte array of information with 0 is black, and 1 is white</param>
       /// <param name="margin">border around the barcode</param>
       /// <returns>BitMatrix of the input</returns>
-      private static BitMatrix bitMatrixFrombitArray(sbyte[][] input, int margin)
+      private static BitMatrix bitMatrixFromBitArray(sbyte[][] input, int margin)
       {
-         // Creates the bitmatrix with extra space for whitespace
+         // Creates the bit matrix with extra space for whitespace
          var output = new BitMatrix(input[0].Length + 2 * margin, input.Length + 2 * margin);
          var yOutput = output.Height - margin - 1;
-         for (int y = 0; y < input.Length; y++)
+         for (int y = 0; y < input.Length; y++, yOutput--)
          {
             var currentInput = input[y];
             var currentInputLength = currentInput.Length;
@@ -216,7 +216,6 @@ namespace ZXing.PDF417
                   output[x + margin, yOutput] = true;
                }
             }
-            yOutput--;
          }
          return output;
       }

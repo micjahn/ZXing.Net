@@ -477,7 +477,7 @@ namespace ZXing.Datamatrix.Internal
 
          if (bitMatrix.Height != symbolSizeRows)
          {
-            throw new ArgumentException("Dimension of bitMarix must match the version size");
+            throw new ArgumentException("Dimension of bitMatrix must match the version size");
          }
 
          int dataRegionSizeRows = version.getDataRegionSizeRows();

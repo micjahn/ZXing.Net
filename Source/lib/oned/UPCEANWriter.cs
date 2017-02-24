@@ -32,7 +32,7 @@ namespace ZXing.OneD
          get
          {
             // Use a different default more appropriate for UPC/EAN
-            return UPCEANReader.START_END_PATTERN.Length;
+            return 9;
          }
       }
    }

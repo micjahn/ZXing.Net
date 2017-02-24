@@ -86,6 +86,19 @@ namespace ZXing.Client.Result
                                      String[] geo)
          : base(ParsedResultType.ADDRESSBOOK)
       {
+         if (phoneNumbers != null && phoneTypes != null && phoneNumbers.Length != phoneTypes.Length)
+         {
+            throw new ArgumentException("Phone numbers and types lengths differ");
+         }
+         if (emails != null && emailTypes != null && emails.Length != emailTypes.Length)
+         {
+            throw new ArgumentException("Emails and types lengths differ");
+         }
+         if (addresses != null && addressTypes != null && addresses.Length != addressTypes.Length)
+         {
+            throw new ArgumentException("Addresses and types lengths differ");
+         }
+
          this.names = names;
          this.nicknames = nicknames;
          this.pronunciation = pronunciation;

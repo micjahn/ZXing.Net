@@ -51,16 +51,7 @@ namespace ZXing.QrCode.Internal
       /// </returns>
       public DecoderResult decode(bool[][] image, IDictionary<DecodeHintType, object> hints)
       {
-         var dimension = image.Length;
-         var bits = new BitMatrix(dimension);
-         for (int i = 0; i < dimension; i++)
-         {
-            for (int j = 0; j < dimension; j++)
-            {
-               bits[j, i] = image[i][j];
-            }
-         }
-         return decode(bits, hints);
+         return decode(BitMatrix.parse(image), hints);
       }
 
       /// <summary>

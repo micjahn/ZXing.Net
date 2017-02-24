@@ -19,8 +19,8 @@ using System.Collections.Generic;
 using System.Text;
 
 using NUnit.Framework;
+
 using ZXing.Common;
-using ZXing.QrCode.Internal;
 
 namespace ZXing.QrCode.Internal.Test
 {
@@ -72,7 +72,7 @@ namespace ZXing.QrCode.Internal.Test
          // Alphanumeric mode.
          Assert.AreEqual(Mode.ALPHANUMERIC, Encoder.chooseMode("A"));
          Assert.AreEqual(Mode.ALPHANUMERIC,
-                    Encoder.chooseMode("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"));
+            Encoder.chooseMode("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"));
          // 8-bit byte mode.
          Assert.AreEqual(Mode.BYTE, Encoder.chooseMode("a"));
          Assert.AreEqual(Mode.BYTE, Encoder.chooseMode("#"));
@@ -83,13 +83,13 @@ namespace ZXing.QrCode.Internal.Test
 
          // AIUE in Hiragana in Shift_JIS
          Assert.AreEqual(Mode.BYTE,
-                    Encoder.chooseMode(shiftJISString(new byte[] { 0x8, 0xa, 0x8, 0xa, 0x8, 0xa, 0x8, 0xa6 })));
+            Encoder.chooseMode(shiftJISString(new byte[] {0x8, 0xa, 0x8, 0xa, 0x8, 0xa, 0x8, 0xa6})));
 
          // Nihon in Kanji in Shift_JIS.
-         Assert.AreEqual(Mode.BYTE, Encoder.chooseMode(shiftJISString(new byte[] { 0x9, 0xf, 0x9, 0x7b })));
+         Assert.AreEqual(Mode.BYTE, Encoder.chooseMode(shiftJISString(new byte[] {0x9, 0xf, 0x9, 0x7b})));
 
          // Sou-Utsu-Byou in Kanji in Shift_JIS.
-         Assert.AreEqual(Mode.BYTE, Encoder.chooseMode(shiftJISString(new byte[] { 0xe, 0x4, 0x9, 0x5, 0x9, 0x61 })));
+         Assert.AreEqual(Mode.BYTE, Encoder.chooseMode(shiftJISString(new byte[] {0xe, 0x4, 0x9, 0x5, 0x9, 0x61})));
       }
 
       [Test]
@@ -125,6 +125,31 @@ namespace ZXing.QrCode.Internal.Test
                                  " 1 1 1 1 1 1 1 0 0 0 1 0 0 1 0 0 0 0 1 1 1\n" +
                                  ">>\n";
          Assert.AreEqual(expected, qrCode.ToString());
+      }
+
+      [Test]
+      public void testEncodeWithVersion()
+      {
+         var hints = new QrCodeEncodingOptions {QrVersion = 7};
+         QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, hints.Hints);
+         Assert.IsTrue(qrCode.ToString().Contains(" version: 7\n"));
+      }
+
+      [Test]
+      public void testEncodeWithVersionString()
+      {
+         var hints = new QrCodeEncodingOptions();
+         hints.Hints[EncodeHintType.QR_VERSION] = "7";
+         QRCode qrCode = Encoder.encode("ABCDEF", ErrorCorrectionLevel.H, hints.Hints);
+         Assert.IsTrue(qrCode.ToString().Contains(" version: 7\n"));
+      }
+
+      [Test]
+      [ExpectedException(typeof(WriterException))]
+      public void testEncodeWithVersionTooSmall()
+      {
+         var hints = new QrCodeEncodingOptions {QrVersion = 3};
+         Encoder.encode("THISMESSAGEISTOOLONGFORAQRCODEVERSION3", ErrorCorrectionLevel.H, hints.Hints);
       }
 
       [Test]

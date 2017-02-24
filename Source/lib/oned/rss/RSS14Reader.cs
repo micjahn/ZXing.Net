@@ -189,7 +189,7 @@ namespace ZXing.OneD.RSS
 
       private Pair decodePair(BitArray row, bool right, int rowNumber, IDictionary<DecodeHintType, object> hints)
       {
-         int[] startEnd = findFinderPattern(row, 0, right);
+         int[] startEnd = findFinderPattern(row, right);
          if (startEnd == null)
             return null;
          FinderPattern pattern = parseFoundFinderPattern(row, rowNumber, right, startEnd);
@@ -338,7 +338,7 @@ namespace ZXing.OneD.RSS
          }
       }
 
-      private int[] findFinderPattern(BitArray row, int rowOffset, bool rightFinderPattern)
+      private int[] findFinderPattern(BitArray row, bool rightFinderPattern)
       {
 
          int[] counters = getDecodeFinderCounters();
@@ -349,6 +349,7 @@ namespace ZXing.OneD.RSS
 
          int width = row.Size;
          bool isWhite = false;
+         int rowOffset = 0;
          while (rowOffset < width)
          {
             isWhite = !row[rowOffset];
@@ -364,7 +365,7 @@ namespace ZXing.OneD.RSS
          int patternStart = rowOffset;
          for (int x = rowOffset; x < width; x++)
          {
-            if (row[x] ^ isWhite)
+            if (row[x] != isWhite)
             {
                counters[counterPosition]++;
             }
@@ -400,7 +401,7 @@ namespace ZXing.OneD.RSS
          bool firstIsBlack = row[startEnd[0]];
          int firstElementStart = startEnd[0] - 1;
          // Locate element 1
-         while (firstElementStart >= 0 && firstIsBlack ^ row[firstElementStart])
+         while (firstElementStart >= 0 && firstIsBlack != row[firstElementStart])
          {
             firstElementStart--;
          }

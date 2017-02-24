@@ -157,7 +157,7 @@ namespace ZXing.Datamatrix.Internal
       }
 
       /// <summary>
-      /// <p>Encapsualtes the parameters for one error-correction block in one symbol version.
+      /// <p>Encapsulates the parameters for one error-correction block in one symbol version.
       /// This includes the number of data codewords, and the number of times a block with these
       /// parameters is used consecutively in the Data Matrix code version's format.</p>
       /// </summary>

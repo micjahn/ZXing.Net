@@ -131,5 +131,11 @@ namespace ZXing
       /// type: <see cref="System.Int32" />, or <see cref="System.String" /> representation of the integer value
       /// </summary>
       AZTEC_LAYERS,
+
+      /// <summary>
+      /// Specifies the exact version of QR code to be encoded.
+      /// (Type <see cref="System.Int32" />, or <see cref="System.String" /> representation of the integer value).
+      /// </summary>
+      QR_VERSION
    }
 }

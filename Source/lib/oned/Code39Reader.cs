@@ -246,7 +246,7 @@ namespace ZXing.OneD
 
          for (int i = rowOffset; i < width; i++)
          {
-            if (row[i] ^ isWhite)
+            if (row[i] != isWhite)
             {
                counters[counterPosition]++;
             }
@@ -263,9 +263,9 @@ namespace ZXing.OneD
                      }
                   }
                   patternStart += counters[0] + counters[1];
-                  Array.Copy(counters, 2, counters, 0, patternLength - 2);
-                  counters[patternLength - 2] = 0;
-                  counters[patternLength - 1] = 0;
+                  Array.Copy(counters, 2, counters, 0, counterPosition - 1);
+                  counters[counterPosition - 1] = 0;
+                  counters[counterPosition] = 0;
                   counterPosition--;
                }
                else
