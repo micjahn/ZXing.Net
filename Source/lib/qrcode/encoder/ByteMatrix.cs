@@ -107,9 +107,10 @@ namespace ZXing.QrCode.Internal
       {
          for (int y = 0; y < height; ++y)
          {
+            var bytesY = bytes[y];
             for (int x = 0; x < width; ++x)
             {
-               bytes[y][x] = value;
+               bytesY[x] = value;
             }
          }
       }
@@ -125,9 +126,10 @@ namespace ZXing.QrCode.Internal
          var result = new StringBuilder(2 * width * height + 2);
          for (int y = 0; y < height; ++y)
          {
+            var bytesY = bytes[y];
             for (int x = 0; x < width; ++x)
             {
-               switch (bytes[y][x])
+               switch (bytesY[x])
                {
                   case 0:
                      result.Append(" 0");

@@ -55,9 +55,10 @@ namespace ZXing.QrCode.Internal
          var bits = new BitMatrix(dimension);
          for (int i = 0; i < dimension; i++)
          {
+            var imageI = image[i];
             for (int j = 0; j < dimension; j++)
             {
-               bits[j, i] = image[i][j];
+               bits[j, i] = imageI[j];
             }
          }
          return decode(bits, hints);

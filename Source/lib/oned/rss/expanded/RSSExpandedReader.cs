@@ -251,7 +251,7 @@ namespace ZXing.OneD.RSS.Expanded
          return null;
       }
 
-      // Whether the pairs form a valid find pattern seqience,
+      // Whether the pairs form a valid find pattern sequence,
       // either complete or a prefix
       private static bool isValidSequence(List<ExpandedPair> pairs)
       {

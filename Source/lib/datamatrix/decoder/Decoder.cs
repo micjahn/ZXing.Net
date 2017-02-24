@@ -44,17 +44,17 @@ namespace ZXing.Datamatrix.Internal
       /// <param name="image">booleans representing white/black Data Matrix Code modules</param>
       /// <returns>text and bytes encoded within the Data Matrix Code</returns>
       /// <exception cref="FormatException">if the Data Matrix Code cannot be decoded</exception>
-      /// <exception cref="ChecksumException">if error correction fails</exception>
       /// </summary>
       public DecoderResult decode(bool[][] image)
       {
-         int dimension = image.Length;
-         BitMatrix bits = new BitMatrix(dimension);
-         for (int i = 0; i < dimension; i++)
+         var dimension = image.Length;
+         var bits = new BitMatrix(dimension);
+         for (var i = 0; i < dimension; i++)
          {
-            for (int j = 0; j < dimension; j++)
+            var imageI = image[i];
+            for (var j = 0; j < dimension; j++)
             {
-               if (image[i][j])
+               if (imageI[j])
                {
                   bits[j, i] = true;
                }
