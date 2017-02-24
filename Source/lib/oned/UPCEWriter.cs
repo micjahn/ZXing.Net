@@ -53,7 +53,7 @@ namespace ZXing.OneD
          {
             case 7:
                // No check digit present, calculate it and add it
-               var check = UPCEANReader.getStandardUPCEANChecksum(contents);
+               var check = UPCEANReader.getStandardUPCEANChecksum(UPCEReader.convertUPCEtoUPCA(contents));
                if (check == null)
                {
                   throw new ArgumentException("Checksum can't be calculated");
@@ -75,6 +75,12 @@ namespace ZXing.OneD
                break;
             default:
                throw new ArgumentException("Requested contents should be 8 digits long, but got " + length);
+         }
+
+         int firstDigit = int.Parse(contents.Substring(0, 1));
+         if (firstDigit != 0 && firstDigit != 1)
+         {
+            throw new ArgumentException("Number system must be 0 or 1");
          }
 
          var checkDigit = int.Parse(contents.Substring(7, 1));

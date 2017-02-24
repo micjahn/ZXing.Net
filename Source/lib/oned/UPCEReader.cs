@@ -216,7 +216,11 @@ namespace ZXing.OneD
                result.Append(lastChar);
                break;
          }
-         result.Append(upce[7]);
+         // Only append check digit in conversion if supplied
+         if (upce.Length >= 8)
+         {
+            result.Append(upce[7]);
+         }
          return result.ToString();
       }
    }
