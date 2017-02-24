@@ -89,7 +89,7 @@ namespace ZXing.OneD
          {
             int one = Convert.ToInt32(contents[i].ToString(), 10);
             int two = Convert.ToInt32(contents[i + 1].ToString(), 10);
-            int[] encoding = new int[18];
+            int[] encoding = new int[10];
             for (int j = 0; j < 5; j++)
             {
                encoding[j << 1] = ITFReader.PATTERNS[one][j];
