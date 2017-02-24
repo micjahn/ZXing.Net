@@ -47,20 +47,7 @@ namespace ZXing.Datamatrix.Internal
       /// </summary>
       public DecoderResult decode(bool[][] image)
       {
-         var dimension = image.Length;
-         var bits = new BitMatrix(dimension);
-         for (var i = 0; i < dimension; i++)
-         {
-            var imageI = image[i];
-            for (var j = 0; j < dimension; j++)
-            {
-               if (imageI[j])
-               {
-                  bits[j, i] = true;
-               }
-            }
-         }
-         return decode(bits);
+         return decode(BitMatrix.parse(image));
       }
 
       /// <summary>
