@@ -140,7 +140,7 @@ namespace ZXing.Common.Test
       ///
       /// <param name="image">The image to test</param>
       /// <param name="rotationInDegrees">The amount of rotation to apply</param>
-      /// <returns>true if nothing found, false if a non-existant barcode was detected</returns>
+      /// <returns>true if nothing found, false if a non-existent barcode was detected</returns>
       /// </summary>
 #if !SILVERLIGHT
       private bool checkForFalsePositives(Bitmap image, float rotationInDegrees)

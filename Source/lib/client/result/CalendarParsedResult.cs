@@ -27,25 +27,26 @@ namespace ZXing.Client.Result
    ///<author>Sean Owen</author>
    public sealed class CalendarParsedResult : ParsedResult
    {
-      private static readonly Regex RFC2445_DURATION = new Regex(@"\A(?:" + "P(?:(\\d+)W)?(?:(\\d+)D)?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?" + @")\z"
+      private static readonly Regex RFC2445_DURATION =
+         new Regex(@"\A(?:" + "P(?:(\\d+)W)?(?:(\\d+)D)?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?" + @")\z"
 #if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
-                                                                 , RegexOptions.Compiled);
+            , RegexOptions.Compiled);
 #else
 );
 #endif
 
       private static readonly long[] RFC2445_DURATION_FIELD_UNITS =
-         {
-            7*24*60*60*1000L, // 1 week
-            24*60*60*1000L, // 1 day
-            60*60*1000L, // 1 hour
-            60*1000L, // 1 minute
-            1000L, // 1 second
-         };
+      {
+         7*24*60*60*1000L, // 1 week
+         24*60*60*1000L, // 1 day
+         60*60*1000L, // 1 hour
+         60*1000L, // 1 minute
+         1000L, // 1 second
+      };
 
       private static readonly Regex DATE_TIME = new Regex(@"\A(?:" + "[0-9]{8}(T[0-9]{6}Z?)?" + @")\z"
 #if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
-                                                          , RegexOptions.Compiled);
+         , RegexOptions.Compiled);
 #else
 );
 #endif
@@ -63,15 +64,15 @@ namespace ZXing.Client.Result
       private readonly double longitude;
 
       public CalendarParsedResult(String summary,
-                                  String startString,
-                                  String endString,
-                                  String durationString,
-                                  String location,
-                                  String organizer,
-                                  String[] attendees,
-                                  String description,
-                                  double latitude,
-                                  double longitude)
+         String startString,
+         String endString,
+         String durationString,
+         String location,
+         String organizer,
+         String[] attendees,
+         String description,
+         double latitude,
+         double longitude)
          : base(ParsedResultType.CALENDAR)
       {
          this.summary = summary;
@@ -207,23 +208,27 @@ namespace ZXing.Client.Result
          if (when.Length == 8)
          {
             // Show only year/month/day
-            return DateTime.ParseExact(when, buildDateFormat(), CultureInfo.InvariantCulture);
+            // For dates without a time, for purposes of interacting with Android, the resulting timestamp
+            // needs to be midnight of that day in GMT. See:
+            // http://code.google.com/p/android/issues/detail?id=8330
+            // format.setTimeZone(TimeZone.getTimeZone("GMT"));
+            return DateTime.ParseExact(when, "yyyyMMdd", CultureInfo.InvariantCulture);
          }
-         else
+         // The when string can be local time, or UTC if it ends with a Z
+         if (when.Length == 16 && when[15] == 'Z')
          {
-            // The when string can be local time, or UTC if it ends with a Z
-            DateTime date;
-            if (when.Length == 16 && when[15] == 'Z')
-            {
-               date = DateTime.ParseExact(when.Substring(0, 15), buildDateTimeFormat(), CultureInfo.InvariantCulture);
-               date = TimeZoneInfo.ConvertTime(date, TimeZoneInfo.Local);
-            }
-            else
-            {
-               date = DateTime.ParseExact(when, buildDateTimeFormat(), CultureInfo.InvariantCulture);
-            }
-            return date;
+            var milliseconds = parseDateTimeString(when.Substring(0, 15));
+            //Calendar calendar = new GregorianCalendar();
+            // Account for time zone difference
+            //milliseconds += calendar.get(Calendar.ZONE_OFFSET);
+            // Might need to correct for daylight savings time, but use target time since
+            // now might be in DST but not then, or vice versa
+            //calendar.setTime(new Date(milliseconds));
+            //return milliseconds + calendar.get(Calendar.DST_OFFSET);
+            milliseconds = TimeZoneInfo.ConvertTime(milliseconds, TimeZoneInfo.Local);
+            return milliseconds;
          }
+         return parseDateTimeString(when);
       }
 
       private static String format(bool allDay, DateTime? date)
@@ -260,21 +265,9 @@ namespace ZXing.Client.Result
          return durationMS;
       }
 
-      private static string buildDateFormat()
+      private static DateTime parseDateTimeString(String dateTimeString)
       {
-         //DateFormat format = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
-         //// For dates without a time, for purposes of interacting with Android, the resulting timestamp
-         //// needs to be midnight of that day in GMT. See:
-         //// http://code.google.com/p/android/issues/detail?id=8330
-         //format.setTimeZone(TimeZone.getTimeZone("GMT"));
-         //return format;
-         // not sure how to handle this correctly in .Net
-         return "yyyyMMdd";
-      }
-
-      private static string buildDateTimeFormat()
-      {
-         return "yyyyMMdd'T'HHmmss";
+         return DateTime.ParseExact(dateTimeString, "yyyyMMdd'T'HHmmss", CultureInfo.InvariantCulture);
       }
    }
 }

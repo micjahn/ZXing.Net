@@ -161,7 +161,7 @@ namespace ZXing.PDF417
          const int aspectRatio = 4;
          sbyte[][] originalScale = encoder.BarcodeMatrix.getScaledMatrix(1, aspectRatio);
          bool rotated = false;
-         if ((height > width) ^ (originalScale[0].Length < originalScale.Length))
+         if ((height > width) != (originalScale[0].Length < originalScale.Length))
          {
             originalScale = rotateArray(originalScale);
             rotated = true;

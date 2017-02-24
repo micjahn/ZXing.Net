@@ -131,7 +131,7 @@ namespace ZXing.Common.Test
          int[] passedCounts = new int[testCount];
          int[] misreadCounts = new int[testCount];
          int[] tryHarderCounts = new int[testCount];
-         int[] tryHaderMisreadCounts = new int[testCount];
+         int[] tryHarderMisreadCounts = new int[testCount];
 
          foreach (var testImage in imageFiles)
          {
@@ -207,7 +207,7 @@ namespace ZXing.Common.Test
                   }
                   else
                   {
-                     tryHaderMisreadCounts[x]++;
+                     tryHarderMisreadCounts[x]++;
                      Log.Info("   with try-hard ... fail.");
                   }
                }
@@ -238,10 +238,10 @@ namespace ZXing.Common.Test
                               tryHarderCounts[x], imageFilesCount, testResult.TryHarderCount);
             failed = imageFilesCount - tryHarderCounts[x];
             Log.InfoFormat(" {0} failed due to misreads, {1} not detected",
-                              tryHaderMisreadCounts[x], failed - tryHaderMisreadCounts[x]);
+                              tryHarderMisreadCounts[x], failed - tryHarderMisreadCounts[x]);
             totalFound += passedCounts[x] + tryHarderCounts[x];
             totalMustPass += testResult.MustPassCount + testResult.TryHarderCount;
-            totalMisread += misreadCounts[x] + tryHaderMisreadCounts[x];
+            totalMisread += misreadCounts[x] + tryHarderMisreadCounts[x];
             totalMaxMisread += testResult.MaxMisreads + testResult.MaxTryHarderMisreads;
          }
 
@@ -277,7 +277,7 @@ namespace ZXing.Common.Test
                Assert.IsTrue(tryHarderCounts[x] >= testResult.TryHarderCount, "Try harder, " + label);
                label = "Rotation " + testResult.Rotation + " degrees: Too many images misread";
                Assert.IsTrue(misreadCounts[x] <= testResult.MaxMisreads, label);
-               Assert.IsTrue(tryHaderMisreadCounts[x] <= testResult.MaxTryHarderMisreads, "Try harder, " + label);
+               Assert.IsTrue(tryHarderMisreadCounts[x] <= testResult.MaxTryHarderMisreads, "Try harder, " + label);
             }
          }
       }

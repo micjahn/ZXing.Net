@@ -29,7 +29,7 @@ namespace ZXing.PDF417.Internal
 
       public BarcodeMetadata Metadata { get; private set; }
       public DetectionResultColumn[] DetectionResultColumns { get; set; }
-      public BoundingBox Box { get; set; }
+      public BoundingBox Box { get; internal set; }
       public int ColumnCount { get; private set; }
 
       public int RowCount

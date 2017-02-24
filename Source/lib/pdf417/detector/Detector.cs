@@ -335,7 +335,7 @@ namespace ZXing.PDF417.Internal
          for (var isWhite = whiteFirst; x < width; x++)
          {
             var pixel = matrix[x, row];
-            if (pixel ^ isWhite)
+            if (pixel != isWhite)
             {
                counters[counterPosition]++;
             }
@@ -348,9 +348,9 @@ namespace ZXing.PDF417.Internal
                      return new int[] {patternStart, x};
                   }
                   patternStart += counters[0] + counters[1];
-                  Array.Copy(counters, 2, counters, 0, patternLength - 2);
-                  counters[patternLength - 2] = 0;
-                  counters[patternLength - 1] = 0;
+                  Array.Copy(counters, 2, counters, 0, counterPosition - 1);
+                  counters[counterPosition - 1] = 0;
+                  counters[counterPosition] = 0;
                   counterPosition--;
                }
                else
@@ -361,12 +361,10 @@ namespace ZXing.PDF417.Internal
                isWhite = !isWhite;
             }
          }
-         if (counterPosition == patternLength - 1)
+         if (counterPosition == patternLength - 1 &&
+             patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE)
          {
-            if (patternMatchVariance(counters, pattern, MAX_INDIVIDUAL_VARIANCE) < MAX_AVG_VARIANCE)
-            {
-               return new int[] {patternStart, x - 1};
-            }
+            return new int[] {patternStart, x - 1};
          }
          return null;
       }

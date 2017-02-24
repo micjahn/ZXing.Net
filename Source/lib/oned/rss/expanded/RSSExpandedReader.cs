@@ -555,7 +555,7 @@ namespace ZXing.OneD.RSS.Expanded
          int patternStart = rowOffset;
          for (int x = rowOffset; x < width; x++)
          {
-            if (row[x] ^ isWhite)
+            if (row[x] != isWhite)
             {
                counters[counterPosition]++;
             }
