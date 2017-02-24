@@ -84,7 +84,7 @@ namespace ZXing.OneD
          }
 
          var checkDigit = int.Parse(contents.Substring(7, 1));
-         var parities = UPCEReader.CHECK_DIGIT_ENCODINGS[checkDigit];
+         var parities = UPCEReader.NUMSYS_AND_CHECK_DIGIT_PATTERNS[firstDigit][checkDigit];
          var result = new bool[CODE_WIDTH];
          var pos = 0;
 
