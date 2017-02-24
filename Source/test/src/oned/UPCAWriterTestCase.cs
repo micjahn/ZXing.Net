@@ -26,20 +26,12 @@ namespace ZXing.OneD.Test
    [TestFixture]
    public sealed class UPCAWriterTestCase
    {
-      [Test]
-      public void testEncode()
+      [TestCase("485963095124", "00001010100011011011101100010001011010111101111010101011100101110100100111011001101101100101110010100000", TestName = "testEncode")]
+      [TestCase("12345678901", "00001010011001001001101111010100011011000101011110101010001001001000111010011100101100110110110010100000", TestName = "testAddChecksumAndEncode")]
+      public void testEncode(string content, string encoding)
       {
-         var testStr = "00010101000110110111011000100010110101111011110101010111001011101001001110110011011011001011100101000";
-         var result = new UPCAWriter().encode("485963095124", BarcodeFormat.UPC_A, testStr.Length, 0);
-         Assert.AreEqual(testStr, BitMatrixTestCase.matrixToString(result));
-      }
-
-      [Test]
-      public void testAddChecksumAndEncode()
-      {
-         var testStr = "00010100110010010011011110101000110110001010111101010100010010010001110100111001011001101101100101000";
-         var result = new UPCAWriter().encode("12345678901", BarcodeFormat.UPC_A, testStr.Length, 0);
-         Assert.AreEqual(testStr, BitMatrixTestCase.matrixToString(result));
+         var result = new UPCAWriter().encode(content, BarcodeFormat.UPC_A, encoding.Length, 0);
+         Assert.AreEqual(encoding, BitMatrixTestCase.matrixToString(result));
       }
    }
 }

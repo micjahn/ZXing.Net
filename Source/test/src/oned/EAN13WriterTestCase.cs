@@ -26,22 +26,12 @@ namespace ZXing.OneD.Test
    [TestFixture]
    public sealed class EAN13WriterTestCase
    {
-      [Test]
-      public void testEncode()
+      [TestCase("5901234123457", "00001010001011010011101100110010011011110100111010101011001101101100100001010111001001110100010010100000", TestName = "testEncode")]
+      [TestCase("590123412345", "00001010001011010011101100110010011011110100111010101011001101101100100001010111001001110100010010100000", TestName = "testAddChecksumAndEncode")]
+      public void testEncode(string content, string encoding)
       {
-         var testStr =
-            "00010100010110100111011001100100110111101001110101010110011011011001000010101110010011101000100101000";
-         var result = new EAN13Writer().encode("5901234123457", BarcodeFormat.EAN_13, testStr.Length, 0);
-         Assert.AreEqual(testStr, BitMatrixTestCase.matrixToString(result));
-      }
-
-      [Test]
-      public void testAddChecksumAndEncode()
-      {
-         var testStr =
-            "00010100010110100111011001100100110111101001110101010110011011011001000010101110010011101000100101000";
-         var result = new EAN13Writer().encode("590123412345", BarcodeFormat.EAN_13, testStr.Length, 0);
-         Assert.AreEqual(testStr, BitMatrixTestCase.matrixToString(result));
+         var result = new EAN13Writer().encode(content, BarcodeFormat.EAN_13, encoding.Length, 0);
+         Assert.AreEqual(encoding, BitMatrixTestCase.matrixToString(result));
       }
    }
 }
