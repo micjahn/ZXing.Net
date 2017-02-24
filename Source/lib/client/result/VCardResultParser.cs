@@ -383,24 +383,28 @@ namespace ZXing.Client.Result
          List<String> result = new List<String>(lists.Count);
          foreach (var list in lists)
          {
-            String type = null;
-            for (int i = 1; i < list.Count; i++)
+            String value = list[0];
+            if (!String.IsNullOrEmpty(value))
             {
-               String metadatum = list[i];
-               int equals = metadatum.IndexOf('=');
-               if (equals < 0)
+               String type = null;
+               for (int i = 1; i < list.Count; i++)
                {
-                  // take the whole thing as a usable label
-                  type = metadatum;
-                  break;
+                  String metadatum = list[i];
+                  int equals = metadatum.IndexOf('=');
+                  if (equals < 0)
+                  {
+                     // take the whole thing as a usable label
+                     type = metadatum;
+                     break;
+                  }
+                  if (String.Compare("TYPE", metadatum.Substring(0, equals), StringComparison.OrdinalIgnoreCase) == 0)
+                  {
+                     type = metadatum.Substring(equals + 1);
+                     break;
+                  }
                }
-               if (String.Compare("TYPE", metadatum.Substring(0, equals), StringComparison.OrdinalIgnoreCase) == 0)
-               {
-                  type = metadatum.Substring(equals + 1);
-                  break;
-               }
+               result.Add(type);
             }
-            result.Add(type);
          }
          return SupportClass.toStringArray(result);
       }
