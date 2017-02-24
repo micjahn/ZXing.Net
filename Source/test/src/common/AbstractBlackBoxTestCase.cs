@@ -55,17 +55,22 @@ namespace ZXing.Common.Test
       private readonly BarcodeFormat? expectedFormat;
       private readonly List<TestResult> testResults;
 
-      protected AbstractBlackBoxTestCase(String testBasePathSuffix,
-                                         Reader barcodeReader,
-                                         BarcodeFormat? expectedFormat)
+      public static String buildTestBase(String testBasePathSuffix)
       {
          // A little workaround to prevent aggravation in my IDE
          if (!Directory.Exists(testBasePathSuffix))
          {
             // try starting with 'core' since the test base is often given as the project root
-            testBasePathSuffix = Path.Combine("..\\..\\..\\Source", testBasePathSuffix);
+            return Path.Combine("..\\..\\..\\Source", testBasePathSuffix);
          }
-         this.testBase = testBasePathSuffix;
+         return testBasePathSuffix;
+      }
+
+      protected AbstractBlackBoxTestCase(String testBasePathSuffix,
+                                         Reader barcodeReader,
+                                         BarcodeFormat? expectedFormat)
+      {
+         this.testBase = buildTestBase(testBasePathSuffix);
          this.barcodeReader = barcodeReader;
          this.expectedFormat = expectedFormat;
          testResults = new List<TestResult>();

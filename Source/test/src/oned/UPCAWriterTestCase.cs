@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using System;
 using NUnit.Framework;
-using ZXing.Common;
+
+using ZXing.Common.Test;
 
 namespace ZXing.OneD.Test
 {
@@ -29,23 +29,17 @@ namespace ZXing.OneD.Test
       [Test]
       public void testEncode()
       {
-         String testStr = "00010101000110110111011000100010110101111011110101010111001011101001001110110011011011001011100101000";
-         BitMatrix result = new UPCAWriter().encode("485963095124", BarcodeFormat.UPC_A, testStr.Length, 0);
-         for (int i = 0; i < testStr.Length; i++)
-         {
-            Assert.AreEqual(testStr[i] == '1', result[i, 0], "Element " + i);
-         }
+         var testStr = "00010101000110110111011000100010110101111011110101010111001011101001001110110011011011001011100101000";
+         var result = new UPCAWriter().encode("485963095124", BarcodeFormat.UPC_A, testStr.Length, 0);
+         Assert.AreEqual(testStr, BitMatrixTestCase.matrixToString(result));
       }
 
       [Test]
       public void testAddChecksumAndEncode()
       {
-         String testStr = "00010100110010010011011110101000110110001010111101010100010010010001110100111001011001101101100101000";
-         BitMatrix result = new UPCAWriter().encode("12345678901", BarcodeFormat.UPC_A, testStr.Length, 0);
-         for (int i = 0; i < testStr.Length; i++)
-         {
-            Assert.AreEqual(testStr[i] == '1', result[i, 0], "Element " + i);
-         }
+         var testStr = "00010100110010010011011110101000110110001010111101010100010010010001110100111001011001101101100101000";
+         var result = new UPCAWriter().encode("12345678901", BarcodeFormat.UPC_A, testStr.Length, 0);
+         Assert.AreEqual(testStr, BitMatrixTestCase.matrixToString(result));
       }
    }
 }

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-using System;
 using NUnit.Framework;
-using ZXing.Common;
+
+using ZXing.Common.Test;
 
 namespace ZXing.OneD.Test
 {
@@ -29,12 +29,9 @@ namespace ZXing.OneD.Test
       [Test]
       public void testEncode()
       {
-         String testStr = "00010100010110100111011001100100110111101001110101010110011011011001000010101110010011101000100101000";
-         BitMatrix result = new EAN13Writer().encode("5901234123457", BarcodeFormat.EAN_13, testStr.Length, 0);
-         for (int i = 0; i < testStr.Length; i++)
-         {
-            Assert.AreEqual(testStr[i] == '1', result[i, 0], "Element " + i);
-         }
+         var testStr = "00010100010110100111011001100100110111101001110101010110011011011001000010101110010011101000100101000";
+         var result = new EAN13Writer().encode("5901234123457", BarcodeFormat.EAN_13, testStr.Length, 0);
+         Assert.AreEqual(testStr, BitMatrixTestCase.matrixToString(result));
       }
    }
 }

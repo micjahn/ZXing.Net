@@ -40,6 +40,7 @@ using System.IO;
 using NUnit.Framework;
 using ZXing.Client.Result;
 using ZXing.Common;
+using ZXing.Common.Test;
 
 namespace ZXing.OneD.RSS.Expanded.Test
 {
@@ -54,44 +55,32 @@ namespace ZXing.OneD.RSS.Expanded.Test
       public void testDecodeRow2result_2()
       {
          // (01)90012345678908(3103)001750
-         String path = "test/data/blackbox/rssexpanded-1/2.png";
-         ExpandedProductParsedResult expected =
-             new ExpandedProductParsedResult("(01)90012345678908(3103)001750", 
-                                             "90012345678908",
-                                             null, null, null, null, null, null,
-                                             "001750",
-                                             ExpandedProductParsedResult.KILOGRAM,
-                                             "3", null, null, null, new Dictionary<String, String>());
+         var path = "2.png";
+         var expected =
+            new ExpandedProductParsedResult("(01)90012345678908(3103)001750",
+               "90012345678908",
+               null, null, null, null, null, null,
+               "001750",
+               ExpandedProductParsedResult.KILOGRAM,
+               "3", null, null, null, new Dictionary<String, String>());
 
          assertCorrectImage2result(path, expected);
       }
 
-      private static void assertCorrectImage2result(String path, ExpandedProductParsedResult expected)
+      private static void assertCorrectImage2result(String imageFileName, ExpandedProductParsedResult expected)
       {
-         RSSExpandedReader rssExpandedReader = new RSSExpandedReader();
+         var rssExpandedReader = new RSSExpandedReader();
 
-         if (!File.Exists(path))
-         {
-            // Support running from project root too
-            path = Path.Combine("..\\..\\..\\Source", path);
-         }
+         var binaryMap = TestCaseUtil.getBinaryBitmap("test/data/blackbox/rssexpanded-1", imageFileName);
+         var rowNumber = binaryMap.Height / 2;
+         var row = binaryMap.getBlackRow(rowNumber, null);
 
-#if !SILVERLIGHT
-         var image = new Bitmap(Image.FromFile(path));
-#else
-         var image = new WriteableBitmap(0, 0);
-         image.SetSource(File.OpenRead(path));
-#endif
-         BinaryBitmap binaryMap = new BinaryBitmap(new GlobalHistogramBinarizer(new BitmapLuminanceSource(image)));
-         int rowNumber = binaryMap.Height / 2;
-         BitArray row = binaryMap.getBlackRow(rowNumber, null);
-
-         Result theResult = rssExpandedReader.decodeRow(rowNumber, row, null);
+         var theResult = rssExpandedReader.decodeRow(rowNumber, row, null);
          Assert.IsNotNull(theResult);
 
          Assert.AreEqual(BarcodeFormat.RSS_EXPANDED, theResult.BarcodeFormat);
 
-         ParsedResult result = ResultParser.parseResult(theResult);
+         var result = ResultParser.parseResult(theResult);
 
          Assert.AreEqual(expected, result);
       }

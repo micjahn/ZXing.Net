@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Text;
 using NUnit.Framework;
 
 namespace ZXing.Common.Test
@@ -294,6 +295,17 @@ namespace ZXing.Common.Test
          catch (ArgumentException)
          {
          }
+      }
+
+      public static String matrixToString(BitMatrix result)
+      {
+         Assert.AreEqual(1, result.Height);
+         StringBuilder builder = new StringBuilder(result.Width);
+         for (int i = 0; i < result.Width; i++)
+         {
+            builder.Append(result[i, 0] ? '1' : '0');
+         }
+         return builder.ToString();
       }
 
       private static void testXOR(BitMatrix dataMatrix, BitMatrix flipMatrix, BitMatrix expectedMatrix)

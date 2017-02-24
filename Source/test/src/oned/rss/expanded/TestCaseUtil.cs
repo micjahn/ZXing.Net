@@ -29,26 +29,33 @@ using System.Drawing;
 using System.IO;
 
 using ZXing.Common;
+using ZXing.Common.Test;
 
 namespace ZXing.OneD.RSS.Expanded.Test
 {
    internal static class TestCaseUtil
    {
-      internal static Bitmap getBufferedImage(String path)
+      internal static BinaryBitmap getBinaryBitmap(String directory, String path)
       {
-         if (!File.Exists(path))
-         {
-            // Support running from project root too
-            path = Path.Combine("..\\..\\..\\Source", path);
-         }
-         return (Bitmap)Image.FromFile(path);
-      }
-
-      internal static BinaryBitmap getBinaryBitmap(String path)
-      {
-         var bufferedImage = getBufferedImage(path);
+         var bufferedImage = readImage(directory, path);
          var luminanceSource = new BitmapLuminanceSource(bufferedImage);
          return new BinaryBitmap(new GlobalHistogramBinarizer(luminanceSource));
       }
+
+#if !SILVERLIGHT
+      internal static Bitmap readImage(String directory, String fileName)
+      {
+         var path = AbstractBlackBoxTestCase.buildTestBase(directory);
+         return new Bitmap(Image.FromFile(Path.Combine(path, fileName)));
+      }
+#else
+      internal static WriteableBitmap readImage(String directory, String fileName)
+      {
+         var path = AbstractBlackBoxTestCase.buildTestBase(directory);
+         var image = new WriteableBitmap(0, 0);
+         image.SetSource(File.OpenRead(Path.Combine(path, fileName)));
+         return image;
+      }
+#endif
    }
 }

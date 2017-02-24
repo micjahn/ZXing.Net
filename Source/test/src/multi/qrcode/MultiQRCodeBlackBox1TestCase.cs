@@ -41,12 +41,7 @@ namespace ZXing.Multi.QrCode.Test
       [Test]
       public void testMultiQRCodes()
       {
-         var path = "test/data/blackbox/multi-qrcode-1";
-         if (!Directory.Exists(path))
-         {
-            path = Path.Combine("..\\..\\..\\Source", path);
-         }
-
+         var path = buildTestBase("test/data/blackbox/multi-qrcode-1");
          var source = new BitmapLuminanceSource((Bitmap) Bitmap.FromFile(Path.Combine(path, "1.png")));
          var bitmap = new BinaryBitmap(new HybridBinarizer(source));
 
