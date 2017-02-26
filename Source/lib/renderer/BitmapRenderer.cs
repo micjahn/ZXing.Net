@@ -74,7 +74,9 @@ namespace ZXing.Rendering
          catch (Exception exc)
          {
             // have to ignore, no better idea
+#if !WindowsCE
             System.Diagnostics.Trace.TraceError("default text font (Arial, 10, regular) couldn't be loaded: {0}", exc.Message);
+#endif
          }
       }
 
@@ -206,8 +208,12 @@ namespace ZXing.Rendering
                // fill the bottom area with the background color if the content should be written below the barcode
                if (outputContent)
                {
+#if WindowsCE
+                  var textAreaHeight = (int)font.Size + 5;
+#else
                   var textAreaHeight = font.Height;
-                  
+#endif
+
                   emptyArea = height + 10 > textAreaHeight ? textAreaHeight : 0;
 
                   if (emptyArea > 0)
