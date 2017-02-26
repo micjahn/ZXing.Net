@@ -385,7 +385,7 @@ namespace ZXing.Datamatrix.Test
 
         byte[] data = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A,
             0x7E, 0x7F, (byte) 0x80, (byte) 0x81, (byte) 0x82};
-        String expected = encodeHighLevel(Encoding.GetEncoding("ISO8859-1").GetString(data));
+        String expected = encodeHighLevel(Encoding.GetEncoding("ISO8859-1").GetString(data, 0, data.Length));
         String visualized = encodeHighLevel("url(data:text/plain;charset=iso-8859-1,"
                                                 + "%00%01%02%03%04%05%06%07%08%09%0A%7E%7F%80%81%82)");
         Assert.AreEqual(expected, visualized);

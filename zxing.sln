@@ -1,7 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing", "Source\lib\zxing.csproj", "{6431CF13-7A7B-4602-B96A-47CDA6F0B008}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{2D5E0A30-FC6C-493C-A756-D5E889809407}"
+	ProjectSection(SolutionItems) = preProject
+		THANKS = THANKS
+		TODO.txt = TODO.txt
+		zxing.nunit = zxing.nunit
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{DE3B6078-DB3E-4A14-9AD6-5CC97E4A67ED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{A91C1873-C7D0-41BC-86B1-9DAB76AFE9E5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commandline", "Commandline", "{4A65D793-76EE-4B99-AA5C-F3208C11EE33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.net4.0", "Source\lib\zxing.net4.0.csproj", "{6431CF13-7A7B-4602-B96A-47CDA6F0B008}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.sl4", "Source\lib\zxing.sl4.csproj", "{03B962BB-7A24-4589-89E5-C42A17DDC376}"
 EndProject
@@ -12,15 +25,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.wp7.1", "Source\lib\zxing.wp7.1.csproj", "{EC6F52B8-AF75-4FA2-85C1-82BF77861FFF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.test", "Source\test\src\zxing.test.csproj", "{D90C151C-5F70-4890-9B10-97955EC809ED}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{2D5E0A30-FC6C-493C-A756-D5E889809407}"
-	ProjectSection(SolutionItems) = preProject
-		THANKS = THANKS
-		TODO.txt = TODO.txt
-		zxing.nunit = zxing.nunit
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{DE3B6078-DB3E-4A14-9AD6-5CC97E4A67ED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsDemo", "Clients\WindowsFormsDemo\WindowsFormsDemo.csproj", "{D21445EE-13AF-418B-9576-83414990B3A7}"
 EndProject
@@ -38,9 +42,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityDemo", "Clients\UnityD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmguCVDemo", "Clients\EmguCVDemo\EmguCVDemo.csproj", "{9870BA86-B9DC-472C-ACA5-EC45C6B066D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.presentation", "Source\lib\zxing.presentation.csproj", "{EA513204-63F3-4C50-992D-08FF430B6F70}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{A91C1873-C7D0-41BC-86B1-9DAB76AFE9E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.net4.0.presentation", "Source\lib\zxing.net4.0.presentation.csproj", "{EA513204-63F3-4C50-992D-08FF430B6F70}"
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "zxing.doc", "Source\lib\documentation\zxing.doc.shfbproj", "{8FAF2142-C26E-4D13-9701-F86F6E6D0443}"
 EndProject
@@ -55,8 +57,6 @@ EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "zxing.sl4.doc", "Source\lib\documentation\zxing.sl4.doc.shfbproj", "{F983B572-DCD7-4AB4-B9D5-D218A22BA5FE}"
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "zxing.net2.0.doc", "Source\lib\documentation\zxing.net2.0.doc.shfbproj", "{12441BD6-6380-40F8-B6F6-C42A98443BBA}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commandline", "Commandline", "{4A65D793-76EE-4B99-AA5C-F3208C11EE33}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineDecoder", "Clients\CommandLineDecoder\CommandLineDecoder.csproj", "{7B604F37-11C5-499F-9CE2-943BAFB60552}"
 EndProject
@@ -84,95 +84,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCVDemo", "Clients\OpenCVDemo\OpenCVDemo.csproj", "{8E24C71F-308A-43B7-9CC4-CBB561913310}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 25
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs05
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Source\\lib\\zxing.csproj
-		SccProjectName1 = Source/lib
-		SccLocalPath1 = Source\\lib
-		SccProjectUniqueName2 = Source\\test\\src\\zxing.test.csproj
-		SccProjectName2 = Source/test/src
-		SccLocalPath2 = Source\\test\\src
-		SccProjectUniqueName3 = Clients\\WindowsFormsDemo\\WindowsFormsDemo.csproj
-		SccProjectTopLevelParentUniqueName3 = zxing.sln
-		SccProjectName3 = Clients/WindowsFormsDemo
-		SccLocalPath3 = Clients\\WindowsFormsDemo
-		SccProjectUniqueName4 = Source\\test\\src\\zxing.sl4.test.csproj
-		SccProjectName4 = Source/test/src
-		SccLocalPath4 = Source\\test\\src
-		SccProjectUniqueName5 = Source\\lib\\zxing.sl5.csproj
-		SccProjectName5 = Source/lib
-		SccLocalPath5 = Source\\lib
-		SccProjectUniqueName6 = Clients\\SilverlightDemo\\SilverlightDemo.csproj
-		SccProjectTopLevelParentUniqueName6 = zxing.sln
-		SccProjectName6 = Clients/SilverlightDemo
-		SccLocalPath6 = Clients\\SilverlightDemo
-		SccProjectUniqueName7 = Source\\lib\\zxing.presentation.csproj
-		SccProjectName7 = Source/lib
-		SccLocalPath7 = Source\\lib
-		SccProjectUniqueName8 = Clients\\AForgeDemo\\AForgeDemo.csproj
-		SccProjectTopLevelParentUniqueName8 = zxing.sln
-		SccProjectName8 = Clients/AForgeDemo
-		SccLocalPath8 = Clients\\AForgeDemo
-		SccProjectUniqueName9 = Clients\\CommandLineDecoder\\CommandLineDecoder.csproj
-		SccProjectTopLevelParentUniqueName9 = zxing.sln
-		SccProjectName9 = Clients/CommandLineDecoder
-		SccLocalPath9 = Clients\\CommandLineDecoder
-		SccProjectUniqueName10 = Clients\\CommandLineEncoder\\CommandLineEncoder.csproj
-		SccProjectTopLevelParentUniqueName10 = zxing.sln
-		SccProjectName10 = Clients/CommandLineEncoder
-		SccLocalPath10 = Clients\\CommandLineEncoder
-		SccProjectUniqueName11 = Clients\\EmguCVDemo\\EmguCVDemo.csproj
-		SccProjectTopLevelParentUniqueName11 = zxing.sln
-		SccProjectName11 = Clients/EmguCVDemo
-		SccLocalPath11 = Clients\\EmguCVDemo
-		SccProjectUniqueName12 = Clients\\ServiceDemo\\ServiceDemo\\ServiceDemo.csproj
-		SccProjectTopLevelParentUniqueName12 = zxing.sln
-		SccProjectName12 = Clients/ServiceDemo/ServiceDemo
-		SccLocalPath12 = Clients\\ServiceDemo\\ServiceDemo
-		SccProjectUniqueName13 = Clients\\UnityDemo\\UnityDemo.csproj
-		SccProjectTopLevelParentUniqueName13 = zxing.sln
-		SccProjectName13 = Clients/UnityDemo
-		SccLocalPath13 = Clients\\UnityDemo
-		SccProjectUniqueName14 = Clients\\WindowsPhoneDemo\\WindowsPhoneDemo.csproj
-		SccProjectTopLevelParentUniqueName14 = zxing.sln
-		SccProjectName14 = Clients/WindowsPhoneDemo
-		SccLocalPath14 = Clients\\WindowsPhoneDemo
-		SccProjectUniqueName15 = Clients\\WPFDemo\\WPFDemo\\WPFDemo.csproj
-		SccProjectTopLevelParentUniqueName15 = zxing.sln
-		SccProjectName15 = Clients/WPFDemo/WPFDemo
-		SccLocalPath15 = Clients\\WPFDemo\\WPFDemo
-		SccProjectUniqueName16 = Source\\lib\\zxing.kinect.csproj
-		SccProjectName16 = Source/lib
-		SccLocalPath16 = Source\\lib
-		SccProjectUniqueName17 = Source\\lib\\zxing.net2.0.csproj
-		SccProjectName17 = Source/lib
-		SccLocalPath17 = Source\\lib
-		SccProjectUniqueName18 = Source\\lib\\zxing.net3.5.csproj
-		SccProjectName18 = Source/lib
-		SccLocalPath18 = Source\\lib
-		SccProjectUniqueName19 = Source\\lib\\zxing.portable.csproj
-		SccProjectName19 = Source/lib
-		SccLocalPath19 = Source\\lib
-		SccProjectUniqueName20 = Source\\lib\\zxing.sl4.csproj
-		SccProjectName20 = Source/lib
-		SccLocalPath20 = Source\\lib
-		SccProjectUniqueName21 = Source\\lib\\zxing.unity.csproj
-		SccProjectName21 = Source/lib
-		SccLocalPath21 = Source\\lib
-		SccProjectUniqueName22 = Source\\lib\\zxing.wp7.0.csproj
-		SccProjectName22 = Source/lib
-		SccLocalPath22 = Source\\lib
-		SccProjectUniqueName23 = Source\\lib\\zxing.wp7.1.csproj
-		SccProjectName23 = Source/lib
-		SccLocalPath23 = Source\\lib
-		SccProjectUniqueName24 = Clients\\OpenCVDemo\\OpenCVDemo.csproj
-		SccProjectTopLevelParentUniqueName24 = zxing.sln
-		SccProjectName24 = Clients/OpenCVDemo
-		SccLocalPath24 = Clients\\OpenCVDemo
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -667,11 +578,16 @@ Global
 		{02B5CDF3-298C-4558-B553-30DDE7CFC2B9} = {DE3B6078-DB3E-4A14-9AD6-5CC97E4A67ED}
 		{AF488075-40E9-48B1-8C5B-2FC5356C9233} = {DE3B6078-DB3E-4A14-9AD6-5CC97E4A67ED}
 		{8E24C71F-308A-43B7-9CC4-CBB561913310} = {DE3B6078-DB3E-4A14-9AD6-5CC97E4A67ED}
+		{8FAF2142-C26E-4D13-9701-F86F6E6D0443} = {A91C1873-C7D0-41BC-86B1-9DAB76AFE9E5}
+		{13ADDABA-9D04-4503-A9FF-C39E96B6E6B4} = {A91C1873-C7D0-41BC-86B1-9DAB76AFE9E5}
+		{5FBC3F17-7792-46CE-B974-14753D605A18} = {A91C1873-C7D0-41BC-86B1-9DAB76AFE9E5}
+		{9AB81466-791F-46B2-AE88-55D4759DE821} = {A91C1873-C7D0-41BC-86B1-9DAB76AFE9E5}
+		{CD937642-91A0-4371-9452-336F8CC63121} = {A91C1873-C7D0-41BC-86B1-9DAB76AFE9E5}
+		{F983B572-DCD7-4AB4-B9D5-D218A22BA5FE} = {A91C1873-C7D0-41BC-86B1-9DAB76AFE9E5}
+		{12441BD6-6380-40F8-B6F6-C42A98443BBA} = {A91C1873-C7D0-41BC-86B1-9DAB76AFE9E5}
+		{0DDD7A5D-C54A-4841-8555-7940DB210DF7} = {A91C1873-C7D0-41BC-86B1-9DAB76AFE9E5}
+		{B95B1194-0D6A-4121-A629-695B1F8EF0A7} = {A91C1873-C7D0-41BC-86B1-9DAB76AFE9E5}
 		{7B604F37-11C5-499F-9CE2-943BAFB60552} = {4A65D793-76EE-4B99-AA5C-F3208C11EE33}
 		{F37668D8-6423-4019-90D9-3DA81EEC6A1A} = {4A65D793-76EE-4B99-AA5C-F3208C11EE33}
-	EndGlobalSection
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal

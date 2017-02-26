@@ -27,7 +27,12 @@ namespace ZXing.Datamatrix.Test
    /// </summary>
    public sealed class PlacementTestCase
    {
-      private static readonly Regex SPACE = new Regex(" ", RegexOptions.Compiled);
+      private static readonly Regex SPACE = new Regex(" "
+#if !SILVERLIGHT
+, RegexOptions.Compiled);
+#else
+);
+#endif
 
       [Test]
       public void testPlacement()

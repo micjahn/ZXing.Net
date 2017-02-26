@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing", "Source\lib\zxing.csproj", "{6431CF13-7A7B-4602-B96A-47CDA6F0B008}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.net4.0", "Source\lib\zxing.net4.0.csproj", "{6431CF13-7A7B-4602-B96A-47CDA6F0B008}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.sl5", "Source\lib\zxing.sl5.csproj", "{A3D48B9C-42A0-4FC8-BB58-D368F239DEBF}"
 EndProject
@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsDemo", "Clients
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SilverlightDemo", "Clients\SilverlightDemo\SilverlightDemo.csproj", "{D8A028A3-AA45-4292-9834-FD1037CEA3E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.presentation", "Source\lib\zxing.presentation.csproj", "{EA513204-63F3-4C50-992D-08FF430B6F70}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.net4.0.presentation", "Source\lib\zxing.net4.0.presentation.csproj", "{EA513204-63F3-4C50-992D-08FF430B6F70}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{2E66BEEA-02F0-4C56-84AB-74625F1D8F82}"
 	ProjectSection(SolutionItems) = preProject

@@ -25,7 +25,11 @@
  */
 
 using System;
+#if !SILVERLIGHT
 using System.Drawing;
+#else
+using System.Windows.Media.Imaging;
+#endif
 using System.IO;
 
 using ZXing.Common;

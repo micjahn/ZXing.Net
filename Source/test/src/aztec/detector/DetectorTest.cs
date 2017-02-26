@@ -91,7 +91,11 @@ namespace ZXing.Aztec.Test
                for (int i = 0; i < 5; i++)
                {
                   BitMatrix copy = clone(matrix);
+#if !SILVERLIGHT
                   ISet<int> errors = new SortedSet<int>();
+#else
+                  ISet<int> errors = new HashSet<int>();
+#endif
                   while (errors.Count < 3)
                   {
                      // Quick and dirty way of getting three distinct integers between 1 and n.

@@ -16,7 +16,11 @@
 
 using System;
 using System.Collections.Generic;
+#if !SILVERLIGHT
 using System.Drawing;
+#else
+using System.Windows.Media.Imaging;
+#endif
 using System.IO;
 using System.Text;
 
@@ -107,8 +111,8 @@ namespace ZXing.PDF417.Test
 #if !SILVERLIGHT
                   var image = new Bitmap(Image.FromFile(imageFile));
 #else
-            var image = new WriteableBitmap(0, 0);
-            image.SetSource(File.OpenRead(testImage));
+                  var image = new WriteableBitmap(0, 0);
+                  image.SetSource(File.OpenRead(imageFile));
 #endif
                   var rotation = testResults[x].Rotation;
                   var rotatedImage = rotateImage(image, rotation);
