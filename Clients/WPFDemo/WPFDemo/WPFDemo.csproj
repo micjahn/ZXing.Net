@@ -110,13 +110,13 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Source\lib\zxing.csproj">
+    <ProjectReference Include="..\..\..\Source\lib\zxing.net4.0.csproj">
       <Project>{6431CF13-7A7B-4602-B96A-47CDA6F0B008}</Project>
-      <Name>zxing</Name>
+      <Name>zxing.net4.0</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Source\lib\zxing.presentation.csproj">
+    <ProjectReference Include="..\..\..\Source\lib\zxing.net4.0.presentation.csproj">
       <Project>{EA513204-63F3-4C50-992D-08FF430B6F70}</Project>
-      <Name>zxing.presentation</Name>
+      <Name>zxing.net4.0.presentation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

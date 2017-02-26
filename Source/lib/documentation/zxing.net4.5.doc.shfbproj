@@ -7,20 +7,20 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{8faf2142-c26e-4d13-9701-f86f6e6d0443}</ProjectGuid>
+    <ProjectGuid>{3EBEACE2-161F-4104-8BE7-1FACA3A57F9D}</ProjectGuid>
     <SHFBSchemaVersion>1.9.9.0</SHFBSchemaVersion>
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
          Studio adds them anyway -->
-    <AssemblyName>zxing.doc</AssemblyName>
-    <RootNamespace>zxing.doc</RootNamespace>
-    <Name>zxing.doc</Name>
+    <AssemblyName>zxing.net4.5.doc</AssemblyName>
+    <RootNamespace>zxing.net4.5.doc</RootNamespace>
+    <Name>zxing.net4.5.doc</Name>
     <!-- SHFB properties -->
-    <OutputPath>..\..\..\Build\Release\Documentation\net4.0\</OutputPath>
-    <HtmlHelpName>zxing.net</HtmlHelpName>
+    <OutputPath>..\..\..\Build\Release\Documentation\net4.5\</OutputPath>
+    <HtmlHelpName>zxing.net4.5</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\zxing.net4.0.csproj" />
-      <DocumentationSource sourceFile="..\zxing.net4.0.presentation.csproj" />
+      <DocumentationSource sourceFile="..\zxing.net4.5.csproj" />
+      <DocumentationSource sourceFile="..\zxing.net4.5.presentation.csproj" />
     </DocumentationSources>
     <SyntaxFilters>Standard</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
@@ -34,7 +34,7 @@
     <BuildAssemblerVerbosity>AllMessages</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
     <IndentHtml>False</IndentHtml>
-    <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
     <KeepLogFile>False</KeepLogFile>
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
     <CppCommentsFixup>False</CppCommentsFixup>
@@ -70,17 +70,17 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release with Documentation' ">
-    <OutputPath>..\..\..\Build\Release\Documentation\net4.0\</OutputPath>
+    <OutputPath>..\..\..\Build\Release\Documentation\net4.5\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\lib\zxing.net4.0.csproj">
-      <Name>zxing.net4.0</Name>
-      <Project>{6431cf13-7a7b-4602-b96a-47cda6f0b008}</Project>
+    <ProjectReference Include="..\..\lib\zxing.net4.5.csproj">
+      <Name>zxing.net4.5</Name>
+      <Project>{24074395-0196-4204-B516-CB6DBA2FC4B9}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\..\lib\zxing.net4.0.presentation.csproj">
-      <Name>zxing.net4.0.presentation</Name>
-      <Project>{ea513204-63f3-4c50-992d-08ff430b6f70}</Project>
+    <ProjectReference Include="..\..\lib\zxing.net4.5.presentation.csproj">
+      <Name>zxing.net4.5.presentation</Name>
+      <Project>{D038EDF8-2DB4-4E21-B369-12C115583A81}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

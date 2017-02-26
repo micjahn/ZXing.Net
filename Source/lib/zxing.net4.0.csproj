@@ -1,80 +1,119 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <SchemaVersion>2.0</SchemaVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A3D48B9C-42A0-4FC8-BB58-D368F239DEBF}</ProjectGuid>
-    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>zxing</AssemblyName>
+    <AssemblyOriginatorKeyFile>..\..\Key\private.snk</AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ZXing</RootNamespace>
-    <AssemblyName>zxing.sl5</AssemblyName>
-    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
-    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
-    <SilverlightApplication>false</SilverlightApplication>
-    <ValidateXaml>true</ValidateXaml>
-    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>
+    </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <ProjectGuid>{6431CF13-7A7B-4602-B96A-47CDA6F0B008}</ProjectGuid>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
   </PropertyGroup>
-  <!-- This property group is only here to support building this project using the 
-       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
-       to set the TargetFrameworkVersion to v3.5 -->
-  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\..\Build\Debug\net4.0\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;DEBUG;NET40</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\Build\Debug\sl5\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;SILVERLIGHT5</DefineConstants>
-    <NoStdLib>true</NoStdLib>
-    <NoConfig>true</NoConfig>
-    <ErrorReport>prompt</ErrorReport>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\Build\Release\sl5\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT;SILVERLIGHT5</DefineConstants>
-    <NoStdLib>true</NoStdLib>
-    <NoConfig>true</NoConfig>
-    <ErrorReport>prompt</ErrorReport>
+    <OutputPath>..\..\Build\Release\net4.0\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE;NET40</DefineConstants>
+    <DocumentationFile>..\..\Build\Release\net4.0\zxing.XML</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\Build\Release\sl5\zxing.sl5.XML</DocumentationFile>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\..\Key\private.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="mscorlib" />
-    <Reference Include="System.Numerics">
-      <Private>False</Private>
+    <Reference Include="System">
+      <Name>System</Name>
     </Reference>
-    <Reference Include="System.Windows" />
-    <Reference Include="system" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Net" />
-    <Reference Include="System.Windows.Browser" />
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml">
+      <Name>System.Xml</Name>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="aztec\AztecDetectorResult.cs" />
-    <Compile Include="aztec\AztecReader.cs" />
     <Compile Include="aztec\AztecResultMetadata.cs" />
     <Compile Include="aztec\AztecWriter.cs" />
-    <Compile Include="aztec\decoder\Decoder.cs" />
-    <Compile Include="aztec\detector\Detector.cs" />
     <Compile Include="aztec\encoder\AztecCode.cs" />
     <Compile Include="aztec\encoder\AztecEncodingOptions.cs" />
     <Compile Include="aztec\encoder\BinaryShiftToken.cs" />
@@ -110,7 +149,9 @@
     <None Include="client\result\optional\AbstractNDEFResultParser.cs" />
     <None Include="client\result\optional\NDEFRecord.cs" />
     <None Include="client\result\optional\NDEFSmartPosterParsedResult.cs" />
-    <None Include="client\result\optional\NDEFSmartPosterResultParser.cs" />
+    <None Include="client\result\optional\NDEFSmartPosterResultParser.cs">
+      <SubType>Code</SubType>
+    </None>
     <None Include="client\result\optional\NDEFTextResultParser.cs" />
     <None Include="client\result\optional\NDEFURIResultParser.cs" />
     <Compile Include="client\result\ParsedResult.cs" />
@@ -136,7 +177,7 @@
     <Compile Include="client\result\WifiResultParser.cs" />
     <Compile Include="common\BitArray.cs" />
     <Compile Include="common\BitMatrix.cs" />
-    <Compile Include="common\BitMatrix.Silverlight.cs" />
+    <Compile Include="common\BitMatrix.Drawing.cs" />
     <Compile Include="common\BitSource.cs" />
     <Compile Include="common\CharacterSetECI.cs" />
     <Compile Include="common\DecoderResult.cs" />
@@ -156,7 +197,6 @@
     <Compile Include="common\reedsolomon\GenericGFPoly.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonDecoder.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonEncoder.cs" />
-    <Compile Include="common\StringUtils.cs" />
     <Compile Include="datamatrix\DataMatrixReader.cs" />
     <Compile Include="datamatrix\DataMatrixWriter.cs" />
     <Compile Include="datamatrix\decoder\BitMatrixParser.cs" />
@@ -187,12 +227,39 @@
     <Compile Include="FormatException.cs" />
     <Compile Include="IBarcodeReader.cs" />
     <Compile Include="IBarcodeReaderGeneric.cs" />
+    <Compile Include="InvertedLuminanceSource.cs" />
+    <Compile Include="oned\Code128EncodingOptions.cs" />
+    <Compile Include="imb\IMBReader.cs" />
+    <Compile Include="oned\Code93Writer.cs" />
+    <Compile Include="oned\MSIReader.cs" />
+    <Compile Include="oned\MSIWriter.cs" />
+    <Compile Include="oned\PlesseyWriter.cs" />
+    <Compile Include="oned\rss\expanded\ExpandedRow.cs" />
+    <Compile Include="oned\UPCEWriter.cs" />
+    <Compile Include="pdf417\decoder\BarcodeMetadata.cs" />
+    <Compile Include="pdf417\decoder\BarcodeValue.cs" />
+    <Compile Include="pdf417\decoder\BoundingBox.cs" />
+    <Compile Include="pdf417\decoder\Codeword.cs" />
+    <Compile Include="pdf417\decoder\DecodedBitStreamParser.cs" />
+    <Compile Include="pdf417\decoder\DetectionResult.cs" />
+    <Compile Include="pdf417\decoder\DetectionResultColumn.cs" />
+    <Compile Include="pdf417\decoder\DetectionResultRowIndicatorColumn.cs" />
+    <Compile Include="pdf417\decoder\PDF417CodewordDecoder.cs" />
+    <Compile Include="pdf417\decoder\PDF417ScanningDecoder.cs" />
+    <Compile Include="pdf417\detector\PDF417DetectorResult.cs" />
+    <Compile Include="pdf417\encoder\PDF417EncodingOptions.cs" />
+    <Compile Include="pdf417\PDF417Common.cs" />
+    <Compile Include="pdf417\PDF417ResultMetadata.cs" />
+    <Compile Include="qrcode\decoder\QRCodeDecoderMetaData.cs" />
+    <Compile Include="qrcode\encoder\QrCodeEncodingOptions.cs" />
+    <Compile Include="renderer\BitmapRenderer.cs" />
+    <Compile Include="renderer\IBarcodeRenderer.cs" />
     <Compile Include="IBarcodeWriter.cs" />
     <Compile Include="IBarcodeWriterGeneric.cs" />
-    <Compile Include="imb\IMBReader.cs" />
-    <Compile Include="IMultipleBarcodeReader.cs" />
+    <Compile Include="IMultipleBarcodeReader.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="IMultipleBarcodeReaderGeneric.cs" />
-    <Compile Include="InvertedLuminanceSource.cs" />
     <Compile Include="LuminanceSource.cs" />
     <Compile Include="maxicode\decoder\BitMatrixParser.cs" />
     <Compile Include="maxicode\decoder\DecodedBitStreamParser.cs" />
@@ -208,13 +275,10 @@
     <Compile Include="multi\qrcode\QRCodeMultiReader.cs" />
     <Compile Include="oned\CodaBarReader.cs" />
     <Compile Include="oned\CodaBarWriter.cs" />
-    <Compile Include="oned\Code128EncodingOptions.cs" />
     <Compile Include="oned\Code128Reader.cs" />
     <Compile Include="oned\Code128Writer.cs" />
     <Compile Include="oned\Code39Reader.cs" />
-    <Compile Include="oned\Code39Writer.cs" />
     <Compile Include="oned\Code93Reader.cs" />
-    <Compile Include="oned\Code93Writer.cs" />
     <Compile Include="oned\EAN13Reader.cs" />
     <Compile Include="oned\EAN13Writer.cs" />
     <Compile Include="oned\EAN8Reader.cs" />
@@ -222,13 +286,10 @@
     <Compile Include="oned\EANManufacturerOrgSupport.cs" />
     <Compile Include="oned\ITFReader.cs" />
     <Compile Include="oned\ITFWriter.cs" />
-    <Compile Include="oned\MSIReader.cs" />
-    <Compile Include="oned\MSIWriter.cs" />
     <Compile Include="oned\MultiFormatOneDReader.cs" />
     <Compile Include="oned\MultiFormatUPCEANReader.cs" />
     <Compile Include="oned\OneDimensionalCodeWriter.cs" />
     <Compile Include="oned\OneDReader.cs" />
-    <Compile Include="oned\PlesseyWriter.cs" />
     <Compile Include="oned\rss\AbstractRSSReader.cs" />
     <Compile Include="oned\rss\DataCharacter.cs" />
     <Compile Include="oned\rss\expanded\BitArrayBuilder.cs" />
@@ -252,7 +313,6 @@
     <Compile Include="oned\rss\expanded\decoders\FieldParser.cs" />
     <Compile Include="oned\rss\expanded\decoders\GeneralAppIdDecoder.cs" />
     <Compile Include="oned\rss\expanded\ExpandedPair.cs" />
-    <Compile Include="oned\rss\expanded\ExpandedRow.cs" />
     <Compile Include="oned\rss\expanded\RSSExpandedReader.cs" />
     <Compile Include="oned\rss\FinderPattern.cs" />
     <Compile Include="oned\rss\Pair.cs" />
@@ -266,34 +326,19 @@
     <Compile Include="oned\UPCEANReader.cs" />
     <Compile Include="oned\UPCEANWriter.cs" />
     <Compile Include="oned\UPCEReader.cs" />
-    <Compile Include="oned\UPCEWriter.cs" />
-    <Compile Include="pdf417\decoder\BarcodeMetadata.cs" />
-    <Compile Include="pdf417\decoder\BarcodeValue.cs" />
-    <Compile Include="pdf417\decoder\BoundingBox.cs" />
-    <Compile Include="pdf417\decoder\Codeword.cs" />
-    <Compile Include="pdf417\decoder\DecodedBitStreamParser.cs" />
-    <Compile Include="pdf417\decoder\DetectionResult.cs" />
-    <Compile Include="pdf417\decoder\DetectionResultColumn.cs" />
-    <Compile Include="pdf417\decoder\DetectionResultRowIndicatorColumn.cs" />
     <Compile Include="pdf417\decoder\ec\ErrorCorrection.cs" />
     <Compile Include="pdf417\decoder\ec\ModulusGF.cs" />
     <Compile Include="pdf417\decoder\ec\ModulusPoly.cs" />
-    <Compile Include="pdf417\decoder\PDF417CodewordDecoder.cs" />
-    <Compile Include="pdf417\decoder\PDF417ScanningDecoder.cs" />
     <Compile Include="pdf417\detector\Detector.cs" />
-    <Compile Include="pdf417\detector\PDF417DetectorResult.cs" />
     <Compile Include="pdf417\encoder\BarcodeMatrix.cs" />
     <Compile Include="pdf417\encoder\BarcodeRow.cs" />
     <Compile Include="pdf417\encoder\Compaction.cs" />
     <Compile Include="pdf417\encoder\Dimensions.cs" />
     <Compile Include="pdf417\encoder\PDF417.cs" />
-    <Compile Include="pdf417\encoder\PDF417EncodingOptions.cs" />
     <Compile Include="pdf417\encoder\PDF417ErrorCorrection.cs" />
     <Compile Include="pdf417\encoder\PDF417HighLevelEncoder.cs" />
-    <Compile Include="pdf417\PDF417Common.cs" />
-    <Compile Include="pdf417\PDF417Reader.cs" />
-    <Compile Include="pdf417\PDF417ResultMetadata.cs" />
     <Compile Include="pdf417\PDF417Writer.cs" />
+    <Compile Include="pdf417\PDF417Reader.cs" />
     <Compile Include="PlanarYUVLuminanceSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="qrcode\decoder\BitMatrixParser.cs" />
@@ -304,7 +349,6 @@
     <Compile Include="qrcode\decoder\ErrorCorrectionLevel.cs" />
     <Compile Include="qrcode\decoder\FormatInformation.cs" />
     <Compile Include="qrcode\decoder\Mode.cs" />
-    <Compile Include="qrcode\decoder\QRCodeDecoderMetaData.cs" />
     <Compile Include="qrcode\decoder\Version.cs" />
     <Compile Include="qrcode\detector\AlignmentPattern.cs" />
     <Compile Include="qrcode\detector\AlignmentPatternFinder.cs" />
@@ -318,51 +362,60 @@
     <Compile Include="qrcode\encoder\MaskUtil.cs" />
     <Compile Include="qrcode\encoder\MatrixUtil.cs" />
     <Compile Include="qrcode\encoder\QRCode.cs" />
-    <Compile Include="qrcode\encoder\QrCodeEncodingOptions.cs" />
     <Compile Include="qrcode\QRCodeReader.cs" />
     <Compile Include="qrcode\QRCodeWriter.cs" />
     <Compile Include="Reader.cs" />
     <Compile Include="ReaderException.cs" />
-    <Compile Include="renderer\IBarcodeRenderer.cs" />
     <Compile Include="renderer\PixelData.cs" />
     <Compile Include="renderer\PixelDataRenderer.cs" />
     <Compile Include="renderer\SvgRenderer.cs" />
-    <Compile Include="renderer\WriteableBitmapRenderer.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="ResultMetadataType.cs" />
     <Compile Include="ResultPoint.cs" />
     <Compile Include="ResultPointCallback.cs" />
     <Compile Include="RGB565LuminanceSource.cs" />
     <Compile Include="RGBLuminanceSource.cs" />
-    <Compile Include="BitmapLuminanceSource.Silverlight.cs" />
-    <Compile Include="silverlight\BigInteger.cs" />
-    <Compile Include="silverlight\NonSerializedAttribute.cs" />
-    <Compile Include="silverlight\SerializableAttribute.cs" />
+    <Compile Include="BitmapLuminanceSource.cs" />
     <Compile Include="SupportClass.cs" />
     <Compile Include="Writer.cs" />
     <Compile Include="WriterException.cs" />
+    <Compile Include="oned\Code39Writer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Key\private.snk">
       <Link>Properties\private.snk</Link>
     </None>
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
-  <ProjectExtensions>
-    <VisualStudio>
-      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
-        <SilverlightProjectProperties />
-      </FlavorProperties>
-    </VisualStudio>
-  </ProjectExtensions>
+  <ItemGroup>
+    <Compile Include="aztec\AztecDetectorResult.cs" />
+    <Compile Include="aztec\AztecReader.cs" />
+    <Compile Include="aztec\decoder\Decoder.cs" />
+    <Compile Include="aztec\detector\Detector.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="common\StringUtils.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(SolutionDir)Key\private.snk" copy "$(SolutionDir)Key\dummy-private.snk" "$(SolutionDir)Key\private.snk"</PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

@@ -65,14 +65,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="zxing.csproj">
+    <ProjectReference Include="zxing.net4.0.csproj">
       <Project>{6431CF13-7A7B-4602-B96A-47CDA6F0B008}</Project>
-      <Name>zxing</Name>
+      <Name>zxing.net4.0</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(SolutionDir)Keys\private.snk" copy "$(SolutionDir)Key\dummy-private.snk" "$(SolutionDir)Key\private.snk"</PreBuildEvent>
+    <PreBuildEvent>if not exist "$(SolutionDir)Key\private.snk" copy "$(SolutionDir)Key\dummy-private.snk" "$(SolutionDir)Key\private.snk"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
