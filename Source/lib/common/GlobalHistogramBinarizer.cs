@@ -112,7 +112,7 @@ namespace ZXing.Common
       /// <summary>
       /// Does not sharpen the data, as this call is intended to only be used by 2D Readers.
       /// </summary>
-      override public BitMatrix BlackMatrix
+      public override BitMatrix BlackMatrix
       {
          get
          {
