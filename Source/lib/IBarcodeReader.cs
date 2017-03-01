@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
-#if !PORTABLE
+#if !(PORTABLE || NETSTANDARD)
 using System.Drawing;
 #endif
 #else
@@ -124,11 +124,11 @@ namespace ZXing
       /// </summary>
       /// <param name="barcodeBitmap">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
-      #if __UNIFIED__
+#if __UNIFIED__
       Result Decode(UIKit.UIImage barcodeImage);
-      #else
+#else
       Result Decode(MonoTouch.UIKit.UIImage barcodeImage);
-      #endif
+#endif
 #elif MONOANDROID
       /// <summary>
       /// Decodes the specified barcode bitmap.
@@ -137,7 +137,7 @@ namespace ZXing
       /// <returns>the result data or null</returns>
       Result Decode(Android.Graphics.Bitmap barcodeImage);
 #else
-#if !PORTABLE
+#if !(PORTABLE || NETSTANDARD)
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
       /// <summary>

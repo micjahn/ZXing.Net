@@ -54,7 +54,7 @@ namespace ZXing
 
       /// <summary>
       /// Fetches luminance data for the underlying bitmap. Values should be fetched using:
-      /// <code>int luminance = array[y * width + x] & 0xff</code>
+      /// <code>int luminance = array[y * width + x] &amp; 0xff</code>
       /// </summary>
       /// <returns>
       /// A row-major 2D array of luminance values. Do not use result.length as it may be

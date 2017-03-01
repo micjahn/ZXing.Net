@@ -43,6 +43,12 @@ using System.Runtime.InteropServices;
 #if MONOTOUCH
 [assembly: AssemblyTitle("zxing.net for mono touch")]
 #endif
+#if WINDOWS_UWP
+[assembly: AssemblyTitle("zxing.net for windows uwp")]
+#endif
+#if NETSTANDARD
+[assembly: AssemblyTitle("zxing.net for .net core standard")]
+#endif
 [assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 27.02.2017 19:21:59)")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyProduct("ZXing.Net")]

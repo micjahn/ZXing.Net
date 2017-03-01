@@ -16,7 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-#if SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NETFX_CORE
+#if SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NETFX_CORE || NETSTANDARD
 using System.Numerics;
 #else
 using BigIntegerLibrary;

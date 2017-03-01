@@ -1,0 +1,931 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{54DA849E-B814-40D9-BB71-DA74D78441A4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ZXing</RootNamespace>
+    <AssemblyName>zxing</AssemblyName>
+    <DefaultLanguage>de-DE</DefaultLanguage>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\Build\Debug\uwp\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\Build\Release\uwp\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\..\Build\Release\uwp\zxing.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <PlatformTarget>ARM</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <PlatformTarget>ARM</PlatformTarget>
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <None Include="..\..\..\Key\private.snk">
+      <Link>Properties\private.snk</Link>
+    </None>
+    <None Include="project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\aztec\AztecDetectorResult.cs">
+      <Link>aztec\AztecDetectorResult.cs</Link>
+    </Compile>
+    <Compile Include="..\aztec\AztecReader.cs">
+      <Link>aztec\AztecReader.cs</Link>
+    </Compile>
+    <Compile Include="..\aztec\AztecResultMetadata.cs">
+      <Link>aztec\AztecResultMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\aztec\AztecWriter.cs">
+      <Link>aztec\AztecWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\aztec\decoder\Decoder.cs">
+      <Link>aztec\decoder\Decoder.cs</Link>
+    </Compile>
+    <Compile Include="..\aztec\detector\Detector.cs">
+      <Link>aztec\detector\Detector.cs</Link>
+    </Compile>
+    <Compile Include="..\aztec\encoder\AztecCode.cs">
+      <Link>aztec\encoder\AztecCode.cs</Link>
+    </Compile>
+    <Compile Include="..\aztec\encoder\AztecEncodingOptions.cs">
+      <Link>aztec\encoder\AztecEncodingOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\aztec\encoder\BinaryShiftToken.cs">
+      <Link>aztec\encoder\BinaryShiftToken.cs</Link>
+    </Compile>
+    <Compile Include="..\aztec\encoder\Encoder.cs">
+      <Link>aztec\encoder\Encoder.cs</Link>
+    </Compile>
+    <Compile Include="..\aztec\encoder\HighLevelEncoder.cs">
+      <Link>aztec\encoder\HighLevelEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\aztec\encoder\SimpleToken.cs">
+      <Link>aztec\encoder\SimpleToken.cs</Link>
+    </Compile>
+    <Compile Include="..\aztec\encoder\State.cs">
+      <Link>aztec\encoder\State.cs</Link>
+    </Compile>
+    <Compile Include="..\aztec\encoder\Token.cs">
+      <Link>aztec\encoder\Token.cs</Link>
+    </Compile>
+    <Compile Include="..\BarcodeFormat.cs">
+      <Link>BarcodeFormat.cs</Link>
+    </Compile>
+    <Compile Include="..\BarcodeReader.cs">
+      <Link>BarcodeReader.cs</Link>
+    </Compile>
+    <Compile Include="..\BarcodeReaderGeneric.cs">
+      <Link>BarcodeReaderGeneric.cs</Link>
+    </Compile>
+    <Compile Include="..\BarcodeWriter.cs">
+      <Link>BarcodeWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\BarcodeWriterGeneric.cs">
+      <Link>BarcodeWriterGeneric.cs</Link>
+    </Compile>
+    <Compile Include="..\BaseLuminanceSource.cs">
+      <Link>BaseLuminanceSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Binarizer.cs">
+      <Link>Binarizer.cs</Link>
+    </Compile>
+    <Compile Include="..\BinaryBitmap.cs">
+      <Link>BinaryBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\BitmapLuminanceSource.Silverlight.cs">
+      <Link>BitmapLuminanceSource.Silverlight.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\AbstractDoCoMoResultParser.cs">
+      <Link>client\result\AbstractDoCoMoResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\AddressBookAUResultParser.cs">
+      <Link>client\result\AddressBookAUResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\AddressBookDoCoMoResultParser.cs">
+      <Link>client\result\AddressBookDoCoMoResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\AddressBookParsedResult.cs">
+      <Link>client\result\AddressBookParsedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\BizcardResultParser.cs">
+      <Link>client\result\BizcardResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\BookmarkDoCoMoResultParser.cs">
+      <Link>client\result\BookmarkDoCoMoResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\CalendarParsedResult.cs">
+      <Link>client\result\CalendarParsedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\EmailAddressParsedResult.cs">
+      <Link>client\result\EmailAddressParsedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\EmailAddressResultParser.cs">
+      <Link>client\result\EmailAddressResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\EmailDoCoMoResultParser.cs">
+      <Link>client\result\EmailDoCoMoResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\ExpandedProductParsedResult.cs">
+      <Link>client\result\ExpandedProductParsedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\ExpandedProductResultParser.cs">
+      <Link>client\result\ExpandedProductResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\GeoParsedResult.cs">
+      <Link>client\result\GeoParsedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\GeoResultParser.cs">
+      <Link>client\result\GeoResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\ISBNParsedResult.cs">
+      <Link>client\result\ISBNParsedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\ISBNResultParser.cs">
+      <Link>client\result\ISBNResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\ParsedResult.cs">
+      <Link>client\result\ParsedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\ParsedResultType.cs">
+      <Link>client\result\ParsedResultType.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\ProductParsedResult.cs">
+      <Link>client\result\ProductParsedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\ProductResultParser.cs">
+      <Link>client\result\ProductResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\ResultParser.cs">
+      <Link>client\result\ResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\SMSMMSResultParser.cs">
+      <Link>client\result\SMSMMSResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\SMSParsedResult.cs">
+      <Link>client\result\SMSParsedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\SMSTOMMSTOResultParser.cs">
+      <Link>client\result\SMSTOMMSTOResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\SMTPResultParser.cs">
+      <Link>client\result\SMTPResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\TelParsedResult.cs">
+      <Link>client\result\TelParsedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\TelResultParser.cs">
+      <Link>client\result\TelResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\TextParsedResult.cs">
+      <Link>client\result\TextParsedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\URIParsedResult.cs">
+      <Link>client\result\URIParsedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\URIResultParser.cs">
+      <Link>client\result\URIResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\URLTOResultParser.cs">
+      <Link>client\result\URLTOResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\VCardResultParser.cs">
+      <Link>client\result\VCardResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\VEventResultParser.cs">
+      <Link>client\result\VEventResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\VINParsedResult.cs">
+      <Link>client\result\VINParsedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\VINResultParser.cs">
+      <Link>client\result\VINResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\WifiParsedResult.cs">
+      <Link>client\result\WifiParsedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\client\result\WifiResultParser.cs">
+      <Link>client\result\WifiResultParser.cs</Link>
+    </Compile>
+    <Compile Include="..\common\BitArray.cs">
+      <Link>common\BitArray.cs</Link>
+    </Compile>
+    <Compile Include="..\common\BitMatrix.cs">
+      <Link>common\BitMatrix.cs</Link>
+    </Compile>
+    <Compile Include="..\common\BitSource.cs">
+      <Link>common\BitSource.cs</Link>
+    </Compile>
+    <Compile Include="..\common\CharacterSetECI.cs">
+      <Link>common\CharacterSetECI.cs</Link>
+    </Compile>
+    <Compile Include="..\common\DecoderResult.cs">
+      <Link>common\DecoderResult.cs</Link>
+    </Compile>
+    <Compile Include="..\common\DecodingOptions.cs">
+      <Link>common\DecodingOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\common\DefaultGridSampler.cs">
+      <Link>common\DefaultGridSampler.cs</Link>
+    </Compile>
+    <Compile Include="..\common\DetectorResult.cs">
+      <Link>common\DetectorResult.cs</Link>
+    </Compile>
+    <Compile Include="..\common\detector\MathUtils.cs">
+      <Link>common\MathUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\common\detector\MonochromeRectangleDetector.cs">
+      <Link>common\detector\MonochromeRectangleDetector.cs</Link>
+    </Compile>
+    <Compile Include="..\common\detector\WhiteRectangleDetector.cs">
+      <Link>common\detector\WhiteRectangleDetector.cs</Link>
+    </Compile>
+    <Compile Include="..\common\ECI.cs">
+      <Link>common\ECI.cs</Link>
+    </Compile>
+    <Compile Include="..\common\EncodingOptions.cs">
+      <Link>common\EncodingOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\common\GlobalHistogramBinarizer.cs">
+      <Link>common\GlobalHistogramBinarizer.cs</Link>
+    </Compile>
+    <Compile Include="..\common\GridSampler.cs">
+      <Link>common\GridSampler.cs</Link>
+    </Compile>
+    <Compile Include="..\common\HybridBinarizer.cs">
+      <Link>common\HybridBinarizer.cs</Link>
+    </Compile>
+    <Compile Include="..\common\PerspectiveTransform.cs">
+      <Link>common\PerspectiveTransform.cs</Link>
+    </Compile>
+    <Compile Include="..\common\reedsolomon\GenericGF.cs">
+      <Link>common\reedsolomon\GenericGF.cs</Link>
+    </Compile>
+    <Compile Include="..\common\reedsolomon\GenericGFPoly.cs">
+      <Link>common\reedsolomon\GenericGFPoly.cs</Link>
+    </Compile>
+    <Compile Include="..\common\reedsolomon\ReedSolomonDecoder.cs">
+      <Link>common\reedsolomon\ReedSolomonDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\common\reedsolomon\ReedSolomonEncoder.cs">
+      <Link>common\reedsolomon\ReedSolomonEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\common\StringUtils.cs">
+      <Link>common\StringUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\DataMatrixReader.cs">
+      <Link>datamatrix\DataMatrixReader.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\DataMatrixWriter.cs">
+      <Link>datamatrix\DataMatrixWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\decoder\BitMatrixParser.cs">
+      <Link>datamatrix\decoder\BitMatrixParser.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\decoder\DataBlock.cs">
+      <Link>datamatrix\decoder\DataBlock.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\decoder\DecodedBitStreamParser.cs">
+      <Link>datamatrix\decoder\DecodedBitStreamParser.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\decoder\Decoder.cs">
+      <Link>datamatrix\decoder\Decoder.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\decoder\Version.cs">
+      <Link>datamatrix\decoder\Version.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\detector\Detector.cs">
+      <Link>datamatrix\detector\Detector.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\ASCIIEncoder.cs">
+      <Link>datamatrix\encoder\ASCIIEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\Base256Encoder.cs">
+      <Link>datamatrix\encoder\Base256Encoder.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\C40Encoder.cs">
+      <Link>datamatrix\encoder\C40Encoder.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\DatamatrixEncodingOptions.cs">
+      <Link>datamatrix\encoder\DatamatrixEncodingOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\DataMatrixSymbolInfo144.cs">
+      <Link>datamatrix\encoder\DataMatrixSymbolInfo144.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\DefaultPlacement.cs">
+      <Link>datamatrix\encoder\DefaultPlacement.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\EdifactEncoder.cs">
+      <Link>datamatrix\encoder\EdifactEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\Encodation.cs">
+      <Link>datamatrix\encoder\Encodation.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\Encoder.cs">
+      <Link>datamatrix\encoder\Encoder.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\EncoderContext.cs">
+      <Link>datamatrix\encoder\EncoderContext.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\ErrorCorrection.cs">
+      <Link>datamatrix\encoder\ErrorCorrection.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\HighLevelEncoder.cs">
+      <Link>datamatrix\encoder\HighLevelEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\SymbolInfo.cs">
+      <Link>datamatrix\encoder\SymbolInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\SymbolShapeHint.cs">
+      <Link>datamatrix\encoder\SymbolShapeHint.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\TextEncoder.cs">
+      <Link>datamatrix\encoder\TextEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\X12Encoder.cs">
+      <Link>datamatrix\encoder\X12Encoder.cs</Link>
+    </Compile>
+    <Compile Include="..\DecodeHintType.cs">
+      <Link>DecodeHintType.cs</Link>
+    </Compile>
+    <Compile Include="..\Dimension.cs">
+      <Link>Dimension.cs</Link>
+    </Compile>
+    <Compile Include="..\EncodeHintType.cs">
+      <Link>EncodeHintType.cs</Link>
+    </Compile>
+    <Compile Include="..\FormatException.cs">
+      <Link>FormatException.cs</Link>
+    </Compile>
+    <Compile Include="..\IBarcodeReader.cs">
+      <Link>IBarcodeReader.cs</Link>
+    </Compile>
+    <Compile Include="..\IBarcodeReaderGeneric.cs">
+      <Link>IBarcodeReaderGeneric.cs</Link>
+    </Compile>
+    <Compile Include="..\IBarcodeWriter.cs">
+      <Link>IBarcodeWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\IBarcodeWriterGeneric.cs">
+      <Link>IBarcodeWriterGeneric.cs</Link>
+    </Compile>
+    <Compile Include="..\imb\IMBReader.cs">
+      <Link>imb\IMBReader.cs</Link>
+    </Compile>
+    <Compile Include="..\IMultipleBarcodeReader.cs">
+      <Link>IMultipleBarcodeReader.cs</Link>
+    </Compile>
+    <Compile Include="..\IMultipleBarcodeReaderGeneric.cs">
+      <Link>IMultipleBarcodeReaderGeneric.cs</Link>
+    </Compile>
+    <Compile Include="..\InvertedLuminanceSource.cs">
+      <Link>InvertedLuminanceSource.cs</Link>
+    </Compile>
+    <Compile Include="..\LuminanceSource.cs">
+      <Link>LuminanceSource.cs</Link>
+    </Compile>
+    <Compile Include="..\maxicode\decoder\BitMatrixParser.cs">
+      <Link>maxicode\decoder\BitMatrixParser.cs</Link>
+    </Compile>
+    <Compile Include="..\maxicode\decoder\DecodedBitStreamParser.cs">
+      <Link>maxicode\decoder\DecodedBitStreamParser.cs</Link>
+    </Compile>
+    <Compile Include="..\maxicode\decoder\Decoder.cs">
+      <Link>maxicode\decoder\Decoder.cs</Link>
+    </Compile>
+    <Compile Include="..\maxicode\MaxiCodeReader.cs">
+      <Link>maxicode\MaxiCodeReader.cs</Link>
+    </Compile>
+    <Compile Include="..\MultiFormatReader.cs">
+      <Link>oned\MultiFormatReader.cs</Link>
+    </Compile>
+    <Compile Include="..\MultiFormatWriter.cs">
+      <Link>oned\MultiFormatWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\multi\ByQuadrantReader.cs">
+      <Link>multi\ByQuadrantReader.cs</Link>
+    </Compile>
+    <Compile Include="..\multi\GenericMultipleBarcodeReader.cs">
+      <Link>multi\GenericMultipleBarcodeReader.cs</Link>
+    </Compile>
+    <Compile Include="..\multi\MultipleBarcodeReader.cs">
+      <Link>multi\MultipleBarcodeReader.cs</Link>
+    </Compile>
+    <Compile Include="..\multi\qrcode\detector\MultiDetector.cs">
+      <Link>multi\qrcode\detector\MultiDetector.cs</Link>
+    </Compile>
+    <Compile Include="..\multi\qrcode\detector\MultiFinderPatternFinder.cs">
+      <Link>multi\qrcode\detector\MultiFinderPatternFinder.cs</Link>
+    </Compile>
+    <Compile Include="..\multi\qrcode\QRCodeMultiReader.cs">
+      <Link>multi\qrcode\QRCodeMultiReader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\CodaBarReader.cs">
+      <Link>oned\CodaBarReader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\CodaBarWriter.cs">
+      <Link>oned\CodaBarWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\Code128EncodingOptions.cs">
+      <Link>oned\Code128EncodingOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\Code128Reader.cs">
+      <Link>oned\Code128Reader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\Code128Writer.cs">
+      <Link>oned\Code128Writer.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\Code39Reader.cs">
+      <Link>oned\Code39Reader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\Code39Writer.cs">
+      <Link>oned\Code39Writer.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\Code93Reader.cs">
+      <Link>oned\Code93Reader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\Code93Writer.cs">
+      <Link>oned\Code93Writer.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\EAN13Reader.cs">
+      <Link>oned\EAN13Reader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\EAN13Writer.cs">
+      <Link>oned\EAN13Writer.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\EAN8Reader.cs">
+      <Link>oned\EAN8Reader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\EAN8Writer.cs">
+      <Link>oned\EAN8Writer.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\EANManufacturerOrgSupport.cs">
+      <Link>oned\EANManufacturerOrgSupport.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\ITFReader.cs">
+      <Link>oned\ITFReader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\ITFWriter.cs">
+      <Link>oned\ITFWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\MSIReader.cs">
+      <Link>oned\MSIReader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\MSIWriter.cs">
+      <Link>oned\MSIWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\MultiFormatOneDReader.cs">
+      <Link>oned\MultiFormatOneDReader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\MultiFormatUPCEANReader.cs">
+      <Link>oned\MultiFormatUPCEANReader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\OneDimensionalCodeWriter.cs">
+      <Link>oned\OneDimensionalCodeWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\OneDReader.cs">
+      <Link>oned\OneDReader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\PlesseyWriter.cs">
+      <Link>oned\PlesseyWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\AbstractRSSReader.cs">
+      <Link>oned\rss\AbstractRSSReader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\DataCharacter.cs">
+      <Link>oned\rss\DataCharacter.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\BitArrayBuilder.cs">
+      <Link>oned\rss\expanded\BitArrayBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\AbstractExpandedDecoder.cs">
+      <Link>oned\rss\expanded\decoders\AbstractExpandedDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\AI013103decoder.cs">
+      <Link>oned\rss\expanded\decoders\AI013103decoder.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\AI01320xDecoder.cs">
+      <Link>oned\rss\expanded\decoders\AI01320xDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\AI01392xDecoder.cs">
+      <Link>oned\rss\expanded\decoders\AI01392xDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\AI01393xDecoder.cs">
+      <Link>oned\rss\expanded\decoders\AI01393xDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\AI013x0x1xDecoder.cs">
+      <Link>oned\rss\expanded\decoders\AI013x0x1xDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\AI013x0xDecoder.cs">
+      <Link>oned\rss\expanded\decoders\AI013x0xDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\AI01AndOtherAIs.cs">
+      <Link>oned\rss\expanded\decoders\AI01AndOtherAIs.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\AI01decoder.cs">
+      <Link>oned\rss\expanded\decoders\AI01decoder.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\AI01weightDecoder.cs">
+      <Link>oned\rss\expanded\decoders\AI01weightDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\AnyAIDecoder.cs">
+      <Link>oned\rss\expanded\decoders\AnyAIDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\BlockParsedResult.cs">
+      <Link>oned\rss\expanded\decoders\BlockParsedResult.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\CurrentParsingState.cs">
+      <Link>oned\rss\expanded\decoders\CurrentParsingState.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\DecodedChar.cs">
+      <Link>oned\rss\expanded\decoders\DecodedChar.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\DecodedInformation.cs">
+      <Link>oned\rss\expanded\decoders\DecodedInformation.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\DecodedNumeric.cs">
+      <Link>oned\rss\expanded\decoders\DecodedNumeric.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\DecodedObject.cs">
+      <Link>oned\rss\expanded\decoders\DecodedObject.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\FieldParser.cs">
+      <Link>oned\rss\expanded\decoders\FieldParser.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\decoders\GeneralAppIdDecoder.cs">
+      <Link>oned\rss\expanded\decoders\GeneralAppIdDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\ExpandedPair.cs">
+      <Link>oned\rss\expanded\ExpandedPair.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\ExpandedRow.cs">
+      <Link>oned\rss\expanded\ExpandedRow.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\expanded\RSSExpandedReader.cs">
+      <Link>oned\rss\expanded\RSSExpandedReader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\FinderPattern.cs">
+      <Link>oned\rss\FinderPattern.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\Pair.cs">
+      <Link>oned\rss\Pair.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\RSS14Reader.cs">
+      <Link>oned\rss\RSS14Reader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\rss\RSSUtils.cs">
+      <Link>oned\rss\RSSUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\UPCAReader.cs">
+      <Link>oned\UPCAReader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\UPCAWriter.cs">
+      <Link>oned\UPCAWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\UPCEANExtension2Support.cs">
+      <Link>oned\UPCEANExtension2Support.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\UPCEANExtension5Support.cs">
+      <Link>oned\UPCEANExtension5Support.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\UPCEANExtensionSupport.cs">
+      <Link>oned\UPCEANExtensionSupport.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\UPCEANReader.cs">
+      <Link>oned\UPCEANReader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\UPCEANWriter.cs">
+      <Link>oned\UPCEANWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\UPCEReader.cs">
+      <Link>oned\UPCEReader.cs</Link>
+    </Compile>
+    <Compile Include="..\oned\UPCEWriter.cs">
+      <Link>oned\UPCEWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\decoder\BarcodeMetadata.cs">
+      <Link>pdf417\decoder\BarcodeMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\decoder\BarcodeValue.cs">
+      <Link>pdf417\decoder\BarcodeValue.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\decoder\BoundingBox.cs">
+      <Link>pdf417\decoder\BoundingBox.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\decoder\Codeword.cs">
+      <Link>pdf417\decoder\Codeword.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\decoder\DecodedBitStreamParser.cs">
+      <Link>pdf417\decoder\DecodedBitStreamParser.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\decoder\DetectionResult.cs">
+      <Link>pdf417\decoder\DetectionResult.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\decoder\DetectionResultColumn.cs">
+      <Link>pdf417\decoder\DetectionResultColumn.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\decoder\DetectionResultRowIndicatorColumn.cs">
+      <Link>pdf417\decoder\DetectionResultRowIndicatorColumn.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\decoder\ec\ErrorCorrection.cs">
+      <Link>pdf417\decoder\ec\ErrorCorrection.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\decoder\ec\ModulusGF.cs">
+      <Link>pdf417\decoder\ec\ModulusGF.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\decoder\ec\ModulusPoly.cs">
+      <Link>pdf417\decoder\ec\ModulusPoly.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\decoder\PDF417CodewordDecoder.cs">
+      <Link>pdf417\decoder\PDF417CodewordDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\decoder\PDF417ScanningDecoder.cs">
+      <Link>pdf417\decoder\PDF417ScanningDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\detector\Detector.cs">
+      <Link>pdf417\detector\Detector.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\detector\PDF417DetectorResult.cs">
+      <Link>pdf417\detector\PDF417DetectorResult.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\encoder\BarcodeMatrix.cs">
+      <Link>pdf417\encoder\BarcodeMatrix.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\encoder\BarcodeRow.cs">
+      <Link>pdf417\encoder\BarcodeRow.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\encoder\Compaction.cs">
+      <Link>pdf417\encoder\Compaction.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\encoder\Dimensions.cs">
+      <Link>pdf417\encoder\Dimensions.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\encoder\PDF417.cs">
+      <Link>pdf417\encoder\PDF417.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\encoder\PDF417EncodingOptions.cs">
+      <Link>pdf417\encoder\PDF417EncodingOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\encoder\PDF417ErrorCorrection.cs">
+      <Link>pdf417\encoder\PDF417ErrorCorrection.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\encoder\PDF417HighLevelEncoder.cs">
+      <Link>pdf417\encoder\PDF417HighLevelEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\PDF417Common.cs">
+      <Link>pdf417\PDF417Common.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\PDF417Reader.cs">
+      <Link>pdf417\PDF417Reader.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\PDF417ResultMetadata.cs">
+      <Link>pdf417\PDF417ResultMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\pdf417\PDF417Writer.cs">
+      <Link>pdf417\PDF417Writer.cs</Link>
+    </Compile>
+    <Compile Include="..\PlanarYUVLuminanceSource.cs">
+      <Link>PlanarYUVLuminanceSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Properties\AssemblyInfo.cs">
+      <Link>Properties\AssemblyInfo</Link>
+    </Compile>
+    <Compile Include="..\qrcode\decoder\BitMatrixParser.cs">
+      <Link>qrcode\decoder\BitMatrixParser.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\decoder\DataBlock.cs">
+      <Link>qrcode\decoder\DataBlock.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\decoder\DataMask.cs">
+      <Link>qrcode\decoder\DataMask.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\decoder\DecodedBitStreamParser.cs">
+      <Link>qrcode\decoder\DecodedBitStreamParser.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\decoder\Decoder.cs">
+      <Link>qrcode\decoder\Decoder.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\decoder\ErrorCorrectionLevel.cs">
+      <Link>qrcode\decoder\ErrorCorrectionLevel.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\decoder\FormatInformation.cs">
+      <Link>qrcode\decoder\FormatInformation.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\decoder\Mode.cs">
+      <Link>qrcode\decoder\Mode.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\decoder\QRCodeDecoderMetaData.cs">
+      <Link>qrcode\decoder\QRCodeDecoderMetaData.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\decoder\Version.cs">
+      <Link>qrcode\decoder\Version.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\detector\AlignmentPattern.cs">
+      <Link>qrcode\detector\AlignmentPattern.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\detector\AlignmentPatternFinder.cs">
+      <Link>qrcode\detector\AlignmentPatternFinder.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\detector\Detector.cs">
+      <Link>qrcode\detector\Detector.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\detector\FinderPattern.cs">
+      <Link>qrcode\detector\FinderPattern.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\detector\FinderPatternFinder.cs">
+      <Link>qrcode\detector\FinderPatternFinder.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\detector\FinderPatternInfo.cs">
+      <Link>qrcode\detector\FinderPatternInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\encoder\BlockPair.cs">
+      <Link>qrcode\encoder\BlockPair.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\encoder\ByteMatrix.cs">
+      <Link>qrcode\encoder\ByteMatrix.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\encoder\Encoder.cs">
+      <Link>qrcode\encoder\Encoder.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\encoder\MaskUtil.cs">
+      <Link>qrcode\encoder\MaskUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\encoder\MatrixUtil.cs">
+      <Link>qrcode\encoder\MatrixUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\encoder\QRCode.cs">
+      <Link>qrcode\encoder\QRCode.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\encoder\QrCodeEncodingOptions.cs">
+      <Link>qrcode\encoder\QrCodeEncodingOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\QRCodeReader.cs">
+      <Link>qrcode\QRCodeReader.cs</Link>
+    </Compile>
+    <Compile Include="..\qrcode\QRCodeWriter.cs">
+      <Link>qrcode\QRCodeWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\Reader.cs">
+      <Link>Reader.cs</Link>
+    </Compile>
+    <Compile Include="..\ReaderException.cs">
+      <Link>ReaderException.cs</Link>
+    </Compile>
+    <Compile Include="..\renderer\IBarcodeRenderer.cs">
+      <Link>renderer\IBarcodeRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\renderer\PixelData.cs">
+      <Link>renderer\PixelData.cs</Link>
+    </Compile>
+    <Compile Include="..\renderer\PixelDataRenderer.cs">
+      <Link>renderer\PixelDataRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\renderer\SVGRenderer.cs">
+      <Link>renderer\SVGRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\renderer\WriteableBitmapRenderer.cs">
+      <Link>renderer\WriteableBitmapRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\Result.cs">
+      <Link>Result.cs</Link>
+    </Compile>
+    <Compile Include="..\ResultMetadataType.cs">
+      <Link>ResultMetadataType.cs</Link>
+    </Compile>
+    <Compile Include="..\ResultPoint.cs">
+      <Link>ResultPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\ResultPointCallback.cs">
+      <Link>ResultPointCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\RGB565LuminanceSource.cs">
+      <Link>RGB565LuminanceSource.cs</Link>
+    </Compile>
+    <Compile Include="..\RGBLuminanceSource.cs">
+      <Link>RGBLuminanceSource.cs</Link>
+    </Compile>
+    <Compile Include="..\silverlight\BrowsableAttribute.cs">
+      <Link>silverlight\BrowsableAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\silverlight\NonSerializedAttribute.cs">
+      <Link>silverlight\NonSerializedAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\silverlight\SerializableAttribute.cs">
+      <Link>silverlight\SerializableAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\SupportClass.cs">
+      <Link>SupportClass.cs</Link>
+    </Compile>
+    <Compile Include="..\Writer.cs">
+      <Link>Writer.cs</Link>
+    </Compile>
+    <Compile Include="..\WriterException.cs">
+      <Link>WriterException.cs</Link>
+    </Compile>
+    <EmbeddedResource Include="Properties\zxing.uwp.rd.xml" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\..\Key\private.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>if not exist "$(SolutionDir)Key\private.snk" copy "$(SolutionDir)Key\dummy-private.snk" "$(SolutionDir)Key\private.snk"</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

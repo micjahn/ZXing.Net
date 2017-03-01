@@ -169,7 +169,7 @@ namespace ZXing.PDF417.Internal
       }
 
       /// <summary>
-      /// Calculates the minimum and maximum X & Y values based on the corner points.
+      /// Calculates the minimum and maximum X &amp; Y values based on the corner points.
       /// </summary>
       private void calculateMinMaxValues()
       {

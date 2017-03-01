@@ -25,7 +25,7 @@ namespace ZXing.Multi.QrCode.Internal
    /// <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square
    /// markers at three corners of a QR Code.</p>
    ///
-   /// <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.
+   /// <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.</p>
    ///
    /// <p>In contrast to <see cref="FinderPatternFinder" />, this class will return an array of all possible
    /// QR code locations in the image.</p>
@@ -38,7 +38,7 @@ namespace ZXing.Multi.QrCode.Internal
    sealed class MultiFinderPatternFinder : FinderPatternFinder
    {
 
-      private static FinderPatternInfo[] EMPTY_RESULT_ARRAY = new FinderPatternInfo[0];
+      private static readonly FinderPatternInfo[] EMPTY_RESULT_ARRAY = new FinderPatternInfo[0];
 
       // TODO MIN_MODULE_COUNT and MAX_MODULE_COUNT would be great hints to ask the user for
       // since it limits the number of regions to decode

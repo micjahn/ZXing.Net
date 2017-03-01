@@ -25,7 +25,7 @@ using Windows.UI;
 using System.Windows.Media;
 #elif UNITY
 using UnityEngine;
-#elif !PORTABLE
+#elif !(PORTABLE || NETSTANDARD)
 using System.Drawing;
 #endif
 
@@ -39,7 +39,7 @@ namespace ZXing.Rendering
    public class SvgRenderer : IBarcodeRenderer<SvgRenderer.SvgImage>
    {
 #if !UNITY
-#if PORTABLE
+#if (PORTABLE || NETSTANDARD)
       public struct Color
       {
          public static Color Black = new Color(0);

@@ -31,7 +31,7 @@ namespace ZXing.Datamatrix.Internal
 
       /// <summary>
       /// <param name="bitMatrix"><see cref="BitMatrix" />to parse</param>
-      /// <exception cref="FormatException">if dimension is < 8 or >144 or not 0 mod 2</exception>
+      /// <exception cref="FormatException">if dimension is &lt; 8 or &gt; 144 or not 0 mod 2</exception>
       /// </summary>
       internal BitMatrixParser(BitMatrix bitMatrix)
       {

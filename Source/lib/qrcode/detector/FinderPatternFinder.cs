@@ -25,7 +25,7 @@ namespace ZXing.QrCode.Internal
    /// <p>This class attempts to find finder patterns in a QR Code. Finder patterns are the square
    /// markers at three corners of a QR Code.</p>
    /// 
-   /// <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.
+   /// <p>This class is thread-safe but not reentrant. Each thread must allocate its own object.</p>
    /// </summary>
    /// <author>Sean Owen</author>
    public class FinderPatternFinder

@@ -34,21 +34,21 @@ namespace ZXing.QrCode.Internal
       /// <summary> See ISO 18004:2006 6.8.1</summary>
       private static readonly Func<int, int, bool>[] DATA_MASKS = new Func<int, int, bool>[]
                                                          {
-                                                            /// <summary> 000: mask bits for which (x + y) mod 2 == 0</summary>
+                                                            // 000: mask bits for which (x + y) mod 2 == 0
                                                             new Func<int, int, bool>((i, j) => ((i + j) & 0x01) == 0),
-                                                            /// <summary> 001: mask bits for which x mod 2 == 0</summary>
+                                                            // 001: mask bits for which x mod 2 == 0
                                                             new Func<int, int, bool>((i, j) => (i & 0x01) == 0),
-                                                            /// <summary> 010: mask bits for which y mod 3 == 0</summary>
+                                                            // 010: mask bits for which y mod 3 == 0
                                                             new Func<int, int, bool>((i, j) => j % 3 == 0),
-                                                            /// <summary> 011: mask bits for which (x + y) mod 3 == 0</summary>
+                                                            // 011: mask bits for which (x + y) mod 3 == 0
                                                             new Func<int, int, bool>((i, j) => (i + j) % 3 == 0),
-                                                            /// <summary> 100: mask bits for which (x/2 + y/3) mod 2 == 0</summary>
+                                                            // 100: mask bits for which (x/2 + y/3) mod 2 == 0
                                                             new Func<int, int, bool>((i, j) => ((((int)((uint)i >> 1)) + (j / 3)) & 0x01) == 0),
-                                                            /// <summary> 101: mask bits for which xy mod 2 + xy mod 3 == 0, equivalently, such that xy mod 6 == 0</summary>
+                                                            // 101: mask bits for which xy mod 2 + xy mod 3 == 0, equivalently, such that xy mod 6 == 0
                                                             new Func<int, int, bool>((i, j) => (i * j) % 6 == 0),
-                                                            /// <summary> 110: mask bits for which (xy mod 2 + xy mod 3) mod 2 == 0, equivalently, such that xy mod 6 < 3</summary>
+                                                            // 110: mask bits for which (xy mod 2 + xy mod 3) mod 2 == 0, equivalently, such that xy mod 6 < 3
                                                             new Func<int, int, bool>((i, j) => ((i * j) % 6) < 3),
-                                                            /// <summary> 111: mask bits for which ((x+y)mod 2 + xy mod 3) mod 2 == 0, equivalently, such that (x + y + xy mod 3) mod 2 == 0</summary>
+                                                            // 111: mask bits for which ((x+y)mod 2 + xy mod 3) mod 2 == 0, equivalently, such that (x + y + xy mod 3) mod 2 == 0
                                                             new Func<int, int, bool>((i, j) => ((i + j + ((i * j) % 3)) & 0x01) == 0),
                                                          };
 
