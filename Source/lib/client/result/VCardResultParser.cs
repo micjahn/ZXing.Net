@@ -26,7 +26,7 @@ namespace ZXing.Client.Result
    /// Parses contact information formatted according to the VCard (2.1) format. This is not a complete
    /// implementation but should parse information as commonly encoded in 2D barcodes.
    /// </summary>
-   /// <authorSean Owen</author>
+   /// <author>Sean Owen</author>
    sealed class VCardResultParser : ResultParser
    {
 #if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE

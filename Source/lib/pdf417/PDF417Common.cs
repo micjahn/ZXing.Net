@@ -61,7 +61,7 @@ namespace ZXing.PDF417
       }
 
       /// <summary>
-      /// Converts an ICollection<int> to an int[]
+      /// Converts an ICollection&lt;int&gt; to an int[]
       /// Carry-over from Java.  Will likely remove and replace with the Generic .ToArray() method.
       /// </summary>
       /// <returns>The int array.</returns>

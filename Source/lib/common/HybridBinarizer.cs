@@ -29,15 +29,11 @@ namespace ZXing.Common
    /// but for now it was not a win to use local blocks for 1D.
    /// 
    /// This Binarizer is the default for the unit tests and the recommended class for library users.
-   /// 
+   /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   /// <author>  dswitkin@google.com (Daniel Switkin)
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
    public sealed class HybridBinarizer : GlobalHistogramBinarizer
    {
-      override public BitMatrix BlackMatrix
+      public override BitMatrix BlackMatrix
       {
          get
          {
@@ -120,24 +116,25 @@ namespace ZXing.Common
       /// <param name="matrix">The matrix.</param>
       private static void calculateThresholdForBlock(byte[] luminances, int subWidth, int subHeight, int width, int height, int[][] blackPoints, BitMatrix matrix)
       {
+         int maxYOffset = height - BLOCK_SIZE;
+         int maxXOffset = width - BLOCK_SIZE;
+
          for (int y = 0; y < subHeight; y++)
          {
             int yoffset = y << BLOCK_SIZE_POWER;
-            int maxYOffset = height - BLOCK_SIZE;
             if (yoffset > maxYOffset)
             {
                yoffset = maxYOffset;
             }
+            int top = cap(y, 2, subHeight - 3);
             for (int x = 0; x < subWidth; x++)
             {
                int xoffset = x << BLOCK_SIZE_POWER;
-               int maxXOffset = width - BLOCK_SIZE;
                if (xoffset > maxXOffset)
                {
                   xoffset = maxXOffset;
                }
                int left = cap(x, 2, subWidth - 3);
-               int top = cap(y, 2, subHeight - 3);
                int sum = 0;
                for (int z = -2; z <= 2; z++)
                {
@@ -195,6 +192,8 @@ namespace ZXing.Common
       /// <returns></returns>
       private static int[][] calculateBlackPoints(byte[] luminances, int subWidth, int subHeight, int width, int height)
       {
+         int maxYOffset = height - BLOCK_SIZE;
+         int maxXOffset = width - BLOCK_SIZE;
          int[][] blackPoints = new int[subHeight][];
          for (int i = 0; i < subHeight; i++)
          {
@@ -204,15 +203,15 @@ namespace ZXing.Common
          for (int y = 0; y < subHeight; y++)
          {
             int yoffset = y << BLOCK_SIZE_POWER;
-            int maxYOffset = height - BLOCK_SIZE;
             if (yoffset > maxYOffset)
             {
                yoffset = maxYOffset;
             }
+            var blackPointsY = blackPoints[y];
+            var blackPointsY1 = y > 0 ? blackPoints[y - 1] : null;
             for (int x = 0; x < subWidth; x++)
             {
                int xoffset = x << BLOCK_SIZE_POWER;
-               int maxXOffset = width - BLOCK_SIZE;
                if (xoffset > maxXOffset)
                {
                   xoffset = maxXOffset;
@@ -262,7 +261,7 @@ namespace ZXing.Common
                   // the level of dark pixels exists locally, use half the min for the block.
                   average = min >> 1;
 
-                  if (y > 0 && x > 0)
+                  if (blackPointsY1 != null && x > 0)
                   {
                      // Correct the "white background" assumption for blocks that have neighbors by comparing
                      // the pixels in this block to the previously calculated black points. This is based on
@@ -271,15 +270,14 @@ namespace ZXing.Common
                      // the boundaries is used for the interior.
 
                      // The (min < bp) is arbitrary but works better than other heuristics that were tried.
-                     int averageNeighborBlackPoint = (blackPoints[y - 1][x] + (2 * blackPoints[y][x - 1]) +
-                         blackPoints[y - 1][x - 1]) >> 2;
+                     int averageNeighborBlackPoint = (blackPointsY1[x] + (2 * blackPointsY[x - 1]) + blackPointsY1[x - 1]) >> 2;
                      if (min < averageNeighborBlackPoint)
                      {
                         average = averageNeighborBlackPoint;
                      }
                   }
                }
-               blackPoints[y][x] = average;
+               blackPointsY[x] = average;
             }
          }
          return blackPoints;

@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
-#if !PORTABLE
+#if !(PORTABLE || NETSTANDARD)
 using System.Drawing;
 #endif
 #else
@@ -120,15 +120,15 @@ namespace ZXing
       Result[] DecodeMultiple(LuminanceSource luminanceSource);
 
 #if MONOTOUCH
-      #if __UNIFIED__
+#if __UNIFIED__
       Result[] DecodeMultiple(UIKit.UIImage barcodeImage);
-      #else
+#else
       Result[] DecodeMultiple(MonoTouch.UIKit.UIImage barcodeImage);
-      #endif
+#endif
 #elif MONOANDROID
       Result[] DecodeMultiple(Android.Graphics.Bitmap barcodeImage);
 #else
-#if !PORTABLE
+#if !(PORTABLE || NETSTANDARD)
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
       /// <summary>

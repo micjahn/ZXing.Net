@@ -29,7 +29,7 @@ namespace ZXing.PDF417.Internal
       private static readonly float[][] RATIOS_TABLE; // = new float[PDF417Common.SYMBOL_TABLE.Length][PDF417Common.BARS_IN_MODULE];
 
       /// <summary>
-      /// Initializes the <see cref="ZXing.PDF417.Internal.PDF417CodewordDecoder"/> class & Pre-computes the symbol ratio table.
+      /// Initializes the <see cref="ZXing.PDF417.Internal.PDF417CodewordDecoder"/> class &amp; Pre-computes the symbol ratio table.
       /// </summary>
       static PDF417CodewordDecoder()
       {

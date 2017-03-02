@@ -21,7 +21,7 @@ using UnityEngine;
 using Color = UnityEngine.Color32;
 #elif MONOANDROID
 using Android.Graphics;
-#elif PORTABLE
+#elif (PORTABLE || NETSTANDARD)
 #elif (NET45 || NET40 || NET35 || NET20 || WindowsCE)
 using System.Drawing;
 #elif NETFX_CORE
@@ -44,7 +44,7 @@ namespace ZXing.Rendering
    /// </summary>
    public sealed class PixelDataRenderer : IBarcodeRenderer<PixelData>
    {
-#if PORTABLE
+#if (PORTABLE || NETSTANDARD)
       public struct Color
       {
          public static Color Black = new Color(0);
@@ -89,7 +89,7 @@ namespace ZXing.Rendering
 #if UNITY
          Foreground = UnityEngine.Color.black;
          Background = UnityEngine.Color.white;
-#elif (NET45 || NET40 || NET35 || NET20 || WindowsCE || PORTABLE || MONOANDROID)
+#elif (NET45 || NET40 || NET35 || NET20 || WindowsCE || PORTABLE || NETSTANDARD || MONOANDROID)
          Foreground = Color.Black;
          Background = Color.White;
 #else

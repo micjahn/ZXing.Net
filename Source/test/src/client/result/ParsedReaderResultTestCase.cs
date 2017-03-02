@@ -223,39 +223,20 @@ namespace ZXing.Client.Result.Test
          doTestResult("BEGIN:VCARD", "", ParsedResultType.ADDRESSBOOK);
       }
 
-      [Test]
-      public void testVEvent()
-      {
-         // UTC times
-         doTestResult("BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n" +
-                      "DTEND:20080505T234555Z\r\nEND:VEVENT\r\nEND:VCALENDAR",
-                      "foo\nSunday, May 04, 2008 12:34:56 PM\nMonday, May 05, 2008 11:45:55 PM",
-                      ParsedResultType.CALENDAR);
-         doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\n" +
-                      "DTEND:20080505T234555Z\r\nEND:VEVENT", "foo\nSunday, May 04, 2008 12:34:56 PM\nMonday, May 05, 2008 11:45:55 PM",
-                      ParsedResultType.CALENDAR);
-         // Local times
-         doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\n" +
-                      "DTEND:20080505T234555\r\nEND:VEVENT", "foo\nSunday, May 04, 2008 12:34:56 PM\nMonday, May 05, 2008 11:45:55 PM",
-                      ParsedResultType.CALENDAR);
-         // Date only (all day event)
-         doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\n" +
-                      "DTEND:20080505\r\nEND:VEVENT", "foo\nSunday, May 04, 2008\nMonday, May 05, 2008", ParsedResultType.CALENDAR);
-         // Start time only
-         doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nEND:VEVENT",
-                      "foo\nSunday, May 04, 2008 12:34:56 PM", ParsedResultType.CALENDAR);
-         doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\nEND:VEVENT",
-                      "foo\nSunday, May 04, 2008 12:34:56 PM", ParsedResultType.CALENDAR);
-         doTestResult("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nEND:VEVENT",
-                      "foo\nSunday, May 04, 2008", ParsedResultType.CALENDAR);
-         doTestResult("BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT",
-                      "BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.URI);
+      [TestCase("BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nDTEND:20080505T234555Z\r\nEND:VEVENT\r\nEND:VCALENDAR", "foo\nSunday, May 4, 2008 12:34:56 PM\nMonday, May 5, 2008 11:45:55 PM", ParsedResultType.CALENDAR, TestName = "VEvent: UTC times - 1")]
+      [TestCase("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nDTEND:20080505T234555Z\r\nEND:VEVENT", "foo\nSunday, May 4, 2008 12:34:56 PM\nMonday, May 5, 2008 11:45:55 PM", ParsedResultType.CALENDAR, TestName = "VEvent: UTC times - 1")]
+      [TestCase("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\nDTEND:20080505T234555\r\nEND:VEVENT", "foo\nSunday, May 4, 2008 12:34:56 PM\nMonday, May 5, 2008 11:45:55 PM", ParsedResultType.CALENDAR, TestName = "VEvent: Local times")]
+      [TestCase("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nDTEND:20080505\r\nEND:VEVENT", "foo\nSunday, May 4, 2008\nMonday, May 5, 2008", ParsedResultType.CALENDAR, TestName = "VEvent: Date only (all day event)")]
+      [TestCase("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nEND:VEVENT", "foo\nSunday, May 4, 2008 12:34:56 PM", ParsedResultType.CALENDAR, TestName = "VEvent: Start time only - 1")]
+      [TestCase("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\nEND:VEVENT", "foo\nSunday, May 4, 2008 12:34:56 PM", ParsedResultType.CALENDAR, TestName = "VEvent: Start time only - 2")]
+      [TestCase("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nEND:VEVENT", "foo\nSunday, May 4, 2008", ParsedResultType.CALENDAR, TestName = "VEvent: Start time only - 3")]
+      [TestCase("BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", "BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.URI, TestName = "VEvent: Start time only - 4")]
          // Yeah, it's OK that this is thought of as maybe a URI as long as it's not CALENDAR
          // Make sure illegal entries without newlines don't crash
-         doTestResult(
-            "BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT",
-            "BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT",
-            ParsedResultType.URI);
+      [TestCase("BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT", "BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT", ParsedResultType.URI, TestName = "VEvent: Illegal entries shouldn't crash")]
+      public void testVEvent(String content, String goldenresult, ParsedResultType type)
+      {
+         doTestResult(content, goldenresult, type);
       }
 
       [Test]

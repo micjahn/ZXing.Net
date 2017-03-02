@@ -155,6 +155,7 @@
     <Compile Include="imb\IMBBlackBox1TestCase.cs" />
     <Compile Include="oned\ITFBlackBox1TestCase.cs" />
     <Compile Include="oned\ITFBlackBox2TestCase.cs" />
+    <Compile Include="oned\ITFWriterTestCase.cs" />
     <Compile Include="oned\MSIBlackBox1TestCase.cs" />
     <Compile Include="oned\rss\expanded\BinaryUtil.cs" />
     <Compile Include="oned\rss\expanded\BinaryUtilTest.cs" />
