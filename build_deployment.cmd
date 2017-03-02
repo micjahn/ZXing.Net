@@ -38,6 +38,7 @@ IF NOT EXIST "%BINARY_DIR%\winmd\zxing.winmd" GOTO BINARY_WINRTCOMPONENTS_NOT_FO
 IF NOT EXIST "%BINARY_DIR%\portable\zxing.portable.dll" GOTO BINARY_PORTABLE_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\kinect\zxing.kinect.dll" GOTO BINARY_KINECT_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\uwp\zxing.dll" GOTO BINARY_UWP_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\netstandard1.6\zxing.dll" GOTO BINARY_NETSTANDARD16_NOT_FOUND
 
 ECHO.
 ECHO Build deployment files in directory
@@ -54,13 +55,18 @@ IF NOT EXIST "%BINARY_DIR%" GOTO BINARY_DIR_NOT_FOUND
 MKDIR "%DEPLOYMENT_DIR%" >NUL: 2>&1
 DEL /F "%DEPLOYMENT_DIR%\%FILENAME_BINARY%" >NUL: 2>&1
 
+REM
+REM preparing binaries
+REM ***************************************************************************************
+DEL /S "%BINARY_DIR%"\Clients\*.xml
+DEL /S "%BINARY_DIR%"\Clients\*.pdb
 
 REM
 REM building archives for binaries
 REM ***************************************************************************************
 
 CD "%BINARY_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net3.5 net4.0 net4.5 net4.6 winrt uwp unity sl4 sl5 wp7.0 wp7.1 wp8.0 monodroid winmd portable kinect ..\..\THANKS ..\..\COPYING -xr!Documentation
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net3.5 net4.0 net4.5 net4.6 winrt uwp netstandard1.6 unity sl4 sl5 wp7.0 wp7.1 wp8.0 monodroid winmd portable kinect ..\..\THANKS ..\..\COPYING -xr!Documentation
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DEMO_BINARY%" Clients
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DOCUMENTATION%" Documentation
 CD "%CURRENT_DIR%"
@@ -94,6 +100,7 @@ MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\AForge" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\EmguCV" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\OpenCV" >NUL: 2>&1
+MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\log4net" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\NUnit.NET" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\NUnit.Silverlight" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\Base\3rdparty\Unity" >NUL: 2>&1
@@ -114,9 +121,11 @@ MKDIR "%SVN_EXPORT_DIR%\WinMD\Clients" >NUL: 2>&1
 "%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/NUnit.Silverlight" "%SVN_EXPORT_DIR%\Base\3rdparty\NUnit.Silverlight"
 "%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/Unity" "%SVN_EXPORT_DIR%\Base\3rdparty\Unity"
 "%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/Kinect" "%SVN_EXPORT_DIR%\Base\3rdparty\Kinect"
+"%SVN_TOOL%" export --force "%SVN_URL%/Key" "%SVN_EXPORT_DIR%\Base\Key"
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.sln" "%SVN_EXPORT_DIR%\Base"
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.ce.sln" "%SVN_EXPORT_DIR%\Base"
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.vs2012.sln" "%SVN_EXPORT_DIR%\Base"
+"%SVN_TOOL%" export --force "%SVN_URL%/zxing.vs2015.sln" "%SVN_EXPORT_DIR%\Base"
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.monoandroid.sln" "%SVN_EXPORT_DIR%\Base"
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.monotouch.sln" "%SVN_EXPORT_DIR%\Base"
 "%SVN_TOOL%" export --force "%SVN_URL%/zxing.nunit" "%SVN_EXPORT_DIR%\Base"
@@ -125,10 +134,11 @@ MKDIR "%SVN_EXPORT_DIR%\WinMD\Clients" >NUL: 2>&1
 
 "%SVN_TOOL%" export --force "%SVN_URL_WINMD%/Source/lib" "%SVN_EXPORT_DIR%\WinMD\Source\lib"
 "%SVN_TOOL%" export --force "%SVN_URL_WINMD%/Clients" "%SVN_EXPORT_DIR%\WinMD\Clients"
+"%SVN_TOOL%" export --force "%SVN_URL_WINMD%/Key" "%SVN_EXPORT_DIR%\WinMD\Key"
 "%SVN_TOOL%" export --force "%SVN_URL_WINMD%/zxing.vs2012.sln" "%SVN_EXPORT_DIR%\WinMD"
 
 CD "%SVN_EXPORT_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Base\Source\lib\*.* Base\Source\test\src\*.* Base\Clients\*.* Base\3rdparty\*.* Base\zxing.sln Base\zxing.ce.sln Base\zxing.vs2012.sln Base\zxing.monoandroid.sln Base\zxing.monotouch.sln Base\zxing.nunit Base\THANKS WinMD\Source\lib\*.* WinMD\Clients\*.* WinMD\zxing.vs2012.sln
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Base\Source\lib\*.* Base\Source\test\src\*.* Base\Clients\*.* Base\3rdparty\*.* Base\Key\*.* Base\zxing.sln Base\zxing.ce.sln Base\zxing.vs2012.sln Base\zxing.vs2015.sln Base\zxing.monoandroid.sln Base\zxing.monotouch.sln Base\zxing.nunit Base\THANKS Base\COPYING WinMD\Source\lib\*.* WinMD\Clients\*.* WinMD\Key\*.* WinMD\zxing.vs2012.sln
 CD "%CURRENT_DIR%"
 
 RMDIR /S /Q "%SVN_EXPORT_DIR%" >NUL: 2>&1
@@ -300,6 +310,13 @@ GOTO END
 :BINARY_UWP_NOT_FOUND
 ECHO The UWP binaries 
 ECHO %BINARY_DIR%\uwp\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
+:BINARY_NETSTANDARD16_NOT_FOUND
+ECHO The .Net Standard binaries 
+ECHO %BINARY_DIR%\netstandard1.6\...
 ECHO weren't found.
 ECHO.
 GOTO END
