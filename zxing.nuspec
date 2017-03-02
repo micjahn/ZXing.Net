@@ -13,7 +13,7 @@
     <description>ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.
 It has been ported by hand with a lot of optimizations and improvements.
 
-It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, .Net 4.5, .Net 4.6, Windows RT Class Library and Components, UWP (experimental), Silverlight 4, Silverlight 5, Windows Phone 7.x and Windows Phone 8.x and Xamarin.Android</description>
+It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, .Net 4.5, .Net 4.6, Windows RT Class Library and Components, UWP (experimental), .Net Standard 1.6 (experimental), Silverlight 4, Silverlight 5, Windows Phone 7.x and Windows Phone 8.x and Xamarin.Android</description>
     <summary>ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.</summary>
     <releaseNotes>* changes of the java version are reflected until 2017/02/27
 * many other small bug fixes and improvements</releaseNotes>
@@ -22,7 +22,7 @@ It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, .Net 4.5, .Net 4.6, Wind
   <files>
     <file src="Build\Release\net2.0\zxing.dll" target="lib\net20\zxing.dll" />
     <file src="Build\Release\net2.0\zxing.pdb" target="lib\net20\zxing.pdb" />
-    <file src="Build\Release\net2.0\zxing.XML" target="lib\net20\zxing.XM" />
+    <file src="Build\Release\net2.0\zxing.XML" target="lib\net20\zxing.XML" />
     <file src="Build\Release\net3.5\zxing.dll" target="lib\net35\zxing.dll" />
     <file src="Build\Release\net3.5\zxing.pdb" target="lib\net35\zxing.pdb" />
     <file src="Build\Release\net3.5\zxing.XML" target="lib\net35\zxing.XML" />
@@ -86,5 +86,8 @@ It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, .Net 4.5, .Net 4.6, Wind
     <file src="Build\Release\uwp\zxing.pdb" target="lib\uap10\zxing.pdb" />
     <file src="Build\Release\uwp\zxing.xml" target="lib\uap10\zxing.xml" />
     <file src="Build\Release\uwp\zxing.pri" target="lib\uap10\zxing.pri" />
+    <file src="Build\Release\netstandard1.6\zxing.dll" target="lib\netstandard\zxing.dll" />
+    <file src="Build\Release\netstandard1.6\zxing.pdb" target="lib\netstandard\zxing.pdb" />
+    <file src="Build\Release\netstandard1.6\zxing.xml" target="lib\netstandard\zxing.xml" />
   </files>
 </package>
