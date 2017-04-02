@@ -19,7 +19,7 @@ using System;
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
 #if !__UNIFIED__
-#if !NETSTANDARD
+#if !NETCOREAPP1_1
 using System.Drawing;
 #endif
 #endif
@@ -54,7 +54,7 @@ namespace ZXing
       private static readonly Func<UIImage, LuminanceSource> defaultCreateLuminanceSource =
          (img) => new RGBLuminanceSource(img);
 #else
-#if !(PORTABLE || NETSTANDARD)
+#if !(PORTABLE || NETCOREAPP1_1)
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
    public class BarcodeReader : BarcodeReaderGeneric<Bitmap>, IBarcodeReader, IMultipleBarcodeReader
@@ -106,7 +106,7 @@ namespace ZXing
 #else
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
-#if !(PORTABLE || NETSTANDARD)
+#if !(PORTABLE || NETCOREAPP1_1)
          Func<Bitmap, LuminanceSource> createLuminanceSource,
 #else
          Func<byte[], LuminanceSource> createLuminanceSource,
@@ -141,7 +141,7 @@ namespace ZXing
 #else
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
-#if !(PORTABLE || NETSTANDARD)
+#if !(PORTABLE || NETCOREAPP1_1)
          Func<Bitmap, LuminanceSource> createLuminanceSource,
 #else
          Func<byte[], LuminanceSource> createLuminanceSource,

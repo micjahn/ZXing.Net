@@ -19,7 +19,7 @@ using System.Collections.Generic;
 
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
-#if !(PORTABLE || NETSTANDARD)
+#if !(PORTABLE || NETCOREAPP1_1)
 using System.Drawing;
 #endif
 #else
@@ -128,7 +128,7 @@ namespace ZXing
 #elif MONOANDROID
       Result[] DecodeMultiple(Android.Graphics.Bitmap barcodeImage);
 #else
-#if !(PORTABLE || NETSTANDARD)
+#if !(PORTABLE || NETCOREAPP1_1)
 #if !(SILVERLIGHT || NETFX_CORE)
 #if !UNITY
       /// <summary>

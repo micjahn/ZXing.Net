@@ -102,7 +102,7 @@ namespace ZXing
       /// <returns></returns>
       Result[] DecodeMultiple(LuminanceSource luminanceSource);
 
-#if !(PORTABLE || NETSTANDARD)
+#if !(PORTABLE || NETCOREAPP1_1)
 #if !UNITY
       /// <summary>
       /// Decodes the specified barcode bitmap.
