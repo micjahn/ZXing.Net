@@ -1,0 +1,95 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <AssemblyName>zxing</AssemblyName>
+    <RootNamespace>zxing</RootNamespace>
+	<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Key\private.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>False</DelaySign>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\Build\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\Build\Release\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="BitmapLuminanceSource.cs" />
+    <Compile Remove="BitmapLuminanceSource.Silverlight.cs" />
+    <Compile Remove="BitmapSourceLuminanceSource.cs" />
+    <Compile Remove="client\result\optional\AbstractNDEFResultParser.cs" />
+    <Compile Remove="client\result\optional\NDEFRecord.cs" />
+    <Compile Remove="client\result\optional\NDEFSmartPosterParsedResult.cs" />
+    <Compile Remove="client\result\optional\NDEFSmartPosterResultParser.cs" />
+    <Compile Remove="client\result\optional\NDEFTextResultParser.cs" />
+    <Compile Remove="client\result\optional\NDEFURIResultParser.cs" />
+    <Compile Remove="common\BitMatrix.Drawing.cs" />
+    <Compile Remove="common\BitMatrix.Silverlight.cs" />
+    <Compile Remove="kinect\BarcodeReader.cs" />
+    <Compile Remove="kinect\ColorImageFrameLuminanceSource.cs" />
+    <Compile Remove="presentation\BarcodeReader.cs" />
+    <Compile Remove="presentation\BarcodeWriter.cs" />
+    <Compile Remove="presentation\BarcodeWriterGeometry.cs" />
+    <Compile Remove="renderer\BitmapRenderer.cs" />
+    <Compile Remove="renderer\GeometryRenderer.cs" />
+    <Compile Remove="renderer\WriteableBitmapRenderer.cs" />
+    <Compile Remove="unity\Color32LuminanceSource.cs" />
+    <Compile Remove="unity\Color32Renderer.cs" />
+    <Compile Remove="xamarin\BitmapLuminanceSource.monoandroid.cs" />
+    <Compile Remove="xamarin\BitmapRenderer.monoandroid.cs" />
+    <Compile Remove="xamarin\BitmapRenderer.monotouch.cs" />
+    <Compile Remove="xamarin\Color.cs" />
+    <Compile Remove="xamarin\ColorConverter.cs" />
+    <Compile Remove="xamarin\ColorTranslator.cs" />
+    <Compile Remove="xamarin\KnownColor.cs" />
+    <Compile Remove="xamarin\KnownColors.cs" />
+    <Compile Remove="xamarin\RGBLuminanceSource.monotouch.cs" />
+    <Compile Remove="xamarin\SystemColors.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="BitmapLuminanceSource.cs" />
+    <None Include="BitmapLuminanceSource.Silverlight.cs" />
+    <None Include="BitmapSourceLuminanceSource.cs" />
+    <None Include="client\result\optional\AbstractNDEFResultParser.cs" />
+    <None Include="client\result\optional\NDEFRecord.cs" />
+    <None Include="client\result\optional\NDEFSmartPosterParsedResult.cs" />
+    <None Include="client\result\optional\NDEFSmartPosterResultParser.cs" />
+    <None Include="client\result\optional\NDEFTextResultParser.cs" />
+    <None Include="client\result\optional\NDEFURIResultParser.cs" />
+    <None Include="common\BitMatrix.Drawing.cs" />
+    <None Include="common\BitMatrix.Silverlight.cs" />
+    <None Include="kinect\BarcodeReader.cs" />
+    <None Include="kinect\ColorImageFrameLuminanceSource.cs" />
+    <None Include="presentation\BarcodeReader.cs" />
+    <None Include="presentation\BarcodeWriter.cs" />
+    <None Include="presentation\BarcodeWriterGeometry.cs" />
+    <None Include="renderer\BitmapRenderer.cs" />
+    <None Include="renderer\GeometryRenderer.cs" />
+    <None Include="renderer\WriteableBitmapRenderer.cs" />
+    <None Include="unity\Color32LuminanceSource.cs" />
+    <None Include="unity\Color32Renderer.cs" />
+    <None Include="xamarin\BitmapLuminanceSource.monoandroid.cs" />
+    <None Include="xamarin\BitmapRenderer.monoandroid.cs" />
+    <None Include="xamarin\BitmapRenderer.monotouch.cs" />
+    <None Include="xamarin\Color.cs" />
+    <None Include="xamarin\ColorConverter.cs" />
+    <None Include="xamarin\ColorTranslator.cs" />
+    <None Include="xamarin\KnownColor.cs" />
+    <None Include="xamarin\KnownColors.cs" />
+    <None Include="xamarin\RGBLuminanceSource.monotouch.cs" />
+    <None Include="xamarin\SystemColors.cs" />
+  </ItemGroup>
+
+</Project>
