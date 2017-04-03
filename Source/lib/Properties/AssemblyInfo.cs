@@ -55,7 +55,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © 2012-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-#if !PORTABLE
+#if !PORTABLE && !NETSTANDARD1_0
 [assembly: Guid("ECE3AB74-9DD1-4CFB-9D48-FCBFB30E06D6")]
 #endif
 

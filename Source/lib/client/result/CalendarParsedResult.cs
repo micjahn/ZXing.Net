@@ -29,7 +29,7 @@ namespace ZXing.Client.Result
    {
       private static readonly Regex RFC2445_DURATION =
          new Regex(@"\A(?:" + "P(?:(\\d+)W)?(?:(\\d+)D)?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+)S)?)?" + @")\z"
-#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
+#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
             , RegexOptions.Compiled);
 #else
 );
@@ -45,7 +45,7 @@ namespace ZXing.Client.Result
       };
 
       private static readonly Regex DATE_TIME = new Regex(@"\A(?:" + "[0-9]{8}(T[0-9]{6}Z?)?" + @")\z"
-#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
+#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
          , RegexOptions.Compiled);
 #else
 );

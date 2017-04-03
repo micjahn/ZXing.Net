@@ -25,7 +25,7 @@ namespace ZXing.Client.Result
    /// </summary>
    public class VINResultParser : ResultParser
    {
-#if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE
+#if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2
       private static readonly Regex IOQ = new Regex("[IOQ]");
       private static readonly Regex AZ09 = new Regex(@"\A(?:" + "[A-Z0-9]{17}" + @")\z");
 #else

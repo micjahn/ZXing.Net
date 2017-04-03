@@ -27,7 +27,7 @@ namespace ZXing.Client.Result
    {
       // See http://www.ietf.org/rfc/rfc2396.txt
       private static readonly Regex URL_WITH_PROTOCOL_PATTERN = new Regex("[a-zA-Z][a-zA-Z0-9+-.]+:"
-#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
+#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
 , RegexOptions.Compiled);
 #else
 );
@@ -36,7 +36,7 @@ namespace ZXing.Client.Result
            "([a-zA-Z0-9\\-]+\\.){1,6}[a-zA-Z]{2,}" + // host name elements
            "(:\\d{1,5})?" + // maybe port
            "(/|\\?|$)" // query, path or nothing
-#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
+#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
               , RegexOptions.Compiled);
 #else
 );

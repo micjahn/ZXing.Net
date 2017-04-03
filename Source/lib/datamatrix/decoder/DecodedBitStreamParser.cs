@@ -648,7 +648,7 @@ namespace ZXing.Datamatrix.Internal
          byteSegments.Add(bytes);
          try
          {
-#if (WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || WindowsCE || PORTABLE)
+#if (WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || WindowsCE || PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
 #if WindowsCE
             result.Append(Encoding.GetEncoding(1252).GetString(bytes, 0, bytes.Length));
 #else
