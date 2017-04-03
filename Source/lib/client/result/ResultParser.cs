@@ -55,7 +55,7 @@ namespace ZXing.Client.Result
             new VINResultParser(),
          };
 
-#if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE
+#if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2
       private static readonly Regex DIGITS = new Regex(@"\A(?:" + "\\d+" + @")\z");
       private static readonly Regex AMPERSAND = new Regex("&");
       private static readonly Regex EQUALS = new Regex("=");

@@ -29,7 +29,7 @@ namespace ZXing.Client.Result
    /// <author>Sean Owen</author>
    sealed class VCardResultParser : ResultParser
    {
-#if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE
+#if SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2
       private static readonly Regex BEGIN_VCARD = new Regex("BEGIN:VCARD", RegexOptions.IgnoreCase);
       private static readonly Regex VCARD_LIKE_DATE = new Regex(@"\A(?:" + "\\d{4}-?\\d{2}-?\\d{2}" + @")\z");
       private static readonly Regex CR_LF_SPACE_TAB = new Regex("\r\n[ \t]");

@@ -1,11 +1,11 @@
 ﻿using System;
-#if !(WindowsCE || PORTABLE)
+#if !(WindowsCE || PORTABLE || NETSTANDARD1_0)
 using System.Runtime.Serialization;
 #endif
-#if !(WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || WindowsCE || PORTABLE)
+#if !(WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || WindowsCE || PORTABLE || NETSTANDARD1_0)
 using System.Runtime.Serialization.Formatters;
 #endif
-#if !PORTABLE
+#if !(PORTABLE || NETSTANDARD1_0)
 using System.Security.Permissions;
 #endif
 using System.Text;
@@ -21,7 +21,7 @@ namespace BigIntegerLibrary
 #if WindowsCE
     [Serializable]
     internal sealed class BigInteger :
-#elif !(WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || MONOTOUCH || MONOANDROID || PORTABLE)
+#elif !(WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || MONOTOUCH || MONOANDROID || PORTABLE || NETSTANDARD1_0)
     [Serializable]
     internal sealed class BigInteger : ISerializable, 
 #else
@@ -205,7 +205,7 @@ namespace BigIntegerLibrary
             }
         }
 
-#if !(WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || WindowsCE || PORTABLE)
+#if !(WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || WindowsCE || PORTABLE || NETSTANDARD1_0)
         /// <summary>
         /// Constructor deserializing a BigInteger.
         /// </summary>
@@ -228,12 +228,12 @@ namespace BigIntegerLibrary
 #endif
 
 
-        #endregion
+      #endregion
 
 
-        #region Public Methods
+      #region Public Methods
 
-#if !(WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || WindowsCE || MONOTOUCH || MONOANDROID || PORTABLE)
+#if !(WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || WindowsCE || MONOTOUCH || MONOANDROID || PORTABLE || NETSTANDARD1_0)
         /// <summary>
         /// BigInteger serializing method, which should not be called manually.
         /// </summary>
@@ -255,13 +255,13 @@ namespace BigIntegerLibrary
         }
 #endif
 
-        /// <summary>
-        /// Determines whether the specified BigInteger is equal to the current BigInteger.
-        /// </summary>
-        /// <param name="other">The BigInteger to compare with the current BigInteger</param>
-        /// <returns>True if the specified BigInteger is equal to the current BigInteger,
-        /// false otherwise</returns>
-        public bool Equals(BigInteger other)
+      /// <summary>
+      /// Determines whether the specified BigInteger is equal to the current BigInteger.
+      /// </summary>
+      /// <param name="other">The BigInteger to compare with the current BigInteger</param>
+      /// <returns>True if the specified BigInteger is equal to the current BigInteger,
+      /// false otherwise</returns>
+      public bool Equals(BigInteger other)
         {
             if (sign != other.sign)
                 return false;

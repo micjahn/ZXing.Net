@@ -19,7 +19,7 @@
  */
 
 using System;
-#if SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NETFX_CORE || NETSTANDARD
+#if (SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NETFX_CORE || NETSTANDARD) && !NETSTANDARD1_0
 using System.Numerics;
 #else
 using BigIntegerLibrary;
@@ -562,7 +562,7 @@ namespace ZXing.PDF417.Internal
 
       private static void encodeNumeric(String msg, int startpos, int count, StringBuilder sb)
       {
-#if SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NETFX_CORE || NETSTANDARD
+#if (SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NETFX_CORE || NETSTANDARD) && !NETSTANDARD1_0
          int idx = 0;
          StringBuilder tmp = new StringBuilder(count/3 + 1);
          BigInteger num900 = new BigInteger(900);

@@ -26,8 +26,8 @@ namespace ZXing.Client.Result
    public sealed class URIParsedResult : ParsedResult
    {
       private static readonly Regex USER_IN_HOST = new Regex(":/*([^/@]+)@[^/]+"
-#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
-         ,RegexOptions.Compiled);
+#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
+         , RegexOptions.Compiled);
 #else
 );
 #endif
