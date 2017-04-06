@@ -100,7 +100,10 @@ namespace ZXing.Multi
          int quarterHeight = halfHeight/2;
          var center = image.crop(quarterWidth, quarterHeight, halfWidth, halfHeight);
          result = @delegate.decode(center, hints);
-         makeAbsolute(result.ResultPoints, quarterWidth, quarterHeight);
+         if (result != null)
+         {
+            makeAbsolute(result.ResultPoints, quarterWidth, quarterHeight);
+         }
          return result;
       }
 
