@@ -1,0 +1,5 @@
+obj/
+bin/
+Build/
+.DS_Store
+private.snk 
