@@ -15,7 +15,8 @@
  */
 
 using System;
-
+using System.ComponentModel;
+using System.Globalization;
 using ZXing.Common;
 using ZXing.QrCode.Internal;
 
@@ -31,7 +32,10 @@ namespace ZXing.QrCode
       /// Specifies what degree of error correction to use, for example in QR Codes.
       /// Type depends on the encoder. For example for QR codes it's type
       /// {@link com.google.zxing.qrcode.decoder.ErrorCorrectionLevel ErrorCorrectionLevel}.
-      /// </summary>
+       /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE
+      [TypeConverter(typeof(ErrorLevelConverter))]
+#endif
       public ErrorCorrectionLevel ErrorCorrection
       {
          get
@@ -135,4 +139,94 @@ namespace ZXing.QrCode
          }
       }
    }
+
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE
+   internal class ErrorLevelConverter : TypeConverter
+   {
+      public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+      {
+         if (sourceType == typeof(ErrorCorrectionLevel))
+            return true;
+         if (sourceType == typeof(String))
+            return true;
+         return base.CanConvertFrom(context, sourceType);
+      }
+
+      public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+      {
+         if (destinationType == typeof(ErrorCorrectionLevel))
+            return true;
+         return base.CanConvertTo(context, destinationType);
+      }
+
+      public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+      {
+         var level = value as ErrorCorrectionLevel;
+         if (level != null)
+         {
+            return level.Name;
+         }
+         if (value is String)
+         {
+            switch (value.ToString())
+            {
+               case "L":
+                  return ErrorCorrectionLevel.L;
+               case "M":
+                  return ErrorCorrectionLevel.M;
+               case "Q":
+                  return ErrorCorrectionLevel.Q;
+               case "H":
+                  return ErrorCorrectionLevel.H;
+               default:
+                  return null;
+            }
+         }
+         return base.ConvertFrom(context, culture, value);
+      }
+
+      public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+      {
+         if (value == null)
+            return null;
+         var level = value as ErrorCorrectionLevel;
+         if (level != null)
+         {
+            return level.Name;
+         } 
+         if (destinationType == typeof(ErrorCorrectionLevel))
+         {
+            switch (value.ToString())
+            {
+               case "L":
+                  return ErrorCorrectionLevel.L;
+               case "M":
+                  return ErrorCorrectionLevel.M;
+               case "Q":
+                  return ErrorCorrectionLevel.Q;
+               case "H":
+                  return ErrorCorrectionLevel.H;
+               default:
+                  return null;
+            }
+         }
+         return base.ConvertTo(context, culture, value, destinationType);
+      }
+
+      public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+      {
+         return true;
+      }
+
+      public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
+      {
+         return true;
+      }
+
+      public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+      {
+         return new StandardValuesCollection(new[] { ErrorCorrectionLevel.L, ErrorCorrectionLevel.M, ErrorCorrectionLevel.Q, ErrorCorrectionLevel.H });
+      }
+   }
+#endif
 }
