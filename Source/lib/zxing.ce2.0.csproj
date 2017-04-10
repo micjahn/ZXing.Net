@@ -338,6 +338,10 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup Condition=" !Exists('$(MSBuildThisFileDirectory)..\..\Key\private.snk') ">
+    <PreBuildEvent Condition=" '$(OS)' == 'Unix' ">cp "$(MSBuildThisFileDirectory)..\..\Key\dummy-private.snk" "$(MSBuildThisFileDirectory)..\..\Key\private.snk"</PreBuildEvent>
+    <PreBuildEvent Condition=" '$(OS)' != 'Unix' ">copy "$(MSBuildThisFileDirectory)..\..\Key\dummy-private.snk" "$(MSBuildThisFileDirectory)..\..\Key\private.snk"</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
