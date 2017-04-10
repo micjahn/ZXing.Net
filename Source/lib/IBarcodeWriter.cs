@@ -98,7 +98,7 @@ namespace ZXing
       Windows.UI.Xaml.Media.Imaging.WriteableBitmap Write(BitMatrix matrix);
 #endif
 
-#if (NET40 || NET35 || NET20) && !UNITY
+#if (NET46 || NET45 || NET40 || NET35 || NET20) && !UNITY
       /// <summary>
       /// Creates a visual representation of the contents
       /// </summary>
