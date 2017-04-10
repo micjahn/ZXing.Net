@@ -1,0 +1,61 @@
+﻿Function Decode_QR_Code_From_File()
+   Dim reader As IBarcodeReader
+   Dim res As Result
+
+   Set reader = New BarcodeReader
+
+   reader.options.PossibleFormats.Add BarcodeFormat_QR_CODE
+
+   Set res = reader.DecodeImageFile("D:\Barcodes\QrCodes\www.png")
+
+   End Function
+
+Function Decode_QR_Code_From_Byte_Array()
+   Dim reader As IBarcodeReader
+   Dim rawRGB(1000) As Byte
+   Dim res As Result
+
+   Set reader = New BarcodeReader
+
+   reader.options.PossibleFormats.Add BarcodeFormat_QR_CODE
+
+   Rem TODO: load bitmap data to byte array rawRGB
+   Set res = reader.DecodeImageBytes(rawRGB, 10, 10, BitmapFormat.BitmapFormat_Gray8)
+
+End Function
+
+Function Encode_To_QR_Code_To_File()
+   Dim writer As IBarcodeWriter
+   Dim qrCodeOptions As QrCodeEncodingOptions
+   Dim pixelDataResult As PixelData
+
+   Set qrCodeOptions = New QrCodeEncodingOptions
+   Set writer = New BarcodeWriter
+   writer.Format = BarcodeFormat_QR_CODE
+   Set writer.options = qrCodeOptions
+   qrCodeOptions.Height = 100
+   qrCodeOptions.Width = 100
+   qrCodeOptions.CharacterSet = "UTF-8"
+   qrCodeOptions.Margin = 10
+   qrCodeOptions.ErrorCorrection = ErrorCorrectionLevel_H
+
+   writer.WritePngToFile "Test", "D:\interop_qrcode.png"
+
+   Rem Or:
+
+   Set pixelDataResult = writer.Write("Test")
+
+End Function
+
+
+Function Decode_QR_Code_From_File_CreateObject()
+   Dim reader As IBarcodeReader
+   Dim res As Result
+
+   Set reader = CreateObject("ZXing.Interop.Decoding.BarcodeReader")
+
+   reader.options.PossibleFormats.Add BarcodeFormat_QR_CODE
+
+   Set res = reader.DecodeImageFile("D:\Barcodes\QrCodes\www.png")
+
+End Function
