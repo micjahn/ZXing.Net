@@ -19,12 +19,18 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
+
+using WindowsFormsDemo.ImageFilters;
 
 using ZXing;
 using ZXing.Client.Result;
 using ZXing.Common;
+using ZXing.PDF417.Internal;
+using ZXing.QrCode.Internal;
 using ZXing.Rendering;
+using Timer = System.Windows.Forms.Timer;
 
 namespace WindowsFormsDemo
 {
@@ -44,34 +50,34 @@ namespace WindowsFormsDemo
       {
          InitializeComponent();
          barcodeReader = new BarcodeReader
-            {
-               AutoRotate = true,
-               TryInverted = true,
-               Options = new DecodingOptions {TryHarder = true}
-            };
+         {
+            AutoRotate = true,
+            TryInverted = true,
+            Options = new DecodingOptions {TryHarder = true}
+         };
          barcodeReader.ResultPointFound += point =>
-                                              {
-                                                 if (point == null)
-                                                    resultPoints.Clear();
-                                                 else
-                                                    resultPoints.Add(point);
-                                              };
+         {
+            if (point == null)
+               resultPoints.Clear();
+            else
+               resultPoints.Add(point);
+         };
          barcodeReader.ResultFound += result =>
-                                         {
-                                            txtType.Text = result.BarcodeFormat.ToString();
-                                            txtContent.Text += result.Text + Environment.NewLine;
-                                            lastResults.Add(result);
-                                            var parsedResult = ResultParser.parseResult(result);
-                                            if (parsedResult != null)
-                                            {
-                                               btnExtendedResult.Visible = !(parsedResult is TextParsedResult);
+         {
+            txtType.Text = result.BarcodeFormat.ToString();
+            txtContent.Text += result.Text + Environment.NewLine;
+            lastResults.Add(result);
+            var parsedResult = ResultParser.parseResult(result);
+            if (parsedResult != null)
+            {
+               btnExtendedResult.Visible = !(parsedResult is TextParsedResult);
                                                txtContent.Text += "\r\n\r\nParsed result:\r\n" + parsedResult.DisplayResult + Environment.NewLine + Environment.NewLine;
-                                            }
-                                            else
-                                            {
-                                               btnExtendedResult.Visible = false;
-                                            }
-                                         };
+            }
+            else
+            {
+               btnExtendedResult.Visible = false;
+            }
+         };
          resultPoints = new List<ResultPoint>();
          lastResults = new List<Result>();
          Renderer = typeof (BitmapRenderer);
@@ -96,6 +102,7 @@ namespace WindowsFormsDemo
          {
             openDlg.FileName = txtBarcodeImageFile.Text;
             openDlg.Multiselect = false;
+            openDlg.Filter = "PNG Files (*.png)|*.png|BMP Files (*.bmp)|*.bmp|TIFF Files (*.tif)|*.tif|JPG Files (*.jpg)|*.jpg|PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*";
             if (openDlg.ShowDialog(this) == DialogResult.OK)
             {
                txtBarcodeImageFile.Text = openDlg.FileName;
@@ -109,38 +116,56 @@ namespace WindowsFormsDemo
          if (!File.Exists(fileName))
          {
             MessageBox.Show(this, String.Format("File not found: {0}", fileName), "Error", MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
+               MessageBoxIcon.Error);
             return;
          }
 
-         using (var bitmap = (Bitmap)Bitmap.FromFile(fileName))
+         if (fileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
          {
             if (TryOnlyMultipleQRCodes)
-               Decode(bitmap, TryMultipleBarcodes, new List<BarcodeFormat> { BarcodeFormat.QR_CODE });
+               Decode(PdfSupport.GetBitmapsFromPdf(fileName), TryMultipleBarcodes, new List<BarcodeFormat> { BarcodeFormat.QR_CODE });
             else
-               Decode(bitmap, TryMultipleBarcodes, null);
+               Decode(PdfSupport.GetBitmapsFromPdf(fileName), TryMultipleBarcodes, null);
+         }
+         else
+         {
+            using (var bitmap = (Bitmap) Bitmap.FromFile(fileName))
+            {
+               if (TryOnlyMultipleQRCodes)
+                  Decode(new[] { bitmap }, TryMultipleBarcodes, new List<BarcodeFormat> {BarcodeFormat.QR_CODE});
+               else
+                  Decode(new[] { bitmap }, TryMultipleBarcodes, null);
+            }
          }
       }
 
-      private void Decode(Bitmap image, bool tryMultipleBarcodes, IList<BarcodeFormat> possibleFormats)
+      private void Decode(IEnumerable<Bitmap> bitmaps, bool tryMultipleBarcodes, IList<BarcodeFormat> possibleFormats)
       {
          resultPoints.Clear();
          lastResults.Clear();
          txtContent.Text = String.Empty;
 
          var timerStart = DateTime.Now.Ticks;
-         Result[] results = null;
+         IList<Result> results = null;
          var previousFormats = barcodeReader.Options.PossibleFormats;
          if (possibleFormats != null)
             barcodeReader.Options.PossibleFormats = possibleFormats;
-         if (tryMultipleBarcodes)
-            results = barcodeReader.DecodeMultiple(image);
-         else
+
+         foreach (var bitmap in bitmaps)
          {
-            var result = barcodeReader.Decode(image);
-            if (result != null)
+            if (tryMultipleBarcodes)
+               results = barcodeReader.DecodeMultiple(bitmap);
+            else
             {
-               results = new[] {result};
+               var result = barcodeReader.Decode(bitmap);
+               if (result != null)
+               {
+                  if (results == null)
+                  {
+                     results = new List<Result>();
+                  }
+                  results.Add(result);
+               }
             }
          }
          var timerStop = DateTime.Now.Ticks;
@@ -159,17 +184,23 @@ namespace WindowsFormsDemo
             {
                if (result.ResultPoints.Length > 0)
                {
-                  var rect = new Rectangle((int) result.ResultPoints[0].X, (int) result.ResultPoints[0].Y, 1, 1);
+                  var offsetX = picBarcode.SizeMode == PictureBoxSizeMode.CenterImage
+                     ? (picBarcode.Width - picBarcode.Image.Width)/2 :
+                     0;
+                  var offsetY = picBarcode.SizeMode == PictureBoxSizeMode.CenterImage
+                     ? (picBarcode.Height - picBarcode.Image.Height) / 2 :
+                     0;
+                  var rect = new Rectangle((int)result.ResultPoints[0].X + offsetX, (int)result.ResultPoints[0].Y + offsetY, 1, 1);
                   foreach (var point in result.ResultPoints)
                   {
-                     if (point.X < rect.Left)
-                        rect = new Rectangle((int) point.X, rect.Y, rect.Width + rect.X - (int) point.X, rect.Height);
-                     if (point.X > rect.Right)
-                        rect = new Rectangle(rect.X, rect.Y, rect.Width + (int) point.X - rect.X, rect.Height);
-                     if (point.Y < rect.Top)
-                        rect = new Rectangle(rect.X, (int) point.Y, rect.Width, rect.Height + rect.Y - (int) point.Y);
-                     if (point.Y > rect.Bottom)
-                        rect = new Rectangle(rect.X, rect.Y, rect.Width, rect.Height + (int) point.Y - rect.Y);
+                     if (point.X + offsetX < rect.Left)
+                        rect = new Rectangle((int)point.X + offsetX, rect.Y, rect.Width + rect.X - (int)point.X - offsetX, rect.Height);
+                     if (point.X + offsetX > rect.Right)
+                        rect = new Rectangle(rect.X, rect.Y, rect.Width + (int)point.X - (rect.X - offsetX), rect.Height);
+                     if (point.Y + offsetY < rect.Top)
+                        rect = new Rectangle(rect.X, (int)point.Y + offsetY, rect.Width, rect.Height + rect.Y - (int)point.Y - offsetY);
+                     if (point.Y + offsetY > rect.Bottom)
+                        rect = new Rectangle(rect.X, rect.Y, rect.Width, rect.Height + (int)point.Y - rect.Y - offsetY);
                   }
                   using (var g = picBarcode.CreateGraphics())
                   {
@@ -184,7 +215,21 @@ namespace WindowsFormsDemo
       {
          var fileName = txtBarcodeImageFile.Text;
          if (File.Exists(fileName))
-            picBarcode.Load(fileName);
+         {
+            if (fileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+            {
+               picBarcode.Image = null;
+               foreach (var bitmap in PdfSupport.GetBitmapsFromPdf(fileName))
+               {
+                  picBarcode.Image = bitmap;
+                  break;
+               }
+            }
+            else
+            {
+               picBarcode.Load(fileName);
+            }
+         }
       }
 
       private void btnDecodeWebCam_Click(object sender, EventArgs e)
@@ -228,15 +273,15 @@ namespace WindowsFormsDemo
          try
          {
             var writer = new BarcodeWriter
-               {
-                  Format = (BarcodeFormat) cmbEncoderType.SelectedItem,
-                  Options = EncodingOptions ?? new EncodingOptions
-                     {
-                        Height = picEncodedBarCode.Height,
-                        Width = picEncodedBarCode.Width
-                     },
+            {
+               Format = (BarcodeFormat) cmbEncoderType.SelectedItem,
+               Options = EncodingOptions ?? new EncodingOptions
+                         {
+                            Height = picEncodedBarCode.Height,
+                            Width = picEncodedBarCode.Width
+                         },
                   Renderer = (IBarcodeRenderer<Bitmap>)Activator.CreateInstance(Renderer)
-               };
+            };
             picEncodedBarCode.Image = writer.Write(txtEncoderContent.Text);
          }
          catch (Exception exc)
@@ -274,19 +319,19 @@ namespace WindowsFormsDemo
                   bmp.Save(fileName, ImageFormat.Tiff);
                   break;
                case ".svg":
+               {
+                  var writer = new BarcodeWriterSvg
                   {
-                     var writer = new BarcodeWriterSvg
-                                     {
-                                        Format = (BarcodeFormat) cmbEncoderType.SelectedItem,
-                                        Options = EncodingOptions ?? new EncodingOptions
-                                                                        {
-                                                                           Height = picEncodedBarCode.Height,
-                                                                           Width = picEncodedBarCode.Width
-                                                                        }
-                                     };
-                     var svgImage = writer.Write(txtEncoderContent.Text);
-                     File.WriteAllText(fileName, svgImage.Content, System.Text.Encoding.UTF8);
-                  }
+                     Format = (BarcodeFormat) cmbEncoderType.SelectedItem,
+                     Options = EncodingOptions ?? new EncodingOptions
+                               {
+                                  Height = picEncodedBarCode.Height,
+                                  Width = picEncodedBarCode.Width
+                               }
+                  };
+                  var svgImage = writer.Write(txtEncoderContent.Text);
+                  File.WriteAllText(fileName, svgImage.Content, System.Text.Encoding.UTF8);
+               }
                   break;
                default:
                   bmp.Save(fileName, ImageFormat.Png);
@@ -305,7 +350,7 @@ namespace WindowsFormsDemo
             try
             {
                barcodeReader.Options.PureBarcode = true;
-               Decode((Bitmap)picEncodedBarCode.Image, false, null);
+               Decode(new []{(Bitmap) picEncodedBarCode.Image}, false, null);
             }
             finally
             {
@@ -318,63 +363,72 @@ namespace WindowsFormsDemo
       {
          if (cmbEncoderType.SelectedItem == null)
          {
-            MessageBox.Show(this, "Please select a barcode format first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, "Please select a barcode format first.", "Error", MessageBoxButtons.OK,
+               MessageBoxIcon.Error);
             return;
          }
          try
          {
             EncodingOptions options;
-            switch ((BarcodeFormat)cmbEncoderType.SelectedItem)
+            switch ((BarcodeFormat) cmbEncoderType.SelectedItem)
             {
                case BarcodeFormat.QR_CODE:
-                  options = new ZXing.QrCode.QrCodeEncodingOptions
-                             {
-                                Height = picEncodedBarCode.Height,
-                                Width = picEncodedBarCode.Width
-                             };
+                  options = EncodingOptions as ZXing.QrCode.QrCodeEncodingOptions ??
+                            new ZXing.QrCode.QrCodeEncodingOptions
+                            {
+                               Height = picEncodedBarCode.Height,
+                               Width = picEncodedBarCode.Width,
+                               ErrorCorrection = ErrorCorrectionLevel.L
+                            };
                   break;
                case BarcodeFormat.PDF_417:
-                  options = new ZXing.PDF417.PDF417EncodingOptions
-                             {
-                                Height = picEncodedBarCode.Height,
-                                Width = picEncodedBarCode.Width
-                             };
+                  options = EncodingOptions as ZXing.PDF417.PDF417EncodingOptions ??
+                            new ZXing.PDF417.PDF417EncodingOptions
+                            {
+                               Height = picEncodedBarCode.Height,
+                               Width = picEncodedBarCode.Width,
+                               ErrorCorrection = PDF417ErrorCorrectionLevel.L0
+                            };
                   break;
                case BarcodeFormat.DATA_MATRIX:
-                  options = new ZXing.Datamatrix.DatamatrixEncodingOptions
-                  {
-                     Height = picEncodedBarCode.Height,
-                     Width = picEncodedBarCode.Width,
-                     SymbolShape = ZXing.Datamatrix.Encoder.SymbolShapeHint.FORCE_SQUARE
-                  };
+                  options = EncodingOptions as ZXing.Datamatrix.DatamatrixEncodingOptions ??
+                            new ZXing.Datamatrix.DatamatrixEncodingOptions
+                            {
+                               Height = picEncodedBarCode.Height,
+                               Width = picEncodedBarCode.Width,
+                               SymbolShape = ZXing.Datamatrix.Encoder.SymbolShapeHint.FORCE_SQUARE
+                            };
                   break;
                case BarcodeFormat.AZTEC:
-                  options = new ZXing.Aztec.AztecEncodingOptions
-                  {
-                     Height = picEncodedBarCode.Height,
-                     Width = picEncodedBarCode.Width,
-                  };
+                  options = EncodingOptions as ZXing.Aztec.AztecEncodingOptions ??
+                            new ZXing.Aztec.AztecEncodingOptions
+                            {
+                               Height = picEncodedBarCode.Height,
+                               Width = picEncodedBarCode.Width,
+                            };
                   break;
                case BarcodeFormat.CODE_128:
-                  options = new ZXing.OneD.Code128EncodingOptions
-                  {
-                     Height = picEncodedBarCode.Height,
-                     Width = picEncodedBarCode.Width,
-                  };
+                  options = EncodingOptions as ZXing.OneD.Code128EncodingOptions ??
+                            new ZXing.OneD.Code128EncodingOptions
+                            {
+                               Height = picEncodedBarCode.Height,
+                               Width = picEncodedBarCode.Width,
+                            };
                   break;
                default:
-                  options = new EncodingOptions
-                             {
-                                Height = picEncodedBarCode.Height,
-                                Width = picEncodedBarCode.Width
-                             };
+                  options = EncodingOptions ??
+                            new EncodingOptions
+                            {
+                               Height = picEncodedBarCode.Height,
+                               Width = picEncodedBarCode.Width
+                            };
                   break;
             }
             var dlg = new EncodingOptionsForm
-                         {
-                            Options = options,
-                            Renderer = Renderer
-                         };
+            {
+               Options = options,
+               Renderer = Renderer
+            };
             if (dlg.ShowDialog(this) == DialogResult.OK)
             {
                EncodingOptions = dlg.Options;
@@ -409,6 +463,46 @@ namespace WindowsFormsDemo
             dlg.Result = parsedResult;
             dlg.ShowDialog(this);
          }
+      }
+
+      private void btnScreenCapture_Click(object sender, EventArgs e)
+      {
+         try
+         {
+            Visible = false;
+            Thread.Sleep(1000);
+            picBarcode.Image = ScreenCapture.CaptureScreen();
+            Visible = true;
+            Decode(new []{(Bitmap)picBarcode.Image}, false, null);
+         }
+         catch (Exception exc)
+         {
+            MessageBox.Show(this, exc.ToString(), "Error by capturing", MessageBoxButtons.OK, MessageBoxIcon.Error);
+         }
+         finally
+         {
+            Visible = true;
+         }
+      }
+
+      private void chkImageScaling_CheckedChanged(object sender, EventArgs e)
+      {
+         picEncodedBarCode.SizeMode = chkImageScaling.Checked
+            ? PictureBoxSizeMode.StretchImage
+            : PictureBoxSizeMode.CenterImage;
+      }
+
+      private void chkScaleDecodingImage_CheckedChanged(object sender, EventArgs e)
+      {
+         picBarcode.SizeMode = chkScaleDecodingImage.Checked
+            ? PictureBoxSizeMode.StretchImage
+            : PictureBoxSizeMode.CenterImage;
+      }
+
+      private void button1_Click(object sender, EventArgs e)
+      {
+         Bitmap img = new Bitmap(picBarcode.Image);
+         picBarcode.Image = MedianFilter.Filter(img, 3, 0, false);
       }
    }
 }

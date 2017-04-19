@@ -33,6 +33,7 @@
          this.labBarcodeImageFile = new System.Windows.Forms.Label();
          this.tabCtrlMain = new System.Windows.Forms.TabControl();
          this.tabPageDecoder = new System.Windows.Forms.TabPage();
+         this.btnScreenCapture = new System.Windows.Forms.Button();
          this.btnExtendedResult = new System.Windows.Forms.Button();
          this.btnDecodingOptions = new System.Windows.Forms.Button();
          this.labDuration = new System.Windows.Forms.Label();
@@ -44,6 +45,7 @@
          this.picBarcode = new System.Windows.Forms.PictureBox();
          this.btnSelectBarcodeImageFileForDecoding = new System.Windows.Forms.Button();
          this.tabPageEncoder = new System.Windows.Forms.TabPage();
+         this.chkImageScaling = new System.Windows.Forms.CheckBox();
          this.btnEncodeOptions = new System.Windows.Forms.Button();
          this.btnEncodeDecode = new System.Windows.Forms.Button();
          this.btnEncoderSave = new System.Windows.Forms.Button();
@@ -60,6 +62,8 @@
          this.txtContentWebCam = new System.Windows.Forms.TextBox();
          this.txtTypeWebCam = new System.Windows.Forms.TextBox();
          this.picWebCam = new System.Windows.Forms.PictureBox();
+         this.btnDecodingFilter = new System.Windows.Forms.Button();
+         this.chkScaleDecodingImage = new System.Windows.Forms.CheckBox();
          this.tabCtrlMain.SuspendLayout();
          this.tabPageDecoder.SuspendLayout();
          ((System.ComponentModel.ISupportInitialize)(this.picBarcode)).BeginInit();
@@ -116,6 +120,9 @@
          // 
          // tabPageDecoder
          // 
+         this.tabPageDecoder.Controls.Add(this.btnDecodingFilter);
+         this.tabPageDecoder.Controls.Add(this.chkScaleDecodingImage);
+         this.tabPageDecoder.Controls.Add(this.btnScreenCapture);
          this.tabPageDecoder.Controls.Add(this.btnExtendedResult);
          this.tabPageDecoder.Controls.Add(this.btnDecodingOptions);
          this.tabPageDecoder.Controls.Add(this.labDuration);
@@ -135,6 +142,17 @@
          this.tabPageDecoder.TabIndex = 0;
          this.tabPageDecoder.Text = "Decoder";
          this.tabPageDecoder.UseVisualStyleBackColor = true;
+         // 
+         // btnScreenCapture
+         // 
+         this.btnScreenCapture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+         this.btnScreenCapture.Location = new System.Drawing.Point(353, 3);
+         this.btnScreenCapture.Name = "btnScreenCapture";
+         this.btnScreenCapture.Size = new System.Drawing.Size(107, 23);
+         this.btnScreenCapture.TabIndex = 13;
+         this.btnScreenCapture.Text = "Screen Capture";
+         this.btnScreenCapture.UseVisualStyleBackColor = true;
+         this.btnScreenCapture.Click += new System.EventHandler(this.btnScreenCapture_Click);
          // 
          // btnExtendedResult
          // 
@@ -225,7 +243,8 @@
          this.picBarcode.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
          this.picBarcode.Location = new System.Drawing.Point(9, 54);
          this.picBarcode.Name = "picBarcode";
-         this.picBarcode.Size = new System.Drawing.Size(214, 197);
+         this.picBarcode.Size = new System.Drawing.Size(214, 174);
+         this.picBarcode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
          this.picBarcode.TabIndex = 4;
          this.picBarcode.TabStop = false;
          // 
@@ -242,6 +261,7 @@
          // 
          // tabPageEncoder
          // 
+         this.tabPageEncoder.Controls.Add(this.chkImageScaling);
          this.tabPageEncoder.Controls.Add(this.btnEncodeOptions);
          this.tabPageEncoder.Controls.Add(this.btnEncodeDecode);
          this.tabPageEncoder.Controls.Add(this.btnEncoderSave);
@@ -258,6 +278,20 @@
          this.tabPageEncoder.TabIndex = 1;
          this.tabPageEncoder.Text = "Encoder";
          this.tabPageEncoder.UseVisualStyleBackColor = true;
+         // 
+         // chkImageScaling
+         // 
+         this.chkImageScaling.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+         this.chkImageScaling.AutoSize = true;
+         this.chkImageScaling.Checked = true;
+         this.chkImageScaling.CheckState = System.Windows.Forms.CheckState.Checked;
+         this.chkImageScaling.Location = new System.Drawing.Point(7, 200);
+         this.chkImageScaling.Name = "chkImageScaling";
+         this.chkImageScaling.Size = new System.Drawing.Size(100, 17);
+         this.chkImageScaling.TabIndex = 18;
+         this.chkImageScaling.Text = "scale the image";
+         this.chkImageScaling.UseVisualStyleBackColor = true;
+         this.chkImageScaling.CheckedChanged += new System.EventHandler(this.chkImageScaling_CheckedChanged);
          // 
          // btnEncodeOptions
          // 
@@ -348,10 +382,11 @@
          this.picEncodedBarCode.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+         this.picEncodedBarCode.BackColor = System.Drawing.SystemColors.InactiveBorder;
          this.picEncodedBarCode.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
          this.picEncodedBarCode.Location = new System.Drawing.Point(3, 6);
          this.picEncodedBarCode.Name = "picEncodedBarCode";
-         this.picEncodedBarCode.Size = new System.Drawing.Size(214, 212);
+         this.picEncodedBarCode.Size = new System.Drawing.Size(214, 188);
          this.picEncodedBarCode.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
          this.picEncodedBarCode.TabIndex = 9;
          this.picEncodedBarCode.TabStop = false;
@@ -433,6 +468,29 @@
          this.picWebCam.TabIndex = 8;
          this.picWebCam.TabStop = false;
          // 
+         // btnDecodingFilter
+         // 
+         this.btnDecodingFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+         this.btnDecodingFilter.Location = new System.Drawing.Point(148, 230);
+         this.btnDecodingFilter.Name = "btnDecodingFilter";
+         this.btnDecodingFilter.Size = new System.Drawing.Size(75, 23);
+         this.btnDecodingFilter.TabIndex = 4;
+         this.btnDecodingFilter.Text = "Filter";
+         this.btnDecodingFilter.UseVisualStyleBackColor = true;
+         this.btnDecodingFilter.Click += new System.EventHandler(this.button1_Click);
+         // 
+         // chkScaleDecodingImage
+         // 
+         this.chkScaleDecodingImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+         this.chkScaleDecodingImage.AutoSize = true;
+         this.chkScaleDecodingImage.Location = new System.Drawing.Point(9, 234);
+         this.chkScaleDecodingImage.Name = "chkScaleDecodingImage";
+         this.chkScaleDecodingImage.Size = new System.Drawing.Size(100, 17);
+         this.chkScaleDecodingImage.TabIndex = 19;
+         this.chkScaleDecodingImage.Text = "scale the image";
+         this.chkScaleDecodingImage.UseVisualStyleBackColor = true;
+         this.chkScaleDecodingImage.CheckedChanged += new System.EventHandler(this.chkScaleDecodingImage_CheckedChanged);
+         // 
          // WindowsFormsDemoForm
          // 
          this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -492,6 +550,10 @@
       private System.Windows.Forms.Button btnEncodeOptions;
       private System.Windows.Forms.Button btnDecodingOptions;
       private System.Windows.Forms.Button btnExtendedResult;
+      private System.Windows.Forms.Button btnScreenCapture;
+      private System.Windows.Forms.CheckBox chkImageScaling;
+      private System.Windows.Forms.Button btnDecodingFilter;
+      private System.Windows.Forms.CheckBox chkScaleDecodingImage;
    }
 }
 
