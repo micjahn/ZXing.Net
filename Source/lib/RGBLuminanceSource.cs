@@ -37,6 +37,10 @@ namespace ZXing
          /// </summary>
          Gray8,
          /// <summary>
+         /// grayscale array, the byte array is a luminance array with 2 bytes per pixel
+         /// </summary>
+         Gray16,
+         /// <summary>
          /// 3 bytes per pixel with the channels red, green and blue
          /// </summary>
          RGB24,
@@ -68,6 +72,10 @@ namespace ZXing
          /// 4 bytes per pixel with the channels red, green, blue and alpha
          /// </summary>
          RGBA32,
+         /// <summary>
+         /// 4 bytes for two pixels, UYVY formatted
+         /// </summary>
+         UYVY,
       }
 
       /// <summary>
@@ -154,6 +162,11 @@ namespace ZXing
          }
       }
 
+      /// <summary>
+      /// calculates the luminance values for the given byte array and bitmap format
+      /// </summary>
+      /// <param name="rgbRawBytes"></param>
+      /// <param name="bitmapFormat"></param>
       protected void CalculateLuminance(byte[] rgbRawBytes, BitmapFormat bitmapFormat)
       {
          if (bitmapFormat == BitmapFormat.Unknown)
@@ -164,6 +177,9 @@ namespace ZXing
          {
             case BitmapFormat.Gray8:
                Buffer.BlockCopy(rgbRawBytes, 0, luminances, 0, rgbRawBytes.Length < luminances.Length ? rgbRawBytes.Length : luminances.Length);
+               break;
+            case BitmapFormat.Gray16:
+               CalculateLuminanceGray16(rgbRawBytes);
                break;
             case BitmapFormat.RGB24:
                CalculateLuminanceRGB24(rgbRawBytes);
@@ -188,6 +204,9 @@ namespace ZXing
                break;
             case BitmapFormat.RGB565:
                CalculateLuminanceRGB565(rgbRawBytes);
+               break;
+            case BitmapFormat.UYVY:
+               CalculateLuminanceUYVY(rgbRawBytes);
                break;
             default:
                throw new ArgumentException("The bitmap format isn't supported.", bitmapFormat.ToString());
@@ -308,6 +327,29 @@ namespace ZXing
             var b = rgbRawBytes[rgbIndex++];
             var luminance = (byte)((RChannelWeight * r + GChannelWeight * g + BChannelWeight * b) >> ChannelWeight);
             luminances[luminanceIndex] = (byte)(((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8));
+         }
+      }
+
+      private void CalculateLuminanceUYVY(byte[] uyuvRawBytes)
+      {
+         // start by 1, jump over first U byte
+         for (int uyvyIndex = 1, luminanceIndex = 0; uyvyIndex < uyuvRawBytes.Length - 1 && luminanceIndex < luminances.Length;)
+         {
+            byte y1 = uyuvRawBytes[uyvyIndex+=2]; // jump from 1 to 3 (from Y1 over 
+            byte y2 = uyuvRawBytes[uyvyIndex+=2]; // jump from 3 to 5
+
+            luminances[luminanceIndex++] = y1;
+            luminances[luminanceIndex++] = y2;
+         }
+      }
+
+      private void CalculateLuminanceGray16(byte[] gray16RawBytes)
+      {
+         for (int grayIndex = 0, luminanceIndex = 0; grayIndex < gray16RawBytes.Length && luminanceIndex < luminances.Length; grayIndex += 2, luminanceIndex++)
+         {
+            byte gray8 = gray16RawBytes[grayIndex];
+
+            luminances[luminanceIndex] = gray8;
          }
       }
    }
