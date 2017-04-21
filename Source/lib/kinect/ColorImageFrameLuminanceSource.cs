@@ -55,19 +55,17 @@ namespace ZXing.Kinect
          switch (bitmap.Format)
          {
             case ColorImageFormat.InfraredResolution640x480Fps30:
-               // not sure, what BitmapFormat should be selected
+               bitmapFormat = BitmapFormat.Gray16;
                break;
-            case ColorImageFormat.RawBayerResolution1280x960Fps12:
-            case ColorImageFormat.RawBayerResolution640x480Fps30:
-               // not sure, what BitmapFormat should be selected
-               break;
-            case ColorImageFormat.RgbResolution1280x960Fps12:
-            case ColorImageFormat.RgbResolution640x480Fps30:
+            case ColorImageFormat.RawBayerResolution1280x960Fps12: // 32-bit, linear X8R8G8B8-formatted
+            case ColorImageFormat.RawBayerResolution640x480Fps30: // 32-bit, linear X8R8G8B8-formatted
+            case ColorImageFormat.RgbResolution1280x960Fps12: // 32-bit, linear X8R8G8B8-formatted
+            case ColorImageFormat.RgbResolution640x480Fps30: // 32-bit, linear X8R8G8B8-formatted
+            case ColorImageFormat.YuvResolution640x480Fps15: // 32-bit, linear X8R8G8B8-formatted
                bitmapFormat = BitmapFormat.BGR32;
                break;
-            case ColorImageFormat.RawYuvResolution640x480Fps15:
-            case ColorImageFormat.YuvResolution640x480Fps15:
-               // not sure, what BitmapFormat should be selected
+            case ColorImageFormat.RawYuvResolution640x480Fps15: // 16-bit, gamma-corrected linear UYVY-formatted
+               bitmapFormat = BitmapFormat.UYVY;
                break;
             default:
                break;
