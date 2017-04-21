@@ -317,13 +317,13 @@ namespace ZXing.Common.Test
             var expectedResults = expectedText.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
             var results = multiReader.decodeMultiple(source, hints);
             if (results == null)
-               throw ReaderException.Instance;
+               throw new ReaderException();
 
             if (expectedResults.Length != results.Length)
             {
                Log.InfoFormat("Count mismatch: expected '{0}' results but got '{1}'",
                   expectedResults.Length, results.Length);
-               throw ReaderException.Instance;
+               throw new ReaderException();
             }
             foreach (var oneResult in results)
             {
@@ -373,7 +373,7 @@ namespace ZXing.Common.Test
             if (result == null)
                result = barcodeReader.decode(source, hints);
             if (result == null)
-               throw ReaderException.Instance;
+               throw new ReaderException();
 
             if (expectedFormat != result.BarcodeFormat)
             {

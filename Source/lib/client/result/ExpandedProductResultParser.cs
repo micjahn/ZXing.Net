@@ -37,6 +37,11 @@ namespace ZXing.Client.Result
    /// <author>Agustín Delgado, Servinform, S.A.</author>
    public class ExpandedProductResultParser : ResultParser
    {
+      /// <summary>
+      /// tries to parse a text representation to a specific result object
+      /// </summary>
+      /// <param name="result"></param>
+      /// <returns></returns>
       public override ParsedResult parse(ZXing.Result result)
       {
          BarcodeFormat format = result.BarcodeFormat;

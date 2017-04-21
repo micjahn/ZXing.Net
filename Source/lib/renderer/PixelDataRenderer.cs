@@ -45,16 +45,40 @@ namespace ZXing.Rendering
    public sealed class PixelDataRenderer : IBarcodeRenderer<PixelData>
    {
 #if (PORTABLE || NETSTANDARD)
+      /// <summary>
+      /// represents a color defined as ARGB byte data
+      /// </summary>
       public struct Color
       {
+         /// <summary>
+         /// the color black
+         /// </summary>
          public static Color Black = new Color(0);
+         /// <summary>
+         /// the color white
+         /// </summary>
          public static Color White = new Color(0x00FFFFFF);
 
+         /// <summary>
+         /// value of the alpha channel
+         /// </summary>
          public byte A;
+         /// <summary>
+         /// value of the red channel
+         /// </summary>
          public byte R;
+         /// <summary>
+         /// value of the green channel
+         /// </summary>
          public byte G;
+         /// <summary>
+         /// value of the blue channel
+         /// </summary>
          public byte B;
 
+         /// <summary>
+         /// Initializes a new instance of the <see cref="Color"/> struct.
+         /// </summary>
          public Color(int color)
          {
             A = (byte)((color & 0xFF000000) >> 24);

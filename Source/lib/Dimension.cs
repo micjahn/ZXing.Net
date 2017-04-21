@@ -26,6 +26,11 @@ namespace ZXing
       private readonly int width;
       private readonly int height;
 
+      /// <summary>
+      /// initializing constructor
+      /// </summary>
+      /// <param name="width"></param>
+      /// <param name="height"></param>
       public Dimension(int width, int height)
       {
          if (width < 0 || height < 0)
@@ -36,16 +41,27 @@ namespace ZXing
          this.height = height;
       }
 
+      /// <summary>
+      /// the width
+      /// </summary>
       public int Width
       {
          get { return width; }
       }
 
+      /// <summary>
+      /// the height
+      /// </summary>
       public int Height
       {
          get { return height; }
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="other"></param>
+      /// <returns></returns>
       public override bool Equals(Object other)
       {
          if (other is Dimension)
@@ -56,11 +72,19 @@ namespace ZXing
          return false;
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <returns></returns>
       public override int GetHashCode()
       {
          return width * 32713 + height;
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <returns></returns>
       public override String ToString()
       {
          return width + "x" + height;

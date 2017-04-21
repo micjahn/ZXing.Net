@@ -25,6 +25,9 @@ namespace ZXing.Client.Result
    /// <author>Sean Owen</author>
    public sealed class EmailAddressParsedResult : ParsedResult
    {
+      /// <summary>
+      /// the email address
+      /// </summary>
       public String EmailAddress
       {
          get
@@ -32,11 +35,29 @@ namespace ZXing.Client.Result
             return Tos == null || Tos.Length == 0 ? null : Tos[0];
          }
       }
+      /// <summary>
+      /// the TOs
+      /// </summary>
       public String[] Tos { get; private set; }
+      /// <summary>
+      /// the CCs
+      /// </summary>
       public String[] CCs { get; private set; }
+      /// <summary>
+      /// the BCCs
+      /// </summary>
       public String[] BCCs { get; private set; }
+      /// <summary>
+      /// the subject
+      /// </summary>
       public String Subject { get; private set; }
+      /// <summary>
+      /// the body
+      /// </summary>
       public String Body { get; private set; }
+      /// <summary>
+      /// the mailto: uri
+      /// </summary>
       [Obsolete("deprecated without replacement")]
       public String MailtoURI { get { return "mailto:"; } }
 

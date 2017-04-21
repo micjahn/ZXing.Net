@@ -32,6 +32,11 @@ namespace ZXing
       private int width;
       private int height;
 
+      /// <summary>
+      /// initializing constructor
+      /// </summary>
+      /// <param name="width"></param>
+      /// <param name="height"></param>
       protected LuminanceSource(int width, int height)
       {
          this.width = width;
@@ -64,7 +69,7 @@ namespace ZXing
       public abstract byte[] Matrix { get; }
 
       /// <returns> The width of the bitmap.</returns>
-      virtual public int Width
+      public virtual int Width
       {
          get
          {
@@ -77,7 +82,7 @@ namespace ZXing
       }
 
       /// <returns> The height of the bitmap.</returns>
-      virtual public int Height
+      public virtual int Height
       {
          get
          {
@@ -90,7 +95,7 @@ namespace ZXing
       }
 
       /// <returns> Whether this subclass supports cropping.</returns>
-      virtual public bool CropSupported
+      public virtual bool CropSupported
       {
          get
          {
@@ -113,7 +118,7 @@ namespace ZXing
       }
 
       /// <returns> Whether this subclass supports counter-clockwise rotation.</returns>
-      virtual public bool RotateSupported
+      public virtual bool RotateSupported
       {
          get
          {
@@ -144,7 +149,7 @@ namespace ZXing
       /// <summary>
       /// </summary>
       /// <returns>Whether this subclass supports invertion.</returns>
-      virtual public bool InversionSupported
+      public virtual bool InversionSupported
       {
          get
          {
@@ -152,12 +157,20 @@ namespace ZXing
          }
       }
 
-      virtual public LuminanceSource invert()
+      /// <summary>
+      /// inverts the luminance values, not supported here. has to implemented in sub classes
+      /// </summary>
+      /// <returns></returns>
+      public virtual LuminanceSource invert()
       {
          throw new NotSupportedException("This luminance source does not support inversion.");
       }
 
-      override public String ToString()
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <returns></returns>
+      public override String ToString()
       {
          var row = new byte[width];
          var result = new StringBuilder(height * (width + 1));

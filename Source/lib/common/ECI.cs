@@ -13,52 +13,40 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-using System;
+
 namespace ZXing.Common
 {
 
-   /// <summary> Superclass of classes encapsulating types ECIs, according to "Extended Channel Interpretations"
+   /// <summary>
+   /// Superclass of classes encapsulating types ECIs, according to "Extended Channel Interpretations"
    /// 5.3 of ISO 18004.
-   /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public abstract class ECI
    {
-      virtual public int Value
-      {
-         get
-         {
-            return value_Renamed;
-         }
+      /// <summary>
+      /// the ECI value
+      /// </summary>
+      public virtual int Value { get; private set; }
 
+      internal ECI(int val)
+      {
+         Value = val;
       }
 
-      //UPGRADE_NOTE: Final was removed from the declaration of 'value '. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
-      private int value_Renamed;
-
-      internal ECI(int value_Renamed)
+      /// <param name="val">ECI value</param>
+      /// <returns><see cref="ECI"/> representing ECI of given value, or null if it is legal but unsupported</returns>
+      /// <throws>ArgumentException if ECI value is invalid </throws>
+      public static ECI getECIByValue(int val)
       {
-         this.value_Renamed = value_Renamed;
-      }
-
-      /// <param name="value">ECI value
-      /// </param>
-      /// <returns> {@link ECI} representing ECI of given value, or null if it is legal but unsupported
-      /// </returns>
-      /// <throws>  IllegalArgumentException if ECI value is invalid </throws>
-      public static ECI getECIByValue(int value_Renamed)
-      {
-         if (value_Renamed < 0 || value_Renamed > 999999)
+         if (val < 0 || val > 999999)
          {
-            throw new System.ArgumentException("Bad ECI value: " + value_Renamed);
+            throw new System.ArgumentException("Bad ECI value: " + val);
          }
-         if (value_Renamed < 900)
+         if (val < 900)
          {
             // Character set ECIs use 000000 - 000899
-            return CharacterSetECI.getCharacterSetECIByValue(value_Renamed);
+            return CharacterSetECI.getCharacterSetECIByValue(val);
          }
          return null;
       }

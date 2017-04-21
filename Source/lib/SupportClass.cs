@@ -125,6 +125,11 @@ namespace ZXing
          }
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="x"></param>
+      /// <returns></returns>
       public static string ToBinaryString(int x)
       {
          char[] bits = new char[32];
@@ -140,6 +145,11 @@ namespace ZXing
          return new string(bits);
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="n"></param>
+      /// <returns></returns>
       public static int bitCount(int n)
       {
          int ret = 0;

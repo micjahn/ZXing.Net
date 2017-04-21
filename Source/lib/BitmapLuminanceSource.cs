@@ -21,6 +21,9 @@ using System.Runtime.InteropServices;
 
 namespace ZXing
 {
+   /// <summary>
+   /// class which represents the luminance values for a bitmap object
+   /// </summary>
    public partial class BitmapLuminanceSource : BaseLuminanceSource
    {
       /// <summary>

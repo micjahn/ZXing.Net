@@ -20,7 +20,7 @@ using System.Text;
 namespace ZXing.PDF417.Internal.EC
 {
    /// <summary>
-   /// <see cref="com.google.zxing.common.reedsolomon.GenericGFPoly"/>
+    /// <see cref="ZXing.Common.ReedSolomon.GenericGFPoly"/>
    /// </summary>
    /// <author>Sean Owen</author>
    internal sealed class ModulusPoly

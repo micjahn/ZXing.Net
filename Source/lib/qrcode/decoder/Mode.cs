@@ -28,26 +28,53 @@ namespace ZXing.QrCode.Internal
       /// <summary>
       /// Gets the name.
       /// </summary>
-      public String Name
-      {
-         get
-         {
-            return name;
-         }
-      }
+      public Names Name { get; private set; }
 
-      public sealed class Names
+      /// <summary>
+      /// enumeration for encoding modes
+      /// </summary>
+      public enum Names
       {
-         public const string TERMINATOR = "TERMINATOR";
-         public const string NUMERIC = "NUMERIC";
-         public const string ALPHANUMERIC = "ALPHANUMERIC";
-         public const string STRUCTURED_APPEND = "STRUCTURED_APPEND";
-         public const string BYTE = "BYTE";
-         public const string ECI = "ECI";
-         public const string KANJI = "KANJI";
-         public const string FNC1_FIRST_POSITION = "FNC1_FIRST_POSITION";
-         public const string FNC1_SECOND_POSITION = "FNC1_SECOND_POSITION";
-         public const string HANZI = "HANZI";
+         /// <summary>
+         /// 
+         /// </summary>
+         TERMINATOR,
+         /// <summary>
+         /// numeric encoding
+         /// </summary>
+         NUMERIC,
+         /// <summary>
+         /// alpha-numeric encoding
+         /// </summary>
+         ALPHANUMERIC,
+         /// <summary>
+         /// structured append
+         /// </summary>
+         STRUCTURED_APPEND,
+         /// <summary>
+         /// byte mode encoding
+         /// </summary>
+         BYTE,
+         /// <summary>
+         /// ECI segment
+         /// </summary>
+         ECI,
+         /// <summary>
+         /// Kanji mode
+         /// </summary>
+         KANJI,
+         /// <summary>
+         /// FNC1 char, first position
+         /// </summary>
+         FNC1_FIRST_POSITION,
+         /// <summary>
+         /// FNC1 char, second position
+         /// </summary>
+         FNC1_SECOND_POSITION,
+         /// <summary>
+         /// Hanzi mode
+         /// </summary>
+         HANZI
       }
 
       // No, we can't use an enum here. J2ME doesn't support it.
@@ -92,14 +119,12 @@ namespace ZXing.QrCode.Internal
       public static readonly Mode HANZI = new Mode(new int[] { 8, 10, 12 }, 0x0D, Names.HANZI);
 
       private readonly int[] characterCountBitsForVersions;
-      private readonly int bits;
-      private readonly String name;
 
-      private Mode(int[] characterCountBitsForVersions, int bits, System.String name)
+      private Mode(int[] characterCountBitsForVersions, int bits, Names name)
       {
          this.characterCountBitsForVersions = characterCountBitsForVersions;
-         this.bits = bits;
-         this.name = name;
+         Bits = bits;
+         Name = name;
       }
 
       /// <summary>
@@ -171,13 +196,7 @@ namespace ZXing.QrCode.Internal
       /// <summary>
       /// Gets the bits.
       /// </summary>
-      public int Bits
-      {
-         get
-         {
-            return bits;
-         }
-      }
+      public int Bits { get; private set; }
 
       /// <summary>
       /// Returns a <see cref="System.String"/> that represents this instance.
@@ -187,7 +206,7 @@ namespace ZXing.QrCode.Internal
       /// </returns>
       public override String ToString()
       {
-         return name;
+         return Name.ToString();
       }
    }
 }

@@ -31,6 +31,9 @@ namespace ZXing
       private static readonly Func<LuminanceSource, Binarizer> defaultCreateBinarizer =
          (luminanceSource) => new HybridBinarizer(luminanceSource);
 
+      /// <summary>
+      /// represents the default function which is called to get a <see cref="RGBLuminanceSource"/> instance from a raw byte array
+      /// </summary>
       protected static readonly Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> defaultCreateRGBLuminanceSource =
          (rawBytes, width, height, format) => new RGBLuminanceSource(rawBytes, width, height, format);
 
@@ -553,6 +556,10 @@ namespace ZXing
          return results;
       }
 
+      /// <summary>
+      /// raises the ResultFound event
+      /// </summary>
+      /// <param name="results"></param>
       protected void OnResultsFound(IEnumerable<Result> results)
       {
          if (ResultFound != null)
@@ -564,6 +571,10 @@ namespace ZXing
          }
       }
 
+      /// <summary>
+      /// raises the ResultFound event
+      /// </summary>
+      /// <param name="result"></param>
       protected void OnResultFound(Result result)
       {
          if (ResultFound != null)
@@ -572,6 +583,10 @@ namespace ZXing
          }
       }
 
+      /// <summary>
+      /// calls the explicitResultPointFound action
+      /// </summary>
+      /// <param name="resultPoint"></param>
       protected void OnResultPointFound(ResultPoint resultPoint)
       {
          if (explicitResultPointFound != null)

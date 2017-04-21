@@ -28,31 +28,37 @@ namespace ZXing
 	public class ReaderException : Exception
 	{
       /// <summary>
-      /// Gets the instance.
-      /// </summary>
-		public static ReaderException Instance
-		{
-			get
-			{
-				return new ReaderException();
-			}
-			
-		}
-		
-      /// <summary>
       /// Initializes a new instance of the <see cref="ReaderException"/> class.
       /// </summary>
-		protected ReaderException()
+		public ReaderException()
 		{
 		}
 
       /// <summary>
       /// Initializes a new instance of the <see cref="ReaderException"/> class.
       /// </summary>
+      /// <param name="message"></param>
+      public ReaderException(String message)
+         : base(message)
+      {
+      }
+      /// <summary>
+      /// Initializes a new instance of the <see cref="ReaderException"/> class.
+      /// </summary>
       /// <param name="innerException">The inner exception.</param>
-      protected ReaderException(Exception innerException)
+      public ReaderException(Exception innerException)
          : base(innerException.Message, innerException)
       {
       }
-	}
+
+      /// <summary>
+      /// Initializes a new instance of the <see cref="ReaderException"/> class.
+      /// </summary>
+      /// <param name="innerException">The inner exception.</param>
+      /// <param name="message"></param>
+      public ReaderException(String message, Exception innerException)
+         : base(message, innerException)
+      {
+      }
+   }
 }

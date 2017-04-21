@@ -27,9 +27,21 @@ namespace ZXing
       // the following channel weights give nearly the same
       // gray scale picture as the java version with BufferedImage.TYPE_BYTE_GRAY
       // they are used in sub classes for luminance / gray scale calculation
+      /// <summary>
+      /// weight of the red channel for calculating a gray scale image
+      /// </summary>
       protected const int RChannelWeight = 19562;
+      /// <summary>
+      /// weight of the green channel for calculating a gray scale image
+      /// </summary>
       protected const int GChannelWeight = 38550;
+      /// <summary>
+      /// weight of the blue channel for calculating a gray scale image
+      /// </summary>
       protected const int BChannelWeight = 7424;
+      /// <summary>
+      /// numbers of bits which for right shifting
+      /// </summary>
       protected const int ChannelWeight = 16;
 
       /// <summary>
@@ -85,6 +97,9 @@ namespace ZXing
          return row;
       }
 
+      /// <summary>
+      /// gets the luminance matrix
+      /// </summary>
       public override byte[] Matrix
       {
          get { return luminances; }
