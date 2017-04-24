@@ -68,11 +68,28 @@ namespace ZXing
          get { return formatMap.Keys; }
       }
 
+      /// <summary>
+      /// encode the given data
+      /// </summary>
+      /// <param name="contents"></param>
+      /// <param name="format"></param>
+      /// <param name="width"></param>
+      /// <param name="height"></param>
+      /// <returns></returns>
       public BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
       {
          return encode(contents, format, width, height, null);
       }
 
+      /// <summary>
+      /// encode the given data
+      /// </summary>
+      /// <param name="contents"></param>
+      /// <param name="format"></param>
+      /// <param name="width"></param>
+      /// <param name="height"></param>
+      /// <param name="hints"></param>
+      /// <returns></returns>
       public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, IDictionary<EncodeHintType, object> hints)
       {
          if (!formatMap.ContainsKey(format))

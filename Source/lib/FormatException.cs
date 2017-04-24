@@ -27,23 +27,34 @@ namespace ZXing
    [Serializable]
    public sealed class FormatException : ReaderException
    {
-      private FormatException()
+      /// <summary>
+      /// 
+      /// </summary>
+      public FormatException()
       {
       }
 
-      private FormatException(Exception innerException)
+      /// <summary>
+      /// 
+      /// </summary>
+      public FormatException(String message)
+         : base(message)
+      {
+      }
+
+      /// <summary>
+      /// 
+      /// </summary>
+      public FormatException(Exception innerException)
          : base(innerException)
       {
       }
-
-      new public static FormatException Instance
+      /// <summary>
+      /// 
+      /// </summary>
+      public FormatException(String message, Exception innerException)
+         : base(message, innerException)
       {
-         get { return new FormatException(); }
-      }
-
-      public static FormatException getInstance(Exception innerExc)
-      {
-         return new FormatException(innerExc);
       }
    }
 }

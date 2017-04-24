@@ -370,7 +370,7 @@ namespace ZXing.QrCode.Internal
       {
          if (value >= ALPHANUMERIC_CHARS.Length)
          {
-            throw FormatException.Instance;
+            throw new FormatException();
          }
          return ALPHANUMERIC_CHARS[value];
       }

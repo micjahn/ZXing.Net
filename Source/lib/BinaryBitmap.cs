@@ -29,6 +29,10 @@ namespace ZXing
       private readonly Binarizer binarizer;
       private BitMatrix matrix;
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="binarizer"></param>
       public BinaryBitmap(Binarizer binarizer)
       {
          if (binarizer == null)

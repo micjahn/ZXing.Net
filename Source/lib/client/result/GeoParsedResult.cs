@@ -53,6 +53,9 @@ namespace ZXing.Client.Result
       /// <return> query string associated with geo URI or null if none exists</return>
       public String Query { get; private set; }
 
+      /// <summary>
+      /// the geo URI
+      /// </summary>
       public String GeoURI { get; private set; }
       
       /// <returns> a URI link to Google Maps which display the point on the Earth described

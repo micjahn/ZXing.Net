@@ -118,7 +118,11 @@ namespace ZXing.Aztec.Internal
          return new DecoderResult(rawBytes, correctedBits.Length, result, null, null);
       }
 
-      // This method is used for testing the high-level encoder
+      /// <summary>
+      /// This method is used for testing the high-level encoder
+      /// </summary>
+      /// <param name="correctedBits"></param>
+      /// <returns></returns>
       public static String highLevelDecode(bool[] correctedBits)
       {
          return getEncodedData(correctedBits);

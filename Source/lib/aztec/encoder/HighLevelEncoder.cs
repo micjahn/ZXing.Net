@@ -168,6 +168,10 @@ namespace ZXing.Aztec.Internal
          SHIFT_TABLE[MODE_DIGIT][MODE_UPPER] = 15;
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="text"></param>
       public HighLevelEncoder(byte[] text)
       {
          this.text = text;

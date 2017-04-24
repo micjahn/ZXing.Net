@@ -31,6 +31,9 @@ namespace ZXing.Client.Result
          displayResultValue = isbn;
       }
 
+      /// <summary>
+      /// the ISBN number
+      /// </summary>
       public String ISBN { get; private set; }
    }
 }

@@ -70,6 +70,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PdfSharp">
+      <HintPath>..\..\3rdparty\PDFsharp\GDI+\PdfSharp.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -102,7 +105,10 @@
     <Compile Include="ExtendedResultForm.Designer.cs">
       <DependentUpon>ExtendedResultForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImageFilters\MedianFilter.cs" />
+    <Compile Include="PdfSupport.cs" />
     <Compile Include="Renderer\CustomBitmapRenderer.cs" />
+    <Compile Include="ScreenCapture.cs" />
     <Compile Include="WebCam.cs" />
     <Compile Include="WindowsFormsDemoForm.cs">
       <SubType>Form</SubType>

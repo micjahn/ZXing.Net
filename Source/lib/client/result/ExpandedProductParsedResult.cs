@@ -36,7 +36,13 @@ namespace ZXing.Client.Result
    /// <author> Agustín Delgado, Servinform, S.A.</author>
    public class ExpandedProductParsedResult : ParsedResult
    {
+      /// <summary>
+      /// extension for kilogram weight type
+      /// </summary>
       public static String KILOGRAM = "KG";
+      /// <summary>
+      /// extension for pounds weight type
+      /// </summary>
       public static String POUND = "LB";
 
       private readonly String rawText;
@@ -56,6 +62,24 @@ namespace ZXing.Client.Result
       // For AIS that not exist in this object
       private readonly IDictionary<String, String> uncommonAIs;
 
+      /// <summary>
+      /// initializing constructor
+      /// </summary>
+      /// <param name="rawText"></param>
+      /// <param name="productID"></param>
+      /// <param name="sscc"></param>
+      /// <param name="lotNumber"></param>
+      /// <param name="productionDate"></param>
+      /// <param name="packagingDate"></param>
+      /// <param name="bestBeforeDate"></param>
+      /// <param name="expirationDate"></param>
+      /// <param name="weight"></param>
+      /// <param name="weightType"></param>
+      /// <param name="weightIncrement"></param>
+      /// <param name="price"></param>
+      /// <param name="priceIncrement"></param>
+      /// <param name="priceCurrency"></param>
+      /// <param name="uncommonAIs"></param>
       public ExpandedProductParsedResult(String rawText,
                                          String productID,
                                          String sscc,
@@ -92,7 +116,12 @@ namespace ZXing.Client.Result
          displayResultValue = productID;
       }
 
-      override public bool Equals(Object o)
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="o"></param>
+      /// <returns></returns>
+      public override bool Equals(Object o)
       {
          if (!(o is ExpandedProductParsedResult))
          {
@@ -137,7 +166,11 @@ namespace ZXing.Client.Result
          return true;
       }
 
-      override public int GetHashCode()
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <returns></returns>
+      public override int GetHashCode()
       {
          int hash = 0;
          hash ^= hashNotNull(productID);
@@ -161,81 +194,129 @@ namespace ZXing.Client.Result
          return o == null ? 0 : o.GetHashCode();
       }
 
+      /// <summary>
+      /// the raw text
+      /// </summary>
       public String RawText
       {
          get { return rawText; }
       }
 
+      /// <summary>
+      /// the product id
+      /// </summary>
       public String ProductID
       {
          get { return productID; }
       }
 
+      /// <summary>
+      /// the sscc
+      /// </summary>
       public String Sscc
       {
          get { return sscc; }
       }
 
+      /// <summary>
+      /// the lot number
+      /// </summary>
       public String LotNumber
       {
          get { return lotNumber; }
       }
 
+      /// <summary>
+      /// the production date
+      /// </summary>
       public String ProductionDate
       {
          get { return productionDate; }
       }
 
+      /// <summary>
+      /// the packaging date
+      /// </summary>
       public String PackagingDate
       {
          get { return packagingDate; }
       }
 
+      /// <summary>
+      /// the best before date
+      /// </summary>
       public String BestBeforeDate
       {
          get { return bestBeforeDate; }
       }
 
+      /// <summary>
+      /// the expiration date
+      /// </summary>
       public String ExpirationDate
       {
          get { return expirationDate; }
       }
 
+      /// <summary>
+      /// the weight
+      /// </summary>
       public String Weight
       {
          get { return weight; }
       }
 
+      /// <summary>
+      /// the weight type
+      /// </summary>
       public String WeightType
       {
          get { return weightType; }
       }
 
+      /// <summary>
+      /// the weight increment
+      /// </summary>
       public String WeightIncrement
       {
          get { return weightIncrement; }
       }
 
+      /// <summary>
+      /// the price
+      /// </summary>
       public String Price
       {
          get { return price; }
       }
 
+      /// <summary>
+      /// the price increment
+      /// </summary>
       public String PriceIncrement
       {
          get { return priceIncrement; }
       }
 
+      /// <summary>
+      /// the price currency
+      /// </summary>
       public String PriceCurrency
       {
          get { return priceCurrency; }
       }
 
+      /// <summary>
+      /// the uncommon AIs
+      /// </summary>
       public IDictionary<String, String> UncommonAIs
       {
          get { return uncommonAIs; }
       }
 
+      /// <summary>
+      /// the display representation (raw text)
+      /// </summary>
       public override string DisplayResult
       {
          get

@@ -42,6 +42,16 @@ namespace ZXing.Client.Result
       private readonly String[] urls;
       private readonly String[] geo;
 
+      /// <summary>
+      /// initializing constructor
+      /// </summary>
+      /// <param name="names"></param>
+      /// <param name="phoneNumbers"></param>
+      /// <param name="phoneTypes"></param>
+      /// <param name="emails"></param>
+      /// <param name="emailTypes"></param>
+      /// <param name="addresses"></param>
+      /// <param name="addressTypes"></param>
       public AddressBookParsedResult(String[] names,
                                  String[] phoneNumbers,
                                  String[] phoneTypes,
@@ -68,6 +78,25 @@ namespace ZXing.Client.Result
       {
       }
 
+      /// <summary>
+      /// initializing constructor
+      /// </summary>
+      /// <param name="names"></param>
+      /// <param name="nicknames"></param>
+      /// <param name="pronunciation"></param>
+      /// <param name="phoneNumbers"></param>
+      /// <param name="phoneTypes"></param>
+      /// <param name="emails"></param>
+      /// <param name="emailTypes"></param>
+      /// <param name="instantMessenger"></param>
+      /// <param name="note"></param>
+      /// <param name="addresses"></param>
+      /// <param name="addressTypes"></param>
+      /// <param name="org"></param>
+      /// <param name="birthday"></param>
+      /// <param name="title"></param>
+      /// <param name="urls"></param>
+      /// <param name="geo"></param>
       public AddressBookParsedResult(String[] names,
                                      String[] nicknames,
                                      String pronunciation,
@@ -119,11 +148,17 @@ namespace ZXing.Client.Result
          displayResultValue = getDisplayResult();
       }
 
+      /// <summary>
+      /// the names
+      /// </summary>
       public String[] Names
       {
          get { return names; }
       }
 
+      /// <summary>
+      /// the nicknames
+      /// </summary>
       public String[] Nicknames
       {
          get { return nicknames; }
@@ -139,6 +174,9 @@ namespace ZXing.Client.Result
          get { return pronunciation; }
       }
 
+      /// <summary>
+      /// the phone numbers
+      /// </summary>
       public String[] PhoneNumbers
       {
          get { return phoneNumbers; }
@@ -151,6 +189,9 @@ namespace ZXing.Client.Result
          get { return phoneTypes; }
       }
 
+      /// <summary>
+      /// the e-mail addresses
+      /// </summary>
       public String[] Emails
       {
          get { return emails; }
@@ -163,16 +204,25 @@ namespace ZXing.Client.Result
          get { return emailTypes; }
       }
 
+      /// <summary>
+      /// the instant messenger addresses
+      /// </summary>
       public String InstantMessenger
       {
          get { return instantMessenger; }
       }
 
+      /// <summary>
+      /// the note field
+      /// </summary>
       public String Note
       {
          get { return note; }
       }
 
+      /// <summary>
+      /// the addresses
+      /// </summary>
       public String[] Addresses
       {
          get { return addresses; }
@@ -185,16 +235,23 @@ namespace ZXing.Client.Result
          get { return addressTypes; }
       }
 
+      /// <summary>
+      /// the title
+      /// </summary>
       public String Title
       {
          get { return title; }
       }
 
+      // the organisation
       public String Org
       {
          get { return org; }
       }
 
+      /// <summary>
+      /// the urls
+      /// </summary>
       public String[] URLs
       {
          get { return urls; }

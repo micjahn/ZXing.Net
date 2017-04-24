@@ -24,8 +24,6 @@
  *   http://www.piramidepse.com/
  */
 
-using System;
-
 namespace ZXing.OneD.RSS.Expanded.Decoders
 {
    /// <summary>
@@ -44,7 +42,7 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
       {
          if (firstDigit < 0 || firstDigit > 10 || secondDigit < 0 || secondDigit > 10)
          {
-            throw FormatException.Instance;
+            throw new FormatException("digits has to be between 0 and 10");
          }
          
          this.firstDigit = firstDigit;

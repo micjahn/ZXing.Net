@@ -95,8 +95,6 @@ namespace ZXing
       /// is important for performance in continuous scan clients.
       /// 
       /// </summary>
-      /// <param name="hints">The set of hints to use for subsequent calls to decode(image)
-      /// </param>
       public IDictionary<DecodeHintType, object> Hints
       {
          set
@@ -183,6 +181,9 @@ namespace ZXing
          }
       }
 
+      /// <summary>
+      /// resets all specific readers
+      /// </summary>
       public void reset()
       {
          if (readers != null)
