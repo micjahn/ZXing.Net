@@ -68,9 +68,9 @@
     <Compile Include="BarcodeFormat.cs" />
     <Compile Include="BarcodeReader.Color32.cs" />
     <Compile Include="BarcodeReaderGeneric.cs" />
-    <Compile Include="BarcodeWriter.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="BarcodeWriter.Color32.cs" />
+    <Compile Include="BarcodeWriter.PixelData.cs" />
+    <Compile Include="BarcodeWriter.SvgImage.cs" />
     <Compile Include="BarcodeWriterGeneric.cs" />
     <Compile Include="BaseLuminanceSource.cs" />
     <Compile Include="Binarizer.cs" />

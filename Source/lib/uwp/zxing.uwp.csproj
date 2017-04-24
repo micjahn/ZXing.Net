@@ -166,8 +166,14 @@
     <Compile Include="..\BarcodeReaderGeneric.cs">
       <Link>BarcodeReaderGeneric.cs</Link>
     </Compile>
-    <Compile Include="..\BarcodeWriter.cs">
-      <Link>BarcodeWriter.cs</Link>
+    <Compile Include="..\BarcodeWriter.PixelData.cs">
+      <Link>BarcodeWriter.PixelData.cs</Link>
+    </Compile>
+    <Compile Include="..\BarcodeWriter.SvgImage.cs">
+      <Link>BarcodeWriter.SvgImage.cs</Link>
+    </Compile>
+    <Compile Include="..\BarcodeWriter.WritableBitmap.cs">
+      <Link>BarcodeWriter.WritableBitmap.cs</Link>
     </Compile>
     <Compile Include="..\BarcodeWriterGeneric.cs">
       <Link>BarcodeWriterGeneric.cs</Link>
