@@ -62,7 +62,7 @@
             "../silverlight/NonSerializedAttribute.cs",
             "../silverlight/SerializableAttribute.cs",
             "../BarcodeFormat.cs",
-            "../BarcodeReader.cs",
+            "../BarcodeReader.ByteArray.cs",
             "../BarcodeReaderGeneric.cs",
             "../BarcodeWriter.cs",
             "../BarcodeWriterGeneric.cs",

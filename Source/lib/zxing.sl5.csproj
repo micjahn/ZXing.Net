@@ -84,7 +84,7 @@
     <Compile Include="aztec\encoder\State.cs" />
     <Compile Include="aztec\encoder\Token.cs" />
     <Compile Include="BarcodeFormat.cs" />
-    <Compile Include="BarcodeReader.cs" />
+    <Compile Include="BarcodeReader.WriteableBitmap.cs" />
     <Compile Include="BarcodeReaderGeneric.cs" />
     <Compile Include="BarcodeWriter.cs" />
     <Compile Include="BarcodeWriterGeneric.cs" />
@@ -325,6 +325,7 @@
     <Compile Include="ReaderException.cs" />
     <Compile Include="renderer\IBarcodeRenderer.cs" />
     <Compile Include="renderer\PixelData.cs" />
+    <Compile Include="renderer\PixelData.WriteableBitmap.Silverlight.cs" />
     <Compile Include="renderer\PixelDataRenderer.cs" />
     <Compile Include="renderer\SvgRenderer.cs" />
     <Compile Include="renderer\WriteableBitmapRenderer.cs" />
@@ -334,7 +335,7 @@
     <Compile Include="ResultPointCallback.cs" />
     <Compile Include="RGB565LuminanceSource.cs" />
     <Compile Include="RGBLuminanceSource.cs" />
-    <Compile Include="BitmapLuminanceSource.Silverlight.cs" />
+    <Compile Include="BitmapLuminanceSource.WriteableBitmap.Silverlight.cs" />
     <Compile Include="silverlight\BigInteger.cs" />
     <Compile Include="silverlight\NonSerializedAttribute.cs" />
     <Compile Include="silverlight\SerializableAttribute.cs" />

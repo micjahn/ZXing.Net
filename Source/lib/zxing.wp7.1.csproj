@@ -69,14 +69,14 @@
     <Compile Include="aztec\encoder\State.cs" />
     <Compile Include="aztec\encoder\Token.cs" />
     <Compile Include="BarcodeFormat.cs" />
-    <Compile Include="BarcodeReader.cs" />
+    <Compile Include="BarcodeReader.WriteableBitmap.cs" />
     <Compile Include="BarcodeReaderGeneric.cs" />
     <Compile Include="BarcodeWriter.cs" />
     <Compile Include="BarcodeWriterGeneric.cs" />
     <Compile Include="BaseLuminanceSource.cs" />
     <Compile Include="Binarizer.cs" />
     <Compile Include="BinaryBitmap.cs" />
-    <Compile Include="BitmapLuminanceSource.Silverlight.cs" />
+    <Compile Include="BitmapLuminanceSource.WriteableBitmap.Silverlight.cs" />
     <Compile Include="client\result\AbstractDoCoMoResultParser.cs" />
     <Compile Include="client\result\AddressBookAUResultParser.cs" />
     <Compile Include="client\result\AddressBookDoCoMoResultParser.cs" />
@@ -315,6 +315,7 @@
     <Compile Include="ReaderException.cs" />
     <Compile Include="renderer\IBarcodeRenderer.cs" />
     <Compile Include="renderer\PixelData.cs" />
+    <Compile Include="renderer\PixelData.WriteableBitmap.Silverlight.cs" />
     <Compile Include="renderer\PixelDataRenderer.cs" />
     <Compile Include="renderer\SvgRenderer.cs" />
     <Compile Include="renderer\WriteableBitmapRenderer.cs" />

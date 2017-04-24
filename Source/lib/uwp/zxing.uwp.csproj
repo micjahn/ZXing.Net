@@ -26,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -156,8 +157,11 @@
     <Compile Include="..\BarcodeFormat.cs">
       <Link>BarcodeFormat.cs</Link>
     </Compile>
-    <Compile Include="..\BarcodeReader.cs">
-      <Link>BarcodeReader.cs</Link>
+    <Compile Include="..\BarcodeReader.SoftwareBitmap.cs">
+      <Link>BarcodeReader.SoftwareBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\BarcodeReader.WriteableBitmap.cs">
+      <Link>BarcodeReader.WriteableBitmap.cs</Link>
     </Compile>
     <Compile Include="..\BarcodeReaderGeneric.cs">
       <Link>BarcodeReaderGeneric.cs</Link>
@@ -177,8 +181,11 @@
     <Compile Include="..\BinaryBitmap.cs">
       <Link>BinaryBitmap.cs</Link>
     </Compile>
-    <Compile Include="..\BitmapLuminanceSource.Silverlight.cs">
-      <Link>BitmapLuminanceSource.Silverlight.cs</Link>
+    <Compile Include="..\BitmapLuminanceSource.SoftwareBitmap.cs">
+      <Link>BitmapLuminanceSource.SoftwareBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\BitmapLuminanceSource.WriteableBitmap.NetFx.cs">
+      <Link>BitmapLuminanceSource.WriteableBitmap.NetFx.cs</Link>
     </Compile>
     <Compile Include="..\client\result\AbstractDoCoMoResultParser.cs">
       <Link>client\result\AbstractDoCoMoResultParser.cs</Link>
@@ -860,6 +867,12 @@
     </Compile>
     <Compile Include="..\renderer\PixelData.cs">
       <Link>renderer\PixelData.cs</Link>
+    </Compile>
+    <Compile Include="..\renderer\PixelData.SoftwareBitmap.cs">
+      <Link>renderer\PixelData.SoftwareBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\renderer\PixelData.WriteableBitmap.NetFx.cs">
+      <Link>renderer\PixelData.WriteableBitmap.NetFx.cs</Link>
     </Compile>
     <Compile Include="..\renderer\PixelDataRenderer.cs">
       <Link>renderer\PixelDataRenderer.cs</Link>

@@ -110,7 +110,7 @@
     <Compile Include="BaseLuminanceSource.cs" />
     <Compile Include="Binarizer.cs" />
     <Compile Include="BinaryBitmap.cs" />
-    <Compile Include="BitmapLuminanceSource.Silverlight.cs" />
+    <Compile Include="BitmapLuminanceSource.WriteableBitmap.Silverlight.cs" />
     <Compile Include="client\result\AbstractDoCoMoResultParser.cs" />
     <Compile Include="client\result\AddressBookAUResultParser.cs" />
     <Compile Include="client\result\AddressBookDoCoMoResultParser.cs" />
@@ -351,6 +351,7 @@
     <Compile Include="ReaderException.cs" />
     <Compile Include="renderer\IBarcodeRenderer.cs" />
     <Compile Include="renderer\PixelData.cs" />
+    <Compile Include="renderer\PixelData.Silverlight.cs" />
     <Compile Include="renderer\PixelDataRenderer.cs" />
     <Compile Include="renderer\SvgRenderer.cs" />
     <Compile Include="renderer\WriteableBitmapRenderer.cs" />

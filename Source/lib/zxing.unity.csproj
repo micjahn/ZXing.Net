@@ -66,9 +66,7 @@
     <Compile Include="aztec\encoder\State.cs" />
     <Compile Include="aztec\encoder\Token.cs" />
     <Compile Include="BarcodeFormat.cs" />
-    <Compile Include="BarcodeReader.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="BarcodeReader.Color32.cs" />
     <Compile Include="BarcodeReaderGeneric.cs" />
     <Compile Include="BarcodeWriter.cs">
       <SubType>Code</SubType>
@@ -307,6 +305,7 @@
     <Compile Include="Reader.cs" />
     <Compile Include="ReaderException.cs" />
     <Compile Include="renderer\IBarcodeRenderer.cs" />
+    <Compile Include="renderer\PixelData.Color32.cs" />
     <Compile Include="renderer\PixelData.cs" />
     <Compile Include="renderer\PixelDataRenderer.cs" />
     <Compile Include="renderer\SvgRenderer.cs" />

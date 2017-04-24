@@ -41,7 +41,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <Compile Include="BarcodeFormat.cs" />
-    <Compile Include="BarcodeReader.cs" />
+    <Compile Include="BarcodeReader.UIImage.cs" />
     <Compile Include="BarcodeReaderGeneric.cs" />
     <Compile Include="BarcodeWriter.cs" />
     <Compile Include="BarcodeWriterGeneric.cs" />
