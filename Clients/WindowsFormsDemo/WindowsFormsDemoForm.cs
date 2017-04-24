@@ -200,7 +200,7 @@ namespace WindowsFormsDemo
                      if (point.Y + offsetY < rect.Top)
                         rect = new Rectangle(rect.X, (int)point.Y + offsetY, rect.Width, rect.Height + rect.Y - (int)point.Y - offsetY);
                      if (point.Y + offsetY > rect.Bottom)
-                        rect = new Rectangle(rect.X, rect.Y, rect.Width, rect.Height + (int)point.Y - rect.Y - offsetY);
+                        rect = new Rectangle(rect.X, rect.Y, rect.Width, rect.Height + (int)point.Y - (rect.Y - offsetY));
                   }
                   using (var g = picBarcode.CreateGraphics())
                   {
