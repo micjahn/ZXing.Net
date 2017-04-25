@@ -886,8 +886,8 @@
     <Compile Include="..\renderer\SVGRenderer.cs">
       <Link>renderer\SVGRenderer.cs</Link>
     </Compile>
-    <Compile Include="..\renderer\WriteableBitmapRenderer.cs">
-      <Link>renderer\WriteableBitmapRenderer.cs</Link>
+    <Compile Include="..\renderer\WriteableBitmapRenderer.NetFx.cs">
+      <Link>renderer\WriteableBitmapRenderer.NetFx.cs</Link>
     </Compile>
     <Compile Include="..\Result.cs">
       <Link>Result.cs</Link>

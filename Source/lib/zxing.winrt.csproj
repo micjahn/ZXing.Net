@@ -368,7 +368,7 @@
     <Compile Include="renderer\PixelData.WriteableBitmap.NetFx.cs" />
     <Compile Include="renderer\PixelDataRenderer.cs" />
     <Compile Include="renderer\SvgRenderer.cs" />
-    <Compile Include="renderer\WriteableBitmapRenderer.cs" />
+    <Compile Include="renderer\WriteableBitmapRenderer.NetFx.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="ResultMetadataType.cs" />
     <Compile Include="ResultPoint.cs" />
