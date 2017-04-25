@@ -169,6 +169,9 @@
     <Compile Include="..\BarcodeWriter.PixelData.cs">
       <Link>BarcodeWriter.PixelData.cs</Link>
     </Compile>
+    <Compile Include="..\BarcodeWriter.SoftwareBitmap.cs">
+      <Link>BarcodeWriter.SoftwareBitmap.cs</Link>
+    </Compile>
     <Compile Include="..\BarcodeWriter.SvgImage.cs">
       <Link>BarcodeWriter.SvgImage.cs</Link>
     </Compile>
@@ -882,6 +885,9 @@
     </Compile>
     <Compile Include="..\renderer\PixelDataRenderer.cs">
       <Link>renderer\PixelDataRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\renderer\SoftwareBitmapRenderer.cs">
+      <Link>renderer\SoftwareBitmapRenderer.cs</Link>
     </Compile>
     <Compile Include="..\renderer\SVGRenderer.cs">
       <Link>renderer\SVGRenderer.cs</Link>
