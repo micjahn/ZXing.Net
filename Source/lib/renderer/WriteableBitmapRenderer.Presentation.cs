@@ -150,11 +150,10 @@ namespace ZXing.Rendering
             }
          }
 
-
-         int foreground = Foreground.A << 24 | Foreground.R << 16 | Foreground.G << 8 | Foreground.B;
-         int background = Background.A << 24 | Background.R << 16 | Background.G << 8 | Background.B;
-         var bmp = new WriteableBitmap(width, height);
-         var pixels = bmp.Pixels;
+         var foreground = Foreground.A << 24 | Foreground.R << 16 | Foreground.G << 8 | Foreground.B;
+         var background = Background.A << 24 | Background.R << 16 | Background.G << 8 | Background.B;
+         var bmp = new WriteableBitmap(width, height, 96.0, 96.0, PixelFormats.Bgra32, null);
+         var pixels = new int[width*height];
          var index = 0;
 
          for (int y = 0; y < matrix.Height - emptyArea; y++)
@@ -182,7 +181,7 @@ namespace ZXing.Rendering
                pixels[index++] = background;
             }
          }
-         bmp.Invalidate();
+         bmp.WritePixels(new Int32Rect(0, 0, width, height), pixels, bmp.BackBufferStride, 0);
 
          /* doesn't correctly work at the moment
           * renders at the wrong position

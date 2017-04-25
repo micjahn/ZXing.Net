@@ -15,9 +15,9 @@
  */
 
 using System;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using Windows.UI;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 using ZXing.Common;
 
@@ -57,28 +57,6 @@ namespace ZXing.Rendering
       /// </value>
       public double FontSize { get; set; }
 
-      /// <summary>
-      /// Gets or sets the font stretch.
-      /// </summary>
-      /// <value>
-      /// The font stretch.
-      /// </value>
-      public FontStretch FontStretch { get; set; }
-      /// <summary>
-      /// Gets or sets the font style.
-      /// </summary>
-      /// <value>
-      /// The font style.
-      /// </value>
-      public FontStyle FontStyle { get; set; }
-      /// <summary>
-      /// Gets or sets the font weight.
-      /// </summary>
-      /// <value>
-      /// The font weight.
-      /// </value>
-      public FontWeight FontWeight { get; set; }
-
       private static readonly FontFamily DefaultFontFamily = new FontFamily("Arial");
 
       /// <summary>
@@ -90,9 +68,6 @@ namespace ZXing.Rendering
          Background = Colors.White;
          FontFamily = DefaultFontFamily;
          FontSize = 10.0;
-         FontStretch = FontStretches.Normal;
-         FontStyle = FontStyles.Normal;
-         FontWeight = FontWeights.Normal;
       }
 
       /// <summary>
@@ -150,36 +125,37 @@ namespace ZXing.Rendering
             }
          }
 
-
-         int foreground = Foreground.A << 24 | Foreground.R << 16 | Foreground.G << 8 | Foreground.B;
-         int background = Background.A << 24 | Background.R << 16 | Background.G << 8 | Background.B;
+         var foreground = new byte[] { Foreground.B, Foreground.G, Foreground.R, Foreground.A };
+         var background = new byte[] { Background.B, Background.G, Background.R, Background.A };
          var bmp = new WriteableBitmap(width, height);
-         var pixels = bmp.Pixels;
-         var index = 0;
-
-         for (int y = 0; y < matrix.Height - emptyArea; y++)
+         
+         // Copy data back
+         using (var stream = System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.AsStream(bmp.PixelBuffer))
          {
-            for (var pixelsizeHeight = 0; pixelsizeHeight < pixelsize; pixelsizeHeight++)
+            for (int y = 0; y < matrix.Height - emptyArea; y++)
             {
-               for (var x = 0; x < matrix.Width; x++)
+               for (var pixelsizeHeight = 0; pixelsizeHeight < pixelsize; pixelsizeHeight++)
                {
-                  var color = matrix[x, y] ? foreground : background;
-                  for (var pixelsizeWidth = 0; pixelsizeWidth < pixelsize; pixelsizeWidth++)
+                  for (var x = 0; x < matrix.Width; x++)
                   {
-                     pixels[index++] = color;
+                     var color = matrix[x, y] ? foreground : background;
+                     for (var pixelsizeWidth = 0; pixelsizeWidth < pixelsize; pixelsizeWidth++)
+                     {
+                        stream.Write(color, 0, 4);
+                     }
+                  }
+                  for (var x = pixelsize * matrix.Width; x < width; x++)
+                  {
+                     stream.Write(background, 0, 4);
                   }
                }
-               for (var x = pixelsize * matrix.Width; x < width; x++)
-               {
-                  pixels[index++] = background;
-               }
             }
-         }
-         for (int y = matrix.Height * pixelsize - emptyArea; y < height; y++)
-         {
-            for (var x = 0; x < width; x++)
+            for (int y = matrix.Height * pixelsize - emptyArea; y < height; y++)
             {
-               pixels[index++] = background;
+               for (var x = 0; x < width; x++)
+               {
+                  stream.Write(background, 0, 4);
+               }
             }
          }
          bmp.Invalidate();

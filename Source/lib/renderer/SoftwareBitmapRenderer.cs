@@ -15,18 +15,18 @@
  */
 
 using System;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using Windows.Graphics.Imaging;
+using Windows.UI;
+using Windows.UI.Xaml.Media;
 
 using ZXing.Common;
 
 namespace ZXing.Rendering
 {
    /// <summary>
-   /// Renders a <see cref="BitMatrix" /> to a <see cref="WriteableBitmap" />
+   /// Renders a <see cref="BitMatrix" /> to a <see cref="SoftwareBitmap" />
    /// </summary>
-   public class WriteableBitmapRenderer : IBarcodeRenderer<WriteableBitmap>
+   public class SoftwareBitmapRenderer : IBarcodeRenderer<SoftwareBitmap>
    {
       /// <summary>
       /// Gets or sets the foreground color.
@@ -57,42 +57,17 @@ namespace ZXing.Rendering
       /// </value>
       public double FontSize { get; set; }
 
-      /// <summary>
-      /// Gets or sets the font stretch.
-      /// </summary>
-      /// <value>
-      /// The font stretch.
-      /// </value>
-      public FontStretch FontStretch { get; set; }
-      /// <summary>
-      /// Gets or sets the font style.
-      /// </summary>
-      /// <value>
-      /// The font style.
-      /// </value>
-      public FontStyle FontStyle { get; set; }
-      /// <summary>
-      /// Gets or sets the font weight.
-      /// </summary>
-      /// <value>
-      /// The font weight.
-      /// </value>
-      public FontWeight FontWeight { get; set; }
-
       private static readonly FontFamily DefaultFontFamily = new FontFamily("Arial");
 
       /// <summary>
       /// Initializes a new instance of the <see cref="WriteableBitmapRenderer"/> class.
       /// </summary>
-      public WriteableBitmapRenderer()
+      public SoftwareBitmapRenderer()
       {
          Foreground = Colors.Black;
          Background = Colors.White;
          FontFamily = DefaultFontFamily;
          FontSize = 10.0;
-         FontStretch = FontStretches.Normal;
-         FontStyle = FontStyles.Normal;
-         FontWeight = FontWeights.Normal;
       }
 
       /// <summary>
@@ -102,7 +77,7 @@ namespace ZXing.Rendering
       /// <param name="format">The format.</param>
       /// <param name="content">The content.</param>
       /// <returns></returns>
-      public WriteableBitmap Render(BitMatrix matrix, BarcodeFormat format, string content)
+      public SoftwareBitmap Render(BitMatrix matrix, BarcodeFormat format, string content)
       {
          return Render(matrix, format, content, null);
       }
@@ -115,7 +90,7 @@ namespace ZXing.Rendering
       /// <param name="content">The content.</param>
       /// <param name="options">The options.</param>
       /// <returns></returns>
-      public virtual WriteableBitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+      public virtual SoftwareBitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
       {
          int width = matrix.Width;
          int height = matrix.Height;
@@ -150,65 +125,58 @@ namespace ZXing.Rendering
             }
          }
 
-
-         int foreground = Foreground.A << 24 | Foreground.R << 16 | Foreground.G << 8 | Foreground.B;
-         int background = Background.A << 24 | Background.R << 16 | Background.G << 8 | Background.B;
-         var bmp = new WriteableBitmap(width, height);
-         var pixels = bmp.Pixels;
+         var foreground = new [] { Foreground.B, Foreground.G, Foreground.R, Foreground.A };
+         var background = new [] { Background.B, Background.G, Background.R, Background.A };
+         var softwareBitmap = new SoftwareBitmap(BitmapPixelFormat.Bgra8, width, height, BitmapAlphaMode.Ignore);
          var index = 0;
 
-         for (int y = 0; y < matrix.Height - emptyArea; y++)
+         using (var bitmapBuffer = softwareBitmap.LockBuffer(BitmapBufferAccessMode.Write))
+         using (var reference = bitmapBuffer.CreateReference())
          {
-            for (var pixelsizeHeight = 0; pixelsizeHeight < pixelsize; pixelsizeHeight++)
+            unsafe
             {
-               for (var x = 0; x < matrix.Width; x++)
+               byte* data;
+               uint capacity;
+               ((IMemoryBufferByteAccess)reference).GetBuffer(out data, out capacity);
+
+               for (int y = 0; y < matrix.Height - emptyArea; y++)
                {
-                  var color = matrix[x, y] ? foreground : background;
-                  for (var pixelsizeWidth = 0; pixelsizeWidth < pixelsize; pixelsizeWidth++)
+                  for (var pixelsizeHeight = 0; pixelsizeHeight < pixelsize; pixelsizeHeight++)
                   {
-                     pixels[index++] = color;
+                     for (var x = 0; x < matrix.Width; x++)
+                     {
+                        var color = matrix[x, y] ? foreground : background;
+                        for (var pixelsizeWidth = 0; pixelsizeWidth < pixelsize; pixelsizeWidth++)
+                        {
+                           data[index++] = color[0];
+                           data[index++] = color[1];
+                           data[index++] = color[2];
+                           data[index++] = color[3];
+                        }
+                     }
+                     for (var x = pixelsize * matrix.Width; x < width; x++)
+                     {
+                        data[index++] = background[0];
+                        data[index++] = background[1];
+                        data[index++] = background[2];
+                        data[index++] = background[3];
+                     }
                   }
                }
-               for (var x = pixelsize * matrix.Width; x < width; x++)
+               for (int y = matrix.Height * pixelsize - emptyArea; y < height; y++)
                {
-                  pixels[index++] = background;
+                  for (var x = 0; x < width; x++)
+                  {
+                     data[index++] = background[0];
+                     data[index++] = background[1];
+                     data[index++] = background[2];
+                     data[index++] = background[3];
+                  }
                }
             }
          }
-         for (int y = matrix.Height * pixelsize - emptyArea; y < height; y++)
-         {
-            for (var x = 0; x < width; x++)
-            {
-               pixels[index++] = background;
-            }
-         }
-         bmp.Invalidate();
 
-         /* doesn't correctly work at the moment
-          * renders at the wrong position
-         if (outputContent)
-         {
-            switch (format)
-            {
-               case BarcodeFormat.EAN_8:
-                  if (content.Length < 8)
-                     content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-                  content = content.Insert(4, "   ");
-                  break;
-               case BarcodeFormat.EAN_13:
-                  if (content.Length < 13)
-                     content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-                  content = content.Insert(7, "   ");
-                  content = content.Insert(1, "   ");
-                  break;
-            }
-            var txt1 = new TextBlock {Text = content, FontSize = 10, Foreground = new SolidColorBrush(Colors.Black)};
-            bmp.Render(txt1, new RotateTransform { Angle = 0, CenterX = width / 2, CenterY = height - 14});
-            bmp.Invalidate();
-         }
-          * */
-
-         return bmp;
+         return softwareBitmap;
       }
    }
 }
