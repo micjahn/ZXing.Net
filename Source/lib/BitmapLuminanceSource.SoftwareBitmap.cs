@@ -58,12 +58,11 @@ namespace ZXing
          // In order to measure pure decoding speed, we convert the entire image to a greyscale array
          // luminance array is initialized with new byte[width * height]; in base class
 
-         if (softwareBitmap.BitmapPixelFormat == BitmapPixelFormat.Gray8 ||
-             softwareBitmap.BitmapPixelFormat == BitmapPixelFormat.Nv12)
+         if (softwareBitmap.BitmapPixelFormat == BitmapPixelFormat.Gray8)
          {
             // shortcut
             var buffer = luminances.AsBuffer();
-            softwareBitmap.CopyToBuffer(buffer); // not correct for NV12, only half of the buffer should be copied
+            softwareBitmap.CopyToBuffer(buffer);
          }
          else
          {
@@ -156,10 +155,68 @@ namespace ZXing
                            }
                         }
                         break;
-                     case BitmapPixelFormat.Gray16:
                      case BitmapPixelFormat.Rgba16:
+                        {
+                           const int SHORTS_PER_PIXEL = 4;
+                           var uint16Data = (ushort*) data;
+                           for (var row = 0; row < height; row++)
+                           {
+                              for (var col = 0; col < width; col++)
+                              {
+                                 var currPixel = desc.StartIndex + desc.Stride * row / 2 + SHORTS_PER_PIXEL * col;
+                                 // scaling down from 16 to 8 bit because channel weights are related to 8 bit values
+                                 var red = uint16Data[currPixel] >> 8;
+                                 var green = uint16Data[currPixel+1] >> 8;
+                                 var blue = uint16Data[currPixel+2] >> 8;
+                                 var alpha = uint16Data[currPixel+3] >> 8;
+                                 var luminance =
+                                    (byte)
+                                    ((RChannelWeight * red + GChannelWeight * green + BChannelWeight * blue) >> ChannelWeight);
+                                 switch (softwareBitmap.BitmapAlphaMode)
+                                 {
+                                    case BitmapAlphaMode.Straight:
+                                       luminances[luminanceIndex] =
+                                          (byte)(((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8));
+                                       break;
+                                    default:
+                                       luminances[luminanceIndex] = luminance;
+                                       break;
+                                 }
+                                 luminanceIndex++;
+                              }
+                           }
+                        }
+                        break;
+                     case BitmapPixelFormat.Gray16:
+                        {
+                           const int SHORTS_PER_PIXEL = 1;
+                           var uint16Data = (ushort*)data;
+                           for (var row = 0; row < height; row++)
+                           {
+                              for (var col = 0; col < width; col++)
+                              {
+                                 var currPixel = desc.StartIndex + desc.Stride * row / 2 + SHORTS_PER_PIXEL * col;
+                                 var gray16 = uint16Data[currPixel];
+                                 luminances[luminanceIndex] = (byte)(gray16 >> 8);
+                                 luminanceIndex++;
+                              }
+                           }
+                        }
                         break;
                      case BitmapPixelFormat.Nv12:
+                        {
+                           for (var row = 0; row < height; row++)
+                           {
+                              for (var col = 0; col < width; col++)
+                              {
+                                 var currPixel = desc.StartIndex + desc.Stride * row + col;
+                                 var y = data[currPixel];
+                                 luminances[luminanceIndex] = y;
+                                 luminanceIndex++;
+                              }
+                           }
+                        }
+                        break;
                      case BitmapPixelFormat.Gray8:
                         // done before
                         break;
