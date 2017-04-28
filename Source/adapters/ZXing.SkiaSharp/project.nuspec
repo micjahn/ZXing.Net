@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>0.16.0</version>
+    <authors>Michael Jahn</authors>
+    <owners>Michael Jahn</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
+    <id>ZXing.Net.Core.Bindings.SkiaSharp</id>
+    <title>ZXing.Net.Core.Bindings.SkiaSharp</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ZXing.Net Bindings for SkiaSharp - use SkiaSharp with ZXing.Net for barcode reading</description>
+    <summary>ZXing.Net Bindings for SkiaSharp</summary>
+    <releaseNotes></releaseNotes>
+    <tags>ZXing SkiaSharp</tags>
+    <dependencies>
+      <group targetFramework=".NETStandard1.3">
+        <dependency id="ZXing.Net" version="0.16.0.0" exclude="Build,Analyzers" />
+        <dependency id="SkiaSharp" version="1.57.0" exclude="Build,Analyzers" />
+        <dependency id="NETStandard.Library" version="1.6.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\netstandard1.3\zxing.skiasharp.dll" target="lib\netstandard1.3\zxing.skiasharp.dll" />
+    <file src="bin\Release\netstandard1.3\zxing.skiasharp.pdb" target="lib\netstandard1.3\zxing.skiasharp.pdb" />
+    <file src="bin\Release\netstandard1.3\zxing.skiasharp.xml" target="lib\netstandard1.3\zxing.skiasharp.xml" />
+  </files>
+</package>

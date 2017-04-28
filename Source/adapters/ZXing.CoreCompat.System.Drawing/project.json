@@ -1,0 +1,39 @@
+﻿{
+   "name": "ZXing.CoreCompat.System.Drawing",
+   "version": "0.15.0.0",
+
+   "dependencies": {
+      "CoreCompat.System.Drawing": "1.0.0-beta006",
+      "NETStandard.Library": "1.6.0"
+   },
+
+   "frameworks": {
+      "netstandard1.3": {
+         "dependencies": {
+            "netstandard": {
+               "target": "project"
+            }
+         }
+      }
+   },
+   "buildOptions": {
+      "define": [ "NETSTANDARD" ],
+      "optimize": true,
+      "xmlDoc": true,
+      "platform": "anycpu",
+      "publicSign": false,
+      "debugType": "portable",
+      "outputName": "zxing.corecompat.system.drawing",
+      "compile": {
+         "includeFiles": [
+            "Properties/AssemblyInfo.cs",
+            "BarcodeReader.Extensions.cs",
+            "BarcodeReader.cs",
+            "BarcodeWriter.cs",
+            "BarcodeWriter.Extensions.cs",
+            "BitmapLuminanceSource.cs",
+            "Rendering/BitmapRenderer.cs"
+         ]
+      }
+   }
+}

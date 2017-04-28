@@ -124,6 +124,7 @@
     <Compile Include="aztec\encoder\Token.cs" />
     <Compile Include="BarcodeFormat.cs" />
     <Compile Include="BarcodeReader.Bitmap.cs" />
+    <Compile Include="BarcodeReaderCustom.cs" />
     <Compile Include="BarcodeReaderGeneric.cs" />
     <Compile Include="BarcodeWriter.Bitmap.cs" />
     <Compile Include="BarcodeWriter.PixelData.cs" />
@@ -227,8 +228,13 @@
     <Compile Include="Dimension.cs" />
     <Compile Include="EncodeHintType.cs" />
     <Compile Include="FormatException.cs" />
+    <Compile Include="IBarcodeReader.Bitmap.cs" />
     <Compile Include="IBarcodeReader.cs" />
+    <Compile Include="IBarcodeReaderCustom.cs" />
+    <Compile Include="IBarcodeReaderCustom.Multiple.cs" />
     <Compile Include="IBarcodeReaderGeneric.cs" />
+    <Compile Include="IBarcodeReader.Multiple.Bitmap.cs" />
+    <Compile Include="IBarcodeReaderGeneric.Multiple.cs" />
     <Compile Include="InvertedLuminanceSource.cs" />
     <Compile Include="oned\Code128EncodingOptions.cs" />
     <Compile Include="imb\IMBReader.cs" />
@@ -258,10 +264,9 @@
     <Compile Include="renderer\IBarcodeRenderer.cs" />
     <Compile Include="IBarcodeWriter.cs" />
     <Compile Include="IBarcodeWriterGeneric.cs" />
-    <Compile Include="IMultipleBarcodeReader.cs">
+    <Compile Include="IBarcodeReader.Multiple.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IMultipleBarcodeReaderGeneric.cs" />
     <Compile Include="LuminanceSource.cs" />
     <Compile Include="maxicode\decoder\BitMatrixParser.cs" />
     <Compile Include="maxicode\decoder\DecodedBitStreamParser.cs" />

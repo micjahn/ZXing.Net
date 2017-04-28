@@ -1,0 +1,37 @@
+﻿{
+   "name": "ZXing.OpenCV",
+   "version": "0.16.0.0",
+
+   "dependencies": {
+      "NETStandard.Library": "1.6.0",
+      "OpenCvSharp3-AnyCPU": "3.2.0.20170419"
+   },
+
+   "frameworks": {
+      "netstandard1.6": {
+         "dependencies": {
+            "netstandard": {
+               "target": "project"
+            }
+         }
+      }
+   },
+   "buildOptions": {
+      "define": [ "NETSTANDARD" ],
+      "optimize": true,
+      "xmlDoc": true,
+      "platform": "anycpu",
+      "publicSign": false,
+      "debugType": "portable",
+      "outputName": "zxing.opencv",
+      "allowUnsafe": true,
+      "compile": {
+         "includeFiles": [
+            "Properties/AssemblyInfo.cs",
+            "BarcodeReader.cs",
+            "BarcodeReader.Extensions.cs",
+            "MatLuminanceSource.cs"
+         ]
+      }
+   }
+}

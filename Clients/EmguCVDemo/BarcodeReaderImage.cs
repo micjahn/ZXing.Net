@@ -25,7 +25,7 @@ namespace EmguCVDemo
    /// <summary>
    /// A barcode reader which accepts an Image instance from EmguCV
    /// </summary>
-   internal class BarcodeReaderImage : BarcodeReaderGeneric<Image<Emgu.CV.Structure.Bgr, byte>>, IBarcodeReaderImage
+   internal class BarcodeReaderImage : BarcodeReader<Image<Emgu.CV.Structure.Bgr, byte>>, IBarcodeReaderImage
    {
       private static readonly Func<Image<Emgu.CV.Structure.Bgr, byte>, LuminanceSource> defaultCreateLuminanceSource =
          (image) => new ImageLuminanceSource(image);

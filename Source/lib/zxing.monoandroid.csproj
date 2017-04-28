@@ -68,6 +68,7 @@
     <Compile Include="BarcodeWriter.Bitmap.cs" />
     <Compile Include="BarcodeWriter.PixelData.cs" />
     <Compile Include="BarcodeWriter.SvgImage.cs" />
+    <Compile Include="BarcodeReaderCustom.cs" />
     <Compile Include="BarcodeWriterGeneric.cs" />
     <Compile Include="BaseLuminanceSource.cs" />
     <Compile Include="Binarizer.cs" />
@@ -163,13 +164,17 @@
     <Compile Include="Dimension.cs" />
     <Compile Include="EncodeHintType.cs" />
     <Compile Include="FormatException.cs" />
+    <Compile Include="IBarcodeReader.AndroidBitmap.cs" />
     <Compile Include="IBarcodeReader.cs" />
+    <Compile Include="IBarcodeReader.Multiple.AndroidBitmap.cs" />
+    <Compile Include="IBarcodeReader.Multiple.cs" />
+    <Compile Include="IBarcodeReaderCustom.cs" />
+    <Compile Include="IBarcodeReaderCustom.Multiple.cs" />
     <Compile Include="IBarcodeReaderGeneric.cs" />
+    <Compile Include="IBarcodeReaderGeneric.Multiple.cs" />
     <Compile Include="IBarcodeWriter.cs" />
     <Compile Include="IBarcodeWriterGeneric.cs" />
     <Compile Include="imb\IMBReader.cs" />
-    <Compile Include="IMultipleBarcodeReader.cs" />
-    <Compile Include="IMultipleBarcodeReaderGeneric.cs" />
     <Compile Include="InvertedLuminanceSource.cs" />
     <Compile Include="LuminanceSource.cs" />
     <Compile Include="maxicode\decoder\BitMatrixParser.cs" />

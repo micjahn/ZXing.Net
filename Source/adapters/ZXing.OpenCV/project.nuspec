@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>0.16.0</version>
+    <authors>Michael Jahn</authors>
+    <owners>Michael Jahn</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
+    <id>ZXing.Net.Core.Bindings.OpenCV</id>
+    <title>ZXing.Net.Core.Bindings.OpenCV</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ZXing.Net Bindings for OpenCV - use OpenCV with ZXing.Net for barcode reading</description>
+    <summary>ZXing.Net Bindings for OpenCV</summary>
+    <releaseNotes></releaseNotes>
+    <tags>ZXing OpenCV</tags>
+    <dependencies>
+      <group targetFramework=".NETStandard1.6">
+        <dependency id="ZXing.Net" version="0.16.0.0" exclude="Build,Analyzers" />
+        <dependency id="OpenCvSharp3-AnyCPU" version="3.2.0.20170419" exclude="Build,Analyzers" />
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\netstandard1.6\zxing.opencv.dll" target="lib\netstandard1.6\zxing.opencv.dll" />
+    <file src="bin\Release\netstandard1.6\zxing.opencv.pdb" target="lib\netstandard1.6\zxing.opencv.pdb" />
+    <file src="bin\Release\netstandard1.6\zxing.opencv.xml" target="lib\netstandard1.6\zxing.opencv.xml" />
+  </files>
+</package>

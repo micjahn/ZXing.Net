@@ -23,7 +23,7 @@ namespace EmguCVDemo
    /// <summary>
    /// The interface for a barcode reader which accepts an Image instance from EmguCV
    /// </summary>
-   internal interface IBarcodeReaderImage : IBarcodeReaderGeneric<Image<Emgu.CV.Structure.Bgr, byte>>
+   internal interface IBarcodeReaderImage : IBarcodeReader<Image<Emgu.CV.Structure.Bgr, byte>>
    {
    }
 }

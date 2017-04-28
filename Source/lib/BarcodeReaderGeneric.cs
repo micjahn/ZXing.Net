@@ -26,7 +26,7 @@ namespace ZXing
    /// <summary>
    /// A smart class to decode the barcode inside a bitmap object
    /// </summary>
-   public class BarcodeReaderGeneric<T> : IBarcodeReaderGeneric<T>, IMultipleBarcodeReaderGeneric<T>
+   public class BarcodeReaderGeneric : IBarcodeReaderGeneric
    {
       private static readonly Func<LuminanceSource, Binarizer> defaultCreateBinarizer =
          (luminanceSource) => new HybridBinarizer(luminanceSource);
@@ -39,11 +39,7 @@ namespace ZXing
 
       private Reader reader;
       private readonly Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource;
-#if !UNITY
-      private readonly Func<T, LuminanceSource> createLuminanceSource;
-#else
-      private readonly Func<T, int, int, LuminanceSource> createLuminanceSource;
-#endif
+
       private readonly Func<LuminanceSource, Binarizer> createBinarizer;
       private bool usePreviousState;
       private DecodingOptions options;
@@ -127,60 +123,7 @@ namespace ZXing
       /// event is executed if a result was found via decode
       /// </summary>
       public event Action<Result> ResultFound;
-
-      /// <summary>
-      /// Gets or sets a flag which cause a deeper look into the bitmap
-      /// </summary>
-      /// <value>
-      ///   <c>true</c> if [try harder]; otherwise, <c>false</c>.
-      /// </value>
-      [Obsolete("Please use the Options.TryHarder property instead.")]
-      public bool TryHarder
-      {
-         get { return Options.TryHarder; }
-         set { Options.TryHarder = value; }
-      }
-
-      /// <summary>
-      /// Image is a pure monochrome image of a barcode.
-      /// </summary>
-      /// <value>
-      ///   <c>true</c> if monochrome image of a barcode; otherwise, <c>false</c>.
-      /// </value>
-      [Obsolete("Please use the Options.PureBarcode property instead.")]
-      public bool PureBarcode
-      {
-         get { return Options.PureBarcode; }
-         set { Options.PureBarcode = value; }
-      }
-
-      /// <summary>
-      /// Specifies what character encoding to use when decoding, where applicable (type String)
-      /// </summary>
-      /// <value>
-      /// The character set.
-      /// </value>
-      [Obsolete("Please use the Options.CharacterSet property instead.")]
-      public string CharacterSet
-      {
-         get { return Options.CharacterSet; }
-         set { Options.CharacterSet = value; }
-      }
-
-      /// <summary>
-      /// Image is known to be of one of a few possible formats.
-      /// Maps to a {@link java.util.List} of {@link BarcodeFormat}s.
-      /// </summary>
-      /// <value>
-      /// The possible formats.
-      /// </value>
-      [Obsolete("Please use the Options.PossibleFormats property instead.")]
-      public IList<BarcodeFormat> PossibleFormats
-      {
-         get { return Options.PossibleFormats; }
-         set { Options.PossibleFormats = value; }
-      }
-
+      
       /// <summary>
       /// Gets or sets a value indicating whether the image should be automatically rotated.
       /// Rotation is supported for 90, 180 and 270 degrees
@@ -200,32 +143,6 @@ namespace ZXing
       /// </value>
       public bool TryInverted { get; set; }
 
-#if !UNITY
-      /// <summary>
-      /// Optional: Gets or sets the function to create a luminance source object for a bitmap.
-      /// If null a platform specific default LuminanceSource is used
-      /// </summary>
-      /// <value>
-      /// The function to create a luminance source object.
-      /// </value>
-      protected Func<T, LuminanceSource> CreateLuminanceSource
-#else
-      /// <summary>
-      /// Optional: Gets or sets the function to create a luminance source object for a bitmap.
-      /// If null a platform specific default LuminanceSource is used
-      /// </summary>
-      /// <value>
-      /// The function to create a luminance source object.
-      /// </value>
-      protected Func<T, int, int, LuminanceSource> CreateLuminanceSource
-#endif
-      {
-         get
-         {
-            return createLuminanceSource;
-         }
-      }
-
       /// <summary>
       /// Optional: Gets or sets the function to create a binarizer object for a luminance source.
       /// If null then HybridBinarizer is used
@@ -242,105 +159,33 @@ namespace ZXing
       }
 
       /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeReaderGeneric{T}"/> class.
+      /// Initializes a new instance of the <see cref="BarcodeReaderGeneric"/> class.
       /// </summary>
       public BarcodeReaderGeneric()
-         : this(new MultiFormatReader(), null, defaultCreateBinarizer)
+         : this(new MultiFormatReader(), defaultCreateBinarizer, null)
       {
       }
 
       /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeReaderGeneric{T}"/> class.
+      /// Initializes a new instance of the <see cref="BarcodeReaderGeneric"/> class.
       /// </summary>
       /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
       /// If null then MultiFormatReader is used</param>
-      /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
-      /// If null, an exception is thrown when Decode is called</param>
-      /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
-      /// If null then HybridBinarizer is used</param>
-      public BarcodeReaderGeneric(Reader reader,
-#if !UNITY
-         Func<T, LuminanceSource> createLuminanceSource,
-#else
-         Func<T, int, int, LuminanceSource> createLuminanceSource,
-#endif
-         Func<LuminanceSource, Binarizer> createBinarizer
-         )
-         : this(reader, createLuminanceSource, createBinarizer, null)
-      {
-      }
-
-      /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeReaderGeneric{T}"/> class.
-      /// </summary>
-      /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
-      /// If null then MultiFormatReader is used</param>
-      /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
-      /// If null, an exception is thrown when Decode is called</param>
       /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
       /// If null then HybridBinarizer is used</param>
       /// <param name="createRGBLuminanceSource">Sets the function to create a luminance source object for a rgb array.
       /// If null the RGBLuminanceSource is used. The handler is only called when Decode with a byte[] array is called.</param>
       public BarcodeReaderGeneric(Reader reader,
-#if !UNITY
-         Func<T, LuminanceSource> createLuminanceSource,
-#else
-         Func<T, int, int, LuminanceSource> createLuminanceSource,
-#endif
          Func<LuminanceSource, Binarizer> createBinarizer,
          Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource
          )
       {
          this.reader = reader ?? new MultiFormatReader();
-         this.createLuminanceSource = createLuminanceSource;
          this.createBinarizer = createBinarizer ?? defaultCreateBinarizer;
          this.createRGBLuminanceSource = createRGBLuminanceSource ?? defaultCreateRGBLuminanceSource;
          usePreviousState = false;
       }
 
-#if !PORTABLE
-#if !UNITY
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="barcodeBitmap">The barcode bitmap.</param>
-      /// <returns>the result data or null</returns>
-      public Result Decode(T barcodeBitmap)
-#else
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="rawRGB">raw bytes of the image in RGB order</param>
-      /// <param name="width"></param>
-      /// <param name="height"></param>
-      /// <returns>
-      /// the result data or null
-      /// </returns>
-      public Result Decode(T rawRGB, int width, int height)
-#endif
-      {
-         if (CreateLuminanceSource == null)
-         {
-            throw new InvalidOperationException("You have to declare a luminance source delegate.");
-         }
-
-#if !UNITY
-         if (barcodeBitmap == null)
-            throw new ArgumentNullException("barcodeBitmap");
-#else
-         if (rawRGB == null)
-            throw new ArgumentNullException("rawRGB");
-#endif
-
-#if !UNITY
-         var luminanceSource = CreateLuminanceSource(barcodeBitmap);
-#else
-         var luminanceSource = CreateLuminanceSource(rawRGB, width, height);
-#endif
-
-         return Decode(luminanceSource);
-      }
-#endif
 
       /// <summary>
       /// Tries to decode a barcode within an image which is given by a luminance source.
@@ -351,7 +196,7 @@ namespace ZXing
       /// </summary>
       /// <param name="luminanceSource">The luminance source.</param>
       /// <returns></returns>
-      virtual public Result Decode(LuminanceSource luminanceSource)
+      public virtual Result Decode(LuminanceSource luminanceSource)
       {
          var result = default(Result);
          var binarizer = CreateBinarizer(luminanceSource);
@@ -430,49 +275,6 @@ namespace ZXing
          return result;
       }
 
-#if !PORTABLE
-#if !UNITY
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="barcodeBitmap">The barcode bitmap.</param>
-      /// <returns>the result data or null</returns>
-      public Result[] DecodeMultiple(T barcodeBitmap)
-#else
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="rawRGB">raw bytes of the image in RGB order</param>
-      /// <param name="width"></param>
-      /// <param name="height"></param>
-      /// <returns>
-      /// the result data or null
-      /// </returns>
-      public Result[] DecodeMultiple(T rawRGB, int width, int height)
-#endif
-      {
-         if (CreateLuminanceSource == null)
-         {
-            throw new InvalidOperationException("You have to declare a luminance source delegate.");
-         }
-#if !UNITY
-         if (barcodeBitmap == null)
-            throw new ArgumentNullException("barcodeBitmap");
-#else
-         if (rawRGB == null)
-            throw new ArgumentNullException("rawRGB");
-#endif
-
-#if !UNITY
-         var luminanceSource = CreateLuminanceSource(barcodeBitmap);
-#else
-         var luminanceSource = CreateLuminanceSource(rawRGB, width, height);
-#endif
-
-         return DecodeMultiple(luminanceSource);
-      }
-#endif
-
       /// <summary>
       /// Tries to decode barcodes within an image which is given by a luminance source.
       /// That method gives a chance to prepare a luminance source completely before calling
@@ -482,7 +284,7 @@ namespace ZXing
       /// </summary>
       /// <param name="luminanceSource">The luminance source.</param>
       /// <returns></returns>
-      virtual public Result[] DecodeMultiple(LuminanceSource luminanceSource)
+      public virtual Result[] DecodeMultiple(LuminanceSource luminanceSource)
       {
          var results = default(Result[]);
          var binarizer = CreateBinarizer(luminanceSource);

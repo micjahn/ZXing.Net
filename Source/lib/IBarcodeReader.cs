@@ -15,21 +15,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-
-#if !(SILVERLIGHT || NETFX_CORE)
-#if !UNITY
-#if !(PORTABLE || NETSTANDARD)
-using System.Drawing;
-#endif
-#else
-using UnityEngine;
-#endif
-#elif NETFX_CORE
-using Windows.UI.Xaml.Media.Imaging;
-#else
-using System.Windows.Media.Imaging;
-#endif
 
 using ZXing.Common;
 
@@ -38,10 +23,7 @@ namespace ZXing
    /// <summary>
    /// Interface for a smart class to decode the barcode inside a bitmap object
    /// </summary>
-#if UNITY
-   [System.CLSCompliant(false)]
-#endif
-   public interface IBarcodeReader
+   public partial interface IBarcodeReader
    {
       /// <summary>
       /// event is executed when a result point was found
@@ -52,43 +34,6 @@ namespace ZXing
       /// event is executed when a result was found via decode
       /// </summary>
       event Action<Result> ResultFound;
-
-      /// <summary>
-      /// Gets or sets a flag which cause a deeper look into the bitmap
-      /// </summary>
-      /// <value>
-      ///   <c>true</c> if [try harder]; otherwise, <c>false</c>.
-      /// </value>
-      [Obsolete("Please use the Options.TryHarder property instead.")]
-      bool TryHarder { get; set; }
-
-      /// <summary>
-      /// Image is a pure monochrome image of a barcode.
-      /// </summary>
-      /// <value>
-      ///   <c>true</c> if monochrome image of a barcode; otherwise, <c>false</c>.
-      /// </value>
-      [Obsolete("Please use the Options.PureBarcode property instead.")]
-      bool PureBarcode { get; set; }
-
-      /// <summary>
-      /// Specifies what character encoding to use when decoding, where applicable (type String)
-      /// </summary>
-      /// <value>
-      /// The character set.
-      /// </value>
-      [Obsolete("Please use the Options.CharacterSet property instead.")]
-      string CharacterSet { get; set; }
-
-      /// <summary>
-      /// Image is known to be of one of a few possible formats.
-      /// Maps to a {@link java.util.List} of {@link BarcodeFormat}s.
-      /// </summary>
-      /// <value>
-      /// The possible formats.
-      /// </value>
-      [Obsolete("Please use the Options.PossibleFormats property instead.")]
-      IList<BarcodeFormat> PossibleFormats { get; set; }
 
       /// <summary>
       /// Specifies some options which influence the decoding process
@@ -117,53 +62,5 @@ namespace ZXing
       /// <param name="luminanceSource">The luminance source.</param>
       /// <returns></returns>
       Result Decode(LuminanceSource luminanceSource);
-
-#if MONOTOUCH
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="barcodeBitmap">The barcode bitmap.</param>
-      /// <returns>the result data or null</returns>
-#if __UNIFIED__
-      Result Decode(UIKit.UIImage barcodeImage);
-#else
-      Result Decode(MonoTouch.UIKit.UIImage barcodeImage);
-#endif
-#elif MONOANDROID
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="barcodeBitmap">The barcode bitmap.</param>
-      /// <returns>the result data or null</returns>
-      Result Decode(Android.Graphics.Bitmap barcodeImage);
-#else
-#if !(PORTABLE || NETSTANDARD)
-#if !(SILVERLIGHT || NETFX_CORE)
-#if !UNITY
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="barcodeBitmap">The barcode bitmap.</param>
-      /// <returns>the result data or null</returns>
-      Result Decode(Bitmap barcodeBitmap);
-#else
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="rawColor32">The image as Color32 array.</param>
-      /// <returns>the result data or null</returns>
-      [System.CLSCompliant(false)]
-      Result Decode(Color32[] rawColor32, int width, int height);
-#endif
-#else
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="barcodeBitmap">The barcode bitmap.</param>
-      /// <returns>the result data or null</returns>
-      Result Decode(WriteableBitmap barcodeBitmap);
-#endif
-#endif
-#endif
    }
 }

@@ -23,7 +23,7 @@ namespace OpenCVDemo
    /// <summary>
    /// interface for a barcode reader class which can be used with the Mat type from OpenCVSharp
    /// </summary>
-   public interface IBarcodeReaderImage : IBarcodeReaderGeneric<Mat>
+   public interface IBarcodeReaderImage : IBarcodeReader<Mat>
    {
    }
 }

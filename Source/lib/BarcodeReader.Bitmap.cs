@@ -22,7 +22,7 @@ namespace ZXing
    /// <summary>
    /// A smart class to decode the barcode inside a bitmap object
    /// </summary>
-   public class BarcodeReader : BarcodeReaderGeneric<Bitmap>, IBarcodeReader, IMultipleBarcodeReader
+   public class BarcodeReader : BarcodeReader<Bitmap>, IBarcodeReader
    {
       private static readonly Func<Bitmap, LuminanceSource> defaultCreateLuminanceSource =
          (bitmap) => new BitmapLuminanceSource(bitmap);
@@ -31,7 +31,7 @@ namespace ZXing
       /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
       /// </summary>
       public BarcodeReader()
-         : this(new MultiFormatReader(), defaultCreateLuminanceSource, null)
+         : this(null, defaultCreateLuminanceSource, null)
       {
       }
 
@@ -67,8 +67,7 @@ namespace ZXing
          Func<LuminanceSource, Binarizer> createBinarizer,
          Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource
       )
-         : base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer, createRGBLuminanceSource
-         )
+         : base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer, createRGBLuminanceSource)
       {
       }
    }
