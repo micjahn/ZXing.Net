@@ -37,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\..\Build\Release\uwp\zxing.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -162,6 +163,9 @@
     </Compile>
     <Compile Include="..\BarcodeReader.WriteableBitmap.cs">
       <Link>BarcodeReader.WriteableBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\BarcodeReaderCustom.cs">
+      <Link>BarcodeReaderCustom.cs</Link>
     </Compile>
     <Compile Include="..\BarcodeReaderGeneric.cs">
       <Link>BarcodeReaderGeneric.cs</Link>
@@ -460,8 +464,29 @@
     <Compile Include="..\IBarcodeReader.cs">
       <Link>IBarcodeReader.cs</Link>
     </Compile>
+    <Compile Include="..\IBarcodeReader.Multiple.cs">
+      <Link>IBarcodeReader.Multiple.cs</Link>
+    </Compile>
+    <Compile Include="..\IBarcodeReader.Multiple.SoftwareBitmap.cs">
+      <Link>IBarcodeReader.Multiple.SoftwareBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\IBarcodeReader.Multiple.WriteableBitmap.cs">
+      <Link>IBarcodeReader.Multiple.WriteableBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\IBarcodeReader.SoftwareBitmap.cs">
+      <Link>IBarcodeReader.SoftwareBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\IBarcodeReaderCustom.cs">
+      <Link>IBarcodeReaderCustom.cs</Link>
+    </Compile>
+    <Compile Include="..\IBarcodeReaderCustom.Multiple.cs">
+      <Link>IBarcodeReaderCustom.Multiple.cs</Link>
+    </Compile>
     <Compile Include="..\IBarcodeReaderGeneric.cs">
       <Link>IBarcodeReaderGeneric.cs</Link>
+    </Compile>
+    <Compile Include="..\IBarcodeReaderGeneric.Multiple.cs">
+      <Link>IBarcodeReaderGeneric.Multiple.cs</Link>
     </Compile>
     <Compile Include="..\IBarcodeWriter.cs">
       <Link>IBarcodeWriter.cs</Link>
@@ -471,12 +496,6 @@
     </Compile>
     <Compile Include="..\imb\IMBReader.cs">
       <Link>imb\IMBReader.cs</Link>
-    </Compile>
-    <Compile Include="..\IMultipleBarcodeReader.cs">
-      <Link>IMultipleBarcodeReader.cs</Link>
-    </Compile>
-    <Compile Include="..\IMultipleBarcodeReaderGeneric.cs">
-      <Link>IMultipleBarcodeReaderGeneric.cs</Link>
     </Compile>
     <Compile Include="..\InvertedLuminanceSource.cs">
       <Link>InvertedLuminanceSource.cs</Link>

@@ -14,32 +14,13 @@
  * limitations under the License.
  */
 
-using System;
-
-using ZXing.Common;
-
 namespace ZXing
 {
    /// <summary>
-   /// Interface for a smart class to decode the barcode inside a bitmap object
+   /// Interface for a smart class to decode multiple barcodes inside a bitmap object
    /// </summary>
    public partial interface IBarcodeReader
    {
-      /// <summary>
-      /// event is executed when a result point was found
-      /// </summary>
-      event Action<ResultPoint> ResultPointFound;
-
-      /// <summary>
-      /// event is executed when a result was found via decode
-      /// </summary>
-      event Action<Result> ResultFound;
-
-      /// <summary>
-      /// Specifies some options which influence the decoding process
-      /// </summary>
-      DecodingOptions Options { get; set; }
-
       /// <summary>
       /// Decodes the specified barcode bitmap which is given by a generic byte array with the order RGB24.
       /// </summary>
@@ -50,10 +31,10 @@ namespace ZXing
       /// <returns>
       /// the result data or null
       /// </returns>
-      Result Decode(byte[] rawRGB, int width, int height, RGBLuminanceSource.BitmapFormat format);
+      Result[] DecodeMultiple(byte[] rawRGB, int width, int height, RGBLuminanceSource.BitmapFormat format);
 
       /// <summary>
-      /// Tries to decode a barcode within an image which is given by a luminance source.
+      /// Tries to decode barcodes within an image which is given by a luminance source.
       /// That method gives a chance to prepare a luminance source completely before calling
       /// the time consuming decoding method. On the other hand there is a chance to create
       /// a luminance source which is independent from external resources (like Bitmap objects)
@@ -61,6 +42,6 @@ namespace ZXing
       /// </summary>
       /// <param name="luminanceSource">The luminance source.</param>
       /// <returns></returns>
-      Result Decode(LuminanceSource luminanceSource);
+      Result[] DecodeMultiple(LuminanceSource luminanceSource);
    }
 }

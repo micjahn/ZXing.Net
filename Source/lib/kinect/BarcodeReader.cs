@@ -23,7 +23,7 @@ namespace ZXing.Kinect
    /// <summary>
    /// A smart class to decode the barcode inside a ColorImageFrame object
    /// </summary>
-   public class BarcodeReader : BarcodeReaderGeneric<ColorImageFrame>
+   public class BarcodeReader : BarcodeReader<ColorImageFrame>
    {
       private static readonly Func<ColorImageFrame, LuminanceSource> defaultCreateLuminanceSource =
          bitmap => new ColorImageFrameLuminanceSource(bitmap);
@@ -32,7 +32,7 @@ namespace ZXing.Kinect
       /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
       /// </summary>
       public BarcodeReader()
-         : this(new MultiFormatReader(), defaultCreateLuminanceSource, null)
+         : this(null, defaultCreateLuminanceSource, null)
       {
       }
 

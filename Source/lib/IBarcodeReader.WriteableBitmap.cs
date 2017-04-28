@@ -16,23 +16,24 @@
 
 using System;
 
-using Emgu.CV;
+#if NETFX_CORE
+using Windows.UI.Xaml.Media.Imaging;
+#else
+using System.Windows.Media.Imaging;
+#endif
 
-using ZXing;
-
-namespace EmguCVDemo
+namespace ZXing
 {
    /// <summary>
-   /// A barcode reader which accepts an Image instance from EmguCV
+   /// Interface for a smart class to decode the barcode inside a bitmap object
    /// </summary>
-   internal class BarcodeReaderImage : BarcodeReader<Image<Emgu.CV.Structure.Bgr, byte>>, IBarcodeReaderImage
+   public partial interface IBarcodeReader
    {
-      private static readonly Func<Image<Emgu.CV.Structure.Bgr, byte>, LuminanceSource> defaultCreateLuminanceSource =
-         (image) => new ImageLuminanceSource(image);
-
-      public BarcodeReaderImage()
-         : base(null, defaultCreateLuminanceSource, null)
-      {
-      }
+      /// <summary>
+      /// Decodes the specified barcode bitmap.
+      /// </summary>
+      /// <param name="barcodeBitmap">The barcode bitmap.</param>
+      /// <returns>the result data or null</returns>
+      Result Decode(WriteableBitmap barcodeBitmap);
    }
 }

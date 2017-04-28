@@ -16,23 +16,17 @@
 
 using System;
 
-using Emgu.CV;
-
-using ZXing;
-
-namespace EmguCVDemo
+namespace ZXing
 {
    /// <summary>
-   /// A barcode reader which accepts an Image instance from EmguCV
+   /// Interface for a smart class to decode multiple barcodes inside a bitmap object
    /// </summary>
-   internal class BarcodeReaderImage : BarcodeReader<Image<Emgu.CV.Structure.Bgr, byte>>, IBarcodeReaderImage
+   public partial interface IBarcodeReader
    {
-      private static readonly Func<Image<Emgu.CV.Structure.Bgr, byte>, LuminanceSource> defaultCreateLuminanceSource =
-         (image) => new ImageLuminanceSource(image);
-
-      public BarcodeReaderImage()
-         : base(null, defaultCreateLuminanceSource, null)
-      {
-      }
+#if __UNIFIED__
+      Result[] DecodeMultiple(UIKit.UIImage barcodeImage);
+#else
+      Result[] DecodeMultiple(MonoTouch.UIKit.UIImage barcodeImage);
+#endif
    }
 }

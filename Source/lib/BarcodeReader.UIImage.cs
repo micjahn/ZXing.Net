@@ -27,7 +27,7 @@ namespace ZXing
    /// <summary>
    /// A smart class to decode the barcode inside a bitmap object
    /// </summary>
-   public class BarcodeReader : BarcodeReaderGeneric<UIImage>, IBarcodeReader, IMultipleBarcodeReader
+   public class BarcodeReader : BarcodeReader<UIImage>, IBarcodeReader
    {
       private static readonly Func<UIImage, LuminanceSource> defaultCreateLuminanceSource =
          // it's an extended version which lives in xamarin/...
@@ -37,7 +37,7 @@ namespace ZXing
       /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
       /// </summary>
       public BarcodeReader()
-         : this(new MultiFormatReader(), defaultCreateLuminanceSource, null)
+         : this(null, defaultCreateLuminanceSource, null)
       {
       }
 
@@ -51,7 +51,7 @@ namespace ZXing
       /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
       /// If null then HybridBinarizer is used</param>
       public BarcodeReader(Reader reader,
-         Func<UIImage, LuminanceSource> createLuminanceSource,
+         Func<UIIMage, LuminanceSource> createLuminanceSource,
          Func<LuminanceSource, Binarizer> createBinarizer
       )
          : base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer)
@@ -73,8 +73,7 @@ namespace ZXing
          Func<LuminanceSource, Binarizer> createBinarizer,
          Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource
       )
-         : base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer, createRGBLuminanceSource
-         )
+         : base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer, createRGBLuminanceSource)
       {
       }
    }

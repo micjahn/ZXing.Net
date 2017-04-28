@@ -14,25 +14,21 @@
  * limitations under the License.
  */
 
-using System;
+using UnityEngine;
 
-using Emgu.CV;
-
-using ZXing;
-
-namespace EmguCVDemo
+namespace ZXing
 {
    /// <summary>
-   /// A barcode reader which accepts an Image instance from EmguCV
+   /// Interface for a smart class to decode multiple barcodes inside a bitmap object
    /// </summary>
-   internal class BarcodeReaderImage : BarcodeReader<Image<Emgu.CV.Structure.Bgr, byte>>, IBarcodeReaderImage
+   public partial interface IBarcodeReader
    {
-      private static readonly Func<Image<Emgu.CV.Structure.Bgr, byte>, LuminanceSource> defaultCreateLuminanceSource =
-         (image) => new ImageLuminanceSource(image);
-
-      public BarcodeReaderImage()
-         : base(null, defaultCreateLuminanceSource, null)
-      {
-      }
+      /// <summary>
+      /// Decodes the specified barcode bitmap.
+      /// </summary>
+      /// <param name="rawColor32">The image as Color32 array.</param>
+      /// <returns>the result data or null</returns>
+      [System.CLSCompliant(false)]
+      Result[] DecodeMultiple(Color32[] rawColor32, int width, int height);
    }
 }
