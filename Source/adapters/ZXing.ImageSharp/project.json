@@ -1,0 +1,39 @@
+﻿{
+   "name": "ZXing.ImageSharp",
+   "version": "0.15.0.0",
+
+   "dependencies": {
+      "ImageSharp": "1.0.0-alpha7-00030",
+      "NETStandard.Library": "1.6.0"
+   },
+
+   "frameworks": {
+      "netstandard1.1": {
+         "dependencies": {
+            "netstandard": {
+               "target": "project"
+            }
+         }
+      }
+   },
+   "buildOptions": {
+      "define": [ "NETSTANDARD" ],
+      "optimize": true,
+      "xmlDoc": true,
+      "platform": "anycpu",
+      "publicSign": false,
+      "debugType": "portable",
+      "outputName": "zxing.imagesharp",
+      "compile": {
+         "includeFiles": [
+            "Properties/AssemblyInfo.cs",
+            "BarcodeReader.Extensions.cs",
+            "BarcodeReader.cs",
+            "BarcodeWriter.cs",
+            "BarcodeWriter.Extensions.cs",
+            "ImageSharpLuminanceSource.cs",
+            "Rendering/ImageSharpRenderer.cs"
+         ]
+      }
+   }
+}

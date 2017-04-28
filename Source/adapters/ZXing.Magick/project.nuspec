@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>0.16.0</version>
+    <authors>Michael Jahn</authors>
+    <owners>Michael Jahn</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
+    <id>ZXing.Net.Core.Bindings.Magick</id>
+    <title>ZXing.Net.Core.Bindings.Magick</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ZXing.Net Bindings for ImageMagick - use ImageMagick with ZXing.Net for barcode reading</description>
+    <summary>ZXing.Net Bindings for ImageMagick</summary>
+    <releaseNotes></releaseNotes>
+    <tags>ZXing Magick</tags>
+    <dependencies>
+      <group targetFramework=".NETStandard1.3">
+        <dependency id="ZXing.Net" version="0.16.0.0" exclude="Build,Analyzers" />
+        <dependency id="Magick.NET.Core-Q8" version="7.0.5.502" exclude="Build,Analyzers" />
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\netstandard1.3\zxing.magick.dll" target="lib\netstandard1.3\zxing.magick.dll" />
+    <file src="bin\Release\netstandard1.3\zxing.magick.pdb" target="lib\netstandard1.3\zxing.magick.pdb" />
+    <file src="bin\Release\netstandard1.3\zxing.magick.xml" target="lib\netstandard1.3\zxing.magick.xml" />
+  </files>
+</package>

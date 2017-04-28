@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>0.16.0-beta</version>
+    <authors>Michael Jahn</authors>
+    <owners>Michael Jahn</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
+    <id>ZXing.Net.Core.Bindings.CoreCompat.System.Drawing</id>
+    <title>ZXing.Net.Core.Bindings.CoreCompat.System.Drawing</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ZXing.Net Bindings for CoreCompat.System.Drawing - use CoreCompat.System.Drawing with ZXing.Net for barcode reading</description>
+    <summary>ZXing.Net Bindings for CoreCompat.System.Drawing</summary>
+    <releaseNotes></releaseNotes>
+    <tags>ZXing CoreCompat.System.Drawing</tags>
+    <dependencies>
+      <group targetFramework=".NETStandard1.1">
+        <dependency id="ZXing.Net" version="0.16.0.0" exclude="Build,Analyzers" />
+        <dependency id="CoreCompat.System.Drawing" version="1.0.0-beta006" exclude="Build,Analyzers" />
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\netstandard1.3\zxing.corecompat.system.drawing.dll" target="lib\netstandard1.3\zxing.corecompat.system.drawing.dll" />
+    <file src="bin\Release\netstandard1.3\zxing.corecompat.system.drawing.pdb" target="lib\netstandard1.3\zxing.corecompat.system.drawing.pdb" />
+    <file src="bin\Release\netstandard1.3\zxing.corecompat.system.drawing.xml" target="lib\netstandard1.3\zxing.corecompat.system.drawing.xml" />
+  </files>
+</package>
