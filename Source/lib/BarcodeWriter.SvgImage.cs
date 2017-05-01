@@ -21,7 +21,7 @@ namespace ZXing
    /// <summary>
    /// A smart class to encode some content to a svg barcode image
    /// </summary>
-   public class BarcodeWriterSvg : BarcodeWriterGeneric<SvgRenderer.SvgImage>
+   public class BarcodeWriterSvg : BarcodeWriter<SvgRenderer.SvgImage>, IBarcodeWriterSvg
    {
       /// <summary>
       /// Initializes a new instance of the <see cref="BarcodeWriterSvg"/> class.

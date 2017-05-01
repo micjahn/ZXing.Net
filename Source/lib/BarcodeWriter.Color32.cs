@@ -22,7 +22,7 @@ namespace ZXing
    /// A smart class to encode some content to a barcode image
    /// </summary>
    [System.CLSCompliant(false)]
-   public class BarcodeWriter : BarcodeWriterGeneric<UnityEngine.Color32[]>, IBarcodeWriter
+   public class BarcodeWriter : BarcodeWriter<UnityEngine.Color32[]>, IBarcodeWriter
    {
       /// <summary>
       /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.

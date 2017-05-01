@@ -21,7 +21,7 @@ namespace ZXing
    /// <summary>
    /// A smart class to encode some content to a barcode image
    /// </summary>
-   public class BarcodeWriterSoftwareBitmap : BarcodeWriterGeneric<Windows.Graphics.Imaging.SoftwareBitmap>
+   public class BarcodeWriterSoftwareBitmap : BarcodeWriter<Windows.Graphics.Imaging.SoftwareBitmap>, IBarcodeWriterSoftwareBitmap
    {
       /// <summary>
       /// Initializes a new instance of the <see cref="BarcodeWriterSoftwareBitmap"/> class.

@@ -74,6 +74,7 @@
     <Compile Include="BarcodeWriter.PixelData.cs" />
     <Compile Include="BarcodeWriter.SvgImage.cs" />
     <Compile Include="BarcodeWriter.WritableBitmap.cs" />
+    <Compile Include="BarcodeWriterCustom.cs" />
     <Compile Include="BarcodeWriterGeneric.cs" />
     <Compile Include="BaseLuminanceSource.cs" />
     <Compile Include="Binarizer.cs" />
@@ -186,6 +187,10 @@
     <Compile Include="IBarcodeReaderGeneric.cs" />
     <Compile Include="IBarcodeReaderGeneric.Multiple.cs" />
     <Compile Include="IBarcodeWriter.cs" />
+    <Compile Include="IBarcodeWriter.PixelData.cs" />
+    <Compile Include="IBarcodeWriter.SvgImage.cs" />
+    <Compile Include="IBarcodeWriter.WriteableBitmap.cs" />
+    <Compile Include="IBarcodeWriterCustom.cs" />
     <Compile Include="IBarcodeWriterGeneric.cs" />
     <Compile Include="imb\IMBReader.cs" />
     <Compile Include="InvertedLuminanceSource.cs" />

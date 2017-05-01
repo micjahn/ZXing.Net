@@ -23,7 +23,7 @@ namespace ZXing.OpenCV
    /// <summary>
    /// A luminance source class which consumes a Mat image from OpenCVSharp and calculates the luminance values based on the bytes of the image
    /// </summary>
-   internal class MatLuminanceSource : BaseLuminanceSource
+   public class MatLuminanceSource : BaseLuminanceSource
    {
       public MatLuminanceSource(Mat image)
          : base(image.Width, image.Height)

@@ -182,6 +182,9 @@
     <Compile Include="..\BarcodeWriter.WritableBitmap.cs">
       <Link>BarcodeWriter.WritableBitmap.cs</Link>
     </Compile>
+    <Compile Include="..\BarcodeWriterCustom.cs">
+      <Link>BarcodeWriterCustom.cs</Link>
+    </Compile>
     <Compile Include="..\BarcodeWriterGeneric.cs">
       <Link>BarcodeWriterGeneric.cs</Link>
     </Compile>
@@ -490,6 +493,21 @@
     </Compile>
     <Compile Include="..\IBarcodeWriter.cs">
       <Link>IBarcodeWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\IBarcodeWriter.PixelData.cs">
+      <Link>IBarcodeWriter.PixelData.cs</Link>
+    </Compile>
+    <Compile Include="..\IBarcodeWriter.SoftwareBitmap.cs">
+      <Link>IBarcodeWriter.SoftwareBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\IBarcodeWriter.SvgImage.cs">
+      <Link>IBarcodeWriter.SvgImage.cs</Link>
+    </Compile>
+    <Compile Include="..\IBarcodeWriter.WriteableBitmap.cs">
+      <Link>IBarcodeWriter.WriteableBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\IBarcodeWriterCustom.cs">
+      <Link>IBarcodeWriterCustom.cs</Link>
     </Compile>
     <Compile Include="..\IBarcodeWriterGeneric.cs">
       <Link>IBarcodeWriterGeneric.cs</Link>

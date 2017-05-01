@@ -27,11 +27,10 @@ namespace ZXing
       /// <summary>
       /// uses the BarcodeWriterGeneric implementation and the <see cref="ImageSharpRenderer"/> class for decoding
       /// </summary>
-      /// <typeparam name="T"></typeparam>
       /// <param name="writer"></param>
       /// <param name="content"></param>
       /// <returns></returns>
-      public static Image WriteImageSharp<T>(this BarcodeWriterGeneric<T> writer, string content)
+      public static Image WriteAsImageSharp(this IBarcodeWriterGeneric writer, string content)
       {
          var bitmatrix = writer.Encode(content);
          var renderer = new ImageSharpRenderer();

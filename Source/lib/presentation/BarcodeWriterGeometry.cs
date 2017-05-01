@@ -24,7 +24,7 @@ namespace ZXing.Presentation
    /// A smart class to encode some content to a barcode image into a geometry
    /// Autor: Rob Fonseca-Ensor
    /// </summary>
-   public class BarcodeWriterGeometry : BarcodeWriterGeneric<Geometry>
+   public class BarcodeWriterGeometry : BarcodeWriter<Geometry>
    {
       /// <summary>
       /// Initializes a new instance of the <see cref="BarcodeWriterGeometry"/> class.

@@ -29,7 +29,7 @@ namespace ZXing
    /// <summary>
    /// A smart class to encode some content to a barcode image
    /// </summary>
-   public class BarcodeWriter : BarcodeWriterGeneric<UIImage>, IBarcodeWriter
+   public class BarcodeWriter : BarcodeWriter<UIImage>, IBarcodeWriter
    {
       /// <summary>
       /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.

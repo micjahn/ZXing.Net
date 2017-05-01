@@ -14,8 +14,8 @@
 * limitations under the License.
 */
 
-using System;
 using System.Windows.Media.Imaging;
+
 using ZXing.Rendering;
 
 namespace ZXing.Presentation
@@ -23,7 +23,7 @@ namespace ZXing.Presentation
    /// <summary>
    /// A smart class to encode some content to a barcode image
    /// </summary>
-   public class BarcodeWriter : BarcodeWriterGeneric<WriteableBitmap>
+   public class BarcodeWriter : BarcodeWriter<WriteableBitmap>
    {
       /// <summary>
       /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.

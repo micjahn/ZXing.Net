@@ -23,7 +23,7 @@ namespace ZXing.ImageSharp
    /// <summary>
    /// barcode writer which creates ImageSharp Image instances
    /// </summary>
-   public class BarcodeWriter : BarcodeWriterGeneric<Image>
+   public class BarcodeWriter : BarcodeWriter<Image>
    {
       /// <summary>
       /// contructor

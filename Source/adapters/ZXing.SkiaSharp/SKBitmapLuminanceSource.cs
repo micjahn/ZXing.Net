@@ -23,7 +23,7 @@ namespace ZXing.SkiaSharp
    /// <summary>
    /// A luminance source class which consumes a Mat image from SkiaSharp and calculates the luminance values based on the bytes of the image
    /// </summary>
-   internal class SKBitmapLuminanceSource : BaseLuminanceSource
+   public class SKBitmapLuminanceSource : BaseLuminanceSource
    {
       public SKBitmapLuminanceSource(SKBitmap image)
          : base(image.Width, image.Height)
