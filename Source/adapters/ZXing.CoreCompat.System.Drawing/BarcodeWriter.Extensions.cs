@@ -28,11 +28,10 @@ namespace ZXing
       /// <summary>
       /// uses the BarcodeWriterGeneric implementation and the <see cref="BitmapRenderer"/> class for decoding
       /// </summary>
-      /// <typeparam name="T"></typeparam>
       /// <param name="writer"></param>
       /// <param name="content"></param>
       /// <returns></returns>
-      public static Bitmap WriteBitmap<T>(this BarcodeWriterGeneric<T> writer, string content)
+      public static Bitmap WriteAsBitmap(this IBarcodeWriterGeneric writer, string content)
       {
          var bitmatrix = writer.Encode(content);
          var renderer = new BitmapRenderer();

@@ -18,33 +18,30 @@ using ZXing.Common;
 
 namespace ZXing
 {
+#if !(WINDOWS_PHONE || WindowsCE)
    /// <summary>
    /// Interface for a smart class to encode some content into a barcode
    /// </summary>
-   public interface IBarcodeWriterGeneric
+   public partial interface IBarcodeWriter<out TOutput>
+#else
+   /// <summary>
+   /// Interface for a smart class to encode some content into a barcode
+   /// </summary>
+   public interface IBarcodeWriter<TOutput>
+#endif
    {
-       /// <summary>
-       /// Get or sets the barcode format which should be generated
-       /// (only suitable if MultiFormatWriter is used for property Encoder which is the default)
-       /// </summary>
-      BarcodeFormat Format { get; set; }
-
       /// <summary>
-      /// Gets or sets the options container for the encoding and renderer process.
-      /// </summary>
-      EncodingOptions Options { get; set; }
-
-      /// <summary>
-      /// Gets or sets the writer which encodes the content to a BitMatrix.
-      /// If no value is set the MultiFormatWriter is used.
-      /// </summary>
-      Writer Encoder { get; set; }
-
-      /// <summary>
-      /// Encodes the specified contents.
+      /// Creates a visual representation of the contents
       /// </summary>
       /// <param name="contents">The contents.</param>
       /// <returns></returns>
-      BitMatrix Encode(string contents);
+      TOutput Write(string contents);
+
+      /// <summary>
+      /// Returns a rendered instance of the barcode which is given by a BitMatrix.
+      /// </summary>
+      /// <param name="matrix">The matrix.</param>
+      /// <returns></returns>
+      TOutput Write(BitMatrix matrix);
    }
 }

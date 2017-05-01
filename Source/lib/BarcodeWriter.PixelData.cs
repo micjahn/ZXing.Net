@@ -21,7 +21,7 @@ namespace ZXing
    /// <summary>
    /// A smart class to encode some content to raw pixel data
    /// </summary>
-   public class BarcodeWriterPixelData : BarcodeWriterGeneric<PixelData>
+   public class BarcodeWriterPixelData : BarcodeWriter<PixelData>, IBarcodeWriterPixelData
    {
       /// <summary>
       /// Initializes a new instance of the <see cref="BarcodeWriterPixelData"/> class.

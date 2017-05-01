@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-using ZXing.Rendering;
+using ZXing.Common;
 
 namespace ZXing
 {
    /// <summary>
-   /// A smart class to encode some content to a barcode image
+   /// Interface for a smart class to encode some content into a barcode
    /// </summary>
-   public class BarcodeWriter : BarcodeWriter<byte[]>, IBarcodeWriter
+   public partial interface IBarcodeWriter
    {
       /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.
+      /// Creates a visual representation of the contents
       /// </summary>
-      public BarcodeWriter()
-      {
-         Renderer = new RawRenderer();
-      }
+      Android.Graphics.Bitmap Write(string contents);
+      /// <summary>
+      /// Returns a rendered instance of the barcode which is given by a BitMatrix.
+      /// </summary>
+      Android.Graphics.Bitmap Write(BitMatrix matrix);
    }
 }

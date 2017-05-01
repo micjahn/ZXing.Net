@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-using ZXing.Rendering;
-
 namespace ZXing
 {
    /// <summary>
-   /// A smart class to encode some content to a barcode image
+   /// Interface for a smart class to decode multiple barcodes inside a bitmap object
    /// </summary>
-   public class BarcodeWriter : BarcodeWriter<byte[]>, IBarcodeWriter
+   public partial interface IBarcodeReader
    {
       /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.
+      /// Decodes the specified barcode bitmap.
       /// </summary>
-      public BarcodeWriter()
-      {
-         Renderer = new RawRenderer();
-      }
+      /// <param name="barcodeBitmap">The barcode bitmap.</param>
+      /// <returns>the result data or null</returns>
+      Result[] DecodeMultiple(byte[] barcodeBitmap);
    }
 }
