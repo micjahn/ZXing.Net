@@ -15,6 +15,7 @@
 */
 
 
+using System;
 using Windows.UI;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -49,8 +50,16 @@ namespace ZXing
          // luminance array is initialized with new byte[width * height]; in base class
 
          var data = System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.ToArray(writeableBitmap.PixelBuffer, 0, (int)writeableBitmap.PixelBuffer.Length);
+         if (data.Length != writeableBitmap.PixelBuffer.Length)
+         {
+            throw new InvalidOperationException(String.Format("The WriteableBitmap instance isn't correct initialized. The PixelBuffer length is {0}, but the resulting data array is {1}", writeableBitmap.PixelBuffer.Length, data.Length));
+         }
          var luminanceIndex = 0;
          var maxSourceIndex = width*height*4;
+         if (data.Length != writeableBitmap.PixelBuffer.Length)
+         {
+            throw new InvalidOperationException(String.Format("The WriteableBitmap instance isn't correct initialized. The PixelBuffer length is {0}, but it should be {1} (height * width * 4)", writeableBitmap.PixelBuffer.Length, maxSourceIndex));
+         }
          for (var sourceIndex = 0; sourceIndex < maxSourceIndex; sourceIndex+=4)
          {
             var c = Color.FromArgb(
