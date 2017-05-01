@@ -48,14 +48,14 @@ namespace ZXing.ImageSharp
          // The underlying raster of image consists of bytes with the luminance values
          using (var pixelAccessor = bitmap.Lock())
          {
+            var luminanceIndex = 0;
+
             for (int y = 0; y < height; y++)
             {
-               var luminanceOffset = y*width;
-
                // with alpha channel; some barcodes are completely black if you
                // only look at the r, g and b channel but the alpha channel controls
                // the view
-               for (int x = 0; x < width; x += 4)
+               for (int x = 0; x < width; x++)
                {
                   var pixel = pixelAccessor[x, y];
                   var luminance = (byte) ((BChannelWeight*pixel.B +
@@ -65,8 +65,8 @@ namespace ZXing.ImageSharp
                   // calculating the resulting luminance based upon a white background
                   var alpha = pixel.A;
                   luminance = (byte) (((luminance*alpha) >> 8) + (255*(255 - alpha) >> 8) + 1);
-                  luminances[luminanceOffset] = luminance;
-                  luminanceOffset++;
+                  luminances[luminanceIndex] = luminance;
+                  luminanceIndex++;
                }
             }
          }
