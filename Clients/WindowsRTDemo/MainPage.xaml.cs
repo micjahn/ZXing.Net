@@ -105,8 +105,8 @@ namespace WindowsRT
       {
          var barcodeReader = new BarcodeReader
          {
-            TryHarder = true,
-            AutoRotate = true
+            AutoRotate = true,
+            Options = {TryHarder = true}
          };
          var result = barcodeReader.Decode(writeableBmp);
 
