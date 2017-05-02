@@ -54,7 +54,7 @@ namespace WindowsPhone8Demo.Extensions
         {
             if (photoResult.TaskResult == TaskResult.OK)
             {
-                _reader.TryHarder = false;
+                _reader.Options.TryHarder = false;
                 _reader.TryInverted = false;
                 _reader.AutoRotate = false;
 
@@ -91,19 +91,19 @@ namespace WindowsPhone8Demo.Extensions
                 }
                 else
                 {
-                    if (!_reader.TryHarder)
+                    if (!_reader.Options.TryHarder)
                     {
                         SetActivityMessage("TryHarder", true);
-                        _reader.TryHarder = true;
+                        _reader.Options.TryHarder = true;
                         _worker.RunWorkerAsync(new WriteableBitmap(_image));
                     }
-                    else if (_reader.TryHarder && !_reader.AutoRotate)
+                    else if (_reader.Options.TryHarder && !_reader.AutoRotate)
                     {
                         SetActivityMessage(".TryHarder & .AutoRotate", true);
                         _reader.AutoRotate = true;
                         _worker.RunWorkerAsync(new WriteableBitmap(_image));
                     }
-                    else if (_reader.TryHarder && _reader.AutoRotate)
+                    else if (_reader.Options.TryHarder && _reader.AutoRotate)
                     {
                         SetActivityMessage(".TryHarder & .AutoRotate & .TryInverted", true);
                         _reader.TryInverted = true;

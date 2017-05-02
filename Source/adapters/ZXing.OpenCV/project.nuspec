@@ -15,7 +15,7 @@
     <releaseNotes></releaseNotes>
     <tags>ZXing OpenCV</tags>
     <dependencies>
-      <group targetFramework=".NETStandard1.6">
+      <group targetFramework="netstandard1.6">
         <dependency id="ZXing.Net" version="0.16.0.0" exclude="Build,Analyzers" />
         <dependency id="OpenCvSharp3-AnyCPU" version="3.2.0.20170419" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
