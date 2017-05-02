@@ -1,5 +1,5 @@
 {
-   "projects": [ "Source/lib" ],
+   "projects": [ "Source/lib", "Source/adapters" ],
    "sdk": {
       "version": "1.0.0-preview2-003131"
 //      "version": "1.0.3"
