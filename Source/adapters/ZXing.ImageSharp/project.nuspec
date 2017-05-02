@@ -15,7 +15,7 @@
     <releaseNotes></releaseNotes>
     <tags>ZXing ImageSharp</tags>
     <dependencies>
-      <group targetFramework=".NETStandard1.1">
+      <group targetFramework="netstandard1.1">
         <dependency id="ZXing.Net" version="0.16.0.0" exclude="Build,Analyzers" />
         <dependency id="ImageSharp" version="1.0.0-alpha8-00058" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />

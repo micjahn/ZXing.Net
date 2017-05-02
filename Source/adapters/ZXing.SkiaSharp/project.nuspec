@@ -15,7 +15,7 @@
     <releaseNotes></releaseNotes>
     <tags>ZXing SkiaSharp</tags>
     <dependencies>
-      <group targetFramework=".NETStandard1.3">
+      <group targetFramework="netstandard1.3">
         <dependency id="ZXing.Net" version="0.16.0.0" exclude="Build,Analyzers" />
         <dependency id="SkiaSharp" version="1.57.0" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="1.6.0" exclude="Build,Analyzers" />
