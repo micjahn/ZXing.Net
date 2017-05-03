@@ -1,12 +1,10 @@
 {
    "name": "ZXing.Magick",
    "version": "0.16.0.0",
-
    "dependencies": {
       "Magick.NET.Core-Q8": "7.0.5.502",
       "NETStandard.Library": "1.6.0"
    },
-
    "frameworks": {
       "netstandard1.3": {
          "dependencies": {

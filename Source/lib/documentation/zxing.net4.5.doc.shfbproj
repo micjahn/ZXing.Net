@@ -8,7 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3EBEACE2-161F-4104-8BE7-1FACA3A57F9D}</ProjectGuid>
-    <SHFBSchemaVersion>1.9.9.0</SHFBSchemaVersion>
+    <SHFBSchemaVersion>2015.6.5.0</SHFBSchemaVersion>
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
          Studio adds them anyway -->
     <AssemblyName>zxing.net4.5.doc</AssemblyName>
@@ -71,6 +71,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release with Documentation' ">
     <OutputPath>..\..\..\Build\Release\Documentation\net4.5\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug - Reduced' ">
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\lib\zxing.net4.5.csproj">

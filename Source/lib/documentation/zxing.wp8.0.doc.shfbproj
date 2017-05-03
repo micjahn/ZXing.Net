@@ -7,24 +7,24 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0ddd7a5d-c54a-4841-8555-7940db210df7}</ProjectGuid>
+    <ProjectGuid>{13addaba-9d04-4503-a9ff-c39e96b6e6b4}</ProjectGuid>
     <SHFBSchemaVersion>2015.6.5.0</SHFBSchemaVersion>
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
          Studio adds them anyway -->
-    <AssemblyName>zxing.net3.5.doc</AssemblyName>
-    <RootNamespace>zxing.net3.5.doc</RootNamespace>
-    <Name>zxing.net3.5.doc</Name>
+    <AssemblyName>zxing.wp8.0.doc</AssemblyName>
+    <RootNamespace>zxing.wp8.0.doc</RootNamespace>
+    <Name>zxing.wp8.0.doc</Name>
     <!-- SHFB properties -->
-    <OutputPath>..\..\..\Build\Release\Documentation\net3.5\</OutputPath>
-    <HtmlHelpName>zxing.net3.5</HtmlHelpName>
+    <OutputPath>..\..\..\Build\Release\Documentation\wp8.0\</OutputPath>
+    <HtmlHelpName>zxing.wp8.0</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\zxing.net3.5.csproj" />
+      <DocumentationSource sourceFile="..\zxing.wp8.0.csproj" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>AllMessages</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
     <IndentHtml>False</IndentHtml>
-    <FrameworkVersion>.NET Framework 3.5</FrameworkVersion>
+    <FrameworkVersion>Silverlight 4</FrameworkVersion>
     <KeepLogFile>False</KeepLogFile>
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
     <CppCommentsFixup>False</CppCommentsFixup>
@@ -71,9 +71,9 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug - Reduced' ">
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\lib\zxing.net3.5.csproj">
-      <Name>zxing.net3.5</Name>
-      <Project>{41b69545-aab6-42a6-96a0-6f6817e654a3}</Project>
+    <ProjectReference Include="..\..\lib\zxing.wp8.0.csproj">
+      <Name>zxing.wp8.0</Name>
+      <Project>{b90c2c94-b895-4c7f-bd20-32135ae5d49b}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
