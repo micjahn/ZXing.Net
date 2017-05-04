@@ -3,7 +3,7 @@
    "version": "0.15.0.0",
    "dependencies": {
       "ImageSharp": "1.0.0-alpha8-00058",
-      "NETStandard.Library": "1.6.0"
+      "NETStandard.Library": "1.6.1"
    },
    "frameworks": {
       "netstandard1.1": {
