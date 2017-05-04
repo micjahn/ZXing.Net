@@ -76,6 +76,10 @@ namespace ZXing
          /// 4 bytes for two pixels, UYVY formatted
          /// </summary>
          UYVY,
+         /// <summary>
+         /// 4 bytes for two pixels, YUYV formatted
+         /// </summary>
+         YUYV
       }
 
       /// <summary>
@@ -208,6 +212,9 @@ namespace ZXing
             case BitmapFormat.UYVY:
                CalculateLuminanceUYVY(rgbRawBytes);
                break;
+            case BitmapFormat.YUYV:
+               CalculateLuminanceYUYV(rgbRawBytes);
+               break;
             default:
                throw new ArgumentException("The bitmap format isn't supported.", bitmapFormat.ToString());
          }
@@ -330,13 +337,26 @@ namespace ZXing
          }
       }
 
-      private void CalculateLuminanceUYVY(byte[] uyuvRawBytes)
+      private void CalculateLuminanceUYVY(byte[] uyvyRawBytes)
       {
          // start by 1, jump over first U byte
-         for (int uyvyIndex = 1, luminanceIndex = 0; uyvyIndex < uyuvRawBytes.Length - 1 && luminanceIndex < luminances.Length;)
+         for (int uyvyIndex = 1, luminanceIndex = 0; uyvyIndex < uyvyRawBytes.Length - 1 && luminanceIndex < luminances.Length;)
          {
-            byte y1 = uyuvRawBytes[uyvyIndex+=2]; // jump from 1 to 3 (from Y1 over 
-            byte y2 = uyuvRawBytes[uyvyIndex+=2]; // jump from 3 to 5
+            byte y1 = uyvyRawBytes[uyvyIndex+=2]; // jump from 1 to 3 (from Y1 over 
+            byte y2 = uyvyRawBytes[uyvyIndex+=2]; // jump from 3 to 5
+
+            luminances[luminanceIndex++] = y1;
+            luminances[luminanceIndex++] = y2;
+         }
+      }
+
+      private void CalculateLuminanceYUYV(byte[] yuyvRawBytes)
+      {
+         // start by 0 not by 1 like UYUV
+         for (int uyvyIndex = 0, luminanceIndex = 0; uyvyIndex < yuyvRawBytes.Length - 1 && luminanceIndex < luminances.Length;)
+         {
+            byte y1 = yuyvRawBytes[uyvyIndex += 2]; // jump from 0 to 2 (from Y1 over 
+            byte y2 = yuyvRawBytes[uyvyIndex += 2]; // jump from 2 to 4
 
             luminances[luminanceIndex++] = y1;
             luminances[luminanceIndex++] = y2;

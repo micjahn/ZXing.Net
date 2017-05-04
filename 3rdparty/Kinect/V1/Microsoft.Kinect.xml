@@ -125,6 +125,12 @@
             <param name="frameFlags">The frame flags of the frame.</param>
             <returns>Null upon failure, a ColorImageStream upon success, which must be Disposed.</returns>
         </member>
+        <member name="M:Microsoft.Kinect.ColorImageFrame.GetRawPixelData">
+            <summary>
+            This method provides the raw array that contains the color frame's pixel data.
+            </summary>
+            <returns>A byte array of the color frame's pixel data.</returns>
+        </member>
         <member name="M:Microsoft.Kinect.ColorImageFrame.CopyPixelDataTo(System.Byte[])">
             <summary>
             This method copies the frame's pixel data to a pre-allocated byte array.
@@ -963,6 +969,12 @@
             <param name="frameFlags">The flags for the frame.</param>
             <returns>Null upon failure, a DepthImageStream upon success, which must be Disposed.</returns>
         </member>
+        <member name="M:Microsoft.Kinect.DepthImageFrame.GetRawPixelData">
+            <summary>
+            This method provides the DepthImagePixel array that contains the depth image's pixel data. 
+            </summary>
+            <returns>A DepthImagePixel array of the depth frame's pixel data.</returns>
+        </member>
         <member name="M:Microsoft.Kinect.DepthImageFrame.CopyPixelDataTo``1(``0[],System.Action{``0[],System.Int32})">
             <summary>
             Private helper function used by CopyPixelDataTo and Copy DepthImagePixelDataTo.
@@ -1061,6 +1073,11 @@
         <member name="P:Microsoft.Kinect.DepthImageFrame.PixelDataLength">
             <summary>
             Total length of the pixel data buffer of this ImageFrame.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Kinect.DepthImageFrame.DepthFilter">
+            <summary>
+            Gets the depth filter that was applied to the frame.
             </summary>
         </member>
         <member name="P:Microsoft.Kinect.DepthImageFrame.SourceStream">
@@ -1399,6 +1416,26 @@
         <member name="P:Microsoft.Kinect.ContextEventHandler`1.ContextHandlerPair.Handler">
             <summary>
             Gets the associated event handler.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Kinect.IDepthFilter">
+            <summary>
+            The interface of a filter to be applied to depth frame data.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Kinect.IDepthFilter.ProcessFrame(System.Int64,System.Int32,System.Int32,Microsoft.Kinect.DepthImagePixel[])">
+            <summary>
+            Processes a frame of depth data.
+            </summary>
+            <param name="timestamp">Timestamp of the depth frame.</param>
+            <param name="width">Width of the depth frame, in pixels.</param>
+            <param name="height">Height of the depth frame, in pixels.</param>
+            <param name="pixelData">Depth frame data.</param>
+            <returns>true if the depth frame was modified; false otherwise.</returns>
+        </member>
+        <member name="P:Microsoft.Kinect.IDepthFilter.NativeObject">
+            <summary>
+            Gets or sets the native depth filter interface.
             </summary>
         </member>
         <member name="T:Microsoft.Kinect.DepthImageFrameReadyEventArgs">
@@ -5415,6 +5452,26 @@
             This field is reserverd.
             </summary>
         </member>
+        <member name="T:Microsoft.Kinect.NuiDepthFilter">
+            <summary>
+            Wrapper of a native filter to be applied to depth frame data.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Kinect.NuiDepthFilter.ProcessFrame(System.Int64,System.Int32,System.Int32,Microsoft.Kinect.DepthImagePixel[])">
+            <summary>
+            Processes a frame of depth data.
+            </summary>
+            <param name="timestamp">Timestamp of the depth frame.</param>
+            <param name="width">Width of the depth frame, in pixels.</param>
+            <param name="height">Height of the depth frame, in pixels.</param>
+            <param name="pixelData">Depth frame data.</param>
+            <returns>true if the depth frame was modified; false otherwise.</returns>
+        </member>
+        <member name="P:Microsoft.Kinect.NuiDepthFilter.NativeObject">
+            <summary>
+            Gets or sets the native depth filter interface.
+            </summary>
+        </member>
         <member name="T:Microsoft.Kinect.Resources">
             <summary>
               A strongly-typed resource class, for looking up localized strings, etc.
@@ -5454,6 +5511,11 @@
         <member name="P:Microsoft.Kinect.Resources.ColorStreamMustBeEnabled">
             <summary>
               Looks up a localized string similar to The Color Stream must be Enabled to get next Color image frame. Call KinectSensor.ColorStream.Enable().
+            </summary>
+        </member>
+        <member name="P:Microsoft.Kinect.Resources.DepthFilterMustImplementNativeInterface">
+            <summary>
+              Looks up a localized string similar to Depth filter must implement the native INuiDepthFilter interface.
             </summary>
         </member>
         <member name="P:Microsoft.Kinect.Resources.DepthStreamMustBeEnabled">
@@ -6852,6 +6914,11 @@
             Default value of false.
             </summary>
         </member>
+        <member name="P:Microsoft.Kinect.KinectSensor.DepthFilter">
+            <summary>
+            Gets or sets a filter to be applied to each depth frame.
+            </summary>
+        </member>
         <member name="P:Microsoft.Kinect.KinectSensor.IsRunning">
             <summary>
             Gets a value indicating whether the Kinect is currently streaming data. To set it, call Start() or Stop().
@@ -7280,6 +7347,11 @@
         <member name="P:Microsoft.Kinect.SkeletonFrame.SkeletonArrayLength">
             <summary>
             Gets the total length of the skeleton data buffer of this SkeletonFrame.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Kinect.SkeletonFrame.DepthFilter">
+            <summary>
+            Gets the depth filter that was applied to the frame.
             </summary>
         </member>
         <member name="T:Microsoft.Kinect.Skeleton">
@@ -8137,6 +8209,11 @@
         <member name="M:Microsoft.Kinect.SkeletonStream.Dispose">
             <summary>
             This method disposes the SkeletonStream.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Kinect.SkeletonStream.Sensor">
+            <summary>
+            Gets the associated KinectSensor.
             </summary>
         </member>
         <member name="P:Microsoft.Kinect.SkeletonStream.IsEnabled">
@@ -9133,6 +9210,16 @@
             The wrapped sensor.
             </summary>
         </member>
+        <member name="F:Microsoft.Kinect.NuiSensor._depthFilter">
+            <summary>
+            The current depth filter.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Kinect.NuiSensor._depthFilters">
+            <summary>
+            All depth filters ever used by this sensor.
+            </summary>
+        </member>
         <member name="M:Microsoft.Kinect.NuiSensor.#ctor(Microsoft.Kinect.Interop.INuiSensor)">
             <summary>
             Initializes a new instance of the NuiSensor class.
@@ -9411,6 +9498,14 @@
             </summary>
             <returns>The color camera settings.</returns>
         </member>
+        <member name="M:Microsoft.Kinect.NuiSensor.GetDepthFilterForTimestamp(System.Int64)">
+            <summary>
+            Returns the depth filter corresponding to a depth or skeleton frame captured at a
+            particular timestamp.
+            </summary>
+            <param name="timestamp">The timestamp at which the frame was captured.</param>
+            <returns>The depth filter that was applied to the frame.</returns>
+        </member>
         <member name="P:Microsoft.Kinect.NuiSensor.IsSupported">
             <summary>
             Gets a value indicating whether the device is a supported Kinect.
@@ -9427,6 +9522,11 @@
             <summary>
             Gets or sets a value indicating whether the infrared emitter is disabled.
             Default value of false.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Kinect.NuiSensor.DepthFilter">
+            <summary>
+            Gets or sets a filter to be applied to each depth frame.
             </summary>
         </member>
         <member name="T:Microsoft.Kinect.NuiColorCameraSettings">
