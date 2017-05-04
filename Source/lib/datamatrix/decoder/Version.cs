@@ -61,31 +61,55 @@ namespace ZXing.Datamatrix.Internal
          this.totalCodewords = total;
       }
 
+      /// <summary>
+      /// returns the version numer
+      /// </summary>
+      /// <returns></returns>
       public int getVersionNumber()
       {
          return versionNumber;
       }
 
+      /// <summary>
+      /// returns the symbol size rows
+      /// </summary>
+      /// <returns></returns>
       public int getSymbolSizeRows()
       {
          return symbolSizeRows;
       }
 
+      /// <summary>
+      /// returns the symbols size columns
+      /// </summary>
+      /// <returns></returns>
       public int getSymbolSizeColumns()
       {
          return symbolSizeColumns;
       }
 
+      /// <summary>
+      /// retursn the data region size rows
+      /// </summary>
+      /// <returns></returns>
       public int getDataRegionSizeRows()
       {
          return dataRegionSizeRows;
       }
 
+      /// <summary>
+      /// returns the data region size columns
+      /// </summary>
+      /// <returns></returns>
       public int getDataRegionSizeColumns()
       {
          return dataRegionSizeColumns;
       }
 
+      /// <summary>
+      /// returns the total codewords count
+      /// </summary>
+      /// <returns></returns>
       public int getTotalCodewords()
       {
          return totalCodewords;
@@ -183,7 +207,11 @@ namespace ZXing.Datamatrix.Internal
          }
       }
 
-      override public String ToString()
+      /// <summary>
+      /// returns the version number as string
+      /// </summary>
+      /// <returns></returns>
+      public override String ToString()
       {
          return versionNumber.ToString();
       }

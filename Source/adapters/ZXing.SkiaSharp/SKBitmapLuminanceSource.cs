@@ -25,17 +25,35 @@ namespace ZXing.SkiaSharp
    /// </summary>
    public class SKBitmapLuminanceSource : BaseLuminanceSource
    {
+      /// <summary>
+      /// initializing constructor
+      /// </summary>
+      /// <param name="image"></param>
       public SKBitmapLuminanceSource(SKBitmap image)
          : base(image.Width, image.Height)
       {
          CalculateLuminance(image);
       }
 
+      /// <summary>
+      /// internal constructor used by CreateLuminanceSource
+      /// </summary>
+      /// <param name="luminances"></param>
+      /// <param name="width"></param>
+      /// <param name="height"></param>
       protected SKBitmapLuminanceSource(byte[] luminances, int width, int height)
          : base(luminances, width, height)
       {
       }
 
+      /// <summary>
+      /// Should create a new luminance source with the right class type.
+      /// The method is used in methods crop and rotate.
+      /// </summary>
+      /// <param name="newLuminances">The new luminances.</param>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      /// <returns></returns>
       protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
       {
          return new SKBitmapLuminanceSource(newLuminances, width, height);

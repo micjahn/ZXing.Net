@@ -32,7 +32,13 @@ namespace ZXing.Common
 #else
       private static String PLATFORM_DEFAULT_ENCODING = Encoding.Default.WebName;
 #endif
+      /// <summary>
+      /// SJIS
+      /// </summary>
       public static String SHIFT_JIS = "SJIS";
+      /// <summary>
+      /// GB2312
+      /// </summary>
       public static String GB2312 = "GB2312";
       private const String EUC_JP = "EUC-JP";
       private const String UTF8 = "UTF-8";

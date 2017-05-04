@@ -139,6 +139,7 @@ namespace ZXing.Datamatrix.Encoder
       /// <param name="shape">requested shape. May be {@code SymbolShapeHint.FORCE_NONE},{@code SymbolShapeHint.FORCE_SQUARE} or {@code SymbolShapeHint.FORCE_RECTANGLE}.</param>
       /// <param name="minSize">the minimum symbol size constraint or null for no constraint</param>
       /// <param name="maxSize">the maximum symbol size constraint or null for no constraint</param>
+      /// <param name="defaultEncodation">encoding mode to start with</param>
       /// <returns>the encoded message (the char values range from 0 to 255)</returns>
       public static String encodeHighLevel(String msg,
                                            SymbolShapeHint shape,

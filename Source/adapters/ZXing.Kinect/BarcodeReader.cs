@@ -16,7 +16,12 @@
 
 using System;
 
-using Microsoft.Kinect;
+#if KINECTV1
+using ColorImageFrame = Microsoft.Kinect.ColorImageFrame;
+#else
+using ColorImageFrame = Microsoft.Kinect.ColorFrame;
+using ColorImageFrameLuminanceSource = ZXing.Kinect.ColorFrameLuminanceSource;
+#endif
 
 namespace ZXing.Kinect
 {

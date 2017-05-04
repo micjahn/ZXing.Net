@@ -68,7 +68,7 @@ namespace ZXing.CoreCompat.Rendering
          {
             DefaultTextFont = new Font("Arial", 10, FontStyle.Regular);
          }
-         catch (Exception exc)
+         catch (Exception )
          {
             // have to ignore, no better idea
          }
@@ -84,11 +84,26 @@ namespace ZXing.CoreCompat.Rendering
          TextFont = DefaultTextFont;
       }
 
+      /// <summary>
+      /// Renders the specified matrix.
+      /// </summary>
+      /// <param name="matrix">The matrix.</param>
+      /// <param name="format">The format.</param>
+      /// <param name="content">The content.</param>
+      /// <returns></returns>
       public Bitmap Render(BitMatrix matrix, BarcodeFormat format, string content)
       {
          return Render(matrix, format, content, new EncodingOptions());
       }
 
+      /// <summary>
+      /// Renders the specified matrix.
+      /// </summary>
+      /// <param name="matrix">The matrix.</param>
+      /// <param name="format">The format.</param>
+      /// <param name="content">The content.</param>
+      /// <param name="options">The options.</param>
+      /// <returns></returns>
       public Bitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
       {
          var width = matrix.Width;

@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-using System;
-
 #if NETFX_CORE
 using Windows.UI.Xaml.Media.Imaging;
 #else
@@ -27,6 +25,7 @@ namespace ZXing
    /// <summary>
    /// Interface for a smart class to decode the barcode inside a bitmap object
    /// </summary>
+   [System.CLSCompliant(false)]
    public partial interface IBarcodeReader
    {
       /// <summary>

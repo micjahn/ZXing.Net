@@ -48,6 +48,7 @@ namespace ZXing
       /// initializing constructor
       /// </summary>
       /// <param name="softwareBitmap"></param>
+      [System.CLSCompliant(false)]
       public SoftwareBitmapLuminanceSource(SoftwareBitmap softwareBitmap)
          : base(softwareBitmap.PixelWidth, softwareBitmap.PixelHeight)
       {

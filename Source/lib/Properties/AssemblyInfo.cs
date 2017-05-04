@@ -49,7 +49,7 @@ using System.Runtime.InteropServices;
 #if NETSTANDARD
 [assembly: AssemblyTitle("zxing.net for .net core standard")]
 #endif
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 27.02.2017 19:21:59)")]
+[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 06.04.2017 15:31:14)")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyProduct("ZXing.Net")]
 [assembly: AssemblyCopyright("Copyright © 2012-2017")]

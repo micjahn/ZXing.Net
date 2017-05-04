@@ -31,16 +31,20 @@ namespace ZXing.Common.Detector
 
       private readonly BitMatrix image;
 
+      /// <summary>
+      /// initializing constructor
+      /// </summary>
+      /// <param name="image"></param>
       public MonochromeRectangleDetector(BitMatrix image)
       {
          this.image = image;
       }
 
-      /// <summary> <p>Detects a rectangular region of black and white -- mostly black -- with a region of mostly
+      /// <summary>
+      /// <p>Detects a rectangular region of black and white -- mostly black -- with a region of mostly
       /// white, in an image.</p>
-      /// 
       /// </summary>
-      /// <returns> {@link ResultPoint}[] describing the corners of the rectangular region. The first and
+      /// <returns><see cref="ResultPoint"/>[] describing the corners of the rectangular region. The first and
       /// last points are opposed on the diagonal, as are the second and third. The first point will be
       /// the topmost point and the last, the bottommost. The second point will be leftmost and the
       /// third, the rightmost

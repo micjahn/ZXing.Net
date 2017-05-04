@@ -34,6 +34,9 @@ namespace ZXing.Common
 #endif
       public IDictionary<DecodeHintType, object> Hints { get; private set; }
 
+      /// <summary>
+      /// event is raised when a value is changed
+      /// </summary>
       [field: NonSerialized]
       public event Action<object, EventArgs> ValueChanged;
 

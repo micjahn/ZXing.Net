@@ -33,6 +33,9 @@ namespace ZXing.Common
    /// </summary>
    public sealed class HybridBinarizer : GlobalHistogramBinarizer
    {
+      /// <summary>
+      /// gives the black matrix
+      /// </summary>
       public override BitMatrix BlackMatrix
       {
          get
@@ -52,11 +55,20 @@ namespace ZXing.Common
 
       private BitMatrix matrix = null;
 
+      /// <summary>
+      /// initializing constructor
+      /// </summary>
+      /// <param name="source"></param>
       public HybridBinarizer(LuminanceSource source)
          : base(source)
       {
       }
 
+      /// <summary>
+      /// creates a new instance
+      /// </summary>
+      /// <param name="source"></param>
+      /// <returns></returns>
       public override Binarizer createBinarizer(LuminanceSource source)
       {
          return new HybridBinarizer(source);

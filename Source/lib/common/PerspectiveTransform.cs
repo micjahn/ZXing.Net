@@ -19,12 +19,8 @@ namespace ZXing.Common
    /// <summary> <p>This class implements a perspective transform in two dimensions. Given four source and four
    /// destination points, it will compute the transformation implied between them. The code is based
    /// directly upon section 3.4.2 of George Wolberg's "Digital Image Warping"; see pages 54-56.</p>
-   /// 
    /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
+   /// <author>Sean Owen</author>
    public sealed class PerspectiveTransform
    {
       private float a11;
@@ -50,6 +46,26 @@ namespace ZXing.Common
          this.a33 = a33;
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="x0"></param>
+      /// <param name="y0"></param>
+      /// <param name="x1"></param>
+      /// <param name="y1"></param>
+      /// <param name="x2"></param>
+      /// <param name="y2"></param>
+      /// <param name="x3"></param>
+      /// <param name="y3"></param>
+      /// <param name="x0p"></param>
+      /// <param name="y0p"></param>
+      /// <param name="x1p"></param>
+      /// <param name="y1p"></param>
+      /// <param name="x2p"></param>
+      /// <param name="y2p"></param>
+      /// <param name="x3p"></param>
+      /// <param name="y3p"></param>
+      /// <returns></returns>
       public static PerspectiveTransform quadrilateralToQuadrilateral(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3, float x0p, float y0p, float x1p, float y1p, float x2p, float y2p, float x3p, float y3p)
       {
 
@@ -58,6 +74,10 @@ namespace ZXing.Common
          return sToQ.times(qToS);
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="points"></param>
       public void transformPoints(float[] points)
       {
          int max = points.Length;
@@ -94,6 +114,18 @@ namespace ZXing.Common
          }
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="x0"></param>
+      /// <param name="y0"></param>
+      /// <param name="x1"></param>
+      /// <param name="y1"></param>
+      /// <param name="x2"></param>
+      /// <param name="y2"></param>
+      /// <param name="x3"></param>
+      /// <param name="y3"></param>
+      /// <returns></returns>
       public static PerspectiveTransform squareToQuadrilateral(float x0, float y0,
                                                                float x1, float y1,
                                                                float x2, float y2,
@@ -123,6 +155,18 @@ namespace ZXing.Common
          }
       }
 
+      /// <summary>
+      /// 
+      /// </summary>
+      /// <param name="x0"></param>
+      /// <param name="y0"></param>
+      /// <param name="x1"></param>
+      /// <param name="y1"></param>
+      /// <param name="x2"></param>
+      /// <param name="y2"></param>
+      /// <param name="x3"></param>
+      /// <param name="y3"></param>
+      /// <returns></returns>
       public static PerspectiveTransform quadrilateralToSquare(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3)
       {
          // Here, the adjoint serves as the inverse:

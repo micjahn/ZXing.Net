@@ -40,16 +40,40 @@ namespace ZXing.Rendering
    {
 #if !UNITY
 #if (PORTABLE || NETSTANDARD)
+      /// <summary>
+      /// represents a color value
+      /// </summary>
       public struct Color
       {
+         /// <summary>
+         /// color black
+         /// </summary>
          public static Color Black = new Color(0);
+         /// <summary>
+         /// color white
+         /// </summary>
          public static Color White = new Color(0x00FFFFFF);
 
+         /// <summary>
+         /// alpha channel
+         /// </summary>
          public byte A;
+         /// <summary>
+         /// red channel
+         /// </summary>
          public byte R;
+         /// <summary>
+         /// green channel
+         /// </summary>
          public byte G;
+         /// <summary>
+         /// blur channel
+         /// </summary>
          public byte B;
 
+         /// <summary>
+         /// initializing constructor
+         /// </summary>
          public Color(int color)
          {
             A = (byte)((color & 0xFF000000) >> 24);

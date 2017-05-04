@@ -20,11 +20,20 @@ using ZXing.Common;
 
 namespace ZXing.Aztec.Internal
 {
+   /// <summary>
+   /// represents a token for a binary shift
+   /// </summary>
    public sealed class BinaryShiftToken : Token
    {
       private readonly short binaryShiftStart;
       private readonly short binaryShiftByteCount;
 
+      /// <summary>
+      /// initializing constructor
+      /// </summary>
+      /// <param name="previous"></param>
+      /// <param name="binaryShiftStart"></param>
+      /// <param name="binaryShiftByteCount"></param>
       public BinaryShiftToken(Token previous,
                               int binaryShiftStart,
                               int binaryShiftByteCount)
@@ -34,6 +43,11 @@ namespace ZXing.Aztec.Internal
          this.binaryShiftByteCount = (short) binaryShiftByteCount;
       }
 
+      /// <summary>
+      /// appends the byte array to the BitArray
+      /// </summary>
+      /// <param name="bitArray"></param>
+      /// <param name="text"></param>
       public override void appendTo(BitArray bitArray, byte[] text)
       {
          for (int i = 0; i < binaryShiftByteCount; i++)
@@ -62,6 +76,10 @@ namespace ZXing.Aztec.Internal
          }
       }
 
+      /// <summary>
+      /// string representation
+      /// </summary>
+      /// <returns></returns>
       public override String ToString()
       {
          return "<" + binaryShiftStart + "::" + (binaryShiftStart + binaryShiftByteCount - 1) + '>';

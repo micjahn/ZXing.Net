@@ -7,7 +7,7 @@
    "frameworks": {
       "netstandard1.0": {
          "buildOptions": {
-            // has to be redefined, otherwise it couldn't not be compiled with BigInteger
+            // has to be redefined, otherwise it could not be compiled with BigInteger
             "compile": {
                "include": [
                   "../aztec/**",
@@ -85,8 +85,8 @@
             }
          }
       },
-      "netstandard1.1": { },
-      "netstandard1.3": { }
+      "netstandard1.1": {},
+      "netstandard1.3": {}
    },
    "buildOptions": {
       "define": [ "NETSTANDARD" ],
@@ -172,6 +172,13 @@
             "../common/BitMatrix.Drawing.cs",
             "../common/BitMatrix.Silverlight.cs"
          ]
+      }
+   },
+   "configurations": {
+      "Debug": {
+         "buildOptions": {
+            "xmlDoc": false
+         }
       }
    }
 }

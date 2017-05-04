@@ -25,6 +25,7 @@ namespace ZXing.Rendering
       /// converts the pixel data to a bitmap object
       /// </summary>
       /// <returns></returns>
+      [System.CLSCompliant(false)]
       public Windows.UI.Xaml.Media.Imaging.WriteableBitmap ToBitmap()
       {
          var bmp = new Windows.UI.Xaml.Media.Imaging.WriteableBitmap(Width, Height);
