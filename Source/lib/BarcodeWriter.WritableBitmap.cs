@@ -27,6 +27,7 @@ namespace ZXing
    /// <summary>
    /// A smart class to encode some content to a barcode image
    /// </summary>
+   [System.CLSCompliant(false)]
    public class BarcodeWriter : BarcodeWriter<WriteableBitmap>, IBarcodeWriter
    {
       /// <summary>

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System;
 using UnityEngine;
 
 namespace ZXing.Rendering
@@ -27,6 +28,7 @@ namespace ZXing.Rendering
       /// converts the pixel data to a bitmap object
       /// </summary>
       /// <returns></returns>
+      [CLSCompliant(false)]
       public Color32[] ToColor32()
       {
          var result = new Color32[Width * Height];

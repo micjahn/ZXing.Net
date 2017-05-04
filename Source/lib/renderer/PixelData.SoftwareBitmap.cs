@@ -27,6 +27,7 @@ namespace ZXing.Rendering
       /// converts the pixel data to a bitmap object
       /// </summary>
       /// <returns></returns>
+      [System.CLSCompliant(false)]
       public SoftwareBitmap ToSoftwareBitmap()
       {
          var bmp = new SoftwareBitmap(BitmapPixelFormat.Rgba8, Width, Height, BitmapAlphaMode.Ignore);

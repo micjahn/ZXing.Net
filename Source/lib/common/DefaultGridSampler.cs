@@ -13,7 +13,6 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-using System;
 
 namespace ZXing.Common
 {
@@ -24,6 +23,28 @@ namespace ZXing.Common
    /// </author>
    public sealed class DefaultGridSampler : GridSampler
    {
+      /// <summary>
+      /// </summary>
+      /// <param name="image"></param>
+      /// <param name="dimensionX"></param>
+      /// <param name="dimensionY"></param>
+      /// <param name="p1ToX"></param>
+      /// <param name="p1ToY"></param>
+      /// <param name="p2ToX"></param>
+      /// <param name="p2ToY"></param>
+      /// <param name="p3ToX"></param>
+      /// <param name="p3ToY"></param>
+      /// <param name="p4ToX"></param>
+      /// <param name="p4ToY"></param>
+      /// <param name="p1FromX"></param>
+      /// <param name="p1FromY"></param>
+      /// <param name="p2FromX"></param>
+      /// <param name="p2FromY"></param>
+      /// <param name="p3FromX"></param>
+      /// <param name="p3FromY"></param>
+      /// <param name="p4FromX"></param>
+      /// <param name="p4FromY"></param>
+      /// <returns></returns>
       public override BitMatrix sampleGrid(BitMatrix image, int dimensionX, int dimensionY, float p1ToX, float p1ToY, float p2ToX, float p2ToY, float p3ToX, float p3ToY, float p4ToX, float p4ToY, float p1FromX, float p1FromY, float p2FromX, float p2FromY, float p3FromX, float p3FromY, float p4FromX, float p4FromY)
       {
          PerspectiveTransform transform = PerspectiveTransform.quadrilateralToQuadrilateral(
@@ -32,6 +53,13 @@ namespace ZXing.Common
          return sampleGrid(image, dimensionX, dimensionY, transform);
       }
 
+      /// <summary>
+      /// </summary>
+      /// <param name="image"></param>
+      /// <param name="dimensionX"></param>
+      /// <param name="dimensionY"></param>
+      /// <param name="transform"></param>
+      /// <returns></returns>
       public override BitMatrix sampleGrid(BitMatrix image, int dimensionX, int dimensionY, PerspectiveTransform transform)
       {
          if (dimensionX <= 0 || dimensionY <= 0)

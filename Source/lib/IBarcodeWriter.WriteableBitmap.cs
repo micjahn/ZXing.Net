@@ -27,6 +27,7 @@ namespace ZXing
    /// <summary>
    /// Interface for a smart class to encode some content into a barcode
    /// </summary>
+   [System.CLSCompliant(false)]
    public partial interface IBarcodeWriter
    {
       /// <summary>

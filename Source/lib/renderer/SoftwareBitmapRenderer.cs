@@ -48,6 +48,7 @@ namespace ZXing.Rendering
       /// <value>
       /// The font family.
       /// </value>
+      [System.CLSCompliant(false)]
       public FontFamily FontFamily { get; set; }
       /// <summary>
       /// Gets or sets the size of the font.
@@ -77,6 +78,7 @@ namespace ZXing.Rendering
       /// <param name="format">The format.</param>
       /// <param name="content">The content.</param>
       /// <returns></returns>
+      [System.CLSCompliant(false)]
       public SoftwareBitmap Render(BitMatrix matrix, BarcodeFormat format, string content)
       {
          return Render(matrix, format, content, null);
@@ -90,6 +92,7 @@ namespace ZXing.Rendering
       /// <param name="content">The content.</param>
       /// <param name="options">The options.</param>
       /// <returns></returns>
+      [System.CLSCompliant(false)]
       public virtual SoftwareBitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
       {
          int width = matrix.Width;

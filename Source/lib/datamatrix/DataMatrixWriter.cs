@@ -30,11 +30,28 @@ namespace ZXing.Datamatrix
    /// <author>Guillaume Le Biller Added to zxing lib.</author>
    public sealed class DataMatrixWriter : Writer
    {
+      /// <summary>
+      /// encodes the content to a BitMatrix
+      /// </summary>
+      /// <param name="contents"></param>
+      /// <param name="format"></param>
+      /// <param name="width"></param>
+      /// <param name="height"></param>
+      /// <returns></returns>
       public BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
       {
          return encode(contents, format, width, height, null);
       }
 
+      /// <summary>
+      /// encodes the content to a BitMatrix
+      /// </summary>
+      /// <param name="contents"></param>
+      /// <param name="format"></param>
+      /// <param name="width"></param>
+      /// <param name="height"></param>
+      /// <param name="hints"></param>
+      /// <returns></returns>
       public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, IDictionary<EncodeHintType, object> hints)
       {
          if (String.IsNullOrEmpty(contents))

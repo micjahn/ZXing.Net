@@ -40,6 +40,7 @@ namespace ZXing
       /// initializing constructor
       /// </summary>
       /// <param name="writeableBitmap"></param>
+      [System.CLSCompliant(false)]
       public BitmapLuminanceSource(WriteableBitmap writeableBitmap)
          : base(writeableBitmap.PixelWidth, writeableBitmap.PixelHeight)
       {

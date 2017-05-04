@@ -34,15 +34,20 @@ namespace ZXing.Datamatrix
 
       /// <summary>
       /// Locates and decodes a Data Matrix code in an image.
-      ///
-      /// <returns>a String representing the content encoded by the Data Matrix code</returns>
-      /// <exception cref="FormatException">if a Data Matrix code cannot be decoded</exception>
       /// </summary>
+      /// <param name="image"></param>
+      /// <returns>a String representing the content encoded by the Data Matrix code</returns>
       public Result decode(BinaryBitmap image)
       {
          return decode(image, null);
       }
 
+      /// <summary>
+      /// Locates and decodes a Data Matrix code in an image.
+      /// </summary>
+      /// <param name="image"></param>
+      /// <param name="hints"></param>
+      /// <returns>a String representing the content encoded by the Data Matrix code</returns>
       public Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
       {
          DecoderResult decoderResult;
@@ -81,6 +86,9 @@ namespace ZXing.Datamatrix
          return result;
       }
 
+      /// <summary>
+      /// does nothing here
+      /// </summary>
       public void reset()
       {
          // do nothing
