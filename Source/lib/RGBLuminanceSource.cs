@@ -340,10 +340,12 @@ namespace ZXing
       private void CalculateLuminanceUYVY(byte[] uyvyRawBytes)
       {
          // start by 1, jump over first U byte
-         for (int uyvyIndex = 1, luminanceIndex = 0; uyvyIndex < uyvyRawBytes.Length - 1 && luminanceIndex < luminances.Length;)
+         for (int uyvyIndex = 1, luminanceIndex = 0; uyvyIndex < uyvyRawBytes.Length - 3 && luminanceIndex < luminances.Length;)
          {
-            byte y1 = uyvyRawBytes[uyvyIndex+=2]; // jump from 1 to 3 (from Y1 over 
-            byte y2 = uyvyRawBytes[uyvyIndex+=2]; // jump from 3 to 5
+            byte y1 = uyvyRawBytes[uyvyIndex];
+            uyvyIndex += 2; // jump from 1 to 3 (from Y1 over to Y2)
+            byte y2 = uyvyRawBytes[uyvyIndex];
+            uyvyIndex += 2; // jump from 3 to 5
 
             luminances[luminanceIndex++] = y1;
             luminances[luminanceIndex++] = y2;
@@ -353,10 +355,12 @@ namespace ZXing
       private void CalculateLuminanceYUYV(byte[] yuyvRawBytes)
       {
          // start by 0 not by 1 like UYUV
-         for (int uyvyIndex = 0, luminanceIndex = 0; uyvyIndex < yuyvRawBytes.Length - 1 && luminanceIndex < luminances.Length;)
+         for (int yuyvIndex = 0, luminanceIndex = 0; yuyvIndex < yuyvRawBytes.Length - 3 && luminanceIndex < luminances.Length;)
          {
-            byte y1 = yuyvRawBytes[uyvyIndex += 2]; // jump from 0 to 2 (from Y1 over 
-            byte y2 = yuyvRawBytes[uyvyIndex += 2]; // jump from 2 to 4
+            byte y1 = yuyvRawBytes[yuyvIndex];
+            yuyvIndex += 2; // jump from 0 to 2 (from Y1 over over to Y2)
+            byte y2 = yuyvRawBytes[yuyvIndex];
+            yuyvIndex += 2; // jump from 2 to 4
 
             luminances[luminanceIndex++] = y1;
             luminances[luminanceIndex++] = y2;
