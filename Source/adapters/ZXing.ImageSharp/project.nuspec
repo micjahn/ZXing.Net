@@ -7,8 +7,8 @@
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
     <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
-    <id>ZXing.Net.Core.Bindings.ImageSharp</id>
-    <title>ZXing.Net.Core.Bindings.ImageSharp</title>
+    <id>ZXing.Net.Bindings.ImageSharp</id>
+    <title>ZXing.Net.Bindings.ImageSharp</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ZXing.Net Bindings for ImageSharp - use ImageSharp with ZXing.Net for barcode reading</description>
     <summary>ZXing.Net Bindings for ImageSharp</summary>
