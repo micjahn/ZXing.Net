@@ -1,0 +1,30 @@
+﻿@using System.Threading.Tasks
+@using ASP.NetCoreDemo.Controllers
+@{
+    ViewData["Title"] = "Encoding";
+}
+<h2>@ViewData["Title"].</h2>
+<h3>@ViewData["Message"]</h3>
+
+<form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="Encode">
+   <div class="form-group">
+      <div class="col-md-10">
+         <p>Content:</p>
+         <input type="text" name="content" />
+      </div>
+      <div class="col-md-10">
+         <p>Type:</p>
+         <select asp-items="@Html.GetEnumSelectList(typeof(BarcodeFormats))" name="barcodeformat"></select>
+      </div>
+   </div>
+   <div class="form-group">
+      <div class="col-md-10">
+         <input type="submit" value="Encode" />
+      </div>
+   </div>
+   <div class="form-group">
+      <div class="col-md-10">
+         <barcode content="@ViewData["BarcodeContent"]" width="500" height="500" barcodeformat="@ViewData["BarcodeFormat"]" outputformat="PNG" />
+      </div>
+   </div>
+</form>
