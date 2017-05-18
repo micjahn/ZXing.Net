@@ -7,8 +7,8 @@
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
     <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
-    <id>ZXing.Net.Core.Bindings.CoreCompat.System.Drawing</id>
-    <title>ZXing.Net.Core.Bindings.CoreCompat.System.Drawing</title>
+    <id>ZXing.Net.Bindings.CoreCompat.System.Drawing</id>
+    <title>ZXing.Net.Bindings.CoreCompat.System.Drawing</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ZXing.Net Bindings for CoreCompat.System.Drawing - use CoreCompat.System.Drawing with ZXing.Net for barcode reading</description>
     <summary>ZXing.Net Bindings for CoreCompat.System.Drawing</summary>

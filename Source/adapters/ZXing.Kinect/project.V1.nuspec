@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>0.16.0</version>
+    <authors>Michael Jahn</authors>
+    <owners>Michael Jahn</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
+    <id>ZXing.Net.Bindings.Kinect.V1</id>
+    <title>ZXing.Net.Bindings.Kinect.V1</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ZXing.Net Bindings for Kinect V1 - use Kinect with ZXing.Net for barcode reading</description>
+    <summary>ZXing.Net Bindings for Kinect V1</summary>
+    <releaseNotes></releaseNotes>
+    <tags>ZXing Kinect</tags>
+    <dependencies>
+      <group targetFramework="net40">
+        <dependency id="ZXing.Net" version="0.16.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\..\..\Build\Release\kinect\V1\zxing.kinect.dll" target="lib\net40\zxing.kinect.dll" />
+    <file src="..\..\..\Build\Release\kinect\V1\zxing.kinect.pdb" target="lib\net40\zxing.kinect.pdb" />
+    <file src="..\..\..\Build\Release\kinect\V1\zxing.kinect.xml" target="lib\net40\zxing.kinect.xml" />
+  </files>
+</package>

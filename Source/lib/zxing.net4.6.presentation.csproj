@@ -23,7 +23,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\Build\Debug\net4.6\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET45;NET46;WPF</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET46;WPF</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <BaseAddress>301989888</BaseAddress>
@@ -36,7 +36,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\Build\Release\net4.6\</OutputPath>
-    <DefineConstants>TRACE;NET45;NET46;WPF</DefineConstants>
+    <DefineConstants>TRACE;NET46;WPF</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\Build\Release\net4.6\zxing.presentation.XML</DocumentationFile>
@@ -55,7 +55,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug - Reduced|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\..\Build\Debug\net4.6\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET45;NET46;WPF</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET46;WPF</DefineConstants>
     <BaseAddress>301989888</BaseAddress>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -84,9 +84,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="zxing.net4.5.csproj">
-      <Project>{24074395-0196-4204-b516-cb6dba2fc4b9}</Project>
-      <Name>zxing.net4.5</Name>
+    <ProjectReference Include="zxing.net4.6.csproj">
+      <Project>{E028CBEC-BD08-4A0F-B4BB-C7EC413A16C1}</Project>
+      <Name>zxing.net4.6</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

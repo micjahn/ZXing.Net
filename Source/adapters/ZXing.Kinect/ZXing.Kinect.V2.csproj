@@ -53,8 +53,8 @@
     <NoWarn>
     </NoWarn>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <IntermediateOutputPath Condition=" '$(PlatformName)' == 'AnyCPU' ">$(BaseIntermediateOutputPath)$(Configuration)\kinect\</IntermediateOutputPath>
-    <IntermediateOutputPath Condition=" '$(PlatformName)' != 'AnyCPU' ">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\kinect\</IntermediateOutputPath>
+    <IntermediateOutputPath Condition=" '$(PlatformName)' == 'AnyCPU' ">$(BaseIntermediateOutputPath)$(Configuration)\kinect\V2\</IntermediateOutputPath>
+    <IntermediateOutputPath Condition=" '$(PlatformName)' != 'AnyCPU' ">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\kinect\V2\</IntermediateOutputPath>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
@@ -77,8 +77,8 @@
     <NoWarn>
     </NoWarn>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <IntermediateOutputPath Condition=" '$(PlatformName)' == 'AnyCPU' ">$(BaseIntermediateOutputPath)$(Configuration)\kinect\</IntermediateOutputPath>
-    <IntermediateOutputPath Condition=" '$(PlatformName)' != 'AnyCPU' ">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\kinect\</IntermediateOutputPath>
+    <IntermediateOutputPath Condition=" '$(PlatformName)' == 'AnyCPU' ">$(BaseIntermediateOutputPath)$(Configuration)\kinect\V2\</IntermediateOutputPath>
+    <IntermediateOutputPath Condition=" '$(PlatformName)' != 'AnyCPU' ">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\kinect\V2\</IntermediateOutputPath>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug - Reduced|AnyCPU'">
@@ -96,12 +96,6 @@
       <HintPath>..\..\..\3rdparty\Kinect\V2\Microsoft.Kinect.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\lib\zxing.net4.0.csproj">
-      <Project>{6431CF13-7A7B-4602-B96A-47CDA6F0B008}</Project>
-      <Name>zxing.net4.0</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\lib\Properties\AssemblyInfo.cs">
@@ -131,6 +125,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\lib\zxing.net4.5.csproj">
+      <Project>{24074395-0196-4204-b516-cb6dba2fc4b9}</Project>
+      <Name>zxing.net4.5</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

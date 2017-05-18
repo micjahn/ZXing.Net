@@ -7,8 +7,8 @@
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
     <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
-    <id>ZXing.Net.Core.Bindings.Magick</id>
-    <title>ZXing.Net.Core.Bindings.Magick</title>
+    <id>ZXing.Net.Bindings.Magick</id>
+    <title>ZXing.Net.Bindings.Magick</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ZXing.Net Bindings for ImageMagick - use ImageMagick with ZXing.Net for barcode reading</description>
     <summary>ZXing.Net Bindings for ImageMagick</summary>

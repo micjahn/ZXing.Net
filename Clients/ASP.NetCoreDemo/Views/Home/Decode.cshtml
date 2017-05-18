@@ -1,0 +1,27 @@
+﻿@{
+    ViewData["Title"] = "Decoding";
+}
+<h2>@ViewData["Title"].</h2>
+<h3>@ViewData["Message"]</h3>
+
+<p>Use this area to provide additional information.</p>
+<form method="post" enctype="multipart/form-data" asp-controller="Home" asp-action="DecodeFiles">
+   <div class="form-group">
+      <div class="col-md-10">
+         <p>Upload one or more files using this form:</p>
+         <input type="file" name="files" multiple />
+      </div>
+   </div>
+   <div class="form-group">
+      <div class="col-md-10">
+         <input type="submit" value="Decode" />
+      </div>
+   </div>
+   <div class="form-group">
+      <div class="col-md-10">
+         <img src="" alt="" />
+         <textarea id="TextAreaResult" rows="2" cols="20">@ViewData["TextAreaResult"]</textarea>
+      </div>
+   </div>
+</form>
+

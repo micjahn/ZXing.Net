@@ -1,6 +1,6 @@
 @ECHO OFF
 
-SET VERSION=0.15.0.0
+SET VERSION=0.16.0.0
 
 SET CURRENT_DIR=%CD%
 SET BUILD_DIR=%CD%\Build
@@ -18,6 +18,9 @@ SET SVN_TOOL=%CD%\3rdparty\Subversion\svn.exe
 
 IF NOT EXIST "%BINARY_DIR%\ce2.0\zxing.ce2.0.dll" GOTO BINARY_CE20_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\ce3.5\zxing.ce3.5.dll" GOTO BINARY_CE35_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\interop\zxing.interop.dll" GOTO BINARY_INTEROP_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\kinect\V1\zxing.kinect.dll" GOTO BINARY_KINECT_V1_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\kinect\V2\zxing.kinect.dll" GOTO BINARY_KINECT_V2_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\net2.0\zxing.dll" GOTO BINARY_NET20_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\net3.5\zxing.dll" GOTO BINARY_NET35_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\net4.0\zxing.dll" GOTO BINARY_NET40_NOT_FOUND
@@ -26,19 +29,22 @@ IF NOT EXIST "%BINARY_DIR%\net4.5\zxing.dll" GOTO BINARY_NET45_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\net4.5\zxing.presentation.dll" GOTO BINARY_NET45_PRESENTATION_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\net4.6\zxing.dll" GOTO BINARY_NET46_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\net4.6\zxing.presentation.dll" GOTO BINARY_NET46_PRESENTATION_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\net4.7\zxing.dll" GOTO BINARY_NET47_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\net4.7\zxing.presentation.dll" GOTO BINARY_NET47_PRESENTATION_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\portable\zxing.portable.dll" GOTO BINARY_PORTABLE_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\sl4\zxing.sl4.dll" GOTO BINARY_SL40_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\sl5\zxing.sl5.dll" GOTO BINARY_SL50_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\unity\zxing.unity.dll" GOTO BINARY_UNITY_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\uwp\zxing.dll" GOTO BINARY_UWP_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\winrt\zxing.winrt.dll" GOTO BINARY_WINRT_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\wp7.0\zxing.wp7.0.dll" GOTO BINARY_WP70_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\wp7.1\zxing.wp7.1.dll" GOTO BINARY_WP71_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\wp8.0\zxing.wp8.0.dll" GOTO BINARY_WP80_NOT_FOUND
-IF NOT EXIST "%BINARY_DIR%\winrt\zxing.winrt.dll" GOTO BINARY_WINRT_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\monodroid\zxing.monoandroid.dll" GOTO BINARY_MONODROID_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\winmd\zxing.winmd" GOTO BINARY_WINRTCOMPONENTS_NOT_FOUND
-IF NOT EXIST "%BINARY_DIR%\portable\zxing.portable.dll" GOTO BINARY_PORTABLE_NOT_FOUND
-IF NOT EXIST "%BINARY_DIR%\kinect\zxing.kinect.dll" GOTO BINARY_KINECT_NOT_FOUND
-IF NOT EXIST "%BINARY_DIR%\uwp\zxing.dll" GOTO BINARY_UWP_NOT_FOUND
-IF NOT EXIST "%BINARY_DIR%\netstandard1.6\zxing.dll" GOTO BINARY_NETSTANDARD16_NOT_FOUND
+IF NOT EXIST "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.0\zxing.dll" GOTO BINARY_NETSTANDARD10_NOT_FOUND
+IF NOT EXIST "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.1\zxing.dll" GOTO BINARY_NETSTANDARD11_NOT_FOUND
+IF NOT EXIST "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.3\zxing.dll" GOTO BINARY_NETSTANDARD13_NOT_FOUND
 
 ECHO.
 ECHO Build deployment files in directory
@@ -61,12 +67,26 @@ REM ****************************************************************************
 DEL /S "%BINARY_DIR%"\Clients\*.xml
 DEL /S "%BINARY_DIR%"\Clients\*.pdb
 
+MKDIR "%BINARY_DIR%\netstandard" >NUL: 2>&1
+MKDIR "%BINARY_DIR%\netstandard\1.0" >NUL: 2>&1
+MKDIR "%BINARY_DIR%\netstandard\1.1" >NUL: 2>&1
+MKDIR "%BINARY_DIR%\netstandard\1.3" >NUL: 2>&1
+COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.0\zxing.dll" "%BINARY_DIR%\netstandard\1.0\"
+COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.0\zxing.pdb" "%BINARY_DIR%\netstandard\1.0\"
+COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.0\zxing.xml" "%BINARY_DIR%\netstandard\1.0\"
+COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.1\zxing.dll" "%BINARY_DIR%\netstandard\1.1\"
+COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.1\zxing.pdb" "%BINARY_DIR%\netstandard\1.1\"
+COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.1\zxing.xml" "%BINARY_DIR%\netstandard\1.1\"
+COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.3\zxing.dll" "%BINARY_DIR%\netstandard\1.3\"
+COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.3\zxing.pdb" "%BINARY_DIR%\netstandard\1.3\"
+COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.3\zxing.xml" "%BINARY_DIR%\netstandard\1.3\"
+
 REM
 REM building archives for binaries
 REM ***************************************************************************************
 
 CD "%BINARY_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net3.5 net4.0 net4.5 net4.6 winrt uwp netstandard1.6 unity sl4 sl5 wp7.0 wp7.1 wp8.0 monodroid winmd portable kinect ..\..\THANKS ..\..\COPYING -xr!Documentation
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net3.5 net4.0 net4.5 net4.6 winrt uwp netstandard unity sl4 sl5 wp7.0 wp7.1 wp8.0 monodroid winmd portable kinect interop ..\..\THANKS ..\..\COPYING -xr!Documentation
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DEMO_BINARY%" Clients
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DOCUMENTATION%" Documentation
 CD "%CURRENT_DIR%"
@@ -174,6 +194,13 @@ ECHO weren't found.
 ECHO.
 GOTO END
 
+:BINARY_INTEROP_NOT_FOUND
+ECHO The Interop binaries 
+ECHO %BINARY_DIR%\interop\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
 :BINARY_NET20_NOT_FOUND
 ECHO The .Net 2.0 binaries 
 ECHO %BINARY_DIR%\net2.0\...
@@ -226,6 +253,20 @@ GOTO END
 :BINARY_NET46_PRESENTATION_NOT_FOUND
 ECHO The .Net 4.6 Presentation binaries 
 ECHO %BINARY_DIR%\net4.6\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
+:BINARY_NET47_NOT_FOUND
+ECHO The .Net 4.7 binaries 
+ECHO %BINARY_DIR%\net4.7\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
+:BINARY_NET47_PRESENTATION_NOT_FOUND
+ECHO The .Net 4.7 Presentation binaries 
+ECHO %BINARY_DIR%\net4.7\...
 ECHO weren't found.
 ECHO.
 GOTO END
@@ -300,9 +341,16 @@ ECHO weren't found.
 ECHO.
 GOTO END
 
-:BINARY_KINECT_NOT_FOUND
-ECHO The Kinect binaries 
-ECHO %BINARY_DIR%\kinect\...
+:BINARY_KINECT_V1_NOT_FOUND
+ECHO The Kinect V1 binaries 
+ECHO %BINARY_DIR%\kinect\V1\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
+:BINARY_KINECT_V2_NOT_FOUND
+ECHO The Kinect V2 binaries 
+ECHO %BINARY_DIR%\kinect\V2\...
 ECHO weren't found.
 ECHO.
 GOTO END
@@ -314,9 +362,23 @@ ECHO weren't found.
 ECHO.
 GOTO END
 
-:BINARY_NETSTANDARD16_NOT_FOUND
-ECHO The .Net Standard binaries 
-ECHO %BINARY_DIR%\netstandard1.6\...
+:BINARY_NETSTANDARD10_NOT_FOUND
+ECHO The .Net Standard 1.0 binaries 
+ECHO %CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.0\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
+:BINARY_NETSTANDARD11_NOT_FOUND
+ECHO The .Net Standard 1.1 binaries 
+ECHO %CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.1\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
+:BINARY_NETSTANDARD13_NOT_FOUND
+ECHO The .Net Standard 1.3 binaries 
+ECHO %CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.3\...
 ECHO weren't found.
 ECHO.
 GOTO END

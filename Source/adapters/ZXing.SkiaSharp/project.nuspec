@@ -7,8 +7,8 @@
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
     <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
-    <id>ZXing.Net.Core.Bindings.SkiaSharp</id>
-    <title>ZXing.Net.Core.Bindings.SkiaSharp</title>
+    <id>ZXing.Net.Bindings.SkiaSharp</id>
+    <title>ZXing.Net.Bindings.SkiaSharp</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ZXing.Net Bindings for SkiaSharp - use SkiaSharp with ZXing.Net for barcode reading</description>
     <summary>ZXing.Net Bindings for SkiaSharp</summary>

@@ -7,7 +7,7 @@
     <ProjectGuid>{24074395-0196-4204-B516-CB6DBA2FC4B9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>zxing</RootNamespace>
+    <RootNamespace>ZXing</RootNamespace>
     <AssemblyName>zxing</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
