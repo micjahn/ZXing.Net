@@ -22,7 +22,7 @@ using Color = UnityEngine.Color32;
 #elif MONOANDROID
 using Android.Graphics;
 #elif (PORTABLE || NETSTANDARD)
-#elif (NET45 || NET40 || NET35 || NET20 || WindowsCE)
+#elif (NET47 || NET46 || NET45 || NET40 || NET35 || NET20 || WindowsCE)
 using System.Drawing;
 #elif NETFX_CORE
 using Windows.UI;
@@ -113,7 +113,7 @@ namespace ZXing.Rendering
 #if UNITY
          Foreground = UnityEngine.Color.black;
          Background = UnityEngine.Color.white;
-#elif (NET45 || NET40 || NET35 || NET20 || WindowsCE || PORTABLE || NETSTANDARD || MONOANDROID)
+#elif (NET47 || NET46 || NET45 || NET40 || NET35 || NET20 || WindowsCE || PORTABLE || NETSTANDARD || MONOANDROID)
          Foreground = Color.Black;
          Background = Color.White;
 #else

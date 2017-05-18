@@ -105,7 +105,7 @@ namespace ZXing
                {
                   // copy a scanline not the whole bitmap because of memory usage
                   Marshal.Copy(ptrInBitmap, buffer, 0, stride);
-#if NET40 || NET45
+#if NET40 || NET45 || NET46 || NET47
                   ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
 #else
                   ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);

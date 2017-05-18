@@ -19,6 +19,15 @@ using System.Runtime.InteropServices;
 #if NET40
 [assembly: AssemblyTitle("zxing.net for .net 4.0")]
 #endif
+#if NET45
+[assembly: AssemblyTitle("zxing.net for .net 4.5")]
+#endif
+#if NET46
+[assembly: AssemblyTitle("zxing.net for .net 4.6")]
+#endif
+#if NET47
+[assembly: AssemblyTitle("zxing.net for .net 4.7")]
+#endif
 #if SILVERLIGHT4
 [assembly: AssemblyTitle("zxing.net for silverlight 4")]
 #endif
@@ -69,9 +78,9 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("0.15.0.0")]
+[assembly: AssemblyVersion("0.16.0.0")]
 #if !WindowsCE
-[assembly: AssemblyFileVersion("0.15.0.0")]
+[assembly: AssemblyFileVersion("0.16.0.0")]
 #endif
 
 [assembly: CLSCompliant(true)]

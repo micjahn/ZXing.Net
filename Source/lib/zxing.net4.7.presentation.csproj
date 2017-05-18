@@ -1,50 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2C7ED1D1-AE0E-4244-87A3-C3CC13DD0659}</ProjectGuid>
+    <ProjectGuid>{D98D11B0-744E-4197-9DA4-D3EE96890219}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ZXing</RootNamespace>
     <AssemblyName>zxing.presentation</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Build\Debug\net4.6\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET46;WPF</DefineConstants>
+    <OutputPath>..\..\Build\Debug\net4.7\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET47;WPF</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <BaseAddress>301989888</BaseAddress>
-    <Prefer32Bit>false</Prefer32Bit>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <IntermediateOutputPath Condition=" '$(PlatformName)' == 'AnyCPU' ">$(BaseIntermediateOutputPath)$(Configuration)\net4.6.presentation\</IntermediateOutputPath>
-    <IntermediateOutputPath Condition=" '$(PlatformName)' != 'AnyCPU' ">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\net4.6.presentation\</IntermediateOutputPath>
+    <IntermediateOutputPath Condition=" '$(PlatformName)' == 'AnyCPU' ">$(BaseIntermediateOutputPath)$(Configuration)\net4.7.presentation\</IntermediateOutputPath>
+    <IntermediateOutputPath Condition=" '$(PlatformName)' != 'AnyCPU' ">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\net4.7.presentation\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Build\Release\net4.6\</OutputPath>
-    <DefineConstants>TRACE;NET46;WPF</DefineConstants>
+    <OutputPath>..\..\Build\Release\net4.7\</OutputPath>
+    <DefineConstants>TRACE;NET47;WPF</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\Build\Release\net4.6\zxing.presentation.XML</DocumentationFile>
-    <BaseAddress>301989888</BaseAddress>
-    <Prefer32Bit>false</Prefer32Bit>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <IntermediateOutputPath Condition=" '$(PlatformName)' == 'AnyCPU' ">$(BaseIntermediateOutputPath)$(Configuration)\net4.6.presentation\</IntermediateOutputPath>
-    <IntermediateOutputPath Condition=" '$(PlatformName)' != 'AnyCPU' ">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\net4.6.presentation\</IntermediateOutputPath>
+    <IntermediateOutputPath Condition=" '$(PlatformName)' == 'AnyCPU' ">$(BaseIntermediateOutputPath)$(Configuration)\net4.7.presentation\</IntermediateOutputPath>
+    <IntermediateOutputPath Condition=" '$(PlatformName)' != 'AnyCPU' ">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\net4.7.presentation\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -54,9 +43,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug - Reduced|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\Build\Debug\net4.6\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET46;WPF</DefineConstants>
-    <BaseAddress>301989888</BaseAddress>
+    <OutputPath>..\..\Build\Debug\net4.7\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET47;WPF</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -84,9 +72,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="zxing.net4.6.csproj">
-      <Project>{E028CBEC-BD08-4A0F-B4BB-C7EC413A16C1}</Project>
-      <Name>zxing.net4.6</Name>
+    <ProjectReference Include="zxing.net4.7.csproj">
+      <Project>{2C074E8F-E879-4C9E-B2C3-8F80C0DB641D}</Project>
+      <Name>zxing.net4.7</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -7,7 +7,7 @@
     <ProjectGuid>{E028CBEC-BD08-4A0F-B4BB-C7EC413A16C1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>zxing</RootNamespace>
+    <RootNamespace>ZXing</RootNamespace>
     <AssemblyName>zxing</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\Build\Debug\net4.6\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET45;NET46;</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET46;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
@@ -33,7 +33,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\Build\Release\net4.6\</OutputPath>
-    <DefineConstants>TRACE;NET45;NET46;</DefineConstants>
+    <DefineConstants>TRACE;NET46;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\Build\Release\net4.6\zxing.XML</DocumentationFile>
@@ -50,7 +50,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug - Reduced|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\..\Build\Debug\net4.6\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET45;NET46;</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET46;</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
