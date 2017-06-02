@@ -48,11 +48,11 @@ namespace ZXing.Rendering
          /// <summary>
          /// color black
          /// </summary>
-         public static Color Black = new Color(0);
+         public static Color Black = new Color(255, 0, 0, 0);
          /// <summary>
          /// color white
          /// </summary>
-         public static Color White = new Color(0x00FFFFFF);
+         public static Color White = new Color(255, 255, 255, 255);
 
          /// <summary>
          /// alpha channel
@@ -80,6 +80,17 @@ namespace ZXing.Rendering
             R = (byte)((color & 0x00FF0000) >> 16);
             G = (byte)((color & 0x0000FF00) >> 8);
             B = (byte)((color & 0x000000FF));
+         }
+
+         /// <summary>
+         /// initializing constructor
+         /// </summary>
+         public Color(byte alpha, byte red, byte green, byte blue)
+         {
+            A = alpha;
+            R = red;
+            G = green;
+            B = blue;
          }
       }
 #endif
@@ -149,7 +160,7 @@ namespace ZXing.Rendering
       /// <returns></returns>
       public SvgImage Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
       {
-         var result = new SvgImage();
+         var result = new SvgImage(matrix.Width, matrix.Height);
 
          Create(result, matrix, format, content, options);
 
@@ -261,11 +272,31 @@ namespace ZXing.Rendering
          }
 
          /// <summary>
+         /// The original height of the bitmatrix for the barcode
+         /// </summary>
+         public int Height { get; set; }
+
+         /// <summary>
+         /// The original width of the bitmatrix for the barcode
+         /// </summary>
+         public int Width { get; set; }
+
+         /// <summary>
          /// Initializes a new instance of the <see cref="SvgImage"/> class.
          /// </summary>
          public SvgImage()
          {
             content = new StringBuilder();
+         }
+
+         /// <summary>
+         /// Initializes a new instance of the <see cref="SvgImage"/> class.
+         /// </summary>
+         public SvgImage(int width, int height)
+         {
+            content = new StringBuilder();
+            Width = width;
+            Height = height;
          }
 
          /// <summary>
