@@ -1,23 +1,53 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.15.0.0</version>
+    <version>0.16.0</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
-    <licenseUrl>http://zxingnet.codeplex.com/license</licenseUrl>
-    <projectUrl>http://zxingnet.codeplex.com/</projectUrl>
-    <iconUrl>https://zxingnet.svn.codeplex.com/svn/trunk/Icons/logo.jpg</iconUrl>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
     <id>ZXing.Net</id>
     <title>ZXing.Net</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.
 It has been ported by hand with a lot of optimizations and improvements.
 
-It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, .Net 4.5, .Net 4.6, Windows RT Class Library and Components, UWP (experimental), .Net Standard 1.6 (experimental), Silverlight 4, Silverlight 5, Windows Phone 7.x and Windows Phone 8.x and Xamarin.Android</description>
+It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, .Net 4.5, .Net 4.6, .Net 4.7, Windows RT Class Library and Components, UWP, .Net Standard 1.0, 1.1 and 1.3, Silverlight 4, Silverlight 5, Windows Phone 7.x and Windows Phone 8.x and Xamarin.Android</description>
     <summary>ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.</summary>
     <releaseNotes>* changes of the java version are reflected until 2017/02/27
 * many other small bug fixes and improvements</releaseNotes>
     <tags>ZXing barcode scanning 1D 2D UPC-A UPC-E EAN-8 EAN-13 QR ITF Codabar RSS-14 Data Matrix PDF 417 PDF417 Aztec</tags>
+    <dependencies>
+      <group targetFramework="net20" />
+      <group targetFramework="net35" />
+      <group targetFramework="net40" />
+      <group targetFramework="net45" />
+      <group targetFramework="net461" />
+      <group targetFramework="net47" />
+      <group targetFramework="sl4" />
+      <group targetFramework="sl5" />
+      <group targetFramework="sl3-wp" />
+      <group targetFramework="sl4-wp71" />
+      <group targetFramework="wp8" />
+      <group targetFramework="windows8-managed" />
+      <group targetFramework="windows8" />
+      <group targetFramework="native" />
+      <group targetFramework="MonoAndroid" />
+      <group targetFramework="net20-cf" />
+      <group targetFramework="net35-cf" />
+      <group targetFramework="portable-win+net40+sl4+sl5+wp7+wp71+wp8" />
+      <group targetFramework="uap10" />
+      <group targetFramework="netstandard1.0">
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="netstandard1.1">
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="netstandard1.3">
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
   </metadata>
   <files>
     <file src="Build\Release\net2.0\zxing.dll" target="lib\net20\zxing.dll" />
@@ -44,6 +74,12 @@ It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, .Net 4.5, .Net 4.6, Wind
     <file src="Build\Release\net4.6\zxing.presentation.dll" target="lib\net461\zxing.presentation.dll" />
     <file src="Build\Release\net4.6\zxing.presentation.pdb" target="lib\net461\zxing.presentation.pdb" />
     <file src="Build\Release\net4.6\zxing.presentation.XML" target="lib\net461\zxing.presentation.XML" />
+    <file src="Build\Release\net4.7\zxing.dll" target="lib\net47\zxing.dll" />
+    <file src="Build\Release\net4.7\zxing.pdb" target="lib\net47\zxing.pdb" />
+    <file src="Build\Release\net4.7\zxing.XML" target="lib\net47\zxing.XML" />
+    <file src="Build\Release\net4.7\zxing.presentation.dll" target="lib\net47\zxing.presentation.dll" />
+    <file src="Build\Release\net4.7\zxing.presentation.pdb" target="lib\net47\zxing.presentation.pdb" />
+    <file src="Build\Release\net4.7\zxing.presentation.XML" target="lib\net47\zxing.presentation.XML" />
     <file src="Build\Release\sl4\zxing.sl4.dll" target="lib\sl4\zxing.sl4.dll" />
     <file src="Build\Release\sl4\zxing.sl4.pdb" target="lib\sl4\zxing.sl4.pdb" />
     <file src="Build\Release\sl4\zxing.sl4.XML" target="lib\sl4\zxing.sl4.XML" />
@@ -86,8 +122,14 @@ It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, .Net 4.5, .Net 4.6, Wind
     <file src="Build\Release\uwp\zxing.pdb" target="lib\uap10\zxing.pdb" />
     <file src="Build\Release\uwp\zxing.xml" target="lib\uap10\zxing.xml" />
     <file src="Build\Release\uwp\zxing.pri" target="lib\uap10\zxing.pri" />
-    <file src="Build\Release\netstandard1.6\zxing.dll" target="lib\netstandard\zxing.dll" />
-    <file src="Build\Release\netstandard1.6\zxing.pdb" target="lib\netstandard\zxing.pdb" />
-    <file src="Build\Release\netstandard1.6\zxing.xml" target="lib\netstandard\zxing.xml" />
+    <file src="Build\Release\netstandard1.0\zxing.dll" target="lib\netstandard1.0\zxing.dll" />
+    <file src="Build\Release\netstandard1.0\zxing.pdb" target="lib\netstandard1.0\zxing.pdb" />
+    <file src="Build\Release\netstandard1.0\zxing.xml" target="lib\netstandard1.0\zxing.xml" />
+    <file src="Build\Release\netstandard1.1\zxing.dll" target="lib\netstandard1.1\zxing.dll" />
+    <file src="Build\Release\netstandard1.1\zxing.pdb" target="lib\netstandard1.1\zxing.pdb" />
+    <file src="Build\Release\netstandard1.1\zxing.xml" target="lib\netstandard1.1\zxing.xml" />
+    <file src="Build\Release\netstandard1.3\zxing.dll" target="lib\netstandard1.3\zxing.dll" />
+    <file src="Build\Release\netstandard1.3\zxing.pdb" target="lib\netstandard1.3\zxing.pdb" />
+    <file src="Build\Release\netstandard1.3\zxing.xml" target="lib\netstandard1.3\zxing.xml" />
   </files>
 </package>
