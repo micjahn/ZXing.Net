@@ -124,21 +124,6 @@ namespace ZXing.Test
          }
       }
 
-      [Test]
-      public void RGB565LuminanceSource_Should_Give_The_Same_Result_As_RGBLuminanceSource_For_BGR565()
-      {
-         BitmapSource bitmapImage = new BitmapImage(new Uri(samplePicRelPath, UriKind.RelativeOrAbsolute));
-         bitmapImage = new FormatConvertedBitmap(bitmapImage, PixelFormats.Bgr565, null, 0);
-         var bytes = new byte[bitmapImage.PixelHeight*bitmapImage.PixelWidth*2];
-         bitmapImage.CopyPixels(bytes, bitmapImage.PixelWidth * 2, 0);
-
-         var rgb565LuminanceSource = new RGB565LuminanceSource(bytes, bitmapImage.PixelWidth, bitmapImage.PixelHeight);
-
-         var rgbLuminanceSource = new BitmapSourceLuminanceSource(bitmapImage);
-
-         Assert.AreEqual(rgbLuminanceSource.ToString(), rgb565LuminanceSource.ToString());
-      }
-
       private const string cropSamplePicRelPath = @"../../../Source/test/data/luminance/crop_sample.png";
       private const string cropSamplePicRelResultPath = @"../../../Source/test/data/luminance/crop_sample.txt.gz";
       private string cropSamplePicRelResult;
