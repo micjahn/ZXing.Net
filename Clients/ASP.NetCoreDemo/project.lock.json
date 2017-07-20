@@ -4140,20 +4140,13 @@
           "lib/netstandard1.3/System.Xml.XPath.XmlDocument.dll": {}
         }
       },
-      "netstandard/0.15.0": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v1.3",
-        "dependencies": {
-          "NETStandard.Library": "1.6.0"
-        }
-      },
-      "ZXing.CoreCompat.System.Drawing/0.15.0": {
+      "ZXing.CoreCompat.System.Drawing/0.16.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v1.3",
         "dependencies": {
           "CoreCompat.System.Drawing": "1.0.0-beta006",
           "NETStandard.Library": "1.6.0",
-          "netstandard": "(, )"
+          "ZXing.Net": "(, )"
         },
         "compile": {
           "netstandard1.3/ZXing.CoreCompat.System.Drawing.dll": {}
@@ -4162,13 +4155,13 @@
           "netstandard1.3/ZXing.CoreCompat.System.Drawing.dll": {}
         }
       },
-      "ZXing.ImageSharp/0.15.0": {
+      "ZXing.ImageSharp/0.16.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v1.1",
         "dependencies": {
           "ImageSharp": "1.0.0-alpha8-00058",
           "NETStandard.Library": "1.6.1",
-          "netstandard": "(, )"
+          "ZXing.Net": "(, )"
         },
         "compile": {
           "netstandard1.1/ZXing.ImageSharp.dll": {}
@@ -4183,7 +4176,7 @@
         "dependencies": {
           "Magick.NET.Core-Q8": "7.0.5.502",
           "NETStandard.Library": "1.6.1",
-          "netstandard": "(, )"
+          "ZXing.Net": "(, )"
         },
         "compile": {
           "netstandard1.3/ZXing.Magick.dll": {}
@@ -4192,13 +4185,20 @@
           "netstandard1.3/ZXing.Magick.dll": {}
         }
       },
+      "ZXing.Net/0.16.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v1.3",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0"
+        }
+      },
       "ZXing.OpenCV/0.16.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v1.6",
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "OpenCvSharp3-AnyCPU": "3.2.0.20170419",
-          "netstandard": "(, )"
+          "ZXing.Net": "(, )"
         },
         "compile": {
           "netstandard1.6/ZXing.OpenCV.dll": {}
@@ -4213,7 +4213,7 @@
         "dependencies": {
           "NETStandard.Library": "1.6.0",
           "SkiaSharp": "1.57.0",
-          "netstandard": "(, )"
+          "ZXing.Net": "(, )"
         },
         "compile": {
           "netstandard1.3/ZXing.SkiaSharp.dll": {}
@@ -10690,16 +10690,12 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "netstandard/0.15.0": {
-      "type": "project",
-      "path": "../../Source/lib/netstandard/project.json"
-    },
-    "ZXing.CoreCompat.System.Drawing/0.15.0": {
+    "ZXing.CoreCompat.System.Drawing/0.16.0": {
       "type": "project",
       "path": "../../Source/adapters/ZXing.CoreCompat.System.Drawing/project.json",
       "msbuildProject": "../../Source/adapters/ZXing.CoreCompat.System.Drawing/ZXing.CoreCompat.System.Drawing.xproj"
     },
-    "ZXing.ImageSharp/0.15.0": {
+    "ZXing.ImageSharp/0.16.0": {
       "type": "project",
       "path": "../../Source/adapters/ZXing.ImageSharp/project.json",
       "msbuildProject": "../../Source/adapters/ZXing.ImageSharp/ZXing.ImageSharp.xproj"
@@ -10708,6 +10704,10 @@
       "type": "project",
       "path": "../../Source/adapters/ZXing.Magick/project.json",
       "msbuildProject": "../../Source/adapters/ZXing.Magick/ZXing.Magick.xproj"
+    },
+    "ZXing.Net/0.16.0": {
+      "type": "project",
+      "path": "../../Source/lib/ZXing.Net/project.json"
     },
     "ZXing.OpenCV/0.16.0": {
       "type": "project",
@@ -10740,9 +10740,9 @@
       "ZXing.CoreCompat.System.Drawing",
       "ZXing.ImageSharp",
       "ZXing.Magick",
+      "ZXing.Net",
       "ZXing.OpenCV",
-      "ZXing.SkiaSharp",
-      "netstandard"
+      "ZXing.SkiaSharp"
     ],
     ".NETCoreApp,Version=v1.0": []
   },

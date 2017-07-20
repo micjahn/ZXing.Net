@@ -30,15 +30,29 @@ namespace ASP.NetCoreDemo.Helper
       public enum OutputFormat
       {
          PNG,
+         SVG
       }
 
       public override void Process(TagHelperContext context, TagHelperOutput output)
       {
          var content = context.AllAttributes["content"]?.Value.ToString();
+
+         if (String.IsNullOrEmpty(content))
+            return;
+
          var alt = context.AllAttributes["alt"]?.Value.ToString();
-         var width = Convert.ToInt32(context.AllAttributes["width"] == null ? "500" : context.AllAttributes["width"].Value.ToString());
-         var height = Convert.ToInt32(context.AllAttributes["height"] == null ? "500" : context.AllAttributes["height"].Value.ToString());
-         var margin = Convert.ToInt32(context.AllAttributes["margin"] == null ? "5" : context.AllAttributes["margin"].Value.ToString());
+         var width =
+            Convert.ToInt32(context.AllAttributes["width"] == null
+               ? "500"
+               : context.AllAttributes["width"].Value.ToString());
+         var height =
+            Convert.ToInt32(context.AllAttributes["height"] == null
+               ? "500"
+               : context.AllAttributes["height"].Value.ToString());
+         var margin =
+            Convert.ToInt32(context.AllAttributes["margin"] == null
+               ? "5"
+               : context.AllAttributes["margin"].Value.ToString());
          var barcodeformat = BarcodeFormat.QR_CODE;
          var outputformat = OutputFormat.PNG;
 
@@ -58,9 +72,19 @@ namespace ASP.NetCoreDemo.Helper
             }
          }
 
-         if (String.IsNullOrEmpty(content))
-            return;
+         switch (outputformat)
+         {
+            case OutputFormat.PNG:
+               GeneratePng(output, content, barcodeformat, width, height, margin, alt);
+               break;
+            case OutputFormat.SVG:
+               GenerateSvg(output, content, barcodeformat, width, height, margin, alt);
+               break;
+         }
+      }
 
+      private void GeneratePng(TagHelperOutput output, string content, BarcodeFormat barcodeformat, int width, int height, int margin, string alt)
+      {
          var qrWriter = new ZXing.BarcodeWriterPixelData
          {
             Format = barcodeformat,
@@ -94,12 +118,32 @@ namespace ASP.NetCoreDemo.Helper
 
             output.TagName = "img";
             output.Attributes.Clear();
-            output.Attributes.Add("width", width);
-            output.Attributes.Add("height", height);
+            output.Attributes.Add("width", pixelData.Width);
+            output.Attributes.Add("height", pixelData.Height);
             output.Attributes.Add("alt", alt);
             output.Attributes.Add("src",
                String.Format("data:image/png;base64,{0}", Convert.ToBase64String(ms.ToArray())));
          }
+      }
+
+      private void GenerateSvg(TagHelperOutput output, string content, BarcodeFormat barcodeformat, int width, int height, int margin, string alt)
+      {
+         var qrWriter = new ZXing.BarcodeWriterSvg
+         {
+            Format = barcodeformat,
+            Options = new QrCodeEncodingOptions { Height = height, Width = width, Margin = margin }
+         };
+
+
+         var svgImage = qrWriter.Write(content);
+
+         output.TagName = "img";
+         output.Attributes.Clear();
+         output.Attributes.Add("width", svgImage.Width);
+         output.Attributes.Add("height", svgImage.Height);
+         output.Attributes.Add("alt", alt);
+         output.Attributes.Add("src", new Microsoft.AspNetCore.Html.HtmlString(
+            String.Format("data:image/svg+xml;{0}", svgImage.Content)));
       }
    }
 }
