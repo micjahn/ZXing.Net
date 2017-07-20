@@ -56,9 +56,6 @@
     <Reference Include="log4net">
       <HintPath>..\..\..\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Kinect, Version=1.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\3rdparty\Kinect\Microsoft.Kinect.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\3rdparty\NUnit.NET\nunit.framework.dll</HintPath>
     </Reference>
