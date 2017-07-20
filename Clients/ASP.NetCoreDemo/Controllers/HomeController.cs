@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ASP.NetCoreDemo.Controllers
 {
@@ -47,6 +46,11 @@ namespace ASP.NetCoreDemo.Controllers
          {
             ViewData["BarcodeContent"] = this.Request.Form["content"];
             ViewData["BarcodeFormat"] = this.Request.Form["barcodeformat"];
+            ViewData["OutputFormat"] = this.Request.Form["outputformat"];
+            ViewData["BarcodeWidth"] = this.Request.Form["width"];
+            ViewData["BarcodeHeight"] = this.Request.Form["height"];
+            ViewData["BarcodeMargin"] = this.Request.Form["margin"];
+            
             ViewData["Message"] = "Here is your barcode";
          }
          else

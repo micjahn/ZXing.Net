@@ -1,5 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using ASP.NetCoreDemo.Controllers
+@using ASP.NetCoreDemo.Helper
 @{
     ViewData["Title"] = "Encoding";
 }
@@ -16,6 +17,22 @@
          <p>Type:</p>
          <select asp-items="@Html.GetEnumSelectList(typeof(BarcodeFormats))" name="barcodeformat"></select>
       </div>
+      <div class="col-md-10">
+         <p>Type:</p>
+         <select asp-items="@Html.GetEnumSelectList(typeof(BarcodeTagHelper.OutputFormat))" name="outputformat"></select>
+      </div>
+      <div class="col-md-10">
+         <p>Width:</p>
+         <input type="text" name="width" value="500" />
+      </div>
+      <div class="col-md-10">
+         <p>Height:</p>
+         <input type="text" name="height" value="500" />
+      </div>
+      <div class="col-md-10">
+         <p>Margin:</p>
+         <input type="text" name="margin" value="5" />
+      </div>
    </div>
    <div class="form-group">
       <div class="col-md-10">
@@ -24,7 +41,7 @@
    </div>
    <div class="form-group">
       <div class="col-md-10">
-         <barcode content="@ViewData["BarcodeContent"]" width="500" height="500" barcodeformat="@ViewData["BarcodeFormat"]" outputformat="PNG" />
+         <barcode content="@ViewData["BarcodeContent"]" width="@ViewData["BarcodeWidth"]" height="@ViewData["BarcodeHeight"]" margin="@ViewData["BarcodeMargin"]" barcodeformat="@ViewData["BarcodeFormat"]" outputformat="@ViewData["OutputFormat"]" />
       </div>
    </div>
 </form>

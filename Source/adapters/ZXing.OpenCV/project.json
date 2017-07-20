@@ -1,6 +1,6 @@
 {
    "name": "ZXing.OpenCV",
-   "version": "0.16.0.0",
+   "version": "0.16.0",
    "dependencies": {
       "NETStandard.Library": "1.6.1",
       "OpenCvSharp3-AnyCPU": "3.2.0.20170419"
@@ -8,7 +8,7 @@
    "frameworks": {
       "netstandard1.6": {
          "dependencies": {
-            "netstandard": {
+            "ZXing.Net": {
                "target": "project"
             }
          }

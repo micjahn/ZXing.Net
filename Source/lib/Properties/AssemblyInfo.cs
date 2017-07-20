@@ -58,6 +58,9 @@ using System.Runtime.InteropServices;
 #if NETSTANDARD
 [assembly: AssemblyTitle("zxing.net for .net core standard")]
 #endif
+#if NETFX_CORE
+[assembly: AssemblyTitle("zxing.net for windows rt")]
+#endif
 [assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 06.04.2017 15:31:14)")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyProduct("ZXing.Net")]
