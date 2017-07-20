@@ -1,6 +1,6 @@
 {
    "name": "ZXing.SkiaSharp",
-   "version": "0.16.0.0",
+   "version": "0.16.0",
    "dependencies": {
       "NETStandard.Library": "1.6.0",
       "SkiaSharp": "1.57.0"
@@ -8,7 +8,7 @@
    "frameworks": {
       "netstandard1.3": {
          "dependencies": {
-            "netstandard": {
+            "ZXing.Net": {
                "target": "project"
             }
          }
