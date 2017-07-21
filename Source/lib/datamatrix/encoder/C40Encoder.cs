@@ -47,13 +47,10 @@ namespace ZXing.Datamatrix.Encoder
             {
                //Avoid having a single C40 value in the last triplet
                var removed = new StringBuilder();
-               if ((buffer.Length % 3) == 2)
+               if ((buffer.Length % 3) == 2 &&
+                   (available < 2 || available > 2))
                {
-                  if (available < 2 || available > 2)
-                  {
-                     lastCharSize = backtrackOneCharacter(context, buffer, removed,
-                                                          lastCharSize);
-                  }
+                  lastCharSize = backtrackOneCharacter(context, buffer, removed, lastCharSize);
                }
                while ((buffer.Length % 3) == 1
                    && ((lastCharSize <= 3 && available != 1) || lastCharSize > 3))

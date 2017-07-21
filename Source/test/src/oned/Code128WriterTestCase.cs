@@ -38,7 +38,7 @@ namespace ZXing.OneD.Test
       private Code128Reader reader;
 
       [SetUp]
-      public void setup()
+      public void setUp()
       {
          writer = new Code128Writer();
          reader = new Code128Reader();
