@@ -69,7 +69,8 @@ namespace ZXing.Datamatrix.Encoder
                int newMode = HighLevelEncoder.lookAheadTest(context.Message, context.Pos, EncodingMode);
                if (newMode != EncodingMode)
                {
-                  context.signalEncoderChange(newMode);
+                  // Return to ASCII encodation, which will actually handle latch to new mode
+                  context.signalEncoderChange(Encodation.ASCII);
                   break;
                }
             }
