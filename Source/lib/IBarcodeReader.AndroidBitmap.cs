@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-using System;
-
 namespace ZXing
 {
    /// <summary>
@@ -26,7 +24,7 @@ namespace ZXing
       /// <summary>
       /// Decodes the specified barcode bitmap.
       /// </summary>
-      /// <param name="barcodeBitmap">The barcode bitmap.</param>
+      /// <param name="barcodeImage">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
       Result Decode(Android.Graphics.Bitmap barcodeImage);
    }

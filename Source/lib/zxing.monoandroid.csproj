@@ -8,12 +8,14 @@
     <ProjectGuid>{8971B59D-78F1-49BA-808D-CBADB37F571F}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>zxing.monoandroid</RootNamespace>
+    <RootNamespace>ZXing</RootNamespace>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AssemblyName>zxing.monoandroid</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Key\private.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkVersion>v2.3</TargetFrameworkVersion>
+    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -25,7 +27,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
     <AndroidLinkMode>None</AndroidLinkMode>
-	<BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
     <IntermediateOutputPath Condition=" '$(PlatformName)' == 'AnyCPU' ">$(BaseIntermediateOutputPath)$(Configuration)\monodroid\</IntermediateOutputPath>
     <IntermediateOutputPath Condition=" '$(PlatformName)' != 'AnyCPU' ">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\monodroid\</IntermediateOutputPath>
   </PropertyGroup>
@@ -40,7 +42,7 @@
     <DefineConstants>MONOANDROID</DefineConstants>
     <DocumentationFile>..\..\Build\Release\monodroid\zxing.monoandroid.XML</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
-	<BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
     <IntermediateOutputPath Condition=" '$(PlatformName)' == 'AnyCPU' ">$(BaseIntermediateOutputPath)$(Configuration)\monodroid\</IntermediateOutputPath>
     <IntermediateOutputPath Condition=" '$(PlatformName)' != 'AnyCPU' ">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\monodroid\</IntermediateOutputPath>
   </PropertyGroup>
@@ -72,7 +74,7 @@
     <Compile Include="BarcodeReader.AndroidBitmap.cs" />
     <Compile Include="BarcodeReaderCustom.cs" />
     <Compile Include="BarcodeReaderGeneric.cs" />
-    <Compile Include="BarcodeWriter.Bitmap.cs" />
+    <Compile Include="BarcodeWriter.AndroidBitmap.cs" />
     <Compile Include="BarcodeWriter.PixelData.cs" />
     <Compile Include="BarcodeWriter.SvgImage.cs" />
     <Compile Include="BarcodeWriterCustom.cs" />
@@ -182,7 +184,6 @@
     <Compile Include="IBarcodeWriter.cs" />
     <Compile Include="IBarcodeWriter.PixelData.cs" />
     <Compile Include="IBarcodeWriter.SvgImage.cs" />
-    <Compile Include="IBarcodeWriter.Bitmap.cs" />
     <Compile Include="IBarcodeWriterCustom.cs" />
     <Compile Include="IBarcodeWriterGeneric.cs" />
     <Compile Include="imb\IMBReader.cs" />

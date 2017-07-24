@@ -27,8 +27,6 @@ namespace ZXing
       private static readonly Func<Bitmap, LuminanceSource> defaultCreateLuminanceSource =
          (bitmap) => new BitmapLuminanceSource(bitmap);
 
-      private readonly Func<Bitmap, LuminanceSource> createLuminanceSource;
-
       /// <summary>
       /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
       /// </summary>
