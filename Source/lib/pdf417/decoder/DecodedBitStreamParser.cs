@@ -750,22 +750,20 @@ namespace ZXing.PDF417.Internal
                      break;
                }
             }
-            if (count % MAX_NUMERIC_CODEWORDS == 0 ||
+            if ((count % MAX_NUMERIC_CODEWORDS == 0 ||
                 code == NUMERIC_COMPACTION_MODE_LATCH ||
-                end)
+                end) &&
+                count > 0)
             {
                // Re-invoking Numeric Compaction mode (by using codeword 902
                // while in Numeric Compaction mode) serves  to terminate the
                // current Numeric Compaction mode grouping as described in 5.4.4.2,
                // and then to start a new one grouping.
-               if (count > 0)
-               {
-                  String s = decodeBase900toBase10(numericCodewords, count);
-                  if (s == null)
-                     return -1;
-                  result.Append(s);
-                  count = 0;
-               }
+               var s = decodeBase900toBase10(numericCodewords, count);
+               if (s == null)
+                  return -1;
+               result.Append(s);
+               count = 0;
             }
          }
          return codeIndex;

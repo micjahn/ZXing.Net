@@ -725,12 +725,12 @@ namespace ZXing.PDF417.Internal
 
       /// <summary>
       /// Determines the number of consecutive characters that are encodable using binary compaction.
-      ///
+      /// </summary>
       /// <param name="msg">the message</param>
       /// <param name="bytes">the message converted to a byte array</param>
       /// <param name="startpos">the start position within the message</param>
+      /// <param name="encoding"></param>
       /// <returns>the requested character count</returns>
-      /// </summary>
       private static int determineConsecutiveBinaryCount(String msg, byte[] bytes, int startpos, Encoding encoding)
       {
          int len = msg.Length;

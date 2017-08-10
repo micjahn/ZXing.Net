@@ -29,6 +29,14 @@ namespace ZXing.Aztec.Internal
    /// <author>David Olivier</author>
    public sealed class Detector
    {
+      private static readonly int[] EXPECTED_CORNER_BITS =
+      {
+         0xee0, // 07340  XXX .XX X.. ...
+         0x1dc, // 00734  ... XXX .XX X..
+         0x83b, // 04073  X.. ... XXX .XX
+         0x707, // 03407 .XX X.. ... XXX
+      };
+
       private readonly BitMatrix image;
 
       private bool compact;
@@ -182,14 +190,6 @@ namespace ZXing.Aztec.Internal
 
          return true;
       }
-
-      private static readonly int[] EXPECTED_CORNER_BITS =
-         {
-            0xee0, // 07340  XXX .XX X.. ...
-            0x1dc, // 00734  ... XXX .XX X..
-            0x83b, // 04073  X.. ... XXX .XX
-            0x707, // 03407 .XX X.. ... XXX
-         };
 
       private static int getRotation(int[] sides, int length)
       {

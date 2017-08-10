@@ -333,7 +333,6 @@
     <Compile Include="ResultMetadataType.cs" />
     <Compile Include="ResultPoint.cs" />
     <Compile Include="ResultPointCallback.cs" />
-    <Compile Include="RGB565LuminanceSource.cs" />
     <Compile Include="RGBLuminanceSource.cs" />
     <Compile Include="SupportClass.cs" />
     <Compile Include="Writer.cs" />

@@ -161,8 +161,8 @@ namespace MonoAndroidDemo
          try 
          {
             var reader = new BarcodeReader ();
-            reader.PossibleFormats = new List<BarcodeFormat> () { CurrentFormat };
-            reader.TryHarder = true;
+            reader.Options.PossibleFormats = new List<BarcodeFormat> () { CurrentFormat };
+            reader.Options.TryHarder = true;
             var result = reader.Decode (image);
             if (result != null)
             {

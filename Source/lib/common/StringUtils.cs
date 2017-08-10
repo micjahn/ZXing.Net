@@ -30,7 +30,7 @@ namespace ZXing.Common
 #if (WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || NETSTANDARD)
       private const String PLATFORM_DEFAULT_ENCODING = "UTF-8";
 #else
-      private static String PLATFORM_DEFAULT_ENCODING = Encoding.Default.WebName;
+      private static readonly String PLATFORM_DEFAULT_ENCODING = Encoding.Default.WebName;
 #endif
       /// <summary>
       /// SJIS
@@ -73,20 +73,15 @@ namespace ZXing.Common
          bool canBeShiftJIS = true;
          bool canBeUTF8 = true;
          int utf8BytesLeft = 0;
-         //int utf8LowChars = 0;
          int utf2BytesChars = 0;
          int utf3BytesChars = 0;
          int utf4BytesChars = 0;
          int sjisBytesLeft = 0;
-         //int sjisLowChars = 0;
          int sjisKatakanaChars = 0;
-         //int sjisDoubleBytesChars = 0;
          int sjisCurKatakanaWordLength = 0;
          int sjisCurDoubleBytesWordLength = 0;
          int sjisMaxKatakanaWordLength = 0;
          int sjisMaxDoubleBytesWordLength = 0;
-         //int isoLowChars = 0;
-         //int isoHighChars = 0;
          int isoHighOther = 0;
 
          bool utf8bom = bytes.Length > 3 &&
@@ -149,9 +144,7 @@ namespace ZXing.Common
                         }
                      }
                   }
-               } //else {
-               //utf8LowChars++;
-               //}
+               }
             }
 
             // ISO-8859-1 stuff
@@ -166,12 +159,8 @@ namespace ZXing.Common
                   if (value < 0xC0 || value == 0xD7 || value == 0xF7)
                   {
                      isoHighOther++;
-                  } //else {
-                  //isoHighChars++;
-                  //}
-               } //else {
-               //isoLowChars++;
-               //}
+                  }
+               }
             }
 
             // Shift_JIS stuff

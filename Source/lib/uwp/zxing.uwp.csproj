@@ -944,9 +944,6 @@
     <Compile Include="..\ResultPointCallback.cs">
       <Link>ResultPointCallback.cs</Link>
     </Compile>
-    <Compile Include="..\RGB565LuminanceSource.cs">
-      <Link>RGB565LuminanceSource.cs</Link>
-    </Compile>
     <Compile Include="..\RGBLuminanceSource.cs">
       <Link>RGBLuminanceSource.cs</Link>
     </Compile>

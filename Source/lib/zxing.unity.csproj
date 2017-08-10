@@ -59,7 +59,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
       <HintPath>..\..\3rdparty\Unity\UnityEngine.dll</HintPath>
       <Private>False</Private>
@@ -338,7 +337,6 @@
     <Compile Include="ResultMetadataType.cs" />
     <Compile Include="ResultPoint.cs" />
     <Compile Include="ResultPointCallback.cs" />
-    <Compile Include="RGB565LuminanceSource.cs" />
     <Compile Include="RGBLuminanceSource.cs" />
     <Compile Include="SupportClass.cs" />
     <Compile Include="unity\Color32LuminanceSource.cs" />

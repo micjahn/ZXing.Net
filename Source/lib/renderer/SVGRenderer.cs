@@ -30,6 +30,7 @@ using System.Drawing;
 #endif
 
 using ZXing.Common;
+using ZXing.OneD;
 
 namespace ZXing.Rendering
 {
@@ -38,6 +39,9 @@ namespace ZXing.Rendering
    /// </summary>
    public class SvgRenderer : IBarcodeRenderer<SvgRenderer.SvgImage>
    {
+      public const string DefaultFontName = "Arial";
+      public const int DefaultFontSize = 10;
+
 #if !UNITY
 #if (PORTABLE || NETSTANDARD)
       /// <summary>
@@ -98,12 +102,14 @@ namespace ZXing.Rendering
       /// Gets or sets the foreground color.
       /// </summary>
       /// <value>The foreground color.</value>
+      [CLSCompliant(false)]
       public Color Foreground { get; set; }
 
       /// <summary>
       /// Gets or sets the background color.
       /// </summary>
       /// <value>The background color.</value>
+      [CLSCompliant(false)]
       public Color Background { get; set; }
 #else
       /// <summary>
@@ -120,6 +126,18 @@ namespace ZXing.Rendering
       [System.CLSCompliant(false)]
       public Color32 Background { get; set; }
 #endif
+
+      /// <summary>
+      /// Gets or sets the font family name
+      /// </summary>
+      /// <value>The font family name.</value>
+      public string FontName { get; set; }
+
+      /// <summary>
+      /// Gets or sets the font size in pixel
+      /// </summary>
+      /// <value>The font size in pixel.</value>
+      public int FontSize { get; set; }
 
       /// <summary>
       /// Initializes a new instance of the <see cref="SvgRenderer"/> class.
@@ -169,17 +187,67 @@ namespace ZXing.Rendering
 
       private void Create(SvgImage image, BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
       {
-         const int quietZone = 5;
-
          if (matrix == null)
             return;
 
+         const int spaceBetweenMatrixAndText = 3;
          int width = matrix.Width;
          int height = matrix.Height;
+         var outputContent = (options == null || !options.PureBarcode) &&
+                    !String.IsNullOrEmpty(content) &&
+                    (format == BarcodeFormat.CODE_39 ||
+                     format == BarcodeFormat.CODE_93 ||
+                     format == BarcodeFormat.CODE_128 ||
+                     format == BarcodeFormat.EAN_13 ||
+                     format == BarcodeFormat.EAN_8 ||
+                     format == BarcodeFormat.CODABAR ||
+                     format == BarcodeFormat.ITF ||
+                     format == BarcodeFormat.UPC_A ||
+                     format == BarcodeFormat.UPC_E ||
+                     format == BarcodeFormat.MSI ||
+                     format == BarcodeFormat.PLESSEY);
+
+         if (outputContent)
+         {
+            var fontSize = FontSize < 1 ? DefaultFontSize : FontSize;
+            height += fontSize + spaceBetweenMatrixAndText;
+         }
+
          image.AddHeader();
-         image.AddTag(0, 0, 2 * quietZone + width, 2 * quietZone + height, Background, Foreground);
-         AppendDarkCell(image, matrix, quietZone, quietZone);
+         image.AddTag(0, 0, width, height, Background, Foreground);
+         AppendDarkCell(image, matrix, 0, 0);
+
+         if (outputContent)
+         {
+            var fontName = String.IsNullOrEmpty(FontName) ? DefaultFontName : FontName;
+            var fontSize = FontSize < 1 ? DefaultFontSize : FontSize;
+
+            content = ModifyContentDependingOnBarcodeFormat(format, content);
+
+            image.AddText(content, fontName, fontSize);
+         }
+
          image.AddEnd();
+      }
+
+      private string ModifyContentDependingOnBarcodeFormat(BarcodeFormat format, string content)
+      {
+         switch (format)
+         {
+            case BarcodeFormat.EAN_8:
+               if (content.Length < 8)
+                  content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+               content = content.Insert(4, "   ");
+               break;
+            case BarcodeFormat.EAN_13:
+               if (content.Length < 13)
+                  content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+               content = content.Insert(7, "   ");
+               content = content.Insert(1, "   ");
+               break;
+         }
+
+         return content;
       }
 
       private static void AppendDarkCell(SvgImage image, BitMatrix matrix, int offsetX, int offSetY)
@@ -352,6 +420,13 @@ namespace ZXing.Rendering
                    GetBackgroundStyle(background),
                    displaysizeX,
                    displaysizeY));
+         }
+
+         internal void AddText(string text, string fontName, int fontSize)
+         {
+            content.AppendFormat(System.Globalization.CultureInfo.InvariantCulture,
+               "<text x=\"50%\" y=\"98%\" style=\"font-family: {0}; font-size: {1}px\" text-anchor=\"middle\">{2}</text>",
+               fontName, fontSize, text);
          }
 
          internal void AddRec(int posX, int posY, int width, int height)

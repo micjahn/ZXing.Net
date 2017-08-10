@@ -87,12 +87,10 @@ namespace ZXing.OneD.RSS
                for (int j = 0; j < rightSize; j++)
                {
                   Pair right = possibleRightPairs[j];
-                  if (right.Count > 1)
+                  if (right.Count > 1 &&
+                      checkChecksum(left, right))
                   {
-                     if (checkChecksum(left, right))
-                     {
-                        return constructResult(left, right);
-                     }
+                     return constructResult(left, right);
                   }
                }
             }

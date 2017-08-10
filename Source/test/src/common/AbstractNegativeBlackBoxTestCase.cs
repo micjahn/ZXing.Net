@@ -42,6 +42,8 @@ namespace ZXing.Common.Test
       private static readonly DanielVaughan.Logging.ILog Log = DanielVaughan.Logging.LogManager.GetLog(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 #endif
 
+      private readonly List<TestResult> testResults;
+
       private class TestResult
       {
          private readonly int falsePositivesAllowed;
@@ -63,8 +65,6 @@ namespace ZXing.Common.Test
             return rotation;
          }
       }
-
-      private readonly List<TestResult> testResults;
 
       // Use the multiformat reader to evaluate all decoders in the system.
       protected AbstractNegativeBlackBoxTestCase(String testBasePathSuffix)

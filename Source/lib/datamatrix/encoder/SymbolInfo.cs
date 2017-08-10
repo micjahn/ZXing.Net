@@ -62,6 +62,15 @@ namespace ZXing.Datamatrix.Encoder
 
       private static SymbolInfo[] symbols = PROD_SYMBOLS;
 
+      private readonly bool rectangular;
+      internal readonly int dataCapacity;
+      internal readonly int errorCodewords;
+      public readonly int matrixWidth;
+      public readonly int matrixHeight;
+      private readonly int dataRegions;
+      private readonly int rsBlockData;
+      private readonly int rsBlockError;
+
       /**
        * Overrides the symbol info set used by this class. Used for testing purposes.
        *
@@ -71,15 +80,6 @@ namespace ZXing.Datamatrix.Encoder
       {
          symbols = @override;
       }
-
-      private readonly bool rectangular;
-      internal readonly int dataCapacity;
-      internal readonly int errorCodewords;
-      public readonly int matrixWidth;
-      public readonly int matrixHeight;
-      private readonly int dataRegions;
-      private readonly int rsBlockData;
-      private readonly int rsBlockError;
 
       public SymbolInfo(bool rectangular, int dataCapacity, int errorCodewords,
                         int matrixWidth, int matrixHeight, int dataRegions)

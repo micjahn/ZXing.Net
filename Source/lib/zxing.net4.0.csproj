@@ -124,9 +124,6 @@
       <Name>System.Drawing</Name>
     </Reference>
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Xml">
-      <Name>System.Xml</Name>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="aztec\AztecResultMetadata.cs" />
@@ -403,7 +400,6 @@
     <Compile Include="ResultMetadataType.cs" />
     <Compile Include="ResultPoint.cs" />
     <Compile Include="ResultPointCallback.cs" />
-    <Compile Include="RGB565LuminanceSource.cs" />
     <Compile Include="RGBLuminanceSource.cs" />
     <Compile Include="BitmapLuminanceSource.cs" />
     <Compile Include="SupportClass.cs" />

@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-using System;
-
 namespace ZXing
 {
    /// <summary>
    /// Interface for a smart class to decode the barcode inside a bitmap object
    /// </summary>
+   [System.CLSCompliant(false)]
    public partial interface IBarcodeReader
    {
       /// <summary>
       /// Decodes the specified barcode bitmap.
       /// </summary>
-      /// <param name="barcodeBitmap">The barcode bitmap.</param>
+      /// <param name="barcodeImage">The barcode bitmap.</param>
       /// <returns>the result data or null</returns>
       Result Decode(Android.Graphics.Bitmap barcodeImage);
    }
