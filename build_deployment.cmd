@@ -19,8 +19,6 @@ SET SVN_TOOL=%CD%\3rdparty\Subversion\svn.exe
 IF NOT EXIST "%BINARY_DIR%\ce2.0\zxing.ce2.0.dll" GOTO BINARY_CE20_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\ce3.5\zxing.ce3.5.dll" GOTO BINARY_CE35_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\interop\zxing.interop.dll" GOTO BINARY_INTEROP_NOT_FOUND
-IF NOT EXIST "%BINARY_DIR%\kinect\V1\zxing.kinect.dll" GOTO BINARY_KINECT_V1_NOT_FOUND
-IF NOT EXIST "%BINARY_DIR%\kinect\V2\zxing.kinect.dll" GOTO BINARY_KINECT_V2_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\net2.0\zxing.dll" GOTO BINARY_NET20_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\net3.5\zxing.dll" GOTO BINARY_NET35_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\net4.0\zxing.dll" GOTO BINARY_NET40_NOT_FOUND
@@ -42,9 +40,16 @@ IF NOT EXIST "%BINARY_DIR%\wp7.1\zxing.wp7.1.dll" GOTO BINARY_WP71_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\wp8.0\zxing.wp8.0.dll" GOTO BINARY_WP80_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\monodroid\zxing.monoandroid.dll" GOTO BINARY_MONODROID_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\winmd\zxing.winmd" GOTO BINARY_WINRTCOMPONENTS_NOT_FOUND
-IF NOT EXIST "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.0\zxing.dll" GOTO BINARY_NETSTANDARD10_NOT_FOUND
-IF NOT EXIST "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.1\zxing.dll" GOTO BINARY_NETSTANDARD11_NOT_FOUND
-IF NOT EXIST "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.3\zxing.dll" GOTO BINARY_NETSTANDARD13_NOT_FOUND
+IF NOT EXIST "%CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard1.0\zxing.dll" GOTO BINARY_NETSTANDARD10_NOT_FOUND
+IF NOT EXIST "%CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard1.1\zxing.dll" GOTO BINARY_NETSTANDARD11_NOT_FOUND
+IF NOT EXIST "%CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard1.3\zxing.dll" GOTO BINARY_NETSTANDARD13_NOT_FOUND
+IF NOT EXIST "%CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.dll" GOTO BINARY_CORECOMPAT_NOT_FOUND
+IF NOT EXIST "%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.1\zxing.imagesharp.dll" GOTO BINARY_IMAGESHARP_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\Bindings\kinect\V1\zxing.kinect.dll" GOTO BINARY_KINECT_V1_NOT_FOUND
+IF NOT EXIST "%BINARY_DIR%\Bindings\kinect\V2\zxing.kinect.dll" GOTO BINARY_KINECT_V2_NOT_FOUND
+IF NOT EXIST "%CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\netstandard1.3\zxing.magick.dll" GOTO BINARY_MAGICK_NOT_FOUND
+IF NOT EXIST "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCV\bin\Release\netstandard1.6\zxing.opencv.dll" GOTO BINARY_OPENCV_NOT_FOUND
+IF NOT EXIST "%CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard1.3\zxing.skiasharp.dll" GOTO BINARY_SKIASHARP_NOT_FOUND
 
 ECHO.
 ECHO Build deployment files in directory
@@ -71,22 +76,49 @@ MKDIR "%BINARY_DIR%\netstandard" >NUL: 2>&1
 MKDIR "%BINARY_DIR%\netstandard\1.0" >NUL: 2>&1
 MKDIR "%BINARY_DIR%\netstandard\1.1" >NUL: 2>&1
 MKDIR "%BINARY_DIR%\netstandard\1.3" >NUL: 2>&1
-COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.0\zxing.dll" "%BINARY_DIR%\netstandard\1.0\"
-COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.0\zxing.pdb" "%BINARY_DIR%\netstandard\1.0\"
-COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.0\zxing.xml" "%BINARY_DIR%\netstandard\1.0\"
-COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.1\zxing.dll" "%BINARY_DIR%\netstandard\1.1\"
-COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.1\zxing.pdb" "%BINARY_DIR%\netstandard\1.1\"
-COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.1\zxing.xml" "%BINARY_DIR%\netstandard\1.1\"
-COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.3\zxing.dll" "%BINARY_DIR%\netstandard\1.3\"
-COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.3\zxing.pdb" "%BINARY_DIR%\netstandard\1.3\"
-COPY "%CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.3\zxing.xml" "%BINARY_DIR%\netstandard\1.3\"
+COPY "%CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.0\zxing.dll" "%BINARY_DIR%\netstandard\1.0\"
+COPY "%CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.0\zxing.pdb" "%BINARY_DIR%\netstandard\1.0\"
+COPY "%CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.0\zxing.xml" "%BINARY_DIR%\netstandard\1.0\"
+COPY "%CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.1\zxing.dll" "%BINARY_DIR%\netstandard\1.1\"
+COPY "%CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.1\zxing.pdb" "%BINARY_DIR%\netstandard\1.1\"
+COPY "%CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.1\zxing.xml" "%BINARY_DIR%\netstandard\1.1\"
+COPY "%CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.3\zxing.dll" "%BINARY_DIR%\netstandard\1.3\"
+COPY "%CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.3\zxing.pdb" "%BINARY_DIR%\netstandard\1.3\"
+COPY "%CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.3\zxing.xml" "%BINARY_DIR%\netstandard\1.3\"
+
+MKDIR "%BINARY_DIR%\Bindings" >NUL: 2>&1
+
+MKDIR "%BINARY_DIR%\Bindings\CoreCompat.System.Drawing" >NUL: 2>&1
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.dll" "%BINARY_DIR%\Bindings\CoreCompat.System.Drawing\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.pdb" "%BINARY_DIR%\Bindings\CoreCompat.System.Drawing\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.xml" "%BINARY_DIR%\Bindings\CoreCompat.System.Drawing\"
+
+MKDIR "%BINARY_DIR%\Bindings\ImageSharp" >NUL: 2>&1
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.1\zxing.imagesharp.dll" "%BINARY_DIR%\Bindings\ImageSharp\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.1\zxing.imagesharp.pdb" "%BINARY_DIR%\Bindings\ImageSharp\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.1\zxing.imagesharp.xml" "%BINARY_DIR%\Bindings\ImageSharp\"
+
+MKDIR "%BINARY_DIR%\Bindings\Magick" >NUL: 2>&1
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\netstandard1.3\zxing.magick.dll" "%BINARY_DIR%\Bindings\Magick\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\netstandard1.3\zxing.magick.pdb" "%BINARY_DIR%\Bindings\Magick\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\netstandard1.3\zxing.magick.xml" "%BINARY_DIR%\Bindings\Magick\"
+
+MKDIR "%BINARY_DIR%\Bindings\OpenCV" >NUL: 2>&1
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCV\bin\Release\netstandard1.6\zxing.opencv.dll" "%BINARY_DIR%\Bindings\OpenCV\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCV\bin\Release\netstandard1.6\zxing.opencv.pdb" "%BINARY_DIR%\Bindings\OpenCV\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCV\bin\Release\netstandard1.6\zxing.opencv.xml" "%BINARY_DIR%\Bindings\OpenCV\"
+
+MKDIR "%BINARY_DIR%\Bindings\SkiaSharp" >NUL: 2>&1
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard1.3\zxing.skiasharp.dll" "%BINARY_DIR%\Bindings\SkiaSharp\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard1.3\zxing.skiasharp.pdb" "%BINARY_DIR%\Bindings\SkiaSharp\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard1.3\zxing.skiasharp.xml" "%BINARY_DIR%\Bindings\SkiaSharp\"
 
 REM
 REM building archives for binaries
 REM ***************************************************************************************
 
 CD "%BINARY_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net3.5 net4.0 net4.5 net4.6 winrt uwp netstandard unity sl4 sl5 wp7.0 wp7.1 wp8.0 monodroid winmd portable kinect interop ..\..\THANKS ..\..\COPYING -xr!Documentation
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net3.5 net4.0 net4.5 net4.6 net4.7 winrt uwp netstandard unity sl4 sl5 wp7.0 wp7.1 wp8.0 monodroid winmd portable interop Bindings ..\..\THANKS ..\..\COPYING -xr!Documentation
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DEMO_BINARY%" Clients
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DOCUMENTATION%" Documentation
 CD "%CURRENT_DIR%"
@@ -343,14 +375,14 @@ GOTO END
 
 :BINARY_KINECT_V1_NOT_FOUND
 ECHO The Kinect V1 binaries 
-ECHO %BINARY_DIR%\kinect\V1\...
+ECHO %BINARY_DIR%\Bindings\Kinect\V1\...
 ECHO weren't found.
 ECHO.
 GOTO END
 
 :BINARY_KINECT_V2_NOT_FOUND
 ECHO The Kinect V2 binaries 
-ECHO %BINARY_DIR%\kinect\V2\...
+ECHO %BINARY_DIR%\Bindings\Kinect\V2\...
 ECHO weren't found.
 ECHO.
 GOTO END
@@ -364,21 +396,56 @@ GOTO END
 
 :BINARY_NETSTANDARD10_NOT_FOUND
 ECHO The .Net Standard 1.0 binaries 
-ECHO %CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.0\...
+ECHO %CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard1.0\...
 ECHO weren't found.
 ECHO.
 GOTO END
 
 :BINARY_NETSTANDARD11_NOT_FOUND
 ECHO The .Net Standard 1.1 binaries 
-ECHO %CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.1\...
+ECHO %CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard1.1\...
 ECHO weren't found.
 ECHO.
 GOTO END
 
 :BINARY_NETSTANDARD13_NOT_FOUND
 ECHO The .Net Standard 1.3 binaries 
-ECHO %CURRENT_DIR%\Source\lib\netstandard\bin\Debug\netstandard1.3\...
+ECHO %CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard1.3\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
+:BINARY_CORECOMPAT_NOT_FOUND
+ECHO The CoreCompat.System.Drawing bindings binaries 
+ECHO %CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
+:BINARY_IMAGESHARP_NOT_FOUND
+ECHO The ImageSharp bindings binaries 
+ECHO %CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.1\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
+:BINARY_MAGICK_NOT_FOUND
+ECHO The Magick bindings binaries 
+ECHO %CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\netstandard1.3\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
+:BINARY_OPENCV_NOT_FOUND
+ECHO The OpenCV bindings binaries 
+ECHO %CURRENT_DIR%\Source\Bindings\ZXing.OpenCV\bin\Release\netstandard1.6\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
+:BINARY_SKIASHARP_NOT_FOUND
+ECHO The OpenCV bindings binaries 
+ECHO %CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard1.3\...
 ECHO weren't found.
 ECHO.
 GOTO END
