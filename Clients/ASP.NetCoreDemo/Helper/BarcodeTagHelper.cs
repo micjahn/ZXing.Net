@@ -20,7 +20,7 @@ using System.IO;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 using ZXing;
-using ZXing.QrCode;
+using ZXing.Common;
 
 namespace ASP.NetCoreDemo.Helper
 {
@@ -42,16 +42,16 @@ namespace ASP.NetCoreDemo.Helper
 
          var alt = context.AllAttributes["alt"]?.Value.ToString();
          var width =
-            Convert.ToInt32(context.AllAttributes["width"] == null
-               ? "500"
+            Convert.ToInt32(String.IsNullOrEmpty(context.AllAttributes["width"]?.Value.ToString())
+               ? "1"
                : context.AllAttributes["width"].Value.ToString());
          var height =
-            Convert.ToInt32(context.AllAttributes["height"] == null
-               ? "500"
+            Convert.ToInt32(String.IsNullOrEmpty(context.AllAttributes["height"]?.Value.ToString())
+               ? "1"
                : context.AllAttributes["height"].Value.ToString());
          var margin =
-            Convert.ToInt32(context.AllAttributes["margin"] == null
-               ? "5"
+            Convert.ToInt32(String.IsNullOrEmpty(context.AllAttributes["margin"]?.Value.ToString())
+               ? "0"
                : context.AllAttributes["margin"].Value.ToString());
          var barcodeformat = BarcodeFormat.QR_CODE;
          var outputformat = OutputFormat.PNG;
@@ -88,7 +88,7 @@ namespace ASP.NetCoreDemo.Helper
          var qrWriter = new ZXing.BarcodeWriterPixelData
          {
             Format = barcodeformat,
-            Options = new QrCodeEncodingOptions { Height = height, Width = width, Margin = margin }
+            Options = new EncodingOptions { Height = height, Width = width, Margin = margin }
          };
 
 
@@ -131,7 +131,7 @@ namespace ASP.NetCoreDemo.Helper
          var qrWriter = new ZXing.BarcodeWriterSvg
          {
             Format = barcodeformat,
-            Options = new QrCodeEncodingOptions { Height = height, Width = width, Margin = margin }
+            Options = new EncodingOptions { Height = height, Width = width, Margin = margin }
          };
 
 
