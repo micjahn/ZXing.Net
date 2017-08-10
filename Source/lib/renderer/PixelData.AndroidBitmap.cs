@@ -25,6 +25,7 @@ namespace ZXing.Rendering
       /// converts the pixel data to a bitmap object
       /// </summary>
       /// <returns></returns>
+      [System.CLSCompliant(false)]
       public Android.Graphics.Bitmap ToBitmap()
       {
          var pixels = Pixels;

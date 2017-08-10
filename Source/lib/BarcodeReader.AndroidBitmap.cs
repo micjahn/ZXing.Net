@@ -22,6 +22,7 @@ namespace ZXing
    /// <summary>
    /// A smart class to decode the barcode inside a bitmap object
    /// </summary>
+   [CLSCompliant(false)]
    public class BarcodeReader : BarcodeReader<Bitmap>, IBarcodeReader
    {
       private static readonly Func<Bitmap, LuminanceSource> defaultCreateLuminanceSource =

@@ -19,6 +19,7 @@ namespace ZXing
    /// <summary>
    /// Interface for a smart class to decode the barcode inside a bitmap object
    /// </summary>
+   [System.CLSCompliant(false)]
    public partial interface IBarcodeReader
    {
       /// <summary>

@@ -21,6 +21,11 @@ namespace ZXing
    /// </summary>
    public partial interface IBarcodeReader
    {
+      /// <summary>
+      /// Decodes the specified barcode bitmap.
+      /// </summary>
+      /// <param name="barcodeImage">The barcode bitmap.</param>
+      /// <returns>the result data or null</returns>
       Result[] DecodeMultiple(Android.Graphics.Bitmap barcodeImage);
    }
 }

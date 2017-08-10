@@ -29,6 +29,7 @@ namespace ZXing
       /// Initializes a new instance of the <see cref="BitmapLuminanceSource"/> class.
       /// </summary>
       /// <param name="bitmap">The bitmap.</param>
+      [CLSCompliant(false)]
       public BitmapLuminanceSource(Bitmap bitmap)
          : base(bitmap.Width, bitmap.Height)
       {

@@ -29,12 +29,14 @@ namespace ZXing.Rendering
       /// Gets or sets the foreground color.
       /// </summary>
       /// <value>The foreground color.</value>
+      [System.CLSCompliant(false)]
       public Color Foreground { get; set; }
 
       /// <summary>
       /// Gets or sets the background color.
       /// </summary>
       /// <value>The background color.</value>
+      [System.CLSCompliant(false)]
       public Color Background { get; set; }
 
       /// <summary>
@@ -53,6 +55,7 @@ namespace ZXing.Rendering
       /// <param name="format">The format.</param>
       /// <param name="content">The content.</param>
       /// <returns></returns>
+      [System.CLSCompliant(false)]
       public Bitmap Render(BitMatrix matrix, BarcodeFormat format, string content)
       {
          return Render(matrix, format, content, new EncodingOptions());
@@ -66,6 +69,7 @@ namespace ZXing.Rendering
       /// <param name="content">The content.</param>
       /// <param name="options">The options.</param>
       /// <returns></returns>
+      [System.CLSCompliant(false)]
       public Bitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
       {
          var width = matrix.Width;

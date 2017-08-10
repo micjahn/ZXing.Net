@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoAndroidDemo", "Clients\MonoAndroidDemo\MonoAndroidDemo.csproj", "{14DFA0B8-A311-46BD-A1BD-A0808473CD80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.monoandroid", "Source\lib\zxing.monoandroid.csproj", "{8971B59D-78F1-49BA-808D-CBADB37F571F}"
