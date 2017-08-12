@@ -164,6 +164,8 @@ MKDIR "%SVN_EXPORT_DIR%\WinMD\Source\lib" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\WinMD\Clients" >NUL: 2>&1
 
 "%SVN_TOOL%" export --force "%SVN_URL%/Source/lib" "%SVN_EXPORT_DIR%\Base\Source\lib"
+"%SVN_TOOL%" export --force "%SVN_URL%/Source/Bindings" "%SVN_EXPORT_DIR%\Base\Source\Bindings"
+"%SVN_TOOL%" export --force "%SVN_URL%/Source/interop" "%SVN_EXPORT_DIR%\Base\Source\interop"
 "%SVN_TOOL%" export --force "%SVN_URL%/Source/test/src" "%SVN_EXPORT_DIR%\Base\Source\test\src"
 "%SVN_TOOL%" export --force "%SVN_URL%/Clients" "%SVN_EXPORT_DIR%\Base\Clients"
 "%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/AForge" "%SVN_EXPORT_DIR%\Base\3rdparty\AForge"
@@ -190,7 +192,7 @@ MKDIR "%SVN_EXPORT_DIR%\WinMD\Clients" >NUL: 2>&1
 "%SVN_TOOL%" export --force "%SVN_URL_WINMD%/zxing.vs2012.sln" "%SVN_EXPORT_DIR%\WinMD"
 
 CD "%SVN_EXPORT_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Base\Source\lib\*.* Base\Source\test\src\*.* Base\Clients\*.* Base\3rdparty\*.* Base\Key\*.* Base\zxing.sln Base\zxing.ce.sln Base\zxing.vs2012.sln Base\zxing.vs2015.sln Base\zxing.monoandroid.sln Base\zxing.monotouch.sln Base\zxing.nunit Base\THANKS Base\COPYING WinMD\Source\lib\*.* WinMD\Clients\*.* WinMD\Key\*.* WinMD\zxing.vs2012.sln
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Base\Source\lib\*.* Base\Source\Bindings\*.* Base\Source\interop\*.* Base\Source\test\src\*.* Base\Clients\*.* Base\3rdparty\*.* Base\Key\*.* Base\zxing.sln Base\zxing.ce.sln Base\zxing.vs2012.sln Base\zxing.vs2015.sln Base\zxing.monoandroid.sln Base\zxing.monotouch.sln Base\zxing.nunit Base\THANKS Base\COPYING WinMD\Source\lib\*.* WinMD\Clients\*.* WinMD\Key\*.* WinMD\zxing.vs2012.sln
 CD "%CURRENT_DIR%"
 
 RMDIR /S /Q "%SVN_EXPORT_DIR%" >NUL: 2>&1
