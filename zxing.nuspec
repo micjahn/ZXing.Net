@@ -122,14 +122,14 @@ It is now compatible with .Net 2.0, .Net 3.5, .Net 4.0, .Net 4.5, .Net 4.6, .Net
     <file src="Build\Release\uwp\zxing.pdb" target="lib\uap10\zxing.pdb" />
     <file src="Build\Release\uwp\zxing.xml" target="lib\uap10\zxing.xml" />
     <file src="Build\Release\uwp\zxing.pri" target="lib\uap10\zxing.pri" />
-    <file src="Build\Release\netstandard1.0\zxing.dll" target="lib\netstandard1.0\zxing.dll" />
-    <file src="Build\Release\netstandard1.0\zxing.pdb" target="lib\netstandard1.0\zxing.pdb" />
-    <file src="Build\Release\netstandard1.0\zxing.xml" target="lib\netstandard1.0\zxing.xml" />
-    <file src="Build\Release\netstandard1.1\zxing.dll" target="lib\netstandard1.1\zxing.dll" />
-    <file src="Build\Release\netstandard1.1\zxing.pdb" target="lib\netstandard1.1\zxing.pdb" />
-    <file src="Build\Release\netstandard1.1\zxing.xml" target="lib\netstandard1.1\zxing.xml" />
-    <file src="Build\Release\netstandard1.3\zxing.dll" target="lib\netstandard1.3\zxing.dll" />
-    <file src="Build\Release\netstandard1.3\zxing.pdb" target="lib\netstandard1.3\zxing.pdb" />
-    <file src="Build\Release\netstandard1.3\zxing.xml" target="lib\netstandard1.3\zxing.xml" />
+    <file src="Build\Release\netstandard\1.0\zxing.dll" target="lib\netstandard1.0\zxing.dll" />
+    <file src="Build\Release\netstandard\1.0\zxing.pdb" target="lib\netstandard1.0\zxing.pdb" />
+    <file src="Build\Release\netstandard\1.0\zxing.xml" target="lib\netstandard1.0\zxing.xml" />
+    <file src="Build\Release\netstandard\1.1\zxing.dll" target="lib\netstandard1.1\zxing.dll" />
+    <file src="Build\Release\netstandard\1.1\zxing.pdb" target="lib\netstandard1.1\zxing.pdb" />
+    <file src="Build\Release\netstandard\1.1\zxing.xml" target="lib\netstandard1.1\zxing.xml" />
+    <file src="Build\Release\netstandard\1.3\zxing.dll" target="lib\netstandard1.3\zxing.dll" />
+    <file src="Build\Release\netstandard\1.3\zxing.pdb" target="lib\netstandard1.3\zxing.pdb" />
+    <file src="Build\Release\netstandard\1.3\zxing.xml" target="lib\netstandard1.3\zxing.xml" />
   </files>
 </package>
