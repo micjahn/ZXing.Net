@@ -40,9 +40,9 @@ IF NOT EXIST "%BINARY_DIR%\wp7.1\zxing.wp7.1.dll" GOTO BINARY_WP71_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\wp8.0\zxing.wp8.0.dll" GOTO BINARY_WP80_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\monodroid\zxing.monoandroid.dll" GOTO BINARY_MONODROID_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\winmd\zxing.winmd" GOTO BINARY_WINRTCOMPONENTS_NOT_FOUND
-IF NOT EXIST "%CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard1.0\zxing.dll" GOTO BINARY_NETSTANDARD10_NOT_FOUND
-IF NOT EXIST "%CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard1.1\zxing.dll" GOTO BINARY_NETSTANDARD11_NOT_FOUND
-IF NOT EXIST "%CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard1.3\zxing.dll" GOTO BINARY_NETSTANDARD13_NOT_FOUND
+IF NOT EXIST "%CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.0\zxing.dll" GOTO BINARY_NETSTANDARD10_NOT_FOUND
+IF NOT EXIST "%CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.1\zxing.dll" GOTO BINARY_NETSTANDARD11_NOT_FOUND
+IF NOT EXIST "%CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.3\zxing.dll" GOTO BINARY_NETSTANDARD13_NOT_FOUND
 IF NOT EXIST "%CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.dll" GOTO BINARY_CORECOMPAT_NOT_FOUND
 IF NOT EXIST "%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.1\zxing.imagesharp.dll" GOTO BINARY_IMAGESHARP_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\Bindings\kinect\V1\zxing.kinect.dll" GOTO BINARY_KINECT_V1_NOT_FOUND
@@ -164,6 +164,8 @@ MKDIR "%SVN_EXPORT_DIR%\WinMD\Source\lib" >NUL: 2>&1
 MKDIR "%SVN_EXPORT_DIR%\WinMD\Clients" >NUL: 2>&1
 
 "%SVN_TOOL%" export --force "%SVN_URL%/Source/lib" "%SVN_EXPORT_DIR%\Base\Source\lib"
+"%SVN_TOOL%" export --force "%SVN_URL%/Source/Bindings" "%SVN_EXPORT_DIR%\Base\Source\Bindings"
+"%SVN_TOOL%" export --force "%SVN_URL%/Source/interop" "%SVN_EXPORT_DIR%\Base\Source\interop"
 "%SVN_TOOL%" export --force "%SVN_URL%/Source/test/src" "%SVN_EXPORT_DIR%\Base\Source\test\src"
 "%SVN_TOOL%" export --force "%SVN_URL%/Clients" "%SVN_EXPORT_DIR%\Base\Clients"
 "%SVN_TOOL%" export --force "%SVN_URL%/3rdparty/AForge" "%SVN_EXPORT_DIR%\Base\3rdparty\AForge"
@@ -190,7 +192,7 @@ MKDIR "%SVN_EXPORT_DIR%\WinMD\Clients" >NUL: 2>&1
 "%SVN_TOOL%" export --force "%SVN_URL_WINMD%/zxing.vs2012.sln" "%SVN_EXPORT_DIR%\WinMD"
 
 CD "%SVN_EXPORT_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Base\Source\lib\*.* Base\Source\test\src\*.* Base\Clients\*.* Base\3rdparty\*.* Base\Key\*.* Base\zxing.sln Base\zxing.ce.sln Base\zxing.vs2012.sln Base\zxing.vs2015.sln Base\zxing.monoandroid.sln Base\zxing.monotouch.sln Base\zxing.nunit Base\THANKS Base\COPYING WinMD\Source\lib\*.* WinMD\Clients\*.* WinMD\Key\*.* WinMD\zxing.vs2012.sln
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Base\Source\lib\*.* Base\Source\Bindings\*.* Base\Source\interop\*.* Base\Source\test\src\*.* Base\Clients\*.* Base\3rdparty\*.* Base\Key\*.* Base\zxing.sln Base\zxing.ce.sln Base\zxing.vs2012.sln Base\zxing.vs2015.sln Base\zxing.monoandroid.sln Base\zxing.monotouch.sln Base\zxing.nunit Base\THANKS Base\COPYING WinMD\Source\lib\*.* WinMD\Clients\*.* WinMD\Key\*.* WinMD\zxing.vs2012.sln
 CD "%CURRENT_DIR%"
 
 RMDIR /S /Q "%SVN_EXPORT_DIR%" >NUL: 2>&1
@@ -396,21 +398,21 @@ GOTO END
 
 :BINARY_NETSTANDARD10_NOT_FOUND
 ECHO The .Net Standard 1.0 binaries 
-ECHO %CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard1.0\...
+ECHO %CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.0\...
 ECHO weren't found.
 ECHO.
 GOTO END
 
 :BINARY_NETSTANDARD11_NOT_FOUND
 ECHO The .Net Standard 1.1 binaries 
-ECHO %CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard1.1\...
+ECHO %CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.1\...
 ECHO weren't found.
 ECHO.
 GOTO END
 
 :BINARY_NETSTANDARD13_NOT_FOUND
 ECHO The .Net Standard 1.3 binaries 
-ECHO %CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard1.3\...
+ECHO %CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.3\...
 ECHO weren't found.
 ECHO.
 GOTO END

@@ -11,7 +11,7 @@
    <div class="form-group">
       <div class="col-md-10">
          <p>Content:</p>
-         <input type="text" name="content" />
+         <input type="text" name="content" value="@ViewData["BarcodeContent"]" required />
       </div>
       <div class="col-md-10">
          <p>Type:</p>
@@ -23,15 +23,15 @@
       </div>
       <div class="col-md-10">
          <p>Width:</p>
-         <input type="text" name="width" value="500" />
+         <input type="text" name="width" value="@ViewData["BarcodeWidth"]" />
       </div>
       <div class="col-md-10">
          <p>Height:</p>
-         <input type="text" name="height" value="500" />
+         <input type="text" name="height" value="@ViewData["BarcodeHeight"]" />
       </div>
       <div class="col-md-10">
          <p>Margin:</p>
-         <input type="text" name="margin" value="5" />
+         <input type="text" name="margin" value="@ViewData["BarcodeMargin"]" />
       </div>
    </div>
    <div class="form-group">
