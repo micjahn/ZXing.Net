@@ -55,17 +55,17 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "zxing.netcore", "Source\lib
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bindings", "Bindings", "{0ED9FFA0-3269-47C1-8A1C-60D894163352}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ZXing.ImageSharp", "Source\adapters\ZXing.ImageSharp\ZXing.ImageSharp.xproj", "{698281F7-355D-4146-B7FC-3A2DF2963122}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ZXing.ImageSharp", "Source\Bindings\ZXing.ImageSharp\ZXing.ImageSharp.xproj", "{698281F7-355D-4146-B7FC-3A2DF2963122}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ZXing.OpenCV", "Source\adapters\ZXing.OpenCV\ZXing.OpenCV.xproj", "{48ABA685-11FE-4C9D-A9CA-A5EA8A67FA0B}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ZXing.OpenCV", "Source\Bindings\ZXing.OpenCV\ZXing.OpenCV.xproj", "{48ABA685-11FE-4C9D-A9CA-A5EA8A67FA0B}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ZXing.CoreCompat.System.Drawing", "Source\adapters\ZXing.CoreCompat.System.Drawing\ZXing.CoreCompat.System.Drawing.xproj", "{AD35609D-D9B2-4690-A478-27C9022BBF7D}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ZXing.CoreCompat.System.Drawing", "Source\Bindings\ZXing.CoreCompat.System.Drawing\ZXing.CoreCompat.System.Drawing.xproj", "{AD35609D-D9B2-4690-A478-27C9022BBF7D}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ZXing.Magick", "Source\adapters\ZXing.Magick\ZXing.Magick.xproj", "{E1D874E4-4E0F-4427-99D8-4B408F0F8DB0}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ZXing.Magick", "Source\Bindings\ZXing.Magick\ZXing.Magick.xproj", "{E1D874E4-4E0F-4427-99D8-4B408F0F8DB0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsDemo", "Clients\WindowsFormsDemo\WindowsFormsDemo.csproj", "{D21445EE-13AF-418B-9576-83414990B3A7}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ZXing.SkiaSharp", "Source\adapters\ZXing.SkiaSharp\ZXing.SkiaSharp.xproj", "{E5DF444D-D8B3-49D3-801B-59B6B1E90901}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ZXing.SkiaSharp", "Source\Bindings\ZXing.SkiaSharp\ZXing.SkiaSharp.xproj", "{E5DF444D-D8B3-49D3-801B-59B6B1E90901}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AForgeDemo", "Clients\AForgeDemo\AForgeDemo.csproj", "{4FE53DF1-45BB-4443-A1AE-B41D3B4D5FF1}"
 EndProject
@@ -115,9 +115,9 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "zxing.ce2.0.doc", "Source\l
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "zxing.ce3.5.doc", "Source\lib\documentation\zxing.ce3.5.doc.shfbproj", "{FF72924A-3CBA-4C3B-9CA8-A04878DEDF26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZXing.Kinect.V1", "Source\adapters\ZXing.Kinect\ZXing.Kinect.V1.csproj", "{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZXing.Kinect.V1", "Source\Bindings\ZXing.Kinect\ZXing.Kinect.V1.csproj", "{45E9F18A-DEFA-4244-A64B-4AA9D8E9574A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZXing.Kinect.V2", "Source\adapters\ZXing.Kinect\ZXing.Kinect.V2.csproj", "{8C0AF5B7-AB42-4224-9E40-E7298CB5A059}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZXing.Kinect.V2", "Source\Bindings\ZXing.Kinect\ZXing.Kinect.V2.csproj", "{8C0AF5B7-AB42-4224-9E40-E7298CB5A059}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.net4.7", "Source\lib\zxing.net4.7.csproj", "{2C074E8F-E879-4C9E-B2C3-8F80C0DB641D}"
 EndProject
