@@ -1,8 +1,8 @@
 {
    "name": "ZXing.ImageSharp",
-   "version": "0.16.0",
+   "version": "0.16.1",
    "dependencies": {
-      "ImageSharp": "1.0.0-alpha8-00058",
+      "ImageSharp": "1.0.0-alpha9-00182",
       "NETStandard.Library": "1.6.1"
    },
    "frameworks": {

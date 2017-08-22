@@ -4192,6 +4192,19 @@
           "NETStandard.Library": "1.6.0"
         }
       },
+      "zxing.netcore/0.16.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v1.3",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0"
+        },
+        "compile": {
+          "netstandard1.3/zxing.netcore.dll": {}
+        },
+        "runtime": {
+          "netstandard1.3/zxing.netcore.dll": {}
+        }
+      },
       "ZXing.OpenCV/0.16.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v1.6",
@@ -10692,32 +10705,37 @@
     },
     "ZXing.CoreCompat.System.Drawing/0.16.0": {
       "type": "project",
-      "path": "../../Source/adapters/ZXing.CoreCompat.System.Drawing/project.json",
-      "msbuildProject": "../../Source/adapters/ZXing.CoreCompat.System.Drawing/ZXing.CoreCompat.System.Drawing.xproj"
+      "path": "../../Source/Bindings/ZXing.CoreCompat.System.Drawing/project.json",
+      "msbuildProject": "../../Source/Bindings/ZXing.CoreCompat.System.Drawing/ZXing.CoreCompat.System.Drawing.xproj"
     },
     "ZXing.ImageSharp/0.16.0": {
       "type": "project",
-      "path": "../../Source/adapters/ZXing.ImageSharp/project.json",
-      "msbuildProject": "../../Source/adapters/ZXing.ImageSharp/ZXing.ImageSharp.xproj"
+      "path": "../../Source/Bindings/ZXing.ImageSharp/project.json",
+      "msbuildProject": "../../Source/Bindings/ZXing.ImageSharp/ZXing.ImageSharp.xproj"
     },
     "ZXing.Magick/0.16.0": {
       "type": "project",
-      "path": "../../Source/adapters/ZXing.Magick/project.json",
-      "msbuildProject": "../../Source/adapters/ZXing.Magick/ZXing.Magick.xproj"
+      "path": "../../Source/Bindings/ZXing.Magick/project.json",
+      "msbuildProject": "../../Source/Bindings/ZXing.Magick/ZXing.Magick.xproj"
     },
     "ZXing.Net/0.16.0": {
       "type": "project",
       "path": "../../Source/lib/ZXing.Net/project.json"
     },
+    "zxing.netcore/0.16.0": {
+      "type": "project",
+      "path": "../../Source/lib/ZXing.Net/project.json",
+      "msbuildProject": "../../Source/lib/ZXing.Net/zxing.netcore.xproj"
+    },
     "ZXing.OpenCV/0.16.0": {
       "type": "project",
-      "path": "../../Source/adapters/ZXing.OpenCV/project.json",
-      "msbuildProject": "../../Source/adapters/ZXing.OpenCV/ZXing.OpenCV.xproj"
+      "path": "../../Source/Bindings/ZXing.OpenCV/project.json",
+      "msbuildProject": "../../Source/Bindings/ZXing.OpenCV/ZXing.OpenCV.xproj"
     },
     "ZXing.SkiaSharp/0.16.0": {
       "type": "project",
-      "path": "../../Source/adapters/ZXing.SkiaSharp/project.json",
-      "msbuildProject": "../../Source/adapters/ZXing.SkiaSharp/ZXing.SkiaSharp.xproj"
+      "path": "../../Source/Bindings/ZXing.SkiaSharp/project.json",
+      "msbuildProject": "../../Source/Bindings/ZXing.SkiaSharp/ZXing.SkiaSharp.xproj"
     }
   },
   "projectFileDependencyGroups": {
