@@ -1,5 +1,5 @@
 # ZXing.Net 
-![ZXing.Net.Mobile Logo](http://download-codeplex.sec.s-msft.com/Download?ProjectName=zxingnet&DownloadId=732797&Build=21031)
+![ZXing.Net.Mobile Logo](https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg)
 
 ## Project Description
 A library which supports decoding and generating of barcodes (like QR Code, PDF 417, EAN, UPC, Aztec, Data Matrix, Codabar) within images.
@@ -15,16 +15,19 @@ UPC-A, EAN-8, EAN-13, Code 39, Code 128, ITF, Codabar, Plessey, MSI, QR Code, PD
 
 #### Assemblies are available for the following platforms:
 
-* .Net 2.0, 3.5 and 4.0
+* .Net 2.0, 3.5, 4.0, 4.5, 4.6 and 4.7
 * Silverlight 4 and 5
 * Windows Phone 7.0, 7.1 and 8.0
 * Windows CE
 * Windows RT Class Library and Runtime Components (winmd)
+* .NET Standard / .NET Core / UWP
 * Portable Class Library
 * Unity3D (.Net 2.0 built without System.Drawing reference)
 * Xamarin.Android (formerly Mono for Android)
+* bindings to CoreCompat.System.Drawing, ImageSharp, SkiaSharp, OpenCVSharp, Magick, Kinect V1 and V2
+* support COM interop, can be used with VBA
 
-The library is available in the download section [download section](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BYHN42UHPA86E) and as [NuGet package](https://www.nuget.org/packages/ZXing.Net/), too.
+The library is available in the release section [release section](https://github.com/micjahn/ZXing.Net/releases) and as [NuGet package](https://www.nuget.org/packages/ZXing.Net/), too.
 
 [![N|NuGet](https://img.shields.io/nuget/v/Nuget.Core.svg)](https://www.nuget.org/packages/ZXing.Net/)
 
@@ -47,19 +50,20 @@ A special version for the [.Net Micro Framework](http://www.microsoft.com/netmf/
 * Unity3D and Vuforia demo (demonstrates encoding of barcodes and decoding of images from a camera with [Unity3D](http://unity3d.com/))
 * Silverlight demo (demonstrates decoding and encoding of static images)
 * EmguCV demo (demonstrates decoding of images from a camera and uses the [EmguCV framework](http://www.emgu.com/))
+* OpenCV demo (demonstrates decoding of images from a camera and uses the [OpenCVSharp framework](https://github.com/shimat/opencvsharp/))
 * AForge demo (demonstrates decoding of images from a camera and uses the [AForge framework](http://www.aforgenet.com/))
 
 ## Thanks
 Many thanks to the team of the [zxing project](https://github.com/zxing/zxing) for their great work. ZXing.Net would not be possible without your work!
 ## Usage examples
-The source code repository includes small examples for Windows Forms, Silverlight and Windows Phone.
+The source code repository includes small examples for Windows Forms, Silverlight, Windows Phone and other project types.
 
-#### small example decoding a barcode inside a bitmap (.Net 2.0/3.5/4.0)
+#### small example decoding a barcode inside a bitmap (.Net 2.0/3.5/4.x)
 ```csharp
 // create a barcode reader instance
 IBarcodeReader reader = new BarcodeReader();
 // load a bitmap
-var barcodeBitmap = (Bitmap)Bitmap.LoadFrom("C:\\sample-barcode-image.png");
+var barcodeBitmap = (Bitmap)Image.LoadFrom("C:\\sample-barcode-image.png");
 // detect and decode the barcode inside the bitmap
 var result = reader.Decode(barcodeBitmap);
 // do something with the result
