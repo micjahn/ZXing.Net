@@ -40,14 +40,8 @@ namespace ZXing.Interop.Encoding
       /// </summary>
       public EncodingOptions Options
       {
-         get
-         {
-            return (options ?? (options = new EncodingOptions()));
-         }
-         set
-         {
-            options = value;
-         }
+         get { return (options ?? (options = new EncodingOptions())); }
+         set { options = value; }
       }
 
       public PixelData Write(string contents)
@@ -60,7 +54,7 @@ namespace ZXing.Interop.Encoding
          return writer.Write(contents).ToInterop();
       }
 
-      public void WritePngToFile(string contents, string fileName)
+      public void WriteToFile(string contents, string fileName, ImageFileFormat imageFileFormat)
       {
          if (string.IsNullOrEmpty(fileName))
             throw new ArgumentNullException(nameof(fileName));
@@ -72,7 +66,20 @@ namespace ZXing.Interop.Encoding
          };
          using (var bitmap = writer.Write(contents))
          {
-            bitmap.Save(fileName, ImageFormat.Png);
+            bitmap.Save(fileName, imageFileFormat.ToDrawingFormat());
+         }
+      }
+
+      public object GetStdPicture(string contents)
+      {
+         var writer = new ZXing.BarcodeWriter
+         {
+            Format = Format.ToZXing(),
+            Options = options.wrappedEncodingOptions
+         };
+         using (var bitmap = writer.Write(contents))
+         {
+            return ImageUtils.ConvertToIPicture(bitmap);
          }
       }
    }
