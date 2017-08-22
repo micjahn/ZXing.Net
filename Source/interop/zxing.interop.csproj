@@ -52,8 +52,13 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ImageOLEConverter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\ImageUtils.cs" />
     <Compile Include="Encoding\AztecEncodingOptions.cs" />
     <Compile Include="Common\BarcodeFormat.cs" />
     <Compile Include="Encoding\BarcodeWriter.cs" />
@@ -61,6 +66,7 @@
     <Compile Include="Decoding\DecodingOptions.cs" />
     <Compile Include="Encoding\EncodingOptions.cs" />
     <Compile Include="Encoding\IBarcodeWriter.cs" />
+    <Compile Include="Encoding\ImageFileFormat.cs" />
     <Compile Include="Encoding\PDF417EncodingOptions.cs" />
     <Compile Include="Encoding\PixelData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

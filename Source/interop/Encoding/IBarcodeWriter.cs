@@ -32,6 +32,8 @@ namespace ZXing.Interop.Encoding
 
       PixelData Write(string contents);
 
-      void WritePngToFile(string contents, string fileName);
+      void WriteToFile(string contents, string fileName, ImageFileFormat imageFileFormat);
+
+      object GetStdPicture(string contents);
    }
 }
