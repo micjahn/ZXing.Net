@@ -10,7 +10,7 @@
     <id>ZXing.Net.Bindings.ImageSharp</id>
     <title>ZXing.Net.Bindings.ImageSharp</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>ZXing.Net Bindings for ImageSharp - use ImageSharp with ZXing.Net for barcode reading</description>
+    <description>ZXing.Net Bindings for ImageSharp - use ImageSharp with ZXing.Net for barcode reading (you have to add https://www.myget.org/F/imagesharp/ as a package source for nuget)</description>
     <summary>ZXing.Net Bindings for ImageSharp</summary>
     <releaseNotes></releaseNotes>
     <tags>ZXing ImageSharp</tags>
