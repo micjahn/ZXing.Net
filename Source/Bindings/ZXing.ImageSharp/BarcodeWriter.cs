@@ -15,22 +15,22 @@
  */
 
 using ImageSharp;
-
+using ImageSharp.PixelFormats;
 using ZXing.ImageSharp.Rendering;
 
 namespace ZXing.ImageSharp
 {
-   /// <summary>
-   /// barcode writer which creates ImageSharp Image instances
-   /// </summary>
-   public class BarcodeWriter : BarcodeWriter<Image>
-   {
-      /// <summary>
-      /// contructor
-      /// </summary>
-      public BarcodeWriter()
-      {
-         Renderer = new ImageSharpRenderer();
-      }
-   }
+	/// <summary>
+	/// barcode writer which creates ImageSharp Image instances
+	/// </summary>
+	public class BarcodeWriter<TPixel> : ZXing.BarcodeWriter<Image<TPixel>> where TPixel : struct, IPixel<TPixel>
+	{
+		/// <summary>
+		/// contructor
+		/// </summary>
+		public BarcodeWriter()
+		{
+			Renderer = new ImageSharpRenderer<TPixel>();
+		}
+	}
 }

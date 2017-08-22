@@ -21,84 +21,85 @@ using ZXing.Common;
 
 namespace ZXing.ImageSharp.Rendering
 {
-   /// <summary>
-   /// IBarcodeRenderer implementation which creates an ImageSharp Image object from the barcode BitMatrix
-   /// </summary>
-   public class ImageSharpRenderer : ZXing.Rendering.IBarcodeRenderer<Image>
-   {
-      /// <summary>
-      /// renders the image
-      /// </summary>
-      /// <param name="matrix"></param>
-      /// <param name="format"></param>
-      /// <param name="content"></param>
-      /// <returns></returns>
-      public Image Render(BitMatrix matrix, BarcodeFormat format, string content)
-      {
-         return Render(matrix, format, content, new EncodingOptions());
-      }
+	/// <summary>
+	/// IBarcodeRenderer implementation which creates an ImageSharp Image object from the barcode BitMatrix
+	/// </summary>
+	public class ImageSharpRenderer<TPixel> : ZXing.Rendering.IBarcodeRenderer<Image<TPixel>> where TPixel : struct, IPixel<TPixel>
+	{
+		/// <summary>
+		/// renders the image
+		/// </summary>
+		/// <param name="matrix"></param>
+		/// <param name="format"></param>
+		/// <param name="content"></param>
+		/// <returns></returns>
+		public Image<TPixel> Render(BitMatrix matrix, BarcodeFormat format, string content)
+		{
+			return Render(matrix, format, content, new EncodingOptions());
+		}
 
-      /// <summary>
-      /// renders the image
-      /// </summary>
-      /// <param name="matrix"></param>
-      /// <param name="format"></param>
-      /// <param name="content"></param>
-      /// <param name="options"></param>
-      /// <returns></returns>
-      public Image Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
-      {
-         int width = matrix.Width;
-         int heigth = matrix.Height;
-         const uint black = 0xFF000000;
-         const uint white = 0xFFFFFFFF;
-         
-         int pixelsize = 1;
+		/// <summary>
+		/// renders the image
+		/// </summary>
+		/// <param name="matrix"></param>
+		/// <param name="format"></param>
+		/// <param name="content"></param>
+		/// <param name="options"></param>
+		/// <returns></returns>
+		public Image<TPixel> Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+		{
+			var width = matrix.Width;
+			var heigth = matrix.Height;
+			var black = new Rgba32(0xFF000000);
+			var white = new Rgba32(0xFFFFFFFF);
 
-         if (options != null)
-         {
-            if (options.Width > width)
-            {
-               width = options.Width;
-            }
-            if (options.Height > heigth)
-            {
-               heigth = options.Height;
-            }
-            // calculating the scaling factor
-            pixelsize = width/matrix.Width;
-            if (pixelsize > heigth/matrix.Height)
-            {
-               pixelsize = heigth/matrix.Height;
-            }
-         }
+			var pixelsize = 1;
 
-         var result = new Image(matrix.Width, matrix.Height);
-         using (var pixelAccessor = result.Lock())
-         {
-            for (int y = 0; y < matrix.Height; y++)
-            {
-               for (var pixelsizeHeight = 0; pixelsizeHeight < pixelsize; pixelsizeHeight++)
-               {
-                  var rowOffset = pixelsize*y + pixelsizeHeight;
+			if (options != null)
+			{
+				if (options.Width > width)
+				{
+					width = options.Width;
+				}
+				if (options.Height > heigth)
+				{
+					heigth = options.Height;
+				}
+				// calculating the scaling factor
+				pixelsize = width/matrix.Width;
+				if (pixelsize > heigth/matrix.Height)
+				{
+					pixelsize = heigth/matrix.Height;
+				}
+			}
 
-                  for (var x = 0; x < matrix.Width; x++)
-                  {
-                     var color = matrix[x, y] ? black : white;
-                     for (var pixelsizeWidth = 0; pixelsizeWidth < pixelsize; pixelsizeWidth++)
-                     {
-                        pixelAccessor[pixelsize*x + pixelsizeWidth, rowOffset] = new Rgba32(color);
-                     }
-                  }
-                  for (var x = pixelsize*matrix.Width; x < width; x++)
-                  {
-                     pixelAccessor[x, rowOffset] = new Rgba32(white);
-                  }
-               }
-            }
-         }
+			var result = new Image<TPixel>(matrix.Width, matrix.Height);
+			for (int y = 0; y < matrix.Height; y++)
+			{
+				for (var pixelsizeHeight = 0; pixelsizeHeight < pixelsize; pixelsizeHeight++)
+				{
+					var rowOffset = pixelsize*y + pixelsizeHeight;
 
-         return result;
-      }
-   }
+					for (var x = 0; x < matrix.Width; x++)
+					{
+						var color = matrix[x, y] ? black : white;
+						for (var pixelsizeWidth = 0; pixelsizeWidth < pixelsize; pixelsizeWidth++)
+						{
+							var pixel = new TPixel();
+							pixel.PackFromRgba32(color);
+							result[pixelsize*x + pixelsizeWidth, rowOffset] = pixel;
+						}
+					}
+					for (var x = pixelsize*matrix.Width; x < width; x++)
+					{
+						var pixel = new TPixel();
+						pixel.PackFromRgba32(white);
+						result[x, rowOffset] = pixel;
+					}
+				}
+			}
+
+			return result;
+		}
+	}
 }

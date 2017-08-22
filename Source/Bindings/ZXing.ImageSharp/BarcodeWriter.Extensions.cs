@@ -15,26 +15,27 @@
  */
 
 using ImageSharp;
+using ImageSharp.PixelFormats;
 using ZXing.ImageSharp.Rendering;
 
 namespace ZXing
 {
-   /// <summary>
-   /// extensions methods which are working directly on any BarcodeWriterGeneric implementation
-   /// </summary>
-   public static class BarcodeWriterExtensions
-   {
-      /// <summary>
-      /// uses the BarcodeWriterGeneric implementation and the <see cref="ImageSharpRenderer"/> class for decoding
-      /// </summary>
-      /// <param name="writer"></param>
-      /// <param name="content"></param>
-      /// <returns></returns>
-      public static Image WriteAsImageSharp(this IBarcodeWriterGeneric writer, string content)
-      {
-         var bitmatrix = writer.Encode(content);
-         var renderer = new ImageSharpRenderer();
-         return renderer.Render(bitmatrix, writer.Format, content, writer.Options);
-      }
-   }
+	/// <summary>
+	/// extensions methods which are working directly on any BarcodeWriterGeneric implementation
+	/// </summary>
+	public static class BarcodeWriterExtensions
+	{
+		/// <summary>
+		/// uses the BarcodeWriterGeneric implementation and the <see cref="ImageSharpRenderer{TPixel}"/> class for decoding
+		/// </summary>
+		/// <param name="writer"></param>
+		/// <param name="content"></param>
+		/// <returns></returns>
+		public static Image<TPixel> WriteAsImageSharp<TPixel>(this IBarcodeWriterGeneric writer, string content) where TPixel : struct, IPixel<TPixel>
+		{
+			var bitmatrix = writer.Encode(content);
+			var renderer = new ImageSharpRenderer<TPixel>();
+			return renderer.Render(bitmatrix, writer.Format, content, writer.Options);
+		}
+	}
 }
