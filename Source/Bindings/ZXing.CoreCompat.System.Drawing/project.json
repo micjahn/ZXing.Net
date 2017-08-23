@@ -1,6 +1,6 @@
 {
    "name": "ZXing.CoreCompat.System.Drawing",
-   "version": "0.16.0",
+   "version": "0.16.1",
    "dependencies": {
       "CoreCompat.System.Drawing": "1.0.0-beta006",
       "NETStandard.Library": "1.6.0"

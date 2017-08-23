@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <PackageId>ZXing.CoreCompat.System.Drawing.v2</PackageId>
+    <VersionPrefix>0.16.1-beta</VersionPrefix>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SignAssembly>False</SignAssembly>
+    <AssemblyTitle>ZXing.Net.Bindings.CoreCompat.System.Drawing</AssemblyTitle>
+    <Title>ZXing.Net.Bindings.CoreCompat.System.Drawing</Title>
+    <Description>A port of Mono's System.Drawing for .NET Core 2.0 and above. Includes types such as System.Drawing.Bitmap and System.Drawing.Image, allowing you to interact with images from .NET Core.</Description>
+    <AssemblyOriginatorKeyFile>../../../Key/private.snk</AssemblyOriginatorKeyFile>
+    <Authors>Michael Jahn</Authors>
+    <PackageProjectUrl>https://github.com/micjahn/ZXing.Net/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/micjahn/ZXing.Net/</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>ZXing CoreCompat.System.Drawing</PackageTags>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<DebugType>portable</DebugType>
+	<AssemblyName>zxing.corecompat.system.drawing.v2</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="../ZXing.CoreCompat.System.Drawing/Rendering/BitmapRenderer.cs" />
+    <Compile Include="../ZXing.CoreCompat.System.Drawing/BitmapLuminanceSource.cs" />
+    <Compile Include="../ZXing.CoreCompat.System.Drawing/BarcodeWriter.Extensions.cs" />
+    <Compile Include="../ZXing.CoreCompat.System.Drawing/BarcodeWriter.cs" />
+    <Compile Include="../ZXing.CoreCompat.System.Drawing/BarcodeReader.cs" />
+    <Compile Include="../ZXing.CoreCompat.System.Drawing/BarcodeReader.Extensions.cs" />
+    <Compile Include="../ZXing.CoreCompat.System.Drawing/Properties/AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CoreCompat.System.Drawing.v2" Version="5.2.0-preview1-r131" />
+	<PackageReference Include="ZXing.Net" Version="0.16.0" />
+  </ItemGroup>
+
+</Project>
