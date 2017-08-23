@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.0-beta</version>
+    <version>0.16.1-beta</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
@@ -20,11 +20,19 @@
         <dependency id="CoreCompat.System.Drawing" version="1.0.0-beta006" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
       </group>
+      <group targetFramework="netstandard2.0">
+        <dependency id="ZXing.Net" version="0.16.0.0" exclude="Build,Analyzers" />
+        <dependency id="CoreCompat.System.Drawing.v2" version="5.2.0-preview1-r131" exclude="Build,Analyzers" />
+        <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
+      </group>
     </dependencies>
   </metadata>
   <files>
     <file src="bin\Release\netstandard1.3\zxing.corecompat.system.drawing.dll" target="lib\netstandard1.3\zxing.corecompat.system.drawing.dll" />
     <file src="bin\Release\netstandard1.3\zxing.corecompat.system.drawing.pdb" target="lib\netstandard1.3\zxing.corecompat.system.drawing.pdb" />
     <file src="bin\Release\netstandard1.3\zxing.corecompat.system.drawing.xml" target="lib\netstandard1.3\zxing.corecompat.system.drawing.xml" />
+    <file src="..\ZXing.CoreCompat.System.Drawing.V2\bin\Release\netstandard2.0\zxing.corecompat.system.drawing.v2.dll" target="lib\netstandard2.0\zxing.corecompat.system.drawing.v2.dll" />
+    <file src="..\ZXing.CoreCompat.System.Drawing.V2\bin\Release\netstandard2.0\zxing.corecompat.system.drawing.v2.pdb" target="lib\netstandard2.0\zxing.corecompat.system.drawing.v2.pdb" />
+    <file src="..\ZXing.CoreCompat.System.Drawing.V2\bin\Release\netstandard2.0\zxing.corecompat.system.drawing.v2.xml" target="lib\netstandard2.0\zxing.corecompat.system.drawing.v2.xml" />
   </files>
 </package>
