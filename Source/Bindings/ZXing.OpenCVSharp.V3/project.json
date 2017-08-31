@@ -1,6 +1,6 @@
 {
    "name": "ZXing.OpenCV.V3",
-   "version": "0.16.0",
+   "version": "0.16.1",
    "dependencies": {
       "NETStandard.Library": "1.6.1",
       "OpenCvSharp3-AnyCPU": "3.2.0.20170419"
@@ -19,7 +19,8 @@
       "optimize": true,
       "xmlDoc": true,
       "platform": "anycpu",
-      "publicSign": false,
+      "publicSign": true,
+      "keyFile": "../../../Key/private.snk",
       "debugType": "portable",
       "outputName": "zxing.opencv",
       "allowUnsafe": true,

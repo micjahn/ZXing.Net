@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.0</version>
+    <version>0.16.1</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
     <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
     <id>ZXing.Net.Bindings.OpenCV</id>
-    <title>ZXing.Net.Bindings.OpenCV</title>
+    <title>ZXing.Net.Bindings.OpenCVSharp.V3</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ZXing.Net Bindings for OpenCVSharp 3.x - use OpenCV with ZXing.Net for barcode reading</description>
     <summary>ZXing.Net Bindings for OpenCV</summary>
