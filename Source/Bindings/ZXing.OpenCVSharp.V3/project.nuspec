@@ -11,7 +11,7 @@
     <title>ZXing.Net.Bindings.OpenCVSharp.V3</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ZXing.Net Bindings for OpenCVSharp 3.x - use OpenCV with ZXing.Net for barcode reading</description>
-    <summary>ZXing.Net Bindings for OpenCV</summary>
+    <summary>ZXing.Net Bindings for OpenCVSharp 3.x</summary>
     <releaseNotes></releaseNotes>
     <tags>ZXing OpenCV</tags>
     <dependencies>

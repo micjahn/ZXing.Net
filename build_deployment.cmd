@@ -48,7 +48,8 @@ IF NOT EXIST "%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstan
 IF NOT EXIST "%BINARY_DIR%\Bindings\kinect\V1\zxing.kinect.dll" GOTO BINARY_KINECT_V1_NOT_FOUND
 IF NOT EXIST "%BINARY_DIR%\Bindings\kinect\V2\zxing.kinect.dll" GOTO BINARY_KINECT_V2_NOT_FOUND
 IF NOT EXIST "%CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\netstandard1.3\zxing.magick.dll" GOTO BINARY_MAGICK_NOT_FOUND
-IF NOT EXIST "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCV\bin\Release\netstandard1.6\zxing.opencv.dll" GOTO BINARY_OPENCV_NOT_FOUND
+IF NOT EXIST "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net20\zxing.opencvsharp.v2.dll" GOTO BINARY_OPENCV_V2_NOT_FOUND
+IF NOT EXIST "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\netstandard1.6\zxing.opencv.dll" GOTO BINARY_OPENCV_NOT_FOUND
 IF NOT EXIST "%CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard1.3\zxing.skiasharp.dll" GOTO BINARY_SKIASHARP_NOT_FOUND
 
 ECHO.
@@ -103,10 +104,15 @@ COPY "%CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\netstandard1.3\zxin
 COPY "%CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\netstandard1.3\zxing.magick.pdb" "%BINARY_DIR%\Bindings\Magick\"
 COPY "%CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\netstandard1.3\zxing.magick.xml" "%BINARY_DIR%\Bindings\Magick\"
 
-MKDIR "%BINARY_DIR%\Bindings\OpenCV" >NUL: 2>&1
-COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCV\bin\Release\netstandard1.6\zxing.opencv.dll" "%BINARY_DIR%\Bindings\OpenCV\"
-COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCV\bin\Release\netstandard1.6\zxing.opencv.pdb" "%BINARY_DIR%\Bindings\OpenCV\"
-COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCV\bin\Release\netstandard1.6\zxing.opencv.xml" "%BINARY_DIR%\Bindings\OpenCV\"
+MKDIR "%BINARY_DIR%\Bindings\OpenCVSharp.V2" >NUL: 2>&1
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net20\zxing.opencvsharp.v2.dll" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net20\zxing.opencvsharp.v2.pdb" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net20\zxing.opencvsharp.v2.xml" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\"
+
+MKDIR "%BINARY_DIR%\Bindings\OpenCVSharp.V3" >NUL: 2>&1
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\netstandard1.6\zxing.opencv.dll" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\netstandard1.6\zxing.opencv.pdb" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\netstandard1.6\zxing.opencv.xml" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\"
 
 MKDIR "%BINARY_DIR%\Bindings\SkiaSharp" >NUL: 2>&1
 COPY "%CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard1.3\zxing.skiasharp.dll" "%BINARY_DIR%\Bindings\SkiaSharp\"
@@ -438,9 +444,16 @@ ECHO weren't found.
 ECHO.
 GOTO END
 
+:BINARY_OPENCV_V2_NOT_FOUND
+ECHO The OpenCVSharp V2 bindings binaries 
+ECHO %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net20\...
+ECHO weren't found.
+ECHO.
+GOTO END
+
 :BINARY_OPENCV_NOT_FOUND
 ECHO The OpenCV bindings binaries 
-ECHO %CURRENT_DIR%\Source\Bindings\ZXing.OpenCV\bin\Release\netstandard1.6\...
+ECHO %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\netstandard1.6\...
 ECHO weren't found.
 ECHO.
 GOTO END
