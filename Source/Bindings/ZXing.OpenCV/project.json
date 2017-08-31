@@ -1,5 +1,5 @@
 {
-   "name": "ZXing.OpenCV",
+   "name": "ZXing.OpenCV.V3",
    "version": "0.16.0",
    "dependencies": {
       "NETStandard.Library": "1.6.1",
