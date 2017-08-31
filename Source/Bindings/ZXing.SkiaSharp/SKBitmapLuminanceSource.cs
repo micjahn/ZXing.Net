@@ -64,20 +64,13 @@ namespace ZXing.SkiaSharp
          if (src == null)
             throw new ArgumentNullException("src");
 
-         src.LockPixels();
-         try
+         var pixels = src.Pixels;
+         for (var index = 0; index < src.Width * src.Height; index++)
          {
-            for (var index = 0; index < src.Width*src.Height; index++)
-            {
-               var pixel = src.Pixels[index];
-               // Calculate luminance cheaply, favoring green.
-               var luminance = (byte)((RChannelWeight * pixel.Red + GChannelWeight * pixel.Green + BChannelWeight * pixel.Blue) >> ChannelWeight);
-               luminances[index] = (byte)(((luminance * pixel.Alpha) >> 8) + (255 * (255 - pixel.Alpha) >> 8));
-            }
-         }
-         finally
-         {
-            src.UnlockPixels();
+            var pixel = pixels[index];
+            // Calculate luminance cheaply, favoring green.
+            var luminance = (byte)((RChannelWeight * pixel.Red + GChannelWeight * pixel.Green + BChannelWeight * pixel.Blue) >> ChannelWeight);
+            luminances[index] = (byte)(((luminance * pixel.Alpha) >> 8) + (255 * (255 - pixel.Alpha) >> 8));
          }
       }
    }

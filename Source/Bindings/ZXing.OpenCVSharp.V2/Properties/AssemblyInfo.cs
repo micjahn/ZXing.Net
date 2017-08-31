@@ -5,10 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("zxing.opencv")]
+[assembly: AssemblyCompany("ZXing.Net Development")]
+[assembly: AssemblyProduct("ZXing.OpenCVSharp.V2")]
 [assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © 2017")]
+[assembly: AssemblyDescription("ZXing.Net Bindings to OpenCVSharp V2")]
+[assembly: AssemblyInformationalVersion("0.16.1")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
@@ -16,4 +18,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("48aba685-11fe-4c9d-a9ca-a5ea8a67fa0b")]
+[assembly: Guid("BAE3A03B-897F-45B3-861A-DC96DE681F77")]

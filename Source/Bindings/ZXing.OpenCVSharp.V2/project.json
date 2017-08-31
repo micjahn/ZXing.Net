@@ -1,35 +1,34 @@
 {
-   "name": "ZXing.SkiaSharp",
+   "name": "ZXing.OpenCV.V2",
    "version": "0.16.1",
    "dependencies": {
       "NETStandard.Library": "1.6.0",
-      "SkiaSharp": "1.57.0"
+      "OpenCvSharp-AnyCPU": "2.4.10.20170306"
    },
    "frameworks": {
-      "netstandard1.3": {
+      "net20": {
          "dependencies": {
-            "ZXing.Net": {
+            "zxing.net2.0": {
                "target": "project"
             }
          }
       }
    },
    "buildOptions": {
-      "define": [ "NETSTANDARD" ],
       "optimize": true,
       "xmlDoc": true,
       "platform": "anycpu",
-      "publicSign": false,
+      "publicSign": true,
       "keyFile": "../../../Key/private.snk",
       "debugType": "portable",
-      "outputName": "zxing.skiasharp",
+      "outputName": "zxing.opencvsharp.v2",
       "allowUnsafe": true,
       "compile": {
          "includeFiles": [
             "Properties/AssemblyInfo.cs",
             "BarcodeReader.cs",
             "BarcodeReader.Extensions.cs",
-            "SKBitmapLuminanceSource.cs"
+            "MatLuminanceSource.cs"
          ]
       }
    }
