@@ -1,4 +1,4 @@
-﻿{
+{
    "dependencies": {
       "Microsoft.NETCore.App": {
          "version": "1.0.1",
@@ -27,7 +27,7 @@
       "ZXing.ImageSharp": {
          "target": "project"
       },
-      "ZXing.OpenCV": {
+      "ZXing.OpenCVSharp.V3": {
          "target": "project"
       },
       "ZXing.CoreCompat.System.Drawing": {
