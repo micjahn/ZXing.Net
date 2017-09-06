@@ -1,7 +1,7 @@
 @ECHO OFF
 
 SET Id=ZXing.Net
-SET VERSION=0.16.0
+SET VERSION=0.16.1
 
 echo Next step - uploading all nuget packages to nuget.org...
 pause

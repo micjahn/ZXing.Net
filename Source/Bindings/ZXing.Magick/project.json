@@ -1,6 +1,6 @@
 {
    "name": "ZXing.Magick",
-   "version": "0.16.0",
+   "version": "0.16.1",
    "dependencies": {
       "Magick.NET.Core-Q8": "7.0.5.502",
       "NETStandard.Library": "1.6.1"
