@@ -1,35 +1,67 @@
 {
-   "name": "ZXing.OpenCV.V2",
-   "version": "0.16.1",
-   "dependencies": {
-      "NETStandard.Library": "1.6.0",
-      "OpenCvSharp-AnyCPU": "2.4.10.20170306"
-   },
-   "frameworks": {
-      "net20": {
-         "dependencies": {
-            "zxing.net2.0": {
-               "target": "project"
-            }
-         }
-      }
-   },
-   "buildOptions": {
-      "optimize": true,
-      "xmlDoc": true,
-      "platform": "anycpu",
-      "publicSign": true,
-      "keyFile": "../../../Key/private.snk",
-      "debugType": "portable",
-      "outputName": "zxing.opencvsharp.v2",
-      "allowUnsafe": true,
-      "compile": {
-         "includeFiles": [
-            "Properties/AssemblyInfo.cs",
-            "BarcodeReader.cs",
-            "BarcodeReader.Extensions.cs",
-            "MatLuminanceSource.cs"
-         ]
-      }
-   }
+	"name": "ZXing.OpenCV.V2",
+	"version": "0.16.1",
+	"dependencies": {
+		"OpenCvSharp-AnyCPU": "2.4.10.20170306"
+	},
+	"frameworks": {
+		"net20": {
+			"dependencies": {
+				"zxing.net2.0": {
+					"target": "project"
+				}
+			},
+			"buildOptions": {
+				"define": [ "NET20" ]
+			}
+		},
+		"net35": {
+			"dependencies": {
+				"zxing.net3.5": {
+					"target": "project"
+				}
+			},
+			"buildOptions": {
+				"define": [ "NET35" ]
+			}
+		},
+		"net40": {
+			"dependencies": {
+				"zxing.net4.0": {
+					"target": "project"
+				}
+			},
+			"buildOptions": {
+				"define": [ "NET40" ]
+			}
+		},
+		"net45": {
+			"dependencies": {
+				"zxing.net4.5": {
+					"target": "project"
+				}
+			},
+			"buildOptions": {
+				"define": [ "NET45" ]
+			}
+		}
+	},
+	"buildOptions": {
+		"optimize": true,
+		"xmlDoc": true,
+		"platform": "anycpu",
+		"publicSign": true,
+		"keyFile": "../../../Key/private.snk",
+		"debugType": "portable",
+		"outputName": "zxing.opencvsharp.v2",
+		"allowUnsafe": true,
+		"compile": {
+			"includeFiles": [
+				"Properties/AssemblyInfo.cs",
+				"BarcodeReader.cs",
+				"BarcodeReader.Extensions.cs",
+				"MatLuminanceSource.cs"
+			]
+		}
+	}
 }

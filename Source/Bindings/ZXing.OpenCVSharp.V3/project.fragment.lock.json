@@ -1,0 +1,56 @@
+{
+  "version": 2,
+  "exports": {
+    "zxing.net2.0/1.0.0": {
+      "type": "project",
+      "framework": ".NETFramework,Version=v2.0",
+      "compile": {
+        "../../Build/Release/net2.0/zxing.dll": {}
+      },
+      "runtime": {
+        "../../Build/Release/net2.0/zxing.dll": {}
+      },
+      "contentFiles": {
+        "../../Build/Release/net2.0/zxing.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    },
+    "zxing.net4.0/1.0.0": {
+      "type": "project",
+      "framework": ".NETFramework,Version=v4.0",
+      "compile": {
+        "../../Build/Release/net4.0/zxing.dll": {}
+      },
+      "runtime": {
+        "../../Build/Release/net4.0/zxing.dll": {}
+      },
+      "contentFiles": {
+        "../../Build/Release/net4.0/zxing.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    },
+    "zxing.net4.6/1.0.0": {
+      "type": "project",
+      "framework": ".NETFramework,Version=v4.6.1",
+      "compile": {
+        "../../Build/Release/net4.6/zxing.dll": {}
+      },
+      "runtime": {
+        "../../Build/Release/net4.6/zxing.dll": {}
+      },
+      "contentFiles": {
+        "../../Build/Release/net4.6/zxing.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    }
+  }
+}

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+ using System;
+
 namespace ZXing.OpenCV
 {
    /// <summary>
