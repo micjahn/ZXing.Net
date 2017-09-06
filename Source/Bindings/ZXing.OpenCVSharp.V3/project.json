@@ -1,36 +1,68 @@
 {
-   "name": "ZXing.OpenCV.V3",
-   "version": "0.16.1",
-   "dependencies": {
-      "NETStandard.Library": "1.6.1",
-      "OpenCvSharp3-AnyCPU": "3.2.0.20170419"
-   },
-   "frameworks": {
-      "netstandard1.6": {
-         "dependencies": {
-            "ZXing.Net": {
-               "target": "project"
-            }
-         }
-      }
-   },
-   "buildOptions": {
-      "define": [ "NETSTANDARD" ],
-      "optimize": true,
-      "xmlDoc": true,
-      "platform": "anycpu",
-      "publicSign": true,
-      "keyFile": "../../../Key/private.snk",
-      "debugType": "portable",
-      "outputName": "zxing.opencv",
-      "allowUnsafe": true,
-      "compile": {
-         "includeFiles": [
-            "Properties/AssemblyInfo.cs",
-            "BarcodeReader.cs",
-            "BarcodeReader.Extensions.cs",
-            "MatLuminanceSource.cs"
-         ]
-      }
-   }
+	"name": "ZXing.OpenCV.V3",
+	"version": "0.16.2",
+	"dependencies": {
+		"OpenCvSharp3-AnyCPU": "3.2.0.20170419"
+	},
+	"frameworks": {
+		"net20": {
+			"dependencies": {
+				"zxing.net2.0": {
+					"target": "project"
+				}
+			},
+			"buildOptions": {
+				"define": [ "NET20" ]
+			}
+		},
+		"net40": {
+			"dependencies": {
+				"zxing.net4.0": {
+					"target": "project"
+				}
+			},
+			"buildOptions": {
+				"define": [ "NET40" ]
+			}
+		},
+		"net46": {
+			"dependencies": {
+				"zxing.net4.6": {
+					"target": "project"
+				}
+			},
+			"buildOptions": {
+				"define": [ "NET46" ]
+			}
+		},
+		"netstandard1.6": {
+			"dependencies": {
+			"NETStandard.Library": "1.6.1",
+				"ZXing.Net": {
+					"target": "project"
+				}
+			},
+			"buildOptions": {
+				"define": [ "NETSTANDARD" ]
+			}
+		}
+	},
+	"buildOptions": {
+		"optimize": true,
+		"xmlDoc": true,
+		"platform": "anycpu",
+		"publicSign": true,
+		"keyFile": "../../../Key/private.snk",
+		"debugType": "portable",
+		"outputName": "zxing.opencv",
+		"allowUnsafe": true,
+		"compile": {
+			"includeFiles": [
+				"Properties/AssemblyInfo.cs",
+				"BarcodeReader.cs",
+				"BarcodeReader.Extensions.cs",
+				"MatLuminanceSource.cs"
+			]
+		}
+	}
 }

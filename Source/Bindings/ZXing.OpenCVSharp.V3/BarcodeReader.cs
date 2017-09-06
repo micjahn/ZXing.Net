@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+using System;
+
 using OpenCvSharp;
 
 namespace ZXing.OpenCV

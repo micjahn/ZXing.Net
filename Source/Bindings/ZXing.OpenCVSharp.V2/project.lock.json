@@ -1,0 +1,257 @@
+{
+  "locked": false,
+  "version": 2,
+  "targets": {
+    ".NETFramework,Version=v2.0": {
+      "OpenCvSharp-AnyCPU/2.4.10.20170306": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.Drawing",
+          "System.Windows.Forms"
+        ],
+        "compile": {
+          "lib/net20/OpenCvSharp.Blob.dll": {},
+          "lib/net20/OpenCvSharp.CPlusPlus.dll": {},
+          "lib/net20/OpenCvSharp.UserInterface.dll": {},
+          "lib/net20/OpenCvSharp.dll": {}
+        },
+        "runtime": {
+          "lib/net20/OpenCvSharp.Blob.dll": {},
+          "lib/net20/OpenCvSharp.CPlusPlus.dll": {},
+          "lib/net20/OpenCvSharp.UserInterface.dll": {},
+          "lib/net20/OpenCvSharp.dll": {}
+        }
+      },
+      "zxing.net2.0/1.0.0": {
+        "type": "project"
+      }
+    },
+    ".NETFramework,Version=v3.5": {
+      "OpenCvSharp-AnyCPU/2.4.10.20170306": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "PresentationCore",
+          "PresentationFramework",
+          "System.Core",
+          "System.Drawing",
+          "System.Windows.Forms",
+          "WindowsBase"
+        ],
+        "compile": {
+          "lib/net35/OpenCvSharp.Blob.dll": {},
+          "lib/net35/OpenCvSharp.CPlusPlus.dll": {},
+          "lib/net35/OpenCvSharp.Extensions.dll": {},
+          "lib/net35/OpenCvSharp.UserInterface.dll": {},
+          "lib/net35/OpenCvSharp.dll": {}
+        },
+        "runtime": {
+          "lib/net35/OpenCvSharp.Blob.dll": {},
+          "lib/net35/OpenCvSharp.CPlusPlus.dll": {},
+          "lib/net35/OpenCvSharp.Extensions.dll": {},
+          "lib/net35/OpenCvSharp.UserInterface.dll": {},
+          "lib/net35/OpenCvSharp.dll": {}
+        }
+      },
+      "zxing.net3.5/1.0.0": {
+        "type": "project"
+      }
+    },
+    ".NETFramework,Version=v4.0": {
+      "OpenCvSharp-AnyCPU/2.4.10.20170306": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "PresentationCore",
+          "PresentationFramework",
+          "System.Core",
+          "System.Drawing",
+          "System.Windows.Forms",
+          "WindowsBase"
+        ],
+        "compile": {
+          "lib/net40/OpenCvSharp.Blob.dll": {},
+          "lib/net40/OpenCvSharp.CPlusPlus.dll": {},
+          "lib/net40/OpenCvSharp.Extensions.dll": {},
+          "lib/net40/OpenCvSharp.UserInterface.dll": {},
+          "lib/net40/OpenCvSharp.dll": {}
+        },
+        "runtime": {
+          "lib/net40/OpenCvSharp.Blob.dll": {},
+          "lib/net40/OpenCvSharp.CPlusPlus.dll": {},
+          "lib/net40/OpenCvSharp.Extensions.dll": {},
+          "lib/net40/OpenCvSharp.UserInterface.dll": {},
+          "lib/net40/OpenCvSharp.dll": {}
+        }
+      },
+      "zxing.net4.0/1.0.0": {
+        "type": "project"
+      }
+    },
+    ".NETFramework,Version=v4.5": {
+      "OpenCvSharp-AnyCPU/2.4.10.20170306": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "PresentationCore",
+          "PresentationFramework",
+          "System.Core",
+          "System.Drawing",
+          "System.Windows.Forms",
+          "WindowsBase"
+        ],
+        "compile": {
+          "lib/net45/OpenCvSharp.Blob.dll": {},
+          "lib/net45/OpenCvSharp.CPlusPlus.dll": {},
+          "lib/net45/OpenCvSharp.Extensions.dll": {},
+          "lib/net45/OpenCvSharp.UserInterface.dll": {},
+          "lib/net45/OpenCvSharp.dll": {}
+        },
+        "runtime": {
+          "lib/net45/OpenCvSharp.Blob.dll": {},
+          "lib/net45/OpenCvSharp.CPlusPlus.dll": {},
+          "lib/net45/OpenCvSharp.Extensions.dll": {},
+          "lib/net45/OpenCvSharp.UserInterface.dll": {},
+          "lib/net45/OpenCvSharp.dll": {}
+        }
+      },
+      "zxing.net4.5/1.0.0": {
+        "type": "project"
+      }
+    }
+  },
+  "libraries": {
+    "OpenCvSharp-AnyCPU/2.4.10.20170306": {
+      "sha512": "fwRXPqhKEfuTxRm69H96hVNXAQluMwYG3wrRXEuQXEyG87JVfHmYJg8YKExa5ReNw+cNBtz+Ic5uZjAvjqIwmw==",
+      "type": "package",
+      "path": "OpenCvSharp-AnyCPU/2.4.10.20170306",
+      "files": [
+        "NativeDlls/x64/OpenCvSharpExtern.dll",
+        "NativeDlls/x64/msvcp120.dll",
+        "NativeDlls/x64/msvcr120.dll",
+        "NativeDlls/x64/opencv_calib3d2410.dll",
+        "NativeDlls/x64/opencv_contrib2410.dll",
+        "NativeDlls/x64/opencv_core2410.dll",
+        "NativeDlls/x64/opencv_features2d2410.dll",
+        "NativeDlls/x64/opencv_ffmpeg2410_64.dll",
+        "NativeDlls/x64/opencv_flann2410.dll",
+        "NativeDlls/x64/opencv_gpu2410.dll",
+        "NativeDlls/x64/opencv_highgui2410.dll",
+        "NativeDlls/x64/opencv_imgproc2410.dll",
+        "NativeDlls/x64/opencv_legacy2410.dll",
+        "NativeDlls/x64/opencv_ml2410.dll",
+        "NativeDlls/x64/opencv_nonfree2410.dll",
+        "NativeDlls/x64/opencv_objdetect2410.dll",
+        "NativeDlls/x64/opencv_ocl2410.dll",
+        "NativeDlls/x64/opencv_photo2410.dll",
+        "NativeDlls/x64/opencv_stitching2410.dll",
+        "NativeDlls/x64/opencv_superres2410.dll",
+        "NativeDlls/x64/opencv_video2410.dll",
+        "NativeDlls/x64/opencv_videostab2410.dll",
+        "NativeDlls/x86/OpenCvSharpExtern.dll",
+        "NativeDlls/x86/msvcp120.dll",
+        "NativeDlls/x86/msvcr120.dll",
+        "NativeDlls/x86/opencv_calib3d2410.dll",
+        "NativeDlls/x86/opencv_contrib2410.dll",
+        "NativeDlls/x86/opencv_core2410.dll",
+        "NativeDlls/x86/opencv_features2d2410.dll",
+        "NativeDlls/x86/opencv_ffmpeg2410.dll",
+        "NativeDlls/x86/opencv_flann2410.dll",
+        "NativeDlls/x86/opencv_gpu2410.dll",
+        "NativeDlls/x86/opencv_highgui2410.dll",
+        "NativeDlls/x86/opencv_imgproc2410.dll",
+        "NativeDlls/x86/opencv_legacy2410.dll",
+        "NativeDlls/x86/opencv_ml2410.dll",
+        "NativeDlls/x86/opencv_nonfree2410.dll",
+        "NativeDlls/x86/opencv_objdetect2410.dll",
+        "NativeDlls/x86/opencv_ocl2410.dll",
+        "NativeDlls/x86/opencv_photo2410.dll",
+        "NativeDlls/x86/opencv_stitching2410.dll",
+        "NativeDlls/x86/opencv_superres2410.dll",
+        "NativeDlls/x86/opencv_video2410.dll",
+        "NativeDlls/x86/opencv_videostab2410.dll",
+        "build/OpenCvSharp-AnyCPU.props",
+        "lib/net20/OpenCvSharp.Blob.XML",
+        "lib/net20/OpenCvSharp.Blob.dll",
+        "lib/net20/OpenCvSharp.Blob.dll.config",
+        "lib/net20/OpenCvSharp.CPlusPlus.XML",
+        "lib/net20/OpenCvSharp.CPlusPlus.dll",
+        "lib/net20/OpenCvSharp.CPlusPlus.dll.config",
+        "lib/net20/OpenCvSharp.UserInterface.dll",
+        "lib/net20/OpenCvSharp.XML",
+        "lib/net20/OpenCvSharp.dll",
+        "lib/net20/OpenCvSharp.dll.config",
+        "lib/net35/OpenCvSharp.Blob.XML",
+        "lib/net35/OpenCvSharp.Blob.dll",
+        "lib/net35/OpenCvSharp.Blob.dll.config",
+        "lib/net35/OpenCvSharp.CPlusPlus.XML",
+        "lib/net35/OpenCvSharp.CPlusPlus.dll",
+        "lib/net35/OpenCvSharp.CPlusPlus.dll.config",
+        "lib/net35/OpenCvSharp.Extensions.XML",
+        "lib/net35/OpenCvSharp.Extensions.dll",
+        "lib/net35/OpenCvSharp.UserInterface.dll",
+        "lib/net35/OpenCvSharp.XML",
+        "lib/net35/OpenCvSharp.dll",
+        "lib/net35/OpenCvSharp.dll.config",
+        "lib/net40/OpenCvSharp.Blob.XML",
+        "lib/net40/OpenCvSharp.Blob.dll",
+        "lib/net40/OpenCvSharp.Blob.dll.config",
+        "lib/net40/OpenCvSharp.CPlusPlus.XML",
+        "lib/net40/OpenCvSharp.CPlusPlus.dll",
+        "lib/net40/OpenCvSharp.CPlusPlus.dll.config",
+        "lib/net40/OpenCvSharp.Extensions.XML",
+        "lib/net40/OpenCvSharp.Extensions.dll",
+        "lib/net40/OpenCvSharp.UserInterface.dll",
+        "lib/net40/OpenCvSharp.XML",
+        "lib/net40/OpenCvSharp.dll",
+        "lib/net40/OpenCvSharp.dll.config",
+        "lib/net45/OpenCvSharp.Blob.XML",
+        "lib/net45/OpenCvSharp.Blob.dll",
+        "lib/net45/OpenCvSharp.Blob.dll.config",
+        "lib/net45/OpenCvSharp.CPlusPlus.XML",
+        "lib/net45/OpenCvSharp.CPlusPlus.dll",
+        "lib/net45/OpenCvSharp.CPlusPlus.dll.config",
+        "lib/net45/OpenCvSharp.Extensions.XML",
+        "lib/net45/OpenCvSharp.Extensions.dll",
+        "lib/net45/OpenCvSharp.UserInterface.dll",
+        "lib/net45/OpenCvSharp.XML",
+        "lib/net45/OpenCvSharp.dll",
+        "lib/net45/OpenCvSharp.dll.config",
+        "opencvsharp-anycpu.2.4.10.20170306.nupkg.sha512",
+        "opencvsharp-anycpu.nuspec"
+      ]
+    },
+    "zxing.net2.0/1.0.0": {
+      "type": "project",
+      "msbuildProject": "../../lib/zxing.net2.0.csproj"
+    },
+    "zxing.net3.5/1.0.0": {
+      "type": "project",
+      "msbuildProject": "../../lib/zxing.net3.5.csproj"
+    },
+    "zxing.net4.0/1.0.0": {
+      "type": "project",
+      "msbuildProject": "../../lib/zxing.net4.0.csproj"
+    },
+    "zxing.net4.5/1.0.0": {
+      "type": "project",
+      "msbuildProject": "../../lib/zxing.net4.5.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "": [
+      "OpenCvSharp-AnyCPU >= 2.4.10.20170306"
+    ],
+    ".NETFramework,Version=v2.0": [
+      "zxing.net2.0"
+    ],
+    ".NETFramework,Version=v3.5": [
+      "zxing.net3.5"
+    ],
+    ".NETFramework,Version=v4.0": [
+      "zxing.net4.0"
+    ],
+    ".NETFramework,Version=v4.5": [
+      "zxing.net4.5"
+    ]
+  },
+  "tools": {},
+  "projectFileToolGroups": {}
+}

@@ -90,9 +90,14 @@ COPY "%CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.3\zxing.xml" "
 MKDIR "%BINARY_DIR%\Bindings" >NUL: 2>&1
 
 MKDIR "%BINARY_DIR%\Bindings\CoreCompat.System.Drawing" >NUL: 2>&1
-COPY "%CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.dll" "%BINARY_DIR%\Bindings\CoreCompat.System.Drawing\"
-COPY "%CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.pdb" "%BINARY_DIR%\Bindings\CoreCompat.System.Drawing\"
-COPY "%CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.xml" "%BINARY_DIR%\Bindings\CoreCompat.System.Drawing\"
+MKDIR "%BINARY_DIR%\Bindings\CoreCompat.System.Drawing\netstandard1.3" >NUL: 2>&1
+MKDIR "%BINARY_DIR%\Bindings\CoreCompat.System.Drawing\netstandard2.0" >NUL: 2>&1
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.dll" "%BINARY_DIR%\Bindings\CoreCompat.System.Drawing\netstandard1.3\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.pdb" "%BINARY_DIR%\Bindings\CoreCompat.System.Drawing\netstandard1.3\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.xml" "%BINARY_DIR%\Bindings\CoreCompat.System.Drawing\netstandard1.3\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard2.0\zxing.corecompat.system.drawing.dll" "%BINARY_DIR%\Bindings\CoreCompat.System.Drawing\netstandard2.0\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard2.0\zxing.corecompat.system.drawing.pdb" "%BINARY_DIR%\Bindings\CoreCompat.System.Drawing\netstandard2.0\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard2.0\zxing.corecompat.system.drawing.xml" "%BINARY_DIR%\Bindings\CoreCompat.System.Drawing\netstandard2.0\"
 
 MKDIR "%BINARY_DIR%\Bindings\ImageSharp" >NUL: 2>&1
 COPY "%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.1\zxing.imagesharp.dll" "%BINARY_DIR%\Bindings\ImageSharp\"
@@ -105,14 +110,40 @@ COPY "%CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\netstandard1.3\zxin
 COPY "%CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\netstandard1.3\zxing.magick.xml" "%BINARY_DIR%\Bindings\Magick\"
 
 MKDIR "%BINARY_DIR%\Bindings\OpenCVSharp.V2" >NUL: 2>&1
-COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net20\zxing.opencvsharp.v2.dll" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\"
-COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net20\zxing.opencvsharp.v2.pdb" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\"
-COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net20\zxing.opencvsharp.v2.xml" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\"
+MKDIR "%BINARY_DIR%\Bindings\OpenCVSharp.V2\net2.0" >NUL: 2>&1
+MKDIR "%BINARY_DIR%\Bindings\OpenCVSharp.V2\net3.5" >NUL: 2>&1
+MKDIR "%BINARY_DIR%\Bindings\OpenCVSharp.V2\net4.0" >NUL: 2>&1
+MKDIR "%BINARY_DIR%\Bindings\OpenCVSharp.V2\net4.5" >NUL: 2>&1
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net20\zxing.opencvsharp.v2.dll" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\net2.0\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net20\zxing.opencvsharp.v2.pdb" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\net2.0\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net20\zxing.opencvsharp.v2.xml" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\net2.0\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net35\zxing.opencvsharp.v2.dll" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\net3.5\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net35\zxing.opencvsharp.v2.pdb" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\net3.5\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net35\zxing.opencvsharp.v2.xml" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\net3.5\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net40\zxing.opencvsharp.v2.dll" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\net4.0\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net40\zxing.opencvsharp.v2.pdb" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\net4.0\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net40\zxing.opencvsharp.v2.xml" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\net4.0\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net45\zxing.opencvsharp.v2.dll" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\net4.5\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net45\zxing.opencvsharp.v2.pdb" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\net4.5\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net45\zxing.opencvsharp.v2.xml" "%BINARY_DIR%\Bindings\OpenCVSharp.V2\net4.5\"
 
 MKDIR "%BINARY_DIR%\Bindings\OpenCVSharp.V3" >NUL: 2>&1
-COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\netstandard1.6\zxing.opencv.dll" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\"
-COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\netstandard1.6\zxing.opencv.pdb" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\"
-COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\netstandard1.6\zxing.opencv.xml" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\"
+MKDIR "%BINARY_DIR%\Bindings\OpenCVSharp.V3\net2.0" >NUL: 2>&1
+MKDIR "%BINARY_DIR%\Bindings\OpenCVSharp.V3\net4.0" >NUL: 2>&1
+MKDIR "%BINARY_DIR%\Bindings\OpenCVSharp.V3\net4.6" >NUL: 2>&1
+MKDIR "%BINARY_DIR%\Bindings\OpenCVSharp.V3\netstandard1.6" >NUL: 2>&1
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\net20\zxing.opencv.dll" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\net2.0\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\net20\zxing.opencv.pdb" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\net2.0\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\net20\zxing.opencv.xml" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\net2.0\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\net40\zxing.opencv.dll" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\net4.0\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\net40\zxing.opencv.pdb" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\net4.0\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\net40\zxing.opencv.xml" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\net4.0\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\net46\zxing.opencv.dll" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\net4.6\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\net46\zxing.opencv.pdb" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\net4.6\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\net46\zxing.opencv.xml" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\net4.6\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\netstandard1.6\zxing.opencv.dll" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\netstandard1.6\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\netstandard1.6\zxing.opencv.pdb" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\netstandard1.6\"
+COPY "%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\netstandard1.6\zxing.opencv.xml" "%BINARY_DIR%\Bindings\OpenCVSharp.V3\netstandard1.6\"
 
 MKDIR "%BINARY_DIR%\Bindings\SkiaSharp" >NUL: 2>&1
 COPY "%CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard1.3\zxing.skiasharp.dll" "%BINARY_DIR%\Bindings\SkiaSharp\"
