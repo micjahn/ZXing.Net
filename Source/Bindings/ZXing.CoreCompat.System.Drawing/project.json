@@ -1,37 +1,47 @@
 {
-   "name": "ZXing.CoreCompat.System.Drawing",
-   "version": "0.16.1",
-   "dependencies": {
-      "CoreCompat.System.Drawing": "1.0.0-beta006",
-      "NETStandard.Library": "1.6.0"
-   },
-   "frameworks": {
-      "netstandard1.3": {
-         "dependencies": {
-            "ZXing.Net": {
-               "target": "project"
-            }
-         }
-      }
-   },
-   "buildOptions": {
-      "define": [ "NETSTANDARD" ],
-      "optimize": true,
-      "xmlDoc": true,
-      "platform": "anycpu",
-      "publicSign": false,
-      "debugType": "portable",
-      "outputName": "zxing.corecompat.system.drawing",
-      "compile": {
-         "includeFiles": [
-            "Properties/AssemblyInfo.cs",
-            "BarcodeReader.Extensions.cs",
-            "BarcodeReader.cs",
-            "BarcodeWriter.cs",
-            "BarcodeWriter.Extensions.cs",
-            "BitmapLuminanceSource.cs",
-            "Rendering/BitmapRenderer.cs"
-         ]
-      }
-   }
+	"name": "ZXing.CoreCompat.System.Drawing",
+	"version": "0.16.1",
+	"dependencies": {
+		"CoreCompat.System.Drawing": "1.0.0-beta006",
+		"NETStandard.Library": "1.6.0"
+	},
+	"frameworks": {
+		"netstandard1.3": {
+			"dependencies": {
+				"ZXing.Net": {
+					"target": "project"
+				}
+			}
+		}
+	},
+	"buildOptions": {
+		"define": [ "NETSTANDARD" ],
+		"optimize": true,
+		"xmlDoc": true,
+		"platform": "anycpu",
+		"publicSign": true,
+		"delaySign": false,
+		"keyFile": "../../../Key/private.snk",
+		"debugType": "portable",
+		"outputName": "zxing.corecompat.system.drawing",
+		"compile": {
+			"includeFiles": [
+				"Properties/AssemblyInfo.cs",
+				"BarcodeReader.Extensions.cs",
+				"BarcodeReader.cs",
+				"BarcodeWriter.cs",
+				"BarcodeWriter.Extensions.cs",
+				"BitmapLuminanceSource.cs",
+				"Rendering/BitmapRenderer.cs"
+			]
+		}
+	},
+	"configurations": {
+		"Debug": {
+			"buildOptions": {
+				"xmlDoc": false,
+				"optimize": false
+			}
+		}
+	}
 }

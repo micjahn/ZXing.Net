@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <PackageReference Include="CoreCompat.System.Drawing.v2" Version="5.2.0-preview1-r131" />
-	<PackageReference Include="ZXing.Net" Version="0.16.0" />
+	<PackageReference Include="ZXing.Net" Version="0.16.1" />
   </ItemGroup>
 
 </Project>
