@@ -51,8 +51,9 @@
 		"xmlDoc": true,
 		"platform": "anycpu",
 		"publicSign": true,
+		"delaySign": false,
 		"keyFile": "../../../Key/private.snk",
-		"debugType": "portable",
+		"debugType": "full",
 		"outputName": "zxing.opencvsharp.v2",
 		"allowUnsafe": true,
 		"compile": {
@@ -62,6 +63,14 @@
 				"BarcodeReader.Extensions.cs",
 				"MatLuminanceSource.cs"
 			]
+		}
+	},
+	"configurations": {
+		"Debug": {
+			"buildOptions": {
+				"xmlDoc": false,
+				"optimize": false
+			}
 		}
 	}
 }
