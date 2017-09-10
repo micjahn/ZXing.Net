@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "exports": {
+    "zxing.net4.5/1.0.0": {
+      "type": "project",
+      "framework": ".NETFramework,Version=v4.5",
+      "compile": {
+        "../../Build/Debug/net4.5/zxing.dll": {}
+      },
+      "runtime": {
+        "../../Build/Debug/net4.5/zxing.dll": {}
+      },
+      "contentFiles": {
+        "../../Build/Debug/net4.5/zxing.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    }
+  }
+}

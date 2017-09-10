@@ -12,7 +12,8 @@
 				}
 			},
 			"buildOptions": {
-				"define": [ "NET20" ]
+				"define": [ "NET20" ],
+				"debugType": "full"
 			}
 		},
 		"net40": {
@@ -22,7 +23,8 @@
 				}
 			},
 			"buildOptions": {
-				"define": [ "NET40" ]
+				"define": [ "NET40" ],
+				"debugType": "full"
 			}
 		},
 		"net46": {
@@ -32,18 +34,20 @@
 				}
 			},
 			"buildOptions": {
-				"define": [ "NET46" ]
+				"define": [ "NET46" ],
+				"debugType": "full"
 			}
 		},
 		"netstandard1.6": {
 			"dependencies": {
-			"NETStandard.Library": "1.6.1",
+				"NETStandard.Library": "1.6.1",
 				"ZXing.Net": {
 					"target": "project"
 				}
 			},
 			"buildOptions": {
-				"define": [ "NETSTANDARD" ]
+				"define": [ "NETSTANDARD" ],
+				"debugType": "portable"
 			}
 		}
 	},
@@ -52,8 +56,8 @@
 		"xmlDoc": true,
 		"platform": "anycpu",
 		"publicSign": true,
+		"delaySign": false,
 		"keyFile": "../../../Key/private.snk",
-		"debugType": "portable",
 		"outputName": "zxing.opencv",
 		"allowUnsafe": true,
 		"compile": {
@@ -63,6 +67,14 @@
 				"BarcodeReader.Extensions.cs",
 				"MatLuminanceSource.cs"
 			]
+		}
+	},
+	"configurations": {
+		"Debug": {
+			"buildOptions": {
+				"xmlDoc": false,
+				"optimize": false
+			}
 		}
 	}
 }

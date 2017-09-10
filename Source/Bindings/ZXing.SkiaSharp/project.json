@@ -1,36 +1,58 @@
 {
-   "name": "ZXing.SkiaSharp",
-   "version": "0.16.1",
-   "dependencies": {
-      "NETStandard.Library": "1.6.0",
-      "SkiaSharp": "1.57.0"
-   },
-   "frameworks": {
-      "netstandard1.3": {
-         "dependencies": {
-            "ZXing.Net": {
-               "target": "project"
-            }
-         }
-      }
-   },
-   "buildOptions": {
-      "define": [ "NETSTANDARD" ],
-      "optimize": true,
-      "xmlDoc": true,
-      "platform": "anycpu",
-      "publicSign": false,
-      "keyFile": "../../../Key/private.snk",
-      "debugType": "portable",
-      "outputName": "zxing.skiasharp",
-      "allowUnsafe": true,
-      "compile": {
-         "includeFiles": [
-            "Properties/AssemblyInfo.cs",
-            "BarcodeReader.cs",
-            "BarcodeReader.Extensions.cs",
-            "SKBitmapLuminanceSource.cs"
-         ]
-      }
-   }
+	"name": "ZXing.SkiaSharp",
+	"version": "0.16.1",
+	"dependencies": {
+		"SkiaSharp": "1.57.0"
+	},
+	"frameworks": {
+		"net45": {
+			"dependencies": {
+				"zxing.net4.5": {
+					"target": "project"
+				}
+			},
+			"buildOptions": {
+				"define": [ "NET45" ],
+				"debugType": "full"
+			}
+		},
+		"netstandard1.3": {
+			"dependencies": {
+				"NETStandard.Library": "1.6.0",
+				"ZXing.Net": {
+					"target": "project"
+				}
+			},
+			"buildOptions": {
+				"define": [ "NETSTANDARD" ],
+				"debugType": "portable"
+			}
+		}
+	},
+	"buildOptions": {
+		"optimize": true,
+		"xmlDoc": true,
+		"platform": "anycpu",
+		"publicSign": false,
+		"delaySign": false,
+		"keyFile": "../../../Key/private.snk",
+		"outputName": "zxing.skiasharp",
+		"allowUnsafe": true,
+		"compile": {
+			"includeFiles": [
+				"Properties/AssemblyInfo.cs",
+				"BarcodeReader.cs",
+				"BarcodeReader.Extensions.cs",
+				"SKBitmapLuminanceSource.cs"
+			]
+		}
+	},
+	"configurations": {
+		"Debug": {
+			"buildOptions": {
+				"xmlDoc": false,
+				"optimize": false
+			}
+		}
+	}
 }
