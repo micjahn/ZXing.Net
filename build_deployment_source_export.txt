@@ -13,7 +13,6 @@ https://github.com/micjahn/ZXing.Net.git/trunk/3rdparty/Kinect Base\3rdparty\Kin
 https://github.com/micjahn/ZXing.Net.git/trunk/Key Base\Key
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.sln Base
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.ce.sln Base
-https://github.com/micjahn/ZXing.Net.git/trunk/zxing.vs2012.sln Base
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.vs2015.sln Base
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.monoandroid.sln Base
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.monotouch.sln Base

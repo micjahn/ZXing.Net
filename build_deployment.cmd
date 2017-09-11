@@ -21,7 +21,7 @@ SET HAS_VALIDATION_ERROR=0
 echo. > %LOGFILE%
 
 echo.
-echo Checking for missing files...
+echo Check for missing files...
 echo.
 
 FOR /F %%b IN (build_deployment_files.txt) DO (
@@ -34,7 +34,7 @@ FOR /F %%b IN (build_deployment_files.txt) DO (
  )
 )
 
-echo Checking strong name of the assemblies...
+echo Check strong name of the assemblies...
 echo (script has to be called in a Visual Studio command prompt, sn.exe has to be in search paths)
 echo.
 
@@ -83,7 +83,7 @@ ECHO %DEPLOYMENT_DIR%...
 ECHO.
 
 REM
-REM preparing deployment directory
+REM prepare deployment directory
 REM ***************************************************************************************
 
 IF NOT EXIST "%BUILD_DIR%" GOTO BUILD_DIR_NOT_FOUND
@@ -93,15 +93,15 @@ MKDIR "%DEPLOYMENT_DIR%" >NUL: 2>&1
 DEL /F "%DEPLOYMENT_DIR%\%FILENAME_BINARY%" >NUL: 2>&1
 
 REM
-REM preparing binaries
+REM prepare binaries
 REM ***************************************************************************************
-ECHO Cleaning up demo client builds
+ECHO Cleanup demo client builds
 ECHO.
 
 DEL /S "%BINARY_DIR%"\Clients\*.xml >> %LOGFILE% 2>&1
 DEL /S "%BINARY_DIR%"\Clients\*.pdb >> %LOGFILE% 2>&1
 
-ECHO Copying binaries
+ECHO Copy binaries
 ECHO.
 
 FOR /F "tokens=1,2 delims= " %%b IN (build_deployment_copy_operations.txt) DO (
@@ -113,57 +113,56 @@ FOR /F "tokens=1,2 delims= " %%b IN (build_deployment_copy_operations.txt) DO (
  SET d=!d:%%BINARY_DIR%%=%BINARY_DIR%!
  SET d=!d:%%CURRENT_DIR%%=%CURRENT_DIR%!
  
- ECHO Copying !f! to !d! >> %LOGFILE% 2>&1
+ ECHO Copy !f! to !d! >> %LOGFILE% 2>&1
  
  MKDIR "!d!" >> %LOGFILE% 2>&1
- if NOT ERRORLEVEL 0 GOTO ERROR_OPERATION
  
  COPY "!f!" "!d!" >> %LOGFILE% 2>&1
- if NOT ERRORLEVEL 0 GOTO ERROR_OPERATION
+ if ERRORLEVEL 1 GOTO ERROR_OPERATION
 )
 
 REM
-REM building archives for binaries
+REM build archives for binaries
 REM ***************************************************************************************
 
 CD "%BINARY_DIR%"
 
-echo Building assembly archive...
+echo Build assembly archive...
 echo.
 
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net3.5 net4.0 net4.5 net4.6 net4.7 winrt uwp netstandard unity sl4 sl5 wp7.0 wp7.1 wp8.0 monodroid winmd portable interop Bindings ..\..\THANKS ..\..\COPYING -xr!Documentation >> %LOGFILE% 2>&1
-if NOT ERRORLEVEL 0 GOTO ERROR_OPERATION
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net3.5 net4.0 net4.5 net4.6 net4.7 winrt uwp netstandard unity sl4 sl5 wp7.0 wp7.1 wp8.0 monodroid winmd portable interop Bindings ..\..\THANKS ..\..\COPYING -xr^^!Documentation >> %LOGFILE% 2>&1
+if ERRORLEVEL 1 GOTO ERROR_OPERATION
 
-echo Building assembly archive - demo clients...
+echo Build assembly archive - demo clients...
 echo.
 
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DEMO_BINARY%" Clients >> %LOGFILE% 2>&1
-if NOT ERRORLEVEL 0 GOTO ERROR_OPERATION
+if ERRORLEVEL 1 GOTO ERROR_OPERATION
 
-echo Building documentation archive...
+echo Build documentation archive...
 echo.
 
 "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_DOCUMENTATION%" Documentation >> %LOGFILE% 2>&1
-if NOT ERRORLEVEL 0 GOTO ERROR_OPERATION
+if ERRORLEVEL 1 GOTO ERROR_OPERATION
 
 CD "%CURRENT_DIR%"
 
 
 REM
-REM building nuget archive
+REM build nuget archive
 REM ***************************************************************************************
 
-echo Building nuget packages...
+echo Build nuget packages...
 echo.
 
 CALL nuget-pack.cmd >> %LOGFILE% 2>&1
 
 
 REM
-REM building source archive
+REM build source archive
 REM ***************************************************************************************
 
-echo Building source code archive...
+echo Build source code archive...
 echo.
 
 RMDIR /S /Q "%SOURCE_EXPORT_DIR%" >NUL: 2>&1
@@ -175,17 +174,17 @@ FOR /F "tokens=1,2 delims= " %%b IN (build_deployment_source_export.txt) DO (
  SET d=!d:%%BINARY_DIR%%=%BINARY_DIR%!
  SET d=!d:%%CURRENT_DIR%%=%CURRENT_DIR%!
  
- ECHO Copying !f! to !d! >> %LOGFILE% 2>&1
+ ECHO Export !f! to !d! >> %LOGFILE% 2>&1
  
  MKDIR "%SOURCE_EXPORT_DIR%\!d!" >> %LOGFILE% 2>&1
- if NOT ERRORLEVEL 0 GOTO ERROR_OPERATION
- 
+  
+ echo "%SVN_TOOL%" export --force "!f!" "%SOURCE_EXPORT_DIR%\!d!" >> %LOGFILE% 2>&1
  "%SVN_TOOL%" export --force "!f!" "%SOURCE_EXPORT_DIR%\!d!" >> %LOGFILE% 2>&1
- if NOT ERRORLEVEL 0 GOTO ERROR_OPERATION
+ if ERRORLEVEL 1 GOTO ERROR_OPERATION
 )
 
 CD "%SOURCE_EXPORT_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Base\Source\lib\*.* Base\Source\Bindings\*.* Base\Source\interop\*.* Base\Source\test\src\*.* Base\Clients\*.* Base\3rdparty\*.* Base\Key\*.* Base\zxing.sln Base\zxing.ce.sln Base\zxing.vs2012.sln Base\zxing.vs2015.sln Base\zxing.monoandroid.sln Base\zxing.monotouch.sln Base\zxing.nunit Base\THANKS Base\COPYING WinMD\Source\lib\*.* WinMD\Clients\*.* WinMD\Key\*.* WinMD\zxing.vs2012.sln >> %LOGFILE% 2>&1
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Base\Source\lib\*.* Base\Source\Bindings\*.* Base\Source\interop\*.* Base\Source\test\src\*.* Base\Clients\*.* Base\3rdparty\*.* Base\Key\*.* Base\zxing.sln Base\zxing.ce.sln Base\zxing.vs2012.sln Base\zxing.vs2015.sln Base\zxing.monoandroid.sln Base\zxing.monotouch.sln Base\zxing.nunit Base\THANKS Base\COPYING WinMD\Source\lib\*.* WinMD\Clients\*.* WinMD\Key\*.* WinMD\zxing.vs2012.sln -xr^^!..svnbridge >> %LOGFILE% 2>&1
 CD "%CURRENT_DIR%"
 
 RMDIR /S /Q "%SOURCE_EXPORT_DIR%" >NUL: 2>&1
