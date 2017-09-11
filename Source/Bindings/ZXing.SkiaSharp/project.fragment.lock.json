@@ -5,13 +5,13 @@
       "type": "project",
       "framework": ".NETFramework,Version=v4.5",
       "compile": {
-        "../../Build/Debug/net4.5/zxing.dll": {}
+        "../../Build/Release/net4.5/zxing.dll": {}
       },
       "runtime": {
-        "../../Build/Debug/net4.5/zxing.dll": {}
+        "../../Build/Release/net4.5/zxing.dll": {}
       },
       "contentFiles": {
-        "../../Build/Debug/net4.5/zxing.pdb": {
+        "../../Build/Release/net4.5/zxing.pdb": {
           "buildAction": "None",
           "codeLanguage": "any",
           "copyToOutput": true

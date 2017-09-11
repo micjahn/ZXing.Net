@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.2-beta</version>
+    <version>0.16.3-beta</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
@@ -16,7 +16,7 @@
     <tags>ZXing ImageSharp</tags>
     <dependencies>
       <group targetFramework="netstandard1.1">
-        <dependency id="ZXing.Net" version="0.16.1.0" exclude="Build,Analyzers" />
+        <dependency id="ZXing.Net" version="0.16.2.0" exclude="Build,Analyzers" />
         <dependency id="ImageSharp" version="1.0.0-alpha9-00182" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
       </group>

@@ -7,10 +7,13 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 #if !NETSTANDARD2_0
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("zxing.corecompat.system.drawing")]
+[assembly: AssemblyCompany("ZXing.Net Development")]
+[assembly: AssemblyProduct("ZXing.CoreCompat.System.Drawing")]
 #endif
 [assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © 2017")]
+[assembly: AssemblyDescription("ZXing.Net Bindings to CoreCompat.System.Drawing")]
+[assembly: AssemblyInformationalVersion("0.16.3")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
