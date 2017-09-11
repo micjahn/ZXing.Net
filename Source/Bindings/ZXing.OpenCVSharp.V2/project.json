@@ -1,6 +1,6 @@
 {
 	"name": "ZXing.OpenCV.V2",
-	"version": "0.16.1",
+	"version": "0.16.3",
 	"dependencies": {
 		"OpenCvSharp-AnyCPU": "2.4.10.20170306"
 	},
@@ -69,7 +69,8 @@
 		"Debug": {
 			"buildOptions": {
 				"xmlDoc": false,
-				"optimize": false
+				"optimize": false,
+		      "publicSign": false
 			}
 		}
 	}

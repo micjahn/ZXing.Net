@@ -6,9 +6,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("zxing.imagesharp")]
+[assembly: AssemblyCompany("ZXing.Net Development")]
+[assembly: AssemblyProduct("ZXing.ImageSharp")]
 [assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Copyright © 2017")]
+[assembly: AssemblyDescription("ZXing.Net Bindings to ImageSharp")]
+[assembly: AssemblyInformationalVersion("0.16.3")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from

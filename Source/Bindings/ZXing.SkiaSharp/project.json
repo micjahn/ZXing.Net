@@ -1,6 +1,6 @@
 {
 	"name": "ZXing.SkiaSharp",
-	"version": "0.16.1",
+	"version": "0.16.3",
 	"dependencies": {
 		"SkiaSharp": "1.57.0"
 	},

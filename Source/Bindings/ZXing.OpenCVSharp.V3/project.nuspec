@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-	 <version>0.16.2</version>
+	 <version>0.16.3</version>
 	 <authors>Michael Jahn</authors>
 	 <owners>Michael Jahn</owners>
 	 <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
@@ -16,19 +16,19 @@
 	 <tags>ZXing OpenCV</tags>
 	 <dependencies>
 		 <group targetFramework="net20">
-			 <dependency id="ZXing.Net" version="0.16.1.0" exclude="Build,Analyzers" />
+			 <dependency id="ZXing.Net" version="0.16.2.0" exclude="Build,Analyzers" />
 			 <dependency id="OpenCvSharp-AnyCPU" version="2.4.10.20170306" exclude="Build,Analyzers" />
 		 </group>
 		 <group targetFramework="net40">
-			 <dependency id="ZXing.Net" version="0.16.1.0" exclude="Build,Analyzers" />
+			 <dependency id="ZXing.Net" version="0.16.2.0" exclude="Build,Analyzers" />
 			 <dependency id="OpenCvSharp-AnyCPU" version="2.4.10.20170306" exclude="Build,Analyzers" />
 		 </group>
 		 <group targetFramework="net46">
-			 <dependency id="ZXing.Net" version="0.16.1.0" exclude="Build,Analyzers" />
+			 <dependency id="ZXing.Net" version="0.16.2.0" exclude="Build,Analyzers" />
 			 <dependency id="OpenCvSharp-AnyCPU" version="2.4.10.20170306" exclude="Build,Analyzers" />
 		 </group>
 		 <group targetFramework="netstandard1.6">
-		   <dependency id="ZXing.Net" version="0.16.1.0" exclude="Build,Analyzers" />
+		   <dependency id="ZXing.Net" version="0.16.2.0" exclude="Build,Analyzers" />
 		   <dependency id="OpenCvSharp3-AnyCPU" version="3.2.0.20170419" exclude="Build,Analyzers" />
 		   <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
 		</group>
