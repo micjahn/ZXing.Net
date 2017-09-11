@@ -2,4 +2,6 @@ obj/
 bin/
 Build/
 .DS_Store
-private.snk 
+private.snk
+.vs/
+*.user
