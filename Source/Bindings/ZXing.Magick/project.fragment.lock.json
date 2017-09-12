@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "exports": {
+    "zxing.net2.0/1.0.0": {
+      "type": "project",
+      "framework": ".NETFramework,Version=v2.0",
+      "compile": {
+        "../../Build/Debug/net2.0/zxing.dll": {}
+      },
+      "runtime": {
+        "../../Build/Debug/net2.0/zxing.dll": {}
+      },
+      "contentFiles": {
+        "../../Build/Debug/net2.0/zxing.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    },
+    "zxing.net4.0/1.0.0": {
+      "type": "project",
+      "framework": ".NETFramework,Version=v4.0",
+      "compile": {
+        "../../Build/Debug/net4.0/zxing.dll": {}
+      },
+      "runtime": {
+        "../../Build/Debug/net4.0/zxing.dll": {}
+      },
+      "contentFiles": {
+        "../../Build/Debug/net4.0/zxing.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    }
+  }
+}

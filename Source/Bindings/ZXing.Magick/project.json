@@ -1,28 +1,50 @@
 {
 	"name": "ZXing.Magick",
-	"version": "0.16.2",
+	"version": "0.16.3",
 	"dependencies": {
-		"Magick.NET.Core-Q8": "7.0.5.502",
-		"NETStandard.Library": "1.6.1"
+		"Magick.NET-Q8-AnyCPU": "7.0.7"
 	},
 	"frameworks": {
+		"net20": {
+			"dependencies": {
+				"zxing.net2.0": {
+					"target": "project"
+				}
+			},
+			"buildOptions": {
+				"define": [ "NET20" ],
+				"debugType": "full"
+			}
+		},
+		"net40": {
+			"dependencies": {
+				"zxing.net4.0": {
+					"target": "project"
+				}
+			},
+			"buildOptions": {
+				"define": [ "NET40" ],
+				"debugType": "full"
+			}
+		},
 		"netstandard1.3": {
 			"dependencies": {
+				"NETStandard.Library": "1.6.1",
 				"ZXing.Net": {
 					"target": "project"
 				}
+			},
+			"buildOptions": {
+				"define": [ "NETSTANDARD" ],
+				"debugType": "portable"
 			}
 		}
 	},
 	"buildOptions": {
-		"define": [ "NETSTANDARD" ],
 		"optimize": true,
 		"xmlDoc": true,
 		"platform": "anycpu",
-		"publicSign": true,
-		"delaySign": false,
-		"keyFile": "../../../Key/private.snk",
-		"debugType": "portable",
+		"publicSign": false,
 		"outputName": "zxing.magick",
 		"allowUnsafe": true,
 		"compile": {

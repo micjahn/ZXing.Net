@@ -50,3 +50,14 @@ namespace ZXing
       }
    }
 }
+
+#if NET20
+namespace System.Runtime.CompilerServices
+{
+   /// <summary>
+   /// for compatibility to .net4.0, needed for extension methods
+   /// </summary>
+   [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method)]
+   public sealed class ExtensionAttribute : Attribute { }
+}
+#endif
