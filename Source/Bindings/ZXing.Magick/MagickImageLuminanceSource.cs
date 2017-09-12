@@ -65,40 +65,17 @@ namespace ZXing.Magick
             throw new ArgumentNullException("src");
 
          var pixels = src.GetPixels();
-
-         switch (src.Format)
+         if (src.HasAlpha)
          {
-            case MagickFormat.Gray:
-               CalculateLuminanceGray8(pixels, src.Width, src.Height);
-               break;
-            case MagickFormat.Bgr:
-            case MagickFormat.Rgb:
-               CalculateLuminanceBGR24(pixels, src.Width, src.Height);
-               break;
-            case MagickFormat.Bgra:
-            case MagickFormat.Rgba:
-               CalculateLuminanceBGRA32(pixels, src.Width, src.Height);
-               break;
-            default:
-               throw new ArgumentOutOfRangeException(String.Format("MagickFormat {0} is not supported", src.Format));
+            CalculateLuminanceBGRA32(pixels, src.Width, src.Height);
+         }
+         else
+         {
+            CalculateLuminanceBGR24(pixels, src.Width, src.Height);
          }
       }
 
-      private unsafe void CalculateLuminanceGray8(PixelCollection pixels, int width, int height)
-      {
-         var luminanceIndex = 0;
-         for (var y = 0; y < height; y++)
-         {
-            for (var x = 0; x < width; x++)
-            {
-               var pixel = pixels[x, y];
-               luminances[luminanceIndex] = pixel.ToColor().R;
-               luminanceIndex++;
-            }
-         }
-      }
-
-      private unsafe void CalculateLuminanceBGR24(PixelCollection pixels, int width, int height)
+      private void CalculateLuminanceBGR24(PixelCollection pixels, int width, int height)
       {
          var luminanceIndex = 0;
          for (var y = 0; y < height; y++)
@@ -112,7 +89,7 @@ namespace ZXing.Magick
          }
       }
 
-      private unsafe void CalculateLuminanceBGRA32(PixelCollection pixels, int width, int height)
+      private void CalculateLuminanceBGRA32(PixelCollection pixels, int width, int height)
       {
          var luminanceIndex = 0;
          for (var y = 0; y < height; y++)
