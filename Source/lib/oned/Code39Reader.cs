@@ -22,7 +22,7 @@ using ZXing.Common;
 namespace ZXing.OneD
 {
    /// <summary>
-   ///   <p>Decodes Code 39 barcodes. This does not support "Full ASCII Code 39" yet.</p>
+   ///   <p>Decodes Code 39 barcodes. Supports "Full ASCII Code 39" if USE_CODE_39_EXTENDED_MODE is set.</p>
    /// 	<author>Sean Owen</author>
    /// @see Code93Reader
    /// </summary>
@@ -47,8 +47,8 @@ namespace ZXing.OneD
                                                     0x034, 0x121, 0x061, 0x160, 0x031, 0x130, 0x070, 0x025, 0x124, 0x064, // 0-9
                                                     0x109, 0x049, 0x148, 0x019, 0x118, 0x058, 0x00D, 0x10C, 0x04C, 0x01C, // A-J
                                                     0x103, 0x043, 0x142, 0x013, 0x112, 0x052, 0x007, 0x106, 0x046, 0x016, // K-T
-                                                    0x181, 0x0C1, 0x1C0, 0x091, 0x190, 0x0D0, 0x085, 0x184, 0x0C4, 0x0A8, // U-
-                                                    0x0A2, 0x08A, 0x02A // $-%
+                                                    0x181, 0x0C1, 0x1C0, 0x091, 0x190, 0x0D0, 0x085, 0x184, 0x0C4, 0x0A8, // U-$
+                                                    0x0A2, 0x08A, 0x02A // /-%
                                                  };
 
       internal static readonly int ASTERISK_ENCODING = 0x094;
@@ -392,9 +392,33 @@ namespace ZXing.OneD
                      {
                         decodedChar = (char)(next - 38);
                      }
-                     else if (next >= 'F' && next <= 'W')
+                     else if (next >= 'F' && next <= 'J')
                      {
                         decodedChar = (char)(next - 11);
+                     }
+                     else if (next >= 'K' && next <= 'O')
+                     {
+                        decodedChar = (char)(next + 16);
+                     }
+                     else if (next >= 'P' && next <= 'T')
+                     {
+                        decodedChar = (char)(next + 43);
+                     }
+                     else if (next == 'U')
+                     {
+                        decodedChar = (char)0;
+                     }
+                     else if (next == 'V')
+                     {
+                        decodedChar = '@';
+                     }
+                     else if (next == 'W')
+                     {
+                        decodedChar = '`';
+                     }
+                     else if (next == 'X' || next == 'Y' || next == 'Z')
+                     {
+                        decodedChar = (char)127;
                      }
                      else
                      {
