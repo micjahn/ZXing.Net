@@ -30,6 +30,7 @@
 %CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing.V2\bin\Release\netstandard2.0\zxing.corecompat.system.drawing.V2.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.1\zxing.imagesharp.dll
+%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.3\zxing.imagesharp.dll
 %BINARY_DIR%\Bindings\kinect\V1\zxing.kinect.dll
 %BINARY_DIR%\Bindings\kinect\V2\zxing.kinect.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\net20\zxing.magick.dll

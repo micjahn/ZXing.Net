@@ -13,9 +13,12 @@
 %CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing.V2\bin\Release\netstandard2.0\zxing.corecompat.system.drawing.V2.dll %BINARY_DIR%\Bindings\CoreCompat.System.Drawing\netstandard2.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing.V2\bin\Release\netstandard2.0\zxing.corecompat.system.drawing.V2.pdb %BINARY_DIR%\Bindings\CoreCompat.System.Drawing\netstandard2.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing.V2\bin\Release\netstandard2.0\zxing.corecompat.system.drawing.V2.xml %BINARY_DIR%\Bindings\CoreCompat.System.Drawing\netstandard2.0\
-%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.1\zxing.imagesharp.dll %BINARY_DIR%\Bindings\ImageSharp\
-%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.1\zxing.imagesharp.pdb %BINARY_DIR%\Bindings\ImageSharp\
-%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.1\zxing.imagesharp.xml %BINARY_DIR%\Bindings\ImageSharp\
+%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.1\zxing.imagesharp.dll %BINARY_DIR%\Bindings\ImageSharp\netstandard1.1\
+%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.1\zxing.imagesharp.pdb %BINARY_DIR%\Bindings\ImageSharp\netstandard1.1\
+%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.1\zxing.imagesharp.xml %BINARY_DIR%\Bindings\ImageSharp\netstandard1.1\
+%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.3\zxing.imagesharp.dll %BINARY_DIR%\Bindings\ImageSharp\netstandard1.3\
+%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.3\zxing.imagesharp.pdb %BINARY_DIR%\Bindings\ImageSharp\netstandard1.3\
+%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.3\zxing.imagesharp.xml %BINARY_DIR%\Bindings\ImageSharp\netstandard1.3\
 %CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\net20\zxing.magick.dll %BINARY_DIR%\Bindings\Magick\net20\
 %CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\net20\zxing.magick.pdb %BINARY_DIR%\Bindings\Magick\net20\
 %CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\net20\zxing.magick.xml %BINARY_DIR%\Bindings\Magick\net20\
