@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-using ImageSharp;
-using ImageSharp.PixelFormats;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace ZXing.ImageSharp
 {
 	/// <summary>
 	/// specific implementation of a barcode reader which can be used with ImageSharp ImageBase objects
 	/// </summary>
-	public class BarcodeReader<TPixel> : ZXing.BarcodeReader<ImageBase<TPixel>> where TPixel : struct, IPixel<TPixel>
+	public class BarcodeReader<TPixel> : ZXing.BarcodeReader<Image<TPixel>> where TPixel : struct, IPixel<TPixel>
 	{
-		private static readonly Func<ImageBase<TPixel>, LuminanceSource> defaultCreateLuminanceSource =
+		private static readonly Func<Image<TPixel>, LuminanceSource> defaultCreateLuminanceSource =
 			(bitmap) => new ImageSharpLuminanceSource<TPixel>(bitmap);
 
 		/// <summary>
@@ -45,7 +45,7 @@ namespace ZXing.ImageSharp
 		/// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
 		/// If null then HybridBinarizer is used</param>
 		public BarcodeReader(Reader reader,
-			Func<ImageBase<TPixel>, LuminanceSource> createLuminanceSource,
+			Func<Image<TPixel>, LuminanceSource> createLuminanceSource,
 			Func<LuminanceSource, Binarizer> createBinarizer)
 			: base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer)
 		{
@@ -62,7 +62,7 @@ namespace ZXing.ImageSharp
 		/// If null then HybridBinarizer is used</param>
 		/// <param name="createRGBLuminanceSource">Sets the function to create a luminance source object for a rgb raw byte array.</param>
 		public BarcodeReader(Reader reader,
-			Func<ImageBase<TPixel>, LuminanceSource> createLuminanceSource,
+			Func<Image<TPixel>, LuminanceSource> createLuminanceSource,
 			Func<LuminanceSource, Binarizer> createBinarizer,
 			Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource)
 			: base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer, createRGBLuminanceSource)

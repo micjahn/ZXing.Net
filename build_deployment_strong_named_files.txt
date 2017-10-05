@@ -25,7 +25,6 @@
 %CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.dll
 %BINARY_DIR%\Bindings\kinect\V1\zxing.kinect.dll
 %BINARY_DIR%\Bindings\kinect\V2\zxing.kinect.dll
-%CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\netstandard1.3\zxing.magick.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net20\zxing.opencvsharp.v2.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net35\zxing.opencvsharp.v2.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net40\zxing.opencvsharp.v2.dll

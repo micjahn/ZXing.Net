@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-using ImageSharp;
-using ImageSharp.PixelFormats;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace ZXing.ImageSharp
 {
@@ -39,7 +39,7 @@ namespace ZXing.ImageSharp
 		/// with the image of a Bitmap instance
 		/// </summary>
 		/// <param name="bitmap">The bitmap.</param>
-		public ImageSharpLuminanceSource(ImageBase<TPixel> bitmap)
+		public ImageSharpLuminanceSource(Image<TPixel> bitmap)
 			: base(bitmap.Width, bitmap.Height)
 		{
 			var height = bitmap.Height;

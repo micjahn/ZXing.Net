@@ -147,6 +147,19 @@ namespace ZXing.Rendering
          var pixelsizeWidth = width / matrix.Width;
          var pixelsizeHeight = height / matrix.Height;
 
+         if (pixelsizeWidth != pixelsizeHeight)
+         {
+            if (format == BarcodeFormat.QR_CODE ||
+                format == BarcodeFormat.AZTEC ||
+                format == BarcodeFormat.DATA_MATRIX ||
+                format == BarcodeFormat.MAXICODE ||
+                format == BarcodeFormat.PDF_417)
+            {
+               // symetric scaling
+               pixelsizeHeight = pixelsizeWidth = pixelsizeHeight < pixelsizeWidth ? pixelsizeHeight : pixelsizeWidth;
+            }
+         }
+
          // create the bitmap and lock the bits because we need the stride
          // which is the width of the image and possible padding bytes
          var bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
