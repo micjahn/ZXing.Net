@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCopyright("Copyright © 2017")]
 [assembly: AssemblyDescription("ZXing.Net Bindings to Magick")]
-[assembly: AssemblyInformationalVersion("0.16.2")]
+[assembly: AssemblyInformationalVersion("0.16.4")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from

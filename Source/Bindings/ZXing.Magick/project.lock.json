@@ -3,7 +3,7 @@
   "version": 2,
   "targets": {
     ".NETFramework,Version=v2.0": {
-      "Magick.NET-Q8-AnyCPU/7.0.7": {
+      "Magick.NET-Q8-AnyCPU/7.0.7.300": {
         "type": "package",
         "frameworkAssemblies": [
           "System.Drawing"
@@ -28,13 +28,23 @@
             "rid": "win7-x86"
           }
         }
+      },
+      "NETStandard.Library/1.6.0": {
+        "type": "package"
       },
       "zxing.net2.0/1.0.0": {
         "type": "project"
+      },
+      "zxing.netcore/0.16.2": {
+        "type": "project",
+        "framework": "Unsupported,Version=v0.0",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0"
+        }
       }
     },
     ".NETFramework,Version=v4.0": {
-      "Magick.NET-Q8-AnyCPU/7.0.7": {
+      "Magick.NET-Q8-AnyCPU/7.0.7.300": {
         "type": "package",
         "frameworkAssemblies": [
           "System.Drawing"
@@ -60,12 +70,22 @@
           }
         }
       },
+      "NETStandard.Library/1.6.0": {
+        "type": "package"
+      },
       "zxing.net4.0/1.0.0": {
         "type": "project"
+      },
+      "zxing.netcore/0.16.2": {
+        "type": "project",
+        "framework": "Unsupported,Version=v0.0",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0"
+        }
       }
     },
     ".NETStandard,Version=v1.3": {
-      "Magick.NET-Q8-AnyCPU/7.0.7": {
+      "Magick.NET-Q8-AnyCPU/7.0.7.300": {
         "type": "package",
         "dependencies": {
           "System.Collections.NonGeneric": "4.3.0",
@@ -1085,14 +1105,27 @@
         "dependencies": {
           "NETStandard.Library": "1.6.0"
         }
+      },
+      "zxing.netcore/0.16.2": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v1.3",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0"
+        },
+        "compile": {
+          "netstandard1.3/zxing.netcore.dll": {}
+        },
+        "runtime": {
+          "netstandard1.3/zxing.netcore.dll": {}
+        }
       }
     }
   },
   "libraries": {
-    "Magick.NET-Q8-AnyCPU/7.0.7": {
-      "sha512": "fCLWrbCDrwSRcBYzGA4kAQBcR+Lju+0pOf1cVEY6W3jJm/YfG0HViAhUHNM5ZJuMmd4a64lxjGIvBWC4/QrvkQ==",
+    "Magick.NET-Q8-AnyCPU/7.0.7.300": {
+      "sha512": "y5yerwo2Msn253dgh+AWHiE5a99Hegvhpio7YotWsJhpvMfIhqetDOjVipLF4xe9YcglHwk7gWBh03uaLQqLUg==",
       "type": "package",
-      "path": "Magick.NET-Q8-AnyCPU/7.0.7",
+      "path": "Magick.NET-Q8-AnyCPU/7.0.7.300",
       "files": [
         "Copyright.txt",
         "Readme.txt",
@@ -1102,7 +1135,7 @@
         "lib/net40/Magick.NET-Q8-AnyCPU.xml",
         "lib/netstandard13/Magick.NET-Q8-AnyCPU.dll",
         "lib/netstandard13/Magick.NET-Q8-AnyCPU.xml",
-        "magick.net-q8-anycpu.7.0.7.nupkg.sha512",
+        "magick.net-q8-anycpu.7.0.7.300.nupkg.sha512",
         "magick.net-q8-anycpu.nuspec",
         "runtimes/linux-x64/native/Magick.NET-Q8-x64.Native.dll.so",
         "runtimes/win7-x64/native/Magick.NET-Q8-x64.Native.dll",
@@ -4121,11 +4154,16 @@
     "zxing.net4.0/1.0.0": {
       "type": "project",
       "msbuildProject": "../../lib/zxing.net4.0.csproj"
+    },
+    "zxing.netcore/0.16.2": {
+      "type": "project",
+      "path": "../../lib/ZXing.Net/project.json",
+      "msbuildProject": "../../lib/ZXing.Net/zxing.netcore.xproj"
     }
   },
   "projectFileDependencyGroups": {
     "": [
-      "Magick.NET-Q8-AnyCPU >= 7.0.7"
+      "Magick.NET-Q8-AnyCPU >= 7.0.7.300"
     ],
     ".NETFramework,Version=v2.0": [
       "zxing.net2.0"

@@ -1,9 +1,9 @@
 {
 	"name": "ZXing.Magick",
-	"version": "0.16.3",
-	"dependencies": {
-		"Magick.NET-Q8-AnyCPU": "7.0.7"
-	},
+	"version": "0.16.4",
+   "dependencies": {
+      "Magick.NET-Q8-AnyCPU": "7.0.7.300"
+   },
 	"frameworks": {
 		"net20": {
 			"dependencies": {
