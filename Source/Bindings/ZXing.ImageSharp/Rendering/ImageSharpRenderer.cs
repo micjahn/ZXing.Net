@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-using ImageSharp;
-using ImageSharp.PixelFormats;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 using ZXing.Common;
 

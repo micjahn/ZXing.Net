@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-using ImageSharp;
-using ImageSharp.PixelFormats;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using ZXing.ImageSharp;
 
 namespace ZXing
@@ -31,7 +31,7 @@ namespace ZXing
 		/// <param name="reader"></param>
 		/// <param name="image"></param>
 		/// <returns></returns>
-		public static Result Decode<TPixel>(this IBarcodeReaderGeneric reader, ImageBase<TPixel> image) where TPixel : struct, IPixel<TPixel>
+		public static Result Decode<TPixel>(this IBarcodeReaderGeneric reader, Image<TPixel> image) where TPixel : struct, IPixel<TPixel>
 		{
 			var luminanceSource = new ImageSharpLuminanceSource<TPixel>(image);
 			return reader.Decode(luminanceSource);
@@ -43,7 +43,7 @@ namespace ZXing
 		/// <param name="reader"></param>
 		/// <param name="image"></param>
 		/// <returns></returns>
-		public static Result[] DecodeMultiple<TPixel>(this IBarcodeReaderGeneric reader, ImageBase<TPixel> image) where TPixel : struct, IPixel<TPixel>
+		public static Result[] DecodeMultiple<TPixel>(this IBarcodeReaderGeneric reader, Image<TPixel> image) where TPixel : struct, IPixel<TPixel>
 		{
 			var luminanceSource = new ImageSharpLuminanceSource<TPixel>(image);
 			return reader.DecodeMultiple(luminanceSource);
