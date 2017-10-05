@@ -75,7 +75,7 @@ namespace ZXing.Magick
          }
       }
 
-      private void CalculateLuminanceBGR24(PixelCollection pixels, int width, int height)
+      private void CalculateLuminanceBGR24(IPixelCollection pixels, int width, int height)
       {
          var luminanceIndex = 0;
          for (var y = 0; y < height; y++)
@@ -89,7 +89,7 @@ namespace ZXing.Magick
          }
       }
 
-      private void CalculateLuminanceBGRA32(PixelCollection pixels, int width, int height)
+      private void CalculateLuminanceBGRA32(IPixelCollection pixels, int width, int height)
       {
          var luminanceIndex = 0;
          for (var y = 0; y < height; y++)
