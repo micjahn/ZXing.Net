@@ -62,16 +62,18 @@ namespace ZXing.Magick
       private void CalculateLuminance(MagickImage src)
       {
          if (src == null)
-            throw new ArgumentNullException("src");
+            throw new ArgumentNullException(nameof(src));
 
-         var pixels = src.GetPixels();
-         if (src.HasAlpha)
+         using (var pixels = src.GetPixels())
          {
-            CalculateLuminanceBGRA32(pixels, src.Width, src.Height);
-         }
-         else
-         {
-            CalculateLuminanceBGR24(pixels, src.Width, src.Height);
+            if (src.HasAlpha)
+            {
+               CalculateLuminanceBGRA32(pixels, src.Width, src.Height);
+            }
+            else
+            {
+               CalculateLuminanceBGR24(pixels, src.Width, src.Height);
+            }
          }
       }
 
