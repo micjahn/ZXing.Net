@@ -128,6 +128,25 @@ namespace ZXing.Client.Result.Test
                 null, null, null, null, null, null, null, null, null, null, "foo,bar");
       }
 
+      [Test]
+      public void testVCardValueURI()
+      {
+         doTest("BEGIN:VCARD\r\nTEL;VALUE=uri:tel:+1-555-555-1212\r\nEND:VCARD",
+             null, null, null, null, null, new String[] { "+1-555-555-1212" }, new String[] { null },
+             null, null, null, null);
+
+         doTest("BEGIN:VCARD\r\nN;VALUE=text:Owen;Sean\r\nEND:VCARD",
+             null, new String[] { "Sean Owen" }, null, null, null, null, null, null, null, null, null);
+      }
+
+      [Test]
+      public void testVCardTypes()
+      {
+         doTest("BEGIN:VCARD\r\nTEL;HOME:\r\nTEL;WORK:10\r\nTEL:20\r\nTEL;CELL:30\r\nEND:VCARD",
+            null, null, null, null, null, new String[] {"10", "20", "30"},
+            new String[] {"WORK", "", "CELL"}, null, null, null, null);
+      }
+
       private static void doTest(String contents,
                                  String title,
                                  String[] names,
