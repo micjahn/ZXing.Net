@@ -64,6 +64,7 @@
     <Compile Include="Encoding\BarcodeWriter.cs" />
     <Compile Include="Common\BitmapFormat.cs" />
     <Compile Include="Decoding\DecodingOptions.cs" />
+    <Compile Include="Encoding\DatamatrixEncodingOptions.cs" />
     <Compile Include="Encoding\EncodingOptions.cs" />
     <Compile Include="Encoding\IBarcodeWriter.cs" />
     <Compile Include="Encoding\ImageFileFormat.cs" />
