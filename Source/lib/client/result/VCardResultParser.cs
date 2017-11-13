@@ -140,6 +140,7 @@ namespace ZXing.Client.Result
             List<String> metadata = null;
             bool quotedPrintable = false;
             String quotedPrintableCharset = null;
+            String valueType = null;
             if (metadataString != null)
             {
                foreach (String metadatum in SEMICOLON.Split(metadataString))
@@ -162,6 +163,10 @@ namespace ZXing.Client.Result
                      else if (String.Compare("CHARSET", key, StringComparison.OrdinalIgnoreCase) == 0)
                      {
                         quotedPrintableCharset = value;
+                     }
+                     else if (String.Compare("VALUE", key, StringComparison.OrdinalIgnoreCase) == 0)
+                     {
+                        valueType = value;
                      }
                   }
                }
@@ -227,6 +232,17 @@ namespace ZXing.Client.Result
                   element = CR_LF_SPACE_TAB.Replace(element, "");
                   element = NEWLINE_ESCAPE.Replace(element, "\n");
                   element = VCARD_ESCAPES.Replace(element, "$1");
+               }
+               // Only handle VALUE=uri specially
+               if ("uri".Equals(valueType))
+               {
+                  // Don't actually support dereferencing URIs, but use scheme-specific part not URI
+                  // as value, to support tel: and mailto:
+                  Uri uri;
+                  if (Uri.TryCreate(element, UriKind.RelativeOrAbsolute, out uri))
+                  {
+                     element = uri.AbsoluteUri.Replace(uri.Scheme + ':', "");
+                  }
                }
                if (metadata == null)
                {
