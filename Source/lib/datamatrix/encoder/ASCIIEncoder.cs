@@ -75,9 +75,11 @@ namespace ZXing.Datamatrix.Encoder
             }
             else
             {
-               if (c == 29)
+               if (c == 29 &&
+                   !context.Fnc1CodewordIsWritten)
                {
                   context.writeCodeword((char)HighLevelEncoder.FNC1);
+                  context.Fnc1CodewordIsWritten = true;
                }
                else
                {

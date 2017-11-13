@@ -477,7 +477,7 @@ namespace ZXing.Datamatrix.Encoder
 
       internal static bool isNativeText(char ch)
       {
-         return (ch == ' ') || (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z');
+         return (ch == ' ') || (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') || ch == 0x001d;
       }
 
       internal static bool isNativeX12(char ch)

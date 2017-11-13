@@ -182,5 +182,7 @@ namespace ZXing.Datamatrix.Encoder
       {
          get { return msg; }
       }
+
+      public bool Fnc1CodewordIsWritten { get; set; }
    }
 }

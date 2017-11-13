@@ -74,5 +74,28 @@ namespace ZXing.Datamatrix.Test
          Assert.IsTrue(tooSmall < matrix.Width);
          Assert.IsTrue(tooSmall < matrix.Height);
       }
+
+      [Test]
+      public void Should_Encode_FNC1()
+      {
+         var content = $"{(char) 29}abcdefg{(char) 29}1223456";
+
+         var writer = new DataMatrixWriter();
+
+         var hints = new Dictionary<EncodeHintType, Object>();
+
+         var matrix = writer.encode(content, BarcodeFormat.DATA_MATRIX, 1, 1, hints);
+
+         Assert.IsNotNull(matrix);
+
+         var reader = new DataMatrixReader();
+         var readerhints = new Dictionary<DecodeHintType, Object>();
+         readerhints.Add(DecodeHintType.PURE_BARCODE, true);
+
+         var result = reader.decode(new BinaryBitmap(matrix), readerhints);
+
+         Assert.That(result, Is.Not.Null);
+         Assert.That(result.Text, Is.EqualTo(content));
+      }
    }
 }
