@@ -80,6 +80,7 @@ namespace ZXing
          var offset = matrix.Height - 1;
          var foreground = Foreground;
          var background = Background;
+         var bitRowRemainder = 32 - (32 - matrix.Width % 32);
 
          for (int y = 0; y < matrix.Height; y++)
          {
@@ -88,13 +89,25 @@ namespace ZXing
 
             for (int x = 0; x < bits.Length; x++)
             {
-               for (int i = 0; i < 32; i++)
+               int finalIndex = 32;
+
+               if (x == bits.Length - 1)
+               {
+                  finalIndex = bitRowRemainder;
+               }
+
+               for (int i = 0; i < finalIndex; i++)
                {
                   int bit = (bits[x] >> i) & 1;
+
                   if (bit == 1)
-                     result[256 * y + x * 32 + i] = new Color32(foreground.r, foreground.g, foreground.b, foreground.a);
+                  {
+                     result[matrix.Width * y + x * 32 + i] = new Color32(foreground.r, foreground.g, foreground.b, foreground.a);
+                  }
                   else
-                     result[256 * y + x * 32 + i] = new Color32(background.r, background.g, background.b, background.a);
+                  {
+                     result[matrix.Width * y + x * 32 + i] = new Color32(background.r, background.g, background.b, background.a);
+                  }
                }
             }
          }
