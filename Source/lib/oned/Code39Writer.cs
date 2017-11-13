@@ -76,7 +76,7 @@ namespace ZXing.OneD
                var unencodable = contents[i];
                contents = tryToConvertToExtendedMode(contents);
                if (contents == null)
-                  throw new ArgumentException("Requested contents contains a not encodable character: '" + unencodable + "'");
+                  throw new ArgumentException("Requested content contains a non-encodable character: '" + unencodable + "'");
                length = contents.Length;
                if (length > 80)
                {
@@ -92,10 +92,6 @@ namespace ZXing.OneD
          for (int i = 0; i < length; i++)
          {
             int indexInString = Code39Reader.ALPHABET_STRING.IndexOf(contents[i]);
-            if (indexInString < 0)
-            {
-               throw new ArgumentException("Bad contents: " + contents);
-            }
             toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
             foreach (int width in widths)
             {
@@ -158,7 +154,7 @@ namespace ZXing.OneD
                   break;
                default:
                   if (character > 0 &&
-                      character < 26)
+                      character < 27)
                   {
                      extendedContent.Append("$");
                      extendedContent.Append((char)('A' + (character - 1)));
@@ -168,35 +164,35 @@ namespace ZXing.OneD
                      extendedContent.Append("%");
                      extendedContent.Append((char)('A' + (character - 27)));
                   }
-                  else if ((character > 32 && character < 45) || character == 47 || character == 58)
+                  else if ((character > ' ' && character < '-') || character == '/' || character == ':')
                   {
                      extendedContent.Append("/");
                      extendedContent.Append((char)('A' + (character - 33)));
                   }
-                  else if (character > 47 && character < 58)
+                  else if (character > '/' && character < ':')
                   {
                      extendedContent.Append((char)('0' + (character - 48)));
                   }
-                  else if (character > 58 && character < 64)
+                  else if (character > ':' && character < '@')
                   {
                      extendedContent.Append("%");
                      extendedContent.Append((char)('F' + (character - 59)));
                   }
-                  else if (character > 64 && character < 91)
+                  else if (character > '@' && character < '[')
                   {
                      extendedContent.Append((char)('A' + (character - 65)));
                   }
-                  else if (character > 90 && character < 96)
+                  else if (character > 'Z' && character < '`')
                   {
                      extendedContent.Append("%");
                      extendedContent.Append((char)('K' + (character - 91)));
                   }
-                  else if (character > 96 && character < 123)
+                  else if (character > '`' && character < '{')
                   {
                      extendedContent.Append("+");
                      extendedContent.Append((char)('A' + (character - 97)));
                   }
-                  else if (character > 122 && character < 128)
+                  else if (character > 'z' && character < 128)
                   {
                      extendedContent.Append("%");
                      extendedContent.Append((char)('P' + (character - 123)));
