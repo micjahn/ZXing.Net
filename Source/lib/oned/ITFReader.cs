@@ -39,10 +39,11 @@ namespace ZXing.OneD
    /// </summary>
    public sealed class ITFReader : OneDReader
    {
-      private static readonly int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
-      private static readonly int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.78f);
+      private static readonly int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.38f);
+      private static readonly int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.5f);
 
       private const int W = 3; // Pixel width of a wide line
+      private const int w = 2; // Pixel width of a wide line
       private const int N = 1; // Pixed width of a narrow line
 
       /// <summary>
@@ -61,24 +62,39 @@ namespace ZXing.OneD
       /// searching for the END_PATTERN
       /// </summary>
       private static readonly int[] START_PATTERN = { N, N, N, N };
-      private static readonly int[] END_PATTERN_REVERSED = { N, N, W };
+      private static readonly int[][] END_PATTERN_REVERSED =
+      {
+         new int[] {N, N, w},
+         new int[] {N, N, W}
+      };
 
       /// <summary>
       /// Patterns of Wide / Narrow lines to indicate each digit
       /// </summary>
       internal static int[][] PATTERNS = new int[][]
-                                           {
-                                              new int[] {N, N, W, W, N}, // 0
-                                              new int[] {W, N, N, N, W}, // 1
-                                              new int[] {N, W, N, N, W}, // 2
-                                              new int[] {W, W, N, N, N}, // 3
-                                              new int[] {N, N, W, N, W}, // 4
-                                              new int[] {W, N, W, N, N}, // 5
-                                              new int[] {N, W, W, N, N}, // 6
-                                              new int[] {N, N, N, W, W}, // 7
-                                              new int[] {W, N, N, W, N}, // 8
-                                              new int[] {N, W, N, W, N} // 9
-                                           };
+      {
+         new int[] {N, N, w, w, N}, // 0
+         new int[] {w, N, N, N, w}, // 1
+         new int[] {N, w, N, N, w}, // 2
+         new int[] {w, w, N, N, N}, // 3
+         new int[] {N, N, w, N, w}, // 4
+         new int[] {w, N, w, N, N}, // 5
+         new int[] {N, w, w, N, N}, // 6
+         new int[] {N, N, N, w, w}, // 7
+         new int[] {w, N, N, w, N}, // 8
+         new int[] {N, w, N, w, N}, // 9
+
+         new int[] {N, N, W, W, N}, // 0
+         new int[] {W, N, N, N, W}, // 1
+         new int[] {N, W, N, N, W}, // 2
+         new int[] {W, W, N, N, N}, // 3
+         new int[] {N, N, W, N, W}, // 4
+         new int[] {W, N, W, N, N}, // 5
+         new int[] {N, W, W, N, N}, // 6
+         new int[] {N, N, N, W, W}, // 7
+         new int[] {W, N, N, W, N}, // 8
+         new int[] {N, W, N, W, N} // 9
+      };
 
       /// <summary>
       /// Attempts to decode a one-dimensional barcode format given a single row of
@@ -316,7 +332,9 @@ namespace ZXing.OneD
          int endStart = skipWhiteSpace(row);
          if (endStart < 0)
             return null;
-         int[] endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED);
+         int[] endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED[0]);
+         if (endPattern == null)
+            endPattern = findGuardPattern(row, endStart, END_PATTERN_REVERSED[1]);
          if (endPattern == null)
          {
             row.reverse();
@@ -414,8 +432,18 @@ namespace ZXing.OneD
                bestVariance = variance;
                bestMatch = i;
             }
+            else if (variance == bestVariance)
+            {
+               // if we find a second 'best match' with the same variance, we can not reliably report to have a suitable match
+               bestMatch = -1;
+            }
          }
-         return bestMatch >= 0;
+         if (bestMatch >= 0)
+         {
+            bestMatch %= 10;
+            return true;
+         }
+         return false;
       }
    }
 }
