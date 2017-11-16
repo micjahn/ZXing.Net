@@ -156,7 +156,7 @@ namespace ZXing.Client.Result
                      String key = metadatumTokens[0];
                      String value = metadatumTokens[1];
                      if (String.Compare("ENCODING", key, StringComparison.OrdinalIgnoreCase) == 0 &&
-                        String.Compare("QUOTED-PRINTABLE", value, StringComparison.OrdinalIgnoreCase) == 0)
+                         String.Compare("QUOTED-PRINTABLE", value, StringComparison.OrdinalIgnoreCase) == 0)
                      {
                         quotedPrintable = true;
                      }
@@ -175,14 +175,15 @@ namespace ZXing.Client.Result
             int matchStart = i; // Found the start of a match here
 
             while ((i = rawText.IndexOf('\n', i)) >= 0)
-            { // Really, end in \r\n
-               if (i < rawText.Length - 1 &&           // But if followed by tab or space,
-                   (rawText[i + 1] == ' ' ||        // this is only a continuation
+            {
+               // Really, end in \r\n
+               if (i < rawText.Length - 1 && // But if followed by tab or space,
+                   (rawText[i + 1] == ' ' || // this is only a continuation
                     rawText[i + 1] == '\t'))
                {
                   i += 2; // Skip \n and continutation whitespace
                }
-               else if (quotedPrintable &&             // If preceded by = in quoted printable
+               else if (quotedPrintable && // If preceded by = in quoted printable
                         ((i >= 1 && rawText[i - 1] == '=') || // this is a continuation
                          (i >= 2 && rawText[i - 2] == '=')))
                {
@@ -238,10 +239,17 @@ namespace ZXing.Client.Result
                {
                   // Don't actually support dereferencing URIs, but use scheme-specific part not URI
                   // as value, to support tel: and mailto:
-                  Uri uri;
-                  if (Uri.TryCreate(element, UriKind.RelativeOrAbsolute, out uri))
+                  try
                   {
-                     element = uri.AbsoluteUri.Replace(uri.Scheme + ':', "");
+                     Uri uri;
+                     if (Uri.TryCreate(element, UriKind.RelativeOrAbsolute, out uri))
+                     {
+                        element = uri.AbsoluteUri.Replace(uri.Scheme + ':', "");
+                     }
+                  }
+                  catch (Exception)
+                  {
+                     // ignore
                   }
                }
                if (metadata == null)
