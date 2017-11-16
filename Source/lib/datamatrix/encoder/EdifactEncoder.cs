@@ -75,7 +75,7 @@ namespace ZXing.Datamatrix.Encoder
                context.updateSymbolInfo();
                int available = context.SymbolInfo.dataCapacity - context.CodewordCount;
                int remaining = context.RemainingCharacters;
-               if (remaining == 0 && available <= 2)
+               if (remaining <= available && available <= 2)
                {
                   return; //No unlatch
                }
