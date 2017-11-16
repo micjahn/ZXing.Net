@@ -33,7 +33,7 @@ namespace ZXing.QrCode.Test
          addTest(19, 19, 0.0f);
          addTest(19, 19, 90.0f);
          addTest(19, 19, 180.0f);
-         addTest(18, 18, 270.0f);
+         addTest(19, 19, 270.0f);
       }
    }
 }

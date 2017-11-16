@@ -29,7 +29,7 @@ namespace ZXing.QrCode.Test
          addTest(31, 31, 0.0f);
          addTest(31, 31, 90.0f);    // Java: addTest(29, 29, 90.0f);
          addTest(30, 30, 180.0f);
-         addTest(29, 29, 270.0f);
+         addTest(30, 30, 270.0f);
       }
    }
 }
