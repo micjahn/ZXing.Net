@@ -208,7 +208,8 @@ namespace ZXing.Datamatrix.Encoder
          int capacity = context.SymbolInfo.dataCapacity;
          if (len < capacity &&
              encodingMode != Encodation.ASCII &&
-             encodingMode != Encodation.BASE256)
+             encodingMode != Encodation.BASE256 &&
+             encodingMode != Encodation.EDIFACT)
          {
             context.writeCodeword('\u00fe'); //Unlatch (254)
          }
