@@ -461,6 +461,21 @@ namespace ZXing.QrCode.Internal
       }
 
       /// <summary>
+      /// @deprecated only exists for backwards compatibility
+      /// @see #handlePossibleCenter(int[], int, int)
+      /// </summary>
+      /// <param name="stateCount"></param>
+      /// <param name="i"></param>
+      /// <param name="j"></param>
+      /// <param name="pureBarcode"></param>
+      /// <returns></returns>
+      [Obsolete]
+      protected bool handlePossibleCenter(int[] stateCount, int i, int j, bool pureBarcode)
+      {
+         return handlePossibleCenter(stateCount, i, j);
+      }
+
+      /// <summary>
       ///   <p>This is called when a horizontal scan finds a possible alignment pattern. It will
       /// cross check with a vertical scan, and if successful, will, ah, cross-cross-check
       /// with another horizontal scan. This is needed primarily to locate the real horizontal
