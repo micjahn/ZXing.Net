@@ -31,18 +31,32 @@ namespace ZXing.Client.Result
       }
 
       public WifiParsedResult(String networkEncryption, String ssid, String password, bool hidden)
+         : this(networkEncryption, ssid, password, hidden, null, null, null, null)
+      {
+         
+      }
+
+      public WifiParsedResult(String networkEncryption, String ssid, String password, bool hidden, String identity, String anonymousIdentity, String eapMethod, String phase2Method)
          : base(ParsedResultType.WIFI)
       {
          Ssid = ssid;
          NetworkEncryption = networkEncryption;
          Password = password;
          Hidden = hidden;
+         Identity = identity;
+         AnonymousIdentity = anonymousIdentity;
+         EapMethod = eapMethod;
+         Phase2Method = phase2Method;
 
          var result = new StringBuilder(80);
          maybeAppend(Ssid, result);
          maybeAppend(NetworkEncryption, result);
          maybeAppend(Password, result);
-         maybeAppend(hidden.ToString(), result);
+         maybeAppend(Hidden.ToString(), result);
+         maybeAppend(Identity, result);
+         maybeAppend(AnonymousIdentity, result);
+         maybeAppend(EapMethod, result);
+         maybeAppend(Phase2Method, result);
          displayResultValue = result.ToString();
       }
 
@@ -53,5 +67,13 @@ namespace ZXing.Client.Result
       public String Password { get; private set; }
 
       public bool Hidden { get; private set; }
+
+      public String Identity { get; private set; }
+
+      public String AnonymousIdentity { get; private set; }
+
+      public String EapMethod { get; private set; }
+
+      public String Phase2Method { get; private set; }
    }
 }

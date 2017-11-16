@@ -22,9 +22,13 @@ namespace ZXing.Client.Result
    /// <p>Parses a WIFI configuration string. Strings will be of the form:</p>
    /// <p>{@code WIFI:T:[network type];S:[network SSID];P:[network password];H:[hidden?];;}</p>
    /// <p>The fields can appear in any order. Only "S:" is required.</p>
+   /// <p>For WPA2 enterprise(EAP), strings will be of the form:</p>
+   /// <p>{@code WIFI:T:WPA2-EAP;S:[network SSID];H:[hidden?];E:[EAP method];H:[Phase 2 method];A:[anonymous identity];I:[username];P:[password];;}</p>
+   /// <p>"EAP method" can e.g.be "TTLS" or "PWD" or one of the other fields in <a href = "https://developer.android.com/reference/android/net/wifi/WifiEnterpriseConfig.Eap.html" > WifiEnterpriseConfig.Eap </ a > and "Phase 2 method" can e.g.be "MSCHAPV2" or any of the other fields in <a href = "https://developer.android.com/reference/android/net/wifi/WifiEnterpriseConfig.Phase2.html" > WifiEnterpriseConfig.Phase2 </ a ></ p >
    /// </summary>
    /// <author>Vikram Aggarwal</author>
    /// <author>Sean Owen</author>
+   /// <author>Steffen Kieﬂ</author>
    public class WifiResultParser : ResultParser
    {
       override public ParsedResult parse(ZXing.Result result)
@@ -34,6 +38,7 @@ namespace ZXing.Client.Result
          {
             return null;
          }
+         rawText = rawText.Substring("WIFI:".Length);
          var ssid = matchSinglePrefixedField("S:", rawText, ';', false);
          if (string.IsNullOrEmpty(ssid))
          {
@@ -48,8 +53,11 @@ namespace ZXing.Client.Result
 #else
          Boolean.TryParse(matchSinglePrefixedField("H:", rawText, ';', false), out hidden);
 #endif
-
-         return new WifiParsedResult(type, ssid, pass, hidden);
+         var identity = matchSinglePrefixedField("I:", rawText, ';', false);
+         var anonymousIdentity = matchSinglePrefixedField("A:", rawText, ';', false);
+         var eapMethod = matchSinglePrefixedField("E:", rawText, ';', false);
+         var phase2Method = matchSinglePrefixedField("H:", rawText, ';', false);
+         return new WifiParsedResult(type, ssid, pass, hidden, identity, anonymousIdentity, eapMethod, phase2Method);
       }
    }
 }
