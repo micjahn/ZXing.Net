@@ -1,17 +1,13 @@
 {
 	"name": "ZXing.CoreCompat.System.Drawing",
-	"version": "0.16.3",
+	"version": "0.16.4",
 	"dependencies": {
 		"CoreCompat.System.Drawing": "1.0.0-beta006",
-		"NETStandard.Library": "1.6.0"
+		"NETStandard.Library": "1.6.1",
+		"ZXing.Net": "0.16.2"
 	},
 	"frameworks": {
-		"netstandard1.3": {
-			"dependencies": {
-				"ZXing.Net": {
-					"target": "project"
-				}
-			}
+		"netstandard1.3": { 
 		}
 	},
 	"buildOptions": {

@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageId>ZXing.CoreCompat.System.Drawing.v2</PackageId>
-    <VersionPrefix>0.16.1-beta</VersionPrefix>
+    <VersionPrefix>0.16.4-beta</VersionPrefix>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -21,6 +21,7 @@
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	<DebugType>portable</DebugType>
 	<AssemblyName>zxing.corecompat.system.drawing.v2</AssemblyName>
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,7 +36,7 @@
 
   <ItemGroup>
     <PackageReference Include="CoreCompat.System.Drawing.v2" Version="5.2.0-preview1-r131" />
-	<PackageReference Include="ZXing.Net" Version="0.16.1" />
+	<PackageReference Include="ZXing.Net" Version="0.16.2" />
   </ItemGroup>
 
 </Project>
