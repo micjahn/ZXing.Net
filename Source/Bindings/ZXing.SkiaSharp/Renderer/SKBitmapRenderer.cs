@@ -135,7 +135,7 @@ namespace ZXing.SkiaSharp.Rendering
          var pixelsizeWidth = width / matrix.Width;
          var pixelsizeHeight = height / matrix.Height;
 
-         using (var surface = SKSurface.Create(width, height, SKColorType.Bgra8888, SKAlphaType.Premul))
+         using (var surface = SKSurface.Create(width, height, SKImageInfo.PlatformColorType, SKAlphaType.Premul))
          using (var paint = new SKPaint())
          {
             var myCanvas = surface.Canvas;
@@ -164,14 +164,14 @@ namespace ZXing.SkiaSharp.Rendering
                            y*pixelsizeHeight + pixelsizeHeightProcessed, color);
                      }
                   }
-                  // fill up to the right if the barcode doesn't fully fit in 
+                  // fill up to the right if the barcode doesn't fully fit in
                   for (var x = pixelsizeWidth*matrix.Width; x < width; x++)
                   {
                      myCanvas.DrawPoint(x, y*pixelsizeHeight + pixelsizeHeightProcessed, Background);
                   }
                }
             }
-            // fill up to the bottom if the barcode doesn't fully fit in 
+            // fill up to the bottom if the barcode doesn't fully fit in
             for (var y = pixelsizeHeight*matrix.Height; y < height; y++)
             {
                for (var x = 0; x < width; x++)
