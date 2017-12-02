@@ -675,7 +675,9 @@ namespace ZXing.PDF417.Internal
       /// </summary>
       /// <param name="msg">the message to encode</param>
       /// <param name="errorCorrectionLevel">PDF417 error correction level to use</param>
-      internal void generateBarcodeLogic(String msg, int errorCorrectionLevel)
+      /// <param name="shortDimension">Short dimension for the generated matrix</param>
+      /// <param name="longDimension">Long dimension for the generated matrix</param>
+      internal void generateBarcodeLogic(String msg, int errorCorrectionLevel, int shortDimension, int longDimension)
       {
 
          //1. step: High-level encoding
@@ -683,7 +685,7 @@ namespace ZXing.PDF417.Internal
          String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, compaction, encoding, disableEci);
          int sourceCodeWords = highLevel.Length;
 
-         int[] dimension = determineDimensions(sourceCodeWords, errorCorrectionCodeWords);
+         int[] dimension = determineDimensions(sourceCodeWords, errorCorrectionCodeWords, shortDimension, longDimension);
 
          int cols = dimension[0];
          int rows = dimension[1];
@@ -722,14 +724,25 @@ namespace ZXing.PDF417.Internal
       /// </summary>
       /// <param name="sourceCodeWords">number of code words</param>
       /// <param name="errorCorrectionCodeWords">number of error correction code words</param>
+      /// <param name="shortDimension">Short dimension for the generated matrix</param>
+      /// <param name="longDimension">Long dimension for the generated matrix</param>
       /// <returns>dimension object containing cols as width and rows as height</returns>
-      private int[] determineDimensions(int sourceCodeWords, int errorCorrectionCodeWords)
+      private int[] determineDimensions(int sourceCodeWords, int errorCorrectionCodeWords,int shortDimension, int longDimension)
       {
          float ratio = 0.0f;
          int[] dimension = null;
+         int maxCols = Math.Min(this.maxCols, (longDimension - 69) / 17);
 
          for (int cols = minCols; cols <= maxCols; cols++)
          {
+
+            int maxRows = this.maxRows;
+            //If maxCols can fit in either dimension, use the long dimsnion for row count.
+            if (cols * 17 + 69 <= shortDimension)
+               maxRows = Math.Min(longDimension / 4, maxRows);
+            //Else If maxCols can only fit within the longest dimension, use the short dimension for row count.
+            else if (cols * 17 + 69 <= longDimension)
+               maxRows = Math.Min(shortDimension / 4, maxRows);
 
             int rows = calculateNumberOfRows(sourceCodeWords, errorCorrectionCodeWords, cols);
 
