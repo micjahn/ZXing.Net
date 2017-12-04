@@ -442,20 +442,11 @@
           "lib/net45/_._": {}
         }
       },
-      "zxing.net4.5/1.0.0": {
-        "type": "project"
-      },
-      "zxing.netcore/0.16.2": {
+      "ZXing.Net/0.16.2": {
         "type": "project",
         "framework": ".NETStandard,Version=v1.1",
         "dependencies": {
           "NETStandard.Library": "1.6.0"
-        },
-        "compile": {
-          "netstandard1.1/zxing.netcore.dll": {}
-        },
-        "runtime": {
-          "netstandard1.1/zxing.netcore.dll": {}
         }
       }
     },
@@ -1307,19 +1298,6 @@
         "framework": ".NETStandard,Version=v1.3",
         "dependencies": {
           "NETStandard.Library": "1.6.0"
-        }
-      },
-      "zxing.netcore/0.16.2": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v1.3",
-        "dependencies": {
-          "NETStandard.Library": "1.6.0"
-        },
-        "compile": {
-          "netstandard1.3/zxing.netcore.dll": {}
-        },
-        "runtime": {
-          "netstandard1.3/zxing.netcore.dll": {}
         }
       }
     }
@@ -4047,27 +4025,16 @@
     "ZXing.Net/0.16.2": {
       "type": "project",
       "path": "../../lib/ZXing.Net/project.json"
-    },
-    "zxing.net4.5/1.0.0": {
-      "type": "project",
-      "msbuildProject": "../../lib/zxing.net4.5.csproj"
-    },
-    "zxing.netcore/0.16.2": {
-      "type": "project",
-      "path": "../../lib/ZXing.Net/project.json",
-      "msbuildProject": "../../lib/ZXing.Net/zxing.netcore.xproj"
     }
   },
   "projectFileDependencyGroups": {
     "": [
-      "SkiaSharp >= 1.57.0"
+      "SkiaSharp >= 1.57.0",
+      "ZXing.Net >= 0.16.2"
     ],
-    ".NETFramework,Version=v4.5": [
-      "zxing.net4.5"
-    ],
+    ".NETFramework,Version=v4.5": [],
     ".NETStandard,Version=v1.3": [
-      "NETStandard.Library >= 1.6.0",
-      "ZXing.Net"
+      "NETStandard.Library >= 1.6.0"
     ]
   },
   "tools": {},

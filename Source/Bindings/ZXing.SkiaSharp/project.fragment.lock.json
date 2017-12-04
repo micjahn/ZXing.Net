@@ -9,13 +9,6 @@
       },
       "runtime": {
         "../../Build/Release/net4.5/zxing.dll": {}
-      },
-      "contentFiles": {
-        "../../Build/Release/net4.5/zxing.pdb": {
-          "buildAction": "None",
-          "codeLanguage": "any",
-          "copyToOutput": true
-        }
       }
     }
   }
