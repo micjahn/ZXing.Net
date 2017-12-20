@@ -53,11 +53,11 @@ namespace ZXing.Rendering
          /// <summary>
          /// the color black
          /// </summary>
-         public static Color Black = new Color(0);
+         public static Color Black = new Color(0xFF000000);
          /// <summary>
          /// the color white
          /// </summary>
-         public static Color White = new Color(0x00FFFFFF);
+         public static Color White = new Color(0xFFFFFFFF);
 
          /// <summary>
          /// value of the alpha channel
@@ -176,6 +176,9 @@ namespace ZXing.Rendering
                pixelsize = heigth / matrix.Height;
             }
          }
+
+         if (emptyArea < heigth)
+            emptyArea = 0;
 
          var pixels = new byte[width * heigth * 4];
          var index = 0;
