@@ -42,7 +42,7 @@ namespace ZXing.Interop.Encoding
       /// <summary>
       /// Specifies the matrix shape for Data Matrix
       /// </summary>
-      public SymbolShapeHint? SymbolShape
+      public SymbolShapeHint SymbolShape
       {
          get { return wrappedDatamatrixEncodingOptions.SymbolShape.ToInterop(); }
          set { wrappedDatamatrixEncodingOptions.SymbolShape = value.ToZXing(); }
@@ -89,9 +89,9 @@ namespace ZXing.Interop.Encoding
       /// Make sure that the content fits into the encodation value, otherwise there will be an exception thrown.
       /// standard value: Encodation.ASCII
       /// </summary>
-      public int? DefaultEncodation
+      public int DefaultEncodation
       {
-         get { return wrappedDatamatrixEncodingOptions.DefaultEncodation; }
+         get { return wrappedDatamatrixEncodingOptions.DefaultEncodation.GetValueOrDefault(Datamatrix.Encoder.Encodation.ASCII); }
          set { wrappedDatamatrixEncodingOptions.DefaultEncodation = value; }
       }
    }
@@ -107,11 +107,8 @@ namespace ZXing.Interop.Encoding
 
    internal static class SymbolShapeHintExtensions
    {
-      public static SymbolShapeHint? ToInterop(this Datamatrix.Encoder.SymbolShapeHint? other)
+      public static SymbolShapeHint ToInterop(this Datamatrix.Encoder.SymbolShapeHint? other)
       {
-         if (other == null)
-            return null;
-
          switch (other)
          {
             case Datamatrix.Encoder.SymbolShapeHint.FORCE_SQUARE:
@@ -119,11 +116,12 @@ namespace ZXing.Interop.Encoding
             case Datamatrix.Encoder.SymbolShapeHint.FORCE_RECTANGLE:
                return SymbolShapeHint.FORCE_RECTANGLE;
             case Datamatrix.Encoder.SymbolShapeHint.FORCE_NONE:
+            case null:
             default:
                return SymbolShapeHint.FORCE_NONE;
          }
       }
-      public static Datamatrix.Encoder.SymbolShapeHint? ToZXing(this SymbolShapeHint? other)
+      public static Datamatrix.Encoder.SymbolShapeHint? ToZXing(this SymbolShapeHint other)
       {
          switch (other)
          {
