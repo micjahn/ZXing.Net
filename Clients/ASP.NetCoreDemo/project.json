@@ -21,24 +21,12 @@
       "Microsoft.Extensions.Logging.Debug": "1.0.0",
       "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
       "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
-      "ZXing.Net": {
-         "target": "project"
-      },
-      "ZXing.ImageSharp": {
-         "target": "project"
-      },
-      "ZXing.OpenCVSharp.V3": {
-         "target": "project"
-      },
-      "ZXing.CoreCompat.System.Drawing": {
-         "target": "project"
-      },
-      "ZXing.Magick": {
-         "target": "project"
-      },
-      "ZXing.SkiaSharp": {
-         "target": "project"
-      }
+      "ZXing.Net.Bindings.SkiaSharp": "0.16.4",
+      "ZXing.Net.Bindings.ImageSharp": "0.16.4-beta",
+      "ZXing.Net.Bindings.CoreCompat.System.Drawing": "0.16.4-beta",
+      "ZXing.Net.Bindings.OpenCV": "0.16.3",
+      "ZXing.Net.Bindings.Magick": "0.16.4",
+      "ZXing.Net": "0.16.2"
    },
 
   "tools": {

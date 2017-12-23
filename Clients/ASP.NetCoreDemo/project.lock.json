@@ -27,23 +27,6 @@
           "lib/netstandard1.3/CoreCompat.System.Drawing.dll": {}
         }
       },
-      "ImageSharp/1.0.0-alpha8-00058": {
-        "type": "package",
-        "dependencies": {
-          "NETStandard.Library": "1.6.1",
-          "System.Buffers": "4.3.0",
-          "System.IO.Compression": "4.3.0",
-          "System.Numerics.Vectors": "4.3.0",
-          "System.Runtime.CompilerServices.Unsafe": "4.3.0",
-          "System.Threading.Tasks.Parallel": "4.3.0"
-        },
-        "compile": {
-          "lib/netstandard1.3/ImageSharp.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.3/ImageSharp.dll": {}
-        }
-      },
       "Libuv/1.9.0": {
         "type": "package",
         "dependencies": {
@@ -84,30 +67,26 @@
           }
         }
       },
-      "Magick.NET.Core-Q8/7.0.5.502": {
+      "Magick.NET-Q8-AnyCPU/7.0.7": {
         "type": "package",
         "dependencies": {
-          "Magick.NET.Core-Q8.Native": "7.0.5.502",
-          "NETStandard.Library": "1.6.0",
-          "System.Collections.NonGeneric": "4.0.1",
-          "System.Xml.XDocument": "4.0.11",
-          "System.Xml.XPath.XDocument": "4.0.1",
-          "System.Xml.XPath.XmlDocument": "4.0.1",
-          "System.Xml.XmlDocument": "4.0.1"
+          "System.Collections.NonGeneric": "4.3.0",
+          "System.Xml.XDocument": "4.3.0",
+          "System.Xml.XPath.XDocument": "4.3.0",
+          "System.Xml.XPath.XmlDocument": "4.3.0",
+          "System.Xml.XmlDocument": "4.3.0"
         },
         "compile": {
-          "lib/netstandard1.3/Magick.NET.Core-Q8.dll": {}
+          "lib/netstandard13/Magick.NET-Q8-AnyCPU.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/Magick.NET.Core-Q8.dll": {}
-        }
-      },
-      "Magick.NET.Core-Q8.Native/7.0.5.502": {
-        "type": "package",
-        "dependencies": {
-          "NETStandard.Library": "1.6.1"
+          "lib/netstandard13/Magick.NET-Q8-AnyCPU.dll": {}
         },
         "runtimeTargets": {
+          "runtimes/linux-x64/native/Magick.NET-Q8-x64.Native.dll.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
           "runtimes/win7-x64/native/Magick.NET-Q8-x64.Native.dll": {
             "assetType": "native",
             "rid": "win7-x64"
@@ -2148,6 +2127,46 @@
           }
         }
       },
+      "SixLabors.Core/1.0.0-beta0002": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "System.Numerics.Vectors": "4.4.0"
+        },
+        "compile": {
+          "lib/netstandard1.1/SixLabors.Core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.1/SixLabors.Core.dll": {}
+        },
+        "contentFiles": {
+          "contentFiles/any/any/_._": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          }
+        }
+      },
+      "SixLabors.ImageSharp/1.0.0-beta0001": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "SixLabors.Core": "1.0.0-beta0002",
+          "System.Buffers": "4.4.0",
+          "System.IO.Compression": "4.3.0",
+          "System.Memory": "4.4.0-preview2-25405-01",
+          "System.Numerics.Vectors": "4.4.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.4.0",
+          "System.Threading.Tasks.Parallel": "4.3.0",
+          "System.ValueTuple": "4.4.0"
+        },
+        "compile": {
+          "lib/netstandard1.3/SixLabors.ImageSharp.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/SixLabors.ImageSharp.dll": {}
+        }
+      },
       "SkiaSharp/1.57.0": {
         "type": "package",
         "compile": {
@@ -2219,7 +2238,7 @@
           "lib/netstandard1.6/System.AppContext.dll": {}
         }
       },
-      "System.Buffers/4.3.0": {
+      "System.Buffers/4.4.0": {
         "type": "package",
         "dependencies": {
           "System.Diagnostics.Debug": "4.3.0",
@@ -2229,7 +2248,7 @@
           "System.Threading": "4.3.0"
         },
         "compile": {
-          "lib/netstandard1.1/System.Buffers.dll": {}
+          "ref/netstandard1.1/System.Buffers.dll": {}
         },
         "runtime": {
           "lib/netstandard1.1/System.Buffers.dll": {}
@@ -2289,15 +2308,15 @@
           "lib/netstandard1.0/System.Collections.Immutable.dll": {}
         }
       },
-      "System.Collections.NonGeneric/4.0.1": {
+      "System.Collections.NonGeneric/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.Diagnostics.Debug": "4.0.11",
-          "System.Globalization": "4.0.11",
-          "System.Resources.ResourceManager": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Runtime.Extensions": "4.1.0",
-          "System.Threading": "4.0.11"
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Threading": "4.3.0"
         },
         "compile": {
           "ref/netstandard1.3/System.Collections.NonGeneric.dll": {}
@@ -2928,6 +2947,19 @@
           "lib/netstandard1.3/System.Linq.Queryable.dll": {}
         }
       },
+      "System.Memory/4.4.0-preview2-25405-01": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "System.Runtime.CompilerServices.Unsafe": "4.4.0-preview2-25405-01"
+        },
+        "compile": {
+          "ref/netstandard1.0/System.Memory.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/System.Memory.dll": {}
+        }
+      },
       "System.Net.Http/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -3146,13 +3178,10 @@
           "lib/netstandard1.3/System.Net.WebSockets.dll": {}
         }
       },
-      "System.Numerics.Vectors/4.3.0": {
+      "System.Numerics.Vectors/4.4.0": {
         "type": "package",
         "dependencies": {
-          "System.Globalization": "4.3.0",
-          "System.Resources.ResourceManager": "4.3.0",
-          "System.Runtime": "4.3.0",
-          "System.Runtime.Extensions": "4.3.0"
+          "NETStandard.Library": "1.6.1"
         },
         "compile": {
           "ref/netstandard1.0/System.Numerics.Vectors.dll": {}
@@ -3372,13 +3401,13 @@
           "lib/portable-net45+win8+wp80+wpa81/_._": {}
         }
       },
-      "System.Runtime.CompilerServices.Unsafe/4.3.0": {
+      "System.Runtime.CompilerServices.Unsafe/4.4.0": {
         "type": "package",
         "dependencies": {
-          "System.Runtime": "4.3.0"
+          "NETStandard.Library": "1.6.1"
         },
         "compile": {
-          "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll": {}
+          "ref/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll": {}
         },
         "runtime": {
           "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll": {}
@@ -4009,6 +4038,18 @@
           "ref/netstandard1.2/System.Threading.Timer.dll": {}
         }
       },
+      "System.ValueTuple/4.4.0": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.0/System.ValueTuple.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/System.ValueTuple.dll": {}
+        }
+      },
       "System.Xml.ReaderWriter/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -4058,19 +4099,19 @@
           "lib/netstandard1.3/System.Xml.XDocument.dll": {}
         }
       },
-      "System.Xml.XmlDocument/4.0.1": {
+      "System.Xml.XmlDocument/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.Collections": "4.0.11",
-          "System.Diagnostics.Debug": "4.0.11",
-          "System.Globalization": "4.0.11",
-          "System.IO": "4.1.0",
-          "System.Resources.ResourceManager": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Runtime.Extensions": "4.1.0",
-          "System.Text.Encoding": "4.0.11",
-          "System.Threading": "4.0.11",
-          "System.Xml.ReaderWriter": "4.0.11"
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Xml.ReaderWriter": "4.3.0"
         },
         "compile": {
           "ref/netstandard1.3/System.Xml.XmlDocument.dll": {}
@@ -4079,18 +4120,18 @@
           "lib/netstandard1.3/System.Xml.XmlDocument.dll": {}
         }
       },
-      "System.Xml.XPath/4.0.1": {
+      "System.Xml.XPath/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.Collections": "4.0.11",
-          "System.Diagnostics.Debug": "4.0.11",
-          "System.Globalization": "4.0.11",
-          "System.IO": "4.1.0",
-          "System.Resources.ResourceManager": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Runtime.Extensions": "4.1.0",
-          "System.Threading": "4.0.11",
-          "System.Xml.ReaderWriter": "4.0.11"
+          "System.Collections": "4.3.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Xml.ReaderWriter": "4.3.0"
         },
         "compile": {
           "ref/netstandard1.3/System.Xml.XPath.dll": {}
@@ -4099,18 +4140,18 @@
           "lib/netstandard1.3/System.Xml.XPath.dll": {}
         }
       },
-      "System.Xml.XPath.XDocument/4.0.1": {
+      "System.Xml.XPath.XDocument/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.Diagnostics.Debug": "4.0.11",
-          "System.Linq": "4.1.0",
-          "System.Resources.ResourceManager": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Runtime.Extensions": "4.1.0",
-          "System.Threading": "4.0.11",
-          "System.Xml.ReaderWriter": "4.0.11",
-          "System.Xml.XDocument": "4.0.11",
-          "System.Xml.XPath": "4.0.1"
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Xml.ReaderWriter": "4.3.0",
+          "System.Xml.XDocument": "4.3.0",
+          "System.Xml.XPath": "4.3.0"
         },
         "compile": {
           "ref/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
@@ -4119,19 +4160,19 @@
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
       },
-      "System.Xml.XPath.XmlDocument/4.0.1": {
+      "System.Xml.XPath.XmlDocument/4.3.0": {
         "type": "package",
         "dependencies": {
-          "System.Collections": "4.0.11",
-          "System.Globalization": "4.0.11",
-          "System.IO": "4.1.0",
-          "System.Resources.ResourceManager": "4.0.1",
-          "System.Runtime": "4.1.0",
-          "System.Runtime.Extensions": "4.1.0",
-          "System.Threading": "4.0.11",
-          "System.Xml.ReaderWriter": "4.0.11",
-          "System.Xml.XPath": "4.0.1",
-          "System.Xml.XmlDocument": "4.0.1"
+          "System.Collections": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Xml.ReaderWriter": "4.3.0",
+          "System.Xml.XPath": "4.3.0",
+          "System.Xml.XmlDocument": "4.3.0"
         },
         "compile": {
           "ref/netstandard1.3/System.Xml.XPath.XmlDocument.dll": {}
@@ -4140,99 +4181,86 @@
           "lib/netstandard1.3/System.Xml.XPath.XmlDocument.dll": {}
         }
       },
-      "ZXing.CoreCompat.System.Drawing/0.16.0": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v1.3",
+      "ZXing.Net/0.16.2": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/zxing.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/zxing.dll": {}
+        }
+      },
+      "ZXing.Net.Bindings.CoreCompat.System.Drawing/0.16.4-beta": {
+        "type": "package",
         "dependencies": {
           "CoreCompat.System.Drawing": "1.0.0-beta006",
-          "NETStandard.Library": "1.6.0",
-          "ZXing.Net": "(, )"
-        },
-        "compile": {
-          "netstandard1.3/ZXing.CoreCompat.System.Drawing.dll": {}
-        },
-        "runtime": {
-          "netstandard1.3/ZXing.CoreCompat.System.Drawing.dll": {}
-        }
-      },
-      "ZXing.ImageSharp/0.16.0": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v1.1",
-        "dependencies": {
-          "ImageSharp": "1.0.0-alpha8-00058",
           "NETStandard.Library": "1.6.1",
-          "ZXing.Net": "(, )"
+          "ZXing.Net": "0.16.2"
         },
         "compile": {
-          "netstandard1.1/ZXing.ImageSharp.dll": {}
+          "lib/netstandard1.3/zxing.corecompat.system.drawing.dll": {}
         },
         "runtime": {
-          "netstandard1.1/ZXing.ImageSharp.dll": {}
+          "lib/netstandard1.3/zxing.corecompat.system.drawing.dll": {}
         }
       },
-      "ZXing.Magick/0.16.0": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v1.3",
+      "ZXing.Net.Bindings.ImageSharp/0.16.4-beta": {
+        "type": "package",
         "dependencies": {
-          "Magick.NET.Core-Q8": "7.0.5.502",
           "NETStandard.Library": "1.6.1",
-          "ZXing.Net": "(, )"
+          "SixLabors.ImageSharp": "1.0.0-beta0001",
+          "ZXing.Net": "0.16.2"
         },
         "compile": {
-          "netstandard1.3/ZXing.Magick.dll": {}
+          "lib/netstandard1.3/zxing.imagesharp.dll": {}
         },
         "runtime": {
-          "netstandard1.3/ZXing.Magick.dll": {}
+          "lib/netstandard1.3/zxing.imagesharp.dll": {}
         }
       },
-      "ZXing.Net/0.16.0": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v1.3",
+      "ZXing.Net.Bindings.Magick/0.16.4": {
+        "type": "package",
         "dependencies": {
-          "NETStandard.Library": "1.6.0"
-        }
-      },
-      "zxing.netcore/0.16.0": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v1.3",
-        "dependencies": {
-          "NETStandard.Library": "1.6.0"
+          "Magick.NET-Q8-AnyCPU": "7.0.7",
+          "NETStandard.Library": "1.6.1",
+          "ZXing.Net": "0.16.2"
         },
         "compile": {
-          "netstandard1.3/zxing.netcore.dll": {}
+          "lib/netstandard1.3/zxing.magick.dll": {}
         },
         "runtime": {
-          "netstandard1.3/zxing.netcore.dll": {}
+          "lib/netstandard1.3/zxing.magick.dll": {}
         }
       },
-      "ZXing.OpenCV/0.16.0": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v1.6",
+      "ZXing.Net.Bindings.OpenCV/0.16.3": {
+        "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.1",
           "OpenCvSharp3-AnyCPU": "3.2.0.20170419",
-          "ZXing.Net": "(, )"
+          "ZXing.Net": "0.16.2"
         },
         "compile": {
-          "netstandard1.6/ZXing.OpenCV.dll": {}
+          "lib/netstandard1.6/zxing.opencv.dll": {}
         },
         "runtime": {
-          "netstandard1.6/ZXing.OpenCV.dll": {}
+          "lib/netstandard1.6/zxing.opencv.dll": {}
         }
       },
-      "ZXing.SkiaSharp/0.16.0": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v1.3",
+      "ZXing.Net.Bindings.SkiaSharp/0.16.4": {
+        "type": "package",
         "dependencies": {
           "NETStandard.Library": "1.6.0",
           "SkiaSharp": "1.57.0",
-          "ZXing.Net": "(, )"
+          "ZXing.Net": "0.16.2"
         },
         "compile": {
-          "netstandard1.3/ZXing.SkiaSharp.dll": {}
+          "lib/netstandard1.3/zxing.skiasharp.dll": {}
         },
         "runtime": {
-          "netstandard1.3/ZXing.SkiaSharp.dll": {}
+          "lib/netstandard1.3/zxing.skiasharp.dll": {}
         }
       }
     }
@@ -4247,19 +4275,6 @@
         "CoreCompat.System.Drawing.nuspec",
         "lib/net45/CoreCompat.System.Drawing.dll",
         "lib/netstandard1.3/CoreCompat.System.Drawing.dll"
-      ]
-    },
-    "ImageSharp/1.0.0-alpha8-00058": {
-      "sha512": "LeRMif1H70KkvdYtE/NjytehBuT7n3grbAbb/6KibxcGHg0RPWAeO0pYEE2E3nL9owAJoO5iFGONISmviQWbew==",
-      "type": "package",
-      "path": "ImageSharp/1.0.0-alpha8-00058",
-      "files": [
-        "ImageSharp.1.0.0-alpha8-00058.nupkg.sha512",
-        "ImageSharp.nuspec",
-        "lib/netstandard1.1/ImageSharp.dll",
-        "lib/netstandard1.1/ImageSharp.xml",
-        "lib/netstandard1.3/ImageSharp.dll",
-        "lib/netstandard1.3/ImageSharp.xml"
       ]
     },
     "Libuv/1.9.0": {
@@ -4280,24 +4295,22 @@
         "runtimes/win7-x86/native/libuv.dll"
       ]
     },
-    "Magick.NET.Core-Q8/7.0.5.502": {
-      "sha512": "9p8iqXZqgaSRPGzM4UlUq49iYsLxS/hZ3c4KnR61oyhqS5iI7ORwdxPXN3rLqvdx/yznmbdV+ql9Jskf+qHE6g==",
+    "Magick.NET-Q8-AnyCPU/7.0.7": {
+      "sha512": "fCLWrbCDrwSRcBYzGA4kAQBcR+Lju+0pOf1cVEY6W3jJm/YfG0HViAhUHNM5ZJuMmd4a64lxjGIvBWC4/QrvkQ==",
       "type": "package",
-      "path": "Magick.NET.Core-Q8/7.0.5.502",
+      "path": "Magick.NET-Q8-AnyCPU/7.0.7",
       "files": [
-        "Magick.NET.Core-Q8.7.0.5.502.nupkg.sha512",
-        "Magick.NET.Core-Q8.nuspec",
-        "lib/netstandard1.3/Magick.NET.Core-Q8.dll",
-        "lib/netstandard1.3/Magick.NET.Core-Q8.xml"
-      ]
-    },
-    "Magick.NET.Core-Q8.Native/7.0.5.502": {
-      "sha512": "JBwIAOgUyZJh3ZFK1tFCKrxVCTomMAKwDjBXp7HDlhKmhrd6qxICFxffsMNKWE5I8dDSxsm1o/bx4g9NLpaH/A==",
-      "type": "package",
-      "path": "Magick.NET.Core-Q8.Native/7.0.5.502",
-      "files": [
-        "Magick.NET.Core-Q8.Native.7.0.5.502.nupkg.sha512",
-        "Magick.NET.Core-Q8.Native.nuspec",
+        "Copyright.txt",
+        "Readme.txt",
+        "lib/net20/Magick.NET-Q8-AnyCPU.dll",
+        "lib/net20/Magick.NET-Q8-AnyCPU.xml",
+        "lib/net40/Magick.NET-Q8-AnyCPU.dll",
+        "lib/net40/Magick.NET-Q8-AnyCPU.xml",
+        "lib/netstandard13/Magick.NET-Q8-AnyCPU.dll",
+        "lib/netstandard13/Magick.NET-Q8-AnyCPU.xml",
+        "magick.net-q8-anycpu.7.0.7.nupkg.sha512",
+        "magick.net-q8-anycpu.nuspec",
+        "runtimes/linux-x64/native/Magick.NET-Q8-x64.Native.dll.so",
         "runtimes/win7-x64/native/Magick.NET-Q8-x64.Native.dll",
         "runtimes/win7-x86/native/Magick.NET-Q8-x86.Native.dll"
       ]
@@ -6058,6 +6071,32 @@
         "runtimes/ubuntu.16.10-x64/native/System.Security.Cryptography.Native.OpenSsl.so"
       ]
     },
+    "SixLabors.Core/1.0.0-beta0002": {
+      "sha512": "OCA7OrYRperPeUU1RNG7B4msnETU+7SIiCPNT9W+BoXSRxutYiBfpamZk6nLAsNnXt/groie0/EPlShgSgH1VA==",
+      "type": "package",
+      "path": "SixLabors.Core/1.0.0-beta0002",
+      "files": [
+        "SixLabors.Core.1.0.0-beta0002.nupkg.sha512",
+        "SixLabors.Core.nuspec",
+        "content/stylecop.json",
+        "contentFiles/any/netstandard1.1/stylecop.json",
+        "lib/netstandard1.1/SixLabors.Core.dll",
+        "lib/netstandard1.1/SixLabors.Core.xml"
+      ]
+    },
+    "SixLabors.ImageSharp/1.0.0-beta0001": {
+      "sha512": "aWTk1brm7ND7+io9jNjZv4pp5BofBQPh72/WFGL9pV6drsOwpzec+svjXIFNnBvP+LnekjRDzgssBPdkIvEc0w==",
+      "type": "package",
+      "path": "SixLabors.ImageSharp/1.0.0-beta0001",
+      "files": [
+        "lib/netstandard1.1/SixLabors.ImageSharp.dll",
+        "lib/netstandard1.1/SixLabors.ImageSharp.xml",
+        "lib/netstandard1.3/SixLabors.ImageSharp.dll",
+        "lib/netstandard1.3/SixLabors.ImageSharp.xml",
+        "sixlabors.imagesharp.1.0.0-beta0001.nupkg.sha512",
+        "sixlabors.imagesharp.nuspec"
+      ]
+    },
     "SkiaSharp/1.57.0": {
       "sha512": "XPCDdu5mPRHK4zEEvK8doUer32i+bU6sics9QU+UawnKR0Wabq/OkCuDMB+FVVpbeAQZtZUu1Zw1OfLXU3dMNw==",
       "type": "package",
@@ -6152,17 +6191,27 @@
         "runtimes/aot/lib/netcore50/System.AppContext.dll"
       ]
     },
-    "System.Buffers/4.3.0": {
-      "sha512": "ratu44uTIHgeBeI0dE8DWvmXVBSo4u7ozRZZHOMmK/JPpYyo0dAfgSiHlpiObMQ5lEtEyIXA40sKRYg5J6A8uQ==",
+    "System.Buffers/4.4.0": {
+      "sha512": "AwarXzzoDwX6BgrhjoJsk6tUezZEozOT5Y9QKF94Gl4JK91I4PIIBkBco9068Y9/Dra8Dkbie99kXB8+1BaYKw==",
       "type": "package",
-      "path": "System.Buffers/4.3.0",
+      "path": "System.Buffers/4.4.0",
       "files": [
-        "System.Buffers.4.3.0.nupkg.sha512",
+        "LICENSE.TXT",
+        "System.Buffers.4.4.0.nupkg.sha512",
         "System.Buffers.nuspec",
-        "ThirdPartyNotices.txt",
-        "dotnet_library_license.txt",
-        "lib/netstandard1.1/.xml",
-        "lib/netstandard1.1/System.Buffers.dll"
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netcoreapp2.0/_._",
+        "lib/netstandard1.1/System.Buffers.dll",
+        "lib/netstandard1.1/System.Buffers.xml",
+        "lib/netstandard2.0/System.Buffers.dll",
+        "lib/netstandard2.0/System.Buffers.xml",
+        "ref/netcoreapp2.0/_._",
+        "ref/netstandard1.1/System.Buffers.dll",
+        "ref/netstandard1.1/System.Buffers.xml",
+        "ref/netstandard2.0/System.Buffers.dll",
+        "ref/netstandard2.0/System.Buffers.xml",
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "System.Collections/4.3.0": {
@@ -6312,13 +6361,11 @@
         "lib/portable-net45+win8+wp8+wpa81/System.Collections.Immutable.xml"
       ]
     },
-    "System.Collections.NonGeneric/4.0.1": {
-      "sha512": "hMxFT2RhhlffyCdKLDXjx8WEC5JfCvNozAZxCablAuFRH74SCV4AgzE8yJCh/73bFnEoZgJ9MJmkjQ0dJmnKqA==",
+    "System.Collections.NonGeneric/4.3.0": {
+      "sha512": "YchicOcfZetS7hhmDWAC5zSoWkcoIsWL0aZWmJcrPf0jU8yY2ctDqSXAKS+vuzrzvCSmVs908B7QwEj/7V+t6Q==",
       "type": "package",
-      "path": "System.Collections.NonGeneric/4.0.1",
+      "path": "System.Collections.NonGeneric/4.3.0",
       "files": [
-        "System.Collections.NonGeneric.4.0.1.nupkg.sha512",
-        "System.Collections.NonGeneric.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
@@ -6346,7 +6393,9 @@
         "ref/xamarinios10/_._",
         "ref/xamarinmac20/_._",
         "ref/xamarintvos10/_._",
-        "ref/xamarinwatchos10/_._"
+        "ref/xamarinwatchos10/_._",
+        "system.collections.nongeneric.4.3.0.nupkg.sha512",
+        "system.collections.nongeneric.nuspec"
       ]
     },
     "System.Collections.Specialized/4.0.1": {
@@ -7928,6 +7977,29 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
+    "System.Memory/4.4.0-preview2-25405-01": {
+      "sha512": "9YCuIA7uv/aEGbwUGQ4QhlrxFgPW/CPwz32xoxSwnv2SIDqmeDDtO4RF+tN+LUzVLBa/vm24xc5rxzSNo1VBdw==",
+      "type": "package",
+      "path": "System.Memory/4.4.0-preview2-25405-01",
+      "files": [
+        "LICENSE.TXT",
+        "System.Memory.4.4.0-preview2-25405-01.nupkg.sha512",
+        "System.Memory.nuspec",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netstandard1.0/System.Memory.dll",
+        "lib/netstandard1.0/System.Memory.xml",
+        "lib/netstandard2.0/System.Memory.dll",
+        "lib/netstandard2.0/System.Memory.xml",
+        "ref/netstandard1.0/System.Memory.dll",
+        "ref/netstandard2.0/System.Memory.dll",
+        "runtimes/unix/lib/netcoreapp2.0/System.Memory.dll",
+        "runtimes/unix/lib/netcoreapp2.0/System.Memory.xml",
+        "runtimes/win/lib/netcoreapp2.0/System.Memory.dll",
+        "runtimes/win/lib/netcoreapp2.0/System.Memory.xml",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
     "System.Net.Http/4.3.0": {
       "sha512": "sYg+FtILtRQuYWSIAuNOELwVuVsxVyJGWQyOnlAzhV4xvhyFnON1bAzYYC+jjRW8JREM45R0R5Dgi8MTC5sEwA==",
       "type": "package",
@@ -8356,21 +8428,24 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "System.Numerics.Vectors/4.3.0": {
-      "sha512": "uAIqmwiQPPXdCz59MQcyHwsH2MzIv24VGCS54kP/1GzTRTuU3hazmiPnGUTlKFia4B1DnbLWjTHoGyTI5BMCTQ==",
+    "System.Numerics.Vectors/4.4.0": {
+      "sha512": "UiLzLW+Lw6HLed1Hcg+8jSRttrbuXv7DANVj0DkL9g6EnnzbL75EB7EWsw5uRbhxd/4YdG8li5XizGWepmG3PQ==",
       "type": "package",
-      "path": "System.Numerics.Vectors/4.3.0",
+      "path": "System.Numerics.Vectors/4.4.0",
       "files": [
-        "System.Numerics.Vectors.4.3.0.nupkg.sha512",
+        "LICENSE.TXT",
+        "System.Numerics.Vectors.4.4.0.nupkg.sha512",
         "System.Numerics.Vectors.nuspec",
-        "ThirdPartyNotices.txt",
-        "dotnet_library_license.txt",
+        "THIRD-PARTY-NOTICES.TXT",
         "lib/MonoAndroid10/_._",
         "lib/MonoTouch10/_._",
         "lib/net46/System.Numerics.Vectors.dll",
         "lib/net46/System.Numerics.Vectors.xml",
+        "lib/netcoreapp2.0/_._",
         "lib/netstandard1.0/System.Numerics.Vectors.dll",
         "lib/netstandard1.0/System.Numerics.Vectors.xml",
+        "lib/netstandard2.0/System.Numerics.Vectors.dll",
+        "lib/netstandard2.0/System.Numerics.Vectors.xml",
         "lib/portable-net45+win8+wp8+wpa81/System.Numerics.Vectors.dll",
         "lib/portable-net45+win8+wp8+wpa81/System.Numerics.Vectors.xml",
         "lib/xamarinios10/_._",
@@ -8381,12 +8456,17 @@
         "ref/MonoTouch10/_._",
         "ref/net46/System.Numerics.Vectors.dll",
         "ref/net46/System.Numerics.Vectors.xml",
+        "ref/netcoreapp2.0/_._",
         "ref/netstandard1.0/System.Numerics.Vectors.dll",
         "ref/netstandard1.0/System.Numerics.Vectors.xml",
+        "ref/netstandard2.0/System.Numerics.Vectors.dll",
+        "ref/netstandard2.0/System.Numerics.Vectors.xml",
         "ref/xamarinios10/_._",
         "ref/xamarinmac20/_._",
         "ref/xamarintvos10/_._",
-        "ref/xamarinwatchos10/_._"
+        "ref/xamarinwatchos10/_._",
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "System.ObjectModel/4.3.0": {
@@ -9026,17 +9106,25 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "System.Runtime.CompilerServices.Unsafe/4.3.0": {
-      "sha512": "rcnXA1U9W3QUtMSGoyoNHH6w4V5Rxa/EKXmzpORUYlDAlDB34hIQoU57ATXl8xHa83VvzRm6PcElEizgUd7U5w==",
+    "System.Runtime.CompilerServices.Unsafe/4.4.0": {
+      "sha512": "9dLLuBxr5GNmOfl2jSMcsHuteEg32BEfUotmmUkmZjpR3RpVHE8YQwt0ow3p6prwA1ME8WqDVZqrr8z6H8G+Kw==",
       "type": "package",
-      "path": "System.Runtime.CompilerServices.Unsafe/4.3.0",
+      "path": "System.Runtime.CompilerServices.Unsafe/4.4.0",
       "files": [
-        "System.Runtime.CompilerServices.Unsafe.4.3.0.nupkg.sha512",
+        "LICENSE.TXT",
+        "System.Runtime.CompilerServices.Unsafe.4.4.0.nupkg.sha512",
         "System.Runtime.CompilerServices.Unsafe.nuspec",
-        "ThirdPartyNotices.txt",
-        "dotnet_library_license.txt",
+        "THIRD-PARTY-NOTICES.TXT",
         "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll",
-        "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.xml"
+        "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "ref/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "ref/netstandard1.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "System.Runtime.Extensions/4.3.0": {
@@ -10419,6 +10507,49 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
+    "System.ValueTuple/4.4.0": {
+      "sha512": "BahUww/+mdP4ARCAh2RQhQTg13wYLVrBb9SYVgW8ZlrwjraGCXHGjo0oIiUfZ34LUZkMMR+RAzR7dEY4S1HeQQ==",
+      "type": "package",
+      "path": "System.ValueTuple/4.4.0",
+      "files": [
+        "LICENSE.TXT",
+        "System.ValueTuple.4.4.0.nupkg.sha512",
+        "System.ValueTuple.nuspec",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net461/System.ValueTuple.dll",
+        "lib/net461/System.ValueTuple.xml",
+        "lib/net47/System.ValueTuple.dll",
+        "lib/net47/System.ValueTuple.xml",
+        "lib/netcoreapp2.0/_._",
+        "lib/netstandard1.0/System.ValueTuple.dll",
+        "lib/netstandard1.0/System.ValueTuple.xml",
+        "lib/netstandard2.0/_._",
+        "lib/portable-net40+sl4+win8+wp8/System.ValueTuple.dll",
+        "lib/portable-net40+sl4+win8+wp8/System.ValueTuple.xml",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net461/System.ValueTuple.dll",
+        "ref/net461/System.ValueTuple.xml",
+        "ref/net47/System.ValueTuple.dll",
+        "ref/net47/System.ValueTuple.xml",
+        "ref/netcoreapp2.0/_._",
+        "ref/netstandard2.0/_._",
+        "ref/portable-net40+sl4+win8+wp8/System.ValueTuple.dll",
+        "ref/portable-net40+sl4+win8+wp8/System.ValueTuple.xml",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
     "System.Xml.ReaderWriter/4.3.0": {
       "sha512": "GrprA+Z0RUXaR4N7/eW71j1rgMnEnEVlgii49GZyAjTH7uliMnrOU3HNFBr6fEDBCJCIdlVNq9hHbaDR621XBA==",
       "type": "package",
@@ -10557,12 +10688,12 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "System.Xml.XmlDocument/4.0.1": {
-      "sha512": "2eZu6IP+etFVBBFUFzw2w6J21DqIN5eL9Y8r8JfJWUmV28Z5P0SNU01oCisVHQgHsDhHPnmq2s1hJrJCFZWloQ==",
+    "System.Xml.XmlDocument/4.3.0": {
+      "sha512": "lJ8AxvkX7GQxpC6GFCeBj8ThYVyQczx2+f/cWHJU8tjS7YfI6Cv6bon70jVEgs2CiFbmmM8b9j1oZVx0dSI2Ww==",
       "type": "package",
-      "path": "System.Xml.XmlDocument/4.0.1",
+      "path": "System.Xml.XmlDocument/4.3.0",
       "files": [
-        "System.Xml.XmlDocument.4.0.1.nupkg.sha512",
+        "System.Xml.XmlDocument.4.3.0.nupkg.sha512",
         "System.Xml.XmlDocument.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -10594,12 +10725,12 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "System.Xml.XPath/4.0.1": {
-      "sha512": "UWd1H+1IJ9Wlq5nognZ/XJdyj8qPE4XufBUkAW59ijsCPjZkZe0MUzKKJFBr+ZWBe5Wq1u1d5f2CYgE93uH7DA==",
+    "System.Xml.XPath/4.3.0": {
+      "sha512": "v1JQ5SETnQusqmS3RwStF7vwQ3L02imIzl++sewmt23VGygix04pEH+FCj1yWb+z4GDzKiljr1W7Wfvrx0YwgA==",
       "type": "package",
-      "path": "System.Xml.XPath/4.0.1",
+      "path": "System.Xml.XPath/4.3.0",
       "files": [
-        "System.Xml.XPath.4.0.1.nupkg.sha512",
+        "System.Xml.XPath.4.3.0.nupkg.sha512",
         "System.Xml.XPath.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -10631,12 +10762,12 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "System.Xml.XPath.XDocument/4.0.1": {
-      "sha512": "FLhdYJx4331oGovQypQ8JIw2kEmNzCsjVOVYY/16kZTUoquZG85oVn7yUhBE2OZt1yGPSXAL0HTEfzjlbNpM7Q==",
+    "System.Xml.XPath.XDocument/4.3.0": {
+      "sha512": "jw9oHHEIVW53mHY9PgrQa98Xo2IZ0ZjrpdOTmtvk+Rvg4tq7dydmxdNqUvJ5YwjDqhn75mBXWttWjiKhWP53LQ==",
       "type": "package",
-      "path": "System.Xml.XPath.XDocument/4.0.1",
+      "path": "System.Xml.XPath.XDocument/4.3.0",
       "files": [
-        "System.Xml.XPath.XDocument.4.0.1.nupkg.sha512",
+        "System.Xml.XPath.XDocument.4.3.0.nupkg.sha512",
         "System.Xml.XPath.XDocument.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
@@ -10668,17 +10799,18 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "System.Xml.XPath.XmlDocument/4.0.1": {
-      "sha512": "Zm2BdeanuncYs3NhCj4c9e1x3EXFzFBVv2wPEc/Dj4ZbI9R8ecLSR5frAsx4zJCPBtKQreQ7Q/KxJEohJZbfzA==",
+    "System.Xml.XPath.XmlDocument/4.3.0": {
+      "sha512": "A/uxsWi/Ifzkmd4ArTLISMbfFs6XpRPsXZonrIqyTY70xi8t+mDtvSM5Os0RqyRDobjMBwIDHDL4NOIbkDwf7A==",
       "type": "package",
-      "path": "System.Xml.XPath.XmlDocument/4.0.1",
+      "path": "System.Xml.XPath.XmlDocument/4.3.0",
       "files": [
-        "System.Xml.XPath.XmlDocument.4.0.1.nupkg.sha512",
+        "System.Xml.XPath.XmlDocument.4.3.0.nupkg.sha512",
         "System.Xml.XPath.XmlDocument.nuspec",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/MonoAndroid10/_._",
         "lib/MonoTouch10/_._",
+        "lib/net46/System.Xml.XPath.XmlDocument.dll",
         "lib/netstandard1.3/System.Xml.XPath.XmlDocument.dll",
         "lib/xamarinios10/_._",
         "lib/xamarinmac20/_._",
@@ -10703,39 +10835,179 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "ZXing.CoreCompat.System.Drawing/0.16.0": {
-      "type": "project",
-      "path": "../../Source/Bindings/ZXing.CoreCompat.System.Drawing/project.json",
-      "msbuildProject": "../../Source/Bindings/ZXing.CoreCompat.System.Drawing/ZXing.CoreCompat.System.Drawing.xproj"
+    "ZXing.Net/0.16.2": {
+      "sha512": "JBpiPNtgnwscGcRI5UpFXSJh/t/zuuxu5yElp6oMm07hBHs0IQgIa8fbgvcSKoPBKm2fyXas8zaYy9Lx4P0o4A==",
+      "type": "package",
+      "path": "ZXing.Net/0.16.2",
+      "files": [
+        "lib/MonoAndroid/zxing.monoandroid.dll",
+        "lib/MonoAndroid/zxing.monoandroid.pdb",
+        "lib/MonoAndroid/zxing.monoandroid.xml",
+        "lib/native/zxing.XML",
+        "lib/native/zxing.pdb",
+        "lib/native/zxing.pri",
+        "lib/native/zxing.winmd",
+        "lib/net20-cf/zxing.ce2.0.dll",
+        "lib/net20-cf/zxing.ce2.0.pdb",
+        "lib/net20-cf/zxing.ce2.0.xml",
+        "lib/net20/zxing.XML",
+        "lib/net20/zxing.dll",
+        "lib/net20/zxing.pdb",
+        "lib/net35-cf/zxing.ce3.5.dll",
+        "lib/net35-cf/zxing.ce3.5.pdb",
+        "lib/net35-cf/zxing.ce3.5.xml",
+        "lib/net35/zxing.XML",
+        "lib/net35/zxing.dll",
+        "lib/net35/zxing.pdb",
+        "lib/net40/zxing.XML",
+        "lib/net40/zxing.dll",
+        "lib/net40/zxing.pdb",
+        "lib/net40/zxing.presentation.XML",
+        "lib/net40/zxing.presentation.dll",
+        "lib/net40/zxing.presentation.pdb",
+        "lib/net45/zxing.XML",
+        "lib/net45/zxing.dll",
+        "lib/net45/zxing.pdb",
+        "lib/net45/zxing.presentation.XML",
+        "lib/net45/zxing.presentation.dll",
+        "lib/net45/zxing.presentation.pdb",
+        "lib/net461/zxing.XML",
+        "lib/net461/zxing.dll",
+        "lib/net461/zxing.pdb",
+        "lib/net461/zxing.presentation.XML",
+        "lib/net461/zxing.presentation.dll",
+        "lib/net461/zxing.presentation.pdb",
+        "lib/net47/zxing.XML",
+        "lib/net47/zxing.dll",
+        "lib/net47/zxing.pdb",
+        "lib/net47/zxing.presentation.XML",
+        "lib/net47/zxing.presentation.dll",
+        "lib/net47/zxing.presentation.pdb",
+        "lib/netstandard1.0/zxing.dll",
+        "lib/netstandard1.0/zxing.pdb",
+        "lib/netstandard1.0/zxing.xml",
+        "lib/netstandard1.1/zxing.dll",
+        "lib/netstandard1.1/zxing.pdb",
+        "lib/netstandard1.1/zxing.xml",
+        "lib/netstandard1.3/zxing.dll",
+        "lib/netstandard1.3/zxing.pdb",
+        "lib/netstandard1.3/zxing.xml",
+        "lib/portable-win+net40+sl4+sl5+wp7+wp71+wp8/zxing.portable.XML",
+        "lib/portable-win+net40+sl4+sl5+wp7+wp71+wp8/zxing.portable.dll",
+        "lib/portable-win+net40+sl4+sl5+wp7+wp71+wp8/zxing.portable.pdb",
+        "lib/sl3-wp/zxing.wp7.0.XML",
+        "lib/sl3-wp/zxing.wp7.0.dll",
+        "lib/sl3-wp/zxing.wp7.0.pdb",
+        "lib/sl4-wp71/zxing.wp7.1.XML",
+        "lib/sl4-wp71/zxing.wp7.1.dll",
+        "lib/sl4-wp71/zxing.wp7.1.pdb",
+        "lib/sl4/zxing.sl4.XML",
+        "lib/sl4/zxing.sl4.dll",
+        "lib/sl4/zxing.sl4.pdb",
+        "lib/sl5/zxing.sl5.XML",
+        "lib/sl5/zxing.sl5.dll",
+        "lib/sl5/zxing.sl5.pdb",
+        "lib/uap10/zxing.dll",
+        "lib/uap10/zxing.pdb",
+        "lib/uap10/zxing.pri",
+        "lib/uap10/zxing.xml",
+        "lib/windows8-managed/zxing.winrt.XML",
+        "lib/windows8-managed/zxing.winrt.dll",
+        "lib/windows8-managed/zxing.winrt.pdb",
+        "lib/windows8/zxing.XML",
+        "lib/windows8/zxing.pdb",
+        "lib/windows8/zxing.pri",
+        "lib/windows8/zxing.winmd",
+        "lib/wp8/zxing.wp8.0.XML",
+        "lib/wp8/zxing.wp8.0.dll",
+        "lib/wp8/zxing.wp8.0.pdb",
+        "zxing.net.0.16.2.nupkg.sha512",
+        "zxing.net.nuspec"
+      ]
     },
-    "ZXing.ImageSharp/0.16.0": {
-      "type": "project",
-      "path": "../../Source/Bindings/ZXing.ImageSharp/project.json",
-      "msbuildProject": "../../Source/Bindings/ZXing.ImageSharp/ZXing.ImageSharp.xproj"
+    "ZXing.Net.Bindings.CoreCompat.System.Drawing/0.16.4-beta": {
+      "sha512": "BABLlnC3DGo3GS3RMrv7tqzNtFUlZz43UUrJMy9dDho7MMYDSe+WG7Dsl94jKBYjt/5HIg6ZtTBK+7QbIvEO2g==",
+      "type": "package",
+      "path": "ZXing.Net.Bindings.CoreCompat.System.Drawing/0.16.4-beta",
+      "files": [
+        "lib/netstandard1.3/zxing.corecompat.system.drawing.dll",
+        "lib/netstandard1.3/zxing.corecompat.system.drawing.pdb",
+        "lib/netstandard1.3/zxing.corecompat.system.drawing.xml",
+        "lib/netstandard2.0/zxing.corecompat.system.drawing.v2.dll",
+        "lib/netstandard2.0/zxing.corecompat.system.drawing.v2.pdb",
+        "lib/netstandard2.0/zxing.corecompat.system.drawing.v2.xml",
+        "zxing.net.bindings.corecompat.system.drawing.0.16.4-beta.nupkg.sha512",
+        "zxing.net.bindings.corecompat.system.drawing.nuspec"
+      ]
     },
-    "ZXing.Magick/0.16.0": {
-      "type": "project",
-      "path": "../../Source/Bindings/ZXing.Magick/project.json",
-      "msbuildProject": "../../Source/Bindings/ZXing.Magick/ZXing.Magick.xproj"
+    "ZXing.Net.Bindings.ImageSharp/0.16.4-beta": {
+      "sha512": "9HjrFUbotgU9UfYtcrrkiCXY1wq2uByQ0ZwwQRnQOCITOBQMc6CMcH6ZruFoG2XvLeVW6/93hjkbwKYW0meorw==",
+      "type": "package",
+      "path": "ZXing.Net.Bindings.ImageSharp/0.16.4-beta",
+      "files": [
+        "lib/netstandard1.1/zxing.imagesharp.dll",
+        "lib/netstandard1.1/zxing.imagesharp.pdb",
+        "lib/netstandard1.1/zxing.imagesharp.xml",
+        "lib/netstandard1.3/zxing.imagesharp.dll",
+        "lib/netstandard1.3/zxing.imagesharp.pdb",
+        "lib/netstandard1.3/zxing.imagesharp.xml",
+        "zxing.net.bindings.imagesharp.0.16.4-beta.nupkg.sha512",
+        "zxing.net.bindings.imagesharp.nuspec"
+      ]
     },
-    "ZXing.Net/0.16.0": {
-      "type": "project",
-      "path": "../../Source/lib/ZXing.Net/project.json"
+    "ZXing.Net.Bindings.Magick/0.16.4": {
+      "sha512": "qnJULyMZhTWLxt0kN047/CgzTJGuQ/1SSGuwlwf8i5/5BeVBhlQVIlpkJqoxXgjz7UcWObxIDNGI8dpizXOBqA==",
+      "type": "package",
+      "path": "ZXing.Net.Bindings.Magick/0.16.4",
+      "files": [
+        "lib/net20/zxing.magick.dll",
+        "lib/net20/zxing.magick.pdb",
+        "lib/net20/zxing.magick.xml",
+        "lib/net40/zxing.magick.dll",
+        "lib/net40/zxing.magick.pdb",
+        "lib/net40/zxing.magick.xml",
+        "lib/netstandard1.3/zxing.magick.dll",
+        "lib/netstandard1.3/zxing.magick.pdb",
+        "lib/netstandard1.3/zxing.magick.xml",
+        "zxing.net.bindings.magick.0.16.4.nupkg.sha512",
+        "zxing.net.bindings.magick.nuspec"
+      ]
     },
-    "zxing.netcore/0.16.0": {
-      "type": "project",
-      "path": "../../Source/lib/ZXing.Net/project.json",
-      "msbuildProject": "../../Source/lib/ZXing.Net/zxing.netcore.xproj"
+    "ZXing.Net.Bindings.OpenCV/0.16.3": {
+      "sha512": "SwsEaVgG61a4cO9l0qoI0bWX4CMvUCgAl1XPL9eZMeWqtem8r9NOkSDEa478fMe0Mb8uwmSmzff0oipW2O+ifw==",
+      "type": "package",
+      "path": "ZXing.Net.Bindings.OpenCV/0.16.3",
+      "files": [
+        "lib/net20/zxing.opencv.dll",
+        "lib/net20/zxing.opencv.pdb",
+        "lib/net20/zxing.opencv.xml",
+        "lib/net40/zxing.opencv.dll",
+        "lib/net40/zxing.opencv.pdb",
+        "lib/net40/zxing.opencv.xml",
+        "lib/net46/zxing.opencv.dll",
+        "lib/net46/zxing.opencv.pdb",
+        "lib/net46/zxing.opencv.xml",
+        "lib/netstandard1.6/zxing.opencv.dll",
+        "lib/netstandard1.6/zxing.opencv.pdb",
+        "lib/netstandard1.6/zxing.opencv.xml",
+        "zxing.net.bindings.opencv.0.16.3.nupkg.sha512",
+        "zxing.net.bindings.opencv.nuspec"
+      ]
     },
-    "ZXing.OpenCV/0.16.0": {
-      "type": "project",
-      "path": "../../Source/Bindings/ZXing.OpenCV/project.json",
-      "msbuildProject": "../../Source/Bindings/ZXing.OpenCV/ZXing.OpenCV.xproj"
-    },
-    "ZXing.SkiaSharp/0.16.0": {
-      "type": "project",
-      "path": "../../Source/Bindings/ZXing.SkiaSharp/project.json",
-      "msbuildProject": "../../Source/Bindings/ZXing.SkiaSharp/ZXing.SkiaSharp.xproj"
+    "ZXing.Net.Bindings.SkiaSharp/0.16.4": {
+      "sha512": "+6zwMVbHnk3Cpg/kV8B3RpHMWKOWZ+8SLKnF9Qt8yStxJRj+r2f0ICPSwfp9coeBoR8bsusJshBTSnQQOnQA9Q==",
+      "type": "package",
+      "path": "ZXing.Net.Bindings.SkiaSharp/0.16.4",
+      "files": [
+        "lib/net45/zxing.skiasharp.dll",
+        "lib/net45/zxing.skiasharp.pdb",
+        "lib/net45/zxing.skiasharp.xml",
+        "lib/netstandard1.3/zxing.skiasharp.dll",
+        "lib/netstandard1.3/zxing.skiasharp.pdb",
+        "lib/netstandard1.3/zxing.skiasharp.xml",
+        "zxing.net.bindings.skiasharp.0.16.4.nupkg.sha512",
+        "zxing.net.bindings.skiasharp.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -10755,12 +11027,12 @@
       "Microsoft.Extensions.Options.ConfigurationExtensions >= 1.0.0",
       "Microsoft.NETCore.App >= 1.0.1",
       "Microsoft.VisualStudio.Web.BrowserLink.Loader >= 14.0.0",
-      "ZXing.CoreCompat.System.Drawing",
-      "ZXing.ImageSharp",
-      "ZXing.Magick",
-      "ZXing.Net",
-      "ZXing.OpenCV",
-      "ZXing.SkiaSharp"
+      "ZXing.Net >= 0.16.2",
+      "ZXing.Net.Bindings.CoreCompat.System.Drawing >= 0.16.4-beta",
+      "ZXing.Net.Bindings.ImageSharp >= 0.16.4-beta",
+      "ZXing.Net.Bindings.Magick >= 0.16.4",
+      "ZXing.Net.Bindings.OpenCV >= 0.16.3",
+      "ZXing.Net.Bindings.SkiaSharp >= 0.16.4"
     ],
     ".NETCoreApp,Version=v1.0": []
   },

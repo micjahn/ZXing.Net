@@ -90,9 +90,9 @@ namespace ASP.NetCoreDemo.Controllers
                {
                   try
                   {
-                     using (var image = ImageSharp.Image.Load(stream))
+                     using (var image = SixLabors.ImageSharp.Image.Load(stream))
                      {
-                        var reader = new ZXing.ImageSharp.BarcodeReader();
+                        var reader = new ZXing.ImageSharp.BarcodeReader<SixLabors.ImageSharp.Rgba32>();
                         var result = reader.Decode(image);
                         ViewData["TextAreaResult"] = "ImageSharp: " + result?.Text;
                      }
