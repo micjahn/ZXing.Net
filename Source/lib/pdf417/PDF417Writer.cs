@@ -156,7 +156,10 @@ namespace ZXing.PDF417
                                                     int height,
                                                     int margin)
       {
-         encoder.generateBarcodeLogic(contents, errorCorrectionLevel);
+        if(width<height)
+            encoder.generateBarcodeLogic(contents, errorCorrectionLevel, width, height);
+        else
+            encoder.generateBarcodeLogic(contents, errorCorrectionLevel, height, width);
 
          const int aspectRatio = 4;
          sbyte[][] originalScale = encoder.BarcodeMatrix.getScaledMatrix(1, aspectRatio);
