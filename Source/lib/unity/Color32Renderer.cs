@@ -80,7 +80,8 @@ namespace ZXing
          var offset = matrix.Height - 1;
          var foreground = Foreground;
          var background = Background;
-         var bitRowRemainder = 32 - (32 - matrix.Width % 32);
+         var divisionLeftover = matrix.Width % 32;
+         var bitRowRemainder = divisionLeftover > 0 ? divisionLeftover : 32;
 
          for (int y = 0; y < matrix.Height; y++)
          {
