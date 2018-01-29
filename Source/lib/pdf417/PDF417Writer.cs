@@ -37,6 +37,10 @@ namespace ZXing.PDF417
       /// default error correction level
       /// </summary>
       private const int DEFAULT_ERROR_CORRECTION_LEVEL = 2;
+      /// <summary>
+      /// default aspect ratio
+      /// </summary>
+      private const int DEFAULT_ASPECT_RATIO = 4;
 
       /// <summary>
       /// </summary>
@@ -62,6 +66,7 @@ namespace ZXing.PDF417
          var encoder = new Internal.PDF417();
          var margin = WHITE_SPACE;
          var errorCorrectionLevel = DEFAULT_ERROR_CORRECTION_LEVEL;
+         var aspectRatio = DEFAULT_ASPECT_RATIO;
 
          if (hints != null)
          {
@@ -88,6 +93,23 @@ namespace ZXing.PDF417
             if (hints.ContainsKey(EncodeHintType.MARGIN) && hints[EncodeHintType.MARGIN] != null)
             {
                margin = Convert.ToInt32(hints[EncodeHintType.MARGIN].ToString());
+            }
+            if(hints.ContainsKey(EncodeHintType.PDF417_ASPECT_RATIO) && hints[EncodeHintType.PDF417_ASPECT_RATIO] != null)
+            {
+                var value = hints[EncodeHintType.PDF417_ASPECT_RATIO];
+                if (value is PDF417AspectRatio ||
+                    value is int)
+                {
+                    aspectRatio = (int)value;
+                }
+                else
+                {
+                    if (Enum.IsDefined(typeof(PDF417AspectRatio), value.ToString()))
+                    {
+                        var aspectRatioEnum = (PDF417AspectRatio)Enum.Parse(typeof(PDF417AspectRatio), value.ToString(), true);
+                            aspectRatio = (int)aspectRatioEnum;
+                    }
+                }
             }
             if (hints.ContainsKey(EncodeHintType.ERROR_CORRECTION) && hints[EncodeHintType.ERROR_CORRECTION] != null)
             {
@@ -125,7 +147,7 @@ namespace ZXing.PDF417
             }
          }
 
-         return bitMatrixFromEncoder(encoder, contents, errorCorrectionLevel, width, height, margin);
+         return bitMatrixFromEncoder(encoder, contents, errorCorrectionLevel, width, height, margin, aspectRatio);
       }
 
       /// <summary>
@@ -135,6 +157,7 @@ namespace ZXing.PDF417
       /// <param name="format">The barcode format to generate</param>
       /// <param name="width">The preferred width in pixels</param>
       /// <param name="height">The preferred height in pixels</param>
+      /// <param name="aspectRatio">The height of a row in the barcode</param>
       /// <returns>
       /// The generated barcode as a Matrix of unsigned bytes (0 == black, 255 == white)
       /// </returns>
@@ -154,11 +177,14 @@ namespace ZXing.PDF417
                                                     int errorCorrectionLevel,
                                                     int width,
                                                     int height,
-                                                    int margin)
+                                                    int margin,
+                                                    int aspectRatio)
       {
-         encoder.generateBarcodeLogic(contents, errorCorrectionLevel);
+         if(width>=height)
+            encoder.generateBarcodeLogic(contents, errorCorrectionLevel, width, height, ref aspectRatio);
+        else
+            encoder.generateBarcodeLogic(contents, errorCorrectionLevel, height, width, ref aspectRatio);
 
-         const int aspectRatio = 4;
          sbyte[][] originalScale = encoder.BarcodeMatrix.getScaledMatrix(1, aspectRatio);
          bool rotated = false;
          if ((height > width) != (originalScale[0].Length < originalScale.Length))

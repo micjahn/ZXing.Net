@@ -518,11 +518,12 @@ namespace ZXing.PDF417.Internal
                   0x10794, 0x10fb4, 0x10792, 0x10fb2, 0x1c7ea
                }
          };
-
+      private const int START_STOP_WIDTH = 69; //TODO: Adjust this for compact==true.  PDF417 compact seems to be ~34 in width.
+      private const int COLUMN_WIDTH = 17;
       private const float PREFERRED_RATIO = 3.0f;
       private const float DEFAULT_MODULE_WIDTH = 0.357f; //1px in mm
       private const float HEIGHT = 2.0f; //mm
-
+    
       private BarcodeMatrix barcodeMatrix;
       private bool compact;
       private Compaction compaction;
@@ -546,8 +547,8 @@ namespace ZXing.PDF417.Internal
          disableEci = false;
          minCols = 2;
          maxCols = 30;
-         maxRows = 30;
-         minRows = 2;
+         maxRows = 90;
+         minRows = 3;
       }
 
       internal BarcodeMatrix BarcodeMatrix
@@ -675,15 +676,16 @@ namespace ZXing.PDF417.Internal
       /// </summary>
       /// <param name="msg">the message to encode</param>
       /// <param name="errorCorrectionLevel">PDF417 error correction level to use</param>
-      internal void generateBarcodeLogic(String msg, int errorCorrectionLevel)
+      internal void generateBarcodeLogic(String msg, int errorCorrectionLevel, int longDimension, int shortDimension, ref int aspectRatio)
       {
 
          //1. step: High-level encoding
-         int errorCorrectionCodeWords = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
          String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, compaction, encoding, disableEci);
          int sourceCodeWords = highLevel.Length;
+         errorCorrectionLevel = PDF417ErrorCorrection.getErrorCorrectionLevel(errorCorrectionLevel,sourceCodeWords);
+         int errorCorrectionCodeWords = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
 
-         int[] dimension = determineDimensions(sourceCodeWords, errorCorrectionCodeWords);
+         int[] dimension = determineDimensions(sourceCodeWords, errorCorrectionCodeWords, longDimension, shortDimension, ref aspectRatio);
 
          int cols = dimension[0];
          int rows = dimension[1];
@@ -722,13 +724,36 @@ namespace ZXing.PDF417.Internal
       /// </summary>
       /// <param name="sourceCodeWords">number of code words</param>
       /// <param name="errorCorrectionCodeWords">number of error correction code words</param>
+      /// <param name="longDimension">The longest dimension of the barcode, used for columns</param>
+      /// <param name="shortDimension">The short dimension of the barcode, used for rows</param>
+      /// <param name="aspectRatio">The height of a row, will alter this parameter if aspectRatio>4 (aspectRatio==AUTO)</param>
       /// <returns>dimension object containing cols as width and rows as height</returns>
-      private int[] determineDimensions(int sourceCodeWords, int errorCorrectionCodeWords)
+      private int[] determineDimensions(int sourceCodeWords, int errorCorrectionCodeWords, int longDimension, int shortDimension, ref int aspectRatio)
       {
          float ratio = 0.0f;
          int[] dimension = null;
 
-         for (int cols = minCols; cols <= maxCols; cols++)
+         int dimMaxCols = Math.Min((longDimension- START_STOP_WIDTH) / COLUMN_WIDTH, maxCols);
+         int dimMaxRows = Math.Min(shortDimension/aspectRatio, maxRows);
+         int calculatedRows = calculateNumberOfRows(sourceCodeWords, errorCorrectionCodeWords, dimMaxCols);
+         bool canFit = calculatedRows < dimMaxRows;
+
+         //Set the aspectRatio if AUTO.
+         if (aspectRatio>=(int)PDF417AspectRatio.AUTO)
+         {
+            dimMaxRows = Math.Min(shortDimension, maxRows);
+            int newRatio = 4;
+                
+            //Integer division.
+            if (dimMaxRows > calculatedRows)
+                newRatio = Math.Min(dimMaxRows / calculatedRows, newRatio);
+            aspectRatio = newRatio;
+            dimMaxRows = Math.Min(shortDimension/aspectRatio, maxRows);
+            canFit = calculatedRows <= dimMaxRows;
+         }
+
+
+         for (int cols = minCols; cols <= maxCols && (!canFit || cols<=dimMaxCols); cols++)
          {
 
             int rows = calculateNumberOfRows(sourceCodeWords, errorCorrectionCodeWords, cols);
@@ -738,7 +763,7 @@ namespace ZXing.PDF417.Internal
                break;
             }
 
-            if (rows > maxRows)
+            if (rows > maxRows || (rows > dimMaxRows && canFit))
             {
                continue;
             }
