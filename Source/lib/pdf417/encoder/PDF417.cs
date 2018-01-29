@@ -736,7 +736,7 @@ namespace ZXing.PDF417.Internal
          int dimMaxCols = Math.Min((longDimension- START_STOP_WIDTH) / COLUMN_WIDTH, maxCols);
          int dimMaxRows = Math.Min(shortDimension/aspectRatio, maxRows);
          int calculatedRows = calculateNumberOfRows(sourceCodeWords, errorCorrectionCodeWords, dimMaxCols);
-         bool canFit = calculatedRows < dimMaxRows;
+         bool canFit = calculatedRows <= dimMaxRows;
 
          //Set the aspectRatio if AUTO.
          if (aspectRatio>=(int)PDF417AspectRatio.AUTO)
