@@ -745,7 +745,7 @@ namespace ZXing.PDF417.Internal
             int newRatio = 4;
                 
             //Integer division.
-            if (dimMaxRows > calculatedRows)
+            if (dimMaxRows >= calculatedRows)
                 newRatio = Math.Min(dimMaxRows / calculatedRows, newRatio);
             aspectRatio = newRatio;
             dimMaxRows = Math.Min(shortDimension/aspectRatio, maxRows);
