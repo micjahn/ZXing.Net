@@ -154,11 +154,25 @@ namespace ZXing.PDF417.Internal
       /// <returns>the number of codewords generated for error correction</returns>
       internal static int getErrorCorrectionCodewordCount(int errorCorrectionLevel)
       {
-         if (errorCorrectionLevel < 0 || errorCorrectionLevel > 8)
-         {
-            throw new ArgumentException("Error correction level must be between 0 and 8!");
-         }
-         return 1 << (errorCorrectionLevel + 1);
+          if (errorCorrectionLevel < 0 || errorCorrectionLevel > 8)
+          {
+              throw new ArgumentException("Error correction level must be between 0 and 8!");
+          }
+          return 1 << (errorCorrectionLevel + 1);
+      }
+
+      /// <summary>
+      /// Determines the error correction level for AUTO
+      /// </summary>
+      /// <param name="errorCorrectionLevel">The error correction level (0-9)</param>
+      /// <param name="sourceCodeWords">The number of codewords for AUTO errorCorrectionLevel</param>
+      /// <returns>the number of codewords generated for error correction</returns>
+      internal static int getErrorCorrectionLevel(int errorCorrectionLevel, int sourceCodeWords)
+      {
+            if (errorCorrectionLevel == (int)PDF417ErrorCorrectionLevel.AUTO)
+                return getRecommendedMinimumErrorCorrectionLevel(sourceCodeWords);
+            else
+                return errorCorrectionLevel;
       }
 
       /// <summary>
@@ -200,6 +214,8 @@ namespace ZXing.PDF417.Internal
       /// <returns>the String representing the error correction codewords</returns>
       internal static String generateErrorCorrection(String dataCodewords, int errorCorrectionLevel)
       {
+        if (errorCorrectionLevel == (int)PDF417ErrorCorrectionLevel.AUTO)
+            errorCorrectionLevel = getRecommendedMinimumErrorCorrectionLevel(errorCorrectionLevel);
          int k = getErrorCorrectionCodewordCount(errorCorrectionLevel);
          char[] e = new char[k];
          int sld = dataCodewords.Length;
@@ -244,6 +260,7 @@ namespace ZXing.PDF417.Internal
       L5,
       L6,
       L7,
-      L8
+      L8,
+      AUTO
    }
 }
