@@ -66,6 +66,12 @@ namespace ZXing
       MARGIN,
 
       /// <summary>
+      /// Specifies the aspect ratio to use.  Default is 4.
+      /// type: <see cref="ZXing.PDF417.Internal.PDF417AspectRatio" />, or 1-4.
+      /// </summary>
+      PDF417_ASPECT_RATIO,
+
+      /// <summary>
       /// Specifies whether to use compact mode for PDF417
       /// type: <see cref="System.Boolean" />, or "true" or "false"
       /// <see cref="System.String" /> value

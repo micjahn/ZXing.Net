@@ -274,6 +274,7 @@
     <Compile Include="pdf417\decoder\PDF417CodewordDecoder.cs" />
     <Compile Include="pdf417\decoder\PDF417ScanningDecoder.cs" />
     <Compile Include="pdf417\detector\PDF417DetectorResult.cs" />
+    <Compile Include="pdf417\encoder\PDF417AspectRatio.cs" />
     <Compile Include="pdf417\encoder\PDF417EncodingOptions.cs" />
     <Compile Include="pdf417\PDF417Common.cs" />
     <Compile Include="pdf417\PDF417ResultMetadata.cs" />

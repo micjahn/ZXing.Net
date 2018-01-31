@@ -27,20 +27,21 @@ namespace ZXing.PDF417.Internal
       private int currentRow;
       private readonly int height;
       private readonly int width;
+      internal const int COLUMN_WIDTH = 17;
 
       /// <summary>
       /// <param name="height">the height of the matrix (Rows)</param>
       /// <param name="width">the width of the matrix (Cols)</param>
       /// </summary>
-      internal BarcodeMatrix(int height, int width)
+      internal BarcodeMatrix(int height, int width, bool compact)
       {
          matrix = new BarcodeRow[height];
          //Initializes the array to the correct width
          for (int i = 0, matrixLength = matrix.Length; i < matrixLength; i++)
          {
-            matrix[i] = new BarcodeRow((width + 4)*17 + 1);
+            matrix[i] = new BarcodeRow(width * COLUMN_WIDTH + (2*COLUMN_WIDTH) + (compact?0:2)*COLUMN_WIDTH + 1);
          }
-         this.width = width*17;
+         this.width = width*COLUMN_WIDTH;
          this.height = height;
          this.currentRow = -1;
       }

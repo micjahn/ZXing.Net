@@ -102,6 +102,30 @@ namespace ZXing.PDF417
       }
 
       /// <summary>
+      /// Specifies what degree of error correction to use
+      /// </summary>
+      public PDF417AspectRatio AspectRatio
+      {
+          get
+          {
+              if (Hints.ContainsKey(EncodeHintType.PDF417_ASPECT_RATIO))
+              {
+                  var value = Hints[EncodeHintType.PDF417_ASPECT_RATIO];
+                  if (value is PDF417AspectRatio)
+                  {
+                      return (PDF417AspectRatio)value;
+                  }
+                  if (value is int)
+                  {
+                      return (PDF417AspectRatio)Enum.Parse(typeof(PDF417AspectRatio), value.ToString(), true);
+                  }
+              }
+                return PDF417AspectRatio.A4;
+          }
+          set { Hints[EncodeHintType.PDF417_ASPECT_RATIO] = value; }
+        }
+
+      /// <summary>
       /// Specifies what character encoding to use where applicable (type {@link String})
       /// </summary>
       public string CharacterSet
