@@ -1,27 +1,18 @@
 {
 	"name": "ZXing.Magick",
 	"version": "0.16.4",
-   "dependencies": {
-      "Magick.NET-Q8-AnyCPU": "7.0.7.300"
+	"dependencies": {
+		"Magick.NET-Q8-AnyCPU": "7.0.7.300",
+		"ZXing.Net": "0.16.2"
    },
 	"frameworks": {
 		"net20": {
-			"dependencies": {
-				"zxing.net2.0": {
-					"target": "project"
-				}
-			},
 			"buildOptions": {
 				"define": [ "NET20" ],
 				"debugType": "full"
 			}
 		},
 		"net40": {
-			"dependencies": {
-				"zxing.net4.0": {
-					"target": "project"
-				}
-			},
 			"buildOptions": {
 				"define": [ "NET40" ],
 				"debugType": "full"
@@ -30,9 +21,6 @@
 		"netstandard1.3": {
 			"dependencies": {
 				"NETStandard.Library": "1.6.1",
-				"ZXing.Net": {
-					"target": "project"
-				}
 			},
 			"buildOptions": {
 				"define": [ "NETSTANDARD" ],
