@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="7efee143-52f5-45aa-8fe4-0d6cccd8a3e4" Publisher="CN=jfrench" Version="1.1.0.0" />
+  <Identity Name="7efee143-52f5-45aa-8fe4-0d6cccd8a3e4" Publisher="CN=ZXing.Net" Version="1.1.0.0" />
   <Properties>
     <DisplayName>WindowsRTDemo</DisplayName>
     <PublisherDisplayName>jfrench</PublisherDisplayName>
