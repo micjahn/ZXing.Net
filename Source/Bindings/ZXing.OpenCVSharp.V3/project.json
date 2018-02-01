@@ -2,37 +2,23 @@
 	"name": "ZXing.OpenCV.V3",
 	"version": "0.16.3",
 	"dependencies": {
-		"OpenCvSharp3-AnyCPU": "3.2.0.20170419"
+		"OpenCvSharp3-AnyCPU": "3.2.0.20170419",
+		"ZXing.Net": "0.16.2"
 	},
 	"frameworks": {
 		"net20": {
-			"dependencies": {
-				"zxing.net2.0": {
-					"target": "project"
-				}
-			},
 			"buildOptions": {
 				"define": [ "NET20" ],
 				"debugType": "full"
 			}
 		},
 		"net40": {
-			"dependencies": {
-				"zxing.net4.0": {
-					"target": "project"
-				}
-			},
 			"buildOptions": {
 				"define": [ "NET40" ],
 				"debugType": "full"
 			}
 		},
 		"net46": {
-			"dependencies": {
-				"zxing.net4.6": {
-					"target": "project"
-				}
-			},
 			"buildOptions": {
 				"define": [ "NET46" ],
 				"debugType": "full"
@@ -40,10 +26,7 @@
 		},
 		"netstandard1.6": {
 			"dependencies": {
-				"NETStandard.Library": "1.6.1",
-				"ZXing.Net": {
-					"target": "project"
-				}
+				"NETStandard.Library": "1.6.1"
 			},
 			"buildOptions": {
 				"define": [ "NETSTANDARD" ],
@@ -74,7 +57,7 @@
 			"buildOptions": {
 				"xmlDoc": false,
 				"optimize": false,
-		      "publicSign": false
+				"publicSign": false
 			}
 		}
 	}

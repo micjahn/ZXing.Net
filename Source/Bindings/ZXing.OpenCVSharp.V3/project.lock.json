@@ -14,8 +14,14 @@
           "lib/net20/OpenCvSharp.dll": {}
         }
       },
-      "zxing.net2.0/1.0.0": {
-        "type": "project"
+      "ZXing.Net/0.16.2": {
+        "type": "package",
+        "compile": {
+          "lib/net20/zxing.dll": {}
+        },
+        "runtime": {
+          "lib/net20/zxing.dll": {}
+        }
       }
     },
     ".NETFramework,Version=v4.0": {
@@ -34,8 +40,16 @@
           "lib/net40/OpenCvSharp.dll": {}
         }
       },
-      "zxing.net4.0/1.0.0": {
-        "type": "project"
+      "ZXing.Net/0.16.2": {
+        "type": "package",
+        "compile": {
+          "lib/net40/zxing.dll": {},
+          "lib/net40/zxing.presentation.dll": {}
+        },
+        "runtime": {
+          "lib/net40/zxing.dll": {},
+          "lib/net40/zxing.presentation.dll": {}
+        }
       }
     },
     ".NETFramework,Version=v4.6": {
@@ -54,8 +68,16 @@
           "lib/net46/OpenCvSharp.dll": {}
         }
       },
-      "zxing.net4.6/1.0.0": {
-        "type": "project"
+      "ZXing.Net/0.16.2": {
+        "type": "package",
+        "compile": {
+          "lib/net45/zxing.dll": {},
+          "lib/net45/zxing.presentation.dll": {}
+        },
+        "runtime": {
+          "lib/net45/zxing.dll": {},
+          "lib/net45/zxing.presentation.dll": {}
+        }
       }
     },
     ".NETStandard,Version=v1.6": {
@@ -1266,11 +1288,16 @@
           "lib/netstandard1.3/System.Xml.XDocument.dll": {}
         }
       },
-      "ZXing.Net/0.16.1": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v1.3",
+      "ZXing.Net/0.16.2": {
+        "type": "package",
         "dependencies": {
-          "NETStandard.Library": "1.6.0"
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/zxing.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/zxing.dll": {}
         }
       }
     }
@@ -4455,39 +4482,107 @@
         "ref/xamarinwatchos10/_._"
       ]
     },
-    "ZXing.Net/0.16.1": {
-      "type": "project",
-      "path": "../../lib/ZXing.Net/project.json"
-    },
-    "zxing.net2.0/1.0.0": {
-      "type": "project",
-      "msbuildProject": "../../lib/zxing.net2.0.csproj"
-    },
-    "zxing.net4.0/1.0.0": {
-      "type": "project",
-      "msbuildProject": "../../lib/zxing.net4.0.csproj"
-    },
-    "zxing.net4.6/1.0.0": {
-      "type": "project",
-      "msbuildProject": "../../lib/zxing.net4.6.csproj"
+    "ZXing.Net/0.16.2": {
+      "sha512": "JBpiPNtgnwscGcRI5UpFXSJh/t/zuuxu5yElp6oMm07hBHs0IQgIa8fbgvcSKoPBKm2fyXas8zaYy9Lx4P0o4A==",
+      "type": "package",
+      "path": "ZXing.Net/0.16.2",
+      "files": [
+        "lib/MonoAndroid/zxing.monoandroid.dll",
+        "lib/MonoAndroid/zxing.monoandroid.pdb",
+        "lib/MonoAndroid/zxing.monoandroid.xml",
+        "lib/native/zxing.XML",
+        "lib/native/zxing.pdb",
+        "lib/native/zxing.pri",
+        "lib/native/zxing.winmd",
+        "lib/net20-cf/zxing.ce2.0.dll",
+        "lib/net20-cf/zxing.ce2.0.pdb",
+        "lib/net20-cf/zxing.ce2.0.xml",
+        "lib/net20/zxing.XML",
+        "lib/net20/zxing.dll",
+        "lib/net20/zxing.pdb",
+        "lib/net35-cf/zxing.ce3.5.dll",
+        "lib/net35-cf/zxing.ce3.5.pdb",
+        "lib/net35-cf/zxing.ce3.5.xml",
+        "lib/net35/zxing.XML",
+        "lib/net35/zxing.dll",
+        "lib/net35/zxing.pdb",
+        "lib/net40/zxing.XML",
+        "lib/net40/zxing.dll",
+        "lib/net40/zxing.pdb",
+        "lib/net40/zxing.presentation.XML",
+        "lib/net40/zxing.presentation.dll",
+        "lib/net40/zxing.presentation.pdb",
+        "lib/net45/zxing.XML",
+        "lib/net45/zxing.dll",
+        "lib/net45/zxing.pdb",
+        "lib/net45/zxing.presentation.XML",
+        "lib/net45/zxing.presentation.dll",
+        "lib/net45/zxing.presentation.pdb",
+        "lib/net461/zxing.XML",
+        "lib/net461/zxing.dll",
+        "lib/net461/zxing.pdb",
+        "lib/net461/zxing.presentation.XML",
+        "lib/net461/zxing.presentation.dll",
+        "lib/net461/zxing.presentation.pdb",
+        "lib/net47/zxing.XML",
+        "lib/net47/zxing.dll",
+        "lib/net47/zxing.pdb",
+        "lib/net47/zxing.presentation.XML",
+        "lib/net47/zxing.presentation.dll",
+        "lib/net47/zxing.presentation.pdb",
+        "lib/netstandard1.0/zxing.dll",
+        "lib/netstandard1.0/zxing.pdb",
+        "lib/netstandard1.0/zxing.xml",
+        "lib/netstandard1.1/zxing.dll",
+        "lib/netstandard1.1/zxing.pdb",
+        "lib/netstandard1.1/zxing.xml",
+        "lib/netstandard1.3/zxing.dll",
+        "lib/netstandard1.3/zxing.pdb",
+        "lib/netstandard1.3/zxing.xml",
+        "lib/portable-win+net40+sl4+sl5+wp7+wp71+wp8/zxing.portable.XML",
+        "lib/portable-win+net40+sl4+sl5+wp7+wp71+wp8/zxing.portable.dll",
+        "lib/portable-win+net40+sl4+sl5+wp7+wp71+wp8/zxing.portable.pdb",
+        "lib/sl3-wp/zxing.wp7.0.XML",
+        "lib/sl3-wp/zxing.wp7.0.dll",
+        "lib/sl3-wp/zxing.wp7.0.pdb",
+        "lib/sl4-wp71/zxing.wp7.1.XML",
+        "lib/sl4-wp71/zxing.wp7.1.dll",
+        "lib/sl4-wp71/zxing.wp7.1.pdb",
+        "lib/sl4/zxing.sl4.XML",
+        "lib/sl4/zxing.sl4.dll",
+        "lib/sl4/zxing.sl4.pdb",
+        "lib/sl5/zxing.sl5.XML",
+        "lib/sl5/zxing.sl5.dll",
+        "lib/sl5/zxing.sl5.pdb",
+        "lib/uap10/zxing.dll",
+        "lib/uap10/zxing.pdb",
+        "lib/uap10/zxing.pri",
+        "lib/uap10/zxing.xml",
+        "lib/windows8-managed/zxing.winrt.XML",
+        "lib/windows8-managed/zxing.winrt.dll",
+        "lib/windows8-managed/zxing.winrt.pdb",
+        "lib/windows8/zxing.XML",
+        "lib/windows8/zxing.pdb",
+        "lib/windows8/zxing.pri",
+        "lib/windows8/zxing.winmd",
+        "lib/wp8/zxing.wp8.0.XML",
+        "lib/wp8/zxing.wp8.0.dll",
+        "lib/wp8/zxing.wp8.0.pdb",
+        "zxing.net.0.16.2.nupkg.sha512",
+        "zxing.net.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "": [
-      "OpenCvSharp3-AnyCPU >= 3.2.0.20170419"
+      "OpenCvSharp3-AnyCPU >= 3.2.0.20170419",
+      "ZXing.Net >= 0.16.2"
     ],
-    ".NETFramework,Version=v2.0": [
-      "zxing.net2.0"
-    ],
-    ".NETFramework,Version=v4.0": [
-      "zxing.net4.0"
-    ],
-    ".NETFramework,Version=v4.6": [
-      "zxing.net4.6"
-    ],
+    ".NETFramework,Version=v2.0": [],
+    ".NETFramework,Version=v4.0": [],
+    ".NETFramework,Version=v4.6": [],
     ".NETStandard,Version=v1.6": [
-      "NETStandard.Library >= 1.6.1",
-      "ZXing.Net"
+      "NETStandard.Library >= 1.6.1"
     ]
   },
   "tools": {},

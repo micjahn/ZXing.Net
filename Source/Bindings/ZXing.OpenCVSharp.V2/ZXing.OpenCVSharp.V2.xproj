@@ -15,11 +15,5 @@
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\lib\zxing.net2.0.csproj" />
-    <ProjectReference Include="..\..\lib\zxing.net3.5.csproj" />
-    <ProjectReference Include="..\..\lib\zxing.net4.0.csproj" />
-    <ProjectReference Include="..\..\lib\zxing.net4.5.csproj" />
-  </ItemGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>

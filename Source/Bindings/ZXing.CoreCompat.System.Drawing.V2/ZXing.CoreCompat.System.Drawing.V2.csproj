@@ -22,6 +22,7 @@
 	<DebugType>portable</DebugType>
 	<AssemblyName>zxing.corecompat.system.drawing.v2</AssemblyName>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	<EnableDefaultCompileItems>False</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <ItemGroup>
