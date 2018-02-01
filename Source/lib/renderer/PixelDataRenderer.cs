@@ -53,11 +53,11 @@ namespace ZXing.Rendering
          /// <summary>
          /// the color black
          /// </summary>
-         public static Color Black = new Color(0xFF000000);
+         public static Color Black = new Color(unchecked((int)0xFF000000));
          /// <summary>
          /// the color white
          /// </summary>
-         public static Color White = new Color(0xFFFFFFFF);
+         public static Color White = new Color(unchecked((int)0xFFFFFFFF));
 
          /// <summary>
          /// value of the alpha channel
