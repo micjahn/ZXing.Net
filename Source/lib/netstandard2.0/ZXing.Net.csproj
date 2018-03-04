@@ -1,0 +1,73 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>0.16.2</VersionPrefix>
+    <TargetFrameworks>netstandard1.0;netstandard1.1;netstandard1.3;netstandard2.0</TargetFrameworks>
+    <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
+    <PlatformTarget>anycpu</PlatformTarget>
+    <PublicSign>true</PublicSign>
+    <DebugType>portable</DebugType>
+    <AssemblyName>zxing</AssemblyName>
+    <AssemblyOriginatorKeyFile>../../../Key/private.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <PackageId>ZXing.Net</PackageId>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+	<EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard1.0'">
+    <DefineConstants>$(DefineConstants);NETSTANDARD1_0</DefineConstants>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard1.1'">
+    <DefineConstants>$(DefineConstants);NETSTANDARD1_1</DefineConstants>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
+    <DefineConstants>$(DefineConstants);NETSTANDARD1_3</DefineConstants>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <DefineConstants>$(DefineConstants);NETSTANDARD2_0</DefineConstants>
+    <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Properties\AssemblyInfo.cs;..\renderer\IBarcodeRenderer.cs;..\renderer\PixelData.cs;..\renderer\PixelDataRenderer.cs;..\renderer\SVGRenderer.cs;..\BarcodeFormat.cs;..\BarcodeReader.ByteArray.cs;..\BarcodeReaderCustom.cs;..\BarcodeReaderGeneric.cs;..\BarcodeWriter.PixelData.cs;..\BarcodeWriter.SvgImage.cs;..\BarcodeWriterCustom.cs;..\BarcodeWriterGeneric.cs;..\BaseLuminanceSource.cs;..\Binarizer.cs;..\BinaryBitmap.cs;..\DecodeHintType.cs;..\Dimension.cs;..\EncodeHintType.cs;..\FormatException.cs;..\IBarcodeReader.cs;..\IBarcodeReader.Multiple.cs;..\IBarcodeReaderCustom.cs;..\IBarcodeReaderCustom.Multiple.cs;..\IBarcodeReaderGeneric.cs;..\IBarcodeReaderGeneric.Multiple.cs;..\IBarcodeWriter.cs;..\IBarcodeWriter.PixelData.cs;..\IBarcodeWriter.SvgImage.cs;..\IBarcodeWriterCustom.cs;..\IBarcodeWriterGeneric.cs;..\InvertedLuminanceSource.cs;..\LuminanceSource.cs;..\MultiFormatReader.cs;..\MultiFormatWriter.cs;..\PlanarYUVLuminanceSource.cs;..\Reader.cs;..\ReaderException.cs;..\Result.cs;..\ResultMetadataType.cs;..\ResultPoint.cs;..\ResultPointCallback.cs;..\RGBLuminanceSource.cs;..\SupportClass.cs;..\Writer.cs;..\WriterException.cs" Exclude="..\common\BitMatrix.Drawing.cs;..\common\BitMatrix.Silverlight.cs" />
+    <Compile Include="..\aztec\**;..\client\**;..\common\**;..\datamatrix\**;..\imb\**;..\maxicode\**;..\multi\**;..\oned\**;..\pdf417\**;..\qrcode\**" Exclude="..\client\result\optional\**\*;..\common\BigInteger\**\*;bin\**;obj\**;**\*.xproj;packages\**;" />
+    <Compile Remove="..\common\BitMatrix.Drawing.cs;..\common\BitMatrix.Silverlight.cs;..\common\advanced\rowedge\**" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.0' ">
+	<Compile Include="..\net2.0\Action.cs;..\net2.0\Func.cs;..\common\BigInteger\**\*;..\silverlight\BrowsableAttribute.cs;..\silverlight\NonSerializedAttribute.cs;..\silverlight\SerializableAttribute.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.1' ">
+	<Compile Include="..\silverlight\BrowsableAttribute.cs;..\silverlight\NonSerializedAttribute.cs;..\silverlight\SerializableAttribute.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
+	<Compile Include="..\silverlight\BrowsableAttribute.cs;..\silverlight\NonSerializedAttribute.cs;..\silverlight\SerializableAttribute.cs" />
+  </ItemGroup>
+
+</Project>
