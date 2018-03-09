@@ -34,11 +34,11 @@ namespace ZXing.QrCode.Internal
       /// <summary>
       /// 1 pixel/module times 3 modules/center
       /// </summary>
-      protected internal const int MIN_SKIP = 3; 
+      protected internal const int MIN_SKIP = 3;
       /// <summary>
-      /// support up to version 10 for mobile clients
+      /// support up to version 20 for mobile clients
       /// </summary>
-      protected internal const int MAX_MODULES = 57;
+      protected internal const int MAX_MODULES = 97;
       private const int INTEGER_MATH_SHIFT = 8;
 
       private readonly BitMatrix image;
