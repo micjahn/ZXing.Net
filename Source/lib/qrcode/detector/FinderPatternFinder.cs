@@ -572,15 +572,14 @@ namespace ZXing.QrCode.Internal
       }
 
       /// <summary>
-      /// @deprecated only exists for backwards compatibility
       /// @see #handlePossibleCenter(int[], int, int)
       /// </summary>
-      /// <param name="stateCount"></param>
-      /// <param name="i"></param>
-      /// <param name="j"></param>
-      /// <param name="pureBarcode"></param>
-      /// <returns></returns>
-      [Obsolete]
+      /// <param name="stateCount">reading state module counts from horizontal scan</param>
+      /// <param name="i">row where finder pattern may be found</param>
+      /// <param name="j">end of possible finder pattern in row</param>
+      /// <param name="pureBarcode">ignored</param>
+      /// <returns>true if a finder pattern candidate was found this time</returns>
+      [Obsolete("only exists for backwards compatibility")]
       protected bool handlePossibleCenter(int[] stateCount, int i, int j, bool pureBarcode)
       {
          return handlePossibleCenter(stateCount, i, j);
