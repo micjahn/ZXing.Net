@@ -142,6 +142,13 @@ namespace ZXing
       /// Specifies the exact version of QR code to be encoded.
       /// (Type <see cref="System.Int32" />, or <see cref="System.String" /> representation of the integer value).
       /// </summary>
-      QR_VERSION
+      QR_VERSION,
+
+      /// <summary>
+      /// * Specifies whether the data should be encoded to the GS1 standard
+      /// type: <see cref="System.Boolean" />, or "true" or "false"
+      /// <see cref="System.String" /> value
+      /// </summary>
+      GS1_FORMAT,
    }
 }
