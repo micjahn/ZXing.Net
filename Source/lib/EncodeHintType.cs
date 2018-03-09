@@ -145,7 +145,7 @@ namespace ZXing
       QR_VERSION,
 
       /// <summary>
-      /// * Specifies whether the data should be encoded to the GS1 standard
+      /// Specifies whether the data should be encoded to the GS1 standard
       /// type: <see cref="System.Boolean" />, or "true" or "false"
       /// <see cref="System.String" /> value
       /// </summary>

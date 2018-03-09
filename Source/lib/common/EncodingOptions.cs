@@ -113,6 +113,26 @@ namespace ZXing.Common
       }
 
       /// <summary>
+      /// Specifies whether the data should be encoded to the GS1 standard;
+      /// FNC1 character is added in front of the data
+      /// </summary>
+      public bool GS1Format
+      {
+         get
+         {
+            if (Hints.ContainsKey(EncodeHintType.GS1_FORMAT))
+            {
+               return (bool)Hints[EncodeHintType.GS1_FORMAT];
+            }
+            return false;
+         }
+         set
+         {
+            Hints[EncodeHintType.GS1_FORMAT] = value;
+         }
+      }
+
+      /// <summary>
       /// Initializes a new instance of the <see cref="EncodingOptions"/> class.
       /// </summary>
       public EncodingOptions()

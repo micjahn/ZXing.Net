@@ -73,6 +73,16 @@ namespace ZXing.OneD
                           hints.ContainsKey(EncodeHintType.CODE128_FORCE_CODESET_B) &&
                           hints[EncodeHintType.CODE128_FORCE_CODESET_B] != null &&
                           Convert.ToBoolean(hints[EncodeHintType.CODE128_FORCE_CODESET_B].ToString()));
+;
+         if (hints != null &&
+             hints.ContainsKey(EncodeHintType.GS1_FORMAT) &&
+             hints[EncodeHintType.GS1_FORMAT] != null &&
+             Convert.ToBoolean(hints[EncodeHintType.GS1_FORMAT].ToString()))
+         {
+            // append the FNC1 character at the first position if not already present
+            if (!string.IsNullOrEmpty(contents) && contents[0] != ESCAPE_FNC_1)
+               contents = ESCAPE_FNC_1 + contents;
+         }
 
          return base.encode(contents, format, width, height, hints);
       }
