@@ -66,7 +66,7 @@ namespace ZXing.Datamatrix
 
          if (width < 0 || height < 0)
          {
-            throw new ArgumentException("Requested dimensions are too small: " + width + 'x' + height);
+            throw new ArgumentException("Requested dimensions can't be negative: " + width + 'x' + height);
          }
 
          // Try to get force shape & min / max size
@@ -121,12 +121,11 @@ namespace ZXing.Datamatrix
          String codewords = ErrorCorrection.encodeECC200(encoded, symbolInfo);
 
          //3. step: Module placement in Matrix
-         var placement =
-             new DefaultPlacement(codewords, symbolInfo.getSymbolDataWidth(), symbolInfo.getSymbolDataHeight());
+         var placement = new DefaultPlacement(codewords, symbolInfo.getSymbolDataWidth(), symbolInfo.getSymbolDataHeight());
          placement.place();
 
          //4. step: low-level encoding
-         return encodeLowLevel(placement, symbolInfo);
+         return encodeLowLevel(placement, symbolInfo, width, height);
       }
 
       /// <summary>
@@ -134,8 +133,10 @@ namespace ZXing.Datamatrix
       /// </summary>
       /// <param name="placement">The DataMatrix placement.</param>
       /// <param name="symbolInfo">The symbol info to encode.</param>
+      /// <param name="width"></param>
+      /// <param name="height"></param>
       /// <returns>The bit matrix generated.</returns>
-      private static BitMatrix encodeLowLevel(DefaultPlacement placement, SymbolInfo symbolInfo)
+      private static BitMatrix encodeLowLevel(DefaultPlacement placement, SymbolInfo symbolInfo, int width, int height)
       {
          int symbolWidth = symbolInfo.getSymbolDataWidth();
          int symbolHeight = symbolInfo.getSymbolDataHeight();
@@ -190,29 +191,51 @@ namespace ZXing.Datamatrix
             }
          }
 
-         return convertByteMatrixToBitMatrix(matrix);
+         return convertByteMatrixToBitMatrix(matrix, width, height);
       }
 
       /// <summary>
       /// Convert the ByteMatrix to BitMatrix.
       /// </summary>
       /// <param name="matrix">The input matrix.</param>
+      /// <param name="reqWidth">The requested width of the image (in pixels) with the Datamatrix code</param>
+      /// <param name="reqHeight">The requested height of the image (in pixels) with the Datamatrix code</param>
       /// <returns>The output matrix.</returns>
-      private static BitMatrix convertByteMatrixToBitMatrix(ByteMatrix matrix)
+      private static BitMatrix convertByteMatrixToBitMatrix(ByteMatrix matrix, int reqWidth, int reqHeight)
       {
-         int matrixWidgth = matrix.Width;
-         int matrixHeight = matrix.Height;
+         var matrixWidth = matrix.Width;
+         var matrixHeight = matrix.Height;
+         var outputWidth = Math.Max(reqWidth, matrixWidth);
+         var outputHeight = Math.Max(reqHeight, matrixHeight);
 
-         var output = new BitMatrix(matrixWidgth, matrixHeight);
-         output.clear();
-         for (int i = 0; i < matrixWidgth; i++)
+         int multiple = Math.Min(outputWidth / matrixWidth, outputHeight / matrixHeight);
+
+         int leftPadding = (outputWidth - (matrixWidth * multiple)) / 2;
+         int topPadding = (outputHeight - (matrixHeight * multiple)) / 2;
+
+         BitMatrix output;
+
+         // remove padding if requested width and height are too small
+         if (reqHeight < matrixHeight || reqWidth < matrixWidth)
          {
-            for (int j = 0; j < matrixHeight; j++)
+            leftPadding = 0;
+            topPadding = 0;
+            output = new BitMatrix(matrixWidth, matrixHeight);
+         }
+         else
+         {
+            output = new BitMatrix(reqWidth, reqHeight);
+         }
+
+         output.clear();
+         for (int inputY = 0, outputY = topPadding; inputY < matrixHeight; inputY++, outputY += multiple)
+         {
+            // Write the contents of this row of the bytematrix
+            for (int inputX = 0, outputX = leftPadding; inputX < matrixWidth; inputX++, outputX += multiple)
             {
-               // Zero is white in the bytematrix
-               if (matrix[i, j] == 1)
+               if (matrix[inputX, inputY] == 1)
                {
-                  output[i, j] = true;
+                  output.setRegion(outputX, outputY, multiple, multiple);
                }
             }
          }
