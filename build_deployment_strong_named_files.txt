@@ -22,6 +22,7 @@
 %CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.0\zxing.dll
 %CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.1\zxing.dll
 %CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard1.3\zxing.dll
+%CURRENT_DIR%\Source\lib\ZXing.Net\bin\Release\netstandard2.0\zxing.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.dll
 %BINARY_DIR%\Bindings\kinect\V1\zxing.kinect.dll
 %BINARY_DIR%\Bindings\kinect\V2\zxing.kinect.dll
