@@ -63,7 +63,7 @@ namespace ZXing.Common
          addCharacterSet(16, new[] { "ISO-8859-1", "ISO-8859-14", "ISO8859_14" }); // use ISO-8859-1 because ISO-8859-16 isn't supported
          addCharacterSet(17, new[] { "ISO-8859-15", "ISO8859_15" });
          addCharacterSet(18, new[] { "ISO-8859-3", "ISO-8859-16", "ISO8859_16" }); // use ISO-8859-3 because ISO-8859-16 isn't supported
-         addCharacterSet(20, new[] { "SJIS", "Shift_JIS" });
+         addCharacterSet(20, new[] { "SJIS", "SHIFT_JIS", "ISO-2022-JP" });
          addCharacterSet(21, new[] { "WINDOWS-1250", "CP1250" });
          addCharacterSet(22, new[] { "WINDOWS-1251", "CP1251" });
          addCharacterSet(23, new[] { "WINDOWS-1252", "CP1252" });
