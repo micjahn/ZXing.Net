@@ -4,9 +4,11 @@
 %BINARY_DIR%\ce3.5\zxing.ce3.5.dll
 %BINARY_DIR%\interop\zxing.interop.dll
 %BINARY_DIR%\net2.0\zxing.dll
+%BINARY_DIR%\net2.0.unsigned\zxing.dll
 %BINARY_DIR%\net3.5\zxing.dll
 %BINARY_DIR%\net4.0\zxing.dll
 %BINARY_DIR%\net4.0\zxing.presentation.dll
+%BINARY_DIR%\net4.0.unsigned\zxing.dll
 %BINARY_DIR%\net4.5\zxing.dll
 %BINARY_DIR%\net4.5\zxing.presentation.dll
 %BINARY_DIR%\net4.6\zxing.dll
@@ -32,6 +34,7 @@
 %CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing.V2\bin\Release\netstandard2.0\zxing.corecompat.system.drawing.V2.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.1\zxing.imagesharp.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard1.3\zxing.imagesharp.dll
+%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netstandard2.0\zxing.imagesharp.dll
 %BINARY_DIR%\Bindings\kinect\V1\zxing.kinect.dll
 %BINARY_DIR%\Bindings\kinect\V2\zxing.kinect.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\net20\zxing.magick.dll
