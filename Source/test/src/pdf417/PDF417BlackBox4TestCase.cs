@@ -66,7 +66,7 @@ namespace ZXing.PDF417.Test
          {
             testBase = TEST_BASE_PATH_SUFFIX;
          }
-         testResults.Add(new TestResult(2, 2, 0, 0, 0.0f));
+         testResults.Add(new TestResult(3, 3, 0, 0, 0.0f));
       }
 
       [Test]

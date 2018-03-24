@@ -201,6 +201,7 @@
     <Compile Include="oned\UPCEWriterTestCase.cs" />
     <Compile Include="pdf417\decoder\ec\AbstractErrorCorrectionTestCase.cs" />
     <Compile Include="pdf417\decoder\ec\ErrorCorrectionTestCase.cs" />
+    <Compile Include="pdf417\decoder\PDF417DecoderTestCase.cs" />
     <Compile Include="pdf417\encoder\PDF417EncoderTestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox1TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox2TestCase.cs" />

@@ -57,6 +57,14 @@ namespace ZXing.PDF417.Internal
       private const int MODE_SHIFT_TO_BYTE_COMPACTION_MODE = 913;
       private const int MAX_NUMERIC_CODEWORDS = 15;
 
+      private const int MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME = 0;
+      private const int MACRO_PDF417_OPTIONAL_FIELD_SEGMENT_COUNT = 1;
+      private const int MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP = 2;
+      private const int MACRO_PDF417_OPTIONAL_FIELD_SENDER = 3;
+      private const int MACRO_PDF417_OPTIONAL_FIELD_ADDRESSEE = 4;
+      private const int MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE = 5;
+      private const int MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM = 6;
+
       private const int PL = 25;
       private const int LL = 27;
       private const int AS = 27;
@@ -231,7 +239,7 @@ namespace ZXing.PDF417.Internal
          return encoding;
       }
 
-      private static int decodeMacroBlock(int[] codewords, int codeIndex, PDF417ResultMetadata resultMetadata)
+      internal static int decodeMacroBlock(int[] codewords, int codeIndex, PDF417ResultMetadata resultMetadata)
       {
          if (codeIndex + NUMBER_OF_SEQUENCE_CODEWORDS > codewords[0])
          {
@@ -252,42 +260,82 @@ namespace ZXing.PDF417.Internal
          codeIndex = textCompaction(codewords, codeIndex, fileId);
          resultMetadata.FileId = fileId.ToString();
 
-         switch (codewords[codeIndex])
+         int optionalFieldsStart = -1;
+         if (codewords[codeIndex] == BEGIN_MACRO_PDF417_OPTIONAL_FIELD)
          {
-            case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
-               codeIndex++;
-               var additionalOptionCodeWords = new int[codewords[0] - codeIndex];
-               var additionalOptionCodeWordsIndex = 0;
+            optionalFieldsStart = codeIndex + 1;
+         }
 
-               var end = false;
-               while ((codeIndex < codewords[0]) && !end)
-               {
-                  var code = codewords[codeIndex++];
-               if (code < TEXT_COMPACTION_MODE_LATCH)
-               {
-                  additionalOptionCodeWords[additionalOptionCodeWordsIndex++] = code;
-               }
-               else
-               {
-                  switch (code)
+         while (codeIndex < codewords[0])
+         {
+            switch (codewords[codeIndex])
+            {
+               case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
+                  codeIndex++;
+                  switch (codewords[codeIndex])
                   {
-                     case MACRO_PDF417_TERMINATOR:
-                        resultMetadata.IsLastSegment = true;
-                        codeIndex++;
-                        end = true;
+                     case MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME:
+                        var fileName = new StringBuilder();
+                        codeIndex = textCompaction(codewords, codeIndex + 1, fileName);
+                        resultMetadata.FileName = fileName.ToString();
+                        break;
+                     case MACRO_PDF417_OPTIONAL_FIELD_SENDER:
+                        var sender = new StringBuilder();
+                        codeIndex = textCompaction(codewords, codeIndex + 1, sender);
+                        resultMetadata.Sender = sender.ToString();
+                        break;
+                     case MACRO_PDF417_OPTIONAL_FIELD_ADDRESSEE:
+                        var addressee = new StringBuilder();
+                        codeIndex = textCompaction(codewords, codeIndex + 1, addressee);
+                        resultMetadata.Addressee = addressee.ToString();
+                        break;
+                     case MACRO_PDF417_OPTIONAL_FIELD_SEGMENT_COUNT:
+                        {
+                           var segmentCount = new StringBuilder();
+                           int intResult;
+                           codeIndex = numericCompaction(codewords, codeIndex + 1, segmentCount);
+                           if (Int32.TryParse(segmentCount.ToString(), out intResult))
+                              resultMetadata.SegmentCount = intResult;
+                        }
+                        break;
+                     case MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP:
+                        {
+                           var timestamp = new StringBuilder();
+                           long longResult;
+                           codeIndex = numericCompaction(codewords, codeIndex + 1, timestamp);
+                           if (Int64.TryParse(timestamp.ToString(), out longResult))
+                              resultMetadata.Timestamp = longResult;
+                        }
+                        break;
+                     case MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM:
+                        {
+                           var checksum = new StringBuilder();
+                           int intResult;
+                           codeIndex = numericCompaction(codewords, codeIndex + 1, checksum);
+                           if (Int32.TryParse(checksum.ToString(), out intResult))
+                              resultMetadata.Checksum = intResult;
+                        }
+                        break;
+                     case MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE:
+                        {
+                           var fileSize = new StringBuilder();
+                           long longResult;
+                           codeIndex = numericCompaction(codewords, codeIndex + 1, fileSize);
+                           if (Int64.TryParse(fileSize.ToString(), out longResult))
+                              resultMetadata.FileSize = longResult;
+                        }
                         break;
                      default:
-                        return -1;
+                        break;
                   }
-               }
+                  break;
+               case MACRO_PDF417_TERMINATOR:
+                  codeIndex++;
+                  resultMetadata.IsLastSegment = true;
+                  break;
+               default:
+                  break;
             }
-            resultMetadata.OptionalData = new int[additionalOptionCodeWordsIndex];
-            Array.Copy(additionalOptionCodeWords, resultMetadata.OptionalData, additionalOptionCodeWordsIndex);
-               break;
-            case MACRO_PDF417_TERMINATOR:
-            resultMetadata.IsLastSegment = true;
-            codeIndex++;
-               break;
          }
 
          return codeIndex;
