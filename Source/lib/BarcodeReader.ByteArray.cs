@@ -19,12 +19,11 @@ using System;
 namespace ZXing
 {
    /// <summary>
-   /// A smart class to decode the barcode inside a bitmap object
+   /// A smart class to decode the barcode inside a bitmap object or byte array with raw pixel color values
    /// </summary>
    public class BarcodeReader : BarcodeReaderGeneric, IBarcodeReader
    {
-      private static readonly Func<byte[], LuminanceSource> defaultCreateLuminanceSource =
-         (data) => null;
+      private static readonly Func<byte[], LuminanceSource> defaultCreateLuminanceSource = null;
 
       private readonly Func<byte[], LuminanceSource> createLuminanceSource;
 
@@ -97,7 +96,7 @@ namespace ZXing
       {
          if (CreateLuminanceSource == null)
          {
-            throw new InvalidOperationException("You have to declare a luminance source delegate.");
+            throw new InvalidOperationException("You have to declare a delegate which converts your byte array to a luminance source object.");
          }
 
          if (barcodeBitmap == null)
@@ -117,7 +116,7 @@ namespace ZXing
       {
          if (CreateLuminanceSource == null)
          {
-            throw new InvalidOperationException("You have to declare a luminance source delegate.");
+            throw new InvalidOperationException("You have to declare a delegate which converts your byte array to a luminance source object.");
          }
 
          if (barcodeBitmap == null)
