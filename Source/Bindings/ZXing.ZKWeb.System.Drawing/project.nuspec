@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>0.16.4-beta</version>
+    <authors>Michael Jahn</authors>
+    <owners>Michael Jahn</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
+    <id>ZXing.Net.Bindings.ZKWeb.System.Drawing</id>
+    <title>ZXing.Net.Bindings.ZKWeb.System.Drawing</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ZXing.Net Bindings for ZKWeb.System.Drawing - use ZKWeb.System.Drawing with ZXing.Net for barcode reading</description>
+    <summary>ZXing.Net Bindings for ZKWeb.System.Drawing</summary>
+    <releaseNotes></releaseNotes>
+    <tags>ZXing ZKWeb.System.Drawing</tags>
+    <dependencies>
+      <group targetFramework="netstandard2.0">
+        <dependency id="ZXing.Net" version="0.16.2.0" exclude="Build,Analyzers" />
+        <dependency id="ZKWeb.System.Drawing" version="4.0.1" exclude="Build,Analyzers" />
+        <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\zxing.zkweb.system.drawing.dll" target="lib\netstandard2.0\zxing.zkweb.system.drawing.dll" />
+    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\zxing.zkweb.system.drawing.pdb" target="lib\netstandard2.0\zxing.zkweb.system.drawing.pdb" />
+    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\zxing.zkweb.system.drawing.xml" target="lib\netstandard2.0\zxing.zkweb.system.drawing.xml" />
+  </files>
+</package>
