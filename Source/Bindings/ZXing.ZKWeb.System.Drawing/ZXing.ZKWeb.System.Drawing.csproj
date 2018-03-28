@@ -1,16 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.16.4</VersionPrefix>
+    <VersionPrefix>0.16.0</VersionPrefix>
     <TargetFramework>netstandard2.0</TargetFramework>
     <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
     <PlatformTarget>anycpu</PlatformTarget>
-    <PublicSign>true</PublicSign>
     <DebugType>portable</DebugType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>zxing.zkweb.system.drawing</AssemblyName>
-    <AssemblyOriginatorKeyFile>../../../Key/dummy-private.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>true</SignAssembly>
     <PackageId>ZXing.ZKWeb.System.Drawing</PackageId>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>

@@ -132,6 +132,8 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "zxing.sl4.doc", "Source\lib
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "zxing.sl5.doc", "Source\lib\documentation\zxing.sl5.doc.shfbproj", "{CD937642-91A0-4371-9452-336F8CC63121}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZXing.ZKWeb.System.Drawing", "Source\Bindings\ZXing.ZKWeb.System.Drawing\ZXing.ZKWeb.System.Drawing.csproj", "{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug - Reduced|Any CPU = Debug - Reduced|Any CPU
@@ -660,6 +662,22 @@ Global
 		{CD937642-91A0-4371-9452-336F8CC63121}.Release with Documentation|x86.ActiveCfg = Release|Any CPU
 		{CD937642-91A0-4371-9452-336F8CC63121}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD937642-91A0-4371-9452-336F8CC63121}.Release|x86.ActiveCfg = Release|Any CPU
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}.Debug - Reduced|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}.Debug - Reduced|Any CPU.Build.0 = Debug|Any CPU
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}.Debug - Reduced|x86.ActiveCfg = Debug|Any CPU
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}.Debug - Reduced|x86.Build.0 = Debug|Any CPU
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}.Debug|x86.Build.0 = Debug|Any CPU
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}.Release with Documentation|Any CPU.ActiveCfg = Release|Any CPU
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}.Release with Documentation|Any CPU.Build.0 = Release|Any CPU
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}.Release with Documentation|x86.ActiveCfg = Release|Any CPU
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}.Release with Documentation|x86.Build.0 = Release|Any CPU
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}.Release|x86.ActiveCfg = Release|Any CPU
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -697,6 +715,7 @@ Global
 		{7E37C88F-C98F-40C7-AC07-4AF710692E47} = {7D5D173D-0A00-4F57-9F02-0739E4C70555}
 		{F983B572-DCD7-4AB4-B9D5-D218A22BA5FE} = {7D5D173D-0A00-4F57-9F02-0739E4C70555}
 		{CD937642-91A0-4371-9452-336F8CC63121} = {7D5D173D-0A00-4F57-9F02-0739E4C70555}
+		{DDABC1B5-1E4C-40E8-9EAC-25D5060BEEAC} = {E3647B3A-B903-402A-B7F7-711A4A1512B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {73A9B453-AE71-4A98-B68A-2389573CD311}

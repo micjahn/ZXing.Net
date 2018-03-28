@@ -61,3 +61,6 @@
 %CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard1.3\zxing.skiasharp.dll %BINARY_DIR%\Bindings\SkiaSharp\
 %CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard1.3\zxing.skiasharp.pdb %BINARY_DIR%\Bindings\SkiaSharp\
 %CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard1.3\zxing.skiasharp.xml %BINARY_DIR%\Bindings\SkiaSharp\
+%CURRENT_DIR%\Source\Bindings\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\zxing.zkweb.system.drawing.dll %BINARY_DIR%\Bindings\ZKWeb.System.Drawing\netstandard2.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\zxing.zkweb.system.drawing.pdb %BINARY_DIR%\Bindings\ZKWeb.System.Drawing\netstandard2.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\zxing.zkweb.system.drawing.xml %BINARY_DIR%\Bindings\ZKWeb.System.Drawing\netstandard2.0\
