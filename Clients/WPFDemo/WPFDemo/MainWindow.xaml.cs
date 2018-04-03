@@ -101,8 +101,8 @@ namespace WPFDemo
                         Format = (BarcodeFormat)cmbEncoderType.SelectedItem,
                         Options = new ZXing.Common.EncodingOptions
                            {
-                              Height = (int)imageBarcodeEncoder.Height,
-                              Width = (int)imageBarcodeEncoder.Width,
+                              Height = (int)((FrameworkElement)imageBarcodeEncoder.Parent).ActualHeight,
+                              Width = (int)((FrameworkElement)imageBarcodeEncoder.Parent).ActualWidth,
                               Margin = 0
                            }
                      };
@@ -118,8 +118,8 @@ namespace WPFDemo
                         Format = (BarcodeFormat) cmbEncoderType.SelectedItem,
                         Options = new ZXing.Common.EncodingOptions
                            {
-                              Height = (int) imageBarcodeEncoder.Height,
-                              Width = (int) imageBarcodeEncoder.Width,
+                              Height = (int)((FrameworkElement)imageBarcodeEncoder.Parent).ActualHeight,
+                              Width = (int)((FrameworkElement)imageBarcodeEncoder.Parent).ActualWidth,
                               Margin = 0
                            }
                      };

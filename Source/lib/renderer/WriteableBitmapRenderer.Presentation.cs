@@ -154,6 +154,7 @@ namespace ZXing.Rendering
          var background = Background.A << 24 | Background.R << 16 | Background.G << 8 | Background.B;
          var bmp = new WriteableBitmap(width, height, 96.0, 96.0, PixelFormats.Bgra32, null);
          var pixels = new int[width*height];
+         var stride = width * sizeof(int); // simple calculation, BGRA32/Int32-array -> 4 bytes per pixel, the same which is used for the WriteableBitmap
          var index = 0;
 
          for (int y = 0; y < matrix.Height - emptyArea; y++)
@@ -181,7 +182,7 @@ namespace ZXing.Rendering
                pixels[index++] = background;
             }
          }
-         bmp.WritePixels(new Int32Rect(0, 0, width, height), pixels, bmp.BackBufferStride, 0);
+         bmp.WritePixels(new Int32Rect(0, 0, width, height), pixels, stride, 0);
 
          /* doesn't correctly work at the moment
           * renders at the wrong position
