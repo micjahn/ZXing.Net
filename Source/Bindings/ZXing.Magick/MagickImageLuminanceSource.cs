@@ -30,9 +30,8 @@ namespace ZXing.Magick
       /// </summary>
       /// <param name="image"></param>
       public MagickImageLuminanceSource(MagickImage image)
-         : base(image.Width, image.Height)
+         : base(CalculateLuminance(image), image.Width, image.Height)
       {
-         CalculateLuminance(image);
       }
 
       /// <summary>
@@ -59,51 +58,13 @@ namespace ZXing.Magick
          return new MagickImageLuminanceSource(newLuminances, width, height);
       }
 
-      private void CalculateLuminance(MagickImage src)
+      private static byte[] CalculateLuminance(MagickImage src)
       {
          if (src == null)
             throw new ArgumentNullException(nameof(src));
-
-         using (var pixels = src.GetPixels())
-         {
-            if (src.HasAlpha)
-            {
-               CalculateLuminanceBGRA32(pixels, src.Width, src.Height);
-            }
-            else
-            {
-               CalculateLuminanceBGR24(pixels, src.Width, src.Height);
-            }
-         }
-      }
-
-      private void CalculateLuminanceBGR24(IPixelCollection pixels, int width, int height)
-      {
-         var luminanceIndex = 0;
-         for (var y = 0; y < height; y++)
-         {
-            for (var x = 0; x < width; x++)
-            {
-               var pixelColor = pixels[x, y].ToColor();
-               luminances[luminanceIndex] = (byte)((RChannelWeight * pixelColor.R + GChannelWeight * pixelColor.G + BChannelWeight * pixelColor.B) >> ChannelWeight);
-               luminanceIndex++;
-            }
-         }
-      }
-
-      private void CalculateLuminanceBGRA32(IPixelCollection pixels, int width, int height)
-      {
-         var luminanceIndex = 0;
-         for (var y = 0; y < height; y++)
-         {
-            for (var x = 0; x < width; x++)
-            {
-               var pixelColor = pixels[x, y].ToColor();
-               var luminance = (byte)((RChannelWeight * pixelColor.R + GChannelWeight * pixelColor.G + BChannelWeight * pixelColor.B) >> ChannelWeight);
-               luminances[luminanceIndex] = (byte)(((luminance * pixelColor.A) >> 8) + (255 * (255 - pixelColor.A) >> 8));
-               luminanceIndex++;
-            }
-         }
+	      if (src.BitDepth() < 8)
+		      src.BitDepth(8);
+	      return src.ToByteArray(MagickFormat.Gray);
       }
    }
 }
