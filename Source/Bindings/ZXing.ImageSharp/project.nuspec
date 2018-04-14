@@ -17,12 +17,12 @@
     <dependencies>
       <group targetFramework="netstandard1.1">
         <dependency id="ZXing.Net" version="0.16.4.0" exclude="Build,Analyzers" />
-        <dependency id="SixLabors.ImageSharp" version="1.0.0-beta0002" exclude="Build,Analyzers" />
+        <dependency id="SixLabors.ImageSharp" version="1.0.0-beta0003" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="netstandard1.3">
         <dependency id="ZXing.Net" version="0.16.4.0" exclude="Build,Analyzers" />
-        <dependency id="SixLabors.ImageSharp" version="1.0.0-beta0002" exclude="Build,Analyzers" />
+        <dependency id="SixLabors.ImageSharp" version="1.0.0-beta0003" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
       </group>
     </dependencies>
