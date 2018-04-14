@@ -1,22 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.16.3</VersionPrefix>
+    <VersionPrefix>0.16.4</VersionPrefix>
     <TargetFrameworks>net20;net40;net46;netstandard1.6</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>anycpu</PlatformTarget>
     <PublicSign>true</PublicSign>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyName>zxing.opencv</AssemblyName>
+    <AssemblyName>ZXing.OpenCv</AssemblyName>
     <AssemblyOriginatorKeyFile>../../../Key/private.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
-    <PackageId>ZXing.OpenCVSharp.V3</PackageId>
+    <PackageId>ZXing.Net.Bindings.OpenCV</PackageId>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.6' ">1.6.1</NetStandardImplicitPackageVersion>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
 	<EnableDefaultCompileItems>False</EnableDefaultCompileItems>
   </PropertyGroup>
 
@@ -26,7 +25,7 @@
 
   <ItemGroup>
     <PackageReference Include="OpenCvSharp3-AnyCPU" Version="3.4.1.20180319" />
-    <PackageReference Include="ZXing.Net" Version="0.16.2" />
+    <PackageReference Include="ZXing.Net" Version="0.16.4" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net20' ">

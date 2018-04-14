@@ -24,7 +24,7 @@ namespace ZXing.ImageSharp
 	/// </summary>
 	public class BarcodeReader<TPixel> : ZXing.BarcodeReader<Image<TPixel>> where TPixel : struct, IPixel<TPixel>
 	{
-		private static readonly Func<Image<TPixel>, LuminanceSource> defaultCreateLuminanceSource =
+		private static readonly System.Func<Image<TPixel>, LuminanceSource> defaultCreateLuminanceSource =
 			(bitmap) => new ImageSharpLuminanceSource<TPixel>(bitmap);
 
 		/// <summary>
@@ -45,8 +45,8 @@ namespace ZXing.ImageSharp
 		/// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
 		/// If null then HybridBinarizer is used</param>
 		public BarcodeReader(Reader reader,
-			Func<Image<TPixel>, LuminanceSource> createLuminanceSource,
-			Func<LuminanceSource, Binarizer> createBinarizer)
+			System.Func<Image<TPixel>, LuminanceSource> createLuminanceSource,
+			System.Func<LuminanceSource, Binarizer> createBinarizer)
 			: base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer)
 		{
 		}
@@ -62,9 +62,9 @@ namespace ZXing.ImageSharp
 		/// If null then HybridBinarizer is used</param>
 		/// <param name="createRGBLuminanceSource">Sets the function to create a luminance source object for a rgb raw byte array.</param>
 		public BarcodeReader(Reader reader,
-			Func<Image<TPixel>, LuminanceSource> createLuminanceSource,
-			Func<LuminanceSource, Binarizer> createBinarizer,
-			Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource)
+			System.Func<Image<TPixel>, LuminanceSource> createLuminanceSource,
+			System.Func<LuminanceSource, Binarizer> createBinarizer,
+			System.Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource)
 			: base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer, createRGBLuminanceSource)
 		{
 		}

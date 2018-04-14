@@ -15,30 +15,29 @@
  */
 
 using System;
-using System.DrawingCore;
-using System.DrawingCore.Imaging;
 using System.Runtime.InteropServices;
+
 using ZXing.Common;
 using ZXing.OneD;
 
-namespace ZXing.CoreCompat.Rendering
+namespace ZXing.ZKWeb.Rendering
 {
-   /// <summary>
-   /// Renders a <see cref="BitMatrix" /> to a <see cref="Bitmap" /> image
-   /// </summary>
-   public class BitmapRenderer : ZXing.Rendering.IBarcodeRenderer<Bitmap>
+	/// <summary>
+	/// Renders a <see cref="BitMatrix" /> to a <see cref="System.DrawingCore.Bitmap" /> image
+	/// </summary>
+	public class BitmapRenderer : ZXing.Rendering.IBarcodeRenderer<System.DrawingCore.Bitmap>
    {
       /// <summary>
       /// Gets or sets the foreground color.
       /// </summary>
       /// <value>The foreground color.</value>
-      public Color Foreground { get; set; }
+      public System.DrawingCore.Color Foreground { get; set; }
 
       /// <summary>
       /// Gets or sets the background color.
       /// </summary>
       /// <value>The background color.</value>
-      public Color Background { get; set; }
+      public System.DrawingCore.Color Background { get; set; }
 
       /// <summary>
       /// Gets or sets the resolution which should be used to create the bitmap
@@ -58,15 +57,15 @@ namespace ZXing.CoreCompat.Rendering
       /// <value>
       /// The text font.
       /// </value>
-      public Font TextFont { get; set; }
+      public System.DrawingCore.Font TextFont { get; set; }
 
-      private static readonly Font DefaultTextFont;
+      private static readonly System.DrawingCore.Font DefaultTextFont;
 
       static BitmapRenderer()
       {
          try
          {
-            DefaultTextFont = new Font("Arial", 10, FontStyle.Regular);
+            DefaultTextFont = new System.DrawingCore.Font("Arial", 10, System.DrawingCore.FontStyle.Regular);
          }
          catch (Exception )
          {
@@ -79,8 +78,8 @@ namespace ZXing.CoreCompat.Rendering
       /// </summary>
       public BitmapRenderer()
       {
-         Foreground = Color.Black;
-         Background = Color.White;
+         Foreground = System.DrawingCore.Color.Black;
+         Background = System.DrawingCore.Color.White;
          TextFont = DefaultTextFont;
       }
 
@@ -91,7 +90,7 @@ namespace ZXing.CoreCompat.Rendering
       /// <param name="format">The format.</param>
       /// <param name="content">The content.</param>
       /// <returns></returns>
-      public Bitmap Render(BitMatrix matrix, BarcodeFormat format, string content)
+      public System.DrawingCore.Bitmap Render(BitMatrix matrix, BarcodeFormat format, string content)
       {
          return Render(matrix, format, content, new EncodingOptions());
       }
@@ -104,7 +103,7 @@ namespace ZXing.CoreCompat.Rendering
       /// <param name="content">The content.</param>
       /// <param name="options">The options.</param>
       /// <returns></returns>
-      public Bitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+      public System.DrawingCore.Bitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
       {
          var width = matrix.Width;
          var height = matrix.Height;
@@ -143,17 +142,17 @@ namespace ZXing.CoreCompat.Rendering
 
          // create the bitmap and lock the bits because we need the stride
          // which is the width of the image and possible padding bytes
-         var bmp = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+         var bmp = new System.DrawingCore.Bitmap(width, height, System.DrawingCore.Imaging.PixelFormat.Format24bppRgb);
 
          var dpiX = DpiX ?? DpiY;
          var dpiY = DpiY ?? DpiX;
          if (dpiX != null)
             bmp.SetResolution(dpiX.Value, dpiY.Value);
 
-         using (var g = Graphics.FromImage(bmp))
+         using (var g = System.DrawingCore.Graphics.FromImage(bmp))
          {
-            var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly,
-               PixelFormat.Format24bppRgb);
+            var bmpData = bmp.LockBits(new System.DrawingCore.Rectangle(0, 0, bmp.Width, bmp.Height), System.DrawingCore.Imaging.ImageLockMode.WriteOnly,
+					System.DrawingCore.Imaging.PixelFormat.Format24bppRgb);
             try
             {
                var pixels = new byte[bmpData.Stride*height];
@@ -255,8 +254,8 @@ namespace ZXing.CoreCompat.Rendering
                   default:
                      break;
                }
-               var brush = new SolidBrush(Foreground);
-               var drawFormat = new StringFormat {Alignment = StringAlignment.Center};
+               var brush = new System.DrawingCore.SolidBrush(Foreground);
+               var drawFormat = new System.DrawingCore.StringFormat {Alignment = System.DrawingCore.StringAlignment.Center};
                g.DrawString(content, font, brush, pixelsizeWidth*matrix.Width/2, height - emptyArea, drawFormat);
             }
          }

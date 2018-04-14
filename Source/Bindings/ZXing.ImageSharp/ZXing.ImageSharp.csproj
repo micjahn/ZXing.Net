@@ -1,22 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.16.4</VersionPrefix>
+    <VersionPrefix>0.16.5</VersionPrefix>
     <TargetFrameworks>netstandard1.1;netstandard1.3;netstandard2.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
     <PlatformTarget>anycpu</PlatformTarget>
     <DebugType>portable</DebugType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyName>zxing.imagesharp</AssemblyName>
-    <PackageId>ZXing.ImageSharp</PackageId>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <AssemblyName>ZXing.ImageSharp</AssemblyName>
+    <PackageId>ZXing.Net.Bindings.ImageSharp</PackageId>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
-    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
-    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
 	<EnableDefaultCompileItems>False</EnableDefaultCompileItems>
   </PropertyGroup>
 
@@ -32,7 +28,7 @@
 
   <ItemGroup>
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0002" />
-    <PackageReference Include="ZXing.Net" Version="0.16.2" />
+    <PackageReference Include="ZXing.Net" Version="0.16.4" />
   </ItemGroup>
   
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.1' ">

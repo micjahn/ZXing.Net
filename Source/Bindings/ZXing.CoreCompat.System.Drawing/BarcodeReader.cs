@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System;
 using System.Drawing;
 
 namespace ZXing.CoreCompat.System.Drawing

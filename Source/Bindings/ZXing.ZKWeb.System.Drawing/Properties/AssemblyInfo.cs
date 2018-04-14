@@ -6,14 +6,10 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyProduct("ZXing.ZKWeb.System.Drawing")]
-[assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCopyright("Copyright © 2018")]
 [assembly: AssemblyDescription("ZXing.Net Bindings to ZKWeb.System.Drawing")]
-[assembly: AssemblyInformationalVersion("0.16.0")]
-[assembly: AssemblyFileVersion("0.16.0.0")]
-[assembly: AssemblyVersion("0.16.0.0")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from

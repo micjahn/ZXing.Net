@@ -1,23 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.16.0</VersionPrefix>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
+    <VersionPrefix>0.16.4</VersionPrefix>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <PackageId>ZXing.Net.Bindings.ZKWeb.System.Drawing</PackageId>
     <PlatformTarget>anycpu</PlatformTarget>
-    <DebugType>portable</DebugType>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyName>zxing.zkweb.system.drawing</AssemblyName>
-    <PackageId>ZXing.ZKWeb.System.Drawing</PackageId>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <SignAssembly>False</SignAssembly>
+    <AssemblyTitle>ZXing.Net.Bindings.ZKWeb.System.Drawing</AssemblyTitle>
+    <Title>ZXing.ZKWeb.System.Drawing</Title>
+    <Description>ZXing.Net binding to ZKWeb.System.Drawing</Description>
+    <AssemblyOriginatorKeyFile>../../../Key/private.snk</AssemblyOriginatorKeyFile>
+    <Authors>Michael Jahn</Authors>
+    <PackageProjectUrl>https://github.com/micjahn/ZXing.Net/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/micjahn/ZXing.Net/</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>ZXing ZKWeb.System.Drawing</PackageTags>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<AssemblyName>ZXing.ZKWeb.System.Drawing</AssemblyName>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
-    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
-    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
-	<EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+	<EnableDefaultCompileItems>False</EnableDefaultCompileItems>												   
+	<RootNamespace>ZXing.ZKWeb</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,7 +37,18 @@
 
   <ItemGroup>
     <PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" />
-    <PackageReference Include="ZXing.Net" Version="0.16.2" />
+    <PackageReference Include="ZXing.Net" Version="0.16.4" />
   </ItemGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">
+    <DefineConstants>$(DefineConstants);NET45</DefineConstants>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
+    <DebugType>portable</DebugType>
+    <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
+  </PropertyGroup>
 
 </Project>

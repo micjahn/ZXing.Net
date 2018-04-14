@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-using System.DrawingCore;
+using System;
 
-namespace ZXing.ZKWeb.System.Drawing
+namespace ZXing.ZKWeb
 {
    /// <summary>
    /// A smart class to decode the barcode inside a bitmap object
    /// </summary>
-   public class BarcodeReader : BarcodeReader<Bitmap>, IBarcodeReader
+   public class BarcodeReader : BarcodeReader<System.DrawingCore.Bitmap>
    {
-      private static readonly Func<Bitmap, LuminanceSource> defaultCreateLuminanceSource =
-         (bitmap) => new BitmapLuminanceSource(bitmap);
+      private static readonly System.Func<System.DrawingCore.Bitmap, LuminanceSource> defaultCreateLuminanceSource =
+         (bitmap) => new ZXing.ZKWeb.BitmapLuminanceSource(bitmap);
 
       /// <summary>
       /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
@@ -44,7 +44,7 @@ namespace ZXing.ZKWeb.System.Drawing
       /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
       /// If null then HybridBinarizer is used</param>
       public BarcodeReader(Reader reader,
-         Func<Bitmap, LuminanceSource> createLuminanceSource,
+         Func<System.DrawingCore.Bitmap, LuminanceSource> createLuminanceSource,
          Func<LuminanceSource, Binarizer> createBinarizer
       )
          : base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer)
@@ -62,7 +62,7 @@ namespace ZXing.ZKWeb.System.Drawing
       /// If null then HybridBinarizer is used</param>
       /// <param name="createRGBLuminanceSource">Sets the function to create a luminance source object for a rgb raw byte array.</param>
       public BarcodeReader(Reader reader,
-         Func<Bitmap, LuminanceSource> createLuminanceSource,
+         Func<System.DrawingCore.Bitmap, LuminanceSource> createLuminanceSource,
          Func<LuminanceSource, Binarizer> createBinarizer,
          Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource
       )

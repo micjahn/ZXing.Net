@@ -1,22 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.16.3</VersionPrefix>
+    <VersionPrefix>0.16.4</VersionPrefix>
     <TargetFrameworks>net20;net35;net40;net45</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>anycpu</PlatformTarget>
     <PublicSign>true</PublicSign>
     <DebugType>full</DebugType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyName>zxing.opencvsharp.v2</AssemblyName>
+    <AssemblyName>ZXing.OpenCvSharp.v2</AssemblyName>
     <AssemblyOriginatorKeyFile>../../../Key/private.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
-    <PackageId>ZXing.OpenCVSharp.V2</PackageId>
+    <PackageId>ZXing.Net.Bindings.OpenCVSharp.V2</PackageId>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
 	<EnableDefaultCompileItems>False</EnableDefaultCompileItems>
   </PropertyGroup>
 
@@ -29,7 +28,7 @@
 
   <ItemGroup>
     <PackageReference Include="OpenCvSharp-AnyCPU" Version="2.4.10.20170306" />
-    <PackageReference Include="ZXing.Net" Version="0.16.2" />
+    <PackageReference Include="ZXing.Net" Version="0.16.4" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net20' ">

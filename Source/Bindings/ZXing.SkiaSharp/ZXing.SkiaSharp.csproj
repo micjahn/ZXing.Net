@@ -1,21 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.16.4</VersionPrefix>
+    <VersionPrefix>0.16.5</VersionPrefix>
     <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>anycpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyName>zxing.skiasharp</AssemblyName>
+    <AssemblyName>ZXing.SkiaSharp</AssemblyName>
     <AssemblyOriginatorKeyFile>../../../Key/private.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
-    <PackageId>ZXing.SkiaSharp</PackageId>
+    <PackageId>ZXing.Net.Bindings.SkiaSharp</PackageId>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.3' ">1.6.1</NetStandardImplicitPackageVersion>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
 	<EnableDefaultCompileItems>False</EnableDefaultCompileItems>
   </PropertyGroup>
 
@@ -30,7 +29,7 @@
 
   <ItemGroup>
     <PackageReference Include="SkiaSharp" Version="1.60.0" />
-    <PackageReference Include="ZXing.Net" Version="0.16.2" />
+    <PackageReference Include="ZXing.Net" Version="0.16.4" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">

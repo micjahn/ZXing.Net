@@ -19,7 +19,7 @@ using System.DrawingCore.Imaging;
 using System.DrawingCore;
 using System.Runtime.InteropServices;
 
-namespace ZXing.ZKWeb.System.Drawing
+namespace ZXing.ZKWeb
 {
    /// <summary>
    /// class which represents the luminance values for a bitmap object

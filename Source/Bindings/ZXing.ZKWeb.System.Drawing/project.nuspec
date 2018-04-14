@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.4-beta</version>
+    <version>0.16.4</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
@@ -15,16 +15,23 @@
     <releaseNotes></releaseNotes>
     <tags>ZXing ZKWeb.System.Drawing</tags>
     <dependencies>
+      <group targetFramework="net45">
+        <dependency id="ZXing.Net" version="0.16.4" exclude="Build,Analyzers" />
+        <dependency id="ZKWeb.System.Drawing" version="4.0.1" exclude="Build,Analyzers" />
+      </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="ZXing.Net" version="0.16.2.0" exclude="Build,Analyzers" />
+        <dependency id="ZXing.Net" version="0.16.4" exclude="Build,Analyzers" />
         <dependency id="ZKWeb.System.Drawing" version="4.0.1" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>
   <files>
-    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\zxing.zkweb.system.drawing.dll" target="lib\netstandard2.0\zxing.zkweb.system.drawing.dll" />
-    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\zxing.zkweb.system.drawing.pdb" target="lib\netstandard2.0\zxing.zkweb.system.drawing.pdb" />
-    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\zxing.zkweb.system.drawing.xml" target="lib\netstandard2.0\zxing.zkweb.system.drawing.xml" />
+    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\net45\ZXing.ZKWeb.System.Drawing.dll" target="lib\net45\ZXing.ZKWeb.System.Drawing.dll" />
+    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\net45\ZXing.ZKWeb.System.Drawing.pdb" target="lib\net45\ZXing.ZKWeb.System.Drawing.pdb" />
+    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\net45\ZXing.ZKWeb.System.Drawing.xml" target="lib\net45\ZXing.ZKWeb.System.Drawing.XML" />
+    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\ZXing.ZKWeb.System.Drawing.dll" target="lib\netstandard2.0\ZXing.ZKWeb.System.Drawing.dll" />
+    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\ZXing.ZKWeb.System.Drawing.pdb" target="lib\netstandard2.0\ZXing.ZKWeb.System.Drawing.pdb" />
+    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\ZXing.ZKWeb.System.Drawing.xml" target="lib\netstandard2.0\ZXing.ZKWeb.System.Drawing.xml" />
   </files>
 </package>

@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-using System.DrawingCore;
-
-using ZXing.CoreCompat.Rendering;
-
 namespace ZXing
 {
    /// <summary>
@@ -25,16 +21,16 @@ namespace ZXing
    /// </summary>
    public static class BarcodeWriterExtensions
    {
-      /// <summary>
-      /// uses the BarcodeWriterGeneric implementation and the <see cref="BitmapRenderer"/> class for decoding
-      /// </summary>
-      /// <param name="writer"></param>
-      /// <param name="content"></param>
-      /// <returns></returns>
-      public static Bitmap WriteAsBitmap(this IBarcodeWriterGeneric writer, string content)
+		/// <summary>
+		/// uses the BarcodeWriterGeneric implementation and the <see cref="ZXing.ZKWeb.Rendering.BitmapRenderer"/> class for decoding
+		/// </summary>
+		/// <param name="writer"></param>
+		/// <param name="content"></param>
+		/// <returns></returns>
+		public static System.DrawingCore.Bitmap WriteAsBitmap(this IBarcodeWriterGeneric writer, string content)
       {
          var bitmatrix = writer.Encode(content);
-         var renderer = new BitmapRenderer();
+         var renderer = new ZXing.ZKWeb.Rendering.BitmapRenderer();
          return renderer.Render(bitmatrix, writer.Format, content, writer.Options);
       }
    }

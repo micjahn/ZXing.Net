@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-using System.DrawingCore;
-
-using ZXing.ZKWeb.System.Drawing;
-
 namespace ZXing
 {
    /// <summary>
@@ -25,27 +21,27 @@ namespace ZXing
    /// </summary>
    public static class BarcodeReaderExtensions
    {
-      /// <summary>
-      /// uses the IBarcodeReaderGeneric implementation and the <see cref="BitmapLuminanceSource"/> class for decoding
-      /// </summary>
-      /// <param name="reader"></param>
-      /// <param name="image"></param>
-      /// <returns></returns>
-      public static Result Decode(this IBarcodeReaderGeneric reader, Bitmap image)
+		/// <summary>
+		/// uses the IBarcodeReaderGeneric implementation and the <see cref="ZXing.ZKWeb.BitmapLuminanceSource"/> class for decoding
+		/// </summary>
+		/// <param name="reader"></param>
+		/// <param name="image"></param>
+		/// <returns></returns>
+		public static Result Decode(this IBarcodeReaderGeneric reader, System.DrawingCore.Bitmap image)
       {
-         var luminanceSource = new BitmapLuminanceSource(image);
+         var luminanceSource = new ZXing.ZKWeb.BitmapLuminanceSource(image);
          return reader.Decode(luminanceSource);
       }
 
-      /// <summary>
-      /// uses the IBarcodeReaderGeneric implementation and the <see cref="BitmapLuminanceSource"/> class for decoding
-      /// </summary>
-      /// <param name="reader"></param>
-      /// <param name="image"></param>
-      /// <returns></returns>
-      public static Result[] DecodeMultiple(this IBarcodeReaderGeneric reader, Bitmap image)
+		/// <summary>
+		/// uses the IBarcodeReaderGeneric implementation and the <see cref="ZXing.ZKWeb.BitmapLuminanceSource"/> class for decoding
+		/// </summary>
+		/// <param name="reader"></param>
+		/// <param name="image"></param>
+		/// <returns></returns>
+		public static Result[] DecodeMultiple(this IBarcodeReaderGeneric reader, System.DrawingCore.Bitmap image)
       {
-         var luminanceSource = new BitmapLuminanceSource(image);
+         var luminanceSource = new ZXing.ZKWeb.BitmapLuminanceSource(image);
          return reader.DecodeMultiple(luminanceSource);
       }
    }
