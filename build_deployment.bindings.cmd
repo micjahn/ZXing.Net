@@ -13,6 +13,7 @@ SET FILENAME_BINARY=%DEPLOYMENT_DIR%\ZXing.Net.Bindings.%VERSION%.zip
 SET ZIP_TOOL=%CD%\3rdparty\zip\7za.exe
 SET SOURCE_EXPORT_DIR=%DEPLOYMENT_DIR%\Source
 SET SVN_TOOL=%CD%\3rdparty\Subversion\svn.exe
+SET GET_PUBLICKEYTOKEN_TOOL=%CD%\3rdparty\GetPublicKeyToken\GetPublicKeyToken.exe
 SET HAS_VALIDATION_ERROR=0
 
 echo. > %LOGFILE%
@@ -34,6 +35,7 @@ FOR /F %%b IN (build_deployment_files.bindings.txt) DO (
 echo Check strong name of the assemblies...
 echo (script has to be called in a Visual Studio command prompt, sn.exe has to be in search paths)
 echo.
+SET VALIDATION_WAS_CALLED=0
 
 FOR /F %%b IN (build_deployment_strong_named_files.bindings.txt) DO (
  SET f=%%b
@@ -51,21 +53,28 @@ FOR /F %%b IN (build_deployment_strong_named_files.bindings.txt) DO (
    SET HAS_VALIDATION_ERROR=1
   )
  )
- 
+
  REM validation of the correct signing key
- for /F "tokens=2 delims=:" %%t in ('"sn -q -T !f!"') DO (
-  IF NOT "%%t" == " 4e88037ac681fe60" (
+ for /F "tokens=1 delims=" %%t in ('"%GET_PUBLICKEYTOKEN_TOOL% !f!"') DO (
+  SET VALIDATION_WAS_CALLED=1
+  IF NOT "%%t" == "4e88037ac681fe60" (
    echo The assembly !f! is not signed with the correct key. required: 4e88037ac681fe60, found: %%t, re-signing...
    sn -q -Ra !f! Key\private.snk
    
    for /F "tokens=2 delims=:" %%t in ('"sn -q -T !f!"') DO (
-    IF NOT "%%t" == " 4e88037ac681fe60" (
+    IF NOT "%%t" == "4e88037ac681fe60" (
      echo The assembly !f! is not signed with the correct key. required: 4e88037ac681fe60, found: %%t
      SET HAS_VALIDATION_ERROR=1
-	)
+    )
    )
   )
  )
+)
+
+IF NOT "!VALIDATION_WAS_CALLED!" == "1" (
+ ECHO.
+ ECHO The file validation procedure was not executed. Please check the deployment script.
+ GOTO END
 )
 
 IF NOT "!HAS_VALIDATION_ERROR!" == "0" (
