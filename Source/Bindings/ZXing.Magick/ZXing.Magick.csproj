@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <VersionPrefix>0.16.5</VersionPrefix>
-    <TargetFrameworks>net20;net40;netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>net20;net40;netstandard1.3;netstandard2.0</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>anycpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="7.4.3" />
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="7.4.6" />
     <PackageReference Include="ZXing.Net" Version="0.16.4" />
   </ItemGroup>
 
@@ -52,6 +52,12 @@
     <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
     <DebugType>portable</DebugType>
     <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
+    <DebugType>portable</DebugType>
+    <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
   </PropertyGroup>
 
 </Project>

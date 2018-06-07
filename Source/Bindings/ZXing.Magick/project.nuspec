@@ -1,44 +1,52 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
-  <metadata>
-    <version>0.16.5</version>
-    <authors>Michael Jahn</authors>
-    <owners>Michael Jahn</owners>
-    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
-    <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
-    <id>ZXing.Net.Bindings.Magick</id>
-    <title>ZXing.Net.Bindings.Magick</title>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>ZXing.Net Bindings for ImageMagick - use ImageMagick with ZXing.Net for barcode reading</description>
-    <summary>ZXing.Net Bindings for ImageMagick</summary>
-    <releaseNotes></releaseNotes>
-    <tags>ZXing Magick</tags>
-    <dependencies>
-       <group targetFramework="net20">
-          <dependency id="ZXing.Net" version="0.16.4.0" exclude="Build,Analyzers" />
-          <dependency id="Magick.NET-Q8-AnyCPU" version="7.4.3" exclude="Build,Analyzers" />
-       </group>
-       <group targetFramework="net40">
-          <dependency id="ZXing.Net" version="0.16.4.0" exclude="Build,Analyzers" />
-          <dependency id="Magick.NET-Q8-AnyCPU" version="7.4.3" exclude="Build,Analyzers" />
-       </group>
-       <group targetFramework="netstandard1.3">
-          <dependency id="ZXing.Net" version="0.16.4.0" exclude="Build,Analyzers" />
-          <dependency id="Magick.NET-Q8-AnyCPU" version="7.4.3" exclude="Build,Analyzers" />
-          <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
-      </group>
-    </dependencies>
-  </metadata>
-  <files>
-    <file src="bin\Release\net20\ZXing.Magick.dll" target="lib\net20\ZXing.Magick.dll" />
-    <file src="bin\Release\net20\ZXing.Magick.pdb" target="lib\net20\ZXing.Magick.pdb" />
-    <file src="bin\Release\net20\ZXing.Magick.xml" target="lib\net20\ZXing.Magick.xml" />
-    <file src="bin\Release\net40\ZXing.Magick.dll" target="lib\net40\ZXing.Magick.dll" />
-    <file src="bin\Release\net40\ZXing.Magick.pdb" target="lib\net40\ZXing.Magick.pdb" />
-    <file src="bin\Release\net40\ZXing.Magick.xml" target="lib\net40\ZXing.Magick.xml" />
-    <file src="bin\Release\netstandard1.3\ZXing.Magick.dll" target="lib\netstandard1.3\ZXing.Magick.dll" />
-    <file src="bin\Release\netstandard1.3\ZXing.Magick.pdb" target="lib\netstandard1.3\ZXing.Magick.pdb" />
-    <file src="bin\Release\netstandard1.3\ZXing.Magick.xml" target="lib\netstandard1.3\ZXing.Magick.xml" />
-  </files>
+	<metadata>
+		<version>0.16.6</version>
+		<authors>Michael Jahn</authors>
+		<owners>Michael Jahn</owners>
+		<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+		<projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
+		<iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
+		<id>ZXing.Net.Bindings.Magick</id>
+		<title>ZXing.Net.Bindings.Magick</title>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>ZXing.Net Bindings for ImageMagick - use ImageMagick with ZXing.Net for barcode reading</description>
+		<summary>ZXing.Net Bindings for ImageMagick</summary>
+		<releaseNotes></releaseNotes>
+		<tags>ZXing Magick</tags>
+		<dependencies>
+			<group targetFramework="net20">
+				<dependency id="ZXing.Net" version="0.16.4.0" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET-Q8-AnyCPU" version="7.4.6" exclude="Build,Analyzers" />
+			</group>
+			<group targetFramework="net40">
+				<dependency id="ZXing.Net" version="0.16.4.0" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET-Q8-AnyCPU" version="7.4.6" exclude="Build,Analyzers" />
+			</group>
+			<group targetFramework="netstandard1.3">
+				<dependency id="ZXing.Net" version="0.16.4.0" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET-Q8-AnyCPU" version="7.4.6" exclude="Build,Analyzers" />
+				<dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+			</group>
+			<group targetFramework="netstandard2.0">
+				<dependency id="ZXing.Net" version="0.16.4.0" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET-Q8-AnyCPU" version="7.4.6" exclude="Build,Analyzers" />
+				<dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+			</group>
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="bin\Release\net20\ZXing.Magick.dll" target="lib\net20\ZXing.Magick.dll" />
+		<file src="bin\Release\net20\ZXing.Magick.pdb" target="lib\net20\ZXing.Magick.pdb" />
+		<file src="bin\Release\net20\ZXing.Magick.xml" target="lib\net20\ZXing.Magick.xml" />
+		<file src="bin\Release\net40\ZXing.Magick.dll" target="lib\net40\ZXing.Magick.dll" />
+		<file src="bin\Release\net40\ZXing.Magick.pdb" target="lib\net40\ZXing.Magick.pdb" />
+		<file src="bin\Release\net40\ZXing.Magick.xml" target="lib\net40\ZXing.Magick.xml" />
+		<file src="bin\Release\netstandard1.3\ZXing.Magick.dll" target="lib\netstandard1.3\ZXing.Magick.dll" />
+		<file src="bin\Release\netstandard1.3\ZXing.Magick.pdb" target="lib\netstandard1.3\ZXing.Magick.pdb" />
+		<file src="bin\Release\netstandard1.3\ZXing.Magick.xml" target="lib\netstandard1.3\ZXing.Magick.xml" />
+		<file src="bin\Release\netstandard2.0\ZXing.Magick.dll" target="lib\netstandard2.0\ZXing.Magick.dll" />
+		<file src="bin\Release\netstandard2.0\ZXing.Magick.pdb" target="lib\netstandard2.0\ZXing.Magick.pdb" />
+		<file src="bin\Release\netstandard2.0\ZXing.Magick.xml" target="lib\netstandard2.0\ZXing.Magick.xml" />
+	</files>
 </package>
