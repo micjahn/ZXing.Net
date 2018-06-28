@@ -16,14 +16,14 @@
 
 namespace System.ComponentModel
 {
-   /// <summary>
-   /// Attribute is only for compatibility issues
-   /// </summary>
-   [AttributeUsage(AttributeTargets.All)]
-   internal sealed class BrowsableAttribute : Attribute
-   {
-      public BrowsableAttribute(bool browsable)
-      {
-      }
-   }
+    /// <summary>
+    /// Attribute is only for compatibility issues
+    /// </summary>
+    [AttributeUsage(AttributeTargets.All)]
+    internal sealed class BrowsableAttribute : Attribute
+    {
+        public BrowsableAttribute(bool browsable)
+        {
+        }
+    }
 }

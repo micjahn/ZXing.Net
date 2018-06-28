@@ -19,54 +19,54 @@ using SixLabors.ImageSharp.PixelFormats;
 
 namespace ZXing.ImageSharp
 {
-	/// <summary>
-	/// specific implementation of a barcode reader which can be used with ImageSharp ImageBase objects
-	/// </summary>
-	public class BarcodeReader<TPixel> : ZXing.BarcodeReader<Image<TPixel>> where TPixel : struct, IPixel<TPixel>
-	{
-		private static readonly System.Func<Image<TPixel>, LuminanceSource> defaultCreateLuminanceSource =
-			(bitmap) => new ImageSharpLuminanceSource<TPixel>(bitmap);
+    /// <summary>
+    /// specific implementation of a barcode reader which can be used with ImageSharp ImageBase objects
+    /// </summary>
+    public class BarcodeReader<TPixel> : ZXing.BarcodeReader<Image<TPixel>> where TPixel : struct, IPixel<TPixel>
+    {
+        private static readonly System.Func<Image<TPixel>, LuminanceSource> defaultCreateLuminanceSource =
+           (bitmap) => new ImageSharpLuminanceSource<TPixel>(bitmap);
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BarcodeReader{TPixel}"/> class.
-		/// </summary>
-		public BarcodeReader()
-			: this(null, defaultCreateLuminanceSource, null)
-		{
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BarcodeReader{TPixel}"/> class.
+        /// </summary>
+        public BarcodeReader()
+           : this(null, defaultCreateLuminanceSource, null)
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BarcodeReader{TPixel}"/> class.
-		/// </summary>
-		/// <param name="reader">Sets the reader which should be used to find and decode the barcode.
-		/// If null then MultiFormatReader is used</param>
-		/// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
-		/// If null, an exception is thrown when Decode is called</param>
-		/// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
-		/// If null then HybridBinarizer is used</param>
-		public BarcodeReader(Reader reader,
-			System.Func<Image<TPixel>, LuminanceSource> createLuminanceSource,
-			System.Func<LuminanceSource, Binarizer> createBinarizer)
-			: base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer)
-		{
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BarcodeReader{TPixel}"/> class.
+        /// </summary>
+        /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
+        /// If null then MultiFormatReader is used</param>
+        /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
+        /// If null, an exception is thrown when Decode is called</param>
+        /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
+        /// If null then HybridBinarizer is used</param>
+        public BarcodeReader(Reader reader,
+           System.Func<Image<TPixel>, LuminanceSource> createLuminanceSource,
+           System.Func<LuminanceSource, Binarizer> createBinarizer)
+           : base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer)
+        {
+        }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="BarcodeReader{TPixel}"/> class.
-		/// </summary>
-		/// <param name="reader">Sets the reader which should be used to find and decode the barcode.
-		/// If null then MultiFormatReader is used</param>
-		/// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
-		/// If null, an exception is thrown when Decode is called</param>
-		/// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
-		/// If null then HybridBinarizer is used</param>
-		/// <param name="createRGBLuminanceSource">Sets the function to create a luminance source object for a rgb raw byte array.</param>
-		public BarcodeReader(Reader reader,
-			System.Func<Image<TPixel>, LuminanceSource> createLuminanceSource,
-			System.Func<LuminanceSource, Binarizer> createBinarizer,
-			System.Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource)
-			: base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer, createRGBLuminanceSource)
-		{
-		}
-	}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BarcodeReader{TPixel}"/> class.
+        /// </summary>
+        /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
+        /// If null then MultiFormatReader is used</param>
+        /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
+        /// If null, an exception is thrown when Decode is called</param>
+        /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
+        /// If null then HybridBinarizer is used</param>
+        /// <param name="createRGBLuminanceSource">Sets the function to create a luminance source object for a rgb raw byte array.</param>
+        public BarcodeReader(Reader reader,
+           System.Func<Image<TPixel>, LuminanceSource> createLuminanceSource,
+           System.Func<LuminanceSource, Binarizer> createBinarizer,
+           System.Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource)
+           : base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer, createRGBLuminanceSource)
+        {
+        }
+    }
 }

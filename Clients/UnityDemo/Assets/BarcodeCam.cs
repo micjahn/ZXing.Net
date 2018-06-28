@@ -23,135 +23,135 @@ using ZXing.QrCode;
 
 public class BarcodeCam : MonoBehaviour
 {
-   // Texture for encoding test
-   public Texture2D encoded;
+    // Texture for encoding test
+    public Texture2D encoded;
 
-   private WebCamTexture camTexture;
-   private Thread qrThread;
+    private WebCamTexture camTexture;
+    private Thread qrThread;
 
-   private Color32[] c;
-   private int W, H;
-      
-   private Rect screenRect;
+    private Color32[] c;
+    private int W, H;
 
-   private bool isQuit;
+    private Rect screenRect;
 
-   public string LastResult;
-   private bool shouldEncodeNow;
+    private bool isQuit;
 
-   void OnGUI()
-   {
-      GUI.DrawTexture(screenRect, camTexture, ScaleMode.ScaleToFit);
-   }
+    public string LastResult;
+    private bool shouldEncodeNow;
 
-   void OnEnable()
-   {
-      if (camTexture != null)
-      {
-         camTexture.Play();
-         W = camTexture.width;
-         H = camTexture.height;
-      }
-   }
+    void OnGUI()
+    {
+        GUI.DrawTexture(screenRect, camTexture, ScaleMode.ScaleToFit);
+    }
 
-   void OnDisable()
-   {
-      if (camTexture != null)
-      {
-         camTexture.Pause();
-      }
-   }
+    void OnEnable()
+    {
+        if (camTexture != null)
+        {
+            camTexture.Play();
+            W = camTexture.width;
+            H = camTexture.height;
+        }
+    }
 
-   void OnDestroy()
-   {
-      qrThread.Abort();
-      camTexture.Stop();
-   }
+    void OnDisable()
+    {
+        if (camTexture != null)
+        {
+            camTexture.Pause();
+        }
+    }
 
-   // It's better to stop the thread by itself rather than abort it.
-   void OnApplicationQuit()
-   {
-      isQuit = true;
-   }
+    void OnDestroy()
+    {
+        qrThread.Abort();
+        camTexture.Stop();
+    }
 
-   void Start()
-   {
-      encoded = new Texture2D(256, 256);
-      LastResult = "http://www.google.com";
-      shouldEncodeNow = true;
+    // It's better to stop the thread by itself rather than abort it.
+    void OnApplicationQuit()
+    {
+        isQuit = true;
+    }
 
-      screenRect = new Rect(0, 0, Screen.width, Screen.height);
+    void Start()
+    {
+        encoded = new Texture2D(256, 256);
+        LastResult = "http://www.google.com";
+        shouldEncodeNow = true;
 
-      camTexture = new WebCamTexture();
-      camTexture.requestedHeight = Screen.height; // 480;
-      camTexture.requestedWidth = Screen.width; //640;
-      OnEnable();
+        screenRect = new Rect(0, 0, Screen.width, Screen.height);
 
-      qrThread = new Thread(DecodeQR);
-      qrThread.Start();
-   }
+        camTexture = new WebCamTexture();
+        camTexture.requestedHeight = Screen.height; // 480;
+        camTexture.requestedWidth = Screen.width; //640;
+        OnEnable();
 
-   void Update()
-   {
-      if (c == null)
-      {
-         c = camTexture.GetPixels32();
-      }
+        qrThread = new Thread(DecodeQR);
+        qrThread.Start();
+    }
 
-      // encode the last found
-      var textForEncoding = LastResult;
-      if (shouldEncodeNow && 
-          textForEncoding != null)
-      {
-         var color32 = Encode(textForEncoding, encoded.width, encoded.height);
-         encoded.SetPixels32(color32);
-         encoded.Apply();
-         shouldEncodeNow = false;
-      }
-   }
+    void Update()
+    {
+        if (c == null)
+        {
+            c = camTexture.GetPixels32();
+        }
 
-   void DecodeQR()
-   {
-      // create a reader with a custom luminance source
-      var barcodeReader = new BarcodeReader {AutoRotate = false, TryHarder = false};
+        // encode the last found
+        var textForEncoding = LastResult;
+        if (shouldEncodeNow &&
+            textForEncoding != null)
+        {
+            var color32 = Encode(textForEncoding, encoded.width, encoded.height);
+            encoded.SetPixels32(color32);
+            encoded.Apply();
+            shouldEncodeNow = false;
+        }
+    }
 
-      while (true)
-      {
-         if (isQuit)
-            break;
+    void DecodeQR()
+    {
+        // create a reader with a custom luminance source
+        var barcodeReader = new BarcodeReader { AutoRotate = false, TryHarder = false };
 
-         try
-         {
-            // decode the current frame
-            var result = barcodeReader.Decode(c, W, H);
-            if (result != null)
+        while (true)
+        {
+            if (isQuit)
+                break;
+
+            try
             {
-               LastResult = result.Text;
-               shouldEncodeNow = true;
-               print(result.Text);
+                // decode the current frame
+                var result = barcodeReader.Decode(c, W, H);
+                if (result != null)
+                {
+                    LastResult = result.Text;
+                    shouldEncodeNow = true;
+                    print(result.Text);
+                }
+
+                // Sleep a little bit and set the signal to get the next frame
+                Thread.Sleep(200);
+                c = null;
             }
+            catch
+            {
+            }
+        }
+    }
 
-            // Sleep a little bit and set the signal to get the next frame
-            Thread.Sleep(200);
-            c = null;
-         }
-         catch
-         {
-         }
-      }
-   }
-
-   private static Color32[] Encode(string textForEncoding, int width, int height)
-   {
-      var writer = new BarcodeWriter
-      {
-         Format = BarcodeFormat.QR_CODE,
-         Options = new QrCodeEncodingOptions
-         {
-            Height = height,
-            Width = width
-         }
-      };
-      return writer.Write(textForEncoding);
-   }
+    private static Color32[] Encode(string textForEncoding, int width, int height)
+    {
+        var writer = new BarcodeWriter
+        {
+            Format = BarcodeFormat.QR_CODE,
+            Options = new QrCodeEncodingOptions
+            {
+                Height = height,
+                Width = width
+            }
+        };
+        return writer.Write(textForEncoding);
+    }
 }

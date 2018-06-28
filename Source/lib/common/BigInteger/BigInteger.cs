@@ -13,11 +13,11 @@ using System.Text;
 
 namespace BigIntegerLibrary
 {
-    
+
     /// <summary>
     /// .NET 2.0 class for handling of very large integers, up to 10240 binary digits or
     /// approximately (safe to use) 3000 decimal digits.
-   /// </summary>
+    /// </summary>
 #if WindowsCE
     [Serializable]
     internal sealed class BigInteger :
@@ -25,13 +25,13 @@ namespace BigIntegerLibrary
     [Serializable]
     internal sealed class BigInteger : ISerializable, 
 #else
-    internal sealed class BigInteger :  
+    internal sealed class BigInteger :
 #endif
        IEquatable<BigInteger>, IComparable, IComparable<BigInteger>
     {
 
         #region Fields
-        
+
         /// <summary>
         /// 2^16 numeration base for internal computations, in order to benefit the most from the
         /// 32 bit (or 64 bit) integer processor registers.
@@ -228,10 +228,10 @@ namespace BigIntegerLibrary
 #endif
 
 
-      #endregion
+        #endregion
 
 
-      #region Public Methods
+        #region Public Methods
 
 #if !(WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || WindowsCE || MONOTOUCH || MONOANDROID || PORTABLE || NETSTANDARD1_0)
         /// <summary>
@@ -255,13 +255,13 @@ namespace BigIntegerLibrary
         }
 #endif
 
-      /// <summary>
-      /// Determines whether the specified BigInteger is equal to the current BigInteger.
-      /// </summary>
-      /// <param name="other">The BigInteger to compare with the current BigInteger</param>
-      /// <returns>True if the specified BigInteger is equal to the current BigInteger,
-      /// false otherwise</returns>
-      public bool Equals(BigInteger other)
+        /// <summary>
+        /// Determines whether the specified BigInteger is equal to the current BigInteger.
+        /// </summary>
+        /// <param name="other">The BigInteger to compare with the current BigInteger</param>
+        /// <returns>True if the specified BigInteger is equal to the current BigInteger,
+        /// false otherwise</returns>
+        public bool Equals(BigInteger other)
         {
             if (sign != other.sign)
                 return false;
@@ -319,7 +319,7 @@ namespace BigIntegerLibrary
             }
 
             res.NumberSign = sign;
-            
+
             return res.ToString();
         }
 
@@ -330,7 +330,7 @@ namespace BigIntegerLibrary
         /// <returns></returns>
         public static BigInteger Parse(string str)
         {
-           return new BigInteger(str);
+            return new BigInteger(str);
         }
 
         /// <summary>
@@ -757,7 +757,7 @@ namespace BigIntegerLibrary
         {
             if ((a.sign == Sign.Negative) || (b.sign == Sign.Negative))
                 throw new BigIntegerException("Cannot compute the Gcd of negative BigIntegers.", null);
-            
+
             BigInteger r;
 
             while (b > Zero)
@@ -785,7 +785,7 @@ namespace BigIntegerLibrary
         {
             if ((a.sign == Sign.Negative) || (b.sign == Sign.Negative))
                 throw new BigIntegerException("Cannot compute the Gcd of negative BigIntegers.", null);
-            
+
             BigInteger u1 = new BigInteger();
             BigInteger u2 = new BigInteger(1);
             BigInteger v1 = new BigInteger(1);
@@ -884,23 +884,23 @@ namespace BigIntegerLibrary
 
             return res;
         }
-/*
-        /// <summary>
-        /// Tests whether the number provided is a prime.
-        /// </summary>
-        /// <param name="number">The number to be tested for primality</param>
-        /// <returns>True, if the number given is a prime, false, otherwise</returns>
-        /// <exception cref="BigIntegerException">Primality is not defined for negative numbers exception</exception>
-        public static bool IsPrime(BigInteger number)
-        {
-            if (number.sign == Sign.Negative)
-                throw new BigIntegerException("Primality is not defined for negative numbers.", null);
+        /*
+                /// <summary>
+                /// Tests whether the number provided is a prime.
+                /// </summary>
+                /// <param name="number">The number to be tested for primality</param>
+                /// <returns>True, if the number given is a prime, false, otherwise</returns>
+                /// <exception cref="BigIntegerException">Primality is not defined for negative numbers exception</exception>
+                public static bool IsPrime(BigInteger number)
+                {
+                    if (number.sign == Sign.Negative)
+                        throw new BigIntegerException("Primality is not defined for negative numbers.", null);
 
-            return PrimalityTester.IsPrime(number);
-        }
-*/
+                    return PrimalityTester.IsPrime(number);
+                }
+        */
 
-#endregion
+        #endregion
 
 
         #region Overloaded Operators
@@ -923,31 +923,31 @@ namespace BigIntegerLibrary
         /// <returns>The BigInteger converted from the given int</returns>
         public static implicit operator BigInteger(int n)
         {
-           return new BigInteger(n);
+            return new BigInteger(n);
         }
 
         public static explicit operator int(BigInteger value)
         {
-           long result = 0;
-           for (var index = value.size - 1; index >= 0; index--)
-           {
-              result *= NumberBase;
-              result += value.digits[index];
-           }
+            long result = 0;
+            for (var index = value.size - 1; index >= 0; index--)
+            {
+                result *= NumberBase;
+                result += value.digits[index];
+            }
 
-           return value.sign == Sign.Negative ? -1 * (int)result : (int)result;
+            return value.sign == Sign.Negative ? -1 * (int)result : (int)result;
         }
 
         public static explicit operator ulong(BigInteger value)
         {
-           ulong result = 0;
-           for (var index = value.size - 1; index >= 0; index--)
-           {
-              result *= NumberBase;
-              result += (ulong)value.digits[index];
-           }
+            ulong result = 0;
+            for (var index = value.size - 1; index >= 0; index--)
+            {
+                result *= NumberBase;
+                result += (ulong)value.digits[index];
+            }
 
-           return result;
+            return result;
         }
 
         /// <summary>
@@ -956,7 +956,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st BigInteger</param>
         /// <param name="b">The 2nd BigInteger</param>
         /// <returns>True if a == b, false otherwise</returns>
-        public static bool operator==(BigInteger a, BigInteger b)
+        public static bool operator ==(BigInteger a, BigInteger b)
         {
             return Equals(a, b);
         }
@@ -967,7 +967,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st BigInteger</param>
         /// <param name="b">The 2nd BigInteger</param>
         /// <returns>True if a != b, false otherwise</returns>
-        public static bool operator!=(BigInteger a, BigInteger b)
+        public static bool operator !=(BigInteger a, BigInteger b)
         {
             return !Equals(a, b);
         }
@@ -978,7 +978,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st BigInteger</param>
         /// <param name="b">The 2nd BigInteger</param>
         /// <returns>True if a &gt; b, false otherwise</returns>
-        public static bool operator>(BigInteger a, BigInteger b)
+        public static bool operator >(BigInteger a, BigInteger b)
         {
             return Greater(a, b);
         }
@@ -989,7 +989,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st BigInteger</param>
         /// <param name="b">The 2nd BigInteger</param>
         /// <returns>True if a &lt; b, false otherwise</returns>
-        public static bool operator<(BigInteger a, BigInteger b)
+        public static bool operator <(BigInteger a, BigInteger b)
         {
             return Smaller(a, b);
         }
@@ -1000,7 +1000,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st BigInteger</param>
         /// <param name="b">The 2nd BigInteger</param>
         /// <returns>True if a &gt;= b, false otherwise</returns>
-        public static bool operator>=(BigInteger a, BigInteger b)
+        public static bool operator >=(BigInteger a, BigInteger b)
         {
             return GreaterOrEqual(a, b);
         }
@@ -1011,7 +1011,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st BigInteger</param>
         /// <param name="b">The 2nd BigInteger</param>
         /// <returns>True if a &lt;= b, false otherwise</returns>
-        public static bool operator<=(BigInteger a, BigInteger b)
+        public static bool operator <=(BigInteger a, BigInteger b)
         {
             return SmallerOrEqual(a, b);
         }
@@ -1021,7 +1021,7 @@ namespace BigIntegerLibrary
         /// </summary>
         /// <param name="n">The BigInteger whose opposite is to be computed</param>
         /// <returns>The BigInteger inverse with respect to addition</returns>
-        public static BigInteger operator-(BigInteger n)
+        public static BigInteger operator -(BigInteger n)
         {
             return Opposite(n);
         }
@@ -1032,7 +1032,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st BigInteger</param>
         /// <param name="b">The 2nd BigInteger</param>
         /// <returns>The BigInteger result of the addition</returns>
-        public static BigInteger operator+(BigInteger a, BigInteger b)
+        public static BigInteger operator +(BigInteger a, BigInteger b)
         {
             return Addition(a, b);
         }
@@ -1043,7 +1043,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st BigInteger</param>
         /// <param name="b">The 2nd BigInteger</param>
         /// <returns>The BigInteger result of the subtraction</returns>
-        public static BigInteger operator-(BigInteger a, BigInteger b)
+        public static BigInteger operator -(BigInteger a, BigInteger b)
         {
             return Subtraction(a, b);
         }
@@ -1054,7 +1054,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st BigInteger</param>
         /// <param name="b">The 2nd BigInteger</param>
         /// <returns>The BigInteger result of the multiplication</returns>
-        public static BigInteger operator*(BigInteger a, BigInteger b)
+        public static BigInteger operator *(BigInteger a, BigInteger b)
         {
             return Multiplication(a, b);
         }
@@ -1066,7 +1066,7 @@ namespace BigIntegerLibrary
         /// <param name="b">The 2nd BigInteger</param>
         /// <returns>The BigInteger result of the division</returns>
         /// <exception cref="BigIntegerException">Cannot divide by zero exception</exception>
-        public static BigInteger operator/(BigInteger a, BigInteger b)
+        public static BigInteger operator /(BigInteger a, BigInteger b)
         {
             return Division(a, b);
         }
@@ -1078,7 +1078,7 @@ namespace BigIntegerLibrary
         /// <param name="b">The 2nd BigInteger</param>
         /// <returns>The BigInteger result of the modulo</returns>
         /// <exception cref="BigIntegerException">Cannot divide by zero exception</exception>
-        public static BigInteger operator%(BigInteger a, BigInteger b)
+        public static BigInteger operator %(BigInteger a, BigInteger b)
         {
             return Modulo(a, b);
         }
@@ -1088,7 +1088,7 @@ namespace BigIntegerLibrary
         /// </summary>
         /// <param name="n">The BigInteger to be incremented by one</param>
         /// <returns>The BigInteger result of incrementing by one</returns>
-        public static BigInteger operator++(BigInteger n)
+        public static BigInteger operator ++(BigInteger n)
         {
             BigInteger res = n + One;
             return res;
@@ -1099,7 +1099,7 @@ namespace BigIntegerLibrary
         /// </summary>
         /// <param name="n">The BigInteger to be decremented by one</param>
         /// <returns>The BigInteger result of decrementing by one</returns>
-        public static BigInteger operator--(BigInteger n)
+        public static BigInteger operator --(BigInteger n)
         {
             BigInteger res = n - One;
             return res;
@@ -1316,7 +1316,7 @@ namespace BigIntegerLibrary
         {
             int i;
             long borrow = 0, diff;
-            
+
             for (i = 0; i <= m; i++)
             {
                 diff = r.digits[i + k] - dq.digits[i] - borrow + NumberBase;
@@ -1345,33 +1345,33 @@ namespace BigIntegerLibrary
         #endregion
 
 
-      private class DigitContainer
-      {
-         private readonly long[][] digits;
-         private const int ChunkSize = 16;
-         private const int ChunkSizeDivisionShift = 4;
-         private const int ChunkCount = BigInteger.MaxSize >> ChunkSizeDivisionShift;
+        private class DigitContainer
+        {
+            private readonly long[][] digits;
+            private const int ChunkSize = 16;
+            private const int ChunkSizeDivisionShift = 4;
+            private const int ChunkCount = BigInteger.MaxSize >> ChunkSizeDivisionShift;
 
-         public DigitContainer()
-         {
-            digits = new long[ChunkCount][];
-         }
+            public DigitContainer()
+            {
+                digits = new long[ChunkCount][];
+            }
 
-         public long this[int index]
-         {
-            get
+            public long this[int index]
             {
-               var chunkIndex = index >> ChunkSizeDivisionShift;
-               var chunk = digits[chunkIndex];
-               return chunk == null ? 0 : chunk[index%ChunkSize];
+                get
+                {
+                    var chunkIndex = index >> ChunkSizeDivisionShift;
+                    var chunk = digits[chunkIndex];
+                    return chunk == null ? 0 : chunk[index % ChunkSize];
+                }
+                set
+                {
+                    var chunkIndex = index >> ChunkSizeDivisionShift;
+                    var chunk = digits[chunkIndex] ?? (digits[chunkIndex] = new long[ChunkSize]);
+                    chunk[index % ChunkSize] = value;
+                }
             }
-            set
-            {
-               var chunkIndex = index >> ChunkSizeDivisionShift;
-               var chunk = digits[chunkIndex] ?? (digits[chunkIndex] = new long[ChunkSize]);
-               chunk[index%ChunkSize] = value;
-            }
-         }
-      }
-   }
+        }
+    }
 }

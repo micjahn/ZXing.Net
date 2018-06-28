@@ -22,51 +22,51 @@ using ZXing.Interop.Common;
 
 namespace ZXing.Interop.Decoding
 {
-   /// <summary>
-   /// A smart class to decode the barcode inside a bitmap object
-   /// </summary>
-   [ComVisible(true)]
-   [Guid("2EDCFB5F-307A-4E21-89CB-AFC99DDDE618")]
-   [ClassInterface(ClassInterfaceType.AutoDual)]
-   public class BarcodeReader : IBarcodeReader
-   {
-      private readonly ZXing.BarcodeReader wrappedReader;
+    /// <summary>
+    /// A smart class to decode the barcode inside a bitmap object
+    /// </summary>
+    [ComVisible(true)]
+    [Guid("2EDCFB5F-307A-4E21-89CB-AFC99DDDE618")]
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    public class BarcodeReader : IBarcodeReader
+    {
+        private readonly ZXing.BarcodeReader wrappedReader;
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
-      /// </summary>
-      public BarcodeReader()
-      {
-         wrappedReader = new ZXing.BarcodeReader();
-      }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+        /// </summary>
+        public BarcodeReader()
+        {
+            wrappedReader = new ZXing.BarcodeReader();
+        }
 
-      public DecodingOptions Options
-      {
-         get { return new DecodingOptions(wrappedReader.Options); }
-         set { wrappedReader.Options = value.wrappedDecodingOptions; }
-      }
+        public DecodingOptions Options
+        {
+            get { return new DecodingOptions(wrappedReader.Options); }
+            set { wrappedReader.Options = value.wrappedDecodingOptions; }
+        }
 
-      public Result DecodeImageBytes([In, MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UI1)]ref byte[] rawRGB,
-         [In] int width,
-         [In] int height,
-         [In] BitmapFormat format)
-      {
-         return new Result(wrappedReader.Decode(rawRGB, width, height, format.ToZXing()));
-      }
+        public Result DecodeImageBytes([In, MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UI1)]ref byte[] rawRGB,
+           [In] int width,
+           [In] int height,
+           [In] BitmapFormat format)
+        {
+            return new Result(wrappedReader.Decode(rawRGB, width, height, format.ToZXing()));
+        }
 
-      public Result DecodeImageFile(String barcodeBitmapFilePath)
-      {
-         try
-         {
-            using (var bitmap = (Bitmap) Bitmap.FromFile(barcodeBitmapFilePath))
+        public Result DecodeImageFile(String barcodeBitmapFilePath)
+        {
+            try
             {
-               return new Result(wrappedReader.Decode(bitmap));
+                using (var bitmap = (Bitmap)Bitmap.FromFile(barcodeBitmapFilePath))
+                {
+                    return new Result(wrappedReader.Decode(bitmap));
+                }
             }
-         }
-         catch (Exception)
-         {
-            return null;
-         }
-      }
-   }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+    }
 }

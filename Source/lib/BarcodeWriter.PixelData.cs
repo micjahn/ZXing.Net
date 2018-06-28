@@ -18,17 +18,17 @@ using ZXing.Rendering;
 
 namespace ZXing
 {
-   /// <summary>
-   /// A smart class to encode some content to raw pixel data
-   /// </summary>
-   public class BarcodeWriterPixelData : BarcodeWriter<PixelData>, IBarcodeWriterPixelData
-   {
-      /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeWriterPixelData"/> class.
-      /// </summary>
-      public BarcodeWriterPixelData()
-      {
-         Renderer = new PixelDataRenderer();
-      }
-   }
+    /// <summary>
+    /// A smart class to encode some content to raw pixel data
+    /// </summary>
+    public class BarcodeWriterPixelData : BarcodeWriter<PixelData>, IBarcodeWriterPixelData
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BarcodeWriterPixelData"/> class.
+        /// </summary>
+        public BarcodeWriterPixelData()
+        {
+            Renderer = new PixelDataRenderer();
+        }
+    }
 }

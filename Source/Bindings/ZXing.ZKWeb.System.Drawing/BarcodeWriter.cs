@@ -16,17 +16,17 @@
 
 namespace ZXing.ZKWeb
 {
-   /// <summary>
-   /// A smart class to encode some content to a barcode image
-   /// </summary>
-   public class BarcodeWriter : BarcodeWriter<System.DrawingCore.Bitmap>
-   {
-      /// <summary>
-      /// 
-      /// </summary>
-      public BarcodeWriter()
-      {
-         Renderer = new ZXing.ZKWeb.Rendering.BitmapRenderer();
-      }
-   }
+    /// <summary>
+    /// A smart class to encode some content to a barcode image
+    /// </summary>
+    public class BarcodeWriter : BarcodeWriter<System.DrawingCore.Bitmap>
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public BarcodeWriter()
+        {
+            Renderer = new ZXing.ZKWeb.Rendering.BitmapRenderer();
+        }
+    }
 }

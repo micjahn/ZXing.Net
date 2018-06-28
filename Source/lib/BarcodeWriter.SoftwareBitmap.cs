@@ -18,18 +18,18 @@ using ZXing.Rendering;
 
 namespace ZXing
 {
-   /// <summary>
-   /// A smart class to encode some content to a barcode image
-   /// </summary>
-   [System.CLSCompliant(false)]
-   public class BarcodeWriterSoftwareBitmap : BarcodeWriter<Windows.Graphics.Imaging.SoftwareBitmap>, IBarcodeWriterSoftwareBitmap
-   {
-      /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeWriterSoftwareBitmap"/> class.
-      /// </summary>
-      public BarcodeWriterSoftwareBitmap()
-      {
-         Renderer = new SoftwareBitmapRenderer();
-      }
-   }
+    /// <summary>
+    /// A smart class to encode some content to a barcode image
+    /// </summary>
+    [System.CLSCompliant(false)]
+    public class BarcodeWriterSoftwareBitmap : BarcodeWriter<Windows.Graphics.Imaging.SoftwareBitmap>, IBarcodeWriterSoftwareBitmap
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BarcodeWriterSoftwareBitmap"/> class.
+        /// </summary>
+        public BarcodeWriterSoftwareBitmap()
+        {
+            Renderer = new SoftwareBitmapRenderer();
+        }
+    }
 }

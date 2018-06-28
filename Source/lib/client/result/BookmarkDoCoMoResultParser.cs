@@ -18,31 +18,31 @@ using System;
 
 namespace ZXing.Client.Result
 {
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
-   sealed class BookmarkDoCoMoResultParser : AbstractDoCoMoResultParser
-   {
-      override public ParsedResult parse(ZXing.Result result)
-      {
-         String rawText = result.Text;
-         if (rawText == null || !rawText.StartsWith("MEBKM:"))
-         {
-            return null;
-         }
-         String title = matchSingleDoCoMoPrefixedField("TITLE:", rawText, true);
-         String[] rawUri = matchDoCoMoPrefixedField("URL:", rawText, true);
-         if (rawUri == null)
-         {
-            return null;
-         }
-         String uri = rawUri[0];
-         if (!URIResultParser.isBasicallyValidURI(uri))
-         {
-            return null;
-         }
-         return new URIParsedResult(uri, title);
-      }
-   }
+    /// <author>  Sean Owen
+    /// </author>
+    /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
+    /// </author>
+    sealed class BookmarkDoCoMoResultParser : AbstractDoCoMoResultParser
+    {
+        override public ParsedResult parse(ZXing.Result result)
+        {
+            String rawText = result.Text;
+            if (rawText == null || !rawText.StartsWith("MEBKM:"))
+            {
+                return null;
+            }
+            String title = matchSingleDoCoMoPrefixedField("TITLE:", rawText, true);
+            String[] rawUri = matchDoCoMoPrefixedField("URL:", rawText, true);
+            if (rawUri == null)
+            {
+                return null;
+            }
+            String uri = rawUri[0];
+            if (!URIResultParser.isBasicallyValidURI(uri))
+            {
+                return null;
+            }
+            return new URIParsedResult(uri, title);
+        }
+    }
 }

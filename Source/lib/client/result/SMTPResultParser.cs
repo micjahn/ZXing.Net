@@ -18,41 +18,41 @@ using System;
 
 namespace ZXing.Client.Result
 {
-   /// <summary>
-   /// <p>Parses an "smtp:" URI result, whose format is not standardized but appears to be like:
-   /// <code>smtp[:subject[:body]]}</code>.</p>
-   /// <p>See http://code.google.com/p/zxing/issues/detail?id=536</p>
-   /// </summary>
-   /// <author>Sean Owen</author>
-   public class SMTPResultParser : ResultParser
-   {
-      override public ParsedResult parse(ZXing.Result result)
-      {
-         String rawText = result.Text;
-         if (!(rawText.StartsWith("smtp:") || rawText.StartsWith("SMTP:")))
-         {
-            return null;
-         }
-         String emailAddress = rawText.Substring(5);
-         String subject = null;
-         String body = null;
-         int colon = emailAddress.IndexOf(':');
-         if (colon >= 0)
-         {
-            subject = emailAddress.Substring(colon + 1);
-            emailAddress = emailAddress.Substring(0, colon);
-            colon = subject.IndexOf(':');
+    /// <summary>
+    /// <p>Parses an "smtp:" URI result, whose format is not standardized but appears to be like:
+    /// <code>smtp[:subject[:body]]}</code>.</p>
+    /// <p>See http://code.google.com/p/zxing/issues/detail?id=536</p>
+    /// </summary>
+    /// <author>Sean Owen</author>
+    public class SMTPResultParser : ResultParser
+    {
+        override public ParsedResult parse(ZXing.Result result)
+        {
+            String rawText = result.Text;
+            if (!(rawText.StartsWith("smtp:") || rawText.StartsWith("SMTP:")))
+            {
+                return null;
+            }
+            String emailAddress = rawText.Substring(5);
+            String subject = null;
+            String body = null;
+            int colon = emailAddress.IndexOf(':');
             if (colon >= 0)
             {
-               body = subject.Substring(colon + 1);
-               subject = subject.Substring(0, colon);
+                subject = emailAddress.Substring(colon + 1);
+                emailAddress = emailAddress.Substring(0, colon);
+                colon = subject.IndexOf(':');
+                if (colon >= 0)
+                {
+                    body = subject.Substring(colon + 1);
+                    subject = subject.Substring(0, colon);
+                }
             }
-         }
-         return new EmailAddressParsedResult(new [] {emailAddress},
-                                             null,
-                                             null,
-                                             subject,
-                                             body);
-      }
-   }
+            return new EmailAddressParsedResult(new[] { emailAddress },
+                                                null,
+                                                null,
+                                                subject,
+                                                body);
+        }
+    }
 }

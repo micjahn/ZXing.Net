@@ -18,17 +18,17 @@ using Windows.Graphics.Imaging;
 
 namespace ZXing
 {
-   /// <summary>
-   /// Interface for a smart class to decode the barcode inside a bitmap object
-   /// </summary>
-   [System.CLSCompliant(false)]
-   public partial interface IBarcodeReader
-   {
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="barcodeBitmap">The barcode bitmap.</param>
-      /// <returns>the result data or null</returns>
-      Result Decode(SoftwareBitmap barcodeBitmap);
-   }
+    /// <summary>
+    /// Interface for a smart class to decode the barcode inside a bitmap object
+    /// </summary>
+    [System.CLSCompliant(false)]
+    public partial interface IBarcodeReader
+    {
+        /// <summary>
+        /// Decodes the specified barcode bitmap.
+        /// </summary>
+        /// <param name="barcodeBitmap">The barcode bitmap.</param>
+        /// <returns>the result data or null</returns>
+        Result Decode(SoftwareBitmap barcodeBitmap);
+    }
 }

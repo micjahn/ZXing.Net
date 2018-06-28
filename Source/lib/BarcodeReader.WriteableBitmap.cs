@@ -23,57 +23,57 @@ using System.Windows.Media.Imaging;
 
 namespace ZXing
 {
-   /// <summary>
-   /// A smart class to decode the barcode inside a bitmap object
-   /// </summary>
-   [System.CLSCompliant(false)]
-   public partial class BarcodeReader : BarcodeReader<WriteableBitmap>, IBarcodeReader
-   {
-      private static readonly Func<WriteableBitmap, LuminanceSource> defaultCreateLuminanceSource =
-         (bitmap) => new BitmapLuminanceSource(bitmap);
+    /// <summary>
+    /// A smart class to decode the barcode inside a bitmap object
+    /// </summary>
+    [System.CLSCompliant(false)]
+    public partial class BarcodeReader : BarcodeReader<WriteableBitmap>, IBarcodeReader
+    {
+        private static readonly Func<WriteableBitmap, LuminanceSource> defaultCreateLuminanceSource =
+           (bitmap) => new BitmapLuminanceSource(bitmap);
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
-      /// </summary>
-      public BarcodeReader()
-         : this(null, defaultCreateLuminanceSource, null)
-      {
-      }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+        /// </summary>
+        public BarcodeReader()
+           : this(null, defaultCreateLuminanceSource, null)
+        {
+        }
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
-      /// </summary>
-      /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
-      /// If null then MultiFormatReader is used</param>
-      /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
-      /// If null, an exception is thrown when Decode is called</param>
-      /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
-      /// If null then HybridBinarizer is used</param>
-      public BarcodeReader(Reader reader,
-         Func<WriteableBitmap, LuminanceSource> createLuminanceSource,
-         Func<LuminanceSource, Binarizer> createBinarizer
-      )
-         : base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer)
-      {
-      }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+        /// </summary>
+        /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
+        /// If null then MultiFormatReader is used</param>
+        /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
+        /// If null, an exception is thrown when Decode is called</param>
+        /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
+        /// If null then HybridBinarizer is used</param>
+        public BarcodeReader(Reader reader,
+           Func<WriteableBitmap, LuminanceSource> createLuminanceSource,
+           Func<LuminanceSource, Binarizer> createBinarizer
+        )
+           : base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer)
+        {
+        }
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
-      /// </summary>
-      /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
-      /// If null then MultiFormatReader is used</param>
-      /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
-      /// If null, an exception is thrown when Decode is called</param>
-      /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
-      /// If null then HybridBinarizer is used</param>
-      /// <param name="createRGBLuminanceSource">Sets the function to create a luminance source object for a rgb raw byte array.</param>
-      public BarcodeReader(Reader reader,
-         Func<WriteableBitmap, LuminanceSource> createLuminanceSource,
-         Func<LuminanceSource, Binarizer> createBinarizer,
-         Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource
-      )
-         : base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer, createRGBLuminanceSource)
-      {
-      }
-   }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+        /// </summary>
+        /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
+        /// If null then MultiFormatReader is used</param>
+        /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
+        /// If null, an exception is thrown when Decode is called</param>
+        /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
+        /// If null then HybridBinarizer is used</param>
+        /// <param name="createRGBLuminanceSource">Sets the function to create a luminance source object for a rgb raw byte array.</param>
+        public BarcodeReader(Reader reader,
+           Func<WriteableBitmap, LuminanceSource> createLuminanceSource,
+           Func<LuminanceSource, Binarizer> createBinarizer,
+           Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource
+        )
+           : base(reader, createLuminanceSource ?? defaultCreateLuminanceSource, createBinarizer, createRGBLuminanceSource)
+        {
+        }
+    }
 }

@@ -19,119 +19,119 @@ using UnityEngine;
 
 namespace ZXing
 {
-   /// <summary>
-   /// A smart class to decode the barcode inside a bitmap object
-   /// </summary>
-   [System.CLSCompliant(false)]
-   public class BarcodeReader : BarcodeReaderGeneric, IBarcodeReader
-   {
-      private static readonly Func<Color32[], int, int, LuminanceSource> defaultCreateLuminanceSource =
-         (rawColor32, width, height) => new Color32LuminanceSource(rawColor32, width, height);
+    /// <summary>
+    /// A smart class to decode the barcode inside a bitmap object
+    /// </summary>
+    [System.CLSCompliant(false)]
+    public class BarcodeReader : BarcodeReaderGeneric, IBarcodeReader
+    {
+        private static readonly Func<Color32[], int, int, LuminanceSource> defaultCreateLuminanceSource =
+           (rawColor32, width, height) => new Color32LuminanceSource(rawColor32, width, height);
 
-      private readonly Func<Color32[], int, int, LuminanceSource> createLuminanceSource;
+        private readonly Func<Color32[], int, int, LuminanceSource> createLuminanceSource;
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
-      /// </summary>
-      public BarcodeReader()
-         : this(new MultiFormatReader(), defaultCreateLuminanceSource, null)
-      {
-      }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+        /// </summary>
+        public BarcodeReader()
+           : this(new MultiFormatReader(), defaultCreateLuminanceSource, null)
+        {
+        }
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
-      /// </summary>
-      /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
-      /// If null then MultiFormatReader is used</param>
-      /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
-      /// If null, an exception is thrown when Decode is called</param>
-      /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
-      /// If null then HybridBinarizer is used</param>
-      public BarcodeReader(Reader reader,
-         Func<Color32[], int, int, LuminanceSource> createLuminanceSource,
-         Func<LuminanceSource, Binarizer> createBinarizer
-      )
-         : this(reader, createLuminanceSource, createBinarizer, null)
-      {
-      }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+        /// </summary>
+        /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
+        /// If null then MultiFormatReader is used</param>
+        /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
+        /// If null, an exception is thrown when Decode is called</param>
+        /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
+        /// If null then HybridBinarizer is used</param>
+        public BarcodeReader(Reader reader,
+           Func<Color32[], int, int, LuminanceSource> createLuminanceSource,
+           Func<LuminanceSource, Binarizer> createBinarizer
+        )
+           : this(reader, createLuminanceSource, createBinarizer, null)
+        {
+        }
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
-      /// </summary>
-      /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
-      /// If null then MultiFormatReader is used</param>
-      /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
-      /// If null, an exception is thrown when Decode is called</param>
-      /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
-      /// If null then HybridBinarizer is used</param>
-      /// <param name="createRGBLuminanceSource">Sets the function to create a luminance source object for a rgb raw byte array.</param>
-      public BarcodeReader(Reader reader,
-         Func<Color32[], int, int, LuminanceSource> createLuminanceSource,
-         Func<LuminanceSource, Binarizer> createBinarizer,
-         Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource
-      )
-         : base(reader, createBinarizer, createRGBLuminanceSource)
-      {
-         this.createLuminanceSource = createLuminanceSource ?? defaultCreateLuminanceSource;
-      }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+        /// </summary>
+        /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
+        /// If null then MultiFormatReader is used</param>
+        /// <param name="createLuminanceSource">Sets the function to create a luminance source object for a bitmap.
+        /// If null, an exception is thrown when Decode is called</param>
+        /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
+        /// If null then HybridBinarizer is used</param>
+        /// <param name="createRGBLuminanceSource">Sets the function to create a luminance source object for a rgb raw byte array.</param>
+        public BarcodeReader(Reader reader,
+           Func<Color32[], int, int, LuminanceSource> createLuminanceSource,
+           Func<LuminanceSource, Binarizer> createBinarizer,
+           Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource
+        )
+           : base(reader, createBinarizer, createRGBLuminanceSource)
+        {
+            this.createLuminanceSource = createLuminanceSource ?? defaultCreateLuminanceSource;
+        }
 
-      /// <summary>
-      /// Optional: Gets or sets the function to create a luminance source object for a bitmap.
-      /// If null a platform specific default LuminanceSource is used
-      /// </summary>
-      /// <value>
-      /// The function to create a luminance source object.
-      /// </value>
-      protected Func<Color32[], int, int, LuminanceSource> CreateLuminanceSource
-      {
-         get
-         {
-            return createLuminanceSource;
-         }
-      }
+        /// <summary>
+        /// Optional: Gets or sets the function to create a luminance source object for a bitmap.
+        /// If null a platform specific default LuminanceSource is used
+        /// </summary>
+        /// <value>
+        /// The function to create a luminance source object.
+        /// </value>
+        protected Func<Color32[], int, int, LuminanceSource> CreateLuminanceSource
+        {
+            get
+            {
+                return createLuminanceSource;
+            }
+        }
 
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="rawColor32"></param>
-      /// <param name="width"></param>
-      /// <param name="height"></param>
-      /// <returns>the result data or null</returns>
-      public Result Decode(Color32[] rawColor32, int width, int height)
-      {
-         if (CreateLuminanceSource == null)
-         {
-            throw new InvalidOperationException("You have to declare a luminance source delegate.");
-         }
+        /// <summary>
+        /// Decodes the specified barcode bitmap.
+        /// </summary>
+        /// <param name="rawColor32"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns>the result data or null</returns>
+        public Result Decode(Color32[] rawColor32, int width, int height)
+        {
+            if (CreateLuminanceSource == null)
+            {
+                throw new InvalidOperationException("You have to declare a luminance source delegate.");
+            }
 
-         if (rawColor32 == null)
-            throw new ArgumentNullException("rawColor32");
+            if (rawColor32 == null)
+                throw new ArgumentNullException("rawColor32");
 
-         var luminanceSource = CreateLuminanceSource(rawColor32, width, height);
+            var luminanceSource = CreateLuminanceSource(rawColor32, width, height);
 
-         return Decode(luminanceSource);
-      }
+            return Decode(luminanceSource);
+        }
 
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="rawColor32"></param>
-      /// <param name="width"></param>
-      /// <param name="height"></param>
-      /// <returns>the result data or null</returns>
-      public Result[] DecodeMultiple(Color32[] rawColor32, int width, int height)
-      {
-         if (CreateLuminanceSource == null)
-         {
-            throw new InvalidOperationException("You have to declare a luminance source delegate.");
-         }
+        /// <summary>
+        /// Decodes the specified barcode bitmap.
+        /// </summary>
+        /// <param name="rawColor32"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns>the result data or null</returns>
+        public Result[] DecodeMultiple(Color32[] rawColor32, int width, int height)
+        {
+            if (CreateLuminanceSource == null)
+            {
+                throw new InvalidOperationException("You have to declare a luminance source delegate.");
+            }
 
-         if (rawColor32 == null)
-            throw new ArgumentNullException("rawColor32");
+            if (rawColor32 == null)
+                throw new ArgumentNullException("rawColor32");
 
-         var luminanceSource = CreateLuminanceSource(rawColor32, width, height);
+            var luminanceSource = CreateLuminanceSource(rawColor32, width, height);
 
-         return DecodeMultiple(luminanceSource);
-      }
-   }
+            return DecodeMultiple(luminanceSource);
+        }
+    }
 }

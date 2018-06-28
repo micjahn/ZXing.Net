@@ -18,39 +18,39 @@ using System.Runtime.InteropServices;
 
 namespace ZXing.Interop.Encoding
 {
-   [ComVisible(true)]
-   [Guid("91B0BED9-1238-4469-9C4F-6C06ECA006C6")]
-   public enum ImageFileFormat
-   {
-      Bmp,
-      Gif,
-      Jpeg,
-      Png,
-      Tiff,
-      Wmf
-   }
+    [ComVisible(true)]
+    [Guid("91B0BED9-1238-4469-9C4F-6C06ECA006C6")]
+    public enum ImageFileFormat
+    {
+        Bmp,
+        Gif,
+        Jpeg,
+        Png,
+        Tiff,
+        Wmf
+    }
 
-   internal static class ImageFileFormatExtensions
-   {
-      public static System.Drawing.Imaging.ImageFormat ToDrawingFormat(this ImageFileFormat format)
-      {
-         switch (format)
-         {
-            case ImageFileFormat.Bmp:
-               return System.Drawing.Imaging.ImageFormat.Bmp;
-            case ImageFileFormat.Gif:
-               return System.Drawing.Imaging.ImageFormat.Gif;
-            case ImageFileFormat.Jpeg:
-               return System.Drawing.Imaging.ImageFormat.Jpeg;
-            case ImageFileFormat.Png:
-               return System.Drawing.Imaging.ImageFormat.Png;
-            case ImageFileFormat.Tiff:
-               return System.Drawing.Imaging.ImageFormat.Tiff;
-            case ImageFileFormat.Wmf:
-               return System.Drawing.Imaging.ImageFormat.Wmf;
-            default:
-               return System.Drawing.Imaging.ImageFormat.Bmp;
-         }
-      }
-   }
+    internal static class ImageFileFormatExtensions
+    {
+        public static System.Drawing.Imaging.ImageFormat ToDrawingFormat(this ImageFileFormat format)
+        {
+            switch (format)
+            {
+                case ImageFileFormat.Bmp:
+                    return System.Drawing.Imaging.ImageFormat.Bmp;
+                case ImageFileFormat.Gif:
+                    return System.Drawing.Imaging.ImageFormat.Gif;
+                case ImageFileFormat.Jpeg:
+                    return System.Drawing.Imaging.ImageFormat.Jpeg;
+                case ImageFileFormat.Png:
+                    return System.Drawing.Imaging.ImageFormat.Png;
+                case ImageFileFormat.Tiff:
+                    return System.Drawing.Imaging.ImageFormat.Tiff;
+                case ImageFileFormat.Wmf:
+                    return System.Drawing.Imaging.ImageFormat.Wmf;
+                default:
+                    return System.Drawing.Imaging.ImageFormat.Bmp;
+            }
+        }
+    }
 }

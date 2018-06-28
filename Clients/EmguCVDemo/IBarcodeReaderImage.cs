@@ -20,10 +20,10 @@ using ZXing;
 
 namespace EmguCVDemo
 {
-   /// <summary>
-   /// The interface for a barcode reader which accepts an Image instance from EmguCV
-   /// </summary>
-   internal interface IBarcodeReaderImage : IBarcodeReader<Image<Emgu.CV.Structure.Bgr, byte>>
-   {
-   }
+    /// <summary>
+    /// The interface for a barcode reader which accepts an Image instance from EmguCV
+    /// </summary>
+    internal interface IBarcodeReaderImage : IBarcodeReader<Image<Emgu.CV.Structure.Bgr, byte>>
+    {
+    }
 }

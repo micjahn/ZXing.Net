@@ -16,29 +16,29 @@
 
 namespace ZXing.Rendering
 {
-   /// <summary>
-   /// represents the generated code as a byte array with pixel data (4 byte per pixel, BGRA)
-   /// </summary>
-   public sealed partial class PixelData
-   {
-      internal PixelData(int width, int height, byte[] pixels)
-      {
-         Height = height;
-         Width = width;
-         Pixels = pixels;
-      }
+    /// <summary>
+    /// represents the generated code as a byte array with pixel data (4 byte per pixel, BGRA)
+    /// </summary>
+    public sealed partial class PixelData
+    {
+        internal PixelData(int width, int height, byte[] pixels)
+        {
+            Height = height;
+            Width = width;
+            Pixels = pixels;
+        }
 
-      /// <summary>
-      /// the generated code as byte array of BGRA pixels
-      /// </summary>
-      public byte[] Pixels { get; private set; }
-      /// <summary>
-      /// the width of the image
-      /// </summary>
-      public int Width { get; private set; }
-      /// <summary>
-      /// the height of the image
-      /// </summary>
-      public int Height { get; private set; }
-   }
+        /// <summary>
+        /// the generated code as byte array of BGRA pixels
+        /// </summary>
+        public byte[] Pixels { get; private set; }
+        /// <summary>
+        /// the width of the image
+        /// </summary>
+        public int Width { get; private set; }
+        /// <summary>
+        /// the height of the image
+        /// </summary>
+        public int Height { get; private set; }
+    }
 }

@@ -18,43 +18,43 @@ using System;
 
 namespace ZXing
 {
-   /// <summary>
-   /// Thrown when a barcode was successfully detected, but some aspect of
-   /// the content did not conform to the barcode's format rules. This could have
-   /// been due to a mis-detection.
-   /// <author>Sean Owen</author>
-   /// </summary>
-   [Serializable]
-   public sealed class FormatException : ReaderException
-   {
-      /// <summary>
-      /// 
-      /// </summary>
-      public FormatException()
-      {
-      }
+    /// <summary>
+    /// Thrown when a barcode was successfully detected, but some aspect of
+    /// the content did not conform to the barcode's format rules. This could have
+    /// been due to a mis-detection.
+    /// <author>Sean Owen</author>
+    /// </summary>
+    [Serializable]
+    public sealed class FormatException : ReaderException
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public FormatException()
+        {
+        }
 
-      /// <summary>
-      /// 
-      /// </summary>
-      public FormatException(String message)
-         : base(message)
-      {
-      }
+        /// <summary>
+        /// 
+        /// </summary>
+        public FormatException(String message)
+           : base(message)
+        {
+        }
 
-      /// <summary>
-      /// 
-      /// </summary>
-      public FormatException(Exception innerException)
-         : base(innerException)
-      {
-      }
-      /// <summary>
-      /// 
-      /// </summary>
-      public FormatException(String message, Exception innerException)
-         : base(message, innerException)
-      {
-      }
-   }
+        /// <summary>
+        /// 
+        /// </summary>
+        public FormatException(Exception innerException)
+           : base(innerException)
+        {
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public FormatException(String message, Exception innerException)
+           : base(message, innerException)
+        {
+        }
+    }
 }

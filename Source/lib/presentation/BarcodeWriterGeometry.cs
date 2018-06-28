@@ -20,18 +20,18 @@ using ZXing.Rendering;
 
 namespace ZXing.Presentation
 {
-   /// <summary>
-   /// A smart class to encode some content to a barcode image into a geometry
-   /// Autor: Rob Fonseca-Ensor
-   /// </summary>
-   public class BarcodeWriterGeometry : BarcodeWriter<Geometry>
-   {
-      /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeWriterGeometry"/> class.
-      /// </summary>
-      public BarcodeWriterGeometry()
-      {
-         Renderer = new GeometryRenderer();
-      }
-   }
+    /// <summary>
+    /// A smart class to encode some content to a barcode image into a geometry
+    /// Autor: Rob Fonseca-Ensor
+    /// </summary>
+    public class BarcodeWriterGeometry : BarcodeWriter<Geometry>
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BarcodeWriterGeometry"/> class.
+        /// </summary>
+        public BarcodeWriterGeometry()
+        {
+            Renderer = new GeometryRenderer();
+        }
+    }
 }

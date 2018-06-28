@@ -18,70 +18,70 @@ using UnityEngine;
 
 namespace ZXing
 {
-   /// <summary>
-   /// Calculates the luminance values based upon the Color32 structure
-   /// </summary>
-   public class Color32LuminanceSource : BaseLuminanceSource
-   {
-      /// <summary>
-      /// Initializes a new instance of the <see cref="Color32LuminanceSource"/> class.
-      /// </summary>
-      /// <param name="width">The width.</param>
-      /// <param name="height">The height.</param>
-      public Color32LuminanceSource(int width, int height)
-         : base(width, height)
-      {
-      }
+    /// <summary>
+    /// Calculates the luminance values based upon the Color32 structure
+    /// </summary>
+    public class Color32LuminanceSource : BaseLuminanceSource
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Color32LuminanceSource"/> class.
+        /// </summary>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        public Color32LuminanceSource(int width, int height)
+           : base(width, height)
+        {
+        }
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="Color32LuminanceSource"/> class.
-      /// </summary>
-      /// <param name="color32s">The color32s.</param>
-      /// <param name="width">The width.</param>
-      /// <param name="height">The height.</param>
-      [System.CLSCompliant(false)]
-      public Color32LuminanceSource(Color32[] color32s, int width, int height)
-         : base(width, height)
-      {
-         SetPixels(color32s);
-      }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Color32LuminanceSource"/> class.
+        /// </summary>
+        /// <param name="color32s">The color32s.</param>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        [System.CLSCompliant(false)]
+        public Color32LuminanceSource(Color32[] color32s, int width, int height)
+           : base(width, height)
+        {
+            SetPixels(color32s);
+        }
 
-      /// <summary>
-      /// Sets the pixels.
-      /// </summary>
-      /// <param name="color32s">The color32s.</param>
-      [System.CLSCompliant(false)]
-      public void SetPixels(Color32[] color32s)
-      {
-         var z = 0;
+        /// <summary>
+        /// Sets the pixels.
+        /// </summary>
+        /// <param name="color32s">The color32s.</param>
+        [System.CLSCompliant(false)]
+        public void SetPixels(Color32[] color32s)
+        {
+            var z = 0;
 
-         for (var y = Height - 1; y >= 0; y--)
-         {
-            // This is flipped vertically because the Color32 array from Unity is reversed vertically,
-            // it means that the top most row of the image would be the bottom most in the array.
-            for (var x = 0; x < Width; x++)
+            for (var y = Height - 1; y >= 0; y--)
             {
-               var color32 = color32s[y*Width + x];
-               // Calculate luminance cheaply, favoring green.
-               luminances[z++] = (byte)((
-                  color32.r +
-                  color32.g + color32.g +
-                  color32.b) >> 2);
+                // This is flipped vertically because the Color32 array from Unity is reversed vertically,
+                // it means that the top most row of the image would be the bottom most in the array.
+                for (var x = 0; x < Width; x++)
+                {
+                    var color32 = color32s[y * Width + x];
+                    // Calculate luminance cheaply, favoring green.
+                    luminances[z++] = (byte)((
+                       color32.r +
+                       color32.g + color32.g +
+                       color32.b) >> 2);
+                }
             }
-         }
-      }
+        }
 
-      /// <summary>
-      /// Should create a new luminance source with the right class type.
-      /// The method is used in methods crop and rotate.
-      /// </summary>
-      /// <param name="newLuminances">The new luminances.</param>
-      /// <param name="width">The width.</param>
-      /// <param name="height">The height.</param>
-      /// <returns></returns>
-      protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
-      {
-         return new Color32LuminanceSource(width, height) { luminances = newLuminances };
-      }
-   }
+        /// <summary>
+        /// Should create a new luminance source with the right class type.
+        /// The method is used in methods crop and rotate.
+        /// </summary>
+        /// <param name="newLuminances">The new luminances.</param>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        /// <returns></returns>
+        protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
+        {
+            return new Color32LuminanceSource(width, height) { luminances = newLuminances };
+        }
+    }
 }

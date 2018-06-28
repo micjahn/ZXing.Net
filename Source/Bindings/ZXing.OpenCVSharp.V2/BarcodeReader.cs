@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
- using System;
+using System;
 
 namespace ZXing.OpenCV
 {
-   /// <summary>
-   /// a barcode reader class which can be used with the Mat type from OpenCVSharp
-   /// </summary>
-   public class BarcodeReader :  BarcodeReader<OpenCvSharp.CPlusPlus.Mat>
-   {
-      /// <summary>
-      /// define a custom function for creation of a luminance source with our specialized Mat-supporting class
-      /// </summary>
-      private static readonly Func<OpenCvSharp.CPlusPlus.Mat, LuminanceSource> defaultCreateLuminanceSource =
-         (image) => new MatLuminanceSource(image);
+    /// <summary>
+    /// a barcode reader class which can be used with the Mat type from OpenCVSharp
+    /// </summary>
+    public class BarcodeReader : BarcodeReader<OpenCvSharp.CPlusPlus.Mat>
+    {
+        /// <summary>
+        /// define a custom function for creation of a luminance source with our specialized Mat-supporting class
+        /// </summary>
+        private static readonly Func<OpenCvSharp.CPlusPlus.Mat, LuminanceSource> defaultCreateLuminanceSource =
+           (image) => new MatLuminanceSource(image);
 
-      /// <summary>
-      /// constructor which uses a custom luminance source with Mat support
-      /// </summary>
-      public BarcodeReader()
-         : base(null, defaultCreateLuminanceSource, null)
-      {
-      }
-   }
+        /// <summary>
+        /// constructor which uses a custom luminance source with Mat support
+        /// </summary>
+        public BarcodeReader()
+           : base(null, defaultCreateLuminanceSource, null)
+        {
+        }
+    }
 }

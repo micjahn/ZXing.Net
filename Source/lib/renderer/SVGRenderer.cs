@@ -34,83 +34,83 @@ using ZXing.OneD;
 
 namespace ZXing.Rendering
 {
-   /// <summary>
-   /// Renders a barcode into a Svg image
-   /// </summary>
-   public class SvgRenderer : IBarcodeRenderer<SvgRenderer.SvgImage>
-   {
-      public const string DefaultFontName = "Arial";
-      public const int DefaultFontSize = 10;
+    /// <summary>
+    /// Renders a barcode into a Svg image
+    /// </summary>
+    public class SvgRenderer : IBarcodeRenderer<SvgRenderer.SvgImage>
+    {
+        public const string DefaultFontName = "Arial";
+        public const int DefaultFontSize = 10;
 
 #if !UNITY
 #if (PORTABLE || NETSTANDARD)
-      /// <summary>
-      /// represents a color value
-      /// </summary>
-      public struct Color
-      {
-         /// <summary>
-         /// color black
-         /// </summary>
-         public static Color Black = new Color(255, 0, 0, 0);
-         /// <summary>
-         /// color white
-         /// </summary>
-         public static Color White = new Color(255, 255, 255, 255);
+        /// <summary>
+        /// represents a color value
+        /// </summary>
+        public struct Color
+        {
+            /// <summary>
+            /// color black
+            /// </summary>
+            public static Color Black = new Color(255, 0, 0, 0);
+            /// <summary>
+            /// color white
+            /// </summary>
+            public static Color White = new Color(255, 255, 255, 255);
 
-         /// <summary>
-         /// alpha channel
-         /// </summary>
-         public byte A;
-         /// <summary>
-         /// red channel
-         /// </summary>
-         public byte R;
-         /// <summary>
-         /// green channel
-         /// </summary>
-         public byte G;
-         /// <summary>
-         /// blur channel
-         /// </summary>
-         public byte B;
+            /// <summary>
+            /// alpha channel
+            /// </summary>
+            public byte A;
+            /// <summary>
+            /// red channel
+            /// </summary>
+            public byte R;
+            /// <summary>
+            /// green channel
+            /// </summary>
+            public byte G;
+            /// <summary>
+            /// blur channel
+            /// </summary>
+            public byte B;
 
-         /// <summary>
-         /// initializing constructor
-         /// </summary>
-         public Color(int color)
-         {
-            A = (byte)((color & 0xFF000000) >> 24);
-            R = (byte)((color & 0x00FF0000) >> 16);
-            G = (byte)((color & 0x0000FF00) >> 8);
-            B = (byte)((color & 0x000000FF));
-         }
+            /// <summary>
+            /// initializing constructor
+            /// </summary>
+            public Color(int color)
+            {
+                A = (byte)((color & 0xFF000000) >> 24);
+                R = (byte)((color & 0x00FF0000) >> 16);
+                G = (byte)((color & 0x0000FF00) >> 8);
+                B = (byte)((color & 0x000000FF));
+            }
 
-         /// <summary>
-         /// initializing constructor
-         /// </summary>
-         public Color(byte alpha, byte red, byte green, byte blue)
-         {
-            A = alpha;
-            R = red;
-            G = green;
-            B = blue;
-         }
-      }
+            /// <summary>
+            /// initializing constructor
+            /// </summary>
+            public Color(byte alpha, byte red, byte green, byte blue)
+            {
+                A = alpha;
+                R = red;
+                G = green;
+                B = blue;
+            }
+        }
 #endif
-      /// <summary>
-      /// Gets or sets the foreground color.
-      /// </summary>
-      /// <value>The foreground color.</value>
-      [CLSCompliant(false)]
-      public Color Foreground { get; set; }
+        /// <summary>
+        /// Gets or sets the foreground color.
+        /// </summary>
+        /// <value>The foreground color.</value>
+        [CLSCompliant(false)]
+        public Color Foreground { get; set; }
 
-      /// <summary>
-      /// Gets or sets the background color.
-      /// </summary>
-      /// <value>The background color.</value>
-      [CLSCompliant(false)]
-      public Color Background { get; set; }
+        /// <summary>
+        /// Gets or sets the background color.
+        /// </summary>
+        /// <value>The background color.</value>
+        [CLSCompliant(false)]
+        public Color Background { get; set; }
 #else
       /// <summary>
       /// Gets or sets the foreground color.
@@ -127,23 +127,23 @@ namespace ZXing.Rendering
       public Color32 Background { get; set; }
 #endif
 
-      /// <summary>
-      /// Gets or sets the font family name
-      /// </summary>
-      /// <value>The font family name.</value>
-      public string FontName { get; set; }
+        /// <summary>
+        /// Gets or sets the font family name
+        /// </summary>
+        /// <value>The font family name.</value>
+        public string FontName { get; set; }
 
-      /// <summary>
-      /// Gets or sets the font size in pixel
-      /// </summary>
-      /// <value>The font size in pixel.</value>
-      public int FontSize { get; set; }
+        /// <summary>
+        /// Gets or sets the font size in pixel
+        /// </summary>
+        /// <value>The font size in pixel.</value>
+        public int FontSize { get; set; }
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="SvgRenderer"/> class.
-      /// </summary>
-      public SvgRenderer()
-      {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SvgRenderer"/> class.
+        /// </summary>
+        public SvgRenderer()
+        {
 #if NETFX_CORE || SILVERLIGHT
          Foreground = Colors.Black;
          Background = Colors.White;
@@ -151,312 +151,312 @@ namespace ZXing.Rendering
          Foreground = new Color32(0, 0, 0, 255);
          Background = new Color32(255, 255, 255, 255);
 #else
-         Foreground = Color.Black;
-         Background = Color.White;
+            Foreground = Color.Black;
+            Background = Color.White;
 #endif
-      }
+        }
 
-      /// <summary>
-      /// Renders the specified matrix.
-      /// </summary>
-      /// <param name="matrix">The matrix.</param>
-      /// <param name="format">The format.</param>
-      /// <param name="content">The content.</param>
-      /// <returns></returns>
-      public SvgImage Render(BitMatrix matrix, BarcodeFormat format, string content)
-      {
-         return Render(matrix, format, content, null);
-      }
+        /// <summary>
+        /// Renders the specified matrix.
+        /// </summary>
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="format">The format.</param>
+        /// <param name="content">The content.</param>
+        /// <returns></returns>
+        public SvgImage Render(BitMatrix matrix, BarcodeFormat format, string content)
+        {
+            return Render(matrix, format, content, null);
+        }
 
-      /// <summary>
-      /// Renders the specified matrix.
-      /// </summary>
-      /// <param name="matrix">The matrix.</param>
-      /// <param name="format">The format.</param>
-      /// <param name="content">The content.</param>
-      /// <param name="options">The options.</param>
-      /// <returns></returns>
-      public SvgImage Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
-      {
-         var result = new SvgImage(matrix.Width, matrix.Height);
+        /// <summary>
+        /// Renders the specified matrix.
+        /// </summary>
+        /// <param name="matrix">The matrix.</param>
+        /// <param name="format">The format.</param>
+        /// <param name="content">The content.</param>
+        /// <param name="options">The options.</param>
+        /// <returns></returns>
+        public SvgImage Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+        {
+            var result = new SvgImage(matrix.Width, matrix.Height);
 
-         Create(result, matrix, format, content, options);
+            Create(result, matrix, format, content, options);
 
-         return result;
-      }
+            return result;
+        }
 
-      private void Create(SvgImage image, BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
-      {
-         if (matrix == null)
-            return;
+        private void Create(SvgImage image, BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+        {
+            if (matrix == null)
+                return;
 
-         const int spaceBetweenMatrixAndText = 3;
-         int width = matrix.Width;
-         int height = matrix.Height;
-         var outputContent = (options == null || !options.PureBarcode) &&
-                    !String.IsNullOrEmpty(content) &&
-                    (format == BarcodeFormat.CODE_39 ||
-                     format == BarcodeFormat.CODE_93 ||
-                     format == BarcodeFormat.CODE_128 ||
-                     format == BarcodeFormat.EAN_13 ||
-                     format == BarcodeFormat.EAN_8 ||
-                     format == BarcodeFormat.CODABAR ||
-                     format == BarcodeFormat.ITF ||
-                     format == BarcodeFormat.UPC_A ||
-                     format == BarcodeFormat.UPC_E ||
-                     format == BarcodeFormat.MSI ||
-                     format == BarcodeFormat.PLESSEY);
+            const int spaceBetweenMatrixAndText = 3;
+            int width = matrix.Width;
+            int height = matrix.Height;
+            var outputContent = (options == null || !options.PureBarcode) &&
+                       !String.IsNullOrEmpty(content) &&
+                       (format == BarcodeFormat.CODE_39 ||
+                        format == BarcodeFormat.CODE_93 ||
+                        format == BarcodeFormat.CODE_128 ||
+                        format == BarcodeFormat.EAN_13 ||
+                        format == BarcodeFormat.EAN_8 ||
+                        format == BarcodeFormat.CODABAR ||
+                        format == BarcodeFormat.ITF ||
+                        format == BarcodeFormat.UPC_A ||
+                        format == BarcodeFormat.UPC_E ||
+                        format == BarcodeFormat.MSI ||
+                        format == BarcodeFormat.PLESSEY);
 
-         if (outputContent)
-         {
-            var fontSize = FontSize < 1 ? DefaultFontSize : FontSize;
-            height += fontSize + spaceBetweenMatrixAndText;
-         }
-
-         image.AddHeader();
-         image.AddTag(0, 0, width, height, Background, Foreground);
-         AppendDarkCell(image, matrix, 0, 0);
-
-         if (outputContent)
-         {
-            var fontName = String.IsNullOrEmpty(FontName) ? DefaultFontName : FontName;
-            var fontSize = FontSize < 1 ? DefaultFontSize : FontSize;
-
-            content = ModifyContentDependingOnBarcodeFormat(format, content);
-
-            image.AddText(content, fontName, fontSize);
-         }
-
-         image.AddEnd();
-      }
-
-      private string ModifyContentDependingOnBarcodeFormat(BarcodeFormat format, string content)
-      {
-         switch (format)
-         {
-            case BarcodeFormat.EAN_8:
-               if (content.Length < 8)
-                  content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-               content = content.Insert(4, "   ");
-               break;
-            case BarcodeFormat.EAN_13:
-               if (content.Length < 13)
-                  content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-               content = content.Insert(7, "   ");
-               content = content.Insert(1, "   ");
-               break;
-         }
-
-         return content;
-      }
-
-      private static void AppendDarkCell(SvgImage image, BitMatrix matrix, int offsetX, int offSetY)
-      {
-         if (matrix == null)
-            return;
-
-         int width = matrix.Width;
-         int height = matrix.Height;
-         var processed = new BitMatrix(width, height);
-         bool currentIsBlack = false;
-         int startPosX = 0;
-         int startPosY = 0;
-         for (int x = 0; x < width; x++)
-         {
-            int endPosX;
-            for (int y = 0; y < height; y++)
+            if (outputContent)
             {
-               if (processed[x, y])
-                  continue;
-
-               processed[x, y] = true;
-
-               if (matrix[x, y])
-               {
-                  if (!currentIsBlack)
-                  {
-                     startPosX = x;
-                     startPosY = y;
-                     currentIsBlack = true;
-                  }
-               }
-               else
-               {
-                  if (currentIsBlack)
-                  {
-                     FindMaximumRectangle(matrix, processed, startPosX, startPosY, y, out endPosX);
-                     image.AddRec(startPosX + offsetX, startPosY + offSetY, endPosX - startPosX + 1, y - startPosY);
-                     currentIsBlack = false;
-                  }
-               }
+                var fontSize = FontSize < 1 ? DefaultFontSize : FontSize;
+                height += fontSize + spaceBetweenMatrixAndText;
             }
-            if (currentIsBlack)
+
+            image.AddHeader();
+            image.AddTag(0, 0, width, height, Background, Foreground);
+            AppendDarkCell(image, matrix, 0, 0);
+
+            if (outputContent)
             {
-               FindMaximumRectangle(matrix, processed, startPosX, startPosY, height, out endPosX);
-               image.AddRec(startPosX + offsetX, startPosY + offSetY, endPosX - startPosX + 1, height - startPosY);
-               currentIsBlack = false;
+                var fontName = String.IsNullOrEmpty(FontName) ? DefaultFontName : FontName;
+                var fontSize = FontSize < 1 ? DefaultFontSize : FontSize;
+
+                content = ModifyContentDependingOnBarcodeFormat(format, content);
+
+                image.AddText(content, fontName, fontSize);
             }
-         }
-      }
 
-      private static void FindMaximumRectangle(BitMatrix matrix, BitMatrix processed, int startPosX, int startPosY, int endPosY, out int endPosX)
-      {
-         endPosX = startPosX;
+            image.AddEnd();
+        }
 
-         for (int x = startPosX + 1; x < matrix.Width; x++)
-         {
-            for (int y = startPosY; y < endPosY; y++)
+        private string ModifyContentDependingOnBarcodeFormat(BarcodeFormat format, string content)
+        {
+            switch (format)
             {
-               if (!matrix[x, y])
-               {
-                  return;
-               }
+                case BarcodeFormat.EAN_8:
+                    if (content.Length < 8)
+                        content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+                    content = content.Insert(4, "   ");
+                    break;
+                case BarcodeFormat.EAN_13:
+                    if (content.Length < 13)
+                        content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+                    content = content.Insert(7, "   ");
+                    content = content.Insert(1, "   ");
+                    break;
             }
-            endPosX = x;
-            for (int y = startPosY; y < endPosY; y++)
+
+            return content;
+        }
+
+        private static void AppendDarkCell(SvgImage image, BitMatrix matrix, int offsetX, int offSetY)
+        {
+            if (matrix == null)
+                return;
+
+            int width = matrix.Width;
+            int height = matrix.Height;
+            var processed = new BitMatrix(width, height);
+            bool currentIsBlack = false;
+            int startPosX = 0;
+            int startPosY = 0;
+            for (int x = 0; x < width; x++)
             {
-               processed[x, y] = true;
+                int endPosX;
+                for (int y = 0; y < height; y++)
+                {
+                    if (processed[x, y])
+                        continue;
+
+                    processed[x, y] = true;
+
+                    if (matrix[x, y])
+                    {
+                        if (!currentIsBlack)
+                        {
+                            startPosX = x;
+                            startPosY = y;
+                            currentIsBlack = true;
+                        }
+                    }
+                    else
+                    {
+                        if (currentIsBlack)
+                        {
+                            FindMaximumRectangle(matrix, processed, startPosX, startPosY, y, out endPosX);
+                            image.AddRec(startPosX + offsetX, startPosY + offSetY, endPosX - startPosX + 1, y - startPosY);
+                            currentIsBlack = false;
+                        }
+                    }
+                }
+                if (currentIsBlack)
+                {
+                    FindMaximumRectangle(matrix, processed, startPosX, startPosY, height, out endPosX);
+                    image.AddRec(startPosX + offsetX, startPosY + offSetY, endPosX - startPosX + 1, height - startPosY);
+                    currentIsBlack = false;
+                }
             }
-         }
-      }
+        }
 
-      /// <summary>
-      /// Represents a barcode as a Svg image
-      /// </summary>
-      public class SvgImage
-      {
-         private readonly StringBuilder content;
+        private static void FindMaximumRectangle(BitMatrix matrix, BitMatrix processed, int startPosX, int startPosY, int endPosY, out int endPosX)
+        {
+            endPosX = startPosX;
 
-         /// <summary>
-         /// Gets or sets the content.
-         /// </summary>
-         /// <value>
-         /// The content.
-         /// </value>
-         public String Content
-         {
-            get { return content.ToString(); }
-            set { content.Length = 0; if (value != null) content.Append(value); }
-         }
+            for (int x = startPosX + 1; x < matrix.Width; x++)
+            {
+                for (int y = startPosY; y < endPosY; y++)
+                {
+                    if (!matrix[x, y])
+                    {
+                        return;
+                    }
+                }
+                endPosX = x;
+                for (int y = startPosY; y < endPosY; y++)
+                {
+                    processed[x, y] = true;
+                }
+            }
+        }
 
-         /// <summary>
-         /// The original height of the bitmatrix for the barcode
-         /// </summary>
-         public int Height { get; set; }
+        /// <summary>
+        /// Represents a barcode as a Svg image
+        /// </summary>
+        public class SvgImage
+        {
+            private readonly StringBuilder content;
 
-         /// <summary>
-         /// The original width of the bitmatrix for the barcode
-         /// </summary>
-         public int Width { get; set; }
+            /// <summary>
+            /// Gets or sets the content.
+            /// </summary>
+            /// <value>
+            /// The content.
+            /// </value>
+            public String Content
+            {
+                get { return content.ToString(); }
+                set { content.Length = 0; if (value != null) content.Append(value); }
+            }
 
-         /// <summary>
-         /// Initializes a new instance of the <see cref="SvgImage"/> class.
-         /// </summary>
-         public SvgImage()
-         {
-            content = new StringBuilder();
-         }
+            /// <summary>
+            /// The original height of the bitmatrix for the barcode
+            /// </summary>
+            public int Height { get; set; }
 
-         /// <summary>
-         /// Initializes a new instance of the <see cref="SvgImage"/> class.
-         /// </summary>
-         public SvgImage(int width, int height)
-         {
-            content = new StringBuilder();
-            Width = width;
-            Height = height;
-         }
+            /// <summary>
+            /// The original width of the bitmatrix for the barcode
+            /// </summary>
+            public int Width { get; set; }
 
-         /// <summary>
-         /// Initializes a new instance of the <see cref="SvgImage"/> class.
-         /// </summary>
-         /// <param name="content">The content.</param>
-         public SvgImage(string content)
-         {
-            this.content = new StringBuilder(content);
-         }
+            /// <summary>
+            /// Initializes a new instance of the <see cref="SvgImage"/> class.
+            /// </summary>
+            public SvgImage()
+            {
+                content = new StringBuilder();
+            }
 
-         /// <summary>
-         /// Gives the XML representation of the SVG image
-         /// </summary>
-         public override string ToString()
-         {
-            return content.ToString();
-         }
+            /// <summary>
+            /// Initializes a new instance of the <see cref="SvgImage"/> class.
+            /// </summary>
+            public SvgImage(int width, int height)
+            {
+                content = new StringBuilder();
+                Width = width;
+                Height = height;
+            }
 
-         internal void AddHeader()
-         {
-            content.Append("<?xml version=\"1.0\" standalone=\"no\"?>");
-            content.Append(@"<!-- Created with ZXing.Net (http://zxingnet.codeplex.com/) -->");
-            content.Append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">");
-         }
+            /// <summary>
+            /// Initializes a new instance of the <see cref="SvgImage"/> class.
+            /// </summary>
+            /// <param name="content">The content.</param>
+            public SvgImage(string content)
+            {
+                this.content = new StringBuilder(content);
+            }
 
-         internal void AddEnd()
-         {
-            content.Append("</svg>");
-         }
+            /// <summary>
+            /// Gives the XML representation of the SVG image
+            /// </summary>
+            public override string ToString()
+            {
+                return content.ToString();
+            }
 
-         internal void AddTag(int displaysizeX, int displaysizeY, int viewboxSizeX, int viewboxSizeY, Color background, Color fill)
-         {
+            internal void AddHeader()
+            {
+                content.Append("<?xml version=\"1.0\" standalone=\"no\"?>");
+                content.Append(@"<!-- Created with ZXing.Net (http://zxingnet.codeplex.com/) -->");
+                content.Append("<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">");
+            }
 
-            if (displaysizeX <= 0 || displaysizeY <= 0)
-               content.Append(string.Format("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.2\" baseProfile=\"tiny\" shape-rendering=\"crispEdges\" viewBox=\"0 0 {0} {1}\" viewport-fill=\"rgb({2})\" viewport-fill-opacity=\"{3}\" fill=\"rgb({4})\" fill-opacity=\"{5}\" {6}>",
-                   viewboxSizeX,
-                   viewboxSizeY,
-                   GetColorRgb(background),
-                   ConvertAlpha(background),
-                   GetColorRgb(fill),
-                   ConvertAlpha(fill),
-                   GetBackgroundStyle(background)
-                   ));
-            else
-               content.Append(string.Format("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.2\" baseProfile=\"tiny\" shape-rendering=\"crispEdges\" viewBox=\"0 0 {0} {1}\" viewport-fill=\"rgb({2})\" viewport-fill-opacity=\"{3}\" fill=\"rgb({4})\" fill-opacity=\"{5}\" {6} width=\"{7}\" height=\"{8}\">",
-                   viewboxSizeX,
-                   viewboxSizeY,
-                   GetColorRgb(background),
-                   ConvertAlpha(background),
-                   GetColorRgb(fill),
-                   ConvertAlpha(fill),
-                   GetBackgroundStyle(background),
-                   displaysizeX,
-                   displaysizeY));
-         }
+            internal void AddEnd()
+            {
+                content.Append("</svg>");
+            }
 
-         internal void AddText(string text, string fontName, int fontSize)
-         {
-            content.AppendFormat(System.Globalization.CultureInfo.InvariantCulture,
-               "<text x=\"50%\" y=\"98%\" style=\"font-family: {0}; font-size: {1}px\" text-anchor=\"middle\">{2}</text>",
-               fontName, fontSize, text);
-         }
+            internal void AddTag(int displaysizeX, int displaysizeY, int viewboxSizeX, int viewboxSizeY, Color background, Color fill)
+            {
 
-         internal void AddRec(int posX, int posY, int width, int height)
-         {
-            content.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "<rect x=\"{0}\" y=\"{1}\" width=\"{2}\" height=\"{3}\"/>", posX, posY, width, height);
-         }
+                if (displaysizeX <= 0 || displaysizeY <= 0)
+                    content.Append(string.Format("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.2\" baseProfile=\"tiny\" shape-rendering=\"crispEdges\" viewBox=\"0 0 {0} {1}\" viewport-fill=\"rgb({2})\" viewport-fill-opacity=\"{3}\" fill=\"rgb({4})\" fill-opacity=\"{5}\" {6}>",
+                        viewboxSizeX,
+                        viewboxSizeY,
+                        GetColorRgb(background),
+                        ConvertAlpha(background),
+                        GetColorRgb(fill),
+                        ConvertAlpha(fill),
+                        GetBackgroundStyle(background)
+                        ));
+                else
+                    content.Append(string.Format("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.2\" baseProfile=\"tiny\" shape-rendering=\"crispEdges\" viewBox=\"0 0 {0} {1}\" viewport-fill=\"rgb({2})\" viewport-fill-opacity=\"{3}\" fill=\"rgb({4})\" fill-opacity=\"{5}\" {6} width=\"{7}\" height=\"{8}\">",
+                        viewboxSizeX,
+                        viewboxSizeY,
+                        GetColorRgb(background),
+                        ConvertAlpha(background),
+                        GetColorRgb(fill),
+                        ConvertAlpha(fill),
+                        GetBackgroundStyle(background),
+                        displaysizeX,
+                        displaysizeY));
+            }
+
+            internal void AddText(string text, string fontName, int fontSize)
+            {
+                content.AppendFormat(System.Globalization.CultureInfo.InvariantCulture,
+                   "<text x=\"50%\" y=\"98%\" style=\"font-family: {0}; font-size: {1}px\" text-anchor=\"middle\">{2}</text>",
+                   fontName, fontSize, text);
+            }
+
+            internal void AddRec(int posX, int posY, int width, int height)
+            {
+                content.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "<rect x=\"{0}\" y=\"{1}\" width=\"{2}\" height=\"{3}\"/>", posX, posY, width, height);
+            }
 
 #if !UNITY
-         internal static double ConvertAlpha(Color alpha)
-         {
-            return Math.Round((((double)alpha.A) / (double)255), 2);
-         }
+            internal static double ConvertAlpha(Color alpha)
+            {
+                return Math.Round((((double)alpha.A) / (double)255), 2);
+            }
 
-         internal static string GetBackgroundStyle(Color color)
-         {
-            double alpha = ConvertAlpha(color);
-            return string.Format("style=\"background-color:rgb({0},{1},{2});background-color:rgba({3});\"",
-                color.R, color.G, color.B, alpha);
-         }
+            internal static string GetBackgroundStyle(Color color)
+            {
+                double alpha = ConvertAlpha(color);
+                return string.Format("style=\"background-color:rgb({0},{1},{2});background-color:rgba({3});\"",
+                    color.R, color.G, color.B, alpha);
+            }
 
-         internal static string GetColorRgb(Color color)
-         {
-            return color.R + "," + color.G + "," + color.B;
-         }
+            internal static string GetColorRgb(Color color)
+            {
+                return color.R + "," + color.G + "," + color.B;
+            }
 
-         internal static string GetColorRgba(Color color)
-         {
-            double alpha = ConvertAlpha(color);
-            return color.R + "," + color.G + "," + color.B + "," + alpha;
-         }
+            internal static string GetColorRgba(Color color)
+            {
+                double alpha = ConvertAlpha(color);
+                return color.R + "," + color.G + "," + color.B + "," + alpha;
+            }
 #else
          internal static double ConvertAlpha(Color32 alpha)
          {
@@ -481,6 +481,6 @@ namespace ZXing.Rendering
             return color.r + "," + color.g + "," + color.b + "," + alpha;
          }
 #endif
-      }
-   }
+        }
+    }
 }

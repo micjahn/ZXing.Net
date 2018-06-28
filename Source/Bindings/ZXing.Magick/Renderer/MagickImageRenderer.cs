@@ -21,52 +21,52 @@ using ImageMagick;
 
 namespace ZXing.Magick.Rendering
 {
-	public class MagickImageRenderer : IBarcodeRenderer<MagickImage>
-	{
-		public MagickImage Render(BitMatrix matrix, BarcodeFormat format, string content)
-		{
-			return Render(matrix, format, content, new EncodingOptions());
-		}
+    public class MagickImageRenderer : IBarcodeRenderer<MagickImage>
+    {
+        public MagickImage Render(BitMatrix matrix, BarcodeFormat format, string content)
+        {
+            return Render(matrix, format, content, new EncodingOptions());
+        }
 
-		public MagickImage Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
-		{
-			byte[] header = System.Text.Encoding.UTF8.GetBytes($"P4\n{matrix.Width} {matrix.Height}\n");
+        public MagickImage Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+        {
+            byte[] header = System.Text.Encoding.UTF8.GetBytes($"P4\n{matrix.Width} {matrix.Height}\n");
 
-			int rowBytes = matrix.Width / 8;
+            int rowBytes = matrix.Width / 8;
 
-			if ((matrix.Width % 8) != 0)
-			{
-				rowBytes++;
-			}
+            if ((matrix.Width % 8) != 0)
+            {
+                rowBytes++;
+            }
 
-			byte[] totalBuffer = new byte[header.Length + rowBytes * matrix.Height];
+            byte[] totalBuffer = new byte[header.Length + rowBytes * matrix.Height];
 
-			header.CopyTo(totalBuffer, 0);
+            header.CopyTo(totalBuffer, 0);
 
-			int bufferOffset = header.Length;
+            int bufferOffset = header.Length;
 
-			for (int y = 0; y < matrix.Height; y++)
-			{
-				for (int x = 0; x < matrix.Width; x++)
-				{
-					if (matrix[x, y])
-					{
-						totalBuffer[bufferOffset] |= (byte)(((byte)1) << 7 - (x % 8));
-					}
+            for (int y = 0; y < matrix.Height; y++)
+            {
+                for (int x = 0; x < matrix.Width; x++)
+                {
+                    if (matrix[x, y])
+                    {
+                        totalBuffer[bufferOffset] |= (byte)(((byte)1) << 7 - (x % 8));
+                    }
 
-					if (x % 8 == 7)
-					{
-						bufferOffset++;
-					}
-				}
+                    if (x % 8 == 7)
+                    {
+                        bufferOffset++;
+                    }
+                }
 
-				if ((matrix.Width % 8) != 0)
-				{
-					bufferOffset++;
-				}
-			}
+                if ((matrix.Width % 8) != 0)
+                {
+                    bufferOffset++;
+                }
+            }
 
-			return new MagickImage(totalBuffer);
-		}
-	}
+            return new MagickImage(totalBuffer);
+        }
+    }
 }

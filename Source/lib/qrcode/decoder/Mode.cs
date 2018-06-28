@@ -18,195 +18,195 @@ using System;
 
 namespace ZXing.QrCode.Internal
 {
-   /// <summary>
-   /// <p>See ISO 18004:2006, 6.4.1, Tables 2 and 3. This enum encapsulates the various modes in which
-   /// data can be encoded to bits in the QR code standard.</p>
-   /// </summary>
-   /// <author>Sean Owen</author>
-   public sealed class Mode
-   {
-      /// <summary>
-      /// Gets the name.
-      /// </summary>
-      public Names Name { get; private set; }
+    /// <summary>
+    /// <p>See ISO 18004:2006, 6.4.1, Tables 2 and 3. This enum encapsulates the various modes in which
+    /// data can be encoded to bits in the QR code standard.</p>
+    /// </summary>
+    /// <author>Sean Owen</author>
+    public sealed class Mode
+    {
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        public Names Name { get; private set; }
 
-      /// <summary>
-      /// enumeration for encoding modes
-      /// </summary>
-      public enum Names
-      {
-         /// <summary>
-         /// 
-         /// </summary>
-         TERMINATOR,
-         /// <summary>
-         /// numeric encoding
-         /// </summary>
-         NUMERIC,
-         /// <summary>
-         /// alpha-numeric encoding
-         /// </summary>
-         ALPHANUMERIC,
-         /// <summary>
-         /// structured append
-         /// </summary>
-         STRUCTURED_APPEND,
-         /// <summary>
-         /// byte mode encoding
-         /// </summary>
-         BYTE,
-         /// <summary>
-         /// ECI segment
-         /// </summary>
-         ECI,
-         /// <summary>
-         /// Kanji mode
-         /// </summary>
-         KANJI,
-         /// <summary>
-         /// FNC1 char, first position
-         /// </summary>
-         FNC1_FIRST_POSITION,
-         /// <summary>
-         /// FNC1 char, second position
-         /// </summary>
-         FNC1_SECOND_POSITION,
-         /// <summary>
-         /// Hanzi mode
-         /// </summary>
-         HANZI
-      }
+        /// <summary>
+        /// enumeration for encoding modes
+        /// </summary>
+        public enum Names
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            TERMINATOR,
+            /// <summary>
+            /// numeric encoding
+            /// </summary>
+            NUMERIC,
+            /// <summary>
+            /// alpha-numeric encoding
+            /// </summary>
+            ALPHANUMERIC,
+            /// <summary>
+            /// structured append
+            /// </summary>
+            STRUCTURED_APPEND,
+            /// <summary>
+            /// byte mode encoding
+            /// </summary>
+            BYTE,
+            /// <summary>
+            /// ECI segment
+            /// </summary>
+            ECI,
+            /// <summary>
+            /// Kanji mode
+            /// </summary>
+            KANJI,
+            /// <summary>
+            /// FNC1 char, first position
+            /// </summary>
+            FNC1_FIRST_POSITION,
+            /// <summary>
+            /// FNC1 char, second position
+            /// </summary>
+            FNC1_SECOND_POSITION,
+            /// <summary>
+            /// Hanzi mode
+            /// </summary>
+            HANZI
+        }
 
-      // No, we can't use an enum here. J2ME doesn't support it.
+        // No, we can't use an enum here. J2ME doesn't support it.
 
-      /// <summary>
-      /// 
-      /// </summary>
-      public static readonly Mode TERMINATOR = new Mode(new int[] { 0, 0, 0 }, 0x00, Names.TERMINATOR); // Not really a mode...
-      /// <summary>
-      /// 
-      /// </summary>
-      public static readonly Mode NUMERIC = new Mode(new int[] { 10, 12, 14 }, 0x01, Names.NUMERIC);
-      /// <summary>
-      /// 
-      /// </summary>
-      public static readonly Mode ALPHANUMERIC = new Mode(new int[] { 9, 11, 13 }, 0x02, Names.ALPHANUMERIC);
-      /// <summary>
-      /// 
-      /// </summary>
-      public static readonly Mode STRUCTURED_APPEND = new Mode(new int[] { 0, 0, 0 }, 0x03, Names.STRUCTURED_APPEND); // Not supported
-      /// <summary>
-      /// 
-      /// </summary>
-      public static readonly Mode BYTE = new Mode(new int[] { 8, 16, 16 }, 0x04, Names.BYTE);
-      /// <summary>
-      /// 
-      /// </summary>
-      public static readonly Mode ECI = new Mode(null, 0x07, Names.ECI); // character counts don't apply
-      /// <summary>
-      /// 
-      /// </summary>
-      public static readonly Mode KANJI = new Mode(new int[] { 8, 10, 12 }, 0x08, Names.KANJI);
-      /// <summary>
-      /// 
-      /// </summary>
-      public static readonly Mode FNC1_FIRST_POSITION = new Mode(null, 0x05, Names.FNC1_FIRST_POSITION);
-      /// <summary>
-      /// 
-      /// </summary>
-      public static readonly Mode FNC1_SECOND_POSITION = new Mode(null, 0x09, Names.FNC1_SECOND_POSITION);
-      /// <summary>See GBT 18284-2000; "Hanzi" is a transliteration of this mode name.</summary>
-      public static readonly Mode HANZI = new Mode(new int[] { 8, 10, 12 }, 0x0D, Names.HANZI);
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly Mode TERMINATOR = new Mode(new int[] { 0, 0, 0 }, 0x00, Names.TERMINATOR); // Not really a mode...
+                                                                                                          /// <summary>
+                                                                                                          /// 
+                                                                                                          /// </summary>
+        public static readonly Mode NUMERIC = new Mode(new int[] { 10, 12, 14 }, 0x01, Names.NUMERIC);
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly Mode ALPHANUMERIC = new Mode(new int[] { 9, 11, 13 }, 0x02, Names.ALPHANUMERIC);
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly Mode STRUCTURED_APPEND = new Mode(new int[] { 0, 0, 0 }, 0x03, Names.STRUCTURED_APPEND); // Not supported
+                                                                                                                        /// <summary>
+                                                                                                                        /// 
+                                                                                                                        /// </summary>
+        public static readonly Mode BYTE = new Mode(new int[] { 8, 16, 16 }, 0x04, Names.BYTE);
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly Mode ECI = new Mode(null, 0x07, Names.ECI); // character counts don't apply
+                                                                           /// <summary>
+                                                                           /// 
+                                                                           /// </summary>
+        public static readonly Mode KANJI = new Mode(new int[] { 8, 10, 12 }, 0x08, Names.KANJI);
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly Mode FNC1_FIRST_POSITION = new Mode(null, 0x05, Names.FNC1_FIRST_POSITION);
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly Mode FNC1_SECOND_POSITION = new Mode(null, 0x09, Names.FNC1_SECOND_POSITION);
+        /// <summary>See GBT 18284-2000; "Hanzi" is a transliteration of this mode name.</summary>
+        public static readonly Mode HANZI = new Mode(new int[] { 8, 10, 12 }, 0x0D, Names.HANZI);
 
-      private readonly int[] characterCountBitsForVersions;
+        private readonly int[] characterCountBitsForVersions;
 
-      private Mode(int[] characterCountBitsForVersions, int bits, Names name)
-      {
-         this.characterCountBitsForVersions = characterCountBitsForVersions;
-         Bits = bits;
-         Name = name;
-      }
+        private Mode(int[] characterCountBitsForVersions, int bits, Names name)
+        {
+            this.characterCountBitsForVersions = characterCountBitsForVersions;
+            Bits = bits;
+            Name = name;
+        }
 
-      /// <summary>
-      /// Fors the bits.
-      /// </summary>
-      /// <param name="bits">four bits encoding a QR Code data mode</param>
-      /// <returns>
-      ///   <see cref="Mode"/> encoded by these bits
-      /// </returns>
-      /// <exception cref="ArgumentException">if bits do not correspond to a known mode</exception>
-      public static Mode forBits(int bits)
-      {
-         switch (bits)
-         {
-            case 0x0:
-               return TERMINATOR;
-            case 0x1:
-               return NUMERIC;
-            case 0x2:
-               return ALPHANUMERIC;
-            case 0x3:
-               return STRUCTURED_APPEND;
-            case 0x4:
-               return BYTE;
-            case 0x5:
-               return FNC1_FIRST_POSITION;
-            case 0x7:
-               return ECI;
-            case 0x8:
-               return KANJI;
-            case 0x9:
-               return FNC1_SECOND_POSITION;
-            case 0xD:
-               // 0xD is defined in GBT 18284-2000, may not be supported in foreign country
-               return HANZI;
-            default:
-               throw new ArgumentException();
-         }
-      }
+        /// <summary>
+        /// Fors the bits.
+        /// </summary>
+        /// <param name="bits">four bits encoding a QR Code data mode</param>
+        /// <returns>
+        ///   <see cref="Mode"/> encoded by these bits
+        /// </returns>
+        /// <exception cref="ArgumentException">if bits do not correspond to a known mode</exception>
+        public static Mode forBits(int bits)
+        {
+            switch (bits)
+            {
+                case 0x0:
+                    return TERMINATOR;
+                case 0x1:
+                    return NUMERIC;
+                case 0x2:
+                    return ALPHANUMERIC;
+                case 0x3:
+                    return STRUCTURED_APPEND;
+                case 0x4:
+                    return BYTE;
+                case 0x5:
+                    return FNC1_FIRST_POSITION;
+                case 0x7:
+                    return ECI;
+                case 0x8:
+                    return KANJI;
+                case 0x9:
+                    return FNC1_SECOND_POSITION;
+                case 0xD:
+                    // 0xD is defined in GBT 18284-2000, may not be supported in foreign country
+                    return HANZI;
+                default:
+                    throw new ArgumentException();
+            }
+        }
 
-      /// <param name="version">version in question
-      /// </param>
-      /// <returns> number of bits used, in this QR Code symbol {@link Version}, to encode the
-      /// count of characters that will follow encoded in this {@link Mode}
-      /// </returns>
-      public int getCharacterCountBits(Version version)
-      {
-         if (characterCountBitsForVersions == null)
-         {
-            throw new ArgumentException("Character count doesn't apply to this mode");
-         }
-         int number = version.VersionNumber;
-         int offset;
-         if (number <= 9)
-         {
-            offset = 0;
-         }
-         else if (number <= 26)
-         {
-            offset = 1;
-         }
-         else
-         {
-            offset = 2;
-         }
-         return characterCountBitsForVersions[offset];
-      }
+        /// <param name="version">version in question
+        /// </param>
+        /// <returns> number of bits used, in this QR Code symbol {@link Version}, to encode the
+        /// count of characters that will follow encoded in this {@link Mode}
+        /// </returns>
+        public int getCharacterCountBits(Version version)
+        {
+            if (characterCountBitsForVersions == null)
+            {
+                throw new ArgumentException("Character count doesn't apply to this mode");
+            }
+            int number = version.VersionNumber;
+            int offset;
+            if (number <= 9)
+            {
+                offset = 0;
+            }
+            else if (number <= 26)
+            {
+                offset = 1;
+            }
+            else
+            {
+                offset = 2;
+            }
+            return characterCountBitsForVersions[offset];
+        }
 
-      /// <summary>
-      /// Gets the bits.
-      /// </summary>
-      public int Bits { get; private set; }
+        /// <summary>
+        /// Gets the bits.
+        /// </summary>
+        public int Bits { get; private set; }
 
-      /// <summary>
-      /// Returns a <see cref="System.String"/> that represents this instance.
-      /// </summary>
-      /// <returns>
-      /// A <see cref="System.String"/> that represents this instance.
-      /// </returns>
-      public override String ToString()
-      {
-         return Name.ToString();
-      }
-   }
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
+        public override String ToString()
+        {
+            return Name.ToString();
+        }
+    }
 }

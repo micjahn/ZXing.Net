@@ -18,47 +18,47 @@ using System.Runtime.InteropServices;
 
 namespace ZXing.Interop.Encoding
 {
-   [ComVisible(true)]
-   [Guid("87B6F992-5EFB-4444-9ADE-96E86AAD3613")]
-   [ClassInterface(ClassInterfaceType.AutoDual)]
-   public class AztecEncodingOptions : EncodingOptions
-   {
-      internal readonly Aztec.AztecEncodingOptions wrappedAztecEncodingOptions;
+    [ComVisible(true)]
+    [Guid("87B6F992-5EFB-4444-9ADE-96E86AAD3613")]
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    public class AztecEncodingOptions : EncodingOptions
+    {
+        internal readonly Aztec.AztecEncodingOptions wrappedAztecEncodingOptions;
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="AztecEncodingOptions"/> class.
-      /// </summary>
-      public AztecEncodingOptions()
-         : this(new Aztec.AztecEncodingOptions())
-      {
-      }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AztecEncodingOptions"/> class.
+        /// </summary>
+        public AztecEncodingOptions()
+           : this(new Aztec.AztecEncodingOptions())
+        {
+        }
 
-      internal AztecEncodingOptions(Aztec.AztecEncodingOptions other)
-         : base(other)
-      {
-         wrappedAztecEncodingOptions = other;
-      }
-      
-      /// <summary>
-      /// Representing the minimal percentage of error correction words. 
-      /// Note: an Aztec symbol should have a minimum of 25% EC words.
-      /// </summary>
-      public int ErrorCorrection
-      {
-         get { return wrappedAztecEncodingOptions.ErrorCorrection.GetValueOrDefault(0); }
-         set { wrappedAztecEncodingOptions.ErrorCorrection = value == 0 ? (int?) null : value; }
-      }
+        internal AztecEncodingOptions(Aztec.AztecEncodingOptions other)
+           : base(other)
+        {
+            wrappedAztecEncodingOptions = other;
+        }
 
-      /// <summary>
-      /// Specifies the required number of layers for an Aztec code:
-      /// a negative number (-1, -2, -3, -4) specifies a compact Aztec code
-      /// 0 indicates to use the minimum number of layers (the default)
-      /// a positive number (1, 2, .. 32) specifies a normal (non-compact) Aztec code
-      /// </summary>
-      public int Layers
-      {
-         get { return wrappedAztecEncodingOptions.Layers.GetValueOrDefault(0); }
-         set { wrappedAztecEncodingOptions.Layers = value == 0 ? (int?)null : value; }
-      }
-   }
+        /// <summary>
+        /// Representing the minimal percentage of error correction words. 
+        /// Note: an Aztec symbol should have a minimum of 25% EC words.
+        /// </summary>
+        public int ErrorCorrection
+        {
+            get { return wrappedAztecEncodingOptions.ErrorCorrection.GetValueOrDefault(0); }
+            set { wrappedAztecEncodingOptions.ErrorCorrection = value == 0 ? (int?)null : value; }
+        }
+
+        /// <summary>
+        /// Specifies the required number of layers for an Aztec code:
+        /// a negative number (-1, -2, -3, -4) specifies a compact Aztec code
+        /// 0 indicates to use the minimum number of layers (the default)
+        /// a positive number (1, 2, .. 32) specifies a normal (non-compact) Aztec code
+        /// </summary>
+        public int Layers
+        {
+            get { return wrappedAztecEncodingOptions.Layers.GetValueOrDefault(0); }
+            set { wrappedAztecEncodingOptions.Layers = value == 0 ? (int?)null : value; }
+        }
+    }
 }

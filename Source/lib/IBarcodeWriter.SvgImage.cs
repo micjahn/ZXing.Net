@@ -19,19 +19,19 @@ using ZXing.Rendering;
 
 namespace ZXing
 {
-   /// <summary>
-   /// Interface for a smart class to encode some content into a barcode
-   /// </summary>
-   public partial interface IBarcodeWriterSvg
-   {
-      /// <summary>
-      /// Creates a visual representation of the contents
-      /// </summary>
-      SvgRenderer.SvgImage Write(string contents);
+    /// <summary>
+    /// Interface for a smart class to encode some content into a barcode
+    /// </summary>
+    public partial interface IBarcodeWriterSvg
+    {
+        /// <summary>
+        /// Creates a visual representation of the contents
+        /// </summary>
+        SvgRenderer.SvgImage Write(string contents);
 
-      /// <summary>
-      /// Returns a rendered instance of the barcode which is given by a BitMatrix.
-      /// </summary>
-      SvgRenderer.SvgImage Write(BitMatrix matrix);
-   }
+        /// <summary>
+        /// Returns a rendered instance of the barcode which is given by a BitMatrix.
+        /// </summary>
+        SvgRenderer.SvgImage Write(BitMatrix matrix);
+    }
 }

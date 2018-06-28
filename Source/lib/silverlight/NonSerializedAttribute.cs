@@ -18,11 +18,11 @@ using System;
 
 namespace ZXing
 {
-   /// <summary>
-   /// Attribute is only for source code compatibility issues
-   /// </summary>
-   [AttributeUsage(AttributeTargets.Field, Inherited = false)]
-   internal class NonSerializedAttribute : Attribute
-   {
-   }
+    /// <summary>
+    /// Attribute is only for source code compatibility issues
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Field, Inherited = false)]
+    internal class NonSerializedAttribute : Attribute
+    {
+    }
 }

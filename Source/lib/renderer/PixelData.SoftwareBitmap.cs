@@ -18,22 +18,22 @@ using Windows.Graphics.Imaging;
 
 namespace ZXing.Rendering
 {
-   /// <summary>
-   /// represents the generated code as a byte array with pixel data (4 byte per pixel, BGRA)
-   /// </summary>
-   public sealed partial class PixelData
-   {
-      /// <summary>
-      /// converts the pixel data to a bitmap object
-      /// </summary>
-      /// <returns></returns>
-      [System.CLSCompliant(false)]
-      public SoftwareBitmap ToSoftwareBitmap()
-      {
-         var bmp = new SoftwareBitmap(BitmapPixelFormat.Rgba8, Width, Height, BitmapAlphaMode.Ignore);
-         bmp.CopyFromBuffer(this.ToBitmap().PixelBuffer);
+    /// <summary>
+    /// represents the generated code as a byte array with pixel data (4 byte per pixel, BGRA)
+    /// </summary>
+    public sealed partial class PixelData
+    {
+        /// <summary>
+        /// converts the pixel data to a bitmap object
+        /// </summary>
+        /// <returns></returns>
+        [System.CLSCompliant(false)]
+        public SoftwareBitmap ToSoftwareBitmap()
+        {
+            var bmp = new SoftwareBitmap(BitmapPixelFormat.Rgba8, Width, Height, BitmapAlphaMode.Ignore);
+            bmp.CopyFromBuffer(this.ToBitmap().PixelBuffer);
 
-         return bmp;
-      }
-   }
+            return bmp;
+        }
+    }
 }

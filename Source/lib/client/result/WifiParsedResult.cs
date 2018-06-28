@@ -19,61 +19,61 @@ using System.Text;
 
 namespace ZXing.Client.Result
 {
-   /// <summary>
-   /// Represents a parsed result that encodes wifi network information, like SSID and password.
-   /// </summary>
-   /// <author>Vikram Aggarwal</author>
-   public class WifiParsedResult : ParsedResult
-   {
-      public WifiParsedResult(String networkEncryption, String ssid, String password)
-         : this(networkEncryption, ssid, password, false)
-      {
-      }
+    /// <summary>
+    /// Represents a parsed result that encodes wifi network information, like SSID and password.
+    /// </summary>
+    /// <author>Vikram Aggarwal</author>
+    public class WifiParsedResult : ParsedResult
+    {
+        public WifiParsedResult(String networkEncryption, String ssid, String password)
+           : this(networkEncryption, ssid, password, false)
+        {
+        }
 
-      public WifiParsedResult(String networkEncryption, String ssid, String password, bool hidden)
-         : this(networkEncryption, ssid, password, hidden, null, null, null, null)
-      {
-         
-      }
+        public WifiParsedResult(String networkEncryption, String ssid, String password, bool hidden)
+           : this(networkEncryption, ssid, password, hidden, null, null, null, null)
+        {
 
-      public WifiParsedResult(String networkEncryption, String ssid, String password, bool hidden, String identity, String anonymousIdentity, String eapMethod, String phase2Method)
-         : base(ParsedResultType.WIFI)
-      {
-         Ssid = ssid;
-         NetworkEncryption = networkEncryption;
-         Password = password;
-         Hidden = hidden;
-         Identity = identity;
-         AnonymousIdentity = anonymousIdentity;
-         EapMethod = eapMethod;
-         Phase2Method = phase2Method;
+        }
 
-         var result = new StringBuilder(80);
-         maybeAppend(Ssid, result);
-         maybeAppend(NetworkEncryption, result);
-         maybeAppend(Password, result);
-         maybeAppend(Hidden.ToString(), result);
-         maybeAppend(Identity, result);
-         maybeAppend(AnonymousIdentity, result);
-         maybeAppend(EapMethod, result);
-         maybeAppend(Phase2Method, result);
-         displayResultValue = result.ToString();
-      }
+        public WifiParsedResult(String networkEncryption, String ssid, String password, bool hidden, String identity, String anonymousIdentity, String eapMethod, String phase2Method)
+           : base(ParsedResultType.WIFI)
+        {
+            Ssid = ssid;
+            NetworkEncryption = networkEncryption;
+            Password = password;
+            Hidden = hidden;
+            Identity = identity;
+            AnonymousIdentity = anonymousIdentity;
+            EapMethod = eapMethod;
+            Phase2Method = phase2Method;
 
-      public String Ssid { get; private set; }
+            var result = new StringBuilder(80);
+            maybeAppend(Ssid, result);
+            maybeAppend(NetworkEncryption, result);
+            maybeAppend(Password, result);
+            maybeAppend(Hidden.ToString(), result);
+            maybeAppend(Identity, result);
+            maybeAppend(AnonymousIdentity, result);
+            maybeAppend(EapMethod, result);
+            maybeAppend(Phase2Method, result);
+            displayResultValue = result.ToString();
+        }
 
-      public String NetworkEncryption { get; private set; }
+        public String Ssid { get; private set; }
 
-      public String Password { get; private set; }
+        public String NetworkEncryption { get; private set; }
 
-      public bool Hidden { get; private set; }
+        public String Password { get; private set; }
 
-      public String Identity { get; private set; }
+        public bool Hidden { get; private set; }
 
-      public String AnonymousIdentity { get; private set; }
+        public String Identity { get; private set; }
 
-      public String EapMethod { get; private set; }
+        public String AnonymousIdentity { get; private set; }
 
-      public String Phase2Method { get; private set; }
-   }
+        public String EapMethod { get; private set; }
+
+        public String Phase2Method { get; private set; }
+    }
 }

@@ -20,124 +20,124 @@ using System.ComponentModel;
 
 namespace ZXing.Common
 {
-   /// <summary>
-   /// Defines an container for encoder options
-   /// </summary>
-   [Serializable]
-   public class EncodingOptions
-   {
-      /// <summary>
-      /// Gets the data container for all options
-      /// </summary>
+    /// <summary>
+    /// Defines an container for encoder options
+    /// </summary>
+    [Serializable]
+    public class EncodingOptions
+    {
+        /// <summary>
+        /// Gets the data container for all options
+        /// </summary>
 #if !UNITY
-      [Browsable(false)]
+        [Browsable(false)]
 #endif
-      public IDictionary<EncodeHintType, object> Hints { get; private set; }
+        public IDictionary<EncodeHintType, object> Hints { get; private set; }
 
-      /// <summary>
-      /// Specifies the height of the barcode image
-      /// </summary>
-      public int Height
-      {
-         get
-         {
-            if (Hints.ContainsKey(EncodeHintType.HEIGHT))
+        /// <summary>
+        /// Specifies the height of the barcode image
+        /// </summary>
+        public int Height
+        {
+            get
             {
-               return (int)Hints[EncodeHintType.HEIGHT];
+                if (Hints.ContainsKey(EncodeHintType.HEIGHT))
+                {
+                    return (int)Hints[EncodeHintType.HEIGHT];
+                }
+                return 0;
             }
-            return 0;
-         }
-         set
-         {
-            Hints[EncodeHintType.HEIGHT] = value;
-         }
-      }
-
-      /// <summary>
-      /// Specifies the width of the barcode image
-      /// </summary>
-      public int Width
-      {
-         get
-         {
-            if (Hints.ContainsKey(EncodeHintType.WIDTH))
+            set
             {
-               return (int)Hints[EncodeHintType.WIDTH];
+                Hints[EncodeHintType.HEIGHT] = value;
             }
-            return 0;
-         }
-         set
-         {
-            Hints[EncodeHintType.WIDTH] = value;
-         }
-      }
+        }
 
-      /// <summary>
-      /// Don't put the content string into the output image.
-      /// </summary>
-      public bool PureBarcode
-      {
-         get
-         {
-            if (Hints.ContainsKey(EncodeHintType.PURE_BARCODE))
+        /// <summary>
+        /// Specifies the width of the barcode image
+        /// </summary>
+        public int Width
+        {
+            get
             {
-               return (bool)Hints[EncodeHintType.PURE_BARCODE];
+                if (Hints.ContainsKey(EncodeHintType.WIDTH))
+                {
+                    return (int)Hints[EncodeHintType.WIDTH];
+                }
+                return 0;
             }
-            return false;
-         }
-         set
-         {
-            Hints[EncodeHintType.PURE_BARCODE] = value;
-         }
-      }
-
-      /// <summary>
-      /// Specifies margin, in pixels, to use when generating the barcode. The meaning can vary
-      /// by format; for example it controls margin before and after the barcode horizontally for
-      /// most 1D formats.
-      /// </summary>
-      public int Margin
-      {
-         get
-         {
-            if (Hints.ContainsKey(EncodeHintType.MARGIN))
+            set
             {
-               return (int) Hints[EncodeHintType.MARGIN];
+                Hints[EncodeHintType.WIDTH] = value;
             }
-            return 0;
-         }
-         set
-         {
-            Hints[EncodeHintType.MARGIN] = value;
-         }
-      }
+        }
 
-      /// <summary>
-      /// Specifies whether the data should be encoded to the GS1 standard;
-      /// FNC1 character is added in front of the data
-      /// </summary>
-      public bool GS1Format
-      {
-         get
-         {
-            if (Hints.ContainsKey(EncodeHintType.GS1_FORMAT))
+        /// <summary>
+        /// Don't put the content string into the output image.
+        /// </summary>
+        public bool PureBarcode
+        {
+            get
             {
-               return (bool)Hints[EncodeHintType.GS1_FORMAT];
+                if (Hints.ContainsKey(EncodeHintType.PURE_BARCODE))
+                {
+                    return (bool)Hints[EncodeHintType.PURE_BARCODE];
+                }
+                return false;
             }
-            return false;
-         }
-         set
-         {
-            Hints[EncodeHintType.GS1_FORMAT] = value;
-         }
-      }
+            set
+            {
+                Hints[EncodeHintType.PURE_BARCODE] = value;
+            }
+        }
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="EncodingOptions"/> class.
-      /// </summary>
-      public EncodingOptions()
-      {
-         Hints = new Dictionary<EncodeHintType, object>();
-      }
-   }
+        /// <summary>
+        /// Specifies margin, in pixels, to use when generating the barcode. The meaning can vary
+        /// by format; for example it controls margin before and after the barcode horizontally for
+        /// most 1D formats.
+        /// </summary>
+        public int Margin
+        {
+            get
+            {
+                if (Hints.ContainsKey(EncodeHintType.MARGIN))
+                {
+                    return (int)Hints[EncodeHintType.MARGIN];
+                }
+                return 0;
+            }
+            set
+            {
+                Hints[EncodeHintType.MARGIN] = value;
+            }
+        }
+
+        /// <summary>
+        /// Specifies whether the data should be encoded to the GS1 standard;
+        /// FNC1 character is added in front of the data
+        /// </summary>
+        public bool GS1Format
+        {
+            get
+            {
+                if (Hints.ContainsKey(EncodeHintType.GS1_FORMAT))
+                {
+                    return (bool)Hints[EncodeHintType.GS1_FORMAT];
+                }
+                return false;
+            }
+            set
+            {
+                Hints[EncodeHintType.GS1_FORMAT] = value;
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EncodingOptions"/> class.
+        /// </summary>
+        public EncodingOptions()
+        {
+            Hints = new Dictionary<EncodeHintType, object>();
+        }
+    }
 }

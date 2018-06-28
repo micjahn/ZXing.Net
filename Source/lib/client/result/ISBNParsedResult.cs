@@ -18,22 +18,22 @@ using System;
 
 namespace ZXing.Client.Result
 {
-   /// <summary>
-   /// Represents a parsed result that encodes a product ISBN number.
-   /// </summary>
-   /// <author>jbreiden@google.com (Jeff Breidenbach)</author>
-   public sealed class ISBNParsedResult : ParsedResult
-   {
-      internal ISBNParsedResult(String isbn)
-         : base(ParsedResultType.ISBN)
-      {
-         ISBN = isbn;
-         displayResultValue = isbn;
-      }
+    /// <summary>
+    /// Represents a parsed result that encodes a product ISBN number.
+    /// </summary>
+    /// <author>jbreiden@google.com (Jeff Breidenbach)</author>
+    public sealed class ISBNParsedResult : ParsedResult
+    {
+        internal ISBNParsedResult(String isbn)
+           : base(ParsedResultType.ISBN)
+        {
+            ISBN = isbn;
+            displayResultValue = isbn;
+        }
 
-      /// <summary>
-      /// the ISBN number
-      /// </summary>
-      public String ISBN { get; private set; }
-   }
+        /// <summary>
+        /// the ISBN number
+        /// </summary>
+        public String ISBN { get; private set; }
+    }
 }

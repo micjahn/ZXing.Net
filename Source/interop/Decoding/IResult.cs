@@ -19,45 +19,45 @@ using System.Runtime.InteropServices;
 
 namespace ZXing.Interop.Decoding
 {
-   /// <summary>
-   /// Encapsulates the result of decoding a barcode within an image.
-   /// </summary>
-   [ComVisible(true)]
-   [Guid("4A5EB14C-9F1C-437E-969D-9882D9AB8AF5")]
-   [InterfaceType(ComInterfaceType.InterfaceIsDual)]
-   public interface IResult
-   {
-      /// <returns>raw text encoded by the barcode, if applicable, otherwise <code>null</code></returns>
-      String Text { get; }
+    /// <summary>
+    /// Encapsulates the result of decoding a barcode within an image.
+    /// </summary>
+    [ComVisible(true)]
+    [Guid("4A5EB14C-9F1C-437E-969D-9882D9AB8AF5")]
+    [InterfaceType(ComInterfaceType.InterfaceIsDual)]
+    public interface IResult
+    {
+        /// <returns>raw text encoded by the barcode, if applicable, otherwise <code>null</code></returns>
+        String Text { get; }
 
-      /// <returns>raw bytes encoded by the barcode, if applicable, otherwise <code>null</code></returns>
-      byte[] RawBytes { get; }
+        /// <returns>raw bytes encoded by the barcode, if applicable, otherwise <code>null</code></returns>
+        byte[] RawBytes { get; }
 
-      /// <returns>
-      /// points related to the barcode in the image. These are typically points
-      /// identifying finder patterns or the corners of the barcode. The exact meaning is
-      /// specific to the type of barcode that was decoded.
-      /// </returns>
-      ResultPoint[] ResultPoints { get; }
+        /// <returns>
+        /// points related to the barcode in the image. These are typically points
+        /// identifying finder patterns or the corners of the barcode. The exact meaning is
+        /// specific to the type of barcode that was decoded.
+        /// </returns>
+        ResultPoint[] ResultPoints { get; }
 
-      /// <returns>{@link BarcodeFormat} representing the format of the barcode that was decoded</returns>
-      Common.BarcodeFormat BarcodeFormat { get; }
+        /// <returns>{@link BarcodeFormat} representing the format of the barcode that was decoded</returns>
+        Common.BarcodeFormat BarcodeFormat { get; }
 
-      /// <returns>
-      /// {@link Hashtable} mapping {@link ResultMetadataType} keys to values. May be
-      /// <code>null</code>. This contains optional metadata about what was detected about the barcode,
-      /// like orientation.
-      /// </returns>
-      ResultMetadataItem[] ResultMetadata { get; }
+        /// <returns>
+        /// {@link Hashtable} mapping {@link ResultMetadataType} keys to values. May be
+        /// <code>null</code>. This contains optional metadata about what was detected about the barcode,
+        /// like orientation.
+        /// </returns>
+        ResultMetadataItem[] ResultMetadata { get; }
 
-      /// <summary>
-      /// Gets the timestamp.
-      /// </summary>
-      long Timestamp { get; }
+        /// <summary>
+        /// Gets the timestamp.
+        /// </summary>
+        long Timestamp { get; }
 
-      /// <summary>
-      /// how many bits of <see cref="RawBytes"/> are valid; typically 8 times its length
-      /// </summary>
-      int NumBits { get; }
-   }
+        /// <summary>
+        /// how many bits of <see cref="RawBytes"/> are valid; typically 8 times its length
+        /// </summary>
+        int NumBits { get; }
+    }
 }

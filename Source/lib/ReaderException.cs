@@ -18,47 +18,47 @@ using System;
 
 namespace ZXing
 {
-	/// <summary>
-	/// The general exception class throw when something goes wrong during decoding of a barcode.
-	/// This includes, but is not limited to, failing checksums / error correction algorithms, being
-	/// unable to locate finder timing patterns, and so on.
-	/// </summary>
-	/// <author>Sean Owen</author>
-	[Serializable]
-	public class ReaderException : Exception
-	{
-      /// <summary>
-      /// Initializes a new instance of the <see cref="ReaderException"/> class.
-      /// </summary>
-		public ReaderException()
-		{
-		}
+    /// <summary>
+    /// The general exception class throw when something goes wrong during decoding of a barcode.
+    /// This includes, but is not limited to, failing checksums / error correction algorithms, being
+    /// unable to locate finder timing patterns, and so on.
+    /// </summary>
+    /// <author>Sean Owen</author>
+    [Serializable]
+    public class ReaderException : Exception
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReaderException"/> class.
+        /// </summary>
+        public ReaderException()
+        {
+        }
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="ReaderException"/> class.
-      /// </summary>
-      /// <param name="message"></param>
-      public ReaderException(String message)
-         : base(message)
-      {
-      }
-      /// <summary>
-      /// Initializes a new instance of the <see cref="ReaderException"/> class.
-      /// </summary>
-      /// <param name="innerException">The inner exception.</param>
-      public ReaderException(Exception innerException)
-         : base(innerException.Message, innerException)
-      {
-      }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReaderException"/> class.
+        /// </summary>
+        /// <param name="message"></param>
+        public ReaderException(String message)
+           : base(message)
+        {
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReaderException"/> class.
+        /// </summary>
+        /// <param name="innerException">The inner exception.</param>
+        public ReaderException(Exception innerException)
+           : base(innerException.Message, innerException)
+        {
+        }
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="ReaderException"/> class.
-      /// </summary>
-      /// <param name="innerException">The inner exception.</param>
-      /// <param name="message"></param>
-      public ReaderException(String message, Exception innerException)
-         : base(message, innerException)
-      {
-      }
-   }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReaderException"/> class.
+        /// </summary>
+        /// <param name="innerException">The inner exception.</param>
+        /// <param name="message"></param>
+        public ReaderException(String message, Exception innerException)
+           : base(message, innerException)
+        {
+        }
+    }
 }

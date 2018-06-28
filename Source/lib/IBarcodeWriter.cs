@@ -18,33 +18,33 @@ using ZXing.Common;
 
 namespace ZXing
 {
-   /// <summary>
-   /// Interface for a smart class to encode some content into a barcode
-   /// </summary>
-   public partial interface IBarcodeWriter
-   {
-      /// <summary>
-      /// Get or sets the barcode format which should be generated
-      /// (only suitable if MultiFormatWriter is used for property Encoder which is the default)
-      /// </summary>
-      BarcodeFormat Format { get; set; }
+    /// <summary>
+    /// Interface for a smart class to encode some content into a barcode
+    /// </summary>
+    public partial interface IBarcodeWriter
+    {
+        /// <summary>
+        /// Get or sets the barcode format which should be generated
+        /// (only suitable if MultiFormatWriter is used for property Encoder which is the default)
+        /// </summary>
+        BarcodeFormat Format { get; set; }
 
-      /// <summary>
-      /// Gets or sets the options container for the encoding and renderer process.
-      /// </summary>
-      EncodingOptions Options { get; set; }
+        /// <summary>
+        /// Gets or sets the options container for the encoding and renderer process.
+        /// </summary>
+        EncodingOptions Options { get; set; }
 
-      /// <summary>
-      /// Gets or sets the writer which encodes the content to a BitMatrix.
-      /// If no value is set the MultiFormatWriter is used.
-      /// </summary>
-      Writer Encoder { get; set; }
+        /// <summary>
+        /// Gets or sets the writer which encodes the content to a BitMatrix.
+        /// If no value is set the MultiFormatWriter is used.
+        /// </summary>
+        Writer Encoder { get; set; }
 
-      /// <summary>
-      /// Encodes the specified contents.
-      /// </summary>
-      /// <param name="contents">The contents.</param>
-      /// <returns></returns>
-      BitMatrix Encode(string contents);
-   }
+        /// <summary>
+        /// Encodes the specified contents.
+        /// </summary>
+        /// <param name="contents">The contents.</param>
+        /// <returns></returns>
+        BitMatrix Encode(string contents);
+    }
 }

@@ -21,69 +21,69 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace ZXing
 {
-   /// <summary>
-   /// class which represents the luminance values for a bitmap object of a WriteableBitmap class
-   /// </summary>
-   public partial class BitmapLuminanceSource : BaseLuminanceSource
-   {
-      /// <summary>
-      /// Initializes a new instance of the <see cref="BitmapLuminanceSource"/> class.
-      /// </summary>
-      /// <param name="width">The width.</param>
-      /// <param name="height">The height.</param>
-      protected BitmapLuminanceSource(int width, int height)
-         : base(width, height)
-      {
-      }
+    /// <summary>
+    /// class which represents the luminance values for a bitmap object of a WriteableBitmap class
+    /// </summary>
+    public partial class BitmapLuminanceSource : BaseLuminanceSource
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BitmapLuminanceSource"/> class.
+        /// </summary>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        protected BitmapLuminanceSource(int width, int height)
+           : base(width, height)
+        {
+        }
 
-      /// <summary>
-      /// initializing constructor
-      /// </summary>
-      /// <param name="writeableBitmap"></param>
-      [System.CLSCompliant(false)]
-      public BitmapLuminanceSource(WriteableBitmap writeableBitmap)
-         : base(writeableBitmap.PixelWidth, writeableBitmap.PixelHeight)
-      {
-         var height = writeableBitmap.PixelHeight;
-         var width = writeableBitmap.PixelWidth;
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="writeableBitmap"></param>
+        [System.CLSCompliant(false)]
+        public BitmapLuminanceSource(WriteableBitmap writeableBitmap)
+           : base(writeableBitmap.PixelWidth, writeableBitmap.PixelHeight)
+        {
+            var height = writeableBitmap.PixelHeight;
+            var width = writeableBitmap.PixelWidth;
 
-         // In order to measure pure decoding speed, we convert the entire image to a greyscale array
-         // luminance array is initialized with new byte[width * height]; in base class
+            // In order to measure pure decoding speed, we convert the entire image to a greyscale array
+            // luminance array is initialized with new byte[width * height]; in base class
 
-         var data = System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.ToArray(writeableBitmap.PixelBuffer, 0, (int)writeableBitmap.PixelBuffer.Length);
-         if (data.Length != writeableBitmap.PixelBuffer.Length)
-         {
-            throw new InvalidOperationException(String.Format("The WriteableBitmap instance isn't correct initialized. The PixelBuffer length is {0}, but the resulting data array is {1}", writeableBitmap.PixelBuffer.Length, data.Length));
-         }
-         var luminanceIndex = 0;
-         var maxSourceIndex = width*height*4;
-         if (data.Length != writeableBitmap.PixelBuffer.Length)
-         {
-            throw new InvalidOperationException(String.Format("The WriteableBitmap instance isn't correct initialized. The PixelBuffer length is {0}, but it should be {1} (height * width * 4)", writeableBitmap.PixelBuffer.Length, maxSourceIndex));
-         }
-         for (var sourceIndex = 0; sourceIndex < maxSourceIndex; sourceIndex+=4)
-         {
-            var c = Color.FromArgb(
-               data[sourceIndex], 
-               data[sourceIndex + 1], 
-               data[sourceIndex + 2], 
-               data[sourceIndex + 3]);
-            luminances[luminanceIndex] = (byte)((RChannelWeight * c.R + GChannelWeight * c.G + BChannelWeight * c.B) >> ChannelWeight);
-            luminanceIndex++;
-         }
-      }
+            var data = System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.ToArray(writeableBitmap.PixelBuffer, 0, (int)writeableBitmap.PixelBuffer.Length);
+            if (data.Length != writeableBitmap.PixelBuffer.Length)
+            {
+                throw new InvalidOperationException(String.Format("The WriteableBitmap instance isn't correct initialized. The PixelBuffer length is {0}, but the resulting data array is {1}", writeableBitmap.PixelBuffer.Length, data.Length));
+            }
+            var luminanceIndex = 0;
+            var maxSourceIndex = width * height * 4;
+            if (data.Length != writeableBitmap.PixelBuffer.Length)
+            {
+                throw new InvalidOperationException(String.Format("The WriteableBitmap instance isn't correct initialized. The PixelBuffer length is {0}, but it should be {1} (height * width * 4)", writeableBitmap.PixelBuffer.Length, maxSourceIndex));
+            }
+            for (var sourceIndex = 0; sourceIndex < maxSourceIndex; sourceIndex += 4)
+            {
+                var c = Color.FromArgb(
+                   data[sourceIndex],
+                   data[sourceIndex + 1],
+                   data[sourceIndex + 2],
+                   data[sourceIndex + 3]);
+                luminances[luminanceIndex] = (byte)((RChannelWeight * c.R + GChannelWeight * c.G + BChannelWeight * c.B) >> ChannelWeight);
+                luminanceIndex++;
+            }
+        }
 
-      /// <summary>
-      /// Should create a new luminance source with the right class type.
-      /// The method is used in methods crop and rotate.
-      /// </summary>
-      /// <param name="newLuminances">The new luminances.</param>
-      /// <param name="width">The width.</param>
-      /// <param name="height">The height.</param>
-      /// <returns></returns>
-      protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
-      {
-         return new BitmapLuminanceSource(width, height) { luminances = newLuminances };
-      }
-   }
+        /// <summary>
+        /// Should create a new luminance source with the right class type.
+        /// The method is used in methods crop and rotate.
+        /// </summary>
+        /// <param name="newLuminances">The new luminances.</param>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        /// <returns></returns>
+        protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
+        {
+            return new BitmapLuminanceSource(width, height) { luminances = newLuminances };
+        }
+    }
 }

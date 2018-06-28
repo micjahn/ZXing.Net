@@ -26,57 +26,57 @@
 
 namespace ZXing.OneD.RSS.Expanded.Decoders
 {
-   /// <summary>
-   /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
-   /// <author>Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)</author>
-   /// </summary>
-   internal sealed class DecodedNumeric : DecodedObject
-   {
-      private readonly int firstDigit;
-      private readonly int secondDigit;
+    /// <summary>
+    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
+    /// <author>Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)</author>
+    /// </summary>
+    internal sealed class DecodedNumeric : DecodedObject
+    {
+        private readonly int firstDigit;
+        private readonly int secondDigit;
 
-      internal static int FNC1 = 10;
+        internal static int FNC1 = 10;
 
-      internal DecodedNumeric(int newPosition, int firstDigit, int secondDigit)
-         : base(newPosition)
-      {
-         if (firstDigit < 0 || firstDigit > 10 || secondDigit < 0 || secondDigit > 10)
-         {
-            throw new FormatException("digits has to be between 0 and 10");
-         }
-         
-         this.firstDigit = firstDigit;
-         this.secondDigit = secondDigit;
-      }
+        internal DecodedNumeric(int newPosition, int firstDigit, int secondDigit)
+           : base(newPosition)
+        {
+            if (firstDigit < 0 || firstDigit > 10 || secondDigit < 0 || secondDigit > 10)
+            {
+                throw new FormatException("digits has to be between 0 and 10");
+            }
 
-      internal int getFirstDigit()
-      {
-         return this.firstDigit;
-      }
+            this.firstDigit = firstDigit;
+            this.secondDigit = secondDigit;
+        }
 
-      internal int getSecondDigit()
-      {
-         return this.secondDigit;
-      }
+        internal int getFirstDigit()
+        {
+            return this.firstDigit;
+        }
 
-      internal int getValue()
-      {
-         return this.firstDigit * 10 + this.secondDigit;
-      }
+        internal int getSecondDigit()
+        {
+            return this.secondDigit;
+        }
 
-      internal bool isFirstDigitFNC1()
-      {
-         return this.firstDigit == FNC1;
-      }
+        internal int getValue()
+        {
+            return this.firstDigit * 10 + this.secondDigit;
+        }
 
-      internal bool isSecondDigitFNC1()
-      {
-         return this.secondDigit == FNC1;
-      }
+        internal bool isFirstDigitFNC1()
+        {
+            return this.firstDigit == FNC1;
+        }
 
-      internal bool isAnyFNC1()
-      {
-         return this.firstDigit == FNC1 || this.secondDigit == FNC1;
-      }
-   }
+        internal bool isSecondDigitFNC1()
+        {
+            return this.secondDigit == FNC1;
+        }
+
+        internal bool isAnyFNC1()
+        {
+            return this.firstDigit == FNC1 || this.secondDigit == FNC1;
+        }
+    }
 }

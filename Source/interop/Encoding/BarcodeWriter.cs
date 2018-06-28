@@ -22,65 +22,65 @@ using ZXing.Interop.Common;
 
 namespace ZXing.Interop.Encoding
 {
-   [ComVisible(true)]
-   [Guid("7CA422BA-2ADE-4C33-A45C-D456A3441FD9")]
-   [ClassInterface(ClassInterfaceType.AutoDual)]
-   public class BarcodeWriter : IBarcodeWriter
-   {
-      private EncodingOptions options;
+    [ComVisible(true)]
+    [Guid("7CA422BA-2ADE-4C33-A45C-D456A3441FD9")]
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    public class BarcodeWriter : IBarcodeWriter
+    {
+        private EncodingOptions options;
 
-      /// <summary>
-      /// Gets or sets the barcode format.
-      /// The value is only suitable if the MultiFormatWriter is used.
-      /// </summary>
-      public Common.BarcodeFormat Format { get; set; }
+        /// <summary>
+        /// Gets or sets the barcode format.
+        /// The value is only suitable if the MultiFormatWriter is used.
+        /// </summary>
+        public Common.BarcodeFormat Format { get; set; }
 
-      /// <summary>
-      /// Gets or sets the options container for the encoding and renderer process.
-      /// </summary>
-      public EncodingOptions Options
-      {
-         get { return (options ?? (options = new EncodingOptions())); }
-         set { options = value; }
-      }
+        /// <summary>
+        /// Gets or sets the options container for the encoding and renderer process.
+        /// </summary>
+        public EncodingOptions Options
+        {
+            get { return (options ?? (options = new EncodingOptions())); }
+            set { options = value; }
+        }
 
-      public PixelData Write(string contents)
-      {
-         var writer = new BarcodeWriterPixelData
-         {
-            Format = Format.ToZXing(),
-            Options = options.wrappedEncodingOptions
-         };
-         return writer.Write(contents).ToInterop();
-      }
+        public PixelData Write(string contents)
+        {
+            var writer = new BarcodeWriterPixelData
+            {
+                Format = Format.ToZXing(),
+                Options = options.wrappedEncodingOptions
+            };
+            return writer.Write(contents).ToInterop();
+        }
 
-      public void WriteToFile(string contents, string fileName, ImageFileFormat imageFileFormat)
-      {
-         if (string.IsNullOrEmpty(fileName))
-            throw new ArgumentNullException(nameof(fileName));
+        public void WriteToFile(string contents, string fileName, ImageFileFormat imageFileFormat)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException(nameof(fileName));
 
-         var writer = new ZXing.BarcodeWriter
-         {
-            Format = Format.ToZXing(),
-            Options = options.wrappedEncodingOptions
-         };
-         using (var bitmap = writer.Write(contents))
-         {
-            bitmap.Save(fileName, imageFileFormat.ToDrawingFormat());
-         }
-      }
+            var writer = new ZXing.BarcodeWriter
+            {
+                Format = Format.ToZXing(),
+                Options = options.wrappedEncodingOptions
+            };
+            using (var bitmap = writer.Write(contents))
+            {
+                bitmap.Save(fileName, imageFileFormat.ToDrawingFormat());
+            }
+        }
 
-      public object GetStdPicture(string contents)
-      {
-         var writer = new ZXing.BarcodeWriter
-         {
-            Format = Format.ToZXing(),
-            Options = options.wrappedEncodingOptions
-         };
-         using (var bitmap = writer.Write(contents))
-         {
-            return ImageUtils.ConvertToIPicture(bitmap);
-         }
-      }
-   }
+        public object GetStdPicture(string contents)
+        {
+            var writer = new ZXing.BarcodeWriter
+            {
+                Format = Format.ToZXing(),
+                Options = options.wrappedEncodingOptions
+            };
+            using (var bitmap = writer.Write(contents))
+            {
+                return ImageUtils.ConvertToIPicture(bitmap);
+            }
+        }
+    }
 }

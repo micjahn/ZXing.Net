@@ -22,78 +22,78 @@ using ZXing;
 
 namespace WindowsFormsDemo
 {
-   public partial class DecodingOptionsForm : Form
-   {
-      private readonly BarcodeReader reader;
-      public bool MultipleBarcodes
-      {
-         get { return chkMultipleDecode.Checked; }
-      }
-      public bool MultipleBarcodesOnlyQR
-      {
-         get { return chkMultipleDecodeOnlyQR.Checked; }
-      }
+    public partial class DecodingOptionsForm : Form
+    {
+        private readonly BarcodeReader reader;
+        public bool MultipleBarcodes
+        {
+            get { return chkMultipleDecode.Checked; }
+        }
+        public bool MultipleBarcodesOnlyQR
+        {
+            get { return chkMultipleDecodeOnlyQR.Checked; }
+        }
 
-      public DecodingOptionsForm(BarcodeReader reader, bool multipleBarcodes, bool multipleBarcodesOnlyQR)
-      {
-         this.reader = reader;
-         InitializeComponent();
+        public DecodingOptionsForm(BarcodeReader reader, bool multipleBarcodes, bool multipleBarcodesOnlyQR)
+        {
+            this.reader = reader;
+            InitializeComponent();
 
-         chkMultipleDecode.Checked = multipleBarcodes;
-         chkMultipleDecodeOnlyQR.Checked = multipleBarcodesOnlyQR;
+            chkMultipleDecode.Checked = multipleBarcodes;
+            chkMultipleDecodeOnlyQR.Checked = multipleBarcodesOnlyQR;
 
-         foreach (var val in Enum.GetValues(typeof (BarcodeFormat)))
-         {
-            var valBarcode = (BarcodeFormat) val;
-            if (valBarcode == BarcodeFormat.PLESSEY)
-               continue;
-            var selectedByDefault = valBarcode != BarcodeFormat.MSI &&
-                                    valBarcode != BarcodeFormat.IMB;
-            if (reader.Options.PossibleFormats != null)
+            foreach (var val in Enum.GetValues(typeof(BarcodeFormat)))
             {
-               selectedByDefault = reader.Options.PossibleFormats.Contains(valBarcode);
+                var valBarcode = (BarcodeFormat)val;
+                if (valBarcode == BarcodeFormat.PLESSEY)
+                    continue;
+                var selectedByDefault = valBarcode != BarcodeFormat.MSI &&
+                                        valBarcode != BarcodeFormat.IMB;
+                if (reader.Options.PossibleFormats != null)
+                {
+                    selectedByDefault = reader.Options.PossibleFormats.Contains(valBarcode);
+                }
+                dataGridViewBarcodeFormats.Rows.Add(selectedByDefault, val.ToString());
             }
-            dataGridViewBarcodeFormats.Rows.Add(selectedByDefault, val.ToString());
-         }
-      }
+        }
 
-      protected override void OnLoad(EventArgs e)
-      {
-         base.OnLoad(e);
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
 
-         chkTryInverted.Checked = reader.TryInverted;
-         chkTryHarder.Checked = reader.Options.TryHarder;
-         chkAutoRotate.Checked = reader.AutoRotate;
-         chkPureBarcode.Checked = reader.Options.PureBarcode;
+            chkTryInverted.Checked = reader.TryInverted;
+            chkTryHarder.Checked = reader.Options.TryHarder;
+            chkAutoRotate.Checked = reader.AutoRotate;
+            chkPureBarcode.Checked = reader.Options.PureBarcode;
 
-         chkCode39CheckDigit.Checked = reader.Options.AssumeCode39CheckDigit;
-         chkCode39ExtendedMode.Checked = reader.Options.UseCode39ExtendedMode;
-         chkCode39ExtendedModeRelaxed.Checked = reader.Options.UseCode39RelaxedExtendedMode;
-      }
+            chkCode39CheckDigit.Checked = reader.Options.AssumeCode39CheckDigit;
+            chkCode39ExtendedMode.Checked = reader.Options.UseCode39ExtendedMode;
+            chkCode39ExtendedModeRelaxed.Checked = reader.Options.UseCode39RelaxedExtendedMode;
+        }
 
-      private void btnOk_Click(object sender, EventArgs e)
-      {
-         reader.TryInverted = chkTryInverted.Checked;
-         reader.Options.TryHarder = chkTryHarder.Checked;
-         reader.AutoRotate = chkAutoRotate.Checked;
-         reader.Options.PureBarcode = chkPureBarcode.Checked;
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+            reader.TryInverted = chkTryInverted.Checked;
+            reader.Options.TryHarder = chkTryHarder.Checked;
+            reader.AutoRotate = chkAutoRotate.Checked;
+            reader.Options.PureBarcode = chkPureBarcode.Checked;
 
-         reader.Options.AssumeCode39CheckDigit = chkCode39CheckDigit.Checked;
-         reader.Options.UseCode39ExtendedMode = chkCode39ExtendedMode.Checked;
-         reader.Options.UseCode39RelaxedExtendedMode = chkCode39ExtendedModeRelaxed.Checked;
+            reader.Options.AssumeCode39CheckDigit = chkCode39CheckDigit.Checked;
+            reader.Options.UseCode39ExtendedMode = chkCode39ExtendedMode.Checked;
+            reader.Options.UseCode39RelaxedExtendedMode = chkCode39ExtendedModeRelaxed.Checked;
 
-         reader.Options.PossibleFormats = new List<BarcodeFormat>();
+            reader.Options.PossibleFormats = new List<BarcodeFormat>();
 
-         foreach (DataGridViewRow row in dataGridViewBarcodeFormats.Rows)
-         {
-            if (((bool) (row.Cells[0].Value)))
+            foreach (DataGridViewRow row in dataGridViewBarcodeFormats.Rows)
             {
-               reader.Options.PossibleFormats.Add(
-                  (BarcodeFormat)Enum.Parse(typeof(BarcodeFormat), row.Cells[1].Value.ToString()));
+                if (((bool)(row.Cells[0].Value)))
+                {
+                    reader.Options.PossibleFormats.Add(
+                       (BarcodeFormat)Enum.Parse(typeof(BarcodeFormat), row.Cells[1].Value.ToString()));
+                }
             }
-         }
-         
-         Close();
-      }
-   }
+
+            Close();
+        }
+    }
 }

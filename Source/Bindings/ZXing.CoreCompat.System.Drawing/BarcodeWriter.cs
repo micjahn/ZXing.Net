@@ -19,18 +19,18 @@ using ZXing.CoreCompat.Rendering;
 
 namespace ZXing.CoreCompat.System.Drawing
 {
-   /// <summary>
-   /// A smart class to encode some content to a barcode image
-   /// </summary>
-   public class BarcodeWriter : BarcodeWriter<Bitmap>
-   {
-      /// <summary>
-      /// 
-      /// </summary>
-      public BarcodeWriter()
-      {
-         Renderer = new BitmapRenderer();
-      }
-   }
+    /// <summary>
+    /// A smart class to encode some content to a barcode image
+    /// </summary>
+    public class BarcodeWriter : BarcodeWriter<Bitmap>
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public BarcodeWriter()
+        {
+            Renderer = new BitmapRenderer();
+        }
+    }
 
 }

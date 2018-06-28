@@ -20,51 +20,51 @@ using ImageMagick;
 
 namespace ZXing.Magick
 {
-   /// <summary>
-   /// A luminance source class which consumes a MagickImage image from ImageMagick and calculates the luminance values based on the bytes of the image
-   /// </summary>
-   public class MagickImageLuminanceSource : BaseLuminanceSource
-   {
-      /// <summary>
-      /// initializing constructor
-      /// </summary>
-      /// <param name="image"></param>
-      public MagickImageLuminanceSource(MagickImage image)
-         : base(CalculateLuminance(image), image.Width, image.Height)
-      {
-      }
+    /// <summary>
+    /// A luminance source class which consumes a MagickImage image from ImageMagick and calculates the luminance values based on the bytes of the image
+    /// </summary>
+    public class MagickImageLuminanceSource : BaseLuminanceSource
+    {
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="image"></param>
+        public MagickImageLuminanceSource(MagickImage image)
+           : base(CalculateLuminance(image), image.Width, image.Height)
+        {
+        }
 
-      /// <summary>
-      /// internal constructor used by CreateLuminanceSource
-      /// </summary>
-      /// <param name="luminances"></param>
-      /// <param name="width"></param>
-      /// <param name="height"></param>
-      protected MagickImageLuminanceSource(byte[] luminances, int width, int height)
-         : base(luminances, width, height)
-      {
-      }
+        /// <summary>
+        /// internal constructor used by CreateLuminanceSource
+        /// </summary>
+        /// <param name="luminances"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        protected MagickImageLuminanceSource(byte[] luminances, int width, int height)
+           : base(luminances, width, height)
+        {
+        }
 
-      /// <summary>
-      /// Should create a new luminance source with the right class type.
-      /// The method is used in methods crop and rotate.
-      /// </summary>
-      /// <param name="newLuminances">The new luminances.</param>
-      /// <param name="width">The width.</param>
-      /// <param name="height">The height.</param>
-      /// <returns></returns>
-      protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
-      {
-         return new MagickImageLuminanceSource(newLuminances, width, height);
-      }
+        /// <summary>
+        /// Should create a new luminance source with the right class type.
+        /// The method is used in methods crop and rotate.
+        /// </summary>
+        /// <param name="newLuminances">The new luminances.</param>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        /// <returns></returns>
+        protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
+        {
+            return new MagickImageLuminanceSource(newLuminances, width, height);
+        }
 
-      private static byte[] CalculateLuminance(MagickImage src)
-      {
-         if (src == null)
-            throw new ArgumentNullException(nameof(src));
-	      if (src.BitDepth() < 8)
-		      src.BitDepth(8);
-	      return src.ToByteArray(MagickFormat.Gray);
-      }
-   }
+        private static byte[] CalculateLuminance(MagickImage src)
+        {
+            if (src == null)
+                throw new ArgumentNullException(nameof(src));
+            if (src.BitDepth() < 8)
+                src.BitDepth(8);
+            return src.ToByteArray(MagickFormat.Gray);
+        }
+    }
 }

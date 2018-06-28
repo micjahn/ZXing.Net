@@ -24,19 +24,19 @@ using System.Windows.Media.Imaging;
 
 namespace ZXing
 {
-   /// <summary>
-   /// Interface for a smart class to encode some content into a barcode
-   /// </summary>
-   [System.CLSCompliant(false)]
-   public partial interface IBarcodeWriter
-   {
-      /// <summary>
-      /// Creates a visual representation of the contents
-      /// </summary>
-      WriteableBitmap Write(string contents);
-      /// <summary>
-      /// Returns a rendered instance of the barcode which is given by a BitMatrix.
-      /// </summary>
-      WriteableBitmap Write(BitMatrix matrix);
-   }
+    /// <summary>
+    /// Interface for a smart class to encode some content into a barcode
+    /// </summary>
+    [System.CLSCompliant(false)]
+    public partial interface IBarcodeWriter
+    {
+        /// <summary>
+        /// Creates a visual representation of the contents
+        /// </summary>
+        WriteableBitmap Write(string contents);
+        /// <summary>
+        /// Returns a rendered instance of the barcode which is given by a BitMatrix.
+        /// </summary>
+        WriteableBitmap Write(BitMatrix matrix);
+    }
 }

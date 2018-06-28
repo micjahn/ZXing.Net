@@ -22,123 +22,123 @@ using ZXing.QrCode.Internal;
 
 namespace ZXing.QrCode
 {
-   /// <summary>
-   /// The class holds the available options for the QrCodeWriter
-   /// </summary>
-   [Serializable]
-   public class QrCodeEncodingOptions : EncodingOptions
-   {
-      /// <summary>
-      /// Specifies what degree of error correction to use, for example in QR Codes.
-      /// Type depends on the encoder. For example for QR codes it's type
-      /// <see cref="ErrorCorrectionLevel"/>.
-      /// </summary>
+    /// <summary>
+    /// The class holds the available options for the QrCodeWriter
+    /// </summary>
+    [Serializable]
+    public class QrCodeEncodingOptions : EncodingOptions
+    {
+        /// <summary>
+        /// Specifies what degree of error correction to use, for example in QR Codes.
+        /// Type depends on the encoder. For example for QR codes it's type
+        /// <see cref="ErrorCorrectionLevel"/>.
+        /// </summary>
 #if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
       [TypeConverter(typeof(ErrorLevelConverter))]
 #endif
-      public ErrorCorrectionLevel ErrorCorrection
-      {
-         get
-         {
-            if (Hints.ContainsKey(EncodeHintType.ERROR_CORRECTION))
+        public ErrorCorrectionLevel ErrorCorrection
+        {
+            get
             {
-               return (ErrorCorrectionLevel) Hints[EncodeHintType.ERROR_CORRECTION];
+                if (Hints.ContainsKey(EncodeHintType.ERROR_CORRECTION))
+                {
+                    return (ErrorCorrectionLevel)Hints[EncodeHintType.ERROR_CORRECTION];
+                }
+                return null;
             }
-            return null;
-         }
-         set
-         {
-            if (value == null)
+            set
             {
-               if (Hints.ContainsKey(EncodeHintType.ERROR_CORRECTION))
-                  Hints.Remove(EncodeHintType.ERROR_CORRECTION);
+                if (value == null)
+                {
+                    if (Hints.ContainsKey(EncodeHintType.ERROR_CORRECTION))
+                        Hints.Remove(EncodeHintType.ERROR_CORRECTION);
+                }
+                else
+                {
+                    Hints[EncodeHintType.ERROR_CORRECTION] = value;
+                }
             }
-            else
-            {
-               Hints[EncodeHintType.ERROR_CORRECTION] = value;
-            }
-         }
-      }
-            
-      /// <summary>
-      /// Specifies what character encoding to use where applicable (type <see cref="String"/>)
-      /// </summary>
-      public string CharacterSet
-      {
-         get
-         {
-            if (Hints.ContainsKey(EncodeHintType.CHARACTER_SET))
-            {
-               return (string) Hints[EncodeHintType.CHARACTER_SET];
-            }
-            return null;
-         }
-         set
-         {
-            if (value == null)
-            {
-               if (Hints.ContainsKey(EncodeHintType.CHARACTER_SET))
-                  Hints.Remove(EncodeHintType.CHARACTER_SET);
-            }
-            else
-            {
-               Hints[EncodeHintType.CHARACTER_SET] = value;
-            }
-         }
-      }
+        }
 
-      /// <summary>
-      /// Explicitly disables ECI segment when generating QR Code
-      /// That is against the specification of QR Code but some
-      /// readers have problems if the charset is switched from
-      /// ISO-8859-1 (default) to UTF-8 with the necessary ECI segment.
-      /// If you set the property to true you can use UTF-8 encoding
-      /// and the ECI segment is omitted.
-      /// </summary>
-      public bool DisableECI
-      {
-         get
-         {
-            if (Hints.ContainsKey(EncodeHintType.DISABLE_ECI))
+        /// <summary>
+        /// Specifies what character encoding to use where applicable (type <see cref="String"/>)
+        /// </summary>
+        public string CharacterSet
+        {
+            get
             {
-               return (bool)Hints[EncodeHintType.DISABLE_ECI];
+                if (Hints.ContainsKey(EncodeHintType.CHARACTER_SET))
+                {
+                    return (string)Hints[EncodeHintType.CHARACTER_SET];
+                }
+                return null;
             }
-            return false;
-         }
-         set
-         {
-            Hints[EncodeHintType.DISABLE_ECI] = value;
-         }
-      }
+            set
+            {
+                if (value == null)
+                {
+                    if (Hints.ContainsKey(EncodeHintType.CHARACTER_SET))
+                        Hints.Remove(EncodeHintType.CHARACTER_SET);
+                }
+                else
+                {
+                    Hints[EncodeHintType.CHARACTER_SET] = value;
+                }
+            }
+        }
 
-      /// <summary>
-      /// Specifies the exact version of QR code to be encoded. An integer, range 1 to 40. If the data specified
-      /// cannot fit within the required version, a WriterException will be thrown.
-      /// </summary>
-      public int? QrVersion
-      {
-         get
-         {
-            if (Hints.ContainsKey(EncodeHintType.QR_VERSION))
+        /// <summary>
+        /// Explicitly disables ECI segment when generating QR Code
+        /// That is against the specification of QR Code but some
+        /// readers have problems if the charset is switched from
+        /// ISO-8859-1 (default) to UTF-8 with the necessary ECI segment.
+        /// If you set the property to true you can use UTF-8 encoding
+        /// and the ECI segment is omitted.
+        /// </summary>
+        public bool DisableECI
+        {
+            get
             {
-               return (int)Hints[EncodeHintType.QR_VERSION];
+                if (Hints.ContainsKey(EncodeHintType.DISABLE_ECI))
+                {
+                    return (bool)Hints[EncodeHintType.DISABLE_ECI];
+                }
+                return false;
             }
-            return null;
-         }
-         set
-         {
-            if (value == null)
+            set
             {
-               if (Hints.ContainsKey(EncodeHintType.QR_VERSION))
-                  Hints.Remove(EncodeHintType.QR_VERSION);
+                Hints[EncodeHintType.DISABLE_ECI] = value;
             }
-            else
+        }
+
+        /// <summary>
+        /// Specifies the exact version of QR code to be encoded. An integer, range 1 to 40. If the data specified
+        /// cannot fit within the required version, a WriterException will be thrown.
+        /// </summary>
+        public int? QrVersion
+        {
+            get
             {
-               Hints[EncodeHintType.QR_VERSION] = value.Value;
+                if (Hints.ContainsKey(EncodeHintType.QR_VERSION))
+                {
+                    return (int)Hints[EncodeHintType.QR_VERSION];
+                }
+                return null;
             }
-         }
-      }
-   }
+            set
+            {
+                if (value == null)
+                {
+                    if (Hints.ContainsKey(EncodeHintType.QR_VERSION))
+                        Hints.Remove(EncodeHintType.QR_VERSION);
+                }
+                else
+                {
+                    Hints[EncodeHintType.QR_VERSION] = value.Value;
+                }
+            }
+        }
+    }
 
 #if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
    internal class ErrorLevelConverter : TypeConverter

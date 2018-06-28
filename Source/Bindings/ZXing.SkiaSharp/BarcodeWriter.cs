@@ -20,18 +20,18 @@ using ZXing.SkiaSharp.Rendering;
 
 namespace ZXing.SkiaSharp
 {
-   /// <summary>
-   /// A smart class to encode some content to a barcode image
-   /// </summary>
-   public class BarcodeWriter : BarcodeWriter<SKBitmap>
-   {
-      /// <summary>
-      /// 
-      /// </summary>
-      public BarcodeWriter()
-      {
-         Renderer = new SKBitmapRenderer();
-      }
-   }
+    /// <summary>
+    /// A smart class to encode some content to a barcode image
+    /// </summary>
+    public class BarcodeWriter : BarcodeWriter<SKBitmap>
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public BarcodeWriter()
+        {
+            Renderer = new SKBitmapRenderer();
+        }
+    }
 
 }

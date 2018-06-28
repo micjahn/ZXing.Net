@@ -23,26 +23,26 @@ using System.Text;
 
 namespace ZXing.PDF417.Internal
 {
-   /// <summary>
-   /// Top-level class for the logic part of the PDF417 implementation.
-   /// </summary>
-   internal sealed class PDF417
-   {
-      /// <summary>
-      /// The start pattern (17 bits)
-      /// </summary>
-      private const int START_PATTERN = 0x1fea8;
+    /// <summary>
+    /// Top-level class for the logic part of the PDF417 implementation.
+    /// </summary>
+    internal sealed class PDF417
+    {
+        /// <summary>
+        /// The start pattern (17 bits)
+        /// </summary>
+        private const int START_PATTERN = 0x1fea8;
 
-      /// <summary>
-      /// The stop pattern (18 bits)
-      /// </summary>
-      private const int STOP_PATTERN = 0x3fa29;
+        /// <summary>
+        /// The stop pattern (18 bits)
+        /// </summary>
+        private const int STOP_PATTERN = 0x3fa29;
 
-      /// <summary>
-      /// The codeword table from the Annex A of ISO/IEC 15438:2001(E).
-      /// </summary>
-      private static readonly int[][] CODEWORD_TABLE =
-         {
+        /// <summary>
+        /// The codeword table from the Annex A of ISO/IEC 15438:2001(E).
+        /// </summary>
+        private static readonly int[][] CODEWORD_TABLE =
+           {
             new[]
                {
                   0x1d5c0, 0x1eaf0, 0x1f57c, 0x1d4e0, 0x1ea78, 0x1f53e,
@@ -518,335 +518,335 @@ namespace ZXing.PDF417.Internal
                   0x10794, 0x10fb4, 0x10792, 0x10fb2, 0x1c7ea
                }
          };
-      private const float PREFERRED_RATIO = 3.0f;
-      private const float DEFAULT_MODULE_WIDTH = 0.357f; //1px in mm
-      private const float HEIGHT = 2.0f; //mm
-    
-      private BarcodeMatrix barcodeMatrix;
-      private bool compact;
-      private Compaction compaction;
-      private Encoding encoding;
-      private bool disableEci;
-      private int minCols;
-      private int maxCols;
-      private int maxRows;
-      private int minRows;
+        private const float PREFERRED_RATIO = 3.0f;
+        private const float DEFAULT_MODULE_WIDTH = 0.357f; //1px in mm
+        private const float HEIGHT = 2.0f; //mm
 
-      internal PDF417()
-         : this(false)
-      {
-      }
+        private BarcodeMatrix barcodeMatrix;
+        private bool compact;
+        private Compaction compaction;
+        private Encoding encoding;
+        private bool disableEci;
+        private int minCols;
+        private int maxCols;
+        private int maxRows;
+        private int minRows;
 
-      internal PDF417(bool compact)
-      {
-         this.compact = compact;
-         compaction = Compaction.AUTO;
-         encoding = null; // use default
-         disableEci = false;
-         minCols = 2;
-         maxCols = 30;
-         maxRows = 90;
-         minRows = 3;
-      }
+        internal PDF417()
+           : this(false)
+        {
+        }
 
-      internal BarcodeMatrix BarcodeMatrix
-      {
-         get { return barcodeMatrix; }
-      }
+        internal PDF417(bool compact)
+        {
+            this.compact = compact;
+            compaction = Compaction.AUTO;
+            encoding = null; // use default
+            disableEci = false;
+            minCols = 2;
+            maxCols = 30;
+            maxRows = 90;
+            minRows = 3;
+        }
 
-      /// <summary>
-      /// Calculates the necessary number of rows as described in annex Q of ISO/IEC 15438:2001(E).
-      /// </summary>
-      /// <param name="m">the number of source codewords prior to the additional of the Symbol Length</param>
-      ///          Descriptor and any pad codewords
-      /// <param name="k">the number of error correction codewords</param>
-      /// <param name="c">the number of columns in the symbol in the data region (excluding start, stop and</param>
-      ///          row indicator codewords)
-      /// <returns>the number of rows in the symbol (r)</returns>
-      private static int calculateNumberOfRows(int m, int k, int c)
-      {
-         int r = ((m + 1 + k)/c) + 1;
-         if (c*r >= (m + 1 + k + c))
-         {
-            r--;
-         }
-         return r;
-      }
+        internal BarcodeMatrix BarcodeMatrix
+        {
+            get { return barcodeMatrix; }
+        }
 
-      /// <summary>
-      /// Calculates the number of pad codewords as described in 4.9.2 of ISO/IEC 15438:2001(E).
-      /// </summary>
-      /// <param name="m">the number of source codewords prior to the additional of the Symbol Length</param>
-      ///          Descriptor and any pad codewords
-      /// <param name="k">the number of error correction codewords</param>
-      /// <param name="c">the number of columns in the symbol in the data region (excluding start, stop and</param>
-      ///          row indicator codewords)
-      /// <param name="r">the number of rows in the symbol</param>
-      /// <returns>the number of pad codewords</returns>
-      private static int getNumberOfPadCodewords(int m, int k, int c, int r)
-      {
-         int n = c*r - k;
-         return n > m + 1 ? n - m - 1 : 0;
-      }
-
-      private static void encodeChar(int pattern, int len, BarcodeRow logic)
-      {
-         int map = 1 << len - 1;
-         bool last = (pattern & map) != 0; //Initialize to inverse of first bit
-         int width = 0;
-         for (int i = 0; i < len; i++)
-         {
-            bool black = (pattern & map) != 0;
-            if (last == black)
+        /// <summary>
+        /// Calculates the necessary number of rows as described in annex Q of ISO/IEC 15438:2001(E).
+        /// </summary>
+        /// <param name="m">the number of source codewords prior to the additional of the Symbol Length</param>
+        ///          Descriptor and any pad codewords
+        /// <param name="k">the number of error correction codewords</param>
+        /// <param name="c">the number of columns in the symbol in the data region (excluding start, stop and</param>
+        ///          row indicator codewords)
+        /// <returns>the number of rows in the symbol (r)</returns>
+        private static int calculateNumberOfRows(int m, int k, int c)
+        {
+            int r = ((m + 1 + k) / c) + 1;
+            if (c * r >= (m + 1 + k + c))
             {
-               width++;
+                r--;
             }
-            else
-            {
-               logic.addBar(last, width);
+            return r;
+        }
 
-               last = black;
-               width = 1;
+        /// <summary>
+        /// Calculates the number of pad codewords as described in 4.9.2 of ISO/IEC 15438:2001(E).
+        /// </summary>
+        /// <param name="m">the number of source codewords prior to the additional of the Symbol Length</param>
+        ///          Descriptor and any pad codewords
+        /// <param name="k">the number of error correction codewords</param>
+        /// <param name="c">the number of columns in the symbol in the data region (excluding start, stop and</param>
+        ///          row indicator codewords)
+        /// <param name="r">the number of rows in the symbol</param>
+        /// <returns>the number of pad codewords</returns>
+        private static int getNumberOfPadCodewords(int m, int k, int c, int r)
+        {
+            int n = c * r - k;
+            return n > m + 1 ? n - m - 1 : 0;
+        }
+
+        private static void encodeChar(int pattern, int len, BarcodeRow logic)
+        {
+            int map = 1 << len - 1;
+            bool last = (pattern & map) != 0; //Initialize to inverse of first bit
+            int width = 0;
+            for (int i = 0; i < len; i++)
+            {
+                bool black = (pattern & map) != 0;
+                if (last == black)
+                {
+                    width++;
+                }
+                else
+                {
+                    logic.addBar(last, width);
+
+                    last = black;
+                    width = 1;
+                }
+                map >>= 1;
             }
-            map >>= 1;
-         }
-         logic.addBar(last, width);
-      }
+            logic.addBar(last, width);
+        }
 
-      private void encodeLowLevel(String fullCodewords,
-                                  int c,
-                                  int r,
-                                  int errorCorrectionLevel,
-                                  BarcodeMatrix logic)
-      {
+        private void encodeLowLevel(String fullCodewords,
+                                    int c,
+                                    int r,
+                                    int errorCorrectionLevel,
+                                    BarcodeMatrix logic)
+        {
 
-         int idx = 0;
-         for (int y = 0; y < r; y++)
-         {
-            int cluster = y%3;
-            logic.startRow();
-            encodeChar(START_PATTERN, 17, logic.getCurrentRow());
-
-            int left;
-            int right;
-            if (cluster == 0)
+            int idx = 0;
+            for (int y = 0; y < r; y++)
             {
-               left = (30*(y/3)) + ((r - 1)/3);
-               right = (30*(y/3)) + (c - 1);
+                int cluster = y % 3;
+                logic.startRow();
+                encodeChar(START_PATTERN, 17, logic.getCurrentRow());
+
+                int left;
+                int right;
+                if (cluster == 0)
+                {
+                    left = (30 * (y / 3)) + ((r - 1) / 3);
+                    right = (30 * (y / 3)) + (c - 1);
+                }
+                else if (cluster == 1)
+                {
+                    left = (30 * (y / 3)) + (errorCorrectionLevel * 3) + ((r - 1) % 3);
+                    right = (30 * (y / 3)) + ((r - 1) / 3);
+                }
+                else
+                {
+                    left = (30 * (y / 3)) + (c - 1);
+                    right = (30 * (y / 3)) + (errorCorrectionLevel * 3) + ((r - 1) % 3);
+                }
+
+                int pattern = CODEWORD_TABLE[cluster][left];
+                encodeChar(pattern, 17, logic.getCurrentRow());
+
+                for (int x = 0; x < c; x++)
+                {
+                    pattern = CODEWORD_TABLE[cluster][fullCodewords[idx]];
+                    encodeChar(pattern, 17, logic.getCurrentRow());
+                    idx++;
+                }
+
+                if (compact)
+                {
+                    encodeChar(STOP_PATTERN, 1, logic.getCurrentRow()); // encodes stop line for compact pdf417
+                }
+                else
+                {
+                    pattern = CODEWORD_TABLE[cluster][right];
+                    encodeChar(pattern, 17, logic.getCurrentRow());
+
+                    encodeChar(STOP_PATTERN, 18, logic.getCurrentRow());
+                }
             }
-            else if (cluster == 1)
+        }
+
+        /// <summary>
+        /// Generates the barcode logic.
+        /// </summary>
+        /// <param name="msg">the message to encode</param>
+        /// <param name="errorCorrectionLevel">PDF417 error correction level to use</param>
+        internal void generateBarcodeLogic(String msg, int errorCorrectionLevel, int longDimension, int shortDimension, ref int aspectRatio)
+        {
+
+            //1. step: High-level encoding
+            String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, compaction, encoding, disableEci);
+            int sourceCodeWords = highLevel.Length;
+            errorCorrectionLevel = PDF417ErrorCorrection.getErrorCorrectionLevel(errorCorrectionLevel, sourceCodeWords);
+            int errorCorrectionCodeWords = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
+
+            int[] dimension = determineDimensions(sourceCodeWords, errorCorrectionCodeWords, longDimension, shortDimension, ref aspectRatio);
+
+            int cols = dimension[0];
+            int rows = dimension[1];
+
+            int pad = getNumberOfPadCodewords(sourceCodeWords, errorCorrectionCodeWords, cols, rows);
+
+            //2. step: construct data codewords
+            if (sourceCodeWords + errorCorrectionCodeWords + 1 > 929)
             {
-               left = (30*(y/3)) + (errorCorrectionLevel*3) + ((r - 1)%3);
-               right = (30*(y/3)) + ((r - 1)/3);
+                // +1 for symbol length CW
+                throw new WriterException(
+                   "Encoded message contains too many code words, message too big (" + msg.Length + " bytes)");
             }
-            else
+            int n = sourceCodeWords + pad + 1;
+            StringBuilder sb = new StringBuilder(n);
+            sb.Append((char)n);
+            sb.Append(highLevel);
+            for (int i = 0; i < pad; i++)
             {
-               left = (30*(y/3)) + (c - 1);
-               right = (30*(y/3)) + (errorCorrectionLevel*3) + ((r - 1)%3);
+                sb.Append((char)900); //PAD characters
             }
+            String dataCodewords = sb.ToString();
 
-            int pattern = CODEWORD_TABLE[cluster][left];
-            encodeChar(pattern, 17, logic.getCurrentRow());
+            //3. step: Error correction
+            String ec = PDF417ErrorCorrection.generateErrorCorrection(dataCodewords, errorCorrectionLevel);
+            String fullCodewords = dataCodewords + ec;
 
-            for (int x = 0; x < c; x++)
+            //4. step: low-level encoding
+            barcodeMatrix = new BarcodeMatrix(rows, cols, compact);
+            encodeLowLevel(fullCodewords, cols, rows, errorCorrectionLevel, barcodeMatrix);
+        }
+
+        /// <summary>
+        /// Determine optimal nr of columns and rows for the specified number of
+        /// codewords.
+        /// </summary>
+        /// <param name="sourceCodeWords">number of code words</param>
+        /// <param name="errorCorrectionCodeWords">number of error correction code words</param>
+        /// <param name="longDimension">The longest dimension of the barcode, used for columns</param>
+        /// <param name="shortDimension">The short dimension of the barcode, used for rows</param>
+        /// <param name="aspectRatio">The height of a row, will alter this parameter if aspectRatio>4 (aspectRatio==AUTO)</param>
+        /// <returns>dimension object containing cols as width and rows as height</returns>
+        private int[] determineDimensions(int sourceCodeWords, int errorCorrectionCodeWords, int longDimension, int shortDimension, ref int aspectRatio)
+        {
+            int startWidth = BarcodeMatrix.COLUMN_WIDTH * 2;
+            int endWidth = (compact ? 0 : 2) * BarcodeMatrix.COLUMN_WIDTH + 1;
+            int start_stop_width = startWidth + endWidth;
+
+            float ratio = 0.0f;
+            int[] dimension = null;
+
+            int dimMaxRows = 0;
+            int dimMaxCols = 0;
+            int calculatedRows = Int32.MaxValue;
+            bool canFit = false;
+
+            if (longDimension >= start_stop_width + BarcodeMatrix.COLUMN_WIDTH)
             {
-               pattern = CODEWORD_TABLE[cluster][fullCodewords[idx]];
-               encodeChar(pattern, 17, logic.getCurrentRow());
-               idx++;
-            }
-
-            if (compact)
-            {
-               encodeChar(STOP_PATTERN, 1, logic.getCurrentRow()); // encodes stop line for compact pdf417
-            }
-            else
-            {
-               pattern = CODEWORD_TABLE[cluster][right];
-               encodeChar(pattern, 17, logic.getCurrentRow());
-
-               encodeChar(STOP_PATTERN, 18, logic.getCurrentRow());
-            }
-         }
-      }
-
-      /// <summary>
-      /// Generates the barcode logic.
-      /// </summary>
-      /// <param name="msg">the message to encode</param>
-      /// <param name="errorCorrectionLevel">PDF417 error correction level to use</param>
-      internal void generateBarcodeLogic(String msg, int errorCorrectionLevel, int longDimension, int shortDimension, ref int aspectRatio)
-      {
-
-         //1. step: High-level encoding
-         String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, compaction, encoding, disableEci);
-         int sourceCodeWords = highLevel.Length;
-         errorCorrectionLevel = PDF417ErrorCorrection.getErrorCorrectionLevel(errorCorrectionLevel,sourceCodeWords);
-         int errorCorrectionCodeWords = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
-
-         int[] dimension = determineDimensions(sourceCodeWords, errorCorrectionCodeWords, longDimension, shortDimension, ref aspectRatio);
-
-         int cols = dimension[0];
-         int rows = dimension[1];
-
-         int pad = getNumberOfPadCodewords(sourceCodeWords, errorCorrectionCodeWords, cols, rows);
-
-         //2. step: construct data codewords
-         if (sourceCodeWords + errorCorrectionCodeWords + 1 > 929)
-         {
-            // +1 for symbol length CW
-            throw new WriterException(
-               "Encoded message contains too many code words, message too big (" + msg.Length + " bytes)");
-         }
-         int n = sourceCodeWords + pad + 1;
-         StringBuilder sb = new StringBuilder(n);
-         sb.Append((char) n);
-         sb.Append(highLevel);
-         for (int i = 0; i < pad; i++)
-         {
-            sb.Append((char) 900); //PAD characters
-         }
-         String dataCodewords = sb.ToString();
-
-         //3. step: Error correction
-         String ec = PDF417ErrorCorrection.generateErrorCorrection(dataCodewords, errorCorrectionLevel);
-         String fullCodewords = dataCodewords + ec;
-
-         //4. step: low-level encoding
-         barcodeMatrix = new BarcodeMatrix(rows, cols, compact);
-         encodeLowLevel(fullCodewords, cols, rows, errorCorrectionLevel, barcodeMatrix);
-      }
-
-      /// <summary>
-      /// Determine optimal nr of columns and rows for the specified number of
-      /// codewords.
-      /// </summary>
-      /// <param name="sourceCodeWords">number of code words</param>
-      /// <param name="errorCorrectionCodeWords">number of error correction code words</param>
-      /// <param name="longDimension">The longest dimension of the barcode, used for columns</param>
-      /// <param name="shortDimension">The short dimension of the barcode, used for rows</param>
-      /// <param name="aspectRatio">The height of a row, will alter this parameter if aspectRatio>4 (aspectRatio==AUTO)</param>
-      /// <returns>dimension object containing cols as width and rows as height</returns>
-      private int[] determineDimensions(int sourceCodeWords, int errorCorrectionCodeWords, int longDimension, int shortDimension, ref int aspectRatio)
-      {
-         int startWidth = BarcodeMatrix.COLUMN_WIDTH * 2;
-         int endWidth = (compact ? 0 : 2) * BarcodeMatrix.COLUMN_WIDTH + 1;
-         int start_stop_width=startWidth+endWidth;
-
-         float ratio = 0.0f;
-         int[] dimension = null;
-
-         int dimMaxRows = 0;
-         int dimMaxCols = 0;
-         int calculatedRows = Int32.MaxValue;
-         bool canFit = false;
-
-         if(longDimension>= start_stop_width + BarcodeMatrix.COLUMN_WIDTH)
-         {
-            dimMaxCols=Math.Min((longDimension- start_stop_width) / BarcodeMatrix.COLUMN_WIDTH, maxCols);
-            dimMaxRows = Math.Min(shortDimension/aspectRatio, maxRows);
-            calculatedRows = calculateNumberOfRows(sourceCodeWords, errorCorrectionCodeWords, dimMaxCols);
-            canFit = calculatedRows <= dimMaxRows;
-         }
-
-         //Set the aspectRatio if AUTO.
-         if (aspectRatio>=(int)PDF417AspectRatio.AUTO)
-         {
-            dimMaxRows = Math.Min(shortDimension, maxRows);
-            int newRatio = 4;
-
-            //Integer division.
-            if (dimMaxRows >= calculatedRows)
-                newRatio = Math.Min(dimMaxRows / calculatedRows, newRatio);
-            aspectRatio = newRatio;
-            dimMaxRows = Math.Min(shortDimension/aspectRatio, maxRows);
-            canFit = calculatedRows <= dimMaxRows;
-         }
-
-
-         for (int cols = minCols; cols <= maxCols && (!canFit || cols<=dimMaxCols); cols++)
-         {
-
-            int rows = calculateNumberOfRows(sourceCodeWords, errorCorrectionCodeWords, cols);
-
-            if (rows < minRows)
-            {
-               break;
+                dimMaxCols = Math.Min((longDimension - start_stop_width) / BarcodeMatrix.COLUMN_WIDTH, maxCols);
+                dimMaxRows = Math.Min(shortDimension / aspectRatio, maxRows);
+                calculatedRows = calculateNumberOfRows(sourceCodeWords, errorCorrectionCodeWords, dimMaxCols);
+                canFit = calculatedRows <= dimMaxRows;
             }
 
-            if (rows > maxRows || (rows > dimMaxRows && canFit))
+            //Set the aspectRatio if AUTO.
+            if (aspectRatio >= (int)PDF417AspectRatio.AUTO)
             {
-               continue;
+                dimMaxRows = Math.Min(shortDimension, maxRows);
+                int newRatio = 4;
+
+                //Integer division.
+                if (dimMaxRows >= calculatedRows)
+                    newRatio = Math.Min(dimMaxRows / calculatedRows, newRatio);
+                aspectRatio = newRatio;
+                dimMaxRows = Math.Min(shortDimension / aspectRatio, maxRows);
+                canFit = calculatedRows <= dimMaxRows;
             }
 
-            float newRatio = ((BarcodeMatrix.COLUMN_WIDTH *cols + start_stop_width) *DEFAULT_MODULE_WIDTH)/(rows*HEIGHT);
 
-            // ignore if previous ratio is closer to preferred ratio
-            if (dimension != null && Math.Abs(newRatio - PREFERRED_RATIO) > Math.Abs(ratio - PREFERRED_RATIO))
+            for (int cols = minCols; cols <= maxCols && (!canFit || cols <= dimMaxCols); cols++)
             {
-               continue;
+
+                int rows = calculateNumberOfRows(sourceCodeWords, errorCorrectionCodeWords, cols);
+
+                if (rows < minRows)
+                {
+                    break;
+                }
+
+                if (rows > maxRows || (rows > dimMaxRows && canFit))
+                {
+                    continue;
+                }
+
+                float newRatio = ((BarcodeMatrix.COLUMN_WIDTH * cols + start_stop_width) * DEFAULT_MODULE_WIDTH) / (rows * HEIGHT);
+
+                // ignore if previous ratio is closer to preferred ratio
+                if (dimension != null && Math.Abs(newRatio - PREFERRED_RATIO) > Math.Abs(ratio - PREFERRED_RATIO))
+                {
+                    continue;
+                }
+
+                ratio = newRatio;
+                dimension = new int[] { cols, rows };
             }
 
-            ratio = newRatio;
-            dimension = new int[] {cols, rows};
-         }
-
-         // Handle case when min values were larger than necessary
-         if (dimension == null)
-         {
-            int rows = calculateNumberOfRows(sourceCodeWords, errorCorrectionCodeWords, minCols);
-            if (rows < minRows)
+            // Handle case when min values were larger than necessary
+            if (dimension == null)
             {
-               dimension = new int[] {minCols, minRows};
+                int rows = calculateNumberOfRows(sourceCodeWords, errorCorrectionCodeWords, minCols);
+                if (rows < minRows)
+                {
+                    dimension = new int[] { minCols, minRows };
+                }
             }
-         }
 
-         if (dimension == null)
-         {
-            throw new WriterException("Unable to fit message in columns");
-         }
+            if (dimension == null)
+            {
+                throw new WriterException("Unable to fit message in columns");
+            }
 
-         return dimension;
-      }
+            return dimension;
+        }
 
-      /// <summary>
-      /// Sets max/min row/col values
-      /// </summary>
-      /// <param name="maxCols">maximum allowed columns</param>
-      /// <param name="minCols">minimum allowed columns</param>
-      /// <param name="maxRows">maximum allowed rows</param>
-      /// <param name="minRows">minimum allowed rows</param>
-      internal void setDimensions(int maxCols, int minCols, int maxRows, int minRows)
-      {
-         this.maxCols = maxCols;
-         this.minCols = minCols;
-         this.maxRows = maxRows;
-         this.minRows = minRows;
-      }
+        /// <summary>
+        /// Sets max/min row/col values
+        /// </summary>
+        /// <param name="maxCols">maximum allowed columns</param>
+        /// <param name="minCols">minimum allowed columns</param>
+        /// <param name="maxRows">maximum allowed rows</param>
+        /// <param name="minRows">minimum allowed rows</param>
+        internal void setDimensions(int maxCols, int minCols, int maxRows, int minRows)
+        {
+            this.maxCols = maxCols;
+            this.minCols = minCols;
+            this.maxRows = maxRows;
+            this.minRows = minRows;
+        }
 
-      /// <summary>
-      /// Sets compaction to values stored in <see cref="Compaction"/>enum
-      /// </summary>
-      /// <param name="compaction">compaction mode to use</param>
-      internal void setCompaction(Compaction compaction)
-      {
-         this.compaction = compaction;
-      }
+        /// <summary>
+        /// Sets compaction to values stored in <see cref="Compaction"/>enum
+        /// </summary>
+        /// <param name="compaction">compaction mode to use</param>
+        internal void setCompaction(Compaction compaction)
+        {
+            this.compaction = compaction;
+        }
 
-      /// <summary>
-      /// Sets compact to be true or false
-      /// </summary>
-      /// <param name="compact">if true, enables compaction</param>
-      internal void setCompact(bool compact)
-      {
-         this.compact = compact;
-      }
+        /// <summary>
+        /// Sets compact to be true or false
+        /// </summary>
+        /// <param name="compact">if true, enables compaction</param>
+        internal void setCompact(bool compact)
+        {
+            this.compact = compact;
+        }
 
-      /// <summary>
-      /// Sets output encoding.
-      /// </summary>
-      /// <param name="encodingname">sets character encoding to use</param>
-      internal void setEncoding(String encodingname)
-      {
+        /// <summary>
+        /// Sets output encoding.
+        /// </summary>
+        /// <param name="encodingname">sets character encoding to use</param>
+        internal void setEncoding(String encodingname)
+        {
 #if WindowsCE
          try
          {
@@ -859,17 +859,17 @@ namespace ZXing.PDF417.Internal
             this.encoding = Encoding.GetEncoding(1252);
          }
 #else
-         this.encoding = Encoding.GetEncoding(encodingname);
+            this.encoding = Encoding.GetEncoding(encodingname);
 #endif
-      }
+        }
 
-      /// <summary>
-      /// Sets the disable eci.
-      /// </summary>
-      /// <param name="disabled">if set to <c>true</c> don't add an ECI segment for different encodings than default.</param>
-      internal void setDisableEci(bool disabled)
-      {
-         this.disableEci = disabled;
-      }
-   }
+        /// <summary>
+        /// Sets the disable eci.
+        /// </summary>
+        /// <param name="disabled">if set to <c>true</c> don't add an ECI segment for different encodings than default.</param>
+        internal void setDisableEci(bool disabled)
+        {
+            this.disableEci = disabled;
+        }
+    }
 }

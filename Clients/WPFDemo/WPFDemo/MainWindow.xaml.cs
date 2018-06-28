@@ -29,106 +29,106 @@ using BarcodeWriterGeometry = ZXing.Presentation.BarcodeWriterGeometry;
 
 namespace WPFDemo
 {
-   /// <summary>
-   /// Interaktionslogik für MainWindow.xaml
-   /// </summary>
-   public partial class MainWindow : Window
-   {
-      private readonly BarcodeReader reader = new BarcodeReader();
+    /// <summary>
+    /// Interaktionslogik für MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        private readonly BarcodeReader reader = new BarcodeReader();
 
-      public MainWindow()
-      {
-         InitializeComponent();
+        public MainWindow()
+        {
+            InitializeComponent();
 
-         foreach (var format in MultiFormatWriter.SupportedWriters)
-            cmbEncoderType.Items.Add(format);
-         cmbEncoderType.SelectedItem = BarcodeFormat.QR_CODE;
+            foreach (var format in MultiFormatWriter.SupportedWriters)
+                cmbEncoderType.Items.Add(format);
+            cmbEncoderType.SelectedItem = BarcodeFormat.QR_CODE;
 
-         cmbRendererType.Items.Add("WriteableBitmap");
-         cmbRendererType.Items.Add("XAML Geometry");
-         cmbRendererType.SelectedItem = "WriteableBitmap";
-      }
+            cmbRendererType.Items.Add("WriteableBitmap");
+            cmbRendererType.Items.Add("XAML Geometry");
+            cmbRendererType.SelectedItem = "WriteableBitmap";
+        }
 
-      private void btnSelectFile_Click(object sender, RoutedEventArgs e)
-      {
-         var dlg = new OpenFileDialog
-                      {
-                         Filter = "All documents (*.*)|*.*",
-                         FileName = txtBarcodeImageFile.Text
-                      };
-         if (dlg.ShowDialog(this).GetValueOrDefault(false))
-         {
-            txtBarcodeImageFile.Text = dlg.FileName;
-         }
-      }
+        private void btnSelectFile_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog
+            {
+                Filter = "All documents (*.*)|*.*",
+                FileName = txtBarcodeImageFile.Text
+            };
+            if (dlg.ShowDialog(this).GetValueOrDefault(false))
+            {
+                txtBarcodeImageFile.Text = dlg.FileName;
+            }
+        }
 
-      private void btnDecode_Click(object sender, RoutedEventArgs e)
-      {
-         var start = DateTime.Now;
-         var result = reader.Decode((BitmapSource) imageBarcode.Source);
-         labDuration.Content = (DateTime.Now - start).Milliseconds + " ms";
-         if (result != null)
-         {
-            txtBarcodeType.Text = result.BarcodeFormat.ToString();
-            txtBarcodeContent.Text = result.Text;
-         }
-         else
-         {
-            txtBarcodeType.Text = "";
-            txtBarcodeContent.Text = "No barcode found.";
-         }
-      }
+        private void btnDecode_Click(object sender, RoutedEventArgs e)
+        {
+            var start = DateTime.Now;
+            var result = reader.Decode((BitmapSource)imageBarcode.Source);
+            labDuration.Content = (DateTime.Now - start).Milliseconds + " ms";
+            if (result != null)
+            {
+                txtBarcodeType.Text = result.BarcodeFormat.ToString();
+                txtBarcodeContent.Text = result.Text;
+            }
+            else
+            {
+                txtBarcodeType.Text = "";
+                txtBarcodeContent.Text = "No barcode found.";
+            }
+        }
 
-      private void txtBarcodeImageFile_TextChanged(object sender, TextChangedEventArgs e)
-      {
-         if (File.Exists(txtBarcodeImageFile.Text))
-         {
-            imageBarcode.Source = new BitmapImage(new Uri(txtBarcodeImageFile.Text));
-         }
-      }
+        private void txtBarcodeImageFile_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (File.Exists(txtBarcodeImageFile.Text))
+            {
+                imageBarcode.Source = new BitmapImage(new Uri(txtBarcodeImageFile.Text));
+            }
+        }
 
-      private void btnEncode_Click(object sender, RoutedEventArgs e)
-      {
-         imageBarcodeEncoder.Visibility = Visibility.Hidden;
-         imageBarcodeEncoderGeometry.Visibility = Visibility.Hidden;
+        private void btnEncode_Click(object sender, RoutedEventArgs e)
+        {
+            imageBarcodeEncoder.Visibility = Visibility.Hidden;
+            imageBarcodeEncoderGeometry.Visibility = Visibility.Hidden;
 
-         switch (cmbRendererType.SelectedItem.ToString())
-         {
-            case "WriteableBitmap":
-               {
-                  var writer = new BarcodeWriter
-                     {
-                        Format = (BarcodeFormat)cmbEncoderType.SelectedItem,
-                        Options = new ZXing.Common.EncodingOptions
-                           {
-                              Height = (int)((FrameworkElement)imageBarcodeEncoder.Parent).ActualHeight,
-                              Width = (int)((FrameworkElement)imageBarcodeEncoder.Parent).ActualWidth,
-                              Margin = 0
-                           }
-                     };
-                  var image = writer.Write(txtBarcodeContentEncode.Text);
-                  imageBarcodeEncoder.Source = image;
-                  imageBarcodeEncoder.Visibility = Visibility.Visible;
-               }
-               break;
-            case "XAML Geometry":
-               {
-                  var writer = new BarcodeWriterGeometry
-                     {
-                        Format = (BarcodeFormat) cmbEncoderType.SelectedItem,
-                        Options = new ZXing.Common.EncodingOptions
-                           {
-                              Height = (int)((FrameworkElement)imageBarcodeEncoder.Parent).ActualHeight,
-                              Width = (int)((FrameworkElement)imageBarcodeEncoder.Parent).ActualWidth,
-                              Margin = 0
-                           }
-                     };
-                  var image = writer.Write(txtBarcodeContentEncode.Text);
-                  imageBarcodeEncoderGeometry.Data = image;
-                  imageBarcodeEncoderGeometry.Visibility = Visibility.Visible;
-               }
-               break;
-         }
-      }
-   }
+            switch (cmbRendererType.SelectedItem.ToString())
+            {
+                case "WriteableBitmap":
+                    {
+                        var writer = new BarcodeWriter
+                        {
+                            Format = (BarcodeFormat)cmbEncoderType.SelectedItem,
+                            Options = new ZXing.Common.EncodingOptions
+                            {
+                                Height = (int)((FrameworkElement)imageBarcodeEncoder.Parent).ActualHeight,
+                                Width = (int)((FrameworkElement)imageBarcodeEncoder.Parent).ActualWidth,
+                                Margin = 0
+                            }
+                        };
+                        var image = writer.Write(txtBarcodeContentEncode.Text);
+                        imageBarcodeEncoder.Source = image;
+                        imageBarcodeEncoder.Visibility = Visibility.Visible;
+                    }
+                    break;
+                case "XAML Geometry":
+                    {
+                        var writer = new BarcodeWriterGeometry
+                        {
+                            Format = (BarcodeFormat)cmbEncoderType.SelectedItem,
+                            Options = new ZXing.Common.EncodingOptions
+                            {
+                                Height = (int)((FrameworkElement)imageBarcodeEncoder.Parent).ActualHeight,
+                                Width = (int)((FrameworkElement)imageBarcodeEncoder.Parent).ActualWidth,
+                                Margin = 0
+                            }
+                        };
+                        var image = writer.Write(txtBarcodeContentEncode.Text);
+                        imageBarcodeEncoderGeometry.Data = image;
+                        imageBarcodeEncoderGeometry.Visibility = Visibility.Visible;
+                    }
+                    break;
+            }
+        }
+    }
 }

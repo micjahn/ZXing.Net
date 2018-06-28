@@ -20,22 +20,22 @@ using ZXing.CoreCompat.Rendering;
 
 namespace ZXing
 {
-   /// <summary>
-   /// extensions methods which are working directly on any BarcodeWriterGeneric implementation
-   /// </summary>
-   public static class BarcodeWriterExtensions
-   {
-      /// <summary>
-      /// uses the BarcodeWriterGeneric implementation and the <see cref="BitmapRenderer"/> class for decoding
-      /// </summary>
-      /// <param name="writer"></param>
-      /// <param name="content"></param>
-      /// <returns></returns>
-      public static Bitmap WriteAsBitmap(this IBarcodeWriterGeneric writer, string content)
-      {
-         var bitmatrix = writer.Encode(content);
-         var renderer = new BitmapRenderer();
-         return renderer.Render(bitmatrix, writer.Format, content, writer.Options);
-      }
-   }
+    /// <summary>
+    /// extensions methods which are working directly on any BarcodeWriterGeneric implementation
+    /// </summary>
+    public static class BarcodeWriterExtensions
+    {
+        /// <summary>
+        /// uses the BarcodeWriterGeneric implementation and the <see cref="BitmapRenderer"/> class for decoding
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        public static Bitmap WriteAsBitmap(this IBarcodeWriterGeneric writer, string content)
+        {
+            var bitmatrix = writer.Encode(content);
+            var renderer = new BitmapRenderer();
+            return renderer.Render(bitmatrix, writer.Format, content, writer.Options);
+        }
+    }
 }

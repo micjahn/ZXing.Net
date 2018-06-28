@@ -20,337 +20,337 @@ using ZXing.Common;
 
 namespace ZXing.QrCode.Internal
 {
-   /// <summary>
-   /// See ISO 18004:2006 Annex D
-   /// </summary>
-   /// <author>Sean Owen</author>
-   public sealed class Version
-   {
-      /// <summary> See ISO 18004:2006 Annex D.
-      /// Element i represents the raw version bits that specify version i + 7
-      /// </summary>
-      private static readonly int[] VERSION_DECODE_INFO = new[]
-                                                             {
+    /// <summary>
+    /// See ISO 18004:2006 Annex D
+    /// </summary>
+    /// <author>Sean Owen</author>
+    public sealed class Version
+    {
+        /// <summary> See ISO 18004:2006 Annex D.
+        /// Element i represents the raw version bits that specify version i + 7
+        /// </summary>
+        private static readonly int[] VERSION_DECODE_INFO = new[]
+                                                               {
                                                                 0x07C94, 0x085BC, 0x09A99, 0x0A4D3, 0x0BBF6,
                                                                 0x0C762, 0x0D847, 0x0E60D, 0x0F928, 0x10B78,
-                                                                0x1145D, 0x12A17, 0x13532, 0x149A6, 0x15683, 
-                                                                0x168C9, 0x177EC, 0x18EC4, 0x191E1, 0x1AFAB, 
-                                                                0x1B08E, 0x1CC1A, 0x1D33F, 0x1ED75, 0x1F250, 
-                                                                0x209D5, 0x216F0, 0x228BA, 0x2379F, 0x24B0B, 
+                                                                0x1145D, 0x12A17, 0x13532, 0x149A6, 0x15683,
+                                                                0x168C9, 0x177EC, 0x18EC4, 0x191E1, 0x1AFAB,
+                                                                0x1B08E, 0x1CC1A, 0x1D33F, 0x1ED75, 0x1F250,
+                                                                0x209D5, 0x216F0, 0x228BA, 0x2379F, 0x24B0B,
                                                                 0x2542E, 0x26A64, 0x27541, 0x28C69
                                                              };
 
-      private static readonly Version[] VERSIONS = buildVersions();
+        private static readonly Version[] VERSIONS = buildVersions();
 
-      private readonly int versionNumber;
-      private readonly int[] alignmentPatternCenters;
-      private readonly ECBlocks[] ecBlocks;
-      private readonly int totalCodewords;
+        private readonly int versionNumber;
+        private readonly int[] alignmentPatternCenters;
+        private readonly ECBlocks[] ecBlocks;
+        private readonly int totalCodewords;
 
-      private Version(int versionNumber, int[] alignmentPatternCenters, params ECBlocks[] ecBlocks)
-      {
-         this.versionNumber = versionNumber;
-         this.alignmentPatternCenters = alignmentPatternCenters;
-         this.ecBlocks = ecBlocks;
-         int total = 0;
-         int ecCodewords = ecBlocks[0].ECCodewordsPerBlock;
-         ECB[] ecbArray = ecBlocks[0].getECBlocks();
-         foreach (var ecBlock in ecbArray)
-         {
-            total += ecBlock.Count * (ecBlock.DataCodewords + ecCodewords);
-         }
-         this.totalCodewords = total;
-      }
-
-      /// <summary>
-      /// Gets the version number.
-      /// </summary>
-      public int VersionNumber
-      {
-         get
-         {
-            return versionNumber;
-         }
-
-      }
-
-      /// <summary>
-      /// Gets the alignment pattern centers.
-      /// </summary>
-      public int[] AlignmentPatternCenters
-      {
-         get
-         {
-            return alignmentPatternCenters;
-         }
-
-      }
-
-      /// <summary>
-      /// Gets the total codewords.
-      /// </summary>
-      public int TotalCodewords
-      {
-         get
-         {
-            return totalCodewords;
-         }
-
-      }
-
-      /// <summary>
-      /// Gets the dimension for version.
-      /// </summary>
-      public int DimensionForVersion
-      {
-         get
-         {
-            return 17 + 4 * versionNumber;
-         }
-
-      }
-
-      /// <summary>
-      /// Gets the EC blocks for level.
-      /// </summary>
-      /// <param name="ecLevel">The ec level.</param>
-      /// <returns></returns>
-      public ECBlocks getECBlocksForLevel(ErrorCorrectionLevel ecLevel)
-      {
-         return ecBlocks[ecLevel.ordinal()];
-      }
-
-      /// <summary> <p>Deduces version information purely from QR Code dimensions.</p>
-      /// 
-      /// </summary>
-      /// <param name="dimension">dimension in modules
-      /// </param>
-      /// <returns><see cref="Version" /> for a QR Code of that dimension or null</returns>
-      public static Version getProvisionalVersionForDimension(int dimension)
-      {
-         if (dimension % 4 != 1)
-         {
-            return null;
-         }
-         try
-         {
-            return getVersionForNumber((dimension - 17) >> 2);
-         }
-         catch (ArgumentException)
-         {
-            return null;
-         }
-      }
-
-      /// <summary>
-      /// Gets the version for number.
-      /// </summary>
-      /// <param name="versionNumber">The version number.</param>
-      /// <returns></returns>
-      public static Version getVersionForNumber(int versionNumber)
-      {
-         if (versionNumber < 1 || versionNumber > 40)
-         {
-            throw new ArgumentException();
-         }
-         return VERSIONS[versionNumber - 1];
-      }
-
-      internal static Version decodeVersionInformation(int versionBits)
-      {
-         int bestDifference = Int32.MaxValue;
-         int bestVersion = 0;
-         for (int i = 0; i < VERSION_DECODE_INFO.Length; i++)
-         {
-            int targetVersion = VERSION_DECODE_INFO[i];
-            // Do the version info bits match exactly? done.
-            if (targetVersion == versionBits)
-            {
-               return getVersionForNumber(i + 7);
-            }
-            // Otherwise see if this is the closest to a real version info bit string
-            // we have seen so far
-            int bitsDifference = FormatInformation.numBitsDiffering(versionBits, targetVersion);
-            if (bitsDifference < bestDifference)
-            {
-               bestVersion = i + 7;
-               bestDifference = bitsDifference;
-            }
-         }
-         // We can tolerate up to 3 bits of error since no two version info codewords will
-         // differ in less than 8 bits.
-         if (bestDifference <= 3)
-         {
-            return getVersionForNumber(bestVersion);
-         }
-         // If we didn't find a close enough match, fail
-         return null;
-      }
-
-      /// <summary> See ISO 18004:2006 Annex E</summary>
-      internal BitMatrix buildFunctionPattern()
-      {
-         int dimension = DimensionForVersion;
-         BitMatrix bitMatrix = new BitMatrix(dimension);
-
-         // Top left finder pattern + separator + format
-         bitMatrix.setRegion(0, 0, 9, 9);
-         // Top right finder pattern + separator + format
-         bitMatrix.setRegion(dimension - 8, 0, 8, 9);
-         // Bottom left finder pattern + separator + format
-         bitMatrix.setRegion(0, dimension - 8, 9, 8);
-
-         // Alignment patterns
-         int max = alignmentPatternCenters.Length;
-         for (int x = 0; x < max; x++)
-         {
-            int i = alignmentPatternCenters[x] - 2;
-            for (int y = 0; y < max; y++)
-            {
-               if ((x == 0 && (y == 0 || y == max - 1)) || (x == max - 1 && y == 0))
-               {
-                  // No alignment patterns near the three finder patterns
-                  continue;
-               }
-               bitMatrix.setRegion(alignmentPatternCenters[y] - 2, i, 5, 5);
-            }
-         }
-
-         // Vertical timing pattern
-         bitMatrix.setRegion(6, 9, 1, dimension - 17);
-         // Horizontal timing pattern
-         bitMatrix.setRegion(9, 6, dimension - 17, 1);
-
-         if (versionNumber > 6)
-         {
-            // Version info, top right
-            bitMatrix.setRegion(dimension - 11, 0, 3, 6);
-            // Version info, bottom left
-            bitMatrix.setRegion(0, dimension - 11, 6, 3);
-         }
-
-         return bitMatrix;
-      }
-
-      /// <summary> <p>Encapsulates a set of error-correction blocks in one symbol version. Most versions will
-      /// use blocks of differing sizes within one version, so, this encapsulates the parameters for
-      /// each set of blocks. It also holds the number of error-correction codewords per block since it
-      /// will be the same across all blocks within one version.</p>
-      /// </summary>
-      public sealed class ECBlocks
-      {
-         private readonly int ecCodewordsPerBlock;
-         private readonly ECB[] ecBlocks;
-
-         internal ECBlocks(int ecCodewordsPerBlock, params ECB[] ecBlocks)
-         {
-            this.ecCodewordsPerBlock = ecCodewordsPerBlock;
+        private Version(int versionNumber, int[] alignmentPatternCenters, params ECBlocks[] ecBlocks)
+        {
+            this.versionNumber = versionNumber;
+            this.alignmentPatternCenters = alignmentPatternCenters;
             this.ecBlocks = ecBlocks;
-         }
-
-         /// <summary>
-         /// Gets the EC codewords per block.
-         /// </summary>
-         public int ECCodewordsPerBlock
-         {
-            get
+            int total = 0;
+            int ecCodewords = ecBlocks[0].ECCodewordsPerBlock;
+            ECB[] ecbArray = ecBlocks[0].getECBlocks();
+            foreach (var ecBlock in ecbArray)
             {
-               return ecCodewordsPerBlock;
+                total += ecBlock.Count * (ecBlock.DataCodewords + ecCodewords);
             }
-         }
+            this.totalCodewords = total;
+        }
 
-         /// <summary>
-         /// Gets the num blocks.
-         /// </summary>
-         public int NumBlocks
-         {
+        /// <summary>
+        /// Gets the version number.
+        /// </summary>
+        public int VersionNumber
+        {
             get
             {
-               int total = 0;
-               foreach (var ecBlock in ecBlocks)
+                return versionNumber;
+            }
+
+        }
+
+        /// <summary>
+        /// Gets the alignment pattern centers.
+        /// </summary>
+        public int[] AlignmentPatternCenters
+        {
+            get
+            {
+                return alignmentPatternCenters;
+            }
+
+        }
+
+        /// <summary>
+        /// Gets the total codewords.
+        /// </summary>
+        public int TotalCodewords
+        {
+            get
+            {
+                return totalCodewords;
+            }
+
+        }
+
+        /// <summary>
+        /// Gets the dimension for version.
+        /// </summary>
+        public int DimensionForVersion
+        {
+            get
+            {
+                return 17 + 4 * versionNumber;
+            }
+
+        }
+
+        /// <summary>
+        /// Gets the EC blocks for level.
+        /// </summary>
+        /// <param name="ecLevel">The ec level.</param>
+        /// <returns></returns>
+        public ECBlocks getECBlocksForLevel(ErrorCorrectionLevel ecLevel)
+        {
+            return ecBlocks[ecLevel.ordinal()];
+        }
+
+        /// <summary> <p>Deduces version information purely from QR Code dimensions.</p>
+        /// 
+        /// </summary>
+        /// <param name="dimension">dimension in modules
+        /// </param>
+        /// <returns><see cref="Version" /> for a QR Code of that dimension or null</returns>
+        public static Version getProvisionalVersionForDimension(int dimension)
+        {
+            if (dimension % 4 != 1)
+            {
+                return null;
+            }
+            try
+            {
+                return getVersionForNumber((dimension - 17) >> 2);
+            }
+            catch (ArgumentException)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the version for number.
+        /// </summary>
+        /// <param name="versionNumber">The version number.</param>
+        /// <returns></returns>
+        public static Version getVersionForNumber(int versionNumber)
+        {
+            if (versionNumber < 1 || versionNumber > 40)
+            {
+                throw new ArgumentException();
+            }
+            return VERSIONS[versionNumber - 1];
+        }
+
+        internal static Version decodeVersionInformation(int versionBits)
+        {
+            int bestDifference = Int32.MaxValue;
+            int bestVersion = 0;
+            for (int i = 0; i < VERSION_DECODE_INFO.Length; i++)
+            {
+                int targetVersion = VERSION_DECODE_INFO[i];
+                // Do the version info bits match exactly? done.
+                if (targetVersion == versionBits)
+                {
+                    return getVersionForNumber(i + 7);
+                }
+                // Otherwise see if this is the closest to a real version info bit string
+                // we have seen so far
+                int bitsDifference = FormatInformation.numBitsDiffering(versionBits, targetVersion);
+                if (bitsDifference < bestDifference)
+                {
+                    bestVersion = i + 7;
+                    bestDifference = bitsDifference;
+                }
+            }
+            // We can tolerate up to 3 bits of error since no two version info codewords will
+            // differ in less than 8 bits.
+            if (bestDifference <= 3)
+            {
+                return getVersionForNumber(bestVersion);
+            }
+            // If we didn't find a close enough match, fail
+            return null;
+        }
+
+        /// <summary> See ISO 18004:2006 Annex E</summary>
+        internal BitMatrix buildFunctionPattern()
+        {
+            int dimension = DimensionForVersion;
+            BitMatrix bitMatrix = new BitMatrix(dimension);
+
+            // Top left finder pattern + separator + format
+            bitMatrix.setRegion(0, 0, 9, 9);
+            // Top right finder pattern + separator + format
+            bitMatrix.setRegion(dimension - 8, 0, 8, 9);
+            // Bottom left finder pattern + separator + format
+            bitMatrix.setRegion(0, dimension - 8, 9, 8);
+
+            // Alignment patterns
+            int max = alignmentPatternCenters.Length;
+            for (int x = 0; x < max; x++)
+            {
+                int i = alignmentPatternCenters[x] - 2;
+                for (int y = 0; y < max; y++)
+                {
+                    if ((x == 0 && (y == 0 || y == max - 1)) || (x == max - 1 && y == 0))
+                    {
+                        // No alignment patterns near the three finder patterns
+                        continue;
+                    }
+                    bitMatrix.setRegion(alignmentPatternCenters[y] - 2, i, 5, 5);
+                }
+            }
+
+            // Vertical timing pattern
+            bitMatrix.setRegion(6, 9, 1, dimension - 17);
+            // Horizontal timing pattern
+            bitMatrix.setRegion(9, 6, dimension - 17, 1);
+
+            if (versionNumber > 6)
+            {
+                // Version info, top right
+                bitMatrix.setRegion(dimension - 11, 0, 3, 6);
+                // Version info, bottom left
+                bitMatrix.setRegion(0, dimension - 11, 6, 3);
+            }
+
+            return bitMatrix;
+        }
+
+        /// <summary> <p>Encapsulates a set of error-correction blocks in one symbol version. Most versions will
+        /// use blocks of differing sizes within one version, so, this encapsulates the parameters for
+        /// each set of blocks. It also holds the number of error-correction codewords per block since it
+        /// will be the same across all blocks within one version.</p>
+        /// </summary>
+        public sealed class ECBlocks
+        {
+            private readonly int ecCodewordsPerBlock;
+            private readonly ECB[] ecBlocks;
+
+            internal ECBlocks(int ecCodewordsPerBlock, params ECB[] ecBlocks)
+            {
+                this.ecCodewordsPerBlock = ecCodewordsPerBlock;
+                this.ecBlocks = ecBlocks;
+            }
+
+            /// <summary>
+            /// Gets the EC codewords per block.
+            /// </summary>
+            public int ECCodewordsPerBlock
+            {
+                get
+                {
+                    return ecCodewordsPerBlock;
+                }
+            }
+
+            /// <summary>
+            /// Gets the num blocks.
+            /// </summary>
+            public int NumBlocks
+            {
+                get
+                {
+                    int total = 0;
+                    foreach (var ecBlock in ecBlocks)
+                    {
+                        total += ecBlock.Count;
+                    }
+                    return total;
+                }
+            }
+
+            /// <summary>
+            /// Gets the total EC codewords.
+            /// </summary>
+            public int TotalECCodewords
+            {
+                get
+                {
+                    return ecCodewordsPerBlock * NumBlocks;
+                }
+            }
+
+            /// <summary>
+            /// Gets the EC blocks.
+            /// </summary>
+            /// <returns></returns>
+            public ECB[] getECBlocks()
+            {
+                return ecBlocks;
+            }
+        }
+
+        /// <summary> <p>Encapsulates the parameters for one error-correction block in one symbol version.
+        /// This includes the number of data codewords, and the number of times a block with these
+        /// parameters is used consecutively in the QR code version's format.</p>
+        /// </summary>
+        public sealed class ECB
+        {
+            private readonly int count;
+            private readonly int dataCodewords;
+
+            internal ECB(int count, int dataCodewords)
+            {
+                this.count = count;
+                this.dataCodewords = dataCodewords;
+            }
+
+            /// <summary>
+            /// Gets the count.
+            /// </summary>
+            public int Count
+            {
+                get
+                {
+                    return count;
+                }
+
+            }
+            /// <summary>
+            /// Gets the data codewords.
+            /// </summary>
+            public int DataCodewords
+            {
+                get
+                {
+                    return dataCodewords;
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
+        public override String ToString()
+        {
+            return Convert.ToString(versionNumber);
+        }
+
+        /// <summary> See ISO 18004:2006 6.5.1 Table 9</summary>
+        private static Version[] buildVersions()
+        {
+            return new Version[]
                {
-                  total += ecBlock.Count;
-               }
-               return total;
-            }
-         }
-
-         /// <summary>
-         /// Gets the total EC codewords.
-         /// </summary>
-         public int TotalECCodewords
-         {
-            get
-            {
-               return ecCodewordsPerBlock * NumBlocks;
-            }
-         }
-
-         /// <summary>
-         /// Gets the EC blocks.
-         /// </summary>
-         /// <returns></returns>
-         public ECB[] getECBlocks()
-         {
-            return ecBlocks;
-         }
-      }
-
-      /// <summary> <p>Encapsulates the parameters for one error-correction block in one symbol version.
-      /// This includes the number of data codewords, and the number of times a block with these
-      /// parameters is used consecutively in the QR code version's format.</p>
-      /// </summary>
-      public sealed class ECB
-      {
-         private readonly int count;
-         private readonly int dataCodewords;
-
-         internal ECB(int count, int dataCodewords)
-         {
-            this.count = count;
-            this.dataCodewords = dataCodewords;
-         }
-
-         /// <summary>
-         /// Gets the count.
-         /// </summary>
-         public int Count
-         {
-            get
-            {
-               return count;
-            }
-
-         }
-         /// <summary>
-         /// Gets the data codewords.
-         /// </summary>
-         public int DataCodewords
-         {
-            get
-            {
-               return dataCodewords;
-            }
-
-         }
-      }
-
-      /// <summary>
-      /// Returns a <see cref="System.String"/> that represents this instance.
-      /// </summary>
-      /// <returns>
-      /// A <see cref="System.String"/> that represents this instance.
-      /// </returns>
-      public override String ToString()
-      {
-         return Convert.ToString(versionNumber);
-      }
-
-      /// <summary> See ISO 18004:2006 6.5.1 Table 9</summary>
-      private static Version[] buildVersions()
-      {
-         return new Version[]
-            {
                new Version(1, new int[] {},
                            new ECBlocks(7, new ECB(1, 19)),
                            new ECBlocks(10, new ECB(1, 16)),
@@ -679,7 +679,7 @@ namespace ZXing.QrCode.Internal
                                         new ECB(34, 25)),
                            new ECBlocks(30, new ECB(20, 15),
                                         new ECB(61, 16)))
-            };
-      }
-   }
+               };
+        }
+    }
 }

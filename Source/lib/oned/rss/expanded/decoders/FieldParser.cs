@@ -29,25 +29,25 @@ using System.Collections.Generic;
 
 namespace ZXing.OneD.RSS.Expanded.Decoders
 {
-   /// <summary>
-   /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
-   /// <author>Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)</author>
-   /// </summary>
-   static class FieldParser
-   {
-      private static readonly Object VARIABLE_LENGTH = new Object();
+    /// <summary>
+    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
+    /// <author>Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)</author>
+    /// </summary>
+    static class FieldParser
+    {
+        private static readonly Object VARIABLE_LENGTH = new Object();
 
-      // "DIGITS", new Integer(LENGTH)
-      //    or
-      // "DIGITS", VARIABLE_LENGTH, new Integer(MAX_SIZE)
-      private static readonly IDictionary<string, object[]> TWO_DIGIT_DATA_LENGTH;
-      private static readonly IDictionary<string, object[]> THREE_DIGIT_DATA_LENGTH;
-      private static readonly IDictionary<string, object[]> THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH;
-      private static readonly IDictionary<string, object[]> FOUR_DIGIT_DATA_LENGTH;
+        // "DIGITS", new Integer(LENGTH)
+        //    or
+        // "DIGITS", VARIABLE_LENGTH, new Integer(MAX_SIZE)
+        private static readonly IDictionary<string, object[]> TWO_DIGIT_DATA_LENGTH;
+        private static readonly IDictionary<string, object[]> THREE_DIGIT_DATA_LENGTH;
+        private static readonly IDictionary<string, object[]> THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH;
+        private static readonly IDictionary<string, object[]> FOUR_DIGIT_DATA_LENGTH;
 
-      static FieldParser()
-      {
-         TWO_DIGIT_DATA_LENGTH = new Dictionary<string, object[]>
+        static FieldParser()
+        {
+            TWO_DIGIT_DATA_LENGTH = new Dictionary<string, object[]>
                                     {
                                        {"00", new object[] {18}},
                                        {"01", new object[] {14}},
@@ -75,7 +75,7 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
                                        {"98", new object[] {VARIABLE_LENGTH, 30}},
                                        {"99", new object[] {VARIABLE_LENGTH, 30}}
                                     };
-         THREE_DIGIT_DATA_LENGTH = new Dictionary<string, object[]>
+            THREE_DIGIT_DATA_LENGTH = new Dictionary<string, object[]>
                                       {
                                          // Same format as above
 
@@ -104,7 +104,7 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
                                          {"425", new object[] {3}},
                                          {"426", new object[] {3}},
                                       };
-         THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH = new Dictionary<string, object[]>
+            THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH = new Dictionary<string, object[]>
                                                  {
                                                     {"310", new object[] {6}},
                                                     {"311", new object[] {6}},
@@ -165,7 +165,7 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
                                                     {"703", new object[] {VARIABLE_LENGTH, 30}}
 
                                                  };
-         FOUR_DIGIT_DATA_LENGTH = new Dictionary<string, object[]>
+            FOUR_DIGIT_DATA_LENGTH = new Dictionary<string, object[]>
                                      {
                                         {"7001", new object[] {13}},
                                         {"7002", new object[] {VARIABLE_LENGTH, 30}},
@@ -187,119 +187,119 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
                                         {"8110", new object[] {VARIABLE_LENGTH, 70}},
                                         {"8200", new object[] {VARIABLE_LENGTH, 70}},
                                      };
-      }
+        }
 
-      internal static String parseFieldsInGeneralPurpose(String rawInformation)
-      {
-         if (String.IsNullOrEmpty(rawInformation))
-         {
-            return null;
-         }
-
-         // Processing 2-digit AIs
-
-         if (rawInformation.Length < 2)
-         {
-            return null;
-         }
-
-         String firstTwoDigits = rawInformation.Substring(0, 2);
-
-         if (TWO_DIGIT_DATA_LENGTH.ContainsKey(firstTwoDigits))
-         {
-            var dataLength = TWO_DIGIT_DATA_LENGTH[firstTwoDigits];
-            if (dataLength[0] == VARIABLE_LENGTH)
+        internal static String parseFieldsInGeneralPurpose(String rawInformation)
+        {
+            if (String.IsNullOrEmpty(rawInformation))
             {
-               return processVariableAI(2, (int)dataLength[1], rawInformation);
+                return null;
             }
-            return processFixedAI(2, (int)dataLength[0], rawInformation);
-         }
 
-         if (rawInformation.Length < 3)
-         {
-            return null;
-         }
+            // Processing 2-digit AIs
 
-         String firstThreeDigits = rawInformation.Substring(0, 3);
-
-         if (THREE_DIGIT_DATA_LENGTH.ContainsKey(firstThreeDigits))
-         {
-            var dataLength = THREE_DIGIT_DATA_LENGTH[firstThreeDigits];
-            if (dataLength[0] == VARIABLE_LENGTH)
+            if (rawInformation.Length < 2)
             {
-               return processVariableAI(3, (int)dataLength[1], rawInformation);
+                return null;
             }
-            return processFixedAI(3, (int)dataLength[0], rawInformation);
-         }
 
-         if (THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH.ContainsKey(firstThreeDigits))
-         {
-            var dataLength = THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH[firstThreeDigits];
-            if (dataLength[0] == VARIABLE_LENGTH)
+            String firstTwoDigits = rawInformation.Substring(0, 2);
+
+            if (TWO_DIGIT_DATA_LENGTH.ContainsKey(firstTwoDigits))
             {
-               return processVariableAI(4, (int)dataLength[1], rawInformation);
+                var dataLength = TWO_DIGIT_DATA_LENGTH[firstTwoDigits];
+                if (dataLength[0] == VARIABLE_LENGTH)
+                {
+                    return processVariableAI(2, (int)dataLength[1], rawInformation);
+                }
+                return processFixedAI(2, (int)dataLength[0], rawInformation);
             }
-            return processFixedAI(4, (int)dataLength[0], rawInformation);
-         }
 
-         if (rawInformation.Length < 4)
-         {
-            return null;
-         }
-
-         String firstFourDigits = rawInformation.Substring(0, 4);
-
-         if (FOUR_DIGIT_DATA_LENGTH.ContainsKey(firstFourDigits))
-         {
-            var dataLength = FOUR_DIGIT_DATA_LENGTH[firstFourDigits];
-            if (dataLength[0] == VARIABLE_LENGTH)
+            if (rawInformation.Length < 3)
             {
-               return processVariableAI(4, (int)dataLength[1], rawInformation);
+                return null;
             }
-            return processFixedAI(4, (int)dataLength[0], rawInformation);
-         }
 
-         return null;
-      }
+            String firstThreeDigits = rawInformation.Substring(0, 3);
 
-      private static String processFixedAI(int aiSize, int fieldSize, String rawInformation)
-      {
-         if (rawInformation.Length < aiSize)
-         {
+            if (THREE_DIGIT_DATA_LENGTH.ContainsKey(firstThreeDigits))
+            {
+                var dataLength = THREE_DIGIT_DATA_LENGTH[firstThreeDigits];
+                if (dataLength[0] == VARIABLE_LENGTH)
+                {
+                    return processVariableAI(3, (int)dataLength[1], rawInformation);
+                }
+                return processFixedAI(3, (int)dataLength[0], rawInformation);
+            }
+
+            if (THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH.ContainsKey(firstThreeDigits))
+            {
+                var dataLength = THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH[firstThreeDigits];
+                if (dataLength[0] == VARIABLE_LENGTH)
+                {
+                    return processVariableAI(4, (int)dataLength[1], rawInformation);
+                }
+                return processFixedAI(4, (int)dataLength[0], rawInformation);
+            }
+
+            if (rawInformation.Length < 4)
+            {
+                return null;
+            }
+
+            String firstFourDigits = rawInformation.Substring(0, 4);
+
+            if (FOUR_DIGIT_DATA_LENGTH.ContainsKey(firstFourDigits))
+            {
+                var dataLength = FOUR_DIGIT_DATA_LENGTH[firstFourDigits];
+                if (dataLength[0] == VARIABLE_LENGTH)
+                {
+                    return processVariableAI(4, (int)dataLength[1], rawInformation);
+                }
+                return processFixedAI(4, (int)dataLength[0], rawInformation);
+            }
+
             return null;
-         }
+        }
 
-         String ai = rawInformation.Substring(0, aiSize);
+        private static String processFixedAI(int aiSize, int fieldSize, String rawInformation)
+        {
+            if (rawInformation.Length < aiSize)
+            {
+                return null;
+            }
 
-         if (rawInformation.Length < aiSize + fieldSize)
-         {
-            return null;
-         }
+            String ai = rawInformation.Substring(0, aiSize);
 
-         String field = rawInformation.Substring(aiSize, fieldSize);
-         String remaining = rawInformation.Substring(aiSize + fieldSize);
-         String result = '(' + ai + ')' + field;
-         String parsedAI = parseFieldsInGeneralPurpose(remaining);
-         return parsedAI == null ? result : result + parsedAI;
-      }
+            if (rawInformation.Length < aiSize + fieldSize)
+            {
+                return null;
+            }
 
-      private static String processVariableAI(int aiSize, int variableFieldSize, String rawInformation)
-      {
-         String ai = rawInformation.Substring(0, aiSize);
-         int maxSize;
-         if (rawInformation.Length < aiSize + variableFieldSize)
-         {
-            maxSize = rawInformation.Length;
-         }
-         else
-         {
-            maxSize = aiSize + variableFieldSize;
-         }
-         String field = rawInformation.Substring(aiSize, maxSize - aiSize);
-         String remaining = rawInformation.Substring(maxSize);
-         String result = '(' + ai + ')' + field;
-         String parsedAI = parseFieldsInGeneralPurpose(remaining);
-         return parsedAI == null ? result : result + parsedAI;
-      }
-   }
+            String field = rawInformation.Substring(aiSize, fieldSize);
+            String remaining = rawInformation.Substring(aiSize + fieldSize);
+            String result = '(' + ai + ')' + field;
+            String parsedAI = parseFieldsInGeneralPurpose(remaining);
+            return parsedAI == null ? result : result + parsedAI;
+        }
+
+        private static String processVariableAI(int aiSize, int variableFieldSize, String rawInformation)
+        {
+            String ai = rawInformation.Substring(0, aiSize);
+            int maxSize;
+            if (rawInformation.Length < aiSize + variableFieldSize)
+            {
+                maxSize = rawInformation.Length;
+            }
+            else
+            {
+                maxSize = aiSize + variableFieldSize;
+            }
+            String field = rawInformation.Substring(aiSize, maxSize - aiSize);
+            String remaining = rawInformation.Substring(maxSize);
+            String result = '(' + ai + ')' + field;
+            String parsedAI = parseFieldsInGeneralPurpose(remaining);
+            return parsedAI == null ? result : result + parsedAI;
+        }
+    }
 }

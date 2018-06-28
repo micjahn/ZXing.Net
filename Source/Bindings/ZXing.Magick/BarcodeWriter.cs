@@ -20,17 +20,17 @@ using ZXing.Magick.Rendering;
 
 namespace ZXing.Magick
 {
-	/// <summary>
-	/// barcode writer which creates ImageSharp Image instances
-	/// </summary>
-	public class BarcodeWriter : ZXing.BarcodeWriter<MagickImage>
-	{
-		/// <summary>
-		/// contructor
-		/// </summary>
-		public BarcodeWriter()
-		{
-			Renderer = new MagickImageRenderer();
-		}
-	}
+    /// <summary>
+    /// barcode writer which creates ImageSharp Image instances
+    /// </summary>
+    public class BarcodeWriter : ZXing.BarcodeWriter<MagickImage>
+    {
+        /// <summary>
+        /// contructor
+        /// </summary>
+        public BarcodeWriter()
+        {
+            Renderer = new MagickImageRenderer();
+        }
+    }
 }

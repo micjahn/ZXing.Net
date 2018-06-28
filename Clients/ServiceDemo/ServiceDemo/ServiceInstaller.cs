@@ -18,12 +18,12 @@ using System.ComponentModel;
 
 namespace ServiceDemo
 {
-   [RunInstaller(true)]
-   public partial class ServiceInstaller : System.Configuration.Install.Installer
-   {
-      public ServiceInstaller()
-      {
-         InitializeComponent();
-      }
-   }
+    [RunInstaller(true)]
+    public partial class ServiceInstaller : System.Configuration.Install.Installer
+    {
+        public ServiceInstaller()
+        {
+            InitializeComponent();
+        }
+    }
 }

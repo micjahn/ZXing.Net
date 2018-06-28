@@ -18,35 +18,35 @@ using System;
 
 namespace com.google.zxing.client.result.optional
 {
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
-   public sealed class NDEFSmartPosterParsedResult : ParsedResult
-   {
-      public String Title { get; private set; }
-      public String URI { get; private set; }
-      public int Action { get; private set; }
+	/// <author>  Sean Owen
+	/// </author>
+	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
+	/// </author>
+	public sealed class NDEFSmartPosterParsedResult : ParsedResult
+	{
+		public String Title { get; private set; }
+		public String URI { get; private set; }
+		public int Action { get; private set; }
 
-      override public String DisplayResult
-      {
-         get
-         {
-            return Title == null ? URI : Title + '\n' + URI;
-         }
-      }
+		override public String DisplayResult
+		{
+			get
+			{
+				return Title == null ? URI : Title + '\n' + URI;
+			}
+		}
 
-      public const int ACTION_UNSPECIFIED = -1;
-      public const int ACTION_DO = 0;
-      public const int ACTION_SAVE = 1;
-      public const int ACTION_OPEN = 2;
+		public const int ACTION_UNSPECIFIED = -1;
+		public const int ACTION_DO = 0;
+		public const int ACTION_SAVE = 1;
+		public const int ACTION_OPEN = 2;
 
-      internal NDEFSmartPosterParsedResult(int action, String uri, String title)
-         : base(ParsedResultType.NDEF_SMART_POSTER)
-      {
-         Action = action;
-         URI = uri;
-         Title = title;
-      }
-   }
+		internal NDEFSmartPosterParsedResult(int action, String uri, String title)
+			: base(ParsedResultType.NDEF_SMART_POSTER)
+		{
+			Action = action;
+			URI = uri;
+			Title = title;
+		}
+	}
 }

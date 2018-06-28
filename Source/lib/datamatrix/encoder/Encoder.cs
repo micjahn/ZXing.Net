@@ -16,10 +16,10 @@
 
 namespace ZXing.Datamatrix.Encoder
 {
-   internal interface Encoder
-   {
-      int EncodingMode { get; }
+    internal interface Encoder
+    {
+        int EncodingMode { get; }
 
-      void encode(EncoderContext context);
-   }
+        void encode(EncoderContext context);
+    }
 }

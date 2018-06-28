@@ -20,47 +20,47 @@ using ZXing.Common;
 
 namespace ZXing
 {
-   /// <summary>
-   /// Interface for a smart class to decode the barcode inside a bitmap object
-   /// </summary>
-   public partial interface IBarcodeReaderGeneric
-   {
-      /// <summary>
-      /// event is executed when a result point was found
-      /// </summary>
-      event Action<ResultPoint> ResultPointFound;
+    /// <summary>
+    /// Interface for a smart class to decode the barcode inside a bitmap object
+    /// </summary>
+    public partial interface IBarcodeReaderGeneric
+    {
+        /// <summary>
+        /// event is executed when a result point was found
+        /// </summary>
+        event Action<ResultPoint> ResultPointFound;
 
-      /// <summary>
-      /// event is executed when a result was found via decode
-      /// </summary>
-      event Action<Result> ResultFound;
+        /// <summary>
+        /// event is executed when a result was found via decode
+        /// </summary>
+        event Action<Result> ResultFound;
 
-      /// <summary>
-      /// Specifies some options which influence the decoding process
-      /// </summary>
-      DecodingOptions Options { get; set; }
+        /// <summary>
+        /// Specifies some options which influence the decoding process
+        /// </summary>
+        DecodingOptions Options { get; set; }
 
-      /// <summary>
-      /// Decodes the specified barcode bitmap which is given by a generic byte array.
-      /// </summary>
-      /// <param name="rawRGB">The barcode bitmap.</param>
-      /// <param name="width">The width.</param>
-      /// <param name="height">The height.</param>
-      /// <param name="format">The format.</param>
-      /// <returns>
-      /// the result data or null
-      /// </returns>
-      Result Decode(byte[] rawRGB, int width, int height, RGBLuminanceSource.BitmapFormat format);
+        /// <summary>
+        /// Decodes the specified barcode bitmap which is given by a generic byte array.
+        /// </summary>
+        /// <param name="rawRGB">The barcode bitmap.</param>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        /// <param name="format">The format.</param>
+        /// <returns>
+        /// the result data or null
+        /// </returns>
+        Result Decode(byte[] rawRGB, int width, int height, RGBLuminanceSource.BitmapFormat format);
 
-      /// <summary>
-      /// Tries to decode a barcode within an image which is given by a luminance source.
-      /// That method gives a chance to prepare a luminance source completely before calling
-      /// the time consuming decoding method. On the other hand there is a chance to create
-      /// a luminance source which is independent from external resources (like Bitmap objects)
-      /// and the decoding call can be made in a background thread.
-      /// </summary>
-      /// <param name="luminanceSource">The luminance source.</param>
-      /// <returns></returns>
-      Result Decode(LuminanceSource luminanceSource);
-   }
+        /// <summary>
+        /// Tries to decode a barcode within an image which is given by a luminance source.
+        /// That method gives a chance to prepare a luminance source completely before calling
+        /// the time consuming decoding method. On the other hand there is a chance to create
+        /// a luminance source which is independent from external resources (like Bitmap objects)
+        /// and the decoding call can be made in a background thread.
+        /// </summary>
+        /// <param name="luminanceSource">The luminance source.</param>
+        /// <returns></returns>
+        Result Decode(LuminanceSource luminanceSource);
+    }
 }

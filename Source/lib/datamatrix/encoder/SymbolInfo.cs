@@ -19,12 +19,12 @@ using System.Text;
 
 namespace ZXing.Datamatrix.Encoder
 {
-   /// <summary>
-   /// Symbol info table for DataMatrix.
-   /// </summary>
-   public class SymbolInfo
-   {
-      internal static readonly SymbolInfo[] PROD_SYMBOLS = {
+    /// <summary>
+    /// Symbol info table for DataMatrix.
+    /// </summary>
+    public class SymbolInfo
+    {
+        internal static readonly SymbolInfo[] PROD_SYMBOLS = {
                                                          new SymbolInfo(false, 3, 5, 8, 8, 1),
                                                          new SymbolInfo(false, 5, 7, 10, 10, 1),
                                                          /*rect*/new SymbolInfo(true, 5, 7, 16, 6, 1),
@@ -60,197 +60,197 @@ namespace ZXing.Datamatrix.Encoder
                                                          new DataMatrixSymbolInfo144(),
                                                       };
 
-      private static SymbolInfo[] symbols = PROD_SYMBOLS;
+        private static SymbolInfo[] symbols = PROD_SYMBOLS;
 
-      private readonly bool rectangular;
-      internal readonly int dataCapacity;
-      internal readonly int errorCodewords;
-      public readonly int matrixWidth;
-      public readonly int matrixHeight;
-      private readonly int dataRegions;
-      private readonly int rsBlockData;
-      private readonly int rsBlockError;
+        private readonly bool rectangular;
+        internal readonly int dataCapacity;
+        internal readonly int errorCodewords;
+        public readonly int matrixWidth;
+        public readonly int matrixHeight;
+        private readonly int dataRegions;
+        private readonly int rsBlockData;
+        private readonly int rsBlockError;
 
-      /**
-       * Overrides the symbol info set used by this class. Used for testing purposes.
-       *
-       * @param override the symbol info set to use
-       */
-      public static void overrideSymbolSet(SymbolInfo[] @override)
-      {
-         symbols = @override;
-      }
+        /**
+         * Overrides the symbol info set used by this class. Used for testing purposes.
+         *
+         * @param override the symbol info set to use
+         */
+        public static void overrideSymbolSet(SymbolInfo[] @override)
+        {
+            symbols = @override;
+        }
 
-      public SymbolInfo(bool rectangular, int dataCapacity, int errorCodewords,
-                        int matrixWidth, int matrixHeight, int dataRegions)
-         : this(rectangular, dataCapacity, errorCodewords, matrixWidth, matrixHeight, dataRegions,
-              dataCapacity, errorCodewords)
-      {
-      }
+        public SymbolInfo(bool rectangular, int dataCapacity, int errorCodewords,
+                          int matrixWidth, int matrixHeight, int dataRegions)
+           : this(rectangular, dataCapacity, errorCodewords, matrixWidth, matrixHeight, dataRegions,
+                dataCapacity, errorCodewords)
+        {
+        }
 
-      internal SymbolInfo(bool rectangular, int dataCapacity, int errorCodewords,
-                         int matrixWidth, int matrixHeight, int dataRegions,
-                         int rsBlockData, int rsBlockError)
-      {
-         this.rectangular = rectangular;
-         this.dataCapacity = dataCapacity;
-         this.errorCodewords = errorCodewords;
-         this.matrixWidth = matrixWidth;
-         this.matrixHeight = matrixHeight;
-         this.dataRegions = dataRegions;
-         this.rsBlockData = rsBlockData;
-         this.rsBlockError = rsBlockError;
-      }
+        internal SymbolInfo(bool rectangular, int dataCapacity, int errorCodewords,
+                           int matrixWidth, int matrixHeight, int dataRegions,
+                           int rsBlockData, int rsBlockError)
+        {
+            this.rectangular = rectangular;
+            this.dataCapacity = dataCapacity;
+            this.errorCodewords = errorCodewords;
+            this.matrixWidth = matrixWidth;
+            this.matrixHeight = matrixHeight;
+            this.dataRegions = dataRegions;
+            this.rsBlockData = rsBlockData;
+            this.rsBlockError = rsBlockError;
+        }
 
-      public static SymbolInfo lookup(int dataCodewords)
-      {
-         return lookup(dataCodewords, SymbolShapeHint.FORCE_NONE, true);
-      }
+        public static SymbolInfo lookup(int dataCodewords)
+        {
+            return lookup(dataCodewords, SymbolShapeHint.FORCE_NONE, true);
+        }
 
-      public static SymbolInfo lookup(int dataCodewords, SymbolShapeHint shape)
-      {
-         return lookup(dataCodewords, shape, true);
-      }
+        public static SymbolInfo lookup(int dataCodewords, SymbolShapeHint shape)
+        {
+            return lookup(dataCodewords, shape, true);
+        }
 
-      public static SymbolInfo lookup(int dataCodewords, bool allowRectangular, bool fail)
-      {
-         SymbolShapeHint shape = allowRectangular
-             ? SymbolShapeHint.FORCE_NONE : SymbolShapeHint.FORCE_SQUARE;
-         return lookup(dataCodewords, shape, fail);
-      }
+        public static SymbolInfo lookup(int dataCodewords, bool allowRectangular, bool fail)
+        {
+            SymbolShapeHint shape = allowRectangular
+                ? SymbolShapeHint.FORCE_NONE : SymbolShapeHint.FORCE_SQUARE;
+            return lookup(dataCodewords, shape, fail);
+        }
 
-      private static SymbolInfo lookup(int dataCodewords, SymbolShapeHint shape, bool fail)
-      {
-         return lookup(dataCodewords, shape, null, null, fail);
-      }
+        private static SymbolInfo lookup(int dataCodewords, SymbolShapeHint shape, bool fail)
+        {
+            return lookup(dataCodewords, shape, null, null, fail);
+        }
 
-      public static SymbolInfo lookup(int dataCodewords,
-                                      SymbolShapeHint shape,
-                                      Dimension minSize,
-                                      Dimension maxSize,
-                                      bool fail)
-      {
-         foreach (SymbolInfo symbol in symbols)
-         {
-            if (shape == SymbolShapeHint.FORCE_SQUARE && symbol.rectangular)
+        public static SymbolInfo lookup(int dataCodewords,
+                                        SymbolShapeHint shape,
+                                        Dimension minSize,
+                                        Dimension maxSize,
+                                        bool fail)
+        {
+            foreach (SymbolInfo symbol in symbols)
             {
-               continue;
+                if (shape == SymbolShapeHint.FORCE_SQUARE && symbol.rectangular)
+                {
+                    continue;
+                }
+                if (shape == SymbolShapeHint.FORCE_RECTANGLE && !symbol.rectangular)
+                {
+                    continue;
+                }
+                if (minSize != null
+                    && (symbol.getSymbolWidth() < minSize.Width
+                    || symbol.getSymbolHeight() < minSize.Height))
+                {
+                    continue;
+                }
+                if (maxSize != null
+                    && (symbol.getSymbolWidth() > maxSize.Width
+                    || symbol.getSymbolHeight() > maxSize.Height))
+                {
+                    continue;
+                }
+                if (dataCodewords <= symbol.dataCapacity)
+                {
+                    return symbol;
+                }
             }
-            if (shape == SymbolShapeHint.FORCE_RECTANGLE && !symbol.rectangular)
+            if (fail)
             {
-               continue;
+                throw new ArgumentException(
+                    "Can't find a symbol arrangement that matches the message. Data codewords: "
+                        + dataCodewords);
             }
-            if (minSize != null
-                && (symbol.getSymbolWidth() < minSize.Width
-                || symbol.getSymbolHeight() < minSize.Height))
+            return null;
+        }
+
+        private int getHorizontalDataRegions()
+        {
+            switch (dataRegions)
             {
-               continue;
+                case 1:
+                    return 1;
+                case 2:
+                case 4:
+                    return 2;
+                case 16:
+                    return 4;
+                case 36:
+                    return 6;
+                default:
+                    throw new InvalidOperationException("Cannot handle this number of data regions");
             }
-            if (maxSize != null
-                && (symbol.getSymbolWidth() > maxSize.Width
-                || symbol.getSymbolHeight() > maxSize.Height))
+        }
+
+        private int getVerticalDataRegions()
+        {
+            switch (dataRegions)
             {
-               continue;
+                case 1:
+                case 2:
+                    return 1;
+                case 4:
+                    return 2;
+                case 16:
+                    return 4;
+                case 36:
+                    return 6;
+                default:
+                    throw new InvalidOperationException("Cannot handle this number of data regions");
             }
-            if (dataCodewords <= symbol.dataCapacity)
-            {
-               return symbol;
-            }
-         }
-         if (fail)
-         {
-            throw new ArgumentException(
-                "Can't find a symbol arrangement that matches the message. Data codewords: "
-                    + dataCodewords);
-         }
-         return null;
-      }
+        }
 
-      private int getHorizontalDataRegions()
-      {
-         switch (dataRegions)
-         {
-            case 1:
-               return 1;
-            case 2:
-            case 4:
-               return 2;
-            case 16:
-               return 4;
-            case 36:
-               return 6;
-            default:
-               throw new InvalidOperationException("Cannot handle this number of data regions");
-         }
-      }
+        public int getSymbolDataWidth()
+        {
+            return getHorizontalDataRegions() * matrixWidth;
+        }
 
-      private int getVerticalDataRegions()
-      {
-         switch (dataRegions)
-         {
-            case 1:
-            case 2:
-               return 1;
-            case 4:
-               return 2;
-            case 16:
-               return 4;
-            case 36:
-               return 6;
-            default:
-               throw new InvalidOperationException("Cannot handle this number of data regions");
-         }
-      }
-      
-      public int getSymbolDataWidth()
-      {
-         return getHorizontalDataRegions() * matrixWidth;
-      }
+        public int getSymbolDataHeight()
+        {
+            return getVerticalDataRegions() * matrixHeight;
+        }
 
-      public int getSymbolDataHeight()
-      {
-         return getVerticalDataRegions() * matrixHeight;
-      }
+        public int getSymbolWidth()
+        {
+            return getSymbolDataWidth() + (getHorizontalDataRegions() * 2);
+        }
 
-      public int getSymbolWidth()
-      {
-         return getSymbolDataWidth() + (getHorizontalDataRegions() * 2);
-      }
+        public int getSymbolHeight()
+        {
+            return getSymbolDataHeight() + (getVerticalDataRegions() * 2);
+        }
 
-      public int getSymbolHeight()
-      {
-         return getSymbolDataHeight() + (getVerticalDataRegions() * 2);
-      }
+        public int getCodewordCount()
+        {
+            return dataCapacity + errorCodewords;
+        }
 
-      public int getCodewordCount()
-      {
-         return dataCapacity + errorCodewords;
-      }
+        virtual public int getInterleavedBlockCount()
+        {
+            return dataCapacity / rsBlockData;
+        }
 
-      virtual public int getInterleavedBlockCount()
-      {
-         return dataCapacity / rsBlockData;
-      }
+        virtual public int getDataLengthForInterleavedBlock(int index)
+        {
+            return rsBlockData;
+        }
 
-      virtual public int getDataLengthForInterleavedBlock(int index)
-      {
-         return rsBlockData;
-      }
+        public int getErrorLengthForInterleavedBlock(int index)
+        {
+            return rsBlockError;
+        }
 
-      public int getErrorLengthForInterleavedBlock(int index)
-      {
-         return rsBlockError;
-      }
-
-      public override String ToString()
-      {
-         var sb = new StringBuilder();
-         sb.Append(rectangular ? "Rectangular Symbol:" : "Square Symbol:");
-         sb.Append(" data region ").Append(matrixWidth).Append('x').Append(matrixHeight);
-         sb.Append(", symbol size ").Append(getSymbolWidth()).Append('x').Append(getSymbolHeight());
-         sb.Append(", symbol data size ").Append(getSymbolDataWidth()).Append('x').Append(getSymbolDataHeight());
-         sb.Append(", codewords ").Append(dataCapacity).Append('+').Append(errorCodewords);
-         return sb.ToString();
-      }
-   }
+        public override String ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append(rectangular ? "Rectangular Symbol:" : "Square Symbol:");
+            sb.Append(" data region ").Append(matrixWidth).Append('x').Append(matrixHeight);
+            sb.Append(", symbol size ").Append(getSymbolWidth()).Append('x').Append(getSymbolHeight());
+            sb.Append(", symbol data size ").Append(getSymbolDataWidth()).Append('x').Append(getSymbolDataHeight());
+            sb.Append(", codewords ").Append(dataCapacity).Append('+').Append(errorCodewords);
+            return sb.ToString();
+        }
+    }
 }

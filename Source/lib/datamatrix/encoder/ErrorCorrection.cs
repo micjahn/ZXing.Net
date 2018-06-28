@@ -19,22 +19,22 @@ using System.Text;
 
 namespace ZXing.Datamatrix.Encoder
 {
-   /// <summary>
-   /// Error Correction Code for ECC200.
-   /// </summary>
-   public static class ErrorCorrection
-   {
-      /// <summary>
-      /// Lookup table which factors to use for which number of error correction codewords.
-      /// See FACTORS.
-      /// </summary>
-      private static readonly int[] FACTOR_SETS
-          = { 5, 7, 10, 11, 12, 14, 18, 20, 24, 28, 36, 42, 48, 56, 62, 68 };
+    /// <summary>
+    /// Error Correction Code for ECC200.
+    /// </summary>
+    public static class ErrorCorrection
+    {
+        /// <summary>
+        /// Lookup table which factors to use for which number of error correction codewords.
+        /// See FACTORS.
+        /// </summary>
+        private static readonly int[] FACTOR_SETS
+            = { 5, 7, 10, 11, 12, 14, 18, 20, 24, 28, 36, 42, 48, 56, 62, 68 };
 
-      /// <summary>
-      /// Precomputed polynomial factors for ECC 200.
-      /// </summary>
-      private static readonly int[][] FACTORS = {
+        /// <summary>
+        /// Precomputed polynomial factors for ECC 200.
+        /// </summary>
+        private static readonly int[][] FACTORS = {
                                                    new[] {228, 48, 15, 111, 62},
                                                    new[] {23, 68, 144, 134, 240, 92, 254},
                                                    new[] {28, 24, 185, 166, 223, 248, 116, 255, 110, 61},
@@ -142,142 +142,142 @@ namespace ZXing.Datamatrix.Encoder
                                                       }
                                                 };
 
-      private const int MODULO_VALUE = 0x12D;
+        private const int MODULO_VALUE = 0x12D;
 
-      private static readonly int[] LOG;
-      private static readonly int[] ALOG;
+        private static readonly int[] LOG;
+        private static readonly int[] ALOG;
 
-      static ErrorCorrection()
-      {
-         //Create log and antilog table
-         LOG = new int[256];
-         ALOG = new int[255];
+        static ErrorCorrection()
+        {
+            //Create log and antilog table
+            LOG = new int[256];
+            ALOG = new int[255];
 
-         int p = 1;
-         for (int i = 0; i < 255; i++)
-         {
-            ALOG[i] = p;
-            LOG[p] = i;
-            p <<= 1;
-            if (p >= 256)
+            int p = 1;
+            for (int i = 0; i < 255; i++)
             {
-               p ^= MODULO_VALUE;
+                ALOG[i] = p;
+                LOG[p] = i;
+                p <<= 1;
+                if (p >= 256)
+                {
+                    p ^= MODULO_VALUE;
+                }
             }
-         }
-      }
+        }
 
-      /// <summary>
-      /// Creates the ECC200 error correction for an encoded message.
-      /// </summary>
-      /// <param name="codewords">The codewords.</param>
-      /// <param name="symbolInfo">information about the symbol to be encoded</param>
-      /// <returns>the codewords with interleaved error correction.</returns>
-      public static String encodeECC200(String codewords, SymbolInfo symbolInfo)
-      {
-         if (codewords.Length != symbolInfo.dataCapacity)
-         {
-            throw new ArgumentException(
-                "The number of codewords does not match the selected symbol");
-         }
-         var sb = new StringBuilder(symbolInfo.dataCapacity + symbolInfo.errorCodewords);
-         sb.Append(codewords);
-         int blockCount = symbolInfo.getInterleavedBlockCount();
-         if (blockCount == 1)
-         {
-            String ecc = createECCBlock(codewords, symbolInfo.errorCodewords);
-            sb.Append(ecc);
-         }
-         else
-         {
-            sb.Length = sb.Capacity;
-            int[] dataSizes = new int[blockCount];
-            int[] errorSizes = new int[blockCount];
-            int[] startPos = new int[blockCount];
-            for (int i = 0; i < blockCount; i++)
+        /// <summary>
+        /// Creates the ECC200 error correction for an encoded message.
+        /// </summary>
+        /// <param name="codewords">The codewords.</param>
+        /// <param name="symbolInfo">information about the symbol to be encoded</param>
+        /// <returns>the codewords with interleaved error correction.</returns>
+        public static String encodeECC200(String codewords, SymbolInfo symbolInfo)
+        {
+            if (codewords.Length != symbolInfo.dataCapacity)
             {
-               dataSizes[i] = symbolInfo.getDataLengthForInterleavedBlock(i + 1);
-               errorSizes[i] = symbolInfo.getErrorLengthForInterleavedBlock(i + 1);
-               startPos[i] = 0;
-               if (i > 0)
-               {
-                  startPos[i] = startPos[i - 1] + dataSizes[i];
-               }
+                throw new ArgumentException(
+                    "The number of codewords does not match the selected symbol");
             }
-            for (int block = 0; block < blockCount; block++)
+            var sb = new StringBuilder(symbolInfo.dataCapacity + symbolInfo.errorCodewords);
+            sb.Append(codewords);
+            int blockCount = symbolInfo.getInterleavedBlockCount();
+            if (blockCount == 1)
             {
-               var temp = new StringBuilder(dataSizes[block]);
-               for (int d = block; d < symbolInfo.dataCapacity; d += blockCount)
-               {
-                  temp.Append(codewords[d]);
-               }
-               String ecc = createECCBlock(temp.ToString(), errorSizes[block]);
-               int pos = 0;
-               for (int e = block; e < errorSizes[block] * blockCount; e += blockCount)
-               {
-                  sb[symbolInfo.dataCapacity + e] = ecc[pos++];
-               }
-            }
-         }
-         return sb.ToString();
-
-      }
-
-      private static String createECCBlock(String codewords, int numECWords)
-      {
-         return createECCBlock(codewords, 0, codewords.Length, numECWords);
-      }
-
-      private static String createECCBlock(String codewords, int start, int len, int numECWords)
-      {
-         int table = -1;
-         for (int i = 0; i < FACTOR_SETS.Length; i++)
-         {
-            if (FACTOR_SETS[i] == numECWords)
-            {
-               table = i;
-               break;
-            }
-         }
-         if (table < 0)
-         {
-            throw new ArgumentException(
-                "Illegal number of error correction codewords specified: " + numECWords);
-         }
-         int[] poly = FACTORS[table];
-         char[] ecc = new char[numECWords];
-         for (int i = 0; i < numECWords; i++)
-         {
-            ecc[i] = (char)0;
-         }
-         for (int i = start; i < start + len; i++)
-         {
-            int m = ecc[numECWords - 1] ^ codewords[i];
-            for (int k = numECWords - 1; k > 0; k--)
-            {
-               if (m != 0 && poly[k] != 0)
-               {
-                  ecc[k] = (char)(ecc[k - 1] ^ ALOG[(LOG[m] + LOG[poly[k]]) % 255]);
-               }
-               else
-               {
-                  ecc[k] = ecc[k - 1];
-               }
-            }
-            if (m != 0 && poly[0] != 0)
-            {
-               ecc[0] = (char)ALOG[(LOG[m] + LOG[poly[0]]) % 255];
+                String ecc = createECCBlock(codewords, symbolInfo.errorCodewords);
+                sb.Append(ecc);
             }
             else
             {
-               ecc[0] = (char)0;
+                sb.Length = sb.Capacity;
+                int[] dataSizes = new int[blockCount];
+                int[] errorSizes = new int[blockCount];
+                int[] startPos = new int[blockCount];
+                for (int i = 0; i < blockCount; i++)
+                {
+                    dataSizes[i] = symbolInfo.getDataLengthForInterleavedBlock(i + 1);
+                    errorSizes[i] = symbolInfo.getErrorLengthForInterleavedBlock(i + 1);
+                    startPos[i] = 0;
+                    if (i > 0)
+                    {
+                        startPos[i] = startPos[i - 1] + dataSizes[i];
+                    }
+                }
+                for (int block = 0; block < blockCount; block++)
+                {
+                    var temp = new StringBuilder(dataSizes[block]);
+                    for (int d = block; d < symbolInfo.dataCapacity; d += blockCount)
+                    {
+                        temp.Append(codewords[d]);
+                    }
+                    String ecc = createECCBlock(temp.ToString(), errorSizes[block]);
+                    int pos = 0;
+                    for (int e = block; e < errorSizes[block] * blockCount; e += blockCount)
+                    {
+                        sb[symbolInfo.dataCapacity + e] = ecc[pos++];
+                    }
+                }
             }
-         }
-         char[] eccReversed = new char[numECWords];
-         for (int i = 0; i < numECWords; i++)
-         {
-            eccReversed[i] = ecc[numECWords - i - 1];
-         }
-         return new String(eccReversed);
-      }
-   }
+            return sb.ToString();
+
+        }
+
+        private static String createECCBlock(String codewords, int numECWords)
+        {
+            return createECCBlock(codewords, 0, codewords.Length, numECWords);
+        }
+
+        private static String createECCBlock(String codewords, int start, int len, int numECWords)
+        {
+            int table = -1;
+            for (int i = 0; i < FACTOR_SETS.Length; i++)
+            {
+                if (FACTOR_SETS[i] == numECWords)
+                {
+                    table = i;
+                    break;
+                }
+            }
+            if (table < 0)
+            {
+                throw new ArgumentException(
+                    "Illegal number of error correction codewords specified: " + numECWords);
+            }
+            int[] poly = FACTORS[table];
+            char[] ecc = new char[numECWords];
+            for (int i = 0; i < numECWords; i++)
+            {
+                ecc[i] = (char)0;
+            }
+            for (int i = start; i < start + len; i++)
+            {
+                int m = ecc[numECWords - 1] ^ codewords[i];
+                for (int k = numECWords - 1; k > 0; k--)
+                {
+                    if (m != 0 && poly[k] != 0)
+                    {
+                        ecc[k] = (char)(ecc[k - 1] ^ ALOG[(LOG[m] + LOG[poly[k]]) % 255]);
+                    }
+                    else
+                    {
+                        ecc[k] = ecc[k - 1];
+                    }
+                }
+                if (m != 0 && poly[0] != 0)
+                {
+                    ecc[0] = (char)ALOG[(LOG[m] + LOG[poly[0]]) % 255];
+                }
+                else
+                {
+                    ecc[0] = (char)0;
+                }
+            }
+            char[] eccReversed = new char[numECWords];
+            for (int i = 0; i < numECWords; i++)
+            {
+                eccReversed[i] = ecc[numECWords - i - 1];
+            }
+            return new String(eccReversed);
+        }
+    }
 }
