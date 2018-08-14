@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>0.16.5</VersionPrefix>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <PackageId>ZXing.Net.Bindings.Windows.Compatibility</PackageId>
+    <PlatformTarget>anycpu</PlatformTarget>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyTitle>ZXing.Windows.Compatibility</AssemblyTitle>
+    <Title>ZXing.Windows.Compatibility</Title>
+    <Description>ZXing.Net binding to the Windows Compatibility Pack</Description>
+    <AssemblyOriginatorKeyFile>../../../Key/private.snk</AssemblyOriginatorKeyFile>
+    <Authors>Michael Jahn</Authors>
+    <PackageProjectUrl>https://github.com/micjahn/ZXing.Net/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/micjahn/ZXing.Net/</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>ZXing Windows Compatibility Pack</PackageTags>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DebugType>portable</DebugType>
+    <AssemblyName>ZXing.Windows.Compatibility</AssemblyName>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="../ZXing.CoreCompat.System.Drawing/Rendering/BitmapRenderer.cs" />
+    <Compile Include="../ZXing.CoreCompat.System.Drawing/BitmapLuminanceSource.cs" />
+    <Compile Include="../ZXing.CoreCompat.System.Drawing/BarcodeWriter.Extensions.cs" />
+    <Compile Include="../ZXing.CoreCompat.System.Drawing/BarcodeWriter.cs" />
+    <Compile Include="../ZXing.CoreCompat.System.Drawing/BarcodeReader.cs" />
+    <Compile Include="../ZXing.CoreCompat.System.Drawing/BarcodeReader.Extensions.cs" />
+    <Compile Include="Properties/AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
+    <PackageReference Include="ZXing.Net" Version="0.16.4" />
+  </ItemGroup>
+
+</Project>
