@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.16.5</VersionPrefix>
+    <VersionPrefix>0.16.6</VersionPrefix>
     <TargetFramework>netstandard2.0</TargetFramework>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageId>ZXing.Net.Bindings.Windows.Compatibility</PackageId>
@@ -28,12 +28,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="../ZXing.CoreCompat.System.Drawing/Rendering/BitmapRenderer.cs" />
-    <Compile Include="../ZXing.CoreCompat.System.Drawing/BitmapLuminanceSource.cs" />
-    <Compile Include="../ZXing.CoreCompat.System.Drawing/BarcodeWriter.Extensions.cs" />
-    <Compile Include="../ZXing.CoreCompat.System.Drawing/BarcodeWriter.cs" />
-    <Compile Include="../ZXing.CoreCompat.System.Drawing/BarcodeReader.cs" />
-    <Compile Include="../ZXing.CoreCompat.System.Drawing/BarcodeReader.Extensions.cs" />
+    <Compile Include="Rendering/BitmapRenderer.cs" />
+    <Compile Include="BitmapLuminanceSource.cs" />
+    <Compile Include="BarcodeWriter.Extensions.cs" />
+    <Compile Include="BarcodeWriter.cs" />
+    <Compile Include="BarcodeReader.cs" />
+    <Compile Include="BarcodeReader.Extensions.cs" />
     <Compile Include="Properties/AssemblyInfo.cs" />
   </ItemGroup>
 

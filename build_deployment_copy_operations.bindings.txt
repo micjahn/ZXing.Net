@@ -52,3 +52,6 @@
 %CURRENT_DIR%\Source\Bindings\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\zxing.zkweb.system.drawing.dll %BINARY_DIR%\Bindings\ZKWeb.System.Drawing\netstandard2.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\zxing.zkweb.system.drawing.pdb %BINARY_DIR%\Bindings\ZKWeb.System.Drawing\netstandard2.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\zxing.zkweb.system.drawing.xml %BINARY_DIR%\Bindings\ZKWeb.System.Drawing\netstandard2.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.Windows.Compatibility\bin\Release\netstandard2.0\zxing.windows.compatibility.dll %BINARY_DIR%\Bindings\ZXing.Windows.Compatibility\netstandard2.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.Windows.Compatibility\bin\Release\netstandard2.0\zxing.windows.compatibility.pdb %BINARY_DIR%\Bindings\ZXing.Windows.Compatibility\netstandard2.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.Windows.Compatibility\bin\Release\netstandard2.0\zxing.windows.compatibility.xml %BINARY_DIR%\Bindings\ZXing.Windows.Compatibility\netstandard2.0\
