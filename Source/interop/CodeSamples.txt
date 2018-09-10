@@ -39,7 +39,7 @@ Function Encode_To_QR_Code_To_File()
    qrCodeOptions.Margin = 10
    qrCodeOptions.ErrorCorrection = ErrorCorrectionLevel_H
 
-   writer.WriteToFile "Test", "D:\interop_qrcode.png"
+   writer.WriteToFile "Test", "D:\interop_qrcode.png", ImageFileFormat_Png
 
    Rem Or:
 
