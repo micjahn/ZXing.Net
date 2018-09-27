@@ -77,7 +77,8 @@ namespace ZXing.Windows.Compatibility
 
 #if !WindowsCE
                     // prepare palette for 1, 4 and 8 bit indexed bitmaps
-                    var luminancePalette = new byte[bitmap.Palette.Entries.Length];
+                    var luminancePalette = new byte[Math.Max(bitmap.Palette.Entries.Length, 1)];
+                    var luminancePaletteLastIndex = luminancePalette.Length - 1;
                     for (var index = 0; index < bitmap.Palette.Entries.Length; index++)
                     {
                         var color = bitmap.Palette.Entries[index];
@@ -117,9 +118,12 @@ namespace ZXing.Windows.Compatibility
                                     {
                                         var sourceValue = buffer[sourceX];
                                         var index = sourceValue & 15;
-                                        luminances[offset + destX + 1] = luminancePalette[index];
+                                        if (destX + 1 < width)
+                                        {
+                                            luminances[offset + destX + 1] = luminancePalette[Math.Min(index, luminancePaletteLastIndex)];
+                                        }
                                         index = (sourceValue >> 4) & 15;
-                                        luminances[offset + destX] = luminancePalette[index];
+                                        luminances[offset + destX] = luminancePalette[Math.Min(index, luminancePaletteLastIndex)];
                                     }
                                 }
                                 else
@@ -129,7 +133,7 @@ namespace ZXing.Windows.Compatibility
                                         for (int subX = 0; subX < 8 && 8 * x + subX < width; subX++)
                                         {
                                             var index = (buffer[x] >> (7 - subX)) & 1;
-                                            luminances[offset + 8 * x + subX] = luminancePalette[index];
+                                            luminances[offset + 8 * x + subX] = luminancePalette[Math.Min(index, luminancePaletteLastIndex)];
                                         }
                                     }
                                 }
@@ -137,7 +141,7 @@ namespace ZXing.Windows.Compatibility
                             case 1:
                                 for (int x = 0; x < width; x++)
                                 {
-                                    luminances[offset + x] = luminancePalette[buffer[x]];
+                                    luminances[offset + x] = luminancePalette[Math.Min(buffer[x], luminancePaletteLastIndex)];
                                 }
                                 break;
 #endif
