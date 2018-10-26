@@ -140,7 +140,7 @@ namespace ZXing.Common
                 }
                 int blackPoint;
                 if (!estimateBlackPoint(localBuckets, out blackPoint))
-                    return null;
+                    return new BitMatrix(1, 1);
 
                 // We delay reading the entire image luminance until the black point estimation succeeds.
                 // Although we end up reading four rows twice, it is consistent with our motto of
