@@ -18,11 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-#if !SILVERLIGHT
 using System.Drawing;
-#else
-using System.Windows.Media.Imaging;
-#endif
 using NUnit.Framework;
 
 namespace ZXing.Common.Test
@@ -36,11 +32,7 @@ namespace ZXing.Common.Test
    [TestFixture]
    public abstract class AbstractNegativeBlackBoxTestCase : AbstractBlackBoxTestCase
    {
-#if !SILVERLIGHT
       private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-#else
-      private static readonly DanielVaughan.Logging.ILog Log = DanielVaughan.Logging.LogManager.GetLog(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-#endif
 
       private readonly List<TestResult> testResults;
 
@@ -90,12 +82,7 @@ namespace ZXing.Common.Test
             var absPath = Path.GetFullPath(testImage);
             Log.InfoFormat("Starting {0}", absPath);
 
-#if !SILVERLIGHT
             var image = new Bitmap(Image.FromFile(testImage));
-#else
-            var image = new WriteableBitmap(0, 0);
-            image.SetSource(File.OpenRead(testImage));
-#endif
             for (int x = 0; x < testResults.Count; x++)
             {
                TestResult testResult = testResults[x];
@@ -142,11 +129,7 @@ namespace ZXing.Common.Test
       /// <param name="rotationInDegrees">The amount of rotation to apply</param>
       /// <returns>true if nothing found, false if a non-existent barcode was detected</returns>
       /// </summary>
-#if !SILVERLIGHT
       private bool checkForFalsePositives(Bitmap image, float rotationInDegrees)
-#else
-      private bool checkForFalsePositives(WriteableBitmap image, float rotationInDegrees)
-#endif
       {
          var rotatedImage = rotateImage(image, rotationInDegrees);
          var source = new BitmapLuminanceSource(rotatedImage);

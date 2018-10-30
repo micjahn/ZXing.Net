@@ -12,8 +12,6 @@
 %BINARY_DIR%\net4.7\zxing.dll
 %BINARY_DIR%\net4.7\zxing.presentation.dll
 %BINARY_DIR%\portable\zxing.portable.dll
-%BINARY_DIR%\sl4\zxing.sl4.dll
-%BINARY_DIR%\sl5\zxing.sl5.dll
 %BINARY_DIR%\uwp\zxing.dll
 %BINARY_DIR%\winrt\zxing.winrt.dll
 %BINARY_DIR%\monodroid\zxing.monoandroid.dll

@@ -324,9 +324,9 @@
     <Compile Include="renderer\PixelData.cs" />
     <Compile Include="renderer\PixelDataRenderer.cs" />
     <Compile Include="renderer\SVGRenderer.cs" />
-    <Compile Include="silverlight\BigInteger.cs" />
-    <Compile Include="silverlight\BrowsableAttribute.cs" />
-    <Compile Include="silverlight\SerializableAttribute.cs" />
+    <Compile Include="uwp\BigInteger.cs" />
+    <Compile Include="uwp\BrowsableAttribute.cs" />
+    <Compile Include="uwp\SerializableAttribute.cs" />
     <Compile Include="xamarin\Color.cs" />
     <Compile Include="xamarin\ColorConverter.cs" />
     <Compile Include="xamarin\ColorTranslator.cs" />

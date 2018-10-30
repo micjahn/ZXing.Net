@@ -203,12 +203,12 @@ namespace ZXing.QrCode.Internal
             {
                 result.Append(Encoding.GetEncoding(StringUtils.GB2312).GetString(buffer, 0, buffer.Length));
             }
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || MONOANDROID || MONOTOUCH)
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || NETFX_CORE || MONOANDROID || MONOTOUCH)
          catch (ArgumentException)
          {
             try
             {
-               // Silverlight only supports a limited number of character sets, trying fallback to UTF-8
+               // these .NET profiles only support a limited number of character sets, trying fallback to UTF-8
                result.Append(Encoding.GetEncoding("UTF-8").GetString(buffer, 0, buffer.Length));
             }
             catch (Exception)
@@ -264,12 +264,12 @@ namespace ZXing.QrCode.Internal
             {
                 result.Append(Encoding.GetEncoding(StringUtils.SHIFT_JIS).GetString(buffer, 0, buffer.Length));
             }
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || MONOANDROID || MONOTOUCH)
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || NETFX_CORE || MONOANDROID || MONOTOUCH)
          catch (ArgumentException)
          {
             try
             {
-               // Silverlight only supports a limited number of character sets, trying fallback to UTF-8
+               // these .NET profiles only support a limited number of character sets, trying fallback to UTF-8
                result.Append(Encoding.GetEncoding("UTF-8").GetString(buffer, 0, buffer.Length));
             }
             catch (Exception)
@@ -321,12 +321,12 @@ namespace ZXing.QrCode.Internal
             {
                 result.Append(Encoding.GetEncoding(encoding).GetString(readBytes, 0, readBytes.Length));
             }
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || MONOANDROID || MONOTOUCH)
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || NETFX_CORE || MONOANDROID || MONOTOUCH)
          catch (ArgumentException)
          {
             try
             {
-               // Silverlight only supports a limited number of character sets, trying fallback to UTF-8
+               // these .NET profiles only support a limited number of character sets, trying fallback to UTF-8
                result.Append(Encoding.GetEncoding("UTF-8").GetString(readBytes, 0, readBytes.Length));
             }
             catch (Exception)

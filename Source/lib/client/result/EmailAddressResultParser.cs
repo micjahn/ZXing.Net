@@ -27,7 +27,7 @@ namespace ZXing.Client.Result
     internal sealed class EmailAddressResultParser : ResultParser
     {
         private static readonly Regex COMMA = new Regex(","
-#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || UNITY || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
+#if !(NETFX_CORE || PORTABLE || UNITY || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
                                              , RegexOptions.Compiled);
 #else
 );
