@@ -1,7 +1,5 @@
 %BINARY_DIR%\ce2.0\zxing.ce2.0.dll
 %BINARY_DIR%\ce3.5\zxing.ce3.5.dll
-%BINARY_DIR%\ce2.0\zxing.ce2.0.dll
-%BINARY_DIR%\ce3.5\zxing.ce3.5.dll
 %BINARY_DIR%\interop\zxing.interop.dll
 %BINARY_DIR%\net2.0\zxing.dll
 %BINARY_DIR%\net3.5\zxing.dll
