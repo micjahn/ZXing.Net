@@ -1,4 +1,4 @@
-﻿/*
+﻿	/*
  * Copyright 2012 ZXing.Net authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -250,7 +250,9 @@ namespace ZXing
                     !AutoRotate)
                     break;
 
-                binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource.rotateCounterClockwise()));
+                luminanceSource = luminanceSource.rotateCounterClockwise();
+                binarizer = CreateBinarizer(luminanceSource);
+                binaryBitmap = new BinaryBitmap(binarizer);
             }
 
             if (result != null)
