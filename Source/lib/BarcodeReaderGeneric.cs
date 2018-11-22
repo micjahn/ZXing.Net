@@ -250,7 +250,9 @@ namespace ZXing
                     !AutoRotate)
                     break;
 
-                binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource.rotateCounterClockwise()));
+                luminanceSource = luminanceSource.rotateCounterClockwise();
+                binarizer = CreateBinarizer(luminanceSource);
+                binaryBitmap = new BinaryBitmap(binarizer);
             }
 
             if (result != null)
