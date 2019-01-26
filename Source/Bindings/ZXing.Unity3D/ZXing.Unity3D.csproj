@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<VersionPrefix>0.16.4</VersionPrefix>
+		<TargetFrameworks>netstandard2.0;net35</TargetFrameworks>
+		<RootNamespace>ZXing.Unity</RootNamespace>
+		<AssemblyName>ZXing.Unity</AssemblyName>
+		<PlatformTarget>anycpu</PlatformTarget>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<AssemblyOriginatorKeyFile>../../../Key/private.snk</AssemblyOriginatorKeyFile>
+		<SignAssembly>false</SignAssembly>
+		<PackageId>ZXing.Net.Bindings.Unity3D</PackageId>
+		<NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard2.0' ">2.0.0</NetStandardImplicitPackageVersion>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+		<EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="ZXing.Net" Version="0.16.4" />
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="UnityEngine">
+			<HintPath>..\..\..\3rdparty\Unity\UnityEngine.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+	</ItemGroup>
+	
+	
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Color32Renderer.cs" />
+    <Compile Include="BarcodeReader.cs" />
+    <Compile Include="BarcodeReader.Extensions.cs" />
+    <Compile Include="BarcodeWriter.cs" />
+    <Compile Include="BarcodeWriter.Extensions.cs" />
+    <Compile Include="Color32LuminanceSource.cs" />
+    <Compile Include="IBarcodeReader.cs" />
+    <Compile Include="IBarcodeReader.Multiple.cs" />
+    <Compile Include="IBarcodeWriter.cs" />
+  </ItemGroup>
+  
+</Project>
