@@ -117,14 +117,10 @@ namespace ZXing.Aztec.Internal
                     }
                     // [Re]stuff the bits if this is the first opportunity, or if the
                     // wordSize has changed
-                    if (wordSize != WORD_SIZE[layers])
+                    if (stuffedBits == null || wordSize != WORD_SIZE[layers])
                     {
                         wordSize = WORD_SIZE[layers];
                         stuffedBits = stuffBits(bits, wordSize);
-                    }
-                    if (stuffedBits == null)
-                    {
-                        continue;
                     }
                     int usableBitsInLayers = totalBitsInLayer - (totalBitsInLayer % wordSize);
                     if (compact && stuffedBits.Size > wordSize * 64)

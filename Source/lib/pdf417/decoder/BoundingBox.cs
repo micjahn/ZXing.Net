@@ -53,10 +53,9 @@ namespace ZXing.PDF417.Internal
                                          ResultPoint topRight,
                                          ResultPoint bottomRight)
         {
-            if ((topLeft == null && topRight == null) ||
-                (bottomLeft == null && bottomRight == null) ||
-                (topLeft != null && bottomLeft == null) ||
-                (topRight != null && bottomRight == null))
+            bool leftUnspecified = topLeft == null || bottomLeft == null;
+            bool rightUnspecified = topRight == null || bottomRight == null;
+            if (leftUnspecified && rightUnspecified)
             {
                 return null;
             }
@@ -89,15 +88,15 @@ namespace ZXing.PDF417.Internal
                             ResultPoint topRight,
                             ResultPoint bottomRight)
         {
-            if (TopLeft == null)
+            if (topLeft == null || bottomLeft == null)
             {
-                TopLeft = new ResultPoint(0, TopRight.Y);
-                BottomLeft = new ResultPoint(0, BottomRight.Y);
+                topLeft = new ResultPoint(0, TopRight.Y);
+                bottomLeft = new ResultPoint(0, BottomRight.Y);
             }
-            else if (TopRight == null)
+            else if (topRight == null || bottomRight == null)
             {
-                TopRight = new ResultPoint(image.Width - 1, TopLeft.Y);
-                BottomRight = new ResultPoint(image.Width - 1, TopLeft.Y);
+                topRight = new ResultPoint(image.Width - 1, TopLeft.Y);
+                bottomRight = new ResultPoint(image.Width - 1, TopLeft.Y);
             }
 
             this.image = image;

@@ -609,9 +609,9 @@ namespace ZXing.Aztec.Internal
         /// <param name="oldSide">the original length of the side of the square in the target bit matrix</param>
         /// <param name="newSide">the new length of the size of the square in the target bit matrix</param>
         /// <returns>the corners of the expanded square</returns>
-        private static ResultPoint[] expandSquare(ResultPoint[] cornerPoints, float oldSide, float newSide)
+        private static ResultPoint[] expandSquare(ResultPoint[] cornerPoints, int oldSide, int newSide)
         {
-            float ratio = newSide / (2 * oldSide);
+            float ratio = newSide / (2.0f * oldSide);
             float dx = cornerPoints[0].X - cornerPoints[2].X;
             float dy = cornerPoints[0].Y - cornerPoints[2].Y;
             float centerx = (cornerPoints[0].X + cornerPoints[2].X) / 2.0f;
