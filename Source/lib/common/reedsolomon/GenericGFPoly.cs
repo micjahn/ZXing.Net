@@ -276,6 +276,10 @@ namespace ZXing.Common.ReedSolomon
 
         public override String ToString()
         {
+            if (isZero)
+            {
+                return "0";
+            }
             StringBuilder result = new StringBuilder(8 * Degree);
             for (int degree = Degree; degree >= 0; degree--)
             {
