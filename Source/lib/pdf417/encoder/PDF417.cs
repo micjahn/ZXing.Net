@@ -778,7 +778,7 @@ namespace ZXing.PDF417.Internal
                     continue;
                 }
 
-                float newRatio = ((BarcodeMatrix.COLUMN_WIDTH * cols + start_stop_width) * DEFAULT_MODULE_WIDTH) / (rows * HEIGHT);
+                float newRatio = (((float)BarcodeMatrix.COLUMN_WIDTH * cols + start_stop_width) * DEFAULT_MODULE_WIDTH) / (rows * HEIGHT);
 
                 // ignore if previous ratio is closer to preferred ratio
                 if (dimension != null && Math.Abs(newRatio - PREFERRED_RATIO) > Math.Abs(ratio - PREFERRED_RATIO))

@@ -734,20 +734,20 @@ namespace ZXing.QrCode.Internal
             if (startSize > 3)
             {
                 // But we can only afford to do so if we have at least 4 possibilities to choose from
-                float totalModuleSize = 0.0f;
-                float square = 0.0f;
+                double totalModuleSize = 0.0;
+                double square = 0.0;
                 foreach (var center in possibleCenters)
                 {
                     float size = center.EstimatedModuleSize;
                     totalModuleSize += size;
                     square += size * size;
                 }
-                float average = totalModuleSize / startSize;
+                double average = totalModuleSize / startSize;
                 float stdDev = (float)Math.Sqrt(square / startSize - average * average);
 
-                possibleCenters.Sort(new FurthestFromAverageComparator(average));
+                possibleCenters.Sort(new FurthestFromAverageComparator((float)average));
 
-                float limit = Math.Max(0.2f * average, stdDev);
+                float limit = Math.Max(0.2f * (float)average, stdDev);
 
                 for (int i = 0; i < possibleCenters.Count && possibleCenters.Count > 3; i++)
                 {

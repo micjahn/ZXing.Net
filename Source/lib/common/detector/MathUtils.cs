@@ -50,8 +50,8 @@ namespace ZXing.Common.Detector
         /// <returns>Euclidean distance between points A and B</returns>
         public static float distance(float aX, float aY, float bX, float bY)
         {
-            float xDiff = aX - bX;
-            float yDiff = aY - bY;
+            double xDiff = aX - bX;
+            double yDiff = aY - bY;
             return (float)Math.Sqrt(xDiff * xDiff + yDiff * yDiff);
         }
 
@@ -65,8 +65,8 @@ namespace ZXing.Common.Detector
         /// <returns>Euclidean distance between points A and B</returns>
         public static float distance(int aX, int aY, int bX, int bY)
         {
-            int xDiff = aX - bX;
-            int yDiff = aY - bY;
+            double xDiff = aX - bX;
+            double yDiff = aY - bY;
             return (float)Math.Sqrt(xDiff * xDiff + yDiff * yDiff);
         }
 

@@ -214,7 +214,7 @@ namespace ZXing.Multi.QrCode.Internal
                         }
 
                         // Calculate the diagonal length by assuming a 90° angle at topleft
-                        float dCpy = (float)Math.Sqrt(dA * dA + dB * dB);
+                        float dCpy = (float)Math.Sqrt((double)dA * dA + (double)dB * dB);
                         // Compare to the real distance in %
                         float vPyC = Math.Abs((dC - dCpy) / Math.Min(dC, dCpy));
 

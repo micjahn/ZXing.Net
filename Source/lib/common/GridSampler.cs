@@ -132,11 +132,10 @@ namespace ZXing.Common
             int height = image.Height;
             // Check and nudge points from start until we see some that are OK:
             bool nudged = true;
-            for (int offset = 0; offset < points.Length && nudged; offset += 2)
+            int maxOffset = points.Length - 1; // points.length must be even
+            for (int offset = 0; offset < maxOffset && nudged; offset += 2)
             {
-                //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
                 int x = (int)points[offset];
-                //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
                 int y = (int)points[offset + 1];
                 if (x < -1 || x > width || y < -1 || y > height)
                 {

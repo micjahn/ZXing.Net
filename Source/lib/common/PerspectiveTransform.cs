@@ -80,7 +80,6 @@ namespace ZXing.Common
         /// <param name="points"></param>
         public void transformPoints(float[] points)
         {
-            int max = points.Length;
             float a11 = this.a11;
             float a12 = this.a12;
             float a13 = this.a13;
@@ -90,7 +89,8 @@ namespace ZXing.Common
             float a31 = this.a31;
             float a32 = this.a32;
             float a33 = this.a33;
-            for (int i = 0; i < max; i += 2)
+            int maxI = points.Length - 1; // points.length must be even
+            for (int i = 0; i < maxI; i += 2)
             {
                 float x = points[i];
                 float y = points[i + 1];

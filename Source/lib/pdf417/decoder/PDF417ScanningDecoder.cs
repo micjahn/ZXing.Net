@@ -59,14 +59,14 @@ namespace ZXing.PDF417.Internal
                                            int minCodewordWidth,
                                            int maxCodewordWidth)
         {
-            BoundingBox boundingBox = BoundingBox.Create(image, imageTopLeft, imageBottomLeft, imageTopRight, imageBottomRight);
+            var boundingBox = BoundingBox.Create(image, imageTopLeft, imageBottomLeft, imageTopRight, imageBottomRight);
             if (boundingBox == null)
                 return null;
 
             DetectionResultRowIndicatorColumn leftRowIndicatorColumn = null;
             DetectionResultRowIndicatorColumn rightRowIndicatorColumn = null;
-            DetectionResult detectionResult = null;
-            for (int i = 0; i < 2; i++)
+            DetectionResult detectionResult;
+            for (bool firstPass = true; ; firstPass = false)
             {
                 if (imageTopLeft != null)
                 {
@@ -83,17 +83,18 @@ namespace ZXing.PDF417.Internal
                     // if a barcode was not decoded where it was detected instead of throwing a new exception object.
                     return null;
                 }
-                if (i == 0 && detectionResult.Box != null &&
-                    (detectionResult.Box.MinY < boundingBox.MinY || detectionResult.Box.MaxY > boundingBox.MaxY))
+                var resultBox = detectionResult.Box;
+                if (firstPass && resultBox != null &&
+                    (resultBox.MinY < boundingBox.MinY || resultBox.MaxY > boundingBox.MaxY))
                 {
-                    boundingBox = detectionResult.Box;
+                    boundingBox = resultBox;
                 }
                 else
                 {
-                    detectionResult.Box = boundingBox;
                     break;
                 }
             }
+            detectionResult.Box = boundingBox;
             int maxBarcodeColumn = detectionResult.ColumnCount + 1;
             detectionResult.DetectionResultColumns[0] = leftRowIndicatorColumn;
 
