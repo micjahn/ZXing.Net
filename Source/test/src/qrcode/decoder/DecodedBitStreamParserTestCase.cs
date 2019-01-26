@@ -87,7 +87,19 @@ namespace ZXing.QrCode.Internal.Test
          Assert.AreEqual("\u963f", result);
       }
 
-      // TODO definitely need more tests here
-
-   }
+       [Test]
+       public void testHanziLevel1()
+       {
+           BitSourceBuilder builder = new BitSourceBuilder();
+           builder.write(0x0D, 4); // Hanzi mode
+           builder.write(0x01, 4); // Subset 1 = GB2312 encoding
+           builder.write(0x01, 8); // 1 characters
+           // A5A2 (U+30A2) => A5A2 - A1A1 = 401, 4*60 + 01 = 0181
+           builder.write(0x0181, 13);
+           String result = DecodedBitStreamParser.decode(builder.toByteArray(),
+               Version.getVersionForNumber(1), null, null).Text;
+           Assert.That(result, Is.EqualTo("\u30a2"));
+       }
+       // TODO definitely need more tests here
+    }
 }
