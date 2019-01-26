@@ -36,7 +36,9 @@ namespace ZXing.Common.ReedSolomon.Test
            Assert.That(FIELD.buildMonomial(0, -1).ToString(), Is.EqualTo("-1"));
            var p = new GenericGFPoly(FIELD, new int[] { 3, 0, -2, 1, 1 });
            Assert.That(p.ToString(), Is.EqualTo("a^25x^4 - ax^2 + x + 1"));
-       }
+           p = new GenericGFPoly(FIELD, new int[] { 3 });
+           Assert.That(p.ToString(), Is.EqualTo("a^25"));
+        }
 
        [Test]
         public void testZero()
