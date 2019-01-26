@@ -115,6 +115,7 @@
     <Compile Include="common\CharacterSetECITestCase.cs" />
     <Compile Include="common\detector\MathUtilsTestCase.cs" />
     <Compile Include="common\PerspectiveTransformTestCase.cs" />
+    <Compile Include="common\reedsolomon\GenericGFPolyTestCase.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonTestCase.cs" />
     <Compile Include="common\StringUtilsTestCase.cs" />
     <Compile Include="common\TestResult.cs">

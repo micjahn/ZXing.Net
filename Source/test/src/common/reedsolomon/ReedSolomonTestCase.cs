@@ -395,14 +395,6 @@ namespace ZXing.Common.ReedSolomon.Test
          testEncodeDecodeRandom(GenericGF.AZTEC_DATA_12, 3072, 1023);
       }
 
-       [Test]
-       public void testPolynomialString()
-       {
-           Assert.That("0", Is.EqualTo(GenericGF.QR_CODE_FIELD_256.Zero.ToString()));
-           GenericGFPoly p = new GenericGFPoly(GenericGF.QR_CODE_FIELD_256, new int[] {3, 0, -2, 1, 1});
-           Assert.That("a^25x^4 - ax^2 + x + 1", Is.EqualTo(p.ToString()));
-       }
-
        public static void corrupt(int[] received, int howMany, Random random, int max)
        {
            //BitSet corrupted = new BitSet(received.Length);
