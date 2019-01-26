@@ -291,7 +291,7 @@ namespace ZXing.Common
             {
                 throw new ArgumentException("input matrix dimensions do not match");
             }
-            var rowArray = new BitArray(width / 32 + 1);
+            var rowArray = new BitArray(width);
             for (int y = 0; y < height; y++)
             {
                 int offset = y * rowSize;

@@ -462,7 +462,7 @@ namespace ZXing.Common
         /// </returns>
         public override String ToString()
         {
-            var result = new System.Text.StringBuilder(size);
+            var result = new System.Text.StringBuilder(size + (size / 8) + 1);
             for (int i = 0; i < size; i++)
             {
                 if ((i & 0x07) == 0)
