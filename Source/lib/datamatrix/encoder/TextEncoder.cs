@@ -20,12 +20,12 @@ namespace ZXing.Datamatrix.Encoder
 {
     internal sealed class TextEncoder : C40Encoder
     {
-        override public int EncodingMode
+        public override int EncodingMode
         {
             get { return Encodation.TEXT; }
         }
 
-        override protected int encodeChar(char c, StringBuilder sb)
+        protected override int encodeChar(char c, StringBuilder sb)
         {
             if (c == ' ')
             {
@@ -42,7 +42,7 @@ namespace ZXing.Datamatrix.Encoder
                 sb.Append((char)(c - 97 + 14));
                 return 1;
             }
-            if (c >= '\u0000' && c <= '\u001f')
+            if (c <= '\u001f')
             {
                 sb.Append('\u0000'); //Shift 1 Set
                 sb.Append(c);
@@ -84,15 +84,10 @@ namespace ZXing.Datamatrix.Encoder
                 sb.Append((char)(c - 123 + 27));
                 return 2;
             }
-            if (c >= '\u0080')
-            {
-                sb.Append("\u0001\u001e"); //Shift 2, Upper Shift
-                int len = 2;
-                len += encodeChar((char)(c - 128), sb);
-                return len;
-            }
-            HighLevelEncoder.illegalCharacter(c);
-            return -1;
+            sb.Append("\u0001\u001e"); //Shift 2, Upper Shift
+            int len = 2;
+            len += encodeChar((char)(c - 128), sb);
+            return len;
         }
     }
 }

@@ -16,46 +16,28 @@
 
 namespace ZXing.Common.Test
 {
-   internal sealed class TestResult
-   {
-      private int mustPassCount;
-      private int tryHarderCount;
-      private int maxMisreads;
-      private int maxTryHarderMisreads;
-      private float rotation;
+    /// <summary>
+    /// Encapsulates the result of one test over a batch of black-box images.
+    /// </summary>
+    internal sealed class TestResult
+    {
+        public TestResult(int mustPassCount, int tryHarderCount, int maxMisreads, int maxTryHarderMisreads, float rotation)
+        {
+            MustPassCount = mustPassCount;
+            TryHarderCount = tryHarderCount;
+            MaxMisreads = maxMisreads;
+            MaxTryHarderMisreads = maxTryHarderMisreads;
+            Rotation = rotation;
+        }
 
-      public TestResult(int mustPassCount, int tryHarderCount, int maxMisreads, int maxTryHarderMisreads, float rotation)
-      {
-         this.mustPassCount = mustPassCount;
-         this.tryHarderCount = tryHarderCount;
-         this.maxMisreads = maxMisreads;
-         this.maxTryHarderMisreads = maxTryHarderMisreads;
-         this.rotation = rotation;
-      }
+        public int MustPassCount { get; }
 
-      public int MustPassCount
-      {
-         get { return mustPassCount; }
-      }
+        public int TryHarderCount { get; }
 
-      public int TryHarderCount
-      {
-         get { return tryHarderCount; }
-      }
+        public int MaxMisreads { get; }
 
-      public int MaxMisreads
-      {
-         get { return maxMisreads; }
-      }
+        public int MaxTryHarderMisreads { get; }
 
-      public int MaxTryHarderMisreads
-      {
-         get { return maxTryHarderMisreads; }
-      }
-
-      public float Rotation
-      {
-         get { return rotation; }
-      }
-   }
+        public float Rotation { get; }
+    }
 }

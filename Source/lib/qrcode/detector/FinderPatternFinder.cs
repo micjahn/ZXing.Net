@@ -72,7 +72,7 @@ namespace ZXing.QrCode.Internal
         /// <summary>
         /// Gets the image.
         /// </summary>
-        virtual protected internal BitMatrix Image
+        protected internal virtual BitMatrix Image
         {
             get
             {
@@ -83,7 +83,7 @@ namespace ZXing.QrCode.Internal
         /// <summary>
         /// Gets the possible centers.
         /// </summary>
-        virtual protected internal List<FinderPattern> PossibleCenters
+        protected internal virtual List<FinderPattern> PossibleCenters
         {
             get
             {
@@ -324,9 +324,6 @@ namespace ZXing.QrCode.Internal
         /// After a vertical and horizontal scan finds a potential finder pattern, this method
         /// "cross-cross-cross-checks" by scanning down diagonally through the center of the possible
         /// finder pattern to see if the same proportion is detected.
-        /// @param maxCount maximum reasonable number of modules that should be
-        ///  observed in any reading state, based on the results of the horizontal scan
-        /// @param originalStateCountTotal The original state count total.
         /// </summary>
         /// <param name="centerI">row where a finder pattern was detected</param>
         /// <param name="centerJ">center of the section that appears to cross a finder pattern</param>

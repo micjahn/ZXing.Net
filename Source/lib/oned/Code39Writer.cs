@@ -153,46 +153,45 @@ namespace ZXing.OneD
                         extendedContent.Append("%W");
                         break;
                     default:
-                        if (character > 0 &&
-                            character < 27)
+                        if (character <= 26)
                         {
                             extendedContent.Append("$");
                             extendedContent.Append((char)('A' + (character - 1)));
                         }
-                        else if (character > 26 && character < 32)
+                        else if (character < 32)
                         {
                             extendedContent.Append("%");
                             extendedContent.Append((char)('A' + (character - 27)));
                         }
-                        else if ((character > ' ' && character < '-') || character == '/' || character == ':')
+                        else if (character <= ',' || character == '/' || character == ':')
                         {
                             extendedContent.Append("/");
                             extendedContent.Append((char)('A' + (character - 33)));
                         }
-                        else if (character > '/' && character < ':')
+                        else if (character <= '9')
                         {
                             extendedContent.Append((char)('0' + (character - 48)));
                         }
-                        else if (character > ':' && character < '@')
+                        else if (character <= '?')
                         {
                             extendedContent.Append("%");
                             extendedContent.Append((char)('F' + (character - 59)));
                         }
-                        else if (character > '@' && character < '[')
+                        else if (character <= 'Z')
                         {
                             extendedContent.Append((char)('A' + (character - 65)));
                         }
-                        else if (character > 'Z' && character < '`')
+                        else if (character <= '_')
                         {
                             extendedContent.Append("%");
                             extendedContent.Append((char)('K' + (character - 91)));
                         }
-                        else if (character > '`' && character < '{')
+                        else if (character <= 'z')
                         {
                             extendedContent.Append("+");
                             extendedContent.Append((char)('A' + (character - 97)));
                         }
-                        else if (character > 'z' && character < 128)
+                        else if (character <= 127)
                         {
                             extendedContent.Append("%");
                             extendedContent.Append((char)('P' + (character - 123)));

@@ -237,8 +237,7 @@ namespace ZXing.OneD.RSS.Expanded
                     return this.pairs;
                 }
 
-                List<ExpandedRow> rs = new List<ExpandedRow>();
-                rs.AddRange(collectedRows);
+                var rs = new List<ExpandedRow>(collectedRows);
                 rs.Add(row);
                 // Recursion: try to add more rows
                 var result = checkRows(rs, i + 1);

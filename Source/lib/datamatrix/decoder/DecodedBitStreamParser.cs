@@ -224,7 +224,7 @@ namespace ZXing.Datamatrix.Internal
                         default:
                             // Not to be used in ASCII encodation
                             // but work around encoders that end with 254, latch back to ASCII
-                            if (oneByte >= 242 && (oneByte != 254 || bits.available() != 0))
+                            if (oneByte != 254 || bits.available() != 0)
                             {
                                 return false;
                             }

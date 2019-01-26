@@ -71,7 +71,7 @@ namespace ZXing.PDF417.Internal
         /// <returns></returns>
         public static BoundingBox Create(BoundingBox box)
         {
-            return new BoundingBox(box.image, box.TopLeft, box.BottomLeft, box.TopRight, box.BottomRight);
+            return new BoundingBox(box);
         }
 
         /// <summary>
@@ -89,12 +89,40 @@ namespace ZXing.PDF417.Internal
                             ResultPoint topRight,
                             ResultPoint bottomRight)
         {
+            if (TopLeft == null)
+            {
+                TopLeft = new ResultPoint(0, TopRight.Y);
+                BottomLeft = new ResultPoint(0, BottomRight.Y);
+            }
+            else if (TopRight == null)
+            {
+                TopRight = new ResultPoint(image.Width - 1, TopLeft.Y);
+                BottomRight = new ResultPoint(image.Width - 1, TopLeft.Y);
+            }
+
             this.image = image;
-            this.TopLeft = topLeft;
-            this.TopRight = topRight;
-            this.BottomLeft = bottomLeft;
-            this.BottomRight = bottomRight;
-            calculateMinMaxValues();
+            TopLeft = topLeft;
+            TopRight = topRight;
+            BottomLeft = bottomLeft;
+            BottomRight = bottomRight;
+
+            MinX = (int)Math.Min(TopLeft.X, BottomLeft.X);
+            MaxX = (int)Math.Max(TopRight.X, BottomRight.X);
+            MinY = (int)Math.Min(TopLeft.Y, TopRight.Y);
+            MaxY = (int)Math.Max(BottomLeft.Y, BottomRight.Y);
+        }
+
+        private BoundingBox(BoundingBox boundingBox)
+        {
+            image = boundingBox.image;
+            TopLeft = boundingBox.TopLeft;
+            BottomLeft = boundingBox.BottomLeft;
+            TopRight = boundingBox.TopRight;
+            BottomRight = boundingBox.BottomRight;
+            MinX = boundingBox.MinX;
+            MaxX = boundingBox.MaxX;
+            MinY = boundingBox.MinY;
+            MaxY = boundingBox.MaxY;
         }
 
         /// <summary>
@@ -164,53 +192,7 @@ namespace ZXing.PDF417.Internal
                 }
             }
 
-            calculateMinMaxValues();
             return new BoundingBox(image, newTopLeft, newBottomLeft, newTopRight, newBottomRight);
         }
-
-        /// <summary>
-        /// Calculates the minimum and maximum X &amp; Y values based on the corner points.
-        /// </summary>
-        private void calculateMinMaxValues()
-        {
-            // Constructor ensures that either Left or Right is not null
-            if (TopLeft == null)
-            {
-                TopLeft = new ResultPoint(0, TopRight.Y);
-                BottomLeft = new ResultPoint(0, BottomRight.Y);
-            }
-            else if (TopRight == null)
-            {
-                TopRight = new ResultPoint(image.Width - 1, TopLeft.Y);
-                BottomRight = new ResultPoint(image.Width - 1, TopLeft.Y);
-            }
-
-            MinX = (int)Math.Min(TopLeft.X, BottomLeft.X);
-            MaxX = (int)Math.Max(TopRight.X, BottomRight.X);
-            MinY = (int)Math.Min(TopLeft.Y, TopRight.Y);
-            MaxY = (int)Math.Max(BottomLeft.Y, BottomRight.Y);
-
-        }
-
-        /// <summary>
-        /// If we adjust the width, set a new right corner coordinate and recalculate
-        /// </summary>
-        /// <param name="bottomRight">Bottom right.</param>
-        internal void SetBottomRight(ResultPoint bottomRight)
-        {
-            this.BottomRight = bottomRight;
-            calculateMinMaxValues();
-        }
-        /*
-        /// <summary>
-        /// If we adjust the width, set a new right corner coordinate and recalculate
-        /// </summary>
-        /// <param name="topRight">Top right.</param>
-        internal void SetTopRight(ResultPoint topRight)
-        {
-           this.TopRight = topRight;
-           calculateMinMaxValues();
-        }
-        */
     }
 }
