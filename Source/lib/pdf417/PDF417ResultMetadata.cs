@@ -31,7 +31,7 @@ namespace ZXing.PDF417
         /// </summary>
         public string FileId { get; set; }
         /// <summary>
-        /// always null
+        /// old optional data format as int array, always null
         /// </summary>
         [System.Obsolete("use dedicated already parsed fields")]
         public int[] OptionalData { get; set; }

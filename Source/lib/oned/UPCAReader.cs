@@ -79,7 +79,7 @@ namespace ZXing.OneD
         /// Get the format of this decoder.
         /// <returns>The 1D format.</returns>
         /// </summary>
-        override internal BarcodeFormat BarcodeFormat
+        internal override BarcodeFormat BarcodeFormat
         {
             get { return BarcodeFormat.UPC_A; }
         }
@@ -94,7 +94,7 @@ namespace ZXing.OneD
         /// <returns>
         /// horizontal offset of first pixel after the "middle" that was decoded or -1 if decoding could not complete successfully
         /// </returns>
-        override protected internal int decodeMiddle(BitArray row, int[] startRange, StringBuilder resultString)
+        protected internal override int decodeMiddle(BitArray row, int[] startRange, StringBuilder resultString)
         {
             return ean13Reader.decodeMiddle(row, startRange, resultString);
         }
@@ -104,10 +104,15 @@ namespace ZXing.OneD
             if (result == null)
                 return null;
 
-            String text = result.Text;
+            var text = result.Text;
             if (text[0] == '0')
             {
-                return new Result(text.Substring(1), null, result.ResultPoints, BarcodeFormat.UPC_A);
+                var upcaResult = new Result(text.Substring(1), null, result.ResultPoints, BarcodeFormat.UPC_A);
+                if (result.ResultMetadata != null)
+                {
+                    upcaResult.putAllMetadata(result.ResultMetadata);
+                }
+                return upcaResult;
             }
             else
             {
