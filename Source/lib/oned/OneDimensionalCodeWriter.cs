@@ -27,6 +27,8 @@ namespace ZXing.OneD
     /// </summary>
     public abstract class OneDimensionalCodeWriter : Writer
     {
+        private static System.Text.RegularExpressions.Regex NUMERIC = new System.Text.RegularExpressions.Regex("[0-9]+");
+
         /// <summary>
         /// Encode a barcode using the default settings.
         /// </summary>
@@ -105,6 +107,17 @@ namespace ZXing.OneD
             return output;
         }
 
+        /// <summary>
+        /// Throw ArgumentException if input contains characters other than digits 0-9.
+        /// </summary>
+        /// <param name="contents"></param>
+        protected static void checkNumeric(String contents)
+        {
+            if (!NUMERIC.Match(contents).Success)
+            {
+                throw new ArgumentException("Input should only contain digits 0-9");
+            }
+        }
 
         /// <summary>
         /// Appends the given pattern to the target array starting at pos.

@@ -14,24 +14,32 @@
  * limitations under the License.
  */
 
+using System;
 using NUnit.Framework;
 
 using ZXing.Common.Test;
 
 namespace ZXing.OneD.Test
 {
-   /// <summary>
-   /// <author>Ari Pollak</author>
-   /// </summary>
-   [TestFixture]
-   public sealed class EAN8WriterTestCase
-   {
-      [TestCase("96385074", "0000001010001011010111101111010110111010101001110111001010001001011100101000000", TestName = "EAN8testEncode")]
-      [TestCase("9638507", "0000001010001011010111101111010110111010101001110111001010001001011100101000000", TestName = "EAN8testAddChecksumAndEncode")]
-      public void testEncode(string content, string encoding)
-      {
-         var result = new EAN8Writer().encode(content, BarcodeFormat.EAN_8, encoding.Length, 0);
-         Assert.AreEqual(encoding, BitMatrixTestCase.matrixToString(result));
-      }
-   }
+    /// <summary>
+    /// <author>Ari Pollak</author>
+    /// </summary>
+    [TestFixture]
+    public sealed class EAN8WriterTestCase
+    {
+        [TestCase("96385074", "0000001010001011010111101111010110111010101001110111001010001001011100101000000", TestName = "EAN8testEncode")]
+        [TestCase("9638507", "0000001010001011010111101111010110111010101001110111001010001001011100101000000", TestName = "EAN8testAddChecksumAndEncode")]
+        public void testEncode(string content, string encoding)
+        {
+            var result = new EAN8Writer().encode(content, BarcodeFormat.EAN_8, encoding.Length, 0);
+            Assert.AreEqual(encoding, BitMatrixTestCase.matrixToString(result));
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void testEncodeIllegalCharacters()
+        {
+            new EAN8Writer().encode("96385abc", BarcodeFormat.EAN_8, 0, 0);
+        }
+    }
 }

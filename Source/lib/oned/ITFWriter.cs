@@ -82,7 +82,7 @@ namespace ZXing.OneD
         /// </summary>
         /// <param name="contents"></param>
         /// <returns></returns>
-        override public bool[] encode(String contents)
+        public override bool[] encode(String contents)
         {
             int length = contents.Length;
             if (length % 2 != 0)
@@ -99,6 +99,8 @@ namespace ZXing.OneD
                 if (!Char.IsDigit(contents[i]))
                     throw new ArgumentException("Requested contents should only contain digits, but got '" + contents[i] + "'");
             }
+
+            checkNumeric(contents);
 
             var result = new bool[9 + 9 * length];
             int pos = appendPattern(result, 0, START_PATTERN, true);

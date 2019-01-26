@@ -95,6 +95,8 @@ namespace ZXing.OneD
                     throw new ArgumentException("Requested contents should be 7 (without checksum digit) or 8 digits long, but got " + contents.Length);
             }
 
+            checkNumeric(contents);
+
             var result = new bool[CODE_WIDTH];
             int pos = 0;
 

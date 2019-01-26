@@ -20,15 +20,22 @@ using ZXing.Common.Test;
 
 namespace ZXing.OneD.Test
 {
-   public class UPCEWriterTestCase
-   {
-      [TestCase("05096893", "0000000000010101110010100111000101101011110110111001011101010100000000000", TestName = "UPCEtestEncode")]
-      [TestCase("12345670", "0000000000010100100110111101010001101110010000101001000101010100000000000", TestName = "UPCEtestEncodeSystem1")]
-      [TestCase("0509689", "0000000000010101110010100111000101101011110110111001011101010100000000000", TestName = "UPCEtestAddChecksumAndEncode")]
-      public void testEncode(String content, String encoding)
-      {
-         var result = new UPCEWriter().encode(content, BarcodeFormat.UPC_E, encoding.Length, 0);
-         Assert.AreEqual(encoding, BitMatrixTestCase.matrixToString(result));
-      }
-   }
+    public class UPCEWriterTestCase
+    {
+        [TestCase("05096893", "0000000000010101110010100111000101101011110110111001011101010100000000000", TestName = "UPCEtestEncode")]
+        [TestCase("12345670", "0000000000010100100110111101010001101110010000101001000101010100000000000", TestName = "UPCEtestEncodeSystem1")]
+        [TestCase("0509689", "0000000000010101110010100111000101101011110110111001011101010100000000000", TestName = "UPCEtestAddChecksumAndEncode")]
+        public void testEncode(String content, String encoding)
+        {
+            var result = new UPCEWriter().encode(content, BarcodeFormat.UPC_E, encoding.Length, 0);
+            Assert.AreEqual(encoding, BitMatrixTestCase.matrixToString(result));
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void testEncodeIllegalCharacters()
+        {
+            new UPCEWriter().encode("05096abc", BarcodeFormat.UPC_E, 0, 0);
+        }
+    }
 }

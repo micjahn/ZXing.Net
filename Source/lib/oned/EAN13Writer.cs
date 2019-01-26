@@ -97,6 +97,8 @@ namespace ZXing.OneD
                     throw new ArgumentException("Requested contents should be 12 (without checksum digit) or 13 digits long, but got " + contents.Length);
             }
 
+            checkNumeric(contents);
+
             int firstDigit = Int32.Parse(contents.Substring(0, 1));
             int parities = EAN13Reader.FIRST_DIGIT_ENCODINGS[firstDigit];
             var result = new bool[CODE_WIDTH];
