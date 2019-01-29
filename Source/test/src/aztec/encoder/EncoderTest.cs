@@ -38,14 +38,10 @@ namespace ZXing.Aztec.Test
    {
       private static readonly Encoding LATIN_1 = Encoding.GetEncoding("ISO-8859-1");
       private static readonly Regex SPACES = new Regex("\\s+"
-#if !SILVERLIGHT
                                                      , RegexOptions.Compiled
-#endif
          );
       private static readonly Regex DOTX = new Regex("[^.X]"
-#if !SILVERLIGHT
                                                      , RegexOptions.Compiled
-#endif
          );
 
       private static readonly ResultPoint[] NO_POINTS = new ResultPoint[0];

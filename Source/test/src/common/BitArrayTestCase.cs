@@ -264,7 +264,6 @@ namespace ZXing.Common.Test
          Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
       }
 
-#if !SILVERLIGHT
       [Test]
       public void ReverseAlgorithmTest()
       {
@@ -427,7 +426,6 @@ namespace ZXing.Common.Test
          System.Diagnostics.Trace.WriteLine(endOld - startOld);
          System.Diagnostics.Trace.WriteLine(endNew - startNew);
       }
-#endif
 
    }
 }

@@ -34,7 +34,7 @@ namespace ZXing.Datamatrix.Encoder
 
         static EncoderContext()
         {
-#if !(WindowsCE || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
+#if !(WindowsCE || NETFX_CORE || PORTABLE)
             encoding = Encoding.GetEncoding("ISO-8859-1");
 #elif WindowsCE
          try

@@ -81,9 +81,6 @@
     <Compile Include="..\..\lib\common\BigInteger\Sign.cs">
       <Link>common\BigInteger\Sign.cs</Link>
     </Compile>
-    <Compile Include="..\..\lib\silverlight\BigInteger.cs">
-      <Link>BigInteger.cs</Link>
-    </Compile>
     <Compile Include="aztec\AztecBlackBox1TestCase.cs" />
     <Compile Include="aztec\AztecBlackBox2TestCase.cs" />
     <Compile Include="aztec\decoder\DecoderTest.cs" />

@@ -59,15 +59,15 @@
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.0' ">
-	<Compile Include="..\net2.0\Action.cs;..\net2.0\Func.cs;..\common\BigInteger\**\*;..\silverlight\BrowsableAttribute.cs;..\silverlight\NonSerializedAttribute.cs;..\silverlight\SerializableAttribute.cs" />
+    <Compile Include="..\net2.0\Action.cs;..\net2.0\Func.cs;..\common\BigInteger\**\*;..\uwp\BrowsableAttribute.cs;..\uwp\NonSerializedAttribute.cs;..\uwp\SerializableAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.1' ">
-	<Compile Include="..\silverlight\BrowsableAttribute.cs;..\silverlight\NonSerializedAttribute.cs;..\silverlight\SerializableAttribute.cs" />
+    <Compile Include="..\uwp\BrowsableAttribute.cs;..\uwp\NonSerializedAttribute.cs;..\uwp\SerializableAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
-	<Compile Include="..\silverlight\BrowsableAttribute.cs;..\silverlight\NonSerializedAttribute.cs;..\silverlight\SerializableAttribute.cs" />
+    <Compile Include="..\uwp\BrowsableAttribute.cs;..\uwp\NonSerializedAttribute.cs;..\uwp\SerializableAttribute.cs" />
   </ItemGroup>
 
 </Project>

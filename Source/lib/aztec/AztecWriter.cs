@@ -32,7 +32,7 @@ namespace ZXing.Aztec
 
         static AztecWriter()
         {
-#if !(WindowsCE || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
+#if !(WindowsCE || NETFX_CORE || PORTABLE)
             DEFAULT_CHARSET = Encoding.GetEncoding("ISO-8859-1");
 #elif WindowsCE
          try

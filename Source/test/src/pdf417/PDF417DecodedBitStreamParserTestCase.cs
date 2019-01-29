@@ -27,11 +27,7 @@ namespace ZXing.PDF417.Test
                                     0x21, 0x82, 0x9f, 0x09, 0x21, 0x1a, 0x45, 0xf4, 0x09, 0x35, 0x2f, 0x44, 0x3f, 0x09, 0x3f, 0x9a,
                                     0x46, 0x5a, 0x09, 0x63, 0x27, 0x82, 0xff, 0x09, 0x6d, 0x15, 0x41, 0xc9, 0x09, 0xa0, 0x23, 0x46
                                  };
-#if !SILVERLIGHT
          var expectedResult = Encoding.UTF7.GetString(expectedResultBytes);
-#else
-         var expectedResult = Encoding.GetEncoding("UTF-7").GetString(expectedResultBytes, 0, expectedResultBytes.Length);
-#endif
          var result = DecodedBitStreamParser.decode(codewords, "L");
          Assert.AreEqual(expectedResult, result.Text);
       }

@@ -16,7 +16,6 @@ UPC-A, EAN-8, EAN-13, Code 39, Code 128, ITF, Codabar, Plessey, MSI, QR Code, PD
 #### Assemblies are available for the following platforms:
 
 * .Net 2.0, 3.5, 4.0, 4.5, 4.6 and 4.7
-* Silverlight 4 and 5
 * Windows Phone 7.0, 7.1 and 8.0
 * Windows CE
 * Windows RT Class Library and Runtime Components (winmd)
@@ -48,7 +47,6 @@ A special version for the [.Net Micro Framework](http://www.microsoft.com/netmf/
 * Windows RT demo (demonstrates decoding of static images)
 * Windows Store App with HTML5/JS (demonstrates decoding of static images)
 * Unity3D and Vuforia demo (demonstrates encoding of barcodes and decoding of images from a camera with [Unity3D](http://unity3d.com/))
-* Silverlight demo (demonstrates decoding and encoding of static images)
 * EmguCV demo (demonstrates decoding of images from a camera and uses the [EmguCV framework](http://www.emgu.com/))
 * OpenCV demo (demonstrates decoding of images from a camera and uses the [OpenCVSharp framework](https://github.com/shimat/opencvsharp/))
 * AForge demo (demonstrates decoding of images from a camera and uses the [AForge framework](http://www.aforgenet.com/))
@@ -56,7 +54,7 @@ A special version for the [.Net Micro Framework](http://www.microsoft.com/netmf/
 ## Thanks
 Many thanks to the team of the [zxing project](https://github.com/zxing/zxing) for their great work. ZXing.Net would not be possible without your work!
 ## Usage examples
-The source code repository includes small examples for Windows Forms, Silverlight, Windows Phone and other project types.
+The source code repository includes small examples for Windows Forms, Windows Phone and other project types.
 
 #### small example decoding a barcode inside a bitmap (.Net 2.0/3.5/4.x)
 ```csharp

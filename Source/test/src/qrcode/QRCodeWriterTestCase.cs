@@ -17,13 +17,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-#if !SILVERLIGHT
 using System.Drawing;
 using System.Drawing.Imaging;
-#else
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-#endif
 using NUnit.Framework;
 
 using ZXing.Common;
@@ -40,11 +35,7 @@ namespace ZXing.QrCode.Test
    {
 
       private static String BASE_IMAGE_PATH = "test/data/golden/qrcode/";
-#if !SILVERLIGHT
       private static Bitmap loadImage(String fileName)
-#else
-      private static WriteableBitmap loadImage(String fileName)
-#endif
       {
          String file = BASE_IMAGE_PATH + fileName;
          if (!File.Exists(file))
@@ -53,16 +44,9 @@ namespace ZXing.QrCode.Test
             file = "..\\..\\..\\Source\\" + BASE_IMAGE_PATH + fileName;
          }
          Assert.IsTrue(File.Exists(file), "Please run from the 'core' directory");
-#if !SILVERLIGHT
          return (Bitmap)Bitmap.FromFile(file);
-#else
-         var wb = new WriteableBitmap(0, 0);
-         wb.SetSource(File.OpenRead(file));
-         return wb;
-#endif
       }
 
-#if !SILVERLIGHT
       // In case the golden images are not monochromatic, convert the RGB values to greyscale.
       private static BitMatrix createMatrixFromImage(Bitmap image)
       {
@@ -103,37 +87,6 @@ namespace ZXing.QrCode.Test
          }
          return matrix;
       }
-#else
-      // In case the golden images are not monochromatic, convert the RGB values to greyscale.
-      private static BitMatrix createMatrixFromImage(WriteableBitmap image)
-      {
-         int width = image.PixelWidth;
-         int height = image.PixelHeight;
-
-         BitMatrix matrix = new BitMatrix(width, height);
-         for (int y = 0; y < height; y++)
-         {
-            int offset = y * width;
-            for (int x = 0; x < width; x++)
-            {
-               int srcPixel = image.Pixels[x + offset];
-               var c = Color.FromArgb((byte)((srcPixel >> 0x18) & 0xff),
-                     (byte)((srcPixel >> 0x10) & 0xff),
-                     (byte)((srcPixel >> 8) & 0xff),
-                     (byte)(srcPixel & 0xff));
-               int luminance = (306 * c.R +
-                                601 * c.G +
-                                117 * c.B) >> 10;
-               if (luminance <= 0x7F)
-               {
-                  matrix[x, y] = true;
-               }
-            }
-         }
-         
-         return matrix;
-      }
-#endif
 
       [Test]
       public void testQRCodeWriter()
@@ -196,7 +149,6 @@ namespace ZXing.QrCode.Test
              "renderer-test-01.png");
       }
 
-#if !SILVERLIGHT
       [Test]
       [Explicit]
       public void test_Random_Encoding_Decoding_Cycles_Up_To_1000()
@@ -237,6 +189,5 @@ namespace ZXing.QrCode.Test
               Assert.AreEqual(content, decodedResult.Text);
            }
        }
-#endif
    }
 }

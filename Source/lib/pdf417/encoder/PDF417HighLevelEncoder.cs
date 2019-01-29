@@ -19,7 +19,7 @@
  */
 
 using System;
-#if (SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NET46 || NET47 || NETFX_CORE || NETSTANDARD) && !NETSTANDARD1_0
+#if (NET40 || NET45 || NET46 || NET47 || NETFX_CORE || NETSTANDARD) && !NETSTANDARD1_0
 using System.Numerics;
 #else
 using BigIntegerLibrary;
@@ -298,7 +298,7 @@ namespace ZXing.PDF417.Internal
                      encoding = Encoding.GetEncoding("CP437");
                   }
 #else
-                        // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
+                        // these .NET profiles support only UTF-8 and UTF-16 out-of-the-box
                         encoding = Encoding.GetEncoding("UTF-8");
 #endif
 
@@ -562,7 +562,7 @@ namespace ZXing.PDF417.Internal
 
         private static void encodeNumeric(String msg, int startpos, int count, StringBuilder sb)
         {
-#if (SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NET46 || NET47 || NETFX_CORE || NETSTANDARD) && !NETSTANDARD1_0
+#if (NET40 || NET45 || NET46 || NET47 || NETFX_CORE || NETSTANDARD) && !NETSTANDARD1_0
          int idx = 0;
          StringBuilder tmp = new StringBuilder(count/3 + 1);
          BigInteger num900 = new BigInteger(900);
@@ -572,11 +572,7 @@ namespace ZXing.PDF417.Internal
             tmp.Length = 0;
             int len = Math.Min(44, count - idx);
             String part = '1' + msg.Substring(startpos + idx, len);
-#if SILVERLIGHT4 || SILVERLIGHT5
-            BigInteger bigint = BigIntegerExtensions.Parse(part);
-#else
             BigInteger bigint = BigInteger.Parse(part);
-#endif
             do
             {
                BigInteger c = bigint%num900;

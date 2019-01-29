@@ -25,11 +25,7 @@
  */
 
 using System;
-#if !SILVERLIGHT
 using System.Drawing;
-#else
-using System.Windows.Media.Imaging;
-#endif
 using System.IO;
 
 using ZXing.Common;
@@ -46,20 +42,10 @@ namespace ZXing.OneD.RSS.Expanded.Test
          return new BinaryBitmap(new GlobalHistogramBinarizer(luminanceSource));
       }
 
-#if !SILVERLIGHT
       internal static Bitmap readImage(String directory, String fileName)
       {
          var path = AbstractBlackBoxTestCase.buildTestBase(directory);
          return new Bitmap(Image.FromFile(Path.Combine(path, fileName)));
       }
-#else
-      internal static WriteableBitmap readImage(String directory, String fileName)
-      {
-         var path = AbstractBlackBoxTestCase.buildTestBase(directory);
-         var image = new WriteableBitmap(0, 0);
-         image.SetSource(File.OpenRead(Path.Combine(path, fileName)));
-         return image;
-      }
-#endif
    }
 }

@@ -19,13 +19,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-#if !SILVERLIGHT
 using System.Drawing;
-#else
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-#endif
 using NUnit.Framework;
 using ZXing.Multi;
 
@@ -37,11 +31,7 @@ namespace ZXing.Common.Test
    /// </summary>
    public abstract class AbstractBlackBoxTestCase
    {
-#if !SILVERLIGHT
       private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-#else
-      private static readonly DanielVaughan.Logging.ILog Log = DanielVaughan.Logging.LogManager.GetLog(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-#endif
 
       public bool accept(String dir, String name)
       {
@@ -138,12 +128,7 @@ namespace ZXing.Common.Test
             var absPath = Path.GetFullPath(testImage);
             Log.InfoFormat("Starting {0}", absPath);
 
-#if !SILVERLIGHT
             var image = new Bitmap(Image.FromFile(testImage));
-#else
-            var image = new WriteableBitmap(0, 0);
-            image.SetSource(File.OpenRead(testImage));
-#endif
 
             String expectedText;
             String expectedTextFile = Path.Combine(Path.GetDirectoryName(absPath), Path.GetFileNameWithoutExtension(absPath) + ".txt");
@@ -409,7 +394,6 @@ namespace ZXing.Common.Test
          return true;
       }
 
-#if !SILVERLIGHT
       protected static Bitmap rotateImage(Bitmap original, float degrees)
       {
          if (degrees == 0.0f)
@@ -437,47 +421,5 @@ namespace ZXing.Common.Test
          newRotated.RotateFlip(rotate);
          return newRotated;
       }
-#else
-      protected static WriteableBitmap rotateImage(WriteableBitmap original, float degrees)
-      {
-         if (degrees == 0.0f)
-         {
-            return original;
-         }
-
-         int width = original.PixelWidth;
-         int height = original.PixelHeight;
-         int full = Math.Max(width, height);
-
-         Image tempImage2 = new Image();
-         tempImage2.Width = full;
-         tempImage2.Height = full;
-         tempImage2.Source = original;
-
-         // New bitmap has swapped width/height
-         WriteableBitmap newRotated = new WriteableBitmap(height, width);
-
-
-         TransformGroup transformGroup = new TransformGroup();
-
-         // Rotate around centre
-         RotateTransform rotate = new RotateTransform();
-         rotate.Angle = degrees;
-         rotate.CenterX = full / 2;
-         rotate.CenterY = full / 2;
-         transformGroup.Children.Add(rotate);
-
-         // and transform back to top left corner of new image
-         TranslateTransform translate = new TranslateTransform();
-         translate.X = -(full - height) / 2;
-         translate.Y = -(full - width) / 2;
-         transformGroup.Children.Add(translate);
-
-         newRotated.Render(tempImage2, transformGroup);
-         newRotated.Invalidate();
-
-         return newRotated;
-      }
-#endif
    }
 }
