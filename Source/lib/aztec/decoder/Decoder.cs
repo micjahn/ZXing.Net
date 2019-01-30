@@ -55,8 +55,8 @@ namespace ZXing.Aztec.Internal
         private static readonly String[] MIXED_TABLE =
         {
          "CTRL_PS", " ", "\x1", "\x2", "\x3", "\x4", "\x5", "\x6", "\x7", "\b", "\t", "\n",
-         "\xD", "\f", "\r", "\x21", "\x22", "\x23", "\x24", "\x25", "@", "\\", "^", "_",
-         "`", "|", "~", "\xB1", "CTRL_LL", "CTRL_UL", "CTRL_PL", "CTRL_BS"
+         "\xB", "\f", "\r", "\x1B", "\x1C", "\x1D", "\x1E", "\x1F", "@", "\\", "^", "_",
+         "`", "|", "~", "\x7F", "CTRL_LL", "CTRL_UL", "CTRL_PL", "CTRL_BS"
       };
 
         private static readonly String[] PUNCT_TABLE =
@@ -406,7 +406,7 @@ namespace ZXing.Aztec.Internal
                 res <<= 1;
                 if (rawbits[i])
                 {
-                    res++;
+                    res |= 1;
                 }
             }
             return res;
