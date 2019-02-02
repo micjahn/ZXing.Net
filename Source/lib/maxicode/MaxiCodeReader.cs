@@ -57,22 +57,16 @@ namespace ZXing.Maxicode
         /// </returns>
         public Result decode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
         {
-            DecoderResult decoderResult;
-            if (hints != null && hints.ContainsKey(DecodeHintType.PURE_BARCODE))
-            {
-                BitMatrix bits = extractPureBits(image.BlackMatrix);
-                if (bits == null)
-                    return null;
-                decoderResult = decoder.decode(bits, hints);
-                if (decoderResult == null)
-                    return null;
-            }
-            else
-            {
+            // Note that MaxiCode reader effectively always assumes PURE_BARCODE mode
+            // and can't detect it in an image
+            var bits = extractPureBits(image.BlackMatrix);
+            if (bits == null)
                 return null;
-            }
+            var decoderResult = decoder.decode(bits, hints);
+            if (decoderResult == null)
+                return null;
 
-            Result result = new Result(decoderResult.Text, decoderResult.RawBytes, NO_POINTS, BarcodeFormat.MAXICODE);
+            var result = new Result(decoderResult.Text, decoderResult.RawBytes, NO_POINTS, BarcodeFormat.MAXICODE);
 
             var ecLevel = decoderResult.ECLevel;
             if (ecLevel != null)

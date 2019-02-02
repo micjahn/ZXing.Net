@@ -142,8 +142,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZXing.Eto.Forms", "Source\B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZXing.Unity3D", "Source\Bindings\ZXing.Unity3D\ZXing.Unity3D.csproj", "{35EFB92B-6C72-48B4-ABFA-39CECE270FF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "Clients\CommandLineEncoder\ConsoleApp1\ConsoleApp1.csproj", "{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug - Reduced|Any CPU = Debug - Reduced|Any CPU
@@ -1513,38 +1511,6 @@ Global
 		{35EFB92B-6C72-48B4-ABFA-39CECE270FF6}.Release|x64.Build.0 = Release|Any CPU
 		{35EFB92B-6C72-48B4-ABFA-39CECE270FF6}.Release|x86.ActiveCfg = Release|Any CPU
 		{35EFB92B-6C72-48B4-ABFA-39CECE270FF6}.Release|x86.Build.0 = Release|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Debug - Reduced|Any CPU.ActiveCfg = Debug|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Debug - Reduced|Any CPU.Build.0 = Debug|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Debug - Reduced|ARM.ActiveCfg = Debug|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Debug - Reduced|ARM.Build.0 = Debug|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Debug - Reduced|x64.ActiveCfg = Debug|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Debug - Reduced|x64.Build.0 = Debug|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Debug - Reduced|x86.ActiveCfg = Debug|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Debug - Reduced|x86.Build.0 = Debug|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Debug|ARM.Build.0 = Debug|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Debug|x64.Build.0 = Debug|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Debug|x86.Build.0 = Debug|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Release with Documentation|Any CPU.ActiveCfg = Release|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Release with Documentation|Any CPU.Build.0 = Release|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Release with Documentation|ARM.ActiveCfg = Release|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Release with Documentation|ARM.Build.0 = Release|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Release with Documentation|x64.ActiveCfg = Release|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Release with Documentation|x64.Build.0 = Release|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Release with Documentation|x86.ActiveCfg = Release|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Release with Documentation|x86.Build.0 = Release|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Release|ARM.ActiveCfg = Release|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Release|ARM.Build.0 = Release|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Release|x64.ActiveCfg = Release|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Release|x64.Build.0 = Release|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Release|x86.ActiveCfg = Release|Any CPU
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1586,7 +1552,6 @@ Global
 		{F6E833C8-0525-4DA9-88FA-F87857EA757C} = {E3647B3A-B903-402A-B7F7-711A4A1512B9}
 		{0E1CE6CC-7377-4854-9598-A18EEC924D51} = {E3647B3A-B903-402A-B7F7-711A4A1512B9}
 		{35EFB92B-6C72-48B4-ABFA-39CECE270FF6} = {E3647B3A-B903-402A-B7F7-711A4A1512B9}
-		{B54A7144-7D32-4D9C-8334-40EB5E75B2D1} = {751F738A-6DBF-4E2B-8FCD-D381E46D979D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {73A9B453-AE71-4A98-B68A-2389573CD311}

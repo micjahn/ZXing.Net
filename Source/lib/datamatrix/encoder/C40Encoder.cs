@@ -52,8 +52,7 @@ namespace ZXing.Datamatrix.Encoder
                     {
                         lastCharSize = backtrackOneCharacter(context, buffer, removed, lastCharSize);
                     }
-                    while ((buffer.Length % 3) == 1
-                        && ((lastCharSize <= 3 && available != 1) || lastCharSize > 3))
+                    while ((buffer.Length % 3) == 1 && (lastCharSize > 3 || available != 1))
                     {
                         lastCharSize = backtrackOneCharacter(context, buffer, removed, lastCharSize);
                     }

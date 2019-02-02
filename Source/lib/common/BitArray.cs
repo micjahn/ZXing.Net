@@ -146,7 +146,7 @@ namespace ZXing.Common
             int bitsOffset = from >> 5;
             int currentBits = bits[bitsOffset];
             // mask off lesser bits first
-            currentBits &= ~((1 << (from & 0x1F)) - 1);
+            currentBits &= -(1 << (from & 0x1F));
             while (currentBits == 0)
             {
                 if (++bitsOffset == bits.Length)
@@ -173,7 +173,7 @@ namespace ZXing.Common
             int bitsOffset = from >> 5;
             int currentBits = ~bits[bitsOffset];
             // mask off lesser bits first
-            currentBits &= ~((1 << (from & 0x1F)) - 1);
+            currentBits &= -(1 << (from & 0x1F));
             while (currentBits == 0)
             {
                 if (++bitsOffset == bits.Length)

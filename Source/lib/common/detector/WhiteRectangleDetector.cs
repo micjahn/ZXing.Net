@@ -128,7 +128,6 @@ namespace ZXing.Common.Detector
             int down = downInit;
             bool sizeExceeded = false;
             bool aBlackPointFoundOnBorder = true;
-            bool atLeastOneBlackPointFoundOnBorder = false;
 
             bool atLeastOneBlackPointFoundOnRight = false;
             bool atLeastOneBlackPointFoundOnBottom = false;
@@ -239,15 +238,9 @@ namespace ZXing.Common.Detector
                     sizeExceeded = true;
                     break;
                 }
-
-                if (aBlackPointFoundOnBorder)
-                {
-                    atLeastOneBlackPointFoundOnBorder = true;
-                }
-
             }
 
-            if (!sizeExceeded && atLeastOneBlackPointFoundOnBorder)
+            if (!sizeExceeded)
             {
 
                 int maxSize = right - left;
