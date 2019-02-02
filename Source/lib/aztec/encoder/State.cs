@@ -161,13 +161,18 @@ namespace ZXing.Aztec.Internal
         /// </summary>
         public bool isBetterThanOrEqualTo(State other)
         {
-            int mySize = this.bitCount + (HighLevelEncoder.LATCH_TABLE[this.mode][other.mode] >> 16);
-            if (other.binaryShiftByteCount > 0 &&
-                (this.binaryShiftByteCount == 0 || this.binaryShiftByteCount > other.binaryShiftByteCount))
+            int newModeBitCount = this.bitCount + (HighLevelEncoder.LATCH_TABLE[this.mode][other.mode] >> 16);
+            if (this.binaryShiftByteCount < other.binaryShiftByteCount)
             {
-                mySize += 10; // Cost of entering Binary Shift mode.
+                // add additional B/S encoding cost of other, if any
+                newModeBitCount += calculateBinaryShiftCost(other) - calculateBinaryShiftCost(this);
             }
-            return mySize <= other.bitCount;
+            else if (this.binaryShiftByteCount > other.binaryShiftByteCount && other.binaryShiftByteCount > 0)
+            {
+                // maximum possible additional cost (we end up exceeding the 31 byte boundary and other state can stay beneath it)
+                newModeBitCount += 10;
+            }
+            return newModeBitCount <= other.bitCount;
         }
 
         public BitArray toBitArray(byte[] text)
@@ -192,6 +197,23 @@ namespace ZXing.Aztec.Internal
         public override String ToString()
         {
             return String.Format("{0} bits={1} bytes={2}", HighLevelEncoder.MODE_NAMES[mode], bitCount, binaryShiftByteCount);
+        }
+
+        private static int calculateBinaryShiftCost(State state)
+        {
+            if (state.binaryShiftByteCount > 62)
+            {
+                return 21; // B/S with extended length
+            }
+            if (state.binaryShiftByteCount > 31)
+            {
+                return 20; // two B/S
+            }
+            if (state.binaryShiftByteCount > 0)
+            {
+                return 10; // one B/S
+            }
+            return 0;
         }
     }
 }
