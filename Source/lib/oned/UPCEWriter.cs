@@ -74,7 +74,7 @@ namespace ZXing.OneD
                     }
                     break;
                 default:
-                    throw new ArgumentException("Requested contents should be 8 digits long, but got " + length);
+                    throw new ArgumentException("Requested contents should be 7 or 8 digits long, but got " + length);
             }
 
             checkNumeric(contents);
