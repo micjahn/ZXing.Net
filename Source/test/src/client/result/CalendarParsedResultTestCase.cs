@@ -148,7 +148,7 @@ namespace ZXing.Client.Result.Test
                                            "GEO:-12.345\r\n" +
                                            "END:VEVENT\r\nEND:VCALENDAR", null, null, BarcodeFormat.QR_CODE);
          var result = ResultParser.parseResult(fakeResult);
-         Assert.AreEqual(ParsedResultType.URI, result.Type);
+         Assert.AreEqual(ParsedResultType.TEXT, result.Type);
       }
 
       [Test]

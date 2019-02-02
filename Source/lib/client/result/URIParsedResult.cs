@@ -15,7 +15,6 @@
 */
 
 using System;
-using System.Text.RegularExpressions;
 
 namespace ZXing.Client.Result
 {
@@ -25,13 +24,6 @@ namespace ZXing.Client.Result
     /// <author>Sean Owen</author>
     public sealed class URIParsedResult : ParsedResult
     {
-        private static readonly Regex USER_IN_HOST = new Regex(":/*([^/@]+)@[^/]+"
-#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || UNITY || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
-         , RegexOptions.Compiled);
-#else
-);
-#endif
-
         public String URI { get; private set; }
 
         public String Title { get; private set; }
@@ -43,6 +35,7 @@ namespace ZXing.Client.Result
         /// http://yourbank.com@phisher.com  This URI connects to phisher.com but may appear
         /// to connect to yourbank.com at first glance.
         /// </returns>
+        [Obsolete("deprecated, see {@link URIResultParser#isPossiblyMaliciousURI(String)")]
         public bool PossiblyMaliciousURI { get; private set; }
 
         public URIParsedResult(String uri, String title)
@@ -50,7 +43,7 @@ namespace ZXing.Client.Result
         {
             URI = massageURI(uri);
             Title = title;
-            PossiblyMaliciousURI = USER_IN_HOST.Match(URI).Success;
+            PossiblyMaliciousURI = URIResultParser.isPossiblyMaliciousURI(uri);
 
             var result = new System.Text.StringBuilder(30);
             maybeAppend(Title, result);
