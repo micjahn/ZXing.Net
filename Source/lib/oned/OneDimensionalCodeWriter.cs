@@ -110,7 +110,8 @@ namespace ZXing.OneD
         /// <summary>
         /// Throw ArgumentException if input contains characters other than digits 0-9.
         /// </summary>
-        /// <param name="contents"></param>
+        /// <param name="contents">string to check for numeric characters</param>
+        /// <exception cref="ArgumentException">if input contains characters other than digits 0-9.</exception>
         protected static void checkNumeric(String contents)
         {
             if (!NUMERIC.Match(contents).Success)
