@@ -236,12 +236,13 @@ namespace ZXing.PDF417.Internal
                                 {
                                     bytes = toBytes(msg, encoding);
                                 }
-                                int b = determineConsecutiveBinaryCount(msg, bytes, p, encoding);
+                                int byteCount;
+                                int b = determineConsecutiveBinaryCount(msg, bytes, p, encoding, out byteCount);
                                 if (b == 0)
                                 {
                                     b = 1;
                                 }
-                                if (b == 1 && encodingMode == TEXT_COMPACTION)
+                                if (b == 1 && byteCount == 1 && encodingMode == TEXT_COMPACTION)
                                 {
                                     //Switch for one byte (instead of latch)
                                     encodeBinary(bytes, 0, 1, TEXT_COMPACTION, sb);
@@ -567,7 +568,7 @@ namespace ZXing.PDF417.Internal
          StringBuilder tmp = new StringBuilder(count/3 + 1);
          BigInteger num900 = new BigInteger(900);
          BigInteger num0 = new BigInteger(0);
-         while (idx < count - 1)
+         while (idx < count)
          {
             tmp.Length = 0;
             int len = Math.Min(44, count - idx);
@@ -596,7 +597,7 @@ namespace ZXing.PDF417.Internal
             StringBuilder tmp = new StringBuilder(count / 3 + 1);
             BigInteger num900 = new BigInteger(900);
             BigInteger num0 = new BigInteger(0);
-            while (idx < count - 1)
+            while (idx < count)
             {
                 tmp.Length = 0;
                 int len = Math.Min(44, count - idx);
@@ -731,11 +732,12 @@ namespace ZXing.PDF417.Internal
         /// <param name="startpos">the start position within the message</param>
         /// <param name="encoding"></param>
         /// <returns>the requested character count</returns>
-        private static int determineConsecutiveBinaryCount(String msg, byte[] bytes, int startpos, Encoding encoding)
+        private static int determineConsecutiveBinaryCount(String msg, byte[] bytes, int startpos, Encoding encoding, out int byteCount)
         {
             int len = msg.Length;
             int idx = startpos;
             int idxb = idx;  // bytes index (may differ from idx for utf-8 and other unicode encodings)
+            byteCount = 0;
             encoding = getEncoder(encoding);
             while (idx < len)
             {
@@ -764,9 +766,9 @@ namespace ZXing.PDF417.Internal
                     throw new WriterException("Non-encodable character detected: " + ch + " (Unicode: " + (int)ch + ')');
                 }
                 idx++;
-                idxb++;
-                if (toBytes(ch, encoding).Length > 1)  // for non-ascii symbols
-                    idxb++;
+                var charAsBytes = toBytes(ch, encoding);
+                idxb += charAsBytes.Length; // for non-ascii symbols
+                byteCount += charAsBytes.Length;
             }
             return idx - startpos;
         }

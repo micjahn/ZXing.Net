@@ -123,7 +123,7 @@ namespace ZXing.PDF417.Internal
             var resultMetadata = new PDF417ResultMetadata();
             Encoding encoding = null;
 
-            while (codeIndex < codewords[0])
+            while (codeIndex <= codewords[0])
             {
                 switch (code)
                 {
@@ -135,7 +135,9 @@ namespace ZXing.PDF417.Internal
                         codeIndex = byteCompaction(code, codewords, encoding ?? (encoding = getEncoding(PDF417HighLevelEncoder.DEFAULT_ENCODING_NAME)), codeIndex, result);
                         break;
                     case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                        result.Append((char)codewords[codeIndex++]);
+                        if (encoding == null)
+                            encoding = getEncoding(PDF417HighLevelEncoder.DEFAULT_ENCODING_NAME);
+                        result.Append(encoding.GetString(new []{(byte)codewords[codeIndex++]}, 0, 1));
                         break;
                     case NUMERIC_COMPACTION_MODE_LATCH:
                         codeIndex = numericCompaction(codewords, codeIndex, result);
