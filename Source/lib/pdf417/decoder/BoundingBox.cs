@@ -90,13 +90,13 @@ namespace ZXing.PDF417.Internal
         {
             if (topLeft == null || bottomLeft == null)
             {
-                topLeft = new ResultPoint(0, TopRight.Y);
-                bottomLeft = new ResultPoint(0, BottomRight.Y);
+                topLeft = new ResultPoint(0, topRight.Y);
+                bottomLeft = new ResultPoint(0, bottomRight.Y);
             }
             else if (topRight == null || bottomRight == null)
             {
-                topRight = new ResultPoint(image.Width - 1, TopLeft.Y);
-                bottomRight = new ResultPoint(image.Width - 1, TopLeft.Y);
+                topRight = new ResultPoint(image.Width - 1, topLeft.Y);
+                bottomRight = new ResultPoint(image.Width - 1, topLeft.Y);
             }
 
             this.image = image;
