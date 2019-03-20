@@ -180,6 +180,7 @@ namespace ZXing.Aztec.Test
             assertEqualByteArrays(byte16, Decoder.convertBoolArrayToByteArray(bool16));
         }
 
+#if !SILVERLIGHT
         [Test]
         public void roundTripTestMixedMode()
         {
@@ -195,5 +196,6 @@ namespace ZXing.Aztec.Test
             var result = reader.Decode(bitmap);
             Assert.That(result.Text, Is.EqualTo(stringContent));
         }
+#endif
     }
 }

@@ -30,14 +30,14 @@ namespace ZXing.Common.Test
             Rotation = rotation;
         }
 
-        public int MustPassCount { get; }
+        public int MustPassCount { get; private set; }
 
-        public int TryHarderCount { get; }
+        public int TryHarderCount { get; private set; }
 
-        public int MaxMisreads { get; }
+        public int MaxMisreads { get; private set; }
 
-        public int MaxTryHarderMisreads { get; }
+        public int MaxTryHarderMisreads { get; private set; }
 
-        public float Rotation { get; }
+        public float Rotation { get; private set; }
     }
 }
