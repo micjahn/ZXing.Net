@@ -230,7 +230,7 @@ namespace ZXing.Client.Result.Test
       [TestCase("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456Z\r\nEND:VEVENT", "foo\nSunday, May 4, 2008 12:34:56 PM", ParsedResultType.CALENDAR, TestName = "VEvent: Start time only - 1")]
       [TestCase("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504T123456\r\nEND:VEVENT", "foo\nSunday, May 4, 2008 12:34:56 PM", ParsedResultType.CALENDAR, TestName = "VEvent: Start time only - 2")]
       [TestCase("BEGIN:VEVENT\r\nSUMMARY:foo\r\nDTSTART:20080504\r\nEND:VEVENT", "foo\nSunday, May 4, 2008", ParsedResultType.CALENDAR, TestName = "VEvent: Start time only - 3")]
-      [TestCase("BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", "BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.URI, TestName = "VEvent: Start time only - 4")]
+      [TestCase("BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", "BEGIN:VEVENT\r\nDTEND:20080505T\r\nEND:VEVENT", ParsedResultType.TEXT, TestName = "VEvent: Start time only - 4")]
          // Yeah, it's OK that this is thought of as maybe a URI as long as it's not CALENDAR
          // Make sure illegal entries without newlines don't crash
       [TestCase("BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT", "BEGIN:VEVENTSUMMARY:EventDTSTART:20081030T122030ZDTEND:20081030T132030ZEND:VEVENT", ParsedResultType.URI, TestName = "VEvent: Illegal entries shouldn't crash")]

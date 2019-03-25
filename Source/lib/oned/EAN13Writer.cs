@@ -20,111 +20,113 @@ using ZXing.Common;
 
 namespace ZXing.OneD
 {
-   /// <summary>
-   /// This object renders an EAN13 code as a <see cref="BitMatrix"/>.
-   /// <author>aripollak@gmail.com (Ari Pollak)</author>
-   /// </summary>
-   public sealed class EAN13Writer : UPCEANWriter
-   {
-      private const int CODE_WIDTH = 3 + // start guard
-          (7 * 6) + // left bars
-          5 + // middle guard
-          (7 * 6) + // right bars
-          3; // end guard
+    /// <summary>
+    /// This object renders an EAN13 code as a <see cref="BitMatrix"/>.
+    /// <author>aripollak@gmail.com (Ari Pollak)</author>
+    /// </summary>
+    public sealed class EAN13Writer : UPCEANWriter
+    {
+        private const int CODE_WIDTH = 3 + // start guard
+            (7 * 6) + // left bars
+            5 + // middle guard
+            (7 * 6) + // right bars
+            3; // end guard
 
-      /// <summary>
-      /// Encode the contents following specified format.
-      /// {@code width} and {@code height} are required size. This method may return bigger size
-      /// {@code BitMatrix} when specified size is too small. The user can set both {@code width} and
-      /// {@code height} to zero to get minimum size barcode. If negative value is set to {@code width}
-      /// or {@code height}, {@code IllegalArgumentException} is thrown.
-      /// </summary>
-      /// <param name="contents"></param>
-      /// <param name="format"></param>
-      /// <param name="width"></param>
-      /// <param name="height"></param>
-      /// <param name="hints"></param>
-      /// <returns></returns>
-      public override BitMatrix encode(String contents,
-                              BarcodeFormat format,
-                              int width,
-                              int height,
-                              IDictionary<EncodeHintType, object> hints)
-      {
-         if (format != BarcodeFormat.EAN_13)
-         {
-            throw new ArgumentException("Can only encode EAN_13, but got " + format);
-         }
-
-         return base.encode(contents, format, width, height, hints);
-      }
-
-      /// <summary>
-      /// Encode the contents to byte array expression of one-dimensional barcode.
-      /// Start code and end code should be included in result, and side margins should not be included.
-      /// <returns>a {@code boolean[]} of horizontal pixels (false = white, true = black)</returns>
-      /// </summary>
-      /// <param name="contents"></param>
-      /// <returns></returns>
-      public override bool[] encode(String contents)
-      {
-         int length = contents.Length;
-         switch (length)
-         {
-            case 12:
-               // No check digit present, calculate it and add it
-               var check = UPCEANReader.getStandardUPCEANChecksum(contents);
-               if (check == null)
-               {
-                  throw new ArgumentException("Checksum can't be calculated");
-               }
-               contents += check.Value;
-               break;
-            case 13:
-               try
-               {
-                  if (!UPCEANReader.checkStandardUPCEANChecksum(contents))
-                  {
-                     throw new ArgumentException("Contents do not pass checksum");
-                  }
-               }
-               catch (FormatException ignored)
-               {
-                  throw new ArgumentException("Illegal contents", ignored);
-               }
-               break;
-            default:
-               throw new ArgumentException("Requested contents should be 12 (without checksum digit) or 13 digits long, but got " + contents.Length);
-         }
-
-         int firstDigit = Int32.Parse(contents.Substring(0, 1));
-         int parities = EAN13Reader.FIRST_DIGIT_ENCODINGS[firstDigit];
-         var result = new bool[CODE_WIDTH];
-         int pos = 0;
-
-         pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);
-
-         // See EAN13Reader for a description of how the first digit & left bars are encoded
-         for (int i = 1; i <= 6; i++)
-         {
-            int digit = Int32.Parse(contents.Substring(i, 1));
-            if ((parities >> (6 - i) & 1) == 1)
+        /// <summary>
+        /// Encode the contents following specified format.
+        /// {@code width} and {@code height} are required size. This method may return bigger size
+        /// {@code BitMatrix} when specified size is too small. The user can set both {@code width} and
+        /// {@code height} to zero to get minimum size barcode. If negative value is set to {@code width}
+        /// or {@code height}, {@code IllegalArgumentException} is thrown.
+        /// </summary>
+        /// <param name="contents"></param>
+        /// <param name="format"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="hints"></param>
+        /// <returns></returns>
+        public override BitMatrix encode(String contents,
+                                BarcodeFormat format,
+                                int width,
+                                int height,
+                                IDictionary<EncodeHintType, object> hints)
+        {
+            if (format != BarcodeFormat.EAN_13)
             {
-               digit += 10;
+                throw new ArgumentException("Can only encode EAN_13, but got " + format);
             }
-            pos += appendPattern(result, pos, UPCEANReader.L_AND_G_PATTERNS[digit], false);
-         }
 
-         pos += appendPattern(result, pos, UPCEANReader.MIDDLE_PATTERN, false);
+            return base.encode(contents, format, width, height, hints);
+        }
 
-         for (int i = 7; i <= 12; i++)
-         {
-            int digit = Int32.Parse(contents.Substring(i, 1));
-            pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], true);
-         }
-         appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);
+        /// <summary>
+        /// Encode the contents to byte array expression of one-dimensional barcode.
+        /// Start code and end code should be included in result, and side margins should not be included.
+        /// <returns>a {@code boolean[]} of horizontal pixels (false = white, true = black)</returns>
+        /// </summary>
+        /// <param name="contents"></param>
+        /// <returns></returns>
+        public override bool[] encode(String contents)
+        {
+            int length = contents.Length;
+            switch (length)
+            {
+                case 12:
+                    // No check digit present, calculate it and add it
+                    var check = UPCEANReader.getStandardUPCEANChecksum(contents);
+                    if (check == null)
+                    {
+                        throw new ArgumentException("Checksum can't be calculated");
+                    }
+                    contents += check.Value;
+                    break;
+                case 13:
+                    try
+                    {
+                        if (!UPCEANReader.checkStandardUPCEANChecksum(contents))
+                        {
+                            throw new ArgumentException("Contents do not pass checksum");
+                        }
+                    }
+                    catch (FormatException ignored)
+                    {
+                        throw new ArgumentException("Illegal contents", ignored);
+                    }
+                    break;
+                default:
+                    throw new ArgumentException("Requested contents should be 12 (without checksum digit) or 13 digits long, but got " + contents.Length);
+            }
 
-         return result;
-      }
-   }
+            checkNumeric(contents);
+
+            int firstDigit = Int32.Parse(contents.Substring(0, 1));
+            int parities = EAN13Reader.FIRST_DIGIT_ENCODINGS[firstDigit];
+            var result = new bool[CODE_WIDTH];
+            int pos = 0;
+
+            pos += appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);
+
+            // See EAN13Reader for a description of how the first digit & left bars are encoded
+            for (int i = 1; i <= 6; i++)
+            {
+                int digit = Int32.Parse(contents.Substring(i, 1));
+                if ((parities >> (6 - i) & 1) == 1)
+                {
+                    digit += 10;
+                }
+                pos += appendPattern(result, pos, UPCEANReader.L_AND_G_PATTERNS[digit], false);
+            }
+
+            pos += appendPattern(result, pos, UPCEANReader.MIDDLE_PATTERN, false);
+
+            for (int i = 7; i <= 12; i++)
+            {
+                int digit = Int32.Parse(contents.Substring(i, 1));
+                pos += appendPattern(result, pos, UPCEANReader.L_PATTERNS[digit], true);
+            }
+            appendPattern(result, pos, UPCEANReader.START_END_PATTERN, true);
+
+            return result;
+        }
+    }
 }

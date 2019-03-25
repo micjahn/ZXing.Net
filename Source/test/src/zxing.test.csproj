@@ -115,6 +115,7 @@
     <Compile Include="common\CharacterSetECITestCase.cs" />
     <Compile Include="common\detector\MathUtilsTestCase.cs" />
     <Compile Include="common\PerspectiveTransformTestCase.cs" />
+    <Compile Include="common\reedsolomon\GenericGFPolyTestCase.cs" />
     <Compile Include="common\reedsolomon\ReedSolomonTestCase.cs" />
     <Compile Include="common\StringUtilsTestCase.cs" />
     <Compile Include="common\TestResult.cs">
@@ -201,6 +202,7 @@
     <Compile Include="oned\UPCEWriterTestCase.cs" />
     <Compile Include="pdf417\decoder\ec\AbstractErrorCorrectionTestCase.cs" />
     <Compile Include="pdf417\decoder\ec\ErrorCorrectionTestCase.cs" />
+    <Compile Include="pdf417\decoder\PDF417DecoderTestCase.cs" />
     <Compile Include="pdf417\encoder\PDF417EncoderTestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox1TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox2TestCase.cs" />
@@ -254,6 +256,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="datamatrix\detector\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition="!Exists('$(MSBuildProjectDirectory)\..\..\..\Key\private.snk')">

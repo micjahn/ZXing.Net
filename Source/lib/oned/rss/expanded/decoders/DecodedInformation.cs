@@ -28,45 +28,45 @@ using System;
 
 namespace ZXing.OneD.RSS.Expanded.Decoders
 {
-   /// <summary>
-   /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
-   /// <author>Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)</author>
-   /// </summary>
-   internal sealed class DecodedInformation : DecodedObject
-   {
-      private String newString;
-      private int remainingValue;
-      private bool remaining;
+    /// <summary>
+    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
+    /// <author>Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)</author>
+    /// </summary>
+    internal sealed class DecodedInformation : DecodedObject
+    {
+        private String newString;
+        private int remainingValue;
+        private bool remaining;
 
-      internal DecodedInformation(int newPosition, String newString)
-         : base(newPosition)
-      {
-         this.newString = newString;
-         this.remaining = false;
-         this.remainingValue = 0;
-      }
+        internal DecodedInformation(int newPosition, String newString)
+           : base(newPosition)
+        {
+            this.newString = newString;
+            this.remaining = false;
+            this.remainingValue = 0;
+        }
 
-      internal DecodedInformation(int newPosition, String newString, int remainingValue)
-         : base(newPosition)
-      {
-         this.remaining = true;
-         this.remainingValue = remainingValue;
-         this.newString = newString;
-      }
+        internal DecodedInformation(int newPosition, String newString, int remainingValue)
+           : base(newPosition)
+        {
+            this.remaining = true;
+            this.remainingValue = remainingValue;
+            this.newString = newString;
+        }
 
-      internal String getNewString()
-      {
-         return this.newString;
-      }
+        internal String getNewString()
+        {
+            return this.newString;
+        }
 
-      internal bool isRemaining()
-      {
-         return this.remaining;
-      }
+        internal bool isRemaining()
+        {
+            return this.remaining;
+        }
 
-      internal int getRemainingValue()
-      {
-         return this.remainingValue;
-      }
-   }
+        internal int getRemainingValue()
+        {
+            return this.remainingValue;
+        }
+    }
 }

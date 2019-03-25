@@ -19,73 +19,73 @@ using System.Text;
 
 namespace ZXing.Client.Result
 {
-   /// <summary>
-   /// Represents a parsed result that encodes an email message including recipients, subject and body text.
-   /// </summary>
-   /// <author>Sean Owen</author>
-   public sealed class EmailAddressParsedResult : ParsedResult
-   {
-      /// <summary>
-      /// the email address
-      /// </summary>
-      public String EmailAddress
-      {
-         get
-         {
-            return Tos == null || Tos.Length == 0 ? null : Tos[0];
-         }
-      }
-      /// <summary>
-      /// the TOs
-      /// </summary>
-      public String[] Tos { get; private set; }
-      /// <summary>
-      /// the CCs
-      /// </summary>
-      public String[] CCs { get; private set; }
-      /// <summary>
-      /// the BCCs
-      /// </summary>
-      public String[] BCCs { get; private set; }
-      /// <summary>
-      /// the subject
-      /// </summary>
-      public String Subject { get; private set; }
-      /// <summary>
-      /// the body
-      /// </summary>
-      public String Body { get; private set; }
-      /// <summary>
-      /// the mailto: uri
-      /// </summary>
-      [Obsolete("deprecated without replacement")]
-      public String MailtoURI { get { return "mailto:"; } }
+    /// <summary>
+    /// Represents a parsed result that encodes an email message including recipients, subject and body text.
+    /// </summary>
+    /// <author>Sean Owen</author>
+    public sealed class EmailAddressParsedResult : ParsedResult
+    {
+        /// <summary>
+        /// the email address
+        /// </summary>
+        public String EmailAddress
+        {
+            get
+            {
+                return Tos == null || Tos.Length == 0 ? null : Tos[0];
+            }
+        }
+        /// <summary>
+        /// the TOs
+        /// </summary>
+        public String[] Tos { get; private set; }
+        /// <summary>
+        /// the CCs
+        /// </summary>
+        public String[] CCs { get; private set; }
+        /// <summary>
+        /// the BCCs
+        /// </summary>
+        public String[] BCCs { get; private set; }
+        /// <summary>
+        /// the subject
+        /// </summary>
+        public String Subject { get; private set; }
+        /// <summary>
+        /// the body
+        /// </summary>
+        public String Body { get; private set; }
+        /// <summary>
+        /// the mailto: uri
+        /// </summary>
+        [Obsolete("deprecated without replacement")]
+        public String MailtoURI { get { return "mailto:"; } }
 
-      internal EmailAddressParsedResult(String to)
-         : this(new[] {to}, null, null, null, null)
-      {
-      }
+        internal EmailAddressParsedResult(String to)
+           : this(new[] { to }, null, null, null, null)
+        {
+        }
 
-      internal EmailAddressParsedResult(String[] tos,
-                               String[] ccs,
-                               String[] bccs,
-                               String subject,
-                               String body)
-         : base(ParsedResultType.EMAIL_ADDRESS)
-      {
-         Tos = tos;
-         CCs = ccs;
-         BCCs = bccs;
-         Subject = subject;
-         Body = body;
+        internal EmailAddressParsedResult(String[] tos,
+                                 String[] ccs,
+                                 String[] bccs,
+                                 String subject,
+                                 String body)
+           : base(ParsedResultType.EMAIL_ADDRESS)
+        {
+            Tos = tos;
+            CCs = ccs;
+            BCCs = bccs;
+            Subject = subject;
+            Body = body;
 
-         var result = new StringBuilder(30);
-         maybeAppend(Tos, result);
-         maybeAppend(CCs, result);
-         maybeAppend(BCCs, result);
-         maybeAppend(Subject, result);
-         maybeAppend(Body, result);
-         displayResultValue = result.ToString();
-      }
-   }
+            var result = new StringBuilder(30);
+            maybeAppend(Tos, result);
+            maybeAppend(CCs, result);
+            maybeAppend(BCCs, result);
+            maybeAppend(Subject, result);
+            maybeAppend(Body, result);
+            displayResultValue = result.ToString();
+        }
+    }
 }

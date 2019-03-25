@@ -20,33 +20,33 @@ using ZXing.ImageSharp;
 
 namespace ZXing
 {
-	/// <summary>
-	/// extensions methods which are working directly on any IBarcodeReaderGeneric implementation
-	/// </summary>
-	public static class BarcodeReaderExtensions
-	{
-		/// <summary>
-		/// uses the IBarcodeReaderGeneric implementation and the <see cref="ImageSharpLuminanceSource{TPixel}"/> class for decoding
-		/// </summary>
-		/// <param name="reader"></param>
-		/// <param name="image"></param>
-		/// <returns></returns>
-		public static Result Decode<TPixel>(this IBarcodeReaderGeneric reader, Image<TPixel> image) where TPixel : struct, IPixel<TPixel>
-		{
-			var luminanceSource = new ImageSharpLuminanceSource<TPixel>(image);
-			return reader.Decode(luminanceSource);
-		}
+    /// <summary>
+    /// extensions methods which are working directly on any IBarcodeReaderGeneric implementation
+    /// </summary>
+    public static class BarcodeReaderExtensions
+    {
+        /// <summary>
+        /// uses the IBarcodeReaderGeneric implementation and the <see cref="ImageSharpLuminanceSource{TPixel}"/> class for decoding
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="image"></param>
+        /// <returns></returns>
+        public static Result Decode<TPixel>(this IBarcodeReaderGeneric reader, Image<TPixel> image) where TPixel : struct, IPixel<TPixel>
+        {
+            var luminanceSource = new ImageSharpLuminanceSource<TPixel>(image);
+            return reader.Decode(luminanceSource);
+        }
 
-		/// <summary>
-		/// uses the IBarcodeReaderGeneric implementation and the <see cref="ImageSharpLuminanceSource{TPixel}"/> class for decoding
-		/// </summary>
-		/// <param name="reader"></param>
-		/// <param name="image"></param>
-		/// <returns></returns>
-		public static Result[] DecodeMultiple<TPixel>(this IBarcodeReaderGeneric reader, Image<TPixel> image) where TPixel : struct, IPixel<TPixel>
-		{
-			var luminanceSource = new ImageSharpLuminanceSource<TPixel>(image);
-			return reader.DecodeMultiple(luminanceSource);
-		}
-	}
+        /// <summary>
+        /// uses the IBarcodeReaderGeneric implementation and the <see cref="ImageSharpLuminanceSource{TPixel}"/> class for decoding
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="image"></param>
+        /// <returns></returns>
+        public static Result[] DecodeMultiple<TPixel>(this IBarcodeReaderGeneric reader, Image<TPixel> image) where TPixel : struct, IPixel<TPixel>
+        {
+            var luminanceSource = new ImageSharpLuminanceSource<TPixel>(image);
+            return reader.DecodeMultiple(luminanceSource);
+        }
+    }
 }

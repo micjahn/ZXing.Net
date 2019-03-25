@@ -29,64 +29,64 @@ using ZXing.Common;
 
 namespace ZXing.OneD.RSS.Expanded
 {
-   /// <summary>
-   /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
-   /// <author>Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)</author>
-   /// </summary>
-   static class BitArrayBuilder
-   {
-      internal static BitArray buildBitArray(List<ExpandedPair> pairs)
-      {
-         int charNumber = (pairs.Count << 1) - 1;
-         if (pairs[pairs.Count - 1].RightChar == null)
-         {
-            charNumber -= 1;
-         }
-
-         int size = 12 * charNumber;
-
-         BitArray binary = new BitArray(size);
-         int accPos = 0;
-
-         ExpandedPair firstPair = pairs[0];
-         int firstValue = firstPair.RightChar.Value;
-         for (int i = 11; i >= 0; --i)
-         {
-            if ((firstValue & (1 << i)) != 0)
+    /// <summary>
+    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
+    /// <author>Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)</author>
+    /// </summary>
+    static class BitArrayBuilder
+    {
+        internal static BitArray buildBitArray(List<ExpandedPair> pairs)
+        {
+            int charNumber = (pairs.Count << 1) - 1;
+            if (pairs[pairs.Count - 1].RightChar == null)
             {
-               binary[accPos] = true;
-            }
-            accPos++;
-         }
-
-         for (int i = 1; i < pairs.Count; ++i)
-         {
-            ExpandedPair currentPair = pairs[i];
-
-            int leftValue = currentPair.LeftChar.Value;
-            for (int j = 11; j >= 0; --j)
-            {
-               if ((leftValue & (1 << j)) != 0)
-               {
-                  binary[accPos] = true;
-               }
-               accPos++;
+                charNumber -= 1;
             }
 
-            if (currentPair.RightChar != null)
+            int size = 12 * charNumber;
+
+            BitArray binary = new BitArray(size);
+            int accPos = 0;
+
+            ExpandedPair firstPair = pairs[0];
+            int firstValue = firstPair.RightChar.Value;
+            for (int i = 11; i >= 0; --i)
             {
-               int rightValue = currentPair.RightChar.Value;
-               for (int j = 11; j >= 0; --j)
-               {
-                  if ((rightValue & (1 << j)) != 0)
-                  {
-                     binary[accPos] = true;
-                  }
-                  accPos++;
-               }
+                if ((firstValue & (1 << i)) != 0)
+                {
+                    binary[accPos] = true;
+                }
+                accPos++;
             }
-         }
-         return binary;
-      }
-   }
+
+            for (int i = 1; i < pairs.Count; ++i)
+            {
+                ExpandedPair currentPair = pairs[i];
+
+                int leftValue = currentPair.LeftChar.Value;
+                for (int j = 11; j >= 0; --j)
+                {
+                    if ((leftValue & (1 << j)) != 0)
+                    {
+                        binary[accPos] = true;
+                    }
+                    accPos++;
+                }
+
+                if (currentPair.RightChar != null)
+                {
+                    int rightValue = currentPair.RightChar.Value;
+                    for (int j = 11; j >= 0; --j)
+                    {
+                        if ((rightValue & (1 << j)) != 0)
+                        {
+                            binary[accPos] = true;
+                        }
+                        accPos++;
+                    }
+                }
+            }
+            return binary;
+        }
+    }
 }

@@ -257,7 +257,7 @@ namespace ZXing.Common.Test
          Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
          Assert.AreNotEqual(a, new BitArray(31));
          a[16] = true;
-         Assert.AreNotEqual(a, new BitArray(31));
+         Assert.AreNotEqual(a, b);
          Assert.AreNotEqual(a.GetHashCode(), b.GetHashCode());
          b[16] = true;
          Assert.AreEqual(a, b);

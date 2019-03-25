@@ -26,70 +26,70 @@
 
 namespace ZXing.OneD.RSS.Expanded.Decoders
 {
-   /// <summary>
-   /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
-   /// </summary>
-   internal sealed class CurrentParsingState
-   {
-      private int position;
-      private State encoding;
+    /// <summary>
+    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
+    /// </summary>
+    internal sealed class CurrentParsingState
+    {
+        private int position;
+        private State encoding;
 
-      private enum State
-      {
-         NUMERIC,
-         ALPHA,
-         ISO_IEC_646
-      }
+        private enum State
+        {
+            NUMERIC,
+            ALPHA,
+            ISO_IEC_646
+        }
 
-      internal CurrentParsingState()
-      {
-         this.position = 0;
-         this.encoding = State.NUMERIC;
-      }
+        internal CurrentParsingState()
+        {
+            this.position = 0;
+            this.encoding = State.NUMERIC;
+        }
 
-      internal int getPosition()
-      {
-         return position;
-      }
+        internal int getPosition()
+        {
+            return position;
+        }
 
-      internal void setPosition(int position)
-      {
-         this.position = position;
-      }
+        internal void setPosition(int position)
+        {
+            this.position = position;
+        }
 
-      internal void incrementPosition(int delta)
-      {
-         position += delta;
-      }
+        internal void incrementPosition(int delta)
+        {
+            position += delta;
+        }
 
-      internal bool isAlpha()
-      {
-         return this.encoding == State.ALPHA;
-      }
+        internal bool isAlpha()
+        {
+            return this.encoding == State.ALPHA;
+        }
 
-      internal bool isNumeric()
-      {
-         return this.encoding == State.NUMERIC;
-      }
+        internal bool isNumeric()
+        {
+            return this.encoding == State.NUMERIC;
+        }
 
-      internal bool isIsoIec646()
-      {
-         return this.encoding == State.ISO_IEC_646;
-      }
+        internal bool isIsoIec646()
+        {
+            return this.encoding == State.ISO_IEC_646;
+        }
 
-      internal void setNumeric()
-      {
-         this.encoding = State.NUMERIC;
-      }
+        internal void setNumeric()
+        {
+            this.encoding = State.NUMERIC;
+        }
 
-      internal void setAlpha()
-      {
-         this.encoding = State.ALPHA;
-      }
+        internal void setAlpha()
+        {
+            this.encoding = State.ALPHA;
+        }
 
-      internal void setIsoIec646()
-      {
-         this.encoding = State.ISO_IEC_646;
-      }
-   }
+        internal void setIsoIec646()
+        {
+            this.encoding = State.ISO_IEC_646;
+        }
+    }
 }

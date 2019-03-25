@@ -395,135 +395,141 @@ namespace ZXing.Common.ReedSolomon.Test
          testEncodeDecodeRandom(GenericGF.AZTEC_DATA_12, 3072, 1023);
       }
 
-      public static void corrupt(int[] received, int howMany, Random random, int max)
-      {
-         //BitSet corrupted = new BitSet(received.Length);
-         var corrupted = new BitArray(received.Length);
-         for (int j = 0; j < howMany; j++)
-         {
-            int location = random.Next(received.Length);
-            int value = random.Next(max);
-            if (corrupted[location] || received[location] == value)
-            {
-               j--;
-            }
-            else
-            {
-               corrupted[location] = true;
-               received[location] = value;
-            }
-         }
-      }
-
-      private static void testEncodeDecodeRandom(GenericGF field, int dataSize, int ecSize)
-      {
-         Assert.IsTrue(dataSize > 0 && dataSize <= field.Size - 3, "Invalid data size for " + field);
-         Assert.IsTrue(ecSize > 0 && ecSize + dataSize <= field.Size, "Invalid ECC size for " + field);
-         ReedSolomonEncoder encoder = new ReedSolomonEncoder(field);
-         int[] message = new int[dataSize + ecSize];
-         int[] dataWords = new int[dataSize];
-         int[] ecWords = new int[ecSize];
-         Random random = getPseudoRandom();
-         int iterations = field.Size > 256 ? 1 : DECODER_RANDOM_TEST_ITERATIONS;
-         for (int i = 0; i < iterations; i++)
-         {
-            // generate random data
-            for (int k = 0; k < dataSize; k++)
-            {
-               dataWords[k] = random.Next(field.Size);
-            }
-            // generate ECC words
-            Array.Copy(dataWords, 0, message, 0, dataWords.Length);
-            encoder.encode(message, ecWords.Length);
-            Array.Copy(message, dataSize, ecWords, 0, ecSize);
-            // check to see if Decoder can fix up to ecWords/2 random errors
-            testDecoder(field, dataWords, ecWords);
-         }
-      }
-
-      private static void testEncodeDecode(GenericGF field, int[] dataWords, int[] ecWords)
-      {
-         testEncoder(field, dataWords, ecWords);
-         testDecoder(field, dataWords, ecWords);
-      }
-
-      private static void testEncoder(GenericGF field, int[] dataWords, int[] ecWords)
-      {
-         ReedSolomonEncoder encoder = new ReedSolomonEncoder(field);
-         int[] messageExpected = new int[dataWords.Length + ecWords.Length];
-         int[] message = new int[dataWords.Length + ecWords.Length];
-         Array.Copy(dataWords, 0, messageExpected, 0, dataWords.Length);
-         Array.Copy(ecWords, 0, messageExpected, dataWords.Length, ecWords.Length);
-         Array.Copy(dataWords, 0, message, 0, dataWords.Length);
-         encoder.encode(message, ecWords.Length);
-         assertDataEquals("Encode in " + field + " (" + dataWords.Length + ',' + ecWords.Length + ") failed",
-                          messageExpected, message);
-      }
-
-      private static void testDecoder(GenericGF field, int[] dataWords, int[] ecWords)
-      {
-         ReedSolomonDecoder decoder = new ReedSolomonDecoder(field);
-         int[] message = new int[dataWords.Length + ecWords.Length];
-         int maxErrors = ecWords.Length / 2;
-         Random random = getPseudoRandom();
-         int iterations = field.Size > 256 ? 1 : DECODER_TEST_ITERATIONS;
-         for (int j = 0; j < iterations; j++)
-         {
-            for (int i = 0; i < ecWords.Length; i++)
-            {
-               if (i > 10 && i < ecWords.Length / 2 - 10)
+       public static void corrupt(int[] received, int howMany, Random random, int max)
+       {
+           //BitSet corrupted = new BitSet(received.Length);
+           var corrupted = new BitArray(received.Length);
+           for (int j = 0; j < howMany; j++)
+           {
+               int location = random.Next(received.Length);
+               int value = random.Next(max);
+               if (corrupted[location] || received[location] == value)
                {
-                  // performance improvement - skip intermediate cases in long-running tests 
-                  i += ecWords.Length / 10;
+                   j--;
                }
+               else
+               {
+                   corrupted[location] = true;
+                   received[location] = value;
+               }
+           }
+       }
+
+       private static void testEncodeDecodeRandom(GenericGF field, int dataSize, int ecSize)
+       {
+           Assert.IsTrue(dataSize > 0 && dataSize <= field.Size - 3, "Invalid data size for " + field);
+           Assert.IsTrue(ecSize > 0 && ecSize + dataSize <= field.Size, "Invalid ECC size for " + field);
+           ReedSolomonEncoder encoder = new ReedSolomonEncoder(field);
+           int[] message = new int[dataSize + ecSize];
+           int[] dataWords = new int[dataSize];
+           int[] ecWords = new int[ecSize];
+           Random random = getPseudoRandom();
+           int iterations = field.Size > 256 ? 1 : DECODER_RANDOM_TEST_ITERATIONS;
+           for (int i = 0; i < iterations; i++)
+           {
+               // generate random data
+               for (int k = 0; k < dataSize; k++)
+               {
+                   dataWords[k] = random.Next(field.Size);
+               }
+
+               // generate ECC words
                Array.Copy(dataWords, 0, message, 0, dataWords.Length);
-               Array.Copy(ecWords, 0, message, dataWords.Length, ecWords.Length);
-               corrupt(message, i, random, field.Size);
-               if (!decoder.decode(message, ecWords.Length))
+               encoder.encode(message, ecWords.Length);
+               Array.Copy(message, dataSize, ecWords, 0, ecSize);
+               // check to see if Decoder can fix up to ecWords/2 random errors
+               testDecoder(field, dataWords, ecWords);
+           }
+       }
+
+       private static void testEncodeDecode(GenericGF field, int[] dataWords, int[] ecWords)
+       {
+           testEncoder(field, dataWords, ecWords);
+           testDecoder(field, dataWords, ecWords);
+       }
+
+       private static void testEncoder(GenericGF field, int[] dataWords, int[] ecWords)
+       {
+           ReedSolomonEncoder encoder = new ReedSolomonEncoder(field);
+           int[] messageExpected = new int[dataWords.Length + ecWords.Length];
+           int[] message = new int[dataWords.Length + ecWords.Length];
+           Array.Copy(dataWords, 0, messageExpected, 0, dataWords.Length);
+           Array.Copy(ecWords, 0, messageExpected, dataWords.Length, ecWords.Length);
+           Array.Copy(dataWords, 0, message, 0, dataWords.Length);
+           encoder.encode(message, ecWords.Length);
+           assertDataEquals("Encode in " + field + " (" + dataWords.Length + ',' + ecWords.Length + ") failed",
+               messageExpected, message);
+       }
+
+       private static void testDecoder(GenericGF field, int[] dataWords, int[] ecWords)
+       {
+           ReedSolomonDecoder decoder = new ReedSolomonDecoder(field);
+           int[] message = new int[dataWords.Length + ecWords.Length];
+           int maxErrors = ecWords.Length / 2;
+           Random random = getPseudoRandom();
+           int iterations = field.Size > 256 ? 1 : DECODER_TEST_ITERATIONS;
+           for (int j = 0; j < iterations; j++)
+           {
+               for (int i = 0; i < ecWords.Length; i++)
                {
-                  // fail only if maxErrors exceeded
-                  Assert.IsTrue(i > maxErrors, "Decode in " + field + " (" + dataWords.Length + ',' + ecWords.Length + ") failed at " + i);
-                  // else stop
-                  break;
+                   if (i > 10 && i < ecWords.Length / 2 - 10)
+                   {
+                       // performance improvement - skip intermediate cases in long-running tests 
+                       i += ecWords.Length / 10;
+                   }
+
+                   Array.Copy(dataWords, 0, message, 0, dataWords.Length);
+                   Array.Copy(ecWords, 0, message, dataWords.Length, ecWords.Length);
+                   corrupt(message, i, random, field.Size);
+                   if (!decoder.decode(message, ecWords.Length))
+                   {
+                       // fail only if maxErrors exceeded
+                       Assert.IsTrue(i > maxErrors,
+                           "Decode in " + field + " (" + dataWords.Length + ',' + ecWords.Length + ") failed at " + i);
+                       // else stop
+                       break;
+                   }
+
+                   if (i < maxErrors)
+                   {
+                       assertDataEquals("Decode in " + field + " (" + dataWords.Length + ',' + ecWords.Length +
+                                        ") failed at " +
+                                        i + " errors",
+                           dataWords,
+                           message);
+                   }
                }
-               if (i < maxErrors)
+           }
+       }
+
+       private static void assertDataEquals(String message, int[] expected, int[] received)
+       {
+           for (int i = 0; i < expected.Length; i++)
+           {
+               if (expected[i] != received[i])
                {
-                  assertDataEquals("Decode in " + field + " (" + dataWords.Length + ',' + ecWords.Length + ") failed at " +
-                                   i + " errors",
-                                   dataWords,
-                                   message);
+                   var receivedCopy = new int[expected.Length];
+                   Array.Copy(received, receivedCopy, expected.Length);
+                   Assert.Fail(message + ". Mismatch at " + i + ". Expected " + arrayToString(expected) + ", got " +
+                               arrayToString(receivedCopy));
                }
-            }
-         }
-      }
+           }
+       }
 
-      private static void assertDataEquals(String message, int[] expected, int[] received)
-      {
-         for (int i = 0; i < expected.Length; i++)
-         {
-            if (expected[i] != received[i])
-            {
-               var receivedCopy = new int[expected.Length];
-               Array.Copy(received, receivedCopy, expected.Length);
-               Assert.Fail(message + ". Mismatch at " + i + ". Expected " + arrayToString(expected) + ", got " +
-                    arrayToString(receivedCopy));
-            }
-         }
-      }
+       private static String arrayToString(int[] data)
+       {
+           StringBuilder sb = new StringBuilder("{");
+           for (int i = 0; i < data.Length; i++)
+           {
+               sb.AppendFormat(i > 0 ? ",%X" : "%X", data[i]);
+           }
 
-      private static String arrayToString(int[] data)
-      {
-         StringBuilder sb = new StringBuilder("{");
-         for (int i = 0; i < data.Length; i++)
-         {
-            sb.AppendFormat(i > 0 ? ",%X" : "%X", data[i]);
-         }
-         return sb.Append('}').ToString();
-      }
+           return sb.Append('}').ToString();
+       }
 
-      private static Random getPseudoRandom()
-      {
-         return new Random(0x0EADBEEF);
-      }
+       private static Random getPseudoRandom()
+       {
+           return new Random(0x0EADBEEF);
+       }
    }
 }

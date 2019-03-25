@@ -18,31 +18,31 @@ using System.Runtime.InteropServices;
 
 namespace ZXing.Interop.Encoding
 {
-   [ComVisible(true)]
-   [Guid("FA47BA12-9F41-4AA0-ADB4-F23C9A2D8999")]
-   [ClassInterface(ClassInterfaceType.AutoDual)]
-   public sealed class PixelData
-   {
-      internal PixelData(int width, int height, byte[] pixels)
-      {
-         Height = height;
-         Width = width;
-         Pixels = pixels;
-      }
+    [ComVisible(true)]
+    [Guid("FA47BA12-9F41-4AA0-ADB4-F23C9A2D8999")]
+    [ClassInterface(ClassInterfaceType.AutoDual)]
+    public sealed class PixelData
+    {
+        internal PixelData(int width, int height, byte[] pixels)
+        {
+            Height = height;
+            Width = width;
+            Pixels = pixels;
+        }
 
-      public byte[] Pixels { get; private set; }
-      public int Width { get; private set; }
-      public int Height { get; private set; }
-   }
+        public byte[] Pixels { get; private set; }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
+    }
 
-   internal static class PixelDataExtensions
-   {
-      public static PixelData ToInterop(this Rendering.PixelData other)
-      {
-         if (other == null)
-            return null;
+    internal static class PixelDataExtensions
+    {
+        public static PixelData ToInterop(this Rendering.PixelData other)
+        {
+            if (other == null)
+                return null;
 
-         return new PixelData(other.Width, other.Height, other.Pixels);
-      }
-   }
+            return new PixelData(other.Width, other.Height, other.Pixels);
+        }
+    }
 }

@@ -29,36 +29,36 @@ using ZXing.Common;
 
 namespace ZXing.OneD.RSS.Expanded.Decoders
 {
-   /// <summary>
-   /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
-   /// </summary>
-   abstract class AI01weightDecoder : AI01decoder
-   {
-      internal AI01weightDecoder(BitArray information)
-         : base(information)
-      {
-      }
+    /// <summary>
+    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
+    /// </summary>
+    abstract class AI01weightDecoder : AI01decoder
+    {
+        internal AI01weightDecoder(BitArray information)
+           : base(information)
+        {
+        }
 
-      protected void encodeCompressedWeight(StringBuilder buf, int currentPos, int weightSize)
-      {
-         int originalWeightNumeric = this.getGeneralDecoder().extractNumericValueFromBitArray(currentPos, weightSize);
-         addWeightCode(buf, originalWeightNumeric);
+        protected void encodeCompressedWeight(StringBuilder buf, int currentPos, int weightSize)
+        {
+            int originalWeightNumeric = this.getGeneralDecoder().extractNumericValueFromBitArray(currentPos, weightSize);
+            addWeightCode(buf, originalWeightNumeric);
 
-         int weightNumeric = checkWeight(originalWeightNumeric);
+            int weightNumeric = checkWeight(originalWeightNumeric);
 
-         int currentDivisor = 100000;
-         for (int i = 0; i < 5; ++i)
-         {
-            if (weightNumeric / currentDivisor == 0)
+            int currentDivisor = 100000;
+            for (int i = 0; i < 5; ++i)
             {
-               buf.Append('0');
+                if (weightNumeric / currentDivisor == 0)
+                {
+                    buf.Append('0');
+                }
+                currentDivisor /= 10;
             }
-            currentDivisor /= 10;
-         }
-         buf.Append(weightNumeric);
-      }
+            buf.Append(weightNumeric);
+        }
 
-      protected abstract void addWeightCode(StringBuilder buf, int weight);
-      protected abstract int checkWeight(int weight);
-   }
+        protected abstract void addWeightCode(StringBuilder buf, int weight);
+        protected abstract int checkWeight(int weight);
+    }
 }

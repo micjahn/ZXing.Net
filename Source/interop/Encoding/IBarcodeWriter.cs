@@ -18,22 +18,22 @@ using System.Runtime.InteropServices;
 
 namespace ZXing.Interop.Encoding
 {
-   [ComVisible(true)]
-   [Guid("917B963C-D041-4551-9666-6FE43BD19E20")]
-   [InterfaceType(ComInterfaceType.InterfaceIsDual)]
-   public interface IBarcodeWriter
-   {
-      Common.BarcodeFormat Format { get; set; }
+    [ComVisible(true)]
+    [Guid("917B963C-D041-4551-9666-6FE43BD19E20")]
+    [InterfaceType(ComInterfaceType.InterfaceIsDual)]
+    public interface IBarcodeWriter
+    {
+        Common.BarcodeFormat Format { get; set; }
 
-      /// <summary>
-      /// Gets or sets the options container for the encoding and renderer process.
-      /// </summary>
-      EncodingOptions Options { get; set; }
+        /// <summary>
+        /// Gets or sets the options container for the encoding and renderer process.
+        /// </summary>
+        EncodingOptions Options { get; set; }
 
-      PixelData Write(string contents);
+        PixelData Write(string contents);
 
-      void WriteToFile(string contents, string fileName, ImageFileFormat imageFileFormat);
+        void WriteToFile(string contents, string fileName, ImageFileFormat imageFileFormat);
 
-      object GetStdPicture(string contents);
-   }
+        object GetStdPicture(string contents);
+    }
 }

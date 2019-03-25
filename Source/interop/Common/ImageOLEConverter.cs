@@ -20,18 +20,18 @@ using System.Windows.Forms;
 
 namespace ZXing.Interop.Common
 {
-   internal class ImageOLEConverter : AxHost
-   {
-      public static readonly ImageOLEConverter Instance = new ImageOLEConverter();
+    internal class ImageOLEConverter : AxHost
+    {
+        public static readonly ImageOLEConverter Instance = new ImageOLEConverter();
 
-      private ImageOLEConverter()
-         : base(Guid.Empty.ToString())
-      {
-      }
+        private ImageOLEConverter()
+           : base(Guid.Empty.ToString())
+        {
+        }
 
-      public object ConvertToIPicture(Image image)
-      {
-         return GetIPictureFromPicture(image);
-      }
-   }
+        public object ConvertToIPicture(Image image)
+        {
+            return GetIPictureFromPicture(image);
+        }
+    }
 }

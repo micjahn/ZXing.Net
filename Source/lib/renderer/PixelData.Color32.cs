@@ -19,33 +19,33 @@ using UnityEngine;
 
 namespace ZXing.Rendering
 {
-   /// <summary>
-   /// represents the generated code as a byte array with pixel data (4 byte per pixel, BGRA)
-   /// </summary>
-   public sealed partial class PixelData
-   {
-      /// <summary>
-      /// converts the pixel data to a bitmap object
-      /// </summary>
-      /// <returns></returns>
-      [CLSCompliant(false)]
-      public Color32[] ToColor32()
-      {
-         var result = new Color32[Width * Height];
-         var resultIndex = 0;
+    /// <summary>
+    /// represents the generated code as a byte array with pixel data (4 byte per pixel, BGRA)
+    /// </summary>
+    public sealed partial class PixelData
+    {
+        /// <summary>
+        /// converts the pixel data to a bitmap object
+        /// </summary>
+        /// <returns></returns>
+        [CLSCompliant(false)]
+        public Color32[] ToColor32()
+        {
+            var result = new Color32[Width * Height];
+            var resultIndex = 0;
 
-         for (int y = 0; y < Height; y++)
-         {
-            var row = y*Width;
-            for (int x = 0; x < Width; x++)
+            for (int y = 0; y < Height; y++)
             {
-               var pixelIndex = row + 4*x;
-               result[resultIndex] = new Color32(Pixels[pixelIndex + 2], Pixels[pixelIndex + 1], Pixels[pixelIndex], Pixels[pixelIndex + 3]);
-               resultIndex++;
+                var row = y * Width;
+                for (int x = 0; x < Width; x++)
+                {
+                    var pixelIndex = row + 4 * x;
+                    result[resultIndex] = new Color32(Pixels[pixelIndex + 2], Pixels[pixelIndex + 1], Pixels[pixelIndex], Pixels[pixelIndex + 3]);
+                    resultIndex++;
+                }
             }
-         }
 
-         return result;
-      }
-   }
+            return result;
+        }
+    }
 }

@@ -18,70 +18,70 @@ using System;
 
 namespace ZXing.Common.Detector
 {
-   /// <summary>
-   /// General math-related and numeric utility functions.
-   /// </summary>
-   public static class MathUtils
-   {
-      /// <summary>
-      /// Ends up being a bit faster than {@link Math#round(float)}. This merely rounds its
-      /// argument to the nearest int, where x.5 rounds up to x+1. Semantics of this shortcut
-      /// differ slightly from {@link Math#round(float)} in that half rounds down for negative
-      /// values. -2.5 rounds to -3, not -2. For purposes here it makes no difference.
-      /// </summary>
-      /// <param name="d">real value to round</param>
-      /// <returns>nearest <c>int</c></returns>
-      public static int round(float d)
-      {
-         if (float.IsNaN(d))
-            return 0;
-         if (float.IsPositiveInfinity(d))
-            return int.MaxValue;
-         return (int)(d + (d < 0.0f ? -0.5f : 0.5f));
-      }
+    /// <summary>
+    /// General math-related and numeric utility functions.
+    /// </summary>
+    public static class MathUtils
+    {
+        /// <summary>
+        /// Ends up being a bit faster than {@link Math#round(float)}. This merely rounds its
+        /// argument to the nearest int, where x.5 rounds up to x+1. Semantics of this shortcut
+        /// differ slightly from {@link Math#round(float)} in that half rounds down for negative
+        /// values. -2.5 rounds to -3, not -2. For purposes here it makes no difference.
+        /// </summary>
+        /// <param name="d">real value to round</param>
+        /// <returns>nearest <c>int</c></returns>
+        public static int round(float d)
+        {
+            if (float.IsNaN(d))
+                return 0;
+            if (float.IsPositiveInfinity(d))
+                return int.MaxValue;
+            return (int)(d + (d < 0.0f ? -0.5f : 0.5f));
+        }
 
-      /// <summary>
-      /// 
-      /// </summary>
-      /// <param name="aX"></param>
-      /// <param name="aY"></param>
-      /// <param name="bX"></param>
-      /// <param name="bY"></param>
-      /// <returns>Euclidean distance between points A and B</returns>
-      public static float distance(float aX, float aY, float bX, float bY)
-      {
-         float xDiff = aX - bX;
-         float yDiff = aY - bY;
-         return (float)Math.Sqrt(xDiff * xDiff + yDiff * yDiff);
-      }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="aX"></param>
+        /// <param name="aY"></param>
+        /// <param name="bX"></param>
+        /// <param name="bY"></param>
+        /// <returns>Euclidean distance between points A and B</returns>
+        public static float distance(float aX, float aY, float bX, float bY)
+        {
+            double xDiff = aX - bX;
+            double yDiff = aY - bY;
+            return (float)Math.Sqrt(xDiff * xDiff + yDiff * yDiff);
+        }
 
-      /// <summary>
-      /// 
-      /// </summary>
-      /// <param name="aX"></param>
-      /// <param name="aY"></param>
-      /// <param name="bX"></param>
-      /// <param name="bY"></param>
-      /// <returns>Euclidean distance between points A and B</returns>
-      public static float distance(int aX, int aY, int bX, int bY)
-      {
-         int xDiff = aX - bX;
-         int yDiff = aY - bY;
-         return (float)Math.Sqrt(xDiff * xDiff + yDiff * yDiff);
-      }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="aX"></param>
+        /// <param name="aY"></param>
+        /// <param name="bX"></param>
+        /// <param name="bY"></param>
+        /// <returns>Euclidean distance between points A and B</returns>
+        public static float distance(int aX, int aY, int bX, int bY)
+        {
+            double xDiff = aX - bX;
+            double yDiff = aY - bY;
+            return (float)Math.Sqrt(xDiff * xDiff + yDiff * yDiff);
+        }
 
-      /// <summary>
-      /// </summary>
-      /// <param name="array">values to sum</param>
-      /// <returns>sum of values in array</returns>
-      public static int sum(int[] array)
-      {
-         int count = 0;
-         foreach (int a in array)
-         {
-            count += a;
-         }
-         return count;
-      }
-   }
+        /// <summary>
+        /// </summary>
+        /// <param name="array">values to sum</param>
+        /// <returns>sum of values in array</returns>
+        public static int sum(int[] array)
+        {
+            int count = 0;
+            foreach (int a in array)
+            {
+                count += a;
+            }
+            return count;
+        }
+    }
 }

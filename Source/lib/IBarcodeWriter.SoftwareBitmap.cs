@@ -19,20 +19,20 @@ using ZXing.Common;
 
 namespace ZXing
 {
-   /// <summary>
-   /// Interface for a smart class to encode some content into a barcode
-   /// </summary>
-   [System.CLSCompliant(false)]
-   public partial interface IBarcodeWriterSoftwareBitmap
-   {
-      /// <summary>
-      /// Creates a visual representation of the contents
-      /// </summary>
-      SoftwareBitmap Write(string contents);
+    /// <summary>
+    /// Interface for a smart class to encode some content into a barcode
+    /// </summary>
+    [System.CLSCompliant(false)]
+    public partial interface IBarcodeWriterSoftwareBitmap
+    {
+        /// <summary>
+        /// Creates a visual representation of the contents
+        /// </summary>
+        SoftwareBitmap Write(string contents);
 
-      /// <summary>
-      /// Returns a rendered instance of the barcode which is given by a BitMatrix.
-      /// </summary>
-      SoftwareBitmap Write(BitMatrix matrix);
-   }
+        /// <summary>
+        /// Returns a rendered instance of the barcode which is given by a BitMatrix.
+        /// </summary>
+        SoftwareBitmap Write(BitMatrix matrix);
+    }
 }

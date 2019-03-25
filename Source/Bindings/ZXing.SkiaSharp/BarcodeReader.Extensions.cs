@@ -20,33 +20,33 @@ using ZXing.SkiaSharp;
 
 namespace ZXing
 {
-   /// <summary>
-   /// extensions methods which are working directly on any IBarcodeReaderGeneric implementation
-   /// </summary>
-   public static class BarcodeReaderExtensions
-   {
-      /// <summary>
-      /// uses the IBarcodeReaderGeneric implementation and the <see cref="SKBitmapLuminanceSource"/> class for decoding
-      /// </summary>
-      /// <param name="reader"></param>
-      /// <param name="image"></param>
-      /// <returns></returns>
-      public static Result Decode(this IBarcodeReaderGeneric reader, SKBitmap image)
-      {
-         var luminanceSource = new SKBitmapLuminanceSource(image);
-         return reader.Decode(luminanceSource);
-      }
+    /// <summary>
+    /// extensions methods which are working directly on any IBarcodeReaderGeneric implementation
+    /// </summary>
+    public static class BarcodeReaderExtensions
+    {
+        /// <summary>
+        /// uses the IBarcodeReaderGeneric implementation and the <see cref="SKBitmapLuminanceSource"/> class for decoding
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="image"></param>
+        /// <returns></returns>
+        public static Result Decode(this IBarcodeReaderGeneric reader, SKBitmap image)
+        {
+            var luminanceSource = new SKBitmapLuminanceSource(image);
+            return reader.Decode(luminanceSource);
+        }
 
-      /// <summary>
-      /// uses the IBarcodeReaderGeneric implementation and the <see cref="SKBitmapLuminanceSource"/> class for decoding
-      /// </summary>
-      /// <param name="reader"></param>
-      /// <param name="image"></param>
-      /// <returns></returns>
-      public static Result[] DecodeMultiple(this IBarcodeReaderGeneric reader, SKBitmap image)
-      {
-         var luminanceSource = new SKBitmapLuminanceSource(image);
-         return reader.DecodeMultiple(luminanceSource);
-      }
-   }
+        /// <summary>
+        /// uses the IBarcodeReaderGeneric implementation and the <see cref="SKBitmapLuminanceSource"/> class for decoding
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="image"></param>
+        /// <returns></returns>
+        public static Result[] DecodeMultiple(this IBarcodeReaderGeneric reader, SKBitmap image)
+        {
+            var luminanceSource = new SKBitmapLuminanceSource(image);
+            return reader.DecodeMultiple(luminanceSource);
+        }
+    }
 }

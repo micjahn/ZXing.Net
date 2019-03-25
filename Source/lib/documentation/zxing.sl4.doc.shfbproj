@@ -8,7 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{f983b572-dcd7-4ab4-b9d5-d218a22ba5fe}</ProjectGuid>
-    <SHFBSchemaVersion>1.9.9.0</SHFBSchemaVersion>
+    <SHFBSchemaVersion>2017.9.26.0</SHFBSchemaVersion>
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
          Studio adds them anyway -->
     <AssemblyName>zxing.sl4.doc</AssemblyName>
@@ -19,7 +19,8 @@
     <HtmlHelpName>zxing.sl4</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\zxing.sl4.csproj" />
+      <DocumentationSource sourceFile="..\..\..\Build\Release\sl4\zxing.sl4.XML" />
+      <DocumentationSource sourceFile="..\..\..\Build\Release\sl4\zxing.sl4.dll" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>AllMessages</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
@@ -37,7 +38,7 @@
     <NamingMethod>Guid</NamingMethod>
     <HelpTitle>ZXing.Net</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
-    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
+    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected, EditorBrowsableNever, NonBrowsable</VisibleItems>
     <ApiFilter />
     <ComponentConfigurations />
     <HelpAttributes />
@@ -69,11 +70,10 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\lib\zxing.sl4.csproj">
-      <Name>zxing.sl4</Name>
-      <Project>{03b962bb-7a24-4589-89e5-c42a17ddc376}</Project>
+    <Reference Include="zxing.sl4, Version=0.16.2.0, Culture=neutral, PublicKeyToken=830ae994e36ac27d">
+      <HintPath>..\..\..\Build\Release\sl4\zxing.sl4.dll</HintPath>
       <Private>True</Private>
-    </ProjectReference>
+    </Reference>
   </ItemGroup>
   <!-- Import the SHFB build targets -->
   <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />

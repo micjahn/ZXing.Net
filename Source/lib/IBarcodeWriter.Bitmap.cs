@@ -18,18 +18,18 @@ using ZXing.Common;
 
 namespace ZXing
 {
-   /// <summary>
-   /// Interface for a smart class to encode some content into a barcode
-   /// </summary>
-   public partial interface IBarcodeWriter
-   {
-      /// <summary>
-      /// Creates a visual representation of the contents
-      /// </summary>
-      System.Drawing.Bitmap Write(string contents);
-      /// <summary>
-      /// Returns a rendered instance of the barcode which is given by a BitMatrix.
-      /// </summary>
-      System.Drawing.Bitmap Write(BitMatrix matrix);
-   }
+    /// <summary>
+    /// Interface for a smart class to encode some content into a barcode
+    /// </summary>
+    public partial interface IBarcodeWriter
+    {
+        /// <summary>
+        /// Creates a visual representation of the contents
+        /// </summary>
+        System.Drawing.Bitmap Write(string contents);
+        /// <summary>
+        /// Returns a rendered instance of the barcode which is given by a BitMatrix.
+        /// </summary>
+        System.Drawing.Bitmap Write(BitMatrix matrix);
+    }
 }

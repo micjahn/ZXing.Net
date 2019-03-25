@@ -16,16 +16,16 @@
 
 namespace ZXing
 {
-   /// <summary>
-   /// Interface for a smart class to decode multiple barcodes inside a bitmap object
-   /// </summary>
-   public partial interface IBarcodeReader<T>
-   {
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="barcodeBitmap">The barcode bitmap.</param>
-      /// <returns>the result data or null</returns>
-      Result[] DecodeMultiple(T barcodeBitmap);
-   }
+    /// <summary>
+    /// Interface for a smart class to decode multiple barcodes inside a bitmap object
+    /// </summary>
+    public partial interface IBarcodeReader<T>
+    {
+        /// <summary>
+        /// Decodes the specified barcode bitmap.
+        /// </summary>
+        /// <param name="barcodeBitmap">The barcode bitmap.</param>
+        /// <returns>the result data or null</returns>
+        Result[] DecodeMultiple(T barcodeBitmap);
+    }
 }

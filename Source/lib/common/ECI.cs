@@ -17,38 +17,38 @@
 namespace ZXing.Common
 {
 
-   /// <summary>
-   /// Superclass of classes encapsulating types ECIs, according to "Extended Channel Interpretations"
-   /// 5.3 of ISO 18004.
-   /// </summary>
-   /// <author>Sean Owen</author>
-   public abstract class ECI
-   {
-      /// <summary>
-      /// the ECI value
-      /// </summary>
-      public virtual int Value { get; private set; }
+    /// <summary>
+    /// Superclass of classes encapsulating types ECIs, according to "Extended Channel Interpretations"
+    /// 5.3 of ISO 18004.
+    /// </summary>
+    /// <author>Sean Owen</author>
+    public abstract class ECI
+    {
+        /// <summary>
+        /// the ECI value
+        /// </summary>
+        public virtual int Value { get; private set; }
 
-      internal ECI(int val)
-      {
-         Value = val;
-      }
+        internal ECI(int val)
+        {
+            Value = val;
+        }
 
-      /// <param name="val">ECI value</param>
-      /// <returns><see cref="ECI"/> representing ECI of given value, or null if it is legal but unsupported</returns>
-      /// <throws>ArgumentException if ECI value is invalid </throws>
-      public static ECI getECIByValue(int val)
-      {
-         if (val < 0 || val > 999999)
-         {
-            throw new System.ArgumentException("Bad ECI value: " + val);
-         }
-         if (val < 900)
-         {
-            // Character set ECIs use 000000 - 000899
-            return CharacterSetECI.getCharacterSetECIByValue(val);
-         }
-         return null;
-      }
-   }
+        /// <param name="val">ECI value</param>
+        /// <returns><see cref="ECI"/> representing ECI of given value, or null if it is legal but unsupported</returns>
+        /// <throws>ArgumentException if ECI value is invalid </throws>
+        public static ECI getECIByValue(int val)
+        {
+            if (val < 0 || val > 999999)
+            {
+                throw new System.ArgumentException("Bad ECI value: " + val);
+            }
+            if (val < 900)
+            {
+                // Character set ECIs use 000000 - 000899
+                return CharacterSetECI.getCharacterSetECIByValue(val);
+            }
+            return null;
+        }
+    }
 }

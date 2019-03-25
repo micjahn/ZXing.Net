@@ -16,36 +16,36 @@
 
 namespace ZXing.Rendering
 {
-   /// <summary>
-   /// represents the generated code as a byte array with pixel data (4 byte per pixel, BGRA)
-   /// </summary>
-   public sealed partial class PixelData
-   {
-      /// <summary>
-      /// converts the pixel data to a bitmap object
-      /// </summary>
-      /// <returns></returns>
-      public System.Drawing.Bitmap ToBitmap()
-      {
-         var bmp = new System.Drawing.Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-         bmp.SetResolution(96, 96);
-         var bmpData = bmp.LockBits(
-            new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), 
-            System.Drawing.Imaging.ImageLockMode.WriteOnly, 
-            System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+    /// <summary>
+    /// represents the generated code as a byte array with pixel data (4 byte per pixel, BGRA)
+    /// </summary>
+    public sealed partial class PixelData
+    {
+        /// <summary>
+        /// converts the pixel data to a bitmap object
+        /// </summary>
+        /// <returns></returns>
+        public System.Drawing.Bitmap ToBitmap()
+        {
+            var bmp = new System.Drawing.Bitmap(Width, Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            bmp.SetResolution(96, 96);
+            var bmpData = bmp.LockBits(
+               new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
+               System.Drawing.Imaging.ImageLockMode.WriteOnly,
+               System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-         try
-         {
-            //Copy the data from the byte array into BitmapData.Scan0
-            System.Runtime.InteropServices.Marshal.Copy(Pixels, 0, bmpData.Scan0, Pixels.Length);
-         }
-         finally
-         {
-            //Unlock the pixels
-            bmp.UnlockBits(bmpData);
-         }
+            try
+            {
+                //Copy the data from the byte array into BitmapData.Scan0
+                System.Runtime.InteropServices.Marshal.Copy(Pixels, 0, bmpData.Scan0, Pixels.Length);
+            }
+            finally
+            {
+                //Unlock the pixels
+                bmp.UnlockBits(bmpData);
+            }
 
-         return bmp;
-      }
-   }
+            return bmp;
+        }
+    }
 }

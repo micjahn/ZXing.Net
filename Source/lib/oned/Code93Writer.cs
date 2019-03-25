@@ -21,115 +21,115 @@ using ZXing.Common;
 
 namespace ZXing.OneD
 {
-   /// <summary>
-   /// This object renders a CODE93 code as a BitMatrix
-   /// </summary>
-   public class Code93Writer : OneDimensionalCodeWriter
-   {
-      public override BitMatrix encode(String contents, BarcodeFormat format, int width, int height, IDictionary<EncodeHintType, object> hints)
-      {
-         if (format != BarcodeFormat.CODE_93)
-         {
-            throw new ArgumentException("Can only encode CODE_93, but got " + format);
-         }
-         return base.encode(contents, format, width, height, hints);
-      }
-
-      public override bool[] encode(String contents)
-      {
-         int length = contents.Length;
-         if (length > 80)
-         {
-            throw new ArgumentException(
-               "Requested contents should be less than 80 digits long, but got " + length);
-         }
-         //each character is encoded by 9 of 0/1's
-         int[] widths = new int[9];
-
-         //length of code + 2 start/stop characters + 2 checksums, each of 9 bits, plus a termination bar
-         int codeWidth = (contents.Length + 2 + 2)*9 + 1;
-
-         //start character (*)
-         toIntArray(Code93Reader.CHARACTER_ENCODINGS[47], widths);
-
-         bool[] result = new bool[codeWidth];
-         int pos = appendPattern(result, 0, widths);
-
-         for (int i = 0; i < length; i++)
-         {
-            int indexInString = Code93Reader.ALPHABET_STRING.IndexOf(contents[i]);
-            toIntArray(Code93Reader.CHARACTER_ENCODINGS[indexInString], widths);
-            pos += appendPattern(result, pos, widths);
-         }
-
-         //add two checksums
-         int check1 = computeChecksumIndex(contents, 20);
-         toIntArray(Code93Reader.CHARACTER_ENCODINGS[check1], widths);
-         pos += appendPattern(result, pos, widths);
-
-         //append the contents to reflect the first checksum added
-         contents += Code93Reader.ALPHABET_STRING[check1];
-
-         int check2 = computeChecksumIndex(contents, 15);
-         toIntArray(Code93Reader.CHARACTER_ENCODINGS[check2], widths);
-         pos += appendPattern(result, pos, widths);
-
-         //end character (*)
-         toIntArray(Code93Reader.CHARACTER_ENCODINGS[47], widths);
-         pos += appendPattern(result, pos, widths);
-
-         //termination bar (single black bar)
-         result[pos] = true;
-
-         return result;
-      }
-
-      private static void toIntArray(int a, int[] toReturn)
-      {
-         for (int i = 0; i < 9; i++)
-         {
-            int temp = a & (1 << (8 - i));
-            toReturn[i] = temp == 0 ? 0 : 1;
-         }
-      }
-
-      /// <summary>
-      /// </summary>
-      /// <param name="target">output to append to</param>
-      /// <param name="pos">start position</param>
-      /// <param name="pattern">pattern to append</param>
-      /// <param name="startColor">unused</param>
-      /// <returns>9</returns>
-      [Obsolete("without replacement; intended as an internal-only method")]
-      protected new static int appendPattern(bool[] target, int pos, int[] pattern, bool startColor)
-      {
-         return appendPattern(target, pos, pattern);
-      }
-
-      private static int appendPattern(bool[] target, int pos, int[] pattern)
-      {
-         foreach (var bit in pattern)
-         {
-            target[pos++] = bit != 0;
-         }
-         return 9;
-      }
-
-      private static int computeChecksumIndex(String contents, int maxWeight)
-      {
-         int weight = 1;
-         int total = 0;
-
-         for (int i = contents.Length - 1; i >= 0; i--)
-         {
-            int indexInString = Code93Reader.ALPHABET_STRING.IndexOf(contents[i]);
-            total += indexInString*weight;
-            if (++weight > maxWeight)
+    /// <summary>
+    /// This object renders a CODE93 code as a BitMatrix
+    /// </summary>
+    public class Code93Writer : OneDimensionalCodeWriter
+    {
+        public override BitMatrix encode(String contents, BarcodeFormat format, int width, int height, IDictionary<EncodeHintType, object> hints)
+        {
+            if (format != BarcodeFormat.CODE_93)
             {
-               weight = 1;
+                throw new ArgumentException("Can only encode CODE_93, but got " + format);
             }
-         }
-         return total%47;
-      }
-   }
+            return base.encode(contents, format, width, height, hints);
+        }
+
+        public override bool[] encode(String contents)
+        {
+            int length = contents.Length;
+            if (length > 80)
+            {
+                throw new ArgumentException(
+                   "Requested contents should be less than 80 digits long, but got " + length);
+            }
+            //each character is encoded by 9 of 0/1's
+            int[] widths = new int[9];
+
+            //length of code + 2 start/stop characters + 2 checksums, each of 9 bits, plus a termination bar
+            int codeWidth = (contents.Length + 2 + 2) * 9 + 1;
+
+            //start character (*)
+            toIntArray(Code93Reader.CHARACTER_ENCODINGS[47], widths);
+
+            bool[] result = new bool[codeWidth];
+            int pos = appendPattern(result, 0, widths);
+
+            for (int i = 0; i < length; i++)
+            {
+                int indexInString = Code93Reader.ALPHABET_STRING.IndexOf(contents[i]);
+                toIntArray(Code93Reader.CHARACTER_ENCODINGS[indexInString], widths);
+                pos += appendPattern(result, pos, widths);
+            }
+
+            //add two checksums
+            int check1 = computeChecksumIndex(contents, 20);
+            toIntArray(Code93Reader.CHARACTER_ENCODINGS[check1], widths);
+            pos += appendPattern(result, pos, widths);
+
+            //append the contents to reflect the first checksum added
+            contents += Code93Reader.ALPHABET_STRING[check1];
+
+            int check2 = computeChecksumIndex(contents, 15);
+            toIntArray(Code93Reader.CHARACTER_ENCODINGS[check2], widths);
+            pos += appendPattern(result, pos, widths);
+
+            //end character (*)
+            toIntArray(Code93Reader.CHARACTER_ENCODINGS[47], widths);
+            pos += appendPattern(result, pos, widths);
+
+            //termination bar (single black bar)
+            result[pos] = true;
+
+            return result;
+        }
+
+        private static void toIntArray(int a, int[] toReturn)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                int temp = a & (1 << (8 - i));
+                toReturn[i] = temp == 0 ? 0 : 1;
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="target">output to append to</param>
+        /// <param name="pos">start position</param>
+        /// <param name="pattern">pattern to append</param>
+        /// <param name="startColor">unused</param>
+        /// <returns>9</returns>
+        [Obsolete("without replacement; intended as an internal-only method")]
+        protected new static int appendPattern(bool[] target, int pos, int[] pattern, bool startColor)
+        {
+            return appendPattern(target, pos, pattern);
+        }
+
+        private static int appendPattern(bool[] target, int pos, int[] pattern)
+        {
+            foreach (var bit in pattern)
+            {
+                target[pos++] = bit != 0;
+            }
+            return 9;
+        }
+
+        private static int computeChecksumIndex(String contents, int maxWeight)
+        {
+            int weight = 1;
+            int total = 0;
+
+            for (int i = contents.Length - 1; i >= 0; i--)
+            {
+                int indexInString = Code93Reader.ALPHABET_STRING.IndexOf(contents[i]);
+                total += indexInString * weight;
+                if (++weight > maxWeight)
+                {
+                    weight = 1;
+                }
+            }
+            return total % 47;
+        }
+    }
 }

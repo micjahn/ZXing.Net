@@ -21,239 +21,502 @@ using System.Runtime.InteropServices;
 
 namespace ZXing
 {
-   /// <summary>
-   /// class which represents the luminance values for a bitmap object
-   /// </summary>
-   public partial class BitmapLuminanceSource : BaseLuminanceSource
-   {
-      /// <summary>
-      /// Initializes a new instance of the <see cref="BitmapLuminanceSource"/> class.
-      /// </summary>
-      /// <param name="width">The width.</param>
-      /// <param name="height">The height.</param>
-      protected BitmapLuminanceSource(int width, int height)
-         : base(width, height)
-      {
-      }
+    /// <summary>
+    /// class which represents the luminance values for a bitmap object
+    /// </summary>
+    public partial class BitmapLuminanceSource : BaseLuminanceSource
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BitmapLuminanceSource"/> class.
+        /// </summary>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        protected BitmapLuminanceSource(int width, int height)
+           : base(width, height)
+        {
+        }
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="BitmapLuminanceSource"/> class
-      /// with the image of a Bitmap instance
-      /// </summary>
-      /// <param name="bitmap">The bitmap.</param>
-      public BitmapLuminanceSource(Bitmap bitmap)
-         : base(bitmap.Width, bitmap.Height)
-      {
-         var height = bitmap.Height;
-         var width = bitmap.Width;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BitmapLuminanceSource"/> class
+        /// with the image of a Bitmap instance
+        /// </summary>
+        /// <param name="bitmap">The bitmap.</param>
+        public BitmapLuminanceSource(Bitmap bitmap)
+           : base(bitmap.Width, bitmap.Height)
+        {
+            CalculateLuminanceValues(bitmap, luminances);
+        }
 
-         // In order to measure pure decoding speed, we convert the entire image to a greyscale array
-         // The underlying raster of image consists of bytes with the luminance values
+        protected static void CalculateLuminanceValues(Bitmap bitmap, byte[] luminances)
+        {
+            var height = bitmap.Height;
+            var width = bitmap.Width;
+
+            // In order to measure pure decoding speed, we convert the entire image to a greyscale array
+            // The underlying raster of image consists of bytes with the luminance values
 #if WindowsCE
-         var data = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+            var data = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
 #else
-         var data = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
+            var data = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
 #endif
-         try
-         {
+            try
+            {
+                var stride = Math.Abs(data.Stride);
+                var pixelWidth = stride / width;
+
+                if (pixelWidth > 4)
+                {
+                    // old slow way for unsupported bit depth
+                    CalculateLuminanceValuesSlow(bitmap, luminances);
+                }
+                else
+                {
+#if !WindowsCE
+                    if (bitmap.PixelFormat == PixelFormat.Format32bppArgb ||
+                        bitmap.PixelFormat == PixelFormat.Format32bppPArgb)
+                    {
+                        pixelWidth = 40;
+                    }
+                    if ((int)bitmap.PixelFormat == 8207 ||
+                        (bitmap.Flags & (int)ImageFlags.ColorSpaceCmyk) == (int)ImageFlags.ColorSpaceCmyk)
+                    {
+                        pixelWidth = 41;
+                    }
+#endif
+
+                    switch (pixelWidth)
+                    {
+#if !WindowsCE
+                        case 0:
+                            if (bitmap.PixelFormat == PixelFormat.Format4bppIndexed)
+                                CalculateLuminanceValuesForIndexed4Bit(bitmap, data, luminances);
+                            else
+                                CalculateLuminanceValuesForIndexed1Bit(bitmap, data, luminances);
+                            break;
+                        case 1:
+                            CalculateLuminanceValuesForIndexed8Bit(bitmap, data, luminances);
+                            break;
+#endif
+                        case 2:
+                            // should be RGB565 or RGB555, assume RGB565
+                            CalculateLuminanceValues565(bitmap, data, luminances);
+                            break;
+                        case 3:
+                            CalculateLuminanceValues24Bit(bitmap, data, luminances);
+                            break;
+                        case 4:
+                            CalculateLuminanceValues32BitWithoutAlpha(bitmap, data, luminances);
+                            break;
+                        case 40:
+                            CalculateLuminanceValues32BitWithAlpha(bitmap, data, luminances);
+                            break;
+                        case 41:
+                            CalculateLuminanceValues32BitCMYK(bitmap, data, luminances);
+                            break;
+                        default:
+                            throw new NotSupportedException();
+                    }
+                }
+            }
+            finally
+            {
+                bitmap.UnlockBits(data);
+            }
+        }
+
+        /// <summary>
+        /// old slow way for unsupported bit depth
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="luminances"></param>
+        protected static void CalculateLuminanceValuesSlow(Bitmap bitmap, byte[] luminances)
+        {
+            var height = bitmap.Height;
+            var width = bitmap.Width;
+
+            for (int y = 0; y < height; y++)
+            {
+                int offset = y * width;
+                for (int x = 0; x < width; x++)
+                {
+                    var c = bitmap.GetPixel(x, y);
+                    luminances[offset + x] = (byte)((RChannelWeight * c.R + GChannelWeight * c.G + BChannelWeight * c.B) >> ChannelWeight);
+                }
+            }
+        }
+
+#if !WindowsCE
+        protected static void CalculateLuminanceValuesForIndexed1Bit(Bitmap bitmap, BitmapData data, byte[] luminances)
+        {
+            var height = data.Height;
+            var width = data.Width;
             var stride = Math.Abs(data.Stride);
-            var pixelWidth = stride/width;
+            var pixelWidth = stride / width;
+            var strideStep = data.Stride;
+            var buffer = new byte[stride];
+            var ptrInBitmap = data.Scan0;
 
-            if (pixelWidth > 4)
+            if (pixelWidth != 0)
+                throw new InvalidOperationException("Unsupported pixel format: " + bitmap.PixelFormat);
+
+            // prepare palette for 1, 4 and 8 bit indexed bitmaps
+            var luminancePalette = new byte[256];
+            var luminancePaletteLength = Math.Min(bitmap.Palette.Entries.Length, luminancePalette.Length);
+            for (var index = 0; index < luminancePaletteLength; index++)
             {
-               // old slow way for unsupported bit depth
-               Color c;
-               for (int y = 0; y < height; y++)
-               {
-                  int offset = y*width;
-                  for (int x = 0; x < width; x++)
-                  {
-                     c = bitmap.GetPixel(x, y);
-                     luminances[offset + x] = (byte)((RChannelWeight * c.R + GChannelWeight * c.G + BChannelWeight * c.B) >> ChannelWeight);
-                  }
-               }
+                var color = bitmap.Palette.Entries[index];
+                luminancePalette[index] = (byte)((RChannelWeight * color.R +
+                                                  GChannelWeight * color.G +
+                                                  BChannelWeight * color.B) >> ChannelWeight);
             }
-            else
+
+            for (int y = 0; y < height; y++)
             {
-               var strideStep = data.Stride;
-               var buffer = new byte[stride];
-               var ptrInBitmap = data.Scan0;
-
-#if !WindowsCE
-               // prepare palette for 1, 4 and 8 bit indexed bitmaps
-               var luminancePalette = new byte[bitmap.Palette.Entries.Length];
-               for (var index = 0; index < bitmap.Palette.Entries.Length; index++)
-               {
-                  var color = bitmap.Palette.Entries[index];
-                  luminancePalette[index] = (byte) ((RChannelWeight*color.R +
-                                                     GChannelWeight*color.G +
-                                                     BChannelWeight*color.B) >> ChannelWeight);
-               }
-               if (bitmap.PixelFormat == PixelFormat.Format32bppArgb ||
-                   bitmap.PixelFormat == PixelFormat.Format32bppPArgb)
-               {
-                  pixelWidth = 40;
-               }
-               if ((int)bitmap.PixelFormat == 8207 ||
-                   (bitmap.Flags & (int)ImageFlags.ColorSpaceCmyk) == (int)ImageFlags.ColorSpaceCmyk)
-               {
-                  pixelWidth = 41;
-               }
-#endif
-
-               for (int y = 0; y < height; y++)
-               {
-                  // copy a scanline not the whole bitmap because of memory usage
-                  Marshal.Copy(ptrInBitmap, buffer, 0, stride);
+                // copy a scanline not the whole bitmap because of memory usage
+                Marshal.Copy(ptrInBitmap, buffer, 0, stride);
 #if NET40 || NET45 || NET46 || NET47
-                  ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
+                ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
 #else
-                  ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
+                ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
 #endif
-                  var offset = y*width;
-                  switch (pixelWidth)
-                  {
-#if !WindowsCE
-                     case 0:
-                        if (bitmap.PixelFormat == PixelFormat.Format4bppIndexed)
-                        {
-                           for (int sourceX = 0, destX = 0; destX < width; sourceX++, destX += 2)
-                           {
-                              var sourceValue = buffer[sourceX];
-                              var index = sourceValue & 15;
-                              luminances[offset + destX + 1] = luminancePalette[index];
-                              index = (sourceValue >> 4) & 15;
-                              luminances[offset + destX] = luminancePalette[index];
-                           }
-                        }
-                        else
-                        {
-                           for (int x = 0; x*8 < width; x++)
-                           {
-                              for (int subX = 0; subX < 8 && 8*x + subX < width; subX++)
-                              {
-                                 var index = (buffer[x] >> (7 - subX)) & 1;
-                                 luminances[offset + 8*x + subX] = luminancePalette[index];
-                              }
-                           }
-                        }
-                        break;
-                     case 1:
-                        for (int x = 0; x < width; x++)
-                        {
-                           luminances[offset + x] = luminancePalette[buffer[x]];
-                        }
-                        break;
-#endif
-                     case 2:
-                        // should be RGB565 or RGB555, assume RGB565
-                        {
-                           var maxIndex = 2*width;
-                           for (int index = 0; index < maxIndex; index += 2)
-                           {
-                              var byte1 = buffer[index];
-                              var byte2 = buffer[index + 1];
-
-                              var b5 = byte1 & 0x1F;
-                              var g5 = (((byte1 & 0xE0) >> 5) | ((byte2 & 0x03) << 3)) & 0x1F;
-                              var r5 = (byte2 >> 2) & 0x1F;
-                              var r8 = (r5*527 + 23) >> 6;
-                              var g8 = (g5*527 + 23) >> 6;
-                              var b8 = (b5*527 + 23) >> 6;
-
-                              luminances[offset] = (byte)((RChannelWeight * r8 + GChannelWeight * g8 + BChannelWeight * b8)  >> ChannelWeight);
-                              offset++;
-                           }
-                        }
-                        break;
-                     case 3:
-                        {
-                           var maxIndex = width*3;
-                           for (int x = 0; x < maxIndex; x += 3)
-                           {
-                              var luminance = (byte) ((BChannelWeight*buffer[x] +
-                                                       GChannelWeight*buffer[x + 1] +
-                                                       RChannelWeight*buffer[x + 2]) >> ChannelWeight);
-                              luminances[offset] = luminance;
-                              offset++;
-                           }
-                        }
-                        break;
-                     case 4:
-                        // 4 bytes without alpha channel value
-                        {
-                           var maxIndex = 4*width;
-                           for (int x = 0; x < maxIndex; x += 4)
-                           {
-                              var luminance = (byte) ((BChannelWeight*buffer[x] +
-                                                       GChannelWeight*buffer[x + 1] +
-                                                       RChannelWeight*buffer[x + 2]) >> ChannelWeight);
-
-                              luminances[offset] = luminance;
-                              offset++;
-                           }
-                        }
-                        break;
-                     case 40:
-                        // with alpha channel; some barcodes are completely black if you
-                        // only look at the r, g and b channel but the alpha channel controls
-                        // the view
-                        {
-                           var maxIndex = 4*width;
-                           for (int x = 0; x < maxIndex; x += 4)
-                           {
-                              var luminance = (byte) ((BChannelWeight*buffer[x] +
-                                                       GChannelWeight*buffer[x + 1] +
-                                                       RChannelWeight*buffer[x + 2]) >> ChannelWeight);
-
-                              // calculating the resulting luminance based upon a white background
-                              // var alpha = buffer[x * pixelWidth + 3] / 255.0;
-                              // luminance = (byte)(luminance * alpha + 255 * (1 - alpha));
-                              var alpha = buffer[x + 3];
-                              luminance = (byte) (((luminance*alpha) >> 8) + (255*(255 - alpha) >> 8) + 1);
-                              luminances[offset] = luminance;
-                              offset++;
-                           }
-                        }
-                        break;
-                     case 41:
-                        // CMYK color space
-                        {
-                           var maxIndex = 4 * width;
-                           for (int x = 0; x < maxIndex; x += 4)
-                           {
-                              var luminance = (byte) (255 - ((BChannelWeight*buffer[x] +
-                                                              GChannelWeight*buffer[x + 1] +
-                                                              RChannelWeight*buffer[x + 2]) >> ChannelWeight));
-                              // Ignore value of k at the moment
-                              luminances[offset] = luminance;
-                              offset++;
-                           }
-                        }
-                        break;
-                     default:
-                        throw new NotSupportedException();
-                  }
-               }
+                var offset = y * width;
+                for (int x = 0; x * 8 < width; x++)
+                {
+                    var x8 = 8 * x;
+                    var offset8 = offset + x8;
+                    for (int subX = 0; subX < 8 && x8 + subX < width; subX++)
+                    {
+                        var index = (buffer[x] >> (7 - subX)) & 1;
+                        luminances[offset8 + subX] = luminancePalette[index];
+                    }
+                }
             }
-         }
-         finally
-         {
-            bitmap.UnlockBits(data);
-         }
-      }
+        }
 
-      /// <summary>
-      /// Should create a new luminance source with the right class type.
-      /// The method is used in methods crop and rotate.
-      /// </summary>
-      /// <param name="newLuminances">The new luminances.</param>
-      /// <param name="width">The width.</param>
-      /// <param name="height">The height.</param>
-      /// <returns></returns>
-      protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
-      {
-         return new BitmapLuminanceSource(width, height) { luminances = newLuminances };
-      }
-   }
+        protected static void CalculateLuminanceValuesForIndexed4Bit(Bitmap bitmap, BitmapData data, byte[] luminances)
+        {
+            if (bitmap.PixelFormat != PixelFormat.Format4bppIndexed)
+                throw new InvalidOperationException("Unsupported pixel format: " + bitmap.PixelFormat);
+
+            var height = data.Height;
+            var width = data.Width;
+            var stride = Math.Abs(data.Stride);
+            var pixelWidth = stride / width;
+            var strideStep = data.Stride;
+            var buffer = new byte[stride];
+            var ptrInBitmap = data.Scan0;
+            var evenWidth = (width / 2) * 2;
+
+            if (pixelWidth != 0)
+                throw new InvalidOperationException("Unsupported pixel format: " + bitmap.PixelFormat);
+
+            // prepare palette for 1, 4 and 8 bit indexed bitmaps
+            var luminancePalette = new byte[256];
+            var luminancePaletteLength = Math.Min(bitmap.Palette.Entries.Length, luminancePalette.Length);
+            for (var index = 0; index < luminancePaletteLength; index++)
+            {
+                var color = bitmap.Palette.Entries[index];
+                luminancePalette[index] = (byte)((RChannelWeight * color.R +
+                                                  GChannelWeight * color.G +
+                                                  BChannelWeight * color.B) >> ChannelWeight);
+            }
+
+            for (int y = 0; y < height; y++)
+            {
+                // copy a scanline not the whole bitmap because of memory usage
+                Marshal.Copy(ptrInBitmap, buffer, 0, stride);
+#if NET40 || NET45 || NET46 || NET47
+                ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
+#else
+                ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
+#endif
+                var offset = y * width;
+                int sourceX = 0;
+                int destX = 0;
+                byte sourceValue = 0;
+                for (; destX < evenWidth; sourceX++, destX += 2)
+                {
+                    sourceValue = buffer[sourceX];
+                    var index = sourceValue & 15;
+                    luminances[offset + destX + 1] = luminancePalette[index];
+                    index = (sourceValue >> 4) & 15;
+                    luminances[offset + destX] = luminancePalette[index];
+                }
+                if (width > evenWidth)
+                {
+                    var index = (sourceValue >> 4) & 15;
+                    luminances[offset + destX] = luminancePalette[index];
+                }
+            }
+        }
+
+        protected static void CalculateLuminanceValuesForIndexed8Bit(Bitmap bitmap, BitmapData data, byte[] luminances)
+        {
+            var height = data.Height;
+            var width = data.Width;
+            var stride = Math.Abs(data.Stride);
+            var pixelWidth = stride / width;
+            var strideStep = data.Stride;
+            var buffer = new byte[stride];
+            var ptrInBitmap = data.Scan0;
+
+            if (pixelWidth != 1)
+                throw new InvalidOperationException("Unsupported pixel format: " + bitmap.PixelFormat);
+
+            // prepare palette for 1, 4 and 8 bit indexed bitmaps
+            var luminancePalette = new byte[256];
+            var luminancePaletteLength = Math.Min(bitmap.Palette.Entries.Length, luminancePalette.Length);
+            for (var index = 0; index < luminancePaletteLength; index++)
+            {
+                var color = bitmap.Palette.Entries[index];
+                luminancePalette[index] = (byte)((RChannelWeight * color.R +
+                                                  GChannelWeight * color.G +
+                                                  BChannelWeight * color.B) >> ChannelWeight);
+            }
+
+            for (int y = 0; y < height; y++)
+            {
+                // copy a scanline not the whole bitmap because of memory usage
+                Marshal.Copy(ptrInBitmap, buffer, 0, stride);
+#if NET40 || NET45 || NET46 || NET47
+                ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
+#else
+                ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
+#endif
+                var offset = y * width;
+                for (int x = 0; x < width; x++)
+                {
+                    luminances[offset + x] = luminancePalette[buffer[x]];
+                }
+            }
+        }
+#endif
+
+        private static void CalculateLuminanceValues565(Bitmap bitmap, BitmapData data, byte[] luminances)
+        {
+            var height = data.Height;
+            var width = data.Width;
+            var stride = Math.Abs(data.Stride);
+            var pixelWidth = stride / width;
+            var strideStep = data.Stride;
+            var buffer = new byte[stride];
+            var ptrInBitmap = data.Scan0;
+
+            if (pixelWidth != 2)
+#if !WindowsCE
+                throw new InvalidOperationException("Unsupported pixel format: " + bitmap.PixelFormat);
+#else
+                throw new InvalidOperationException("Unsupported pixel format");
+#endif
+
+            for (int y = 0; y < height; y++)
+            {
+                // copy a scanline not the whole bitmap because of memory usage
+                Marshal.Copy(ptrInBitmap, buffer, 0, stride);
+#if NET40 || NET45 || NET46 || NET47
+                ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
+#else
+                ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
+#endif
+                var offset = y * width;
+                var maxIndex = 2 * width;
+                for (int index = 0; index < maxIndex; index += 2)
+                {
+                    var byte1 = buffer[index];
+                    var byte2 = buffer[index + 1];
+
+                    var b5 = byte1 & 0x1F;
+                    var g5 = (((byte1 & 0xE0) >> 5) | ((byte2 & 0x03) << 3)) & 0x1F;
+                    var r5 = (byte2 >> 2) & 0x1F;
+                    var r8 = (r5 * 527 + 23) >> 6;
+                    var g8 = (g5 * 527 + 23) >> 6;
+                    var b8 = (b5 * 527 + 23) >> 6;
+
+                    luminances[offset] = (byte)((RChannelWeight * r8 + GChannelWeight * g8 + BChannelWeight * b8) >> ChannelWeight);
+                    offset++;
+                }
+            }
+        }
+
+        private static void CalculateLuminanceValues24Bit(Bitmap bitmap, BitmapData data, byte[] luminances)
+        {
+            var height = data.Height;
+            var width = data.Width;
+            var stride = Math.Abs(data.Stride);
+            var pixelWidth = stride / width;
+            var strideStep = data.Stride;
+            var buffer = new byte[stride];
+            var ptrInBitmap = data.Scan0;
+
+            if (pixelWidth != 3)
+#if !WindowsCE
+                throw new InvalidOperationException("Unsupported pixel format: " + bitmap.PixelFormat);
+#else
+                throw new InvalidOperationException("Unsupported pixel format");
+#endif
+
+            for (int y = 0; y < height; y++)
+            {
+                // copy a scanline not the whole bitmap because of memory usage
+                Marshal.Copy(ptrInBitmap, buffer, 0, stride);
+#if NET40 || NET45 || NET46 || NET47
+                ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
+#else
+                ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
+#endif
+                var offset = y * width;
+                var maxIndex = width * 3;
+                for (int x = 0; x < maxIndex; x += 3)
+                {
+                    var luminance = (byte)((BChannelWeight * buffer[x] +
+                                            GChannelWeight * buffer[x + 1] +
+                                            RChannelWeight * buffer[x + 2]) >> ChannelWeight);
+                    luminances[offset] = luminance;
+                    offset++;
+                }
+            }
+        }
+
+        private static void CalculateLuminanceValues32BitWithoutAlpha(Bitmap bitmap, BitmapData data, byte[] luminances)
+        {
+            var height = data.Height;
+            var width = data.Width;
+            var stride = Math.Abs(data.Stride);
+            var pixelWidth = stride / width;
+            var strideStep = data.Stride;
+            var buffer = new byte[stride];
+            var ptrInBitmap = data.Scan0;
+            var maxIndex = 4 * width;
+
+            if (pixelWidth != 4)
+#if !WindowsCE
+                throw new InvalidOperationException("Unsupported pixel format: " + bitmap.PixelFormat);
+#else
+                throw new InvalidOperationException("Unsupported pixel format");
+#endif
+
+            for (int y = 0; y < height; y++)
+            {
+                // copy a scanline not the whole bitmap because of memory usage
+                Marshal.Copy(ptrInBitmap, buffer, 0, stride);
+#if NET40 || NET45 || NET46 || NET47
+                ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
+#else
+                ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
+#endif
+                var offset = y * width;
+                // 4 bytes without alpha channel value
+                for (int x = 0; x < maxIndex; x += 4)
+                {
+                    var luminance = (byte)((BChannelWeight * buffer[x] +
+                                            GChannelWeight * buffer[x + 1] +
+                                            RChannelWeight * buffer[x + 2]) >> ChannelWeight);
+
+                    luminances[offset] = luminance;
+                    offset++;
+                }
+            }
+        }
+
+        private static void CalculateLuminanceValues32BitWithAlpha(Bitmap bitmap, BitmapData data, byte[] luminances)
+        {
+            var height = data.Height;
+            var width = data.Width;
+            var stride = Math.Abs(data.Stride);
+            var pixelWidth = stride / width;
+            var strideStep = data.Stride;
+            var buffer = new byte[stride];
+            var ptrInBitmap = data.Scan0;
+            var maxIndex = 4 * width;
+
+            if (pixelWidth != 4)
+#if !WindowsCE
+                throw new InvalidOperationException("Unsupported pixel format: " + bitmap.PixelFormat);
+#else
+                throw new InvalidOperationException("Unsupported pixel format");
+#endif
+
+            for (int y = 0; y < height; y++)
+            {
+                // copy a scanline not the whole bitmap because of memory usage
+                Marshal.Copy(ptrInBitmap, buffer, 0, stride);
+#if NET40 || NET45 || NET46 || NET47
+                ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
+#else
+                ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
+#endif
+                var offset = y * width;
+                // with alpha channel; some barcodes are completely black if you
+                // only look at the r, g and b channel but the alpha channel controls
+                // the view
+                for (int x = 0; x < maxIndex; x += 4)
+                {
+                    var luminance = (byte)((BChannelWeight * buffer[x] +
+                                            GChannelWeight * buffer[x + 1] +
+                                            RChannelWeight * buffer[x + 2]) >> ChannelWeight);
+
+                    // calculating the resulting luminance based upon a white background
+                    // var alpha = buffer[x * pixelWidth + 3] / 255.0;
+                    // luminance = (byte)(luminance * alpha + 255 * (1 - alpha));
+                    var alpha = buffer[x + 3];
+                    luminance = (byte)(((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8) + 1);
+                    luminances[offset] = luminance;
+                    offset++;
+                }
+            }
+        }
+
+        private static void CalculateLuminanceValues32BitCMYK(Bitmap bitmap, BitmapData data, byte[] luminances)
+        {
+            var height = data.Height;
+            var width = data.Width;
+            var stride = Math.Abs(data.Stride);
+            var pixelWidth = stride / width;
+            var strideStep = data.Stride;
+            var buffer = new byte[stride];
+            var ptrInBitmap = data.Scan0;
+            var maxIndex = 4 * width;
+
+            if (pixelWidth != 4)
+#if !WindowsCE
+                throw new InvalidOperationException("Unsupported pixel format: " + bitmap.PixelFormat);
+#else
+                throw new InvalidOperationException("Unsupported pixel format");
+#endif
+
+            for (int y = 0; y < height; y++)
+            {
+                // copy a scanline not the whole bitmap because of memory usage
+                Marshal.Copy(ptrInBitmap, buffer, 0, stride);
+#if NET40 || NET45 || NET46 || NET47
+                ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
+#else
+                ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
+#endif
+                var offset = y * width;
+                for (int x = 0; x < maxIndex; x += 4)
+                {
+                    var luminance = (byte)(255 - ((BChannelWeight * buffer[x] +
+                                                   GChannelWeight * buffer[x + 1] +
+                                                   RChannelWeight * buffer[x + 2]) >> ChannelWeight));
+                    // Ignore value of k at the moment
+                    luminances[offset] = luminance;
+                    offset++;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Should create a new luminance source with the right class type.
+        /// The method is used in methods crop and rotate.
+        /// </summary>
+        /// <param name="newLuminances">The new luminances.</param>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        /// <returns></returns>
+        protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
+        {
+            return new BitmapLuminanceSource(width, height) { luminances = newLuminances };
+        }
+    }
 }

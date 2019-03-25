@@ -278,6 +278,7 @@
     <Compile Include="pdf417\decoder\PDF417ScanningDecoder.cs" />
     <Compile Include="pdf417\detector\Detector.cs" />
     <Compile Include="pdf417\detector\PDF417DetectorResult.cs" />
+    <Compile Include="pdf417\encoder\PDF417AspectRatio.cs" />
     <Compile Include="pdf417\encoder\BarcodeMatrix.cs" />
     <Compile Include="pdf417\encoder\BarcodeRow.cs" />
     <Compile Include="pdf417\encoder\Compaction.cs" />

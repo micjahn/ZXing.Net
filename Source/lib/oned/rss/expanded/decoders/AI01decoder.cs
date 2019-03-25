@@ -31,63 +31,63 @@ using ZXing.Common;
 
 namespace ZXing.OneD.RSS.Expanded.Decoders
 {
-   /// <summary>
-   /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
-   /// <author>Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)</author>
-   /// </summary>
-   abstract class AI01decoder : AbstractExpandedDecoder
-   {
-      protected static int GTIN_SIZE = 40;
+    /// <summary>
+    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
+    /// <author>Eduardo Castillejo, University of Deusto (eduardo.castillejo@deusto.es)</author>
+    /// </summary>
+    abstract class AI01decoder : AbstractExpandedDecoder
+    {
+        protected static int GTIN_SIZE = 40;
 
-      internal AI01decoder(BitArray information)
-         : base(information)
-      {
-      }
+        internal AI01decoder(BitArray information)
+           : base(information)
+        {
+        }
 
-      protected void encodeCompressedGtin(StringBuilder buf, int currentPos)
-      {
-         buf.Append("(01)");
-         int initialPosition = buf.Length;
-         buf.Append('9');
+        protected void encodeCompressedGtin(StringBuilder buf, int currentPos)
+        {
+            buf.Append("(01)");
+            int initialPosition = buf.Length;
+            buf.Append('9');
 
-         encodeCompressedGtinWithoutAI(buf, currentPos, initialPosition);
-      }
+            encodeCompressedGtinWithoutAI(buf, currentPos, initialPosition);
+        }
 
-      protected void encodeCompressedGtinWithoutAI(StringBuilder buf, int currentPos, int initialBufferPosition)
-      {
-         for (int i = 0; i < 4; ++i)
-         {
-            int currentBlock = this.getGeneralDecoder().extractNumericValueFromBitArray(currentPos + 10 * i, 10);
-            if (currentBlock / 100 == 0)
+        protected void encodeCompressedGtinWithoutAI(StringBuilder buf, int currentPos, int initialBufferPosition)
+        {
+            for (int i = 0; i < 4; ++i)
             {
-               buf.Append('0');
+                int currentBlock = this.getGeneralDecoder().extractNumericValueFromBitArray(currentPos + 10 * i, 10);
+                if (currentBlock / 100 == 0)
+                {
+                    buf.Append('0');
+                }
+                if (currentBlock / 10 == 0)
+                {
+                    buf.Append('0');
+                }
+                buf.Append(currentBlock);
             }
-            if (currentBlock / 10 == 0)
+
+            appendCheckDigit(buf, initialBufferPosition);
+        }
+
+        private static void appendCheckDigit(StringBuilder buf, int currentPos)
+        {
+            int checkDigit = 0;
+            for (int i = 0; i < 13; i++)
             {
-               buf.Append('0');
+                int digit = buf[i + currentPos] - '0';
+                checkDigit += (i & 0x01) == 0 ? 3 * digit : digit;
             }
-            buf.Append(currentBlock);
-         }
 
-         appendCheckDigit(buf, initialBufferPosition);
-      }
+            checkDigit = 10 - (checkDigit % 10);
+            if (checkDigit == 10)
+            {
+                checkDigit = 0;
+            }
 
-      private static void appendCheckDigit(StringBuilder buf, int currentPos)
-      {
-         int checkDigit = 0;
-         for (int i = 0; i < 13; i++)
-         {
-            int digit = buf[i + currentPos] - '0';
-            checkDigit += (i & 0x01) == 0 ? 3 * digit : digit;
-         }
-
-         checkDigit = 10 - (checkDigit % 10);
-         if (checkDigit == 10)
-         {
-            checkDigit = 0;
-         }
-
-         buf.Append(checkDigit);
-      }
-   }
+            buf.Append(checkDigit);
+        }
+    }
 }

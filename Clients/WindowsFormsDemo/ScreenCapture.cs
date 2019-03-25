@@ -19,19 +19,19 @@ using System.Windows.Forms;
 
 namespace WindowsFormsDemo
 {
-   internal static class ScreenCapture
-   {
-      public static Image CaptureScreen()
-      {
-         var bounds = Screen.GetBounds(Point.Empty);
-         var bitmap = new Bitmap(bounds.Width, bounds.Height);
+    internal static class ScreenCapture
+    {
+        public static Image CaptureScreen()
+        {
+            var bounds = Screen.GetBounds(Point.Empty);
+            var bitmap = new Bitmap(bounds.Width, bounds.Height);
 
-         using (Graphics g = Graphics.FromImage(bitmap))
-         {
-            g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
-         }
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
+            }
 
-         return bitmap;
-      }
-   }
+            return bitmap;
+        }
+    }
 }

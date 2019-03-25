@@ -18,17 +18,17 @@ using UnityEngine;
 
 namespace ZXing
 {
-   /// <summary>
-   /// Interface for a smart class to decode multiple barcodes inside a bitmap object
-   /// </summary>
-   public partial interface IBarcodeReader
-   {
-      /// <summary>
-      /// Decodes the specified barcode bitmap.
-      /// </summary>
-      /// <param name="rawColor32">The image as Color32 array.</param>
-      /// <returns>the result data or null</returns>
-      [System.CLSCompliant(false)]
-      Result[] DecodeMultiple(Color32[] rawColor32, int width, int height);
-   }
+    /// <summary>
+    /// Interface for a smart class to decode multiple barcodes inside a bitmap object
+    /// </summary>
+    public partial interface IBarcodeReader
+    {
+        /// <summary>
+        /// Decodes the specified barcode bitmap.
+        /// </summary>
+        /// <param name="rawColor32">The image as Color32 array.</param>
+        /// <returns>the result data or null</returns>
+        [System.CLSCompliant(false)]
+        Result[] DecodeMultiple(Color32[] rawColor32, int width, int height);
+    }
 }

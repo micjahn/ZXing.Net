@@ -128,7 +128,7 @@ namespace BigIntegerLibrary
         }
 
 
-#endregion
+        #endregion
 
 
         #region Public Methods
@@ -484,7 +484,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st Base10BigInteger</param>
         /// <param name="b">The 2nd Base10BigInteger</param>
         /// <returns>True if a == b, false otherwise</returns>
-        public static bool operator==(Base10BigInteger a, Base10BigInteger b)
+        public static bool operator ==(Base10BigInteger a, Base10BigInteger b)
         {
             return Equals(a, b);
         }
@@ -495,7 +495,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st Base10BigInteger</param>
         /// <param name="b">The 2nd Base10BigInteger</param>
         /// <returns>True if a != b, false otherwise</returns>
-        public static bool operator!=(Base10BigInteger a, Base10BigInteger b)
+        public static bool operator !=(Base10BigInteger a, Base10BigInteger b)
         {
             return !Equals(a, b);
         }
@@ -506,7 +506,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st Base10BigInteger</param>
         /// <param name="b">The 2nd Base10BigInteger</param>
         /// <returns>True if a &gt; b, false otherwise</returns>
-        public static bool operator>(Base10BigInteger a, Base10BigInteger b)
+        public static bool operator >(Base10BigInteger a, Base10BigInteger b)
         {
             return Greater(a, b);
         }
@@ -517,7 +517,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st Base10BigInteger</param>
         /// <param name="b">The 2nd Base10BigInteger</param>
         /// <returns>True if a &lt; b, false otherwise</returns>
-        public static bool operator<(Base10BigInteger a, Base10BigInteger b)
+        public static bool operator <(Base10BigInteger a, Base10BigInteger b)
         {
             return Smaller(a, b);
         }
@@ -528,7 +528,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st Base10BigInteger</param>
         /// <param name="b">The 2nd Base10BigInteger</param>
         /// <returns>True if a &gt;= b, false otherwise</returns>
-        public static bool operator>=(Base10BigInteger a, Base10BigInteger b)
+        public static bool operator >=(Base10BigInteger a, Base10BigInteger b)
         {
             return GreaterOrEqual(a, b);
         }
@@ -539,7 +539,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st Base10BigInteger</param>
         /// <param name="b">The 2nd Base10BigInteger</param>
         /// <returns>True if a &lt;= b, false otherwise</returns>
-        public static bool operator<=(Base10BigInteger a, Base10BigInteger b)
+        public static bool operator <=(Base10BigInteger a, Base10BigInteger b)
         {
             return SmallerOrEqual(a, b);
         }
@@ -549,7 +549,7 @@ namespace BigIntegerLibrary
         /// </summary>
         /// <param name="n">The Base10BigInteger whose opposite is to be computed</param>
         /// <returns>The Base10BigInteger inverse with respect to addition</returns>
-        public static Base10BigInteger operator-(Base10BigInteger n)
+        public static Base10BigInteger operator -(Base10BigInteger n)
         {
             return Opposite(n);
         }
@@ -560,7 +560,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st Base10BigInteger</param>
         /// <param name="b">The 2nd Base10BigInteger</param>
         /// <returns>The Base10BigInteger result of the addition</returns>
-        public static Base10BigInteger operator+(Base10BigInteger a, Base10BigInteger b)
+        public static Base10BigInteger operator +(Base10BigInteger a, Base10BigInteger b)
         {
             return Addition(a, b);
         }
@@ -571,7 +571,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st Base10BigInteger</param>
         /// <param name="b">The 2nd Base10BigInteger</param>
         /// <returns>The Base10BigInteger result of the subtraction</returns>
-        public static Base10BigInteger operator-(Base10BigInteger a, Base10BigInteger b)
+        public static Base10BigInteger operator -(Base10BigInteger a, Base10BigInteger b)
         {
             return Subtraction(a, b);
         }
@@ -582,7 +582,7 @@ namespace BigIntegerLibrary
         /// <param name="a">The 1st Base10BigInteger</param>
         /// <param name="b">The 2nd Base10BigInteger</param>
         /// <returns>The Base10BigInteger result of the multiplication</returns>
-        public static Base10BigInteger operator*(Base10BigInteger a, Base10BigInteger b)
+        public static Base10BigInteger operator *(Base10BigInteger a, Base10BigInteger b)
         {
             return Multiplication(a, b);
         }
@@ -592,7 +592,7 @@ namespace BigIntegerLibrary
         /// </summary>
         /// <param name="n">The Base10BigInteger to be incremented by one</param>
         /// <returns>The Base10BigInteger result of incrementing by one</returns>
-        public static Base10BigInteger operator++(Base10BigInteger n)
+        public static Base10BigInteger operator ++(Base10BigInteger n)
         {
             Base10BigInteger res = n + One;
             return res;
@@ -603,14 +603,14 @@ namespace BigIntegerLibrary
         /// </summary>
         /// <param name="n">The Base10BigInteger to be decremented by one</param>
         /// <returns>The Base10BigInteger result of decrementing by one</returns>
-        public static Base10BigInteger operator--(Base10BigInteger n)
+        public static Base10BigInteger operator --(Base10BigInteger n)
         {
             Base10BigInteger res = n - One;
             return res;
         }
 
 
-#endregion
+        #endregion
 
 
         #region Private Methods
@@ -730,37 +730,37 @@ namespace BigIntegerLibrary
         }
 
 
-#endregion
+        #endregion
 
 
 
-      private class DigitContainer
-      {
-         private readonly long[][] digits;
-         private const int ChunkSize = 32;
-         private const int ChunkSizeDivisionShift = 5;
-         private const int ChunkCount = Base10BigInteger.MaxSize >> ChunkSizeDivisionShift;
+        private class DigitContainer
+        {
+            private readonly long[][] digits;
+            private const int ChunkSize = 32;
+            private const int ChunkSizeDivisionShift = 5;
+            private const int ChunkCount = Base10BigInteger.MaxSize >> ChunkSizeDivisionShift;
 
-         public DigitContainer()
-         {
-            digits = new long[ChunkCount][];
-         }
-
-         public long this[int index]
-         {
-            get
+            public DigitContainer()
             {
-               var chunkIndex = index >> ChunkSizeDivisionShift;
-               var chunk = digits[chunkIndex];
-               return chunk == null ? 0 : chunk[index%ChunkSize];
+                digits = new long[ChunkCount][];
             }
-            set
+
+            public long this[int index]
             {
-               var chunkIndex = index >> ChunkSizeDivisionShift;
-               var chunk = digits[chunkIndex] ?? (digits[chunkIndex] = new long[ChunkSize]);
-               chunk[index%ChunkSize] = value;
+                get
+                {
+                    var chunkIndex = index >> ChunkSizeDivisionShift;
+                    var chunk = digits[chunkIndex];
+                    return chunk == null ? 0 : chunk[index % ChunkSize];
+                }
+                set
+                {
+                    var chunkIndex = index >> ChunkSizeDivisionShift;
+                    var chunk = digits[chunkIndex] ?? (digits[chunkIndex] = new long[ChunkSize]);
+                    chunk[index % ChunkSize] = value;
+                }
             }
-         }
-      }
-   }
+        }
+    }
 }

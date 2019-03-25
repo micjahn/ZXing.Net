@@ -18,13 +18,13 @@ using ZXing.Common;
 
 namespace ZXing.Maxicode.Internal
 {
-   /// <summary>
-   /// <author>mike32767</author>
-   /// <author>Manuel Kasten</author>
-   /// </summary>
-   sealed class BitMatrixParser
-   {
-      private static readonly int[][] BITNR = new int[][] {
+    /// <summary>
+    /// <author>mike32767</author>
+    /// <author>Manuel Kasten</author>
+    /// </summary>
+    sealed class BitMatrixParser
+    {
+        private static readonly int[][] BITNR = new int[][] {
          new[] {121,120,127,126,133,132,139,138,145,144,151,150,157,156,163,162,169,168,175,174,181,180,187,186,193,192,199,198, -2, -2},
          new[] {123,122,129,128,135,134,141,140,147,146,153,152,159,158,165,164,171,170,177,176,183,182,189,188,195,194,201,200,816, -3},
          new[] {125,124,131,130,137,136,143,142,149,148,155,154,161,160,167,166,173,172,179,178,185,184,191,190,197,196,203,202,818,817},
@@ -60,34 +60,34 @@ namespace ZXing.Maxicode.Internal
          new[] {737,736,743,742,749,748,755,754,761,760,767,766,773,772,779,778,785,784,791,790,797,796,803,802,809,808,815,814,863,862}
       };
 
-      private readonly BitMatrix bitMatrix;
+        private readonly BitMatrix bitMatrix;
 
-      /// <summary>
-      /// <param name="bitMatrix"><see cref="BitMatrix" />to parse</param>
-      /// </summary>
-      internal BitMatrixParser(BitMatrix bitMatrix)
-      {
-         this.bitMatrix = bitMatrix;
-      }
+        /// <summary>
+        /// <param name="bitMatrix"><see cref="BitMatrix" />to parse</param>
+        /// </summary>
+        internal BitMatrixParser(BitMatrix bitMatrix)
+        {
+            this.bitMatrix = bitMatrix;
+        }
 
-      internal byte[] readCodewords()
-      {
-         byte[] result = new byte[144];
-         int height = bitMatrix.Height;
-         int width = bitMatrix.Width;
-         for (int y = 0; y < height; y++)
-         {
-            int[] bitnrRow = BITNR[y];
-            for (int x = 0; x < width; x++)
+        internal byte[] readCodewords()
+        {
+            byte[] result = new byte[144];
+            int height = bitMatrix.Height;
+            int width = bitMatrix.Width;
+            for (int y = 0; y < height; y++)
             {
-               int bit = bitnrRow[x];
-               if (bit >= 0 && bitMatrix[x, y])
-               {
-                  result[bit / 6] |= (byte)(1 << (5 - (bit % 6)));
-               }
+                int[] bitnrRow = BITNR[y];
+                for (int x = 0; x < width; x++)
+                {
+                    int bit = bitnrRow[x];
+                    if (bit >= 0 && bitMatrix[x, y])
+                    {
+                        result[bit / 6] |= (byte)(1 << (5 - (bit % 6)));
+                    }
+                }
             }
-         }
-         return result;
-      }
-   }
+            return result;
+        }
+    }
 }

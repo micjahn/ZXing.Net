@@ -19,42 +19,42 @@ using System.Collections.Generic;
 
 namespace CommandLineDecoder
 {
-   /// <summary>
-   /// Represents the collection of all images files/URLs to decode.
-   /// </summary>
-   internal sealed class Inputs
-   {
-      private readonly List<String> inputs = new List<String>(10);
-      private int position;
+    /// <summary>
+    /// Represents the collection of all images files/URLs to decode.
+    /// </summary>
+    internal sealed class Inputs
+    {
+        private readonly List<String> inputs = new List<String>(10);
+        private int position;
 
-      public void addInput(String pathOrUrl)
-      {
-         lock (inputs)
-         {
-            inputs.Add(pathOrUrl);
-         }
-      }
-
-      public String getNextInput()
-      {
-         lock (inputs)
-         {
-            if (position < inputs.Count)
+        public void addInput(String pathOrUrl)
+        {
+            lock (inputs)
             {
-               String result = inputs[position];
-               position++;
-               return result;
+                inputs.Add(pathOrUrl);
             }
-            else
-            {
-               return null;
-            }
-         }
-      }
+        }
 
-      public int getInputCount()
-      {
-         return inputs.Count;
-      }
-   }
+        public String getNextInput()
+        {
+            lock (inputs)
+            {
+                if (position < inputs.Count)
+                {
+                    String result = inputs[position];
+                    position++;
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        public int getInputCount()
+        {
+            return inputs.Count;
+        }
+    }
 }

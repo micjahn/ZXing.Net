@@ -23,23 +23,23 @@ using ZXing.OneD;
 
 namespace ZXing.Common
 {
-   public sealed partial class BitMatrix
-   {
-      [Obsolete("Use BarcodeWriter instead")]
-      public Bitmap ToBitmap()
-      {
-         return ToBitmap(BarcodeFormat.EAN_8, null);
-      }
+    public sealed partial class BitMatrix
+    {
+        [Obsolete("Use BarcodeWriter instead")]
+        public Bitmap ToBitmap()
+        {
+            return ToBitmap(BarcodeFormat.EAN_8, null);
+        }
 
-      /// <summary>
-      /// Converts this ByteMatrix to a black and white bitmap.
-      /// </summary>
-      /// <returns>A black and white bitmap converted from this ByteMatrix.</returns>
-      [Obsolete("Use BarcodeWriter instead")]
-      public Bitmap ToBitmap(BarcodeFormat format, String content)
-      {
-         var writer = new BarcodeWriter {Format = format};
-         return writer.Write(content);
-      }
-   }
+        /// <summary>
+        /// Converts this ByteMatrix to a black and white bitmap.
+        /// </summary>
+        /// <returns>A black and white bitmap converted from this ByteMatrix.</returns>
+        [Obsolete("Use BarcodeWriter instead")]
+        public Bitmap ToBitmap(BarcodeFormat format, String content)
+        {
+            var writer = new BarcodeWriter { Format = format };
+            return writer.Write(content);
+        }
+    }
 }

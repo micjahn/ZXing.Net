@@ -16,29 +16,29 @@
 
 namespace ZXing.PDF417.Internal
 {
-   /// <summary>
-   /// Represents possible PDF417 barcode compaction types.
-   /// </summary>
-   public enum Compaction
-   {
-      /// <summary>
-      /// 
-      /// </summary>
-      AUTO,
+    /// <summary>
+    /// Represents possible PDF417 barcode compaction types.
+    /// </summary>
+    public enum Compaction
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        AUTO,
 
-      /// <summary>
-      /// 
-      /// </summary>
-      TEXT,
+        /// <summary>
+        /// 
+        /// </summary>
+        TEXT,
 
-      /// <summary>
-      /// 
-      /// </summary>
-      BYTE,
+        /// <summary>
+        /// 
+        /// </summary>
+        BYTE,
 
-      /// <summary>
-      /// 
-      /// </summary>
-      NUMERIC
-   }
+        /// <summary>
+        /// 
+        /// </summary>
+        NUMERIC
+    }
 }

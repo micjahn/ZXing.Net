@@ -16,25 +16,25 @@
 
 namespace ZXing.Rendering
 {
-   /// <summary>
-   /// represents the generated code as a byte array with pixel data (4 byte per pixel, BGRA)
-   /// </summary>
-   public sealed partial class PixelData
-   {
-      /// <summary>
-      /// converts the pixel data to a bitmap object
-      /// </summary>
-      /// <returns></returns>
-      [System.CLSCompliant(false)]
-      public Windows.UI.Xaml.Media.Imaging.WriteableBitmap ToBitmap()
-      {
-         var bmp = new Windows.UI.Xaml.Media.Imaging.WriteableBitmap(Width, Height);
-         using (var stream = System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.AsStream(bmp.PixelBuffer))
-         {
-            stream.Write(Pixels, 0, Pixels.Length);
-         }
-         bmp.Invalidate();
-         return bmp;
-      }
-   }
+    /// <summary>
+    /// represents the generated code as a byte array with pixel data (4 byte per pixel, BGRA)
+    /// </summary>
+    public sealed partial class PixelData
+    {
+        /// <summary>
+        /// converts the pixel data to a bitmap object
+        /// </summary>
+        /// <returns></returns>
+        [System.CLSCompliant(false)]
+        public Windows.UI.Xaml.Media.Imaging.WriteableBitmap ToBitmap()
+        {
+            var bmp = new Windows.UI.Xaml.Media.Imaging.WriteableBitmap(Width, Height);
+            using (var stream = System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.AsStream(bmp.PixelBuffer))
+            {
+                stream.Write(Pixels, 0, Pixels.Length);
+            }
+            bmp.Invalidate();
+            return bmp;
+        }
+    }
 }

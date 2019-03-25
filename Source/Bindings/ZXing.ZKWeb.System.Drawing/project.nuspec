@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>0.16.4</version>
+    <authors>Michael Jahn</authors>
+    <owners>Michael Jahn</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
+    <id>ZXing.Net.Bindings.ZKWeb.System.Drawing</id>
+    <title>ZXing.Net.Bindings.ZKWeb.System.Drawing</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ZXing.Net Bindings for ZKWeb.System.Drawing - use ZKWeb.System.Drawing with ZXing.Net for barcode reading</description>
+    <summary>ZXing.Net Bindings for ZKWeb.System.Drawing</summary>
+    <releaseNotes></releaseNotes>
+    <tags>ZXing ZKWeb.System.Drawing</tags>
+    <dependencies>
+      <group targetFramework="net45">
+        <dependency id="ZXing.Net" version="0.16.4" exclude="Build,Analyzers" />
+        <dependency id="ZKWeb.System.Drawing" version="4.0.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="netstandard2.0">
+        <dependency id="ZXing.Net" version="0.16.4" exclude="Build,Analyzers" />
+        <dependency id="ZKWeb.System.Drawing" version="4.0.1" exclude="Build,Analyzers" />
+        <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\net45\ZXing.ZKWeb.System.Drawing.dll" target="lib\net45\ZXing.ZKWeb.System.Drawing.dll" />
+    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\net45\ZXing.ZKWeb.System.Drawing.pdb" target="lib\net45\ZXing.ZKWeb.System.Drawing.pdb" />
+    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\net45\ZXing.ZKWeb.System.Drawing.xml" target="lib\net45\ZXing.ZKWeb.System.Drawing.XML" />
+    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\ZXing.ZKWeb.System.Drawing.dll" target="lib\netstandard2.0\ZXing.ZKWeb.System.Drawing.dll" />
+    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\ZXing.ZKWeb.System.Drawing.pdb" target="lib\netstandard2.0\ZXing.ZKWeb.System.Drawing.pdb" />
+    <file src="..\ZXing.ZKWeb.System.Drawing\bin\Release\netstandard2.0\ZXing.ZKWeb.System.Drawing.xml" target="lib\netstandard2.0\ZXing.ZKWeb.System.Drawing.xml" />
+  </files>
+</package>

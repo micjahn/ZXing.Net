@@ -18,77 +18,77 @@ using System;
 
 namespace com.google.zxing.client.result.optional
 {
-   /// <summary> <p>Represents a record in an NDEF message. This class only supports certain types
-   /// of records -- namely, non-chunked records, where ID length is omitted, and only
-   /// "short records".</p>
-   /// 
-   /// </summary>
-   /// <author>  Sean Owen
-   /// </author>
-   /// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
-   /// </author>
-   sealed class NDEFRecord
-   {
-      private readonly int header;
+	/// <summary> <p>Represents a record in an NDEF message. This class only supports certain types
+	/// of records -- namely, non-chunked records, where ID length is omitted, and only
+	/// "short records".</p>
+	/// 
+	/// </summary>
+	/// <author>  Sean Owen
+	/// </author>
+	/// <author>www.Redivivus.in (suraj.supekar@redivivus.in) - Ported from ZXING Java Source 
+	/// </author>
+	sealed class NDEFRecord
+	{
+		private readonly int header;
 
-      internal bool MessageBegin
-      {
-         get
-         {
-            return (header & 0x80) != 0;
-         }
+		internal bool MessageBegin
+		{
+			get
+			{
+				return (header & 0x80) != 0;
+			}
 
-      }
-      internal bool MessageEnd
-      {
-         get
-         {
-            return (header & 0x40) != 0;
-         }
+		}
+		internal bool MessageEnd
+		{
+			get
+			{
+				return (header & 0x40) != 0;
+			}
 
-      }
+		}
 
-      internal String Type { get; private set; }
-      internal sbyte[] Payload { get; private set; }
-      internal int TotalRecordLength { get; private set; }
+		internal String Type { get; private set; }
+		internal sbyte[] Payload { get; private set; }
+		internal int TotalRecordLength { get; private set; }
 
-      private const int SUPPORTED_HEADER_MASK = 0x3F; // 0 0 1 1 1 111 (the bottom 6 bits matter)
-      private const int SUPPORTED_HEADER = 0x11; // 0 0 0 1 0 001
+		private const int SUPPORTED_HEADER_MASK = 0x3F; // 0 0 1 1 1 111 (the bottom 6 bits matter)
+		private const int SUPPORTED_HEADER = 0x11; // 0 0 0 1 0 001
 
-      public const String TEXT_WELL_KNOWN_TYPE = "T";
-      public const String URI_WELL_KNOWN_TYPE = "U";
-      public const String SMART_POSTER_WELL_KNOWN_TYPE = "Sp";
-      public const String ACTION_WELL_KNOWN_TYPE = "act";
+		public const String TEXT_WELL_KNOWN_TYPE = "T";
+		public const String URI_WELL_KNOWN_TYPE = "U";
+		public const String SMART_POSTER_WELL_KNOWN_TYPE = "Sp";
+		public const String ACTION_WELL_KNOWN_TYPE = "act";
 
 
-      private NDEFRecord(int header, String type, sbyte[] payload, int totalRecordLength)
-      {
-         this.header = header;
-         Type = type;
-         Payload = payload;
-         TotalRecordLength = totalRecordLength;
-      }
+		private NDEFRecord(int header, String type, sbyte[] payload, int totalRecordLength)
+		{
+			this.header = header;
+			Type = type;
+			Payload = payload;
+			TotalRecordLength = totalRecordLength;
+		}
 
-      internal static NDEFRecord readRecord(sbyte[] bytes, int offset)
-      {
-         var header = bytes[offset] & 0xFF;
+		internal static NDEFRecord readRecord(sbyte[] bytes, int offset)
+		{
+			var header = bytes[offset] & 0xFF;
 
-         // Does header match what we support in the bits we care about?
-         // XOR figures out where we differ, and if any of those are in the mask, fail
-         if (((header ^ SUPPORTED_HEADER) & SUPPORTED_HEADER_MASK) != 0)
-         {
-            return null;
-         }
-         var typeLength = bytes[offset + 1] & 0xFF;
+			// Does header match what we support in the bits we care about?
+			// XOR figures out where we differ, and if any of those are in the mask, fail
+			if (((header ^ SUPPORTED_HEADER) & SUPPORTED_HEADER_MASK) != 0)
+			{
+				return null;
+			}
+			var typeLength = bytes[offset + 1] & 0xFF;
 
-         var payloadLength = bytes[offset + 2] & 0xFF;
+			var payloadLength = bytes[offset + 2] & 0xFF;
 
-         var type = AbstractNDEFResultParser.bytesToString(bytes, offset + 3, typeLength, "US-ASCII");
+			var type = AbstractNDEFResultParser.bytesToString(bytes, offset + 3, typeLength, "US-ASCII");
 
-         var payload = new sbyte[payloadLength];
-         Array.Copy(bytes, offset + 3 + typeLength, payload, 0, payloadLength);
+			var payload = new sbyte[payloadLength];
+			Array.Copy(bytes, offset + 3 + typeLength, payload, 0, payloadLength);
 
-         return new NDEFRecord(header, type, payload, 3 + typeLength + payloadLength);
-      }
-   }
+			return new NDEFRecord(header, type, payload, 3 + typeLength + payloadLength);
+		}
+	}
 }

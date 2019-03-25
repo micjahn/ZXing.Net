@@ -18,11 +18,11 @@ using System.Drawing;
 
 namespace ZXing.Interop.Common
 {
-   public static class ImageUtils
-   {
-      public static object ConvertToIPicture(Image image)
-      {
-         return ImageOLEConverter.Instance.ConvertToIPicture(image);
-      }
-   }
+    public static class ImageUtils
+    {
+        public static object ConvertToIPicture(Image image)
+        {
+            return ImageOLEConverter.Instance.ConvertToIPicture(image);
+        }
+    }
 }

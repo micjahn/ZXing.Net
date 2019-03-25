@@ -20,60 +20,60 @@ using System.ServiceProcess;
 
 namespace ServiceDemo
 {
-   static class Program
-   {
-      /// <summary>
-      /// Der Haupteinstiegspunkt für die Anwendung.
-      /// </summary>
-      static void Main(string[] args)
-      {
-         if (!Environment.UserInteractive)
-         {
-            var ServicesToRun = new ServiceBase[]
-                                             {
+    static class Program
+    {
+        /// <summary>
+        /// Der Haupteinstiegspunkt für die Anwendung.
+        /// </summary>
+        static void Main(string[] args)
+        {
+            if (!Environment.UserInteractive)
+            {
+                var ServicesToRun = new ServiceBase[]
+                                                 {
                                                 new BarcodeScannerService()
-                                             };
-            ServiceBase.Run(ServicesToRun);
-         }
-         else
-         {
-            try
-            {
-               EnableConsole();
-               var service = new BarcodeScannerService();
-               service.StartForeground(args);
+                                                 };
+                ServiceBase.Run(ServicesToRun);
             }
-            catch (Exception exc)
+            else
             {
-               Console.WriteLine(exc.Message);
-               var innerExc = exc.InnerException;
-               while (innerExc != null)
-               {
-                  Console.WriteLine(innerExc.Message);
-                  innerExc = innerExc.InnerException;
-               }
+                try
+                {
+                    EnableConsole();
+                    var service = new BarcodeScannerService();
+                    service.StartForeground(args);
+                }
+                catch (Exception exc)
+                {
+                    Console.WriteLine(exc.Message);
+                    var innerExc = exc.InnerException;
+                    while (innerExc != null)
+                    {
+                        Console.WriteLine(innerExc.Message);
+                        innerExc = innerExc.InnerException;
+                    }
+                }
             }
-         }
-      }
+        }
 
-      private const int ATTACH_PARENT_PROCESS = -1;
+        private const int ATTACH_PARENT_PROCESS = -1;
 
-      [DllImport("kernel32.dll", SetLastError = true)]
-      [return: MarshalAs(UnmanagedType.Bool)]
-      [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1060:MovePInvokesToNativeMethodsClass")]
-      private static extern bool AttachConsole(int dwProcessId);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1060:MovePInvokesToNativeMethodsClass")]
+        private static extern bool AttachConsole(int dwProcessId);
 
-      [DllImport("kernel32.dll", SetLastError = true)]
-      [return: MarshalAs(UnmanagedType.Bool)]
-      [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1060:MovePInvokesToNativeMethodsClass")]
-      private static extern bool AllocConsole();
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1060:MovePInvokesToNativeMethodsClass")]
+        private static extern bool AllocConsole();
 
-      public static void EnableConsole()
-      {
-         if (!AttachConsole(ATTACH_PARENT_PROCESS))
-         {
-            AllocConsole();
-         }
-      }
-   }
+        public static void EnableConsole()
+        {
+            if (!AttachConsole(ATTACH_PARENT_PROCESS))
+            {
+                AllocConsole();
+            }
+        }
+    }
 }

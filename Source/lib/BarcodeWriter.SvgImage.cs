@@ -18,17 +18,17 @@ using ZXing.Rendering;
 
 namespace ZXing
 {
-   /// <summary>
-   /// A smart class to encode some content to a svg barcode image
-   /// </summary>
-   public class BarcodeWriterSvg : BarcodeWriter<SvgRenderer.SvgImage>, IBarcodeWriterSvg
-   {
-      /// <summary>
-      /// Initializes a new instance of the <see cref="BarcodeWriterSvg"/> class.
-      /// </summary>
-      public BarcodeWriterSvg()
-      {
-         Renderer = new SvgRenderer();
-      }
-   }
+    /// <summary>
+    /// A smart class to encode some content to a svg barcode image
+    /// </summary>
+    public class BarcodeWriterSvg : BarcodeWriter<SvgRenderer.SvgImage>, IBarcodeWriterSvg
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BarcodeWriterSvg"/> class.
+        /// </summary>
+        public BarcodeWriterSvg()
+        {
+            Renderer = new SvgRenderer();
+        }
+    }
 }

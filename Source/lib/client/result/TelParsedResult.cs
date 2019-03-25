@@ -18,29 +18,29 @@ using System;
 
 namespace ZXing.Client.Result
 {
-   /// <summary>
-   /// Represents a parsed result that encodes a telephone number.
-   /// </summary>
-   /// <author>Sean Owen</author>
-   public sealed class TelParsedResult : ParsedResult
-   {
-      public TelParsedResult(String number, String telURI, String title)
-         : base(ParsedResultType.TEL)
-      {
-         Number = number;
-         TelURI = telURI;
-         Title = title;
+    /// <summary>
+    /// Represents a parsed result that encodes a telephone number.
+    /// </summary>
+    /// <author>Sean Owen</author>
+    public sealed class TelParsedResult : ParsedResult
+    {
+        public TelParsedResult(String number, String telURI, String title)
+           : base(ParsedResultType.TEL)
+        {
+            Number = number;
+            TelURI = telURI;
+            Title = title;
 
-         var result = new System.Text.StringBuilder(20);
-         maybeAppend(number, result);
-         maybeAppend(title, result);
-         displayResultValue = result.ToString();
-      }
+            var result = new System.Text.StringBuilder(20);
+            maybeAppend(number, result);
+            maybeAppend(title, result);
+            displayResultValue = result.ToString();
+        }
 
-      public String Number { get; private set; }
+        public String Number { get; private set; }
 
-      public String TelURI { get; private set; }
+        public String TelURI { get; private set; }
 
-      public String Title { get; private set; }
-   }
+        public String Title { get; private set; }
+    }
 }

@@ -22,33 +22,33 @@ using ZXing.Rendering;
 
 namespace WindowsFormsDemo
 {
-   public partial class EncodingOptionsForm : Form
-   {
-      public EncodingOptions Options
-      {
-         get
-         {
-            return (EncodingOptions)propOptions.SelectedObject;
-         }
-         set
-         {
-            propOptions.SelectedObject = value;
-         }
-      }
+    public partial class EncodingOptionsForm : Form
+    {
+        public EncodingOptions Options
+        {
+            get
+            {
+                return (EncodingOptions)propOptions.SelectedObject;
+            }
+            set
+            {
+                propOptions.SelectedObject = value;
+            }
+        }
 
-      public Type Renderer
-      {
-         get { return (Type)cmbRenderer.SelectedItem; }
-         set { cmbRenderer.SelectedItem = value; }
-      }
+        public Type Renderer
+        {
+            get { return (Type)cmbRenderer.SelectedItem; }
+            set { cmbRenderer.SelectedItem = value; }
+        }
 
-      public EncodingOptionsForm()
-      {
-         InitializeComponent();
+        public EncodingOptionsForm()
+        {
+            InitializeComponent();
 
-         cmbRenderer.Items.Add(typeof (BitmapRenderer));
-         cmbRenderer.Items.Add(typeof (CustomBitmapRenderer));
-         cmbRenderer.SelectedItem = typeof (BitmapRenderer);
-      }
-   }
+            cmbRenderer.Items.Add(typeof(BitmapRenderer));
+            cmbRenderer.Items.Add(typeof(CustomBitmapRenderer));
+            cmbRenderer.SelectedItem = typeof(BitmapRenderer);
+        }
+    }
 }

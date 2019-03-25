@@ -19,148 +19,154 @@ using System.Text;
 
 namespace ZXing.Datamatrix.Encoder
 {
-   internal sealed class EdifactEncoder : Encoder
-   {
-      public int EncodingMode
-      {
-         get { return Encodation.EDIFACT; }
-      }
+    internal sealed class EdifactEncoder : Encoder
+    {
+        public int EncodingMode
+        {
+            get { return Encodation.EDIFACT; }
+        }
 
-      public void encode(EncoderContext context)
-      {
-         //step F
-         var buffer = new StringBuilder();
-         while (context.HasMoreCharacters)
-         {
-            char c = context.CurrentChar;
-            encodeChar(c, buffer);
-            context.Pos++;
-
-            int count = buffer.Length;
-            if (count >= 4)
+        public void encode(EncoderContext context)
+        {
+            //step F
+            var buffer = new StringBuilder();
+            while (context.HasMoreCharacters)
             {
-               context.writeCodewords(encodeToCodewords(buffer, 0));
-               buffer.Remove(0, 4);
+                char c = context.CurrentChar;
+                encodeChar(c, buffer);
+                context.Pos++;
 
-               int newMode = HighLevelEncoder.lookAheadTest(context.Message, context.Pos, EncodingMode);
-               if (newMode != EncodingMode)
-               {
-                  // Return to ASCII encodation, which will actually handle latch to new mode
-                  context.signalEncoderChange(Encodation.ASCII);
-                  break;
-               }
+                int count = buffer.Length;
+                if (count >= 4)
+                {
+                    context.writeCodewords(encodeToCodewords(buffer, 0));
+                    buffer.Remove(0, 4);
+
+                    int newMode = HighLevelEncoder.lookAheadTest(context.Message, context.Pos, EncodingMode);
+                    if (newMode != EncodingMode)
+                    {
+                        // Return to ASCII encodation, which will actually handle latch to new mode
+                        context.signalEncoderChange(Encodation.ASCII);
+                        break;
+                    }
+                }
             }
-         }
-         buffer.Append((char)31); //Unlatch
-         handleEOD(context, buffer);
-      }
+            buffer.Append((char)31); //Unlatch
+            handleEOD(context, buffer);
+        }
 
-      /// <summary>
-      /// Handle "end of data" situations
-      /// </summary>
-      /// <param name="context">the encoder context</param>
-      /// <param name="buffer">the buffer with the remaining encoded characters</param>
-      private static void handleEOD(EncoderContext context, StringBuilder buffer)
-      {
-         try
-         {
-            int count = buffer.Length;
-            if (count == 0)
+        /// <summary>
+        /// Handle "end of data" situations
+        /// </summary>
+        /// <param name="context">the encoder context</param>
+        /// <param name="buffer">the buffer with the remaining encoded characters</param>
+        private static void handleEOD(EncoderContext context, StringBuilder buffer)
+        {
+            try
             {
-               return; //Already finished
-            }
-            if (count == 1)
-            {
-               //Only an unlatch at the end
-               context.updateSymbolInfo();
-               int available = context.SymbolInfo.dataCapacity - context.CodewordCount;
-               int remaining = context.RemainingCharacters;
-               if (remaining <= available && available <= 2)
-               {
-                  return; //No unlatch
-               }
-            }
+                int count = buffer.Length;
+                if (count == 0)
+                {
+                    return; //Already finished
+                }
+                if (count == 1)
+                {
+                    //Only an unlatch at the end
+                    context.updateSymbolInfo();
+                    int available = context.SymbolInfo.dataCapacity - context.CodewordCount;
+                    int remaining = context.RemainingCharacters;
+                    // The following two lines are a hack inspired by the 'fix' from https://sourceforge.net/p/barcode4j/svn/221/
+                    if (remaining > available)
+                    {
+                        context.updateSymbolInfo(context.CodewordCount + 1);
+                        available = context.SymbolInfo.dataCapacity - context.CodewordCount;
+                    }
+                    if (remaining <= available && available <= 2)
+                    {
+                        return; //No unlatch
+                    }
+                }
 
-            if (count > 4)
-            {
-               throw new InvalidOperationException("Count must not exceed 4");
-            }
-            int restChars = count - 1;
-            String encoded = encodeToCodewords(buffer, 0);
-            bool endOfSymbolReached = !context.HasMoreCharacters;
-            bool restInAscii = endOfSymbolReached && restChars <= 2;
+                if (count > 4)
+                {
+                    throw new InvalidOperationException("Count must not exceed 4");
+                }
+                int restChars = count - 1;
+                String encoded = encodeToCodewords(buffer, 0);
+                bool endOfSymbolReached = !context.HasMoreCharacters;
+                bool restInAscii = endOfSymbolReached && restChars <= 2;
 
-            if (restChars <= 2)
-            {
-               context.updateSymbolInfo(context.CodewordCount + restChars);
-               int available = context.SymbolInfo.dataCapacity - context.CodewordCount;
-               if (available >= 3)
-               {
-                  restInAscii = false;
-                  context.updateSymbolInfo(context.CodewordCount + encoded.Length);
-                  //available = context.symbolInfo.dataCapacity - context.getCodewordCount();
-               }
-            }
+                if (restChars <= 2)
+                {
+                    context.updateSymbolInfo(context.CodewordCount + restChars);
+                    int available = context.SymbolInfo.dataCapacity - context.CodewordCount;
+                    if (available >= 3)
+                    {
+                        restInAscii = false;
+                        context.updateSymbolInfo(context.CodewordCount + encoded.Length);
+                        //available = context.symbolInfo.dataCapacity - context.getCodewordCount();
+                    }
+                }
 
-            if (restInAscii)
+                if (restInAscii)
+                {
+                    context.resetSymbolInfo();
+                    context.Pos -= restChars;
+                }
+                else
+                {
+                    context.writeCodewords(encoded);
+                }
+            }
+            finally
             {
-               context.resetSymbolInfo();
-               context.Pos -= restChars;
+                context.signalEncoderChange(Encodation.ASCII);
+            }
+        }
+
+        private static void encodeChar(char c, StringBuilder sb)
+        {
+            if (c >= ' ' && c <= '?')
+            {
+                sb.Append(c);
+            }
+            else if (c >= '@' && c <= '^')
+            {
+                sb.Append((char)(c - 64));
             }
             else
             {
-               context.writeCodewords(encoded);
+                HighLevelEncoder.illegalCharacter(c);
             }
-         }
-         finally
-         {
-            context.signalEncoderChange(Encodation.ASCII);
-         }
-      }
+        }
 
-      private static void encodeChar(char c, StringBuilder sb)
-      {
-         if (c >= ' ' && c <= '?')
-         {
-            sb.Append(c);
-         }
-         else if (c >= '@' && c <= '^')
-         {
-            sb.Append((char)(c - 64));
-         }
-         else
-         {
-            HighLevelEncoder.illegalCharacter(c);
-         }
-      }
+        private static String encodeToCodewords(StringBuilder sb, int startPos)
+        {
+            int len = sb.Length - startPos;
+            if (len == 0)
+            {
+                throw new InvalidOperationException("StringBuilder must not be empty");
+            }
+            char c1 = sb[startPos];
+            char c2 = len >= 2 ? sb[startPos + 1] : (char)0;
+            char c3 = len >= 3 ? sb[startPos + 2] : (char)0;
+            char c4 = len >= 4 ? sb[startPos + 3] : (char)0;
 
-      private static String encodeToCodewords(StringBuilder sb, int startPos)
-      {
-         int len = sb.Length - startPos;
-         if (len == 0)
-         {
-            throw new InvalidOperationException("StringBuilder must not be empty");
-         }
-         char c1 = sb[startPos];
-         char c2 = len >= 2 ? sb[startPos + 1] : (char)0;
-         char c3 = len >= 3 ? sb[startPos + 2] : (char)0;
-         char c4 = len >= 4 ? sb[startPos + 3] : (char)0;
-
-         int v = (c1 << 18) + (c2 << 12) + (c3 << 6) + c4;
-         char cw1 = (char)((v >> 16) & 255);
-         char cw2 = (char)((v >> 8) & 255);
-         char cw3 = (char)(v & 255);
-         var res = new StringBuilder(3);
-         res.Append(cw1);
-         if (len >= 2)
-         {
-            res.Append(cw2);
-         }
-         if (len >= 3)
-         {
-            res.Append(cw3);
-         }
-         return res.ToString();
-      }
-   }
+            int v = (c1 << 18) + (c2 << 12) + (c3 << 6) + c4;
+            char cw1 = (char)((v >> 16) & 255);
+            char cw2 = (char)((v >> 8) & 255);
+            char cw3 = (char)(v & 255);
+            var res = new StringBuilder(3);
+            res.Append(cw1);
+            if (len >= 2)
+            {
+                res.Append(cw2);
+            }
+            if (len >= 3)
+            {
+                res.Append(cw3);
+            }
+            return res.ToString();
+        }
+    }
 }

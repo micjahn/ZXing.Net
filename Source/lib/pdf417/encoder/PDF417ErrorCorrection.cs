@@ -24,18 +24,18 @@ using System.Text;
 
 namespace ZXing.PDF417.Internal
 {
-   /// <summary>
-   /// PDF417 error correction code following the algorithm described in ISO/IEC 15438:2001(E) in
-   /// chapter 4.10.
-   /// </summary>
-   internal static class PDF417ErrorCorrection
-   {
-      /// <summary>
-      /// Tables of coefficients for calculating error correction words
-      /// (see annex F, ISO/IEC 15438:2001(E))
-      /// </summary>
-      private static readonly int[][] EC_COEFFICIENTS =
-         {
+    /// <summary>
+    /// PDF417 error correction code following the algorithm described in ISO/IEC 15438:2001(E) in
+    /// chapter 4.10.
+    /// </summary>
+    internal static class PDF417ErrorCorrection
+    {
+        /// <summary>
+        /// Tables of coefficients for calculating error correction words
+        /// (see annex F, ISO/IEC 15438:2001(E))
+        /// </summary>
+        private static readonly int[][] EC_COEFFICIENTS =
+           {
             new[] {27, 917},
             new[] {522, 568, 723, 809},
             new[] {237, 308, 436, 284, 646, 653, 428, 379},
@@ -146,104 +146,117 @@ namespace ZXing.PDF417.Internal
                }
          };
 
-      /// <summary>
-      /// Determines the number of error correction codewords for a specified error correction
-      /// level.
-      /// </summary>
-      /// <param name="errorCorrectionLevel">the error correction level (0-8)</param>
-      /// <returns>the number of codewords generated for error correction</returns>
-      internal static int getErrorCorrectionCodewordCount(int errorCorrectionLevel)
-      {
-         if (errorCorrectionLevel < 0 || errorCorrectionLevel > 8)
-         {
-            throw new ArgumentException("Error correction level must be between 0 and 8!");
-         }
-         return 1 << (errorCorrectionLevel + 1);
-      }
-
-      /// <summary>
-      /// Returns the recommended minimum error correction level as described in annex E of
-      /// ISO/IEC 15438:2001(E).
-      /// </summary>
-      /// <param name="n">the number of data codewords</param>
-      /// <returns>the recommended minimum error correction level</returns>
-      internal static int getRecommendedMinimumErrorCorrectionLevel(int n)
-      {
-         if (n <= 0)
-         {
-            throw new ArgumentException("n must be > 0");
-         }
-         if (n <= 40)
-         {
-            return 2;
-         }
-         if (n <= 160)
-         {
-            return 3;
-         }
-         if (n <= 320)
-         {
-            return 4;
-         }
-         if (n <= 863)
-         {
-            return 5;
-         }
-         throw new WriterException("No recommendation possible");
-      }
-
-      /// <summary>
-      /// Generates the error correction codewords according to 4.10 in ISO/IEC 15438:2001(E).
-      /// </summary>
-      /// <param name="dataCodewords">the data codewords</param>
-      /// <param name="errorCorrectionLevel">the error correction level (0-8)</param>
-      /// <returns>the String representing the error correction codewords</returns>
-      internal static String generateErrorCorrection(String dataCodewords, int errorCorrectionLevel)
-      {
-         int k = getErrorCorrectionCodewordCount(errorCorrectionLevel);
-         char[] e = new char[k];
-         int sld = dataCodewords.Length;
-         for (int i = 0; i < sld; i++)
-         {
-            int t1 = (dataCodewords[i] + e[e.Length - 1])%929;
-            int t2;
-            int t3;
-            for (int j = k - 1; j >= 1; j--)
+        /// <summary>
+        /// Determines the number of error correction codewords for a specified error correction
+        /// level.
+        /// </summary>
+        /// <param name="errorCorrectionLevel">the error correction level (0-8)</param>
+        /// <returns>the number of codewords generated for error correction</returns>
+        internal static int getErrorCorrectionCodewordCount(int errorCorrectionLevel)
+        {
+            if (errorCorrectionLevel < 0 || errorCorrectionLevel > 8)
             {
-               t2 = (t1*EC_COEFFICIENTS[errorCorrectionLevel][j])%929;
-               t3 = 929 - t2;
-               e[j] = (char) ((e[j - 1] + t3)%929);
+                throw new ArgumentException("Error correction level must be between 0 and 8!");
             }
-            t2 = (t1*EC_COEFFICIENTS[errorCorrectionLevel][0])%929;
-            t3 = 929 - t2;
-            e[0] = (char) (t3%929);
-         }
-         StringBuilder sb = new StringBuilder(k);
-         for (int j = k - 1; j >= 0; j--)
-         {
-            if (e[j] != 0)
-            {
-               e[j] = (char) (929 - e[j]);
-            }
-            sb.Append(e[j]);
-         }
-         return sb.ToString();
-      }
-   }
+            return 1 << (errorCorrectionLevel + 1);
+        }
 
-   /// <summary>
-   /// defines the level of the error correction / count of error correction codewords
-   /// </summary>
-   public enum PDF417ErrorCorrectionLevel
-   {
-      L0 = 0,
-      L1,
-      L2,
-      L3,
-      L4,
-      L5,
-      L6,
-      L7,
-      L8
-   }
+        /// <summary>
+        /// Determines the error correction level for AUTO
+        /// </summary>
+        /// <param name="errorCorrectionLevel">The error correction level (0-9)</param>
+        /// <param name="sourceCodeWords">The number of codewords for AUTO errorCorrectionLevel</param>
+        /// <returns>the number of codewords generated for error correction</returns>
+        internal static int getErrorCorrectionLevel(int errorCorrectionLevel, int sourceCodeWords)
+        {
+            if (errorCorrectionLevel == (int)PDF417ErrorCorrectionLevel.AUTO)
+                return getRecommendedMinimumErrorCorrectionLevel(sourceCodeWords);
+            else
+                return errorCorrectionLevel;
+        }
+
+        /// <summary>
+        /// Returns the recommended minimum error correction level as described in annex E of
+        /// ISO/IEC 15438:2001(E).
+        /// </summary>
+        /// <param name="n">the number of data codewords</param>
+        /// <returns>the recommended minimum error correction level</returns>
+        internal static int getRecommendedMinimumErrorCorrectionLevel(int n)
+        {
+            if (n <= 40)
+            {
+                return 2;
+            }
+            if (n <= 160)
+            {
+                return 3;
+            }
+            if (n <= 320)
+            {
+                return 4;
+            }
+            if (n <= 863)
+            {
+                return 5;
+            }
+            throw new WriterException("No recommendation possible");
+        }
+
+        /// <summary>
+        /// Generates the error correction codewords according to 4.10 in ISO/IEC 15438:2001(E).
+        /// </summary>
+        /// <param name="dataCodewords">the data codewords</param>
+        /// <param name="errorCorrectionLevel">the error correction level (0-8)</param>
+        /// <returns>the String representing the error correction codewords</returns>
+        internal static String generateErrorCorrection(String dataCodewords, int errorCorrectionLevel)
+        {
+            if (errorCorrectionLevel == (int)PDF417ErrorCorrectionLevel.AUTO)
+                errorCorrectionLevel = getRecommendedMinimumErrorCorrectionLevel(errorCorrectionLevel);
+            int k = getErrorCorrectionCodewordCount(errorCorrectionLevel);
+            char[] e = new char[k];
+            int sld = dataCodewords.Length;
+            for (int i = 0; i < sld; i++)
+            {
+                int t1 = (dataCodewords[i] + e[e.Length - 1]) % 929;
+                int t2;
+                int t3;
+                for (int j = k - 1; j >= 1; j--)
+                {
+                    t2 = (t1 * EC_COEFFICIENTS[errorCorrectionLevel][j]) % 929;
+                    t3 = 929 - t2;
+                    e[j] = (char)((e[j - 1] + t3) % 929);
+                }
+                t2 = (t1 * EC_COEFFICIENTS[errorCorrectionLevel][0]) % 929;
+                t3 = 929 - t2;
+                e[0] = (char)(t3 % 929);
+            }
+            StringBuilder sb = new StringBuilder(k);
+            for (int j = k - 1; j >= 0; j--)
+            {
+                if (e[j] != 0)
+                {
+                    e[j] = (char)(929 - e[j]);
+                }
+                sb.Append(e[j]);
+            }
+            return sb.ToString();
+        }
+    }
+
+    /// <summary>
+    /// defines the level of the error correction / count of error correction codewords
+    /// </summary>
+    public enum PDF417ErrorCorrectionLevel
+    {
+        L0 = 0,
+        L1,
+        L2,
+        L3,
+        L4,
+        L5,
+        L6,
+        L7,
+        L8,
+        AUTO
+    }
 }

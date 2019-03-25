@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>0.16.0</VersionPrefix>
+    <TargetFramework>netstandard1.0</TargetFramework>
+    <TargetFrameworks>netstandard1.0</TargetFrameworks>
+    <PackageId>ZXing.Net.Bindings.Eto.Forms</PackageId>
+    <PlatformTarget>anycpu</PlatformTarget>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyTitle>ZXing.Eto.Forms</AssemblyTitle>
+    <Title>ZXing.Eto.Forms</Title>
+    <Description>ZXing.Net binding to the Eto.Forms</Description>
+    <AssemblyOriginatorKeyFile>../../../Key/private.snk</AssemblyOriginatorKeyFile>
+    <Authors>Michael Jahn</Authors>
+    <PackageProjectUrl>https://github.com/micjahn/ZXing.Net/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/micjahn/ZXing.Net/</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>ZXing Eto</PackageTags>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DebugType>portable</DebugType>
+    <AssemblyName>ZXing.Eto.Forms</AssemblyName>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Rendering/BitmapRenderer.cs" />
+    <Compile Include="BitmapLuminanceSource.cs" />
+    <Compile Include="BarcodeWriter.Extensions.cs" />
+    <Compile Include="BarcodeWriter.cs" />
+    <Compile Include="BarcodeReader.cs" />
+    <Compile Include="BarcodeReader.Extensions.cs" />
+    <Compile Include="Properties/AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Eto.Forms" Version="2.4.1" />
+    <PackageReference Include="ZXing.Net" Version="0.16.4" />
+  </ItemGroup>
+
+</Project>

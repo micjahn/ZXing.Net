@@ -18,68 +18,68 @@ using System;
 
 namespace ZXing.OneD.RSS
 {
-   /// <summary>
-   /// Encapsulates a since character value in an RSS barcode, including its checksum information.
-   /// </summary>
-   public class DataCharacter
-   {
-      /// <summary>
-      /// Gets the value.
-      /// </summary>
-      public int Value { get; private set; }
-      /// <summary>
-      /// Gets the checksum portion.
-      /// </summary>
-      public int ChecksumPortion { get; private set; }
+    /// <summary>
+    /// Encapsulates a since character value in an RSS barcode, including its checksum information.
+    /// </summary>
+    public class DataCharacter
+    {
+        /// <summary>
+        /// Gets the value.
+        /// </summary>
+        public int Value { get; private set; }
+        /// <summary>
+        /// Gets the checksum portion.
+        /// </summary>
+        public int ChecksumPortion { get; private set; }
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="DataCharacter"/> class.
-      /// </summary>
-      /// <param name="value">The value.</param>
-      /// <param name="checksumPortion">The checksum portion.</param>
-      public DataCharacter(int value, int checksumPortion)
-      {
-         Value = value;
-         ChecksumPortion = checksumPortion;
-      }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataCharacter"/> class.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="checksumPortion">The checksum portion.</param>
+        public DataCharacter(int value, int checksumPortion)
+        {
+            Value = value;
+            ChecksumPortion = checksumPortion;
+        }
 
-      /// <summary>
-      /// Returns a <see cref="System.String"/> that represents this instance.
-      /// </summary>
-      /// <returns>
-      /// A <see cref="System.String"/> that represents this instance.
-      /// </returns>
-      override public String ToString()
-      {
-         return Value + "(" + ChecksumPortion + ')';
-      }
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
+        override public String ToString()
+        {
+            return Value + "(" + ChecksumPortion + ')';
+        }
 
-      /// <summary>
-      /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
-      /// </summary>
-      /// <param name="o">The <see cref="System.Object"/> to compare with this instance.</param>
-      /// <returns>
-      ///   <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
-      /// </returns>
-      override public bool Equals(Object o)
-      {
-         if (!(o is DataCharacter))
-         {
-            return false;
-         }
-         DataCharacter that = (DataCharacter)o;
-         return Value == that.Value && ChecksumPortion == that.ChecksumPortion;
-      }
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object"/> is equal to this instance.
+        /// </summary>
+        /// <param name="o">The <see cref="System.Object"/> to compare with this instance.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
+        override public bool Equals(Object o)
+        {
+            if (!(o is DataCharacter))
+            {
+                return false;
+            }
+            DataCharacter that = (DataCharacter)o;
+            return Value == that.Value && ChecksumPortion == that.ChecksumPortion;
+        }
 
-      /// <summary>
-      /// Returns a hash code for this instance.
-      /// </summary>
-      /// <returns>
-      /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
-      /// </returns>
-      override public int GetHashCode()
-      {
-         return Value ^ ChecksumPortion;
-      }
-   }
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
+        override public int GetHashCode()
+        {
+            return Value ^ ChecksumPortion;
+        }
+    }
 }

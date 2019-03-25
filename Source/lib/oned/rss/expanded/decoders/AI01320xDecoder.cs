@@ -29,35 +29,35 @@ using ZXing.Common;
 
 namespace ZXing.OneD.RSS.Expanded.Decoders
 {
-   /// <summary>
-   /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
-   /// </summary>
-   sealed class AI01320xDecoder : AI013x0xDecoder
-   {
-      internal AI01320xDecoder(BitArray information)
-         : base(information)
-      {
-      }
+    /// <summary>
+    /// <author>Pablo Orduña, University of Deusto (pablo.orduna@deusto.es)</author>
+    /// </summary>
+    sealed class AI01320xDecoder : AI013x0xDecoder
+    {
+        internal AI01320xDecoder(BitArray information)
+           : base(information)
+        {
+        }
 
-      override protected void addWeightCode(StringBuilder buf, int weight)
-      {
-         if (weight < 10000)
-         {
-            buf.Append("(3202)");
-         }
-         else
-         {
-            buf.Append("(3203)");
-         }
-      }
+        override protected void addWeightCode(StringBuilder buf, int weight)
+        {
+            if (weight < 10000)
+            {
+                buf.Append("(3202)");
+            }
+            else
+            {
+                buf.Append("(3203)");
+            }
+        }
 
-      override protected int checkWeight(int weight)
-      {
-         if (weight < 10000)
-         {
-            return weight;
-         }
-         return weight - 10000;
-      }
-   }
+        override protected int checkWeight(int weight)
+        {
+            if (weight < 10000)
+            {
+                return weight;
+            }
+            return weight - 10000;
+        }
+    }
 }
