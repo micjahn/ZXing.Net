@@ -29,7 +29,7 @@ namespace ZXing.Magick
         /// initializing constructor
         /// </summary>
         /// <param name="image"></param>
-        public MagickImageLuminanceSource(MagickImage image)
+        public MagickImageLuminanceSource(IMagickImage image)
            : base(CalculateLuminance(image), image.Width, image.Height)
         {
         }
@@ -58,7 +58,7 @@ namespace ZXing.Magick
             return new MagickImageLuminanceSource(newLuminances, width, height);
         }
 
-        private static byte[] CalculateLuminance(MagickImage src)
+        private static byte[] CalculateLuminance(IMagickImage src)
         {
             if (src == null)
                 throw new ArgumentNullException(nameof(src));

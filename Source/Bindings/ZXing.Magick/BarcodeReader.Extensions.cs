@@ -31,7 +31,7 @@ namespace ZXing
         /// <param name="reader"></param>
         /// <param name="image"></param>
         /// <returns></returns>
-        public static Result Decode(this IBarcodeReaderGeneric reader, MagickImage image)
+        public static Result Decode(this IBarcodeReaderGeneric reader, IMagickImage image)
         {
             var luminanceSource = new MagickImageLuminanceSource(image);
             return reader.Decode(luminanceSource);
@@ -43,7 +43,7 @@ namespace ZXing
         /// <param name="reader"></param>
         /// <param name="image"></param>
         /// <returns></returns>
-        public static Result[] DecodeMultiple(this IBarcodeReaderGeneric reader, MagickImage image)
+        public static Result[] DecodeMultiple(this IBarcodeReaderGeneric reader, IMagickImage image)
         {
             var luminanceSource = new MagickImageLuminanceSource(image);
             return reader.DecodeMultiple(luminanceSource);
