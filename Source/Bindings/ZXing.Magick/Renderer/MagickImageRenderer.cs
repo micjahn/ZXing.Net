@@ -21,14 +21,27 @@ using ImageMagick;
 
 namespace ZXing.Magick.Rendering
 {
-    public class MagickImageRenderer : IBarcodeRenderer<MagickImage>
+    public class MagickImageRenderer : IBarcodeRenderer<IMagickImage>
     {
-        public MagickImage Render(BitMatrix matrix, BarcodeFormat format, string content)
+        private readonly IMagickFactory magickFactory;
+
+        public MagickImageRenderer()
+            : this(null)
+        {
+
+        }
+
+        public MagickImageRenderer(IMagickFactory magickFactory)
+        {
+            this.magickFactory = magickFactory ?? new MagickFactory();
+        }
+
+        public IMagickImage Render(BitMatrix matrix, BarcodeFormat format, string content)
         {
             return Render(matrix, format, content, new EncodingOptions());
         }
 
-        public MagickImage Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+        public IMagickImage Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
         {
             byte[] header = System.Text.Encoding.UTF8.GetBytes($"P4\n{matrix.Width} {matrix.Height}\n");
 
@@ -66,7 +79,7 @@ namespace ZXing.Magick.Rendering
                 }
             }
 
-            return new MagickImage(totalBuffer);
+            return this.magickFactory.CreateImage(totalBuffer);
         }
     }
 }
