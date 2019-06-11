@@ -83,6 +83,9 @@ namespace ZXing
         /// <summary>Intelligent Mail barcode</summary>
         IMB = 524288,
 
+        /// <summary>Pharmacode format.</summary>
+        PHARMA_CODE = 1048576,
+
         /// <summary>
         /// UPC_A | UPC_E | EAN_13 | EAN_8 | CODABAR | CODE_39 | CODE_93 | CODE_128 | ITF | RSS_14 | RSS_EXPANDED
         /// without MSI (to many false-positives) and IMB (not enough tested, and it looks more like a 2D)

@@ -33,7 +33,7 @@
     <DefineConstants>TRACE;DEBUG;PORTABLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-	<BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
     <IntermediateOutputPath Condition=" '$(PlatformName)' == 'AnyCPU' ">$(BaseIntermediateOutputPath)$(Configuration)\portable\</IntermediateOutputPath>
     <IntermediateOutputPath Condition=" '$(PlatformName)' != 'AnyCPU' ">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\portable\</IntermediateOutputPath>
   </PropertyGroup>
@@ -45,7 +45,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\Build\Release\portable\zxing.portable.XML</DocumentationFile>
-	<BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
     <IntermediateOutputPath Condition=" '$(PlatformName)' == 'AnyCPU' ">$(BaseIntermediateOutputPath)$(Configuration)\portable\</IntermediateOutputPath>
     <IntermediateOutputPath Condition=" '$(PlatformName)' != 'AnyCPU' ">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\portable\</IntermediateOutputPath>
   </PropertyGroup>
@@ -217,6 +217,7 @@
     <Compile Include="oned\MultiFormatUPCEANReader.cs" />
     <Compile Include="oned\OneDimensionalCodeWriter.cs" />
     <Compile Include="oned\OneDReader.cs" />
+    <Compile Include="oned\PharmaCodeReader.cs" />
     <Compile Include="oned\PlesseyWriter.cs" />
     <Compile Include="oned\rss\AbstractRSSReader.cs" />
     <Compile Include="oned\rss\DataCharacter.cs" />

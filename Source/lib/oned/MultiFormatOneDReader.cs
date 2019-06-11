@@ -89,6 +89,10 @@ namespace ZXing.OneD
                 {
                     readers.Add(new RSSExpandedReader());
                 }
+                if (possibleFormats.Contains(BarcodeFormat.PHARMA_CODE))
+                {
+                    readers.Add(new PharmaCodeReader());
+                }
             }
             if (readers.Count == 0)
             {
@@ -97,6 +101,7 @@ namespace ZXing.OneD
                 bool useCode39ExtendedMode = hints != null && hints.ContainsKey(DecodeHintType.USE_CODE_39_EXTENDED_MODE) &&
                                              (bool)hints[DecodeHintType.USE_CODE_39_EXTENDED_MODE];
                 // MSI needs to be activated explicit
+                // PHARMA_CODE needs to be activated explicit
 
                 readers.Add(new MultiFormatUPCEANReader(hints));
                 readers.Add(new Code39Reader(useCode39CheckDigit, useCode39ExtendedMode));

@@ -240,6 +240,7 @@
     <Compile Include="oned\Code93Writer.cs" />
     <Compile Include="oned\MSIReader.cs" />
     <Compile Include="oned\MSIWriter.cs" />
+    <Compile Include="oned\PharmaCodeReader.cs" />
     <Compile Include="oned\PlesseyWriter.cs" />
     <Compile Include="oned\rss\expanded\ExpandedRow.cs" />
     <Compile Include="oned\UPCEWriter.cs" />

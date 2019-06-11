@@ -626,6 +626,9 @@
     <Compile Include="..\oned\OneDReader.cs">
       <Link>oned\OneDReader.cs</Link>
     </Compile>
+    <Compile Include="..\oned\PharmaCodeReader.cs">
+      <Link>oned\PharmaCodeReader.cs</Link>
+    </Compile>
     <Compile Include="..\oned\PlesseyWriter.cs">
       <Link>oned\PlesseyWriter.cs</Link>
     </Compile>
