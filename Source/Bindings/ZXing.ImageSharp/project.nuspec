@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.6-beta</version>
+    <version>0.16.7-beta</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
@@ -15,27 +15,19 @@
     <releaseNotes></releaseNotes>
     <tags>ZXing ImageSharp</tags>
     <dependencies>
-      <group targetFramework="netstandard1.1">
-        <dependency id="ZXing.Net" version="0.16.4.0" exclude="Build,Analyzers" />
-        <dependency id="SixLabors.ImageSharp" version="1.0.0-beta0005" exclude="Build,Analyzers" />
-        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
-      </group>
       <group targetFramework="netstandard1.3">
         <dependency id="ZXing.Net" version="0.16.4.0" exclude="Build,Analyzers" />
-        <dependency id="SixLabors.ImageSharp" version="1.0.0-beta0005" exclude="Build,Analyzers" />
+        <dependency id="SixLabors.ImageSharp" version="1.0.0-beta0006" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="netstandard2.0">
         <dependency id="ZXing.Net" version="0.16.4.0" exclude="Build,Analyzers" />
-        <dependency id="SixLabors.ImageSharp" version="1.0.0-beta0005" exclude="Build,Analyzers" />
+        <dependency id="SixLabors.ImageSharp" version="1.0.0-beta0006" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\netstandard1.1\ZXing.ImageSharp.dll" target="lib\netstandard1.1\ZXing.ImageSharp.dll" />
-    <file src="bin\Release\netstandard1.1\ZXing.ImageSharp.pdb" target="lib\netstandard1.1\ZXing.ImageSharp.pdb" />
-    <file src="bin\Release\netstandard1.1\ZXing.ImageSharp.xml" target="lib\netstandard1.1\ZXing.ImageSharp.xml" />
     <file src="bin\Release\netstandard1.3\ZXing.ImageSharp.dll" target="lib\netstandard1.3\ZXing.ImageSharp.dll" />
     <file src="bin\Release\netstandard1.3\ZXing.ImageSharp.pdb" target="lib\netstandard1.3\ZXing.ImageSharp.pdb" />
     <file src="bin\Release\netstandard1.3\ZXing.ImageSharp.xml" target="lib\netstandard1.3\ZXing.ImageSharp.xml" />
