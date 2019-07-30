@@ -49,7 +49,7 @@ namespace ZXing.ImageSharp.Rendering
         public Image<TPixel> Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
         {
             var width = matrix.Width;
-            var heigth = matrix.Height;
+            var height = matrix.Height;
             var black = new Rgba32(0xFF000000);
             var white = new Rgba32(0xFFFFFFFF);
 
@@ -61,15 +61,15 @@ namespace ZXing.ImageSharp.Rendering
                 {
                     width = options.Width;
                 }
-                if (options.Height > heigth)
+                if (options.Height > height)
                 {
-                    heigth = options.Height;
+                    height = options.Height;
                 }
                 // calculating the scaling factor
                 pixelsize = width / matrix.Width;
-                if (pixelsize > heigth / matrix.Height)
+                if (pixelsize > height / matrix.Height)
                 {
-                    pixelsize = heigth / matrix.Height;
+                    pixelsize = height / matrix.Height;
                 }
             }
 
@@ -86,14 +86,14 @@ namespace ZXing.ImageSharp.Rendering
                         for (var pixelsizeWidth = 0; pixelsizeWidth < pixelsize; pixelsizeWidth++)
                         {
                             var pixel = new TPixel();
-                            pixel.PackFromRgba32(color);
+                            pixel.FromRgba32(color);
                             result[pixelsize * x + pixelsizeWidth, rowOffset] = pixel;
                         }
                     }
                     for (var x = pixelsize * matrix.Width; x < width; x++)
                     {
                         var pixel = new TPixel();
-                        pixel.PackFromRgba32(white);
+                        pixel.FromRgba32(white);
                         result[x, rowOffset] = pixel;
                     }
                 }
