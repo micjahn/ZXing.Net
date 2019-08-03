@@ -21,12 +21,12 @@ namespace ZXing.Datamatrix.Encoder
 {
     internal class C40Encoder : Encoder
     {
-        virtual public int EncodingMode
+        public virtual int EncodingMode
         {
             get { return Encodation.C40; }
         }
 
-        virtual public void encode(EncoderContext context)
+        public virtual void encode(EncoderContext context)
         {
             //step C
             var buffer = new StringBuilder();
@@ -47,8 +47,7 @@ namespace ZXing.Datamatrix.Encoder
                 {
                     //Avoid having a single C40 value in the last triplet
                     var removed = new StringBuilder();
-                    if ((buffer.Length % 3) == 2 &&
-                        (available < 2 || available > 2))
+                    if ((buffer.Length % 3) == 2 && available != 2)
                     {
                         lastCharSize = backtrackOneCharacter(context, buffer, removed, lastCharSize);
                     }
@@ -75,7 +74,7 @@ namespace ZXing.Datamatrix.Encoder
         }
 
         private int backtrackOneCharacter(EncoderContext context,
-                                          StringBuilder buffer, StringBuilder removed, int lastCharSize)
+            StringBuilder buffer, StringBuilder removed, int lastCharSize)
         {
             int count = buffer.Length;
             buffer.Remove(count - lastCharSize, lastCharSize);
@@ -97,7 +96,7 @@ namespace ZXing.Datamatrix.Encoder
         /// </summary>
         /// <param name="context">the encoder context</param>
         /// <param name="buffer">the buffer with the remaining encoded characters</param>
-        virtual protected void handleEOD(EncoderContext context, StringBuilder buffer)
+        protected virtual void handleEOD(EncoderContext context, StringBuilder buffer)
         {
             int unwritten = (buffer.Length / 3) * 2;
             int rest = buffer.Length % 3;
@@ -149,7 +148,7 @@ namespace ZXing.Datamatrix.Encoder
             context.signalEncoderChange(Encodation.ASCII);
         }
 
-        virtual protected int encodeChar(char c, StringBuilder sb)
+        protected virtual int encodeChar(char c, StringBuilder sb)
         {
             if (c == ' ')
             {
@@ -158,12 +157,12 @@ namespace ZXing.Datamatrix.Encoder
             }
             if (c >= '0' && c <= '9')
             {
-                sb.Append((char)(c - 48 + 4));
+                sb.Append((char) (c - 48 + 4));
                 return 1;
             }
             if (c >= 'A' && c <= 'Z')
             {
-                sb.Append((char)(c - 65 + 14));
+                sb.Append((char) (c - 65 + 14));
                 return 1;
             }
             if (c <= '\u001f')
@@ -175,30 +174,30 @@ namespace ZXing.Datamatrix.Encoder
             if (c <= '/')
             {
                 sb.Append('\u0001'); //Shift 2 Set
-                sb.Append((char)(c - 33));
+                sb.Append((char) (c - 33));
                 return 2;
             }
             if (c <= '@')
             {
                 sb.Append('\u0001'); //Shift 2 Set
-                sb.Append((char)(c - 58 + 15));
+                sb.Append((char) (c - 58 + 15));
                 return 2;
             }
             if (c <= '_')
             {
                 sb.Append('\u0001'); //Shift 2 Set
-                sb.Append((char)(c - 91 + 22));
+                sb.Append((char) (c - 91 + 22));
                 return 2;
             }
             if (c <= '\u007f')
             {
                 sb.Append('\u0002'); //Shift 3 Set
-                sb.Append((char)(c - 96));
+                sb.Append((char) (c - 96));
                 return 2;
             }
             sb.Append("\u0001\u001e"); //Shift 2, Upper Shift
             int len = 2;
-            len += encodeChar((char)(c - 128), sb);
+            len += encodeChar((char) (c - 128), sb);
             return len;
         }
 
@@ -208,9 +207,9 @@ namespace ZXing.Datamatrix.Encoder
             char c2 = sb[startPos + 1];
             char c3 = sb[startPos + 2];
             int v = (1600 * c1) + (40 * c2) + c3 + 1;
-            char cw1 = (char)(v / 256);
-            char cw2 = (char)(v % 256);
-            return new String(new char[] { cw1, cw2 });
+            char cw1 = (char) (v / 256);
+            char cw2 = (char) (v % 256);
+            return new String(new char[] {cw1, cw2});
         }
     }
 }
