@@ -96,7 +96,7 @@ namespace ZXing.Multi.QrCode.Internal
         ///         those that have been detected at least CENTER_QUORUM times, and whose module
         ///         size differs from the average among those patterns the least
         /// </returns>
-        private FinderPattern[][] selectMutipleBestPatterns()
+        private FinderPattern[][] selectMultipleBestPatterns()
         {
             List<FinderPattern> possibleCenters = PossibleCenters;
             int size = possibleCenters.Count;
@@ -309,7 +309,7 @@ namespace ZXing.Multi.QrCode.Internal
                     handlePossibleCenter(stateCount, i, maxJ);
                 } // end if foundPatternCross
             } // for i=iSkip-1 ...
-            FinderPattern[][] patternInfo = selectMutipleBestPatterns();
+            FinderPattern[][] patternInfo = selectMultipleBestPatterns();
             if (patternInfo == null)
                 return EMPTY_RESULT_ARRAY;
             List<FinderPatternInfo> result = new List<FinderPatternInfo>();
