@@ -15,7 +15,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 
 using ZXing.Common;
 using ZXing.Common.Detector;
@@ -54,292 +53,294 @@ namespace ZXing.Datamatrix.Internal
             ResultPoint[] cornerPoints = rectangleDetector.detect();
             if (cornerPoints == null)
                 return null;
-            var pointA = cornerPoints[0];
-            var pointB = cornerPoints[1];
-            var pointC = cornerPoints[2];
-            var pointD = cornerPoints[3];
 
-            // Point A and D are across the diagonal from one another,
-            // as are B and C. Figure out which are the solid black lines
-            // by counting transitions
-            var transitions = new List<ResultPointsAndTransitions>(4);
-            transitions.Add(transitionsBetween(pointA, pointB));
-            transitions.Add(transitionsBetween(pointA, pointC));
-            transitions.Add(transitionsBetween(pointB, pointD));
-            transitions.Add(transitionsBetween(pointC, pointD));
-            transitions.Sort(new ResultPointsAndTransitionsComparator());
-
-            // Sort by number of transitions. First two will be the two solid sides; last two
-            // will be the two alternating black/white sides
-            var lSideOne = transitions[0];
-            var lSideTwo = transitions[1];
-
-            // Figure out which point is their intersection by tallying up the number of times we see the
-            // endpoints in the four endpoints. One will show up twice.
-            var pointCount = new Dictionary<ResultPoint, int>();
-            increment(pointCount, lSideOne.From);
-            increment(pointCount, lSideOne.To);
-            increment(pointCount, lSideTwo.From);
-            increment(pointCount, lSideTwo.To);
-
-            ResultPoint maybeTopLeft = null;
-            ResultPoint bottomLeft = null;
-            ResultPoint maybeBottomRight = null;
-            foreach (var entry in pointCount)
-            {
-                ResultPoint point = entry.Key;
-                int value = entry.Value;
-                if (value == 2)
-                {
-                    bottomLeft = point; // this is definitely the bottom left, then -- end of two L sides
-                }
-                else
-                {
-                    // Otherwise it's either top left or bottom right -- just assign the two arbitrarily now
-                    if (maybeTopLeft == null)
-                    {
-                        maybeTopLeft = point;
-                    }
-                    else
-                    {
-                        maybeBottomRight = point;
-                    }
-                }
-            }
-
-            if (maybeTopLeft == null || bottomLeft == null || maybeBottomRight == null)
+            ResultPoint[] points = detectSolid1(cornerPoints);
+            points = detectSolid2(points);
+            points[3] = correctTopRight(points);
+            if (points[3] == null)
             {
                 return null;
             }
+            points = shiftToModuleCenter(points);
 
-            // Bottom left is correct but top left and bottom right might be switched
-            ResultPoint[] corners = { maybeTopLeft, bottomLeft, maybeBottomRight };
-            // Use the dot product trick to sort them out
-            ResultPoint.orderBestPatterns(corners);
+            ResultPoint topLeft = points[0];
+            ResultPoint bottomLeft = points[1];
+            ResultPoint bottomRight = points[2];
+            ResultPoint topRight = points[3];
 
-            // Now we know which is which:
-            ResultPoint bottomRight = corners[0];
-            bottomLeft = corners[1];
-            ResultPoint topLeft = corners[2];
-
-            // Which point didn't we find in relation to the "L" sides? that's the top right corner
-            ResultPoint topRight;
-            if (!pointCount.ContainsKey(pointA))
-            {
-                topRight = pointA;
-            }
-            else if (!pointCount.ContainsKey(pointB))
-            {
-                topRight = pointB;
-            }
-            else if (!pointCount.ContainsKey(pointC))
-            {
-                topRight = pointC;
-            }
-            else
-            {
-                topRight = pointD;
-            }
-
-            // Next determine the dimension by tracing along the top or right side and counting black/white
-            // transitions. Since we start inside a black module, we should see a number of transitions
-            // equal to 1 less than the code dimension. Well, actually 2 less, because we are going to
-            // end on a black module:
-
-            // The top right point is actually the corner of a module, which is one of the two black modules
-            // adjacent to the white module at the top right. Tracing to that corner from either the top left
-            // or bottom right should work here.
-
-            int dimensionTop = transitionsBetween(topLeft, topRight).Transitions;
-            int dimensionRight = transitionsBetween(bottomRight, topRight).Transitions;
-
+            int dimensionTop = transitionsBetween(topLeft, topRight) + 1;
+            int dimensionRight = transitionsBetween(bottomRight, topRight) + 1;
             if ((dimensionTop & 0x01) == 1)
             {
-                // it can't be odd, so, round... up?
-                dimensionTop++;
+                dimensionTop += 1;
             }
-            dimensionTop += 2;
-
             if ((dimensionRight & 0x01) == 1)
             {
-                // it can't be odd, so, round... up?
-                dimensionRight++;
+                dimensionRight += 1;
             }
-            dimensionRight += 2;
 
-            BitMatrix bits;
-            ResultPoint correctedTopRight;
-
-            // Rectangular symbols are 6x16, 6x28, 10x24, 10x32, 14x32, or 14x44. If one dimension is more
-            // than twice the other, it's certainly rectangular, but to cut a bit more slack we accept it as
-            // rectangular if the bigger side is at least 7/4 times the other:
-            if (4 * dimensionTop >= 7 * dimensionRight || 4 * dimensionRight >= 7 * dimensionTop)
+            if (4 * dimensionTop < 7 * dimensionRight && 4 * dimensionRight < 7 * dimensionTop)
             {
-                // The matrix is rectangular
+                // The matrix is square
+                dimensionTop = dimensionRight = Math.Max(dimensionTop, dimensionRight);
+            }
 
-                correctedTopRight =
-                    correctTopRightRectangular(bottomLeft, bottomRight, topLeft, topRight, dimensionTop, dimensionRight);
-                if (correctedTopRight == null)
-                {
-                    correctedTopRight = topRight;
-                }
+            BitMatrix bits = sampleGrid(image,
+                topLeft,
+                bottomLeft,
+                bottomRight,
+                topRight,
+                dimensionTop,
+                dimensionRight);
 
-                dimensionTop = transitionsBetween(topLeft, correctedTopRight).Transitions;
-                dimensionRight = transitionsBetween(bottomRight, correctedTopRight).Transitions;
+            return new DetectorResult(bits, new ResultPoint[] { topLeft, bottomLeft, bottomRight, topRight });
+        }
 
-                if ((dimensionTop & 0x01) == 1)
-                {
-                    // it can't be odd, so, round... up?
-                    dimensionTop++;
-                }
+        private ResultPoint shiftPoint(ResultPoint point, ResultPoint to, int div)
+        {
+            float x = (to.X - point.X) / (div + 1);
+            float y = (to.Y - point.Y) / (div + 1);
+            return new ResultPoint(point.X + x, point.Y + y);
+        }
 
-                if ((dimensionRight & 0x01) == 1)
-                {
-                    // it can't be odd, so, round... up?
-                    dimensionRight++;
-                }
+        private ResultPoint moveAway(ResultPoint point, float fromX, float fromY)
+        {
+            float x = point.X;
+            float y = point.Y;
 
-                bits = sampleGrid(image, topLeft, bottomLeft, bottomRight, correctedTopRight, dimensionTop, dimensionRight);
+            if (x < fromX)
+            {
+                x -= 1;
             }
             else
             {
-                // The matrix is square
-
-                int dimension = Math.Min(dimensionRight, dimensionTop);
-                // correct top right point to match the white module
-                correctedTopRight = correctTopRight(bottomLeft, bottomRight, topLeft, topRight, dimension);
-                if (correctedTopRight == null)
-                {
-                    correctedTopRight = topRight;
-                }
-
-                // Redetermine the dimension using the corrected top right point
-                int dimensionCorrected = Math.Max(transitionsBetween(topLeft, correctedTopRight).Transitions,
-                                          transitionsBetween(bottomRight, correctedTopRight).Transitions);
-                dimensionCorrected++;
-                if ((dimensionCorrected & 0x01) == 1)
-                {
-                    dimensionCorrected++;
-                }
-
-                bits = sampleGrid(image,
-                                  topLeft,
-                                  bottomLeft,
-                                  bottomRight,
-                                  correctedTopRight,
-                                  dimensionCorrected,
-                                  dimensionCorrected);
+                x += 1;
             }
-            if (bits == null)
-                return null;
 
-            return new DetectorResult(bits, new ResultPoint[] { topLeft, bottomLeft, bottomRight, correctedTopRight });
+            if (y < fromY)
+            {
+                y -= 1;
+            }
+            else
+            {
+                y += 1;
+            }
+
+            return new ResultPoint(x, y);
         }
 
         /// <summary>
-        /// Calculates the position of the white top right module using the output of the rectangle detector
-        /// for a rectangular matrix
+        /// Detect a solid side which has minimum transition.
         /// </summary>
-        private ResultPoint correctTopRightRectangular(ResultPoint bottomLeft,
-                                                       ResultPoint bottomRight,
-                                                       ResultPoint topLeft,
-                                                       ResultPoint topRight,
-                                                       int dimensionTop,
-                                                       int dimensionRight)
+        /// <param name="cornerPoints"></param>
+        /// <returns></returns>
+        private ResultPoint[] detectSolid1(ResultPoint[] cornerPoints)
         {
+            // 0  2
+            // 1  3
+            ResultPoint pointA = cornerPoints[0];
+            ResultPoint pointB = cornerPoints[1];
+            ResultPoint pointC = cornerPoints[3];
+            ResultPoint pointD = cornerPoints[2];
 
-            float corr = distance(bottomLeft, bottomRight) / (float)dimensionTop;
-            int norm = distance(topLeft, topRight);
-            if (norm == 0)
-                return null;
-            float cos = (topRight.X - topLeft.X) / norm;
-            float sin = (topRight.Y - topLeft.Y) / norm;
+            int trAB = transitionsBetween(pointA, pointB);
+            int trBC = transitionsBetween(pointB, pointC);
+            int trCD = transitionsBetween(pointC, pointD);
+            int trDA = transitionsBetween(pointD, pointA);
 
-            ResultPoint c1 = new ResultPoint(topRight.X + corr * cos, topRight.Y + corr * sin);
-
-            corr = distance(bottomLeft, topLeft) / (float)dimensionRight;
-            norm = distance(bottomRight, topRight);
-            if (norm == 0)
-                return null;
-            cos = (topRight.X - bottomRight.X) / norm;
-            sin = (topRight.Y - bottomRight.Y) / norm;
-
-            ResultPoint c2 = new ResultPoint(topRight.X + corr * cos, topRight.Y + corr * sin);
-
-            if (!isValid(c1))
+            // 0..3
+            // :  :
+            // 1--2
+            int min = trAB;
+            ResultPoint[] points = { pointD, pointA, pointB, pointC };
+            if (min > trBC)
             {
-                if (isValid(c2))
-                {
-                    return c2;
-                }
-                return null;
+                min = trBC;
+                points[0] = pointA;
+                points[1] = pointB;
+                points[2] = pointC;
+                points[3] = pointD;
             }
-            if (!isValid(c2))
+            if (min > trCD)
             {
-                return c1;
+                min = trCD;
+                points[0] = pointB;
+                points[1] = pointC;
+                points[2] = pointD;
+                points[3] = pointA;
             }
-
-            int l1 = Math.Abs(dimensionTop - transitionsBetween(topLeft, c1).Transitions) +
-                       Math.Abs(dimensionRight - transitionsBetween(bottomRight, c1).Transitions);
-            int l2 = Math.Abs(dimensionTop - transitionsBetween(topLeft, c2).Transitions) +
-              Math.Abs(dimensionRight - transitionsBetween(bottomRight, c2).Transitions);
-
-            if (l1 <= l2)
+            if (min > trDA)
             {
-                return c1;
+                points[0] = pointC;
+                points[1] = pointD;
+                points[2] = pointA;
+                points[3] = pointB;
             }
 
-            return c2;
+            return points;
         }
 
         /// <summary>
-        /// Calculates the position of the white top right module using the output of the rectangle detector
-        /// for a square matrix
+        /// Detect a second solid side next to first solid side.
         /// </summary>
-        private ResultPoint correctTopRight(ResultPoint bottomLeft,
-                                            ResultPoint bottomRight,
-                                            ResultPoint topLeft,
-                                            ResultPoint topRight,
-                                            int dimension)
+        /// <param name="points"></param>
+        /// <returns></returns>
+        private ResultPoint[] detectSolid2(ResultPoint[] points)
         {
+            // A..D
+            // :  :
+            // B--C
+            ResultPoint pointA = points[0];
+            ResultPoint pointB = points[1];
+            ResultPoint pointC = points[2];
+            ResultPoint pointD = points[3];
 
-            float corr = distance(bottomLeft, bottomRight) / (float)dimension;
-            int norm = distance(topLeft, topRight);
-            if (norm == 0)
-                return null;
-            float cos = (topRight.X - topLeft.X) / norm;
-            float sin = (topRight.Y - topLeft.Y) / norm;
+            // Transition detection on the edge is not stable.
+            // To safely detect, shift the points to the module center.
+            int tr = transitionsBetween(pointA, pointD);
+            ResultPoint pointBs = shiftPoint(pointB, pointC, (tr + 1) * 4);
+            ResultPoint pointCs = shiftPoint(pointC, pointB, (tr + 1) * 4);
+            int trBA = transitionsBetween(pointBs, pointA);
+            int trCD = transitionsBetween(pointCs, pointD);
 
-            ResultPoint c1 = new ResultPoint(topRight.X + corr * cos, topRight.Y + corr * sin);
-
-            corr = distance(bottomLeft, topLeft) / (float)dimension;
-            norm = distance(bottomRight, topRight);
-            if (norm == 0)
-                return null;
-            cos = (topRight.X - bottomRight.X) / norm;
-            sin = (topRight.Y - bottomRight.Y) / norm;
-
-            ResultPoint c2 = new ResultPoint(topRight.X + corr * cos, topRight.Y + corr * sin);
-
-            if (!isValid(c1))
+            // 0..3
+            // |  :
+            // 1--2
+            if (trBA < trCD)
             {
-                if (isValid(c2))
+                // solid sides: A-B-C
+                points[0] = pointA;
+                points[1] = pointB;
+                points[2] = pointC;
+                points[3] = pointD;
+            }
+            else
+            {
+                // solid sides: B-C-D
+                points[0] = pointB;
+                points[1] = pointC;
+                points[2] = pointD;
+                points[3] = pointA;
+            }
+
+            return points;
+        }
+
+        /// <summary>
+        /// Calculates the corner position of the white top right module.
+        /// </summary>
+        /// <param name="points"></param>
+        /// <returns></returns>
+        private ResultPoint correctTopRight(ResultPoint[] points)
+        {
+            // A..D
+            // |  :
+            // B--C
+            ResultPoint pointA = points[0];
+            ResultPoint pointB = points[1];
+            ResultPoint pointC = points[2];
+            ResultPoint pointD = points[3];
+
+            // shift points for safe transition detection.
+            int trTop = transitionsBetween(pointA, pointD);
+            int trRight = transitionsBetween(pointB, pointD);
+            ResultPoint pointAs = shiftPoint(pointA, pointB, (trRight + 1) * 4);
+            ResultPoint pointCs = shiftPoint(pointC, pointB, (trTop + 1) * 4);
+
+            trTop = transitionsBetween(pointAs, pointD);
+            trRight = transitionsBetween(pointCs, pointD);
+
+            ResultPoint candidate1 = new ResultPoint(
+                pointD.X + (pointC.X - pointB.X) / (trTop + 1),
+                pointD.Y + (pointC.Y - pointB.Y) / (trTop + 1));
+            ResultPoint candidate2 = new ResultPoint(
+                pointD.X + (pointA.X - pointB.X) / (trRight + 1),
+                pointD.Y + (pointA.Y - pointB.Y) / (trRight + 1));
+
+            if (!isValid(candidate1))
+            {
+                if (isValid(candidate2))
                 {
-                    return c2;
+                    return candidate2;
                 }
                 return null;
             }
-            if (!isValid(c2))
+            if (!isValid(candidate2))
             {
-                return c1;
+                return candidate1;
             }
 
-            int l1 = Math.Abs(transitionsBetween(topLeft, c1).Transitions -
-                              transitionsBetween(bottomRight, c1).Transitions);
-            int l2 = Math.Abs(transitionsBetween(topLeft, c2).Transitions -
-                            transitionsBetween(bottomRight, c2).Transitions);
+            int sumc1 = transitionsBetween(pointAs, candidate1) + transitionsBetween(pointCs, candidate1);
+            int sumc2 = transitionsBetween(pointAs, candidate2) + transitionsBetween(pointCs, candidate2);
 
-            return l1 <= l2 ? c1 : c2;
+            if (sumc1 > sumc2)
+            {
+                return candidate1;
+            }
+            else
+            {
+                return candidate2;
+            }
+        }
+
+        /// <summary>
+        /// Shift the edge points to the module center.
+        /// </summary>
+        /// <param name="points"></param>
+        /// <returns></returns>
+        private ResultPoint[] shiftToModuleCenter(ResultPoint[] points)
+        {
+            // A..D
+            // |  :
+            // B--C
+            ResultPoint pointA = points[0];
+            ResultPoint pointB = points[1];
+            ResultPoint pointC = points[2];
+            ResultPoint pointD = points[3];
+
+            // calculate pseudo dimensions
+            int dimH = transitionsBetween(pointA, pointD) + 1;
+            int dimV = transitionsBetween(pointC, pointD) + 1;
+
+            // shift points for safe dimension detection
+            ResultPoint pointAs = shiftPoint(pointA, pointB, dimV * 4);
+            ResultPoint pointCs = shiftPoint(pointC, pointB, dimH * 4);
+
+            //  calculate more precise dimensions
+            dimH = transitionsBetween(pointAs, pointD) + 1;
+            dimV = transitionsBetween(pointCs, pointD) + 1;
+            if ((dimH & 0x01) == 1)
+            {
+                dimH += 1;
+            }
+            if ((dimV & 0x01) == 1)
+            {
+                dimV += 1;
+            }
+
+            // WhiteRectangleDetector returns points inside of the rectangle.
+            // I want points on the edges.
+            float centerX = (pointA.X + pointB.X + pointC.X + pointD.X) / 4;
+            float centerY = (pointA.Y + pointB.Y + pointC.Y + pointD.Y) / 4;
+            pointA = moveAway(pointA, centerX, centerY);
+            pointB = moveAway(pointB, centerX, centerY);
+            pointC = moveAway(pointC, centerX, centerY);
+            pointD = moveAway(pointD, centerX, centerY);
+
+            ResultPoint pointBs;
+            ResultPoint pointDs;
+
+            // shift points to the center of each modules
+            pointAs = shiftPoint(pointA, pointB, dimV * 4);
+            pointAs = shiftPoint(pointAs, pointD, dimH * 4);
+            pointBs = shiftPoint(pointB, pointA, dimV * 4);
+            pointBs = shiftPoint(pointBs, pointC, dimH * 4);
+            pointCs = shiftPoint(pointC, pointD, dimV * 4);
+            pointCs = shiftPoint(pointCs, pointB, dimH * 4);
+            pointDs = shiftPoint(pointD, pointC, dimV * 4);
+            pointDs = shiftPoint(pointDs, pointA, dimH * 4);
+
+            return new ResultPoint[] { pointAs, pointBs, pointCs, pointDs };
         }
 
         private bool isValid(ResultPoint p)
@@ -347,64 +348,45 @@ namespace ZXing.Datamatrix.Internal
             return p.X >= 0 && p.X < image.Width && p.Y > 0 && p.Y < image.Height;
         }
 
-        // L2 distance
-        private static int distance(ResultPoint a, ResultPoint b)
-        {
-            return MathUtils.round(ResultPoint.distance(a, b));
-        }
-
-        /// <summary>
-        /// Increments the Integer associated with a key by one.
-        /// </summary>
-        private static void increment(IDictionary<ResultPoint, int> table, ResultPoint key)
-        {
-            if (table.ContainsKey(key))
-            {
-                int value = table[key];
-                table[key] = value + 1;
-            }
-            else
-            {
-                table[key] = 1;
-            }
-        }
-
         private static BitMatrix sampleGrid(BitMatrix image,
-                                            ResultPoint topLeft,
-                                            ResultPoint bottomLeft,
-                                            ResultPoint bottomRight,
-                                            ResultPoint topRight,
-                                            int dimensionX,
-                                            int dimensionY)
+            ResultPoint topLeft,
+            ResultPoint bottomLeft,
+            ResultPoint bottomRight,
+            ResultPoint topRight,
+            int dimensionX,
+            int dimensionY)
         {
 
             GridSampler sampler = GridSampler.Instance;
 
             return sampler.sampleGrid(image,
-                                      dimensionX,
-                                      dimensionY,
-                                      0.5f,
-                                      0.5f,
-                                      dimensionX - 0.5f,
-                                      0.5f,
-                                      dimensionX - 0.5f,
-                                      dimensionY - 0.5f,
-                                      0.5f,
-                                      dimensionY - 0.5f,
-                                      topLeft.X,
-                                      topLeft.Y,
-                                      topRight.X,
-                                      topRight.Y,
-                                      bottomRight.X,
-                                      bottomRight.Y,
-                                      bottomLeft.X,
-                                      bottomLeft.Y);
+                dimensionX,
+                dimensionY,
+                0.5f,
+                0.5f,
+                dimensionX - 0.5f,
+                0.5f,
+                dimensionX - 0.5f,
+                dimensionY - 0.5f,
+                0.5f,
+                dimensionY - 0.5f,
+                topLeft.X,
+                topLeft.Y,
+                topRight.X,
+                topRight.Y,
+                bottomRight.X,
+                bottomRight.Y,
+                bottomLeft.X,
+                bottomLeft.Y);
         }
 
         /// <summary>
         /// Counts the number of black/white transitions between two points, using something like Bresenham's algorithm.
         /// </summary>
-        private ResultPointsAndTransitions transitionsBetween(ResultPoint from, ResultPoint to)
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        private int transitionsBetween(ResultPoint from, ResultPoint to)
         {
             // See QR Code Detector, sizeOfBlackWhiteBlackRun()
             int fromX = (int)from.X;
@@ -424,7 +406,7 @@ namespace ZXing.Datamatrix.Internal
 
             int dx = Math.Abs(toX - fromX);
             int dy = Math.Abs(toY - fromY);
-            int error = -dx >> 1;
+            int error = -dx / 2;
             int ystep = fromY < toY ? 1 : -1;
             int xstep = fromX < toX ? 1 : -1;
             int transitions = 0;
@@ -448,40 +430,7 @@ namespace ZXing.Datamatrix.Internal
                     error -= dx;
                 }
             }
-            return new ResultPointsAndTransitions(from, to, transitions);
-        }
-
-        /// <summary>
-        /// Simply encapsulates two points and a number of transitions between them.
-        /// </summary>
-        private sealed class ResultPointsAndTransitions
-        {
-            public ResultPoint From { get; private set; }
-            public ResultPoint To { get; private set; }
-            public int Transitions { get; private set; }
-
-            public ResultPointsAndTransitions(ResultPoint from, ResultPoint to, int transitions)
-            {
-                From = from;
-                To = to;
-                Transitions = transitions;
-            }
-
-            override public String ToString()
-            {
-                return From + "/" + To + '/' + Transitions;
-            }
-        }
-
-        /// <summary>
-        /// Orders ResultPointsAndTransitions by number of transitions, ascending.
-        /// </summary>
-        private sealed class ResultPointsAndTransitionsComparator : IComparer<ResultPointsAndTransitions>
-        {
-            public int Compare(ResultPointsAndTransitions o1, ResultPointsAndTransitions o2)
-            {
-                return o1.Transitions - o2.Transitions;
-            }
+            return transitions;
         }
     }
 }
