@@ -63,7 +63,7 @@ namespace ZXing.OneD
                 case 8:
                     try
                     {
-                        if (!UPCEANReader.checkStandardUPCEANChecksum(contents))
+                        if (!UPCEANReader.checkStandardUPCEANChecksum(UPCEReader.convertUPCEtoUPCA(contents)))
                         {
                             throw new ArgumentException("Contents do not pass checksum");
                         }
