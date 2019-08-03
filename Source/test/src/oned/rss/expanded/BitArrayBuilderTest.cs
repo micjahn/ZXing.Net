@@ -89,7 +89,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
                rightChar = null;
             }
 
-            ExpandedPair expandedPair = new ExpandedPair(leftChar, rightChar, null, true);
+            ExpandedPair expandedPair = new ExpandedPair(leftChar, rightChar, null);
             pairs.Add(expandedPair);
          }
 

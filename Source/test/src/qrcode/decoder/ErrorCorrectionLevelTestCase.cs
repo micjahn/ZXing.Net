@@ -20,28 +20,27 @@ using NUnit.Framework;
 
 namespace ZXing.QrCode.Internal.Test
 {
-   /// <summary>
-   /// <author>Sean Owen</author>
-   /// </summary>
-   [TestFixture]
-   public sealed class ErrorCorrectionLevelTestCase
-   {
-      [Test]
-      public void testForBits()
-      {
-         Assert.AreEqual(ErrorCorrectionLevel.M, ErrorCorrectionLevel.forBits(0));
-         Assert.AreEqual(ErrorCorrectionLevel.L, ErrorCorrectionLevel.forBits(1));
-         Assert.AreEqual(ErrorCorrectionLevel.H, ErrorCorrectionLevel.forBits(2));
-         Assert.AreEqual(ErrorCorrectionLevel.Q, ErrorCorrectionLevel.forBits(3));
-         try
-         {
+    /// <summary>
+    /// <author>Sean Owen</author>
+    /// </summary>
+    [TestFixture]
+    public sealed class ErrorCorrectionLevelTestCase
+    {
+        [Test]
+        public void testForBits()
+        {
+            Assert.AreEqual(ErrorCorrectionLevel.M, ErrorCorrectionLevel.forBits(0));
+            Assert.AreEqual(ErrorCorrectionLevel.L, ErrorCorrectionLevel.forBits(1));
+            Assert.AreEqual(ErrorCorrectionLevel.H, ErrorCorrectionLevel.forBits(2));
+            Assert.AreEqual(ErrorCorrectionLevel.Q, ErrorCorrectionLevel.forBits(3));
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void testBadECLevel()
+        {
             ErrorCorrectionLevel.forBits(4);
             throw new AssertionException("Should have thrown an exception");
-         }
-         catch (ArgumentException )
-         {
-            // good
-         }
-      }
-   }
+        }
+    }
 }

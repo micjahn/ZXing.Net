@@ -31,19 +31,21 @@ namespace ZXing.QrCode.Internal
     public class FinderPatternFinder
     {
         private const int CENTER_QUORUM = 2;
-        private static EstimatedModuleComparator moduleComparator = new EstimatedModuleComparator();
+
         /// <summary>
         /// 1 pixel/module times 3 modules/center
         /// </summary>
         protected internal const int MIN_SKIP = 3;
+
         /// <summary>
         /// support up to version 20 for mobile clients
         /// </summary>
         protected internal const int MAX_MODULES = 97;
+
         private const int INTEGER_MATH_SHIFT = 8;
 
         private readonly BitMatrix image;
-        private List<FinderPattern> possibleCenters;
+        private readonly List<FinderPattern> possibleCenters;
         private bool hasSkipped;
         private readonly int[] crossCheckStateCount;
         private readonly ResultPointCallback resultPointCallback;
@@ -53,7 +55,7 @@ namespace ZXing.QrCode.Internal
         /// </summary>
         /// <param name="image">image to search</param>
         public FinderPatternFinder(BitMatrix image)
-           : this(image, null)
+            : this(image, null)
         {
         }
 
@@ -75,10 +77,7 @@ namespace ZXing.QrCode.Internal
         /// </summary>
         protected internal virtual BitMatrix Image
         {
-            get
-            {
-                return image;
-            }
+            get { return image; }
         }
 
         /// <summary>
@@ -86,10 +85,7 @@ namespace ZXing.QrCode.Internal
         /// </summary>
         protected internal virtual List<FinderPattern> PossibleCenters
         {
-            get
-            {
-                return possibleCenters;
-            }
+            get { return possibleCenters; }
         }
 
         internal virtual FinderPatternInfo find(IDictionary<DecodeHintType, object> hints)
@@ -258,10 +254,10 @@ namespace ZXing.QrCode.Internal
             int maxVariance = moduleSize / 2;
             // Allow less than 50% variance from 1-1-3-1-1 proportions
             return Math.Abs(moduleSize - (stateCount[0] << INTEGER_MATH_SHIFT)) < maxVariance &&
-                Math.Abs(moduleSize - (stateCount[1] << INTEGER_MATH_SHIFT)) < maxVariance &&
-                Math.Abs(3 * moduleSize - (stateCount[2] << INTEGER_MATH_SHIFT)) < 3 * maxVariance &&
-                Math.Abs(moduleSize - (stateCount[3] << INTEGER_MATH_SHIFT)) < maxVariance &&
-                Math.Abs(moduleSize - (stateCount[4] << INTEGER_MATH_SHIFT)) < maxVariance;
+                   Math.Abs(moduleSize - (stateCount[1] << INTEGER_MATH_SHIFT)) < maxVariance &&
+                   Math.Abs(3 * moduleSize - (stateCount[2] << INTEGER_MATH_SHIFT)) < 3 * maxVariance &&
+                   Math.Abs(moduleSize - (stateCount[3] << INTEGER_MATH_SHIFT)) < maxVariance &&
+                   Math.Abs(moduleSize - (stateCount[4] << INTEGER_MATH_SHIFT)) < maxVariance;
         }
 
         /// <summary>
@@ -289,11 +285,11 @@ namespace ZXing.QrCode.Internal
             float maxVariance = moduleSize / 1.333f;
             // Allow less than 75% variance from 1-1-3-1-1 proportions
             return
-               Math.Abs(moduleSize - stateCount[0]) < maxVariance &&
-               Math.Abs(moduleSize - stateCount[1]) < maxVariance &&
-               Math.Abs(3.0f * moduleSize - stateCount[2]) < 3 * maxVariance &&
-               Math.Abs(moduleSize - stateCount[3]) < maxVariance &&
-               Math.Abs(moduleSize - stateCount[4]) < maxVariance;
+                Math.Abs(moduleSize - stateCount[0]) < maxVariance &&
+                Math.Abs(moduleSize - stateCount[1]) < maxVariance &&
+                Math.Abs(3.0f * moduleSize - stateCount[2]) < 3 * maxVariance &&
+                Math.Abs(moduleSize - stateCount[3]) < maxVariance &&
+                Math.Abs(moduleSize - stateCount[4]) < maxVariance;
         }
 
         private int[] CrossCheckStateCount
@@ -304,6 +300,7 @@ namespace ZXing.QrCode.Internal
                 return crossCheckStateCount;
             }
         }
+
         protected void clearCounts(int[] counts)
         {
             for (int x = 0; x < counts.Length; x++)
@@ -603,16 +600,16 @@ namespace ZXing.QrCode.Internal
         protected bool handlePossibleCenter(int[] stateCount, int i, int j)
         {
             int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] +
-                stateCount[4];
+                                  stateCount[4];
             float? centerJ = centerFromEnd(stateCount, j);
             if (centerJ == null)
                 return false;
-            float? centerI = crossCheckVertical(i, (int)centerJ.Value, stateCount[2], stateCountTotal);
+            float? centerI = crossCheckVertical(i, (int) centerJ.Value, stateCount[2], stateCountTotal);
             if (centerI != null)
             {
                 // Re-cross check
-                centerJ = crossCheckHorizontal((int)centerJ.Value, (int)centerI.Value, stateCount[2], stateCountTotal);
-                if (centerJ != null && crossCheckDiagonal((int)centerI, (int)centerJ))
+                centerJ = crossCheckHorizontal((int) centerJ.Value, (int) centerI.Value, stateCount[2], stateCountTotal);
+                if (centerJ != null && crossCheckDiagonal((int) centerI, (int) centerJ))
                 {
                     float estimatedModuleSize = stateCountTotal / 7.0f;
                     bool found = false;
@@ -676,7 +673,7 @@ namespace ZXing.QrCode.Internal
                         // This is the case where you find top left last.
                         hasSkipped = true;
                         //UPGRADE_WARNING: Data types in Visual C# might be different.  Verify the accuracy of narrowing conversions. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1042'"
-                        return (int)(Math.Abs(firstConfirmedCenter.X - center.X) - Math.Abs(firstConfirmedCenter.Y - center.Y)) / 2;
+                        return (int) (Math.Abs(firstConfirmedCenter.X - center.X) - Math.Abs(firstConfirmedCenter.Y - center.Y)) / 2;
                     }
                 }
             }
@@ -718,24 +715,16 @@ namespace ZXing.QrCode.Internal
             return totalDeviation <= 0.05f * totalModuleSize;
         }
 
-        /// <summary>
-        /// Get square of distance between a and b.
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        private static double squaredDistance(FinderPattern a, FinderPattern b)
-        {
-            double x = a.X - b.X;
-            double y = a.Y - b.Y;
-            return x * x + y * y;
-        }
 
-        /// <returns> the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
-        /// those have similar module size and form a shape closer to a isosceles right triangle.
-        /// </returns>
+        /**
+         * @return the 3 best {@link FinderPattern}s from our list of candidates. The "best" are
+         *         those that have been detected at least {@link #CENTER_QUORUM} times, and whose module
+         *         size differs from the average among those patterns the least
+         * @throws NotFoundException if 3 such finder patterns do not exist
+         */
         private FinderPattern[] selectBestPatterns()
         {
+
             int startSize = possibleCenters.Count;
             if (startSize < 3)
             {
@@ -743,74 +732,115 @@ namespace ZXing.QrCode.Internal
                 return null;
             }
 
-            possibleCenters.Sort(moduleComparator);
-
-            double distortion = Double.MaxValue;
-            double[] squares = new double[3];
-            FinderPattern[] bestPatterns = new FinderPattern[3];
-
-            for (int i = 0; i < possibleCenters.Count - 2; i++)
+            // Filter outlier possibilities whose module size is too different
+            if (startSize > 3)
             {
-                FinderPattern fpi = possibleCenters[i];
-                float minModuleSize = fpi.EstimatedModuleSize;
-
-                for (int j = i + 1; j < possibleCenters.Count - 1; j++)
+                // But we can only afford to do so if we have at least 4 possibilities to choose from
+                double totalModuleSize = 0.0;
+                double square = 0.0;
+                foreach (FinderPattern center in possibleCenters)
                 {
-                    FinderPattern fpj = possibleCenters[j];
-                    double squares0 = squaredDistance(fpi, fpj);
+                    float size = center.EstimatedModuleSize;
+                    totalModuleSize += size;
+                    square += (double) size * size;
+                }
+                double average = totalModuleSize / startSize;
+                float stdDev = (float) Math.Sqrt(square / startSize - average * average);
 
-                    for (int k = j + 1; k < possibleCenters.Count; k++)
+                possibleCenters.Sort(new FurthestFromAverageComparator((float) average));
+
+                float limit = Math.Max(0.2f * (float) average, stdDev);
+
+                for (int i = 0; i < possibleCenters.Count && possibleCenters.Count > 3; i++)
+                {
+                    FinderPattern pattern = possibleCenters[i];
+                    if (Math.Abs(pattern.EstimatedModuleSize - average) > limit)
                     {
-                        FinderPattern fpk = possibleCenters[k];
-                        float maxModuleSize = fpk.EstimatedModuleSize;
-                        if (maxModuleSize > minModuleSize * 1.4f)
-                        {
-                            // module size is not similar
-                            continue;
-                        }
-
-                        squares[0] = squares0;
-                        squares[1] = squaredDistance(fpj, fpk);
-                        squares[2] = squaredDistance(fpi, fpk);
-                        Array.Sort(squares);
-
-                        // a^2 + b^2 = c^2 (Pythagorean theorem), and a = b (isosceles triangle).
-                        // Since any right triangle satisfies the formula c^2 - b^2 - a^2 = 0,
-                        // we need to check both two equal sides separately.
-                        // The value of |c^2 - 2 * b^2| + |c^2 - 2 * a^2| increases as dissimilarity
-                        // from isosceles right triangle.
-                        double d = Math.Abs(squares[2] - 2 * squares[1]) + Math.Abs(squares[2] - 2 * squares[0]);
-                        if (d < distortion)
-                        {
-                            distortion = d;
-                            bestPatterns[0] = fpi;
-                            bestPatterns[1] = fpj;
-                            bestPatterns[2] = fpk;
-                        }
+                        possibleCenters.RemoveAt(i);
+                        i--;
                     }
                 }
             }
 
-            if (distortion == Double.MaxValue)
+            if (possibleCenters.Count > 3)
             {
-                return null;
+                // Throw away all but those first size candidate points we found.
+
+                float totalModuleSize = 0.0f;
+                foreach (FinderPattern possibleCenter in possibleCenters)
+                {
+                    totalModuleSize += possibleCenter.EstimatedModuleSize;
+                }
+
+                float average = totalModuleSize / possibleCenters.Count;
+
+                possibleCenters.Sort(new CenterComparator(average));
+
+                possibleCenters.RemoveRange(3, possibleCenters.Count - 3);
             }
 
-            return bestPatterns;
+            return new FinderPattern[]
+            {
+                possibleCenters[0],
+                possibleCenters[1],
+                possibleCenters[2]
+            };
         }
 
-        /// <summary>
-        /// Orders by {@link FinderPatternFinder#getEstimatedModuleSize()}
-        /// </summary>
-        private sealed class EstimatedModuleComparator : IComparer<FinderPattern>
+        /**
+         * <p>Orders by furthest from average</p>
+         */
+        private sealed class FurthestFromAverageComparator : IComparer<FinderPattern>
         {
+            private readonly float average;
+
+            public FurthestFromAverageComparator(float f)
+            {
+                average = f;
+            }
+
             public int Compare(FinderPattern center1, FinderPattern center2)
             {
-                if (center1.EstimatedModuleSize == center2.EstimatedModuleSize)
-                    return 0;
-                if (center1.EstimatedModuleSize < center2.EstimatedModuleSize)
+                var left = Math.Abs(center2.EstimatedModuleSize - average);
+                var right = Math.Abs(center1.EstimatedModuleSize - average);
+                if (left < right)
                     return -1;
-                return 1;
+                if (left > right)
+                    return -1;
+                return 0;
+            }
+        }
+
+        /**
+         * <p>Orders by {@link FinderPattern#getCount()}, descending.</p>
+         */
+        private sealed class CenterComparator : IComparer<FinderPattern>
+        {
+            private readonly float average;
+
+            public CenterComparator(float f)
+            {
+                average = f;
+            }
+
+            public int Compare(FinderPattern center1, FinderPattern center2)
+            {
+                int countCompare = 0;
+                if (center2.Count < center1.Count)
+                    countCompare = -1;
+                if (center2.Count > center1.Count)
+                    countCompare = 1;
+                if (countCompare == 0)
+                {
+                    var left = Math.Abs(center1.EstimatedModuleSize - average);
+                    var right = Math.Abs(center2.EstimatedModuleSize - average);
+                    if (left < right)
+                        return -1;
+                    if (left > right)
+                        return -1;
+                    return 0;
+                }
+                return countCompare;
             }
         }
     }

@@ -506,7 +506,7 @@ namespace ZXing.OneD.RSS.Expanded
 
             DataCharacter rightChar = decodeDataCharacter(row, pattern, isOddPattern, false);
 
-            return new ExpandedPair(leftChar, rightChar, pattern, true);
+            return new ExpandedPair(leftChar, rightChar, pattern);
         }
 
         private bool findNextPair(BitArray row, List<ExpandedPair> previousPairs, int forcedOffset)

@@ -39,14 +39,12 @@ namespace ZXing.OneD.RSS.Expanded
         internal FinderPattern FinderPattern { get; private set; }
 
         internal ExpandedPair(DataCharacter leftChar,
-                     DataCharacter rightChar,
-                     FinderPattern finderPattern,
-                     bool mayBeLast)
+            DataCharacter rightChar,
+            FinderPattern finderPattern)
         {
             LeftChar = leftChar;
             RightChar = rightChar;
             FinderPattern = finderPattern;
-            MayBeLast = mayBeLast;
         }
 
         public bool MustBeLast
@@ -54,20 +52,20 @@ namespace ZXing.OneD.RSS.Expanded
             get { return RightChar == null; }
         }
 
-        override public String ToString()
+        public override String ToString()
         {
             return
                 "[ " + LeftChar + " , " + RightChar + " : " +
                 (FinderPattern == null ? "null" : FinderPattern.Value.ToString()) + " ]";
         }
 
-        override public bool Equals(Object o)
+        public override bool Equals(Object o)
         {
             if (!(o is ExpandedPair))
             {
                 return false;
             }
-            ExpandedPair that = (ExpandedPair)o;
+            ExpandedPair that = (ExpandedPair) o;
             return
                 EqualsOrNull(LeftChar, that.LeftChar) &&
                 EqualsOrNull(RightChar, that.RightChar) &&
@@ -79,7 +77,7 @@ namespace ZXing.OneD.RSS.Expanded
             return o1 == null ? o2 == null : o1.Equals(o2);
         }
 
-        override public int GetHashCode()
+        public override int GetHashCode()
         {
             return hashNotNull(LeftChar) ^ hashNotNull(RightChar) ^ hashNotNull(FinderPattern);
         }
