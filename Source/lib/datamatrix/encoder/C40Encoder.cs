@@ -172,25 +172,25 @@ namespace ZXing.Datamatrix.Encoder
                 sb.Append(c);
                 return 2;
             }
-            if (c >= '!' && c <= '/')
+            if (c <= '/')
             {
                 sb.Append('\u0001'); //Shift 2 Set
                 sb.Append((char)(c - 33));
                 return 2;
             }
-            if (c >= ':' && c <= '@')
+            if (c <= '@')
             {
                 sb.Append('\u0001'); //Shift 2 Set
                 sb.Append((char)(c - 58 + 15));
                 return 2;
             }
-            if (c >= '[' && c <= '_')
+            if (c <= '_')
             {
                 sb.Append('\u0001'); //Shift 2 Set
                 sb.Append((char)(c - 91 + 22));
                 return 2;
             }
-            if (c >= '\u0060' && c <= '\u007f')
+            if (c <= '\u007f')
             {
                 sb.Append('\u0002'); //Shift 3 Set
                 sb.Append((char)(c - 96));
