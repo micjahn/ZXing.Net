@@ -90,7 +90,7 @@ namespace ZXing.Multi.QrCode
             return results.ToArray();
         }
 
-        private List<Result> ProcessStructuredAppend(List<Result> results)
+        internal static List<Result> ProcessStructuredAppend(List<Result> results)
         {
             bool hasSA = false;
             // first, check, if there is at least on SA result in the list
@@ -111,10 +111,13 @@ namespace ZXing.Multi.QrCode
             var saResults = new List<Result>();
             foreach (var result in results)
             {
-                newResults.Add(result);
                 if (result.ResultMetadata.ContainsKey(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE))
                 {
                     saResults.Add(result);
+                }
+                else
+                {
+                    newResults.Add(result);
                 }
             }
             // sort and concatenate the SA list items
@@ -128,7 +131,7 @@ namespace ZXing.Multi.QrCode
                 rawBytesLen += saResult.RawBytes.Length;
                 if (saResult.ResultMetadata.ContainsKey(ResultMetadataType.BYTE_SEGMENTS))
                 {
-                    foreach (var segment in (IEnumerable<byte[]>)saResult.ResultMetadata[ResultMetadataType.BYTE_SEGMENTS])
+                    foreach (var segment in (IEnumerable<byte[]>) saResult.ResultMetadata[ResultMetadataType.BYTE_SEGMENTS])
                     {
                         byteSegmentLength += segment.Length;
                     }
@@ -144,7 +147,7 @@ namespace ZXing.Multi.QrCode
                 newRawBytesIndex += saResult.RawBytes.Length;
                 if (saResult.ResultMetadata.ContainsKey(ResultMetadataType.BYTE_SEGMENTS))
                 {
-                    foreach (var segment in (IEnumerable<byte[]>)saResult.ResultMetadata[ResultMetadataType.BYTE_SEGMENTS])
+                    foreach (var segment in (IEnumerable<byte[]>) saResult.ResultMetadata[ResultMetadataType.BYTE_SEGMENTS])
                     {
                         Array.Copy(segment, 0, newByteSegment, byteSegmentIndex, segment.Length);
                         byteSegmentIndex += segment.Length;
@@ -162,10 +165,10 @@ namespace ZXing.Multi.QrCode
             return newResults;
         }
 
-        private int SaSequenceSort(Result a, Result b)
+        private static int SaSequenceSort(Result a, Result b)
         {
-            var aNumber = (int)(a.ResultMetadata[ResultMetadataType.STRUCTURED_APPEND_SEQUENCE]);
-            var bNumber = (int)(b.ResultMetadata[ResultMetadataType.STRUCTURED_APPEND_SEQUENCE]);
+            var aNumber = (int) (a.ResultMetadata[ResultMetadataType.STRUCTURED_APPEND_SEQUENCE]);
+            var bNumber = (int) (b.ResultMetadata[ResultMetadataType.STRUCTURED_APPEND_SEQUENCE]);
             return aNumber - bNumber;
         }
     }
