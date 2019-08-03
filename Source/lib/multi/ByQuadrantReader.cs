@@ -123,7 +123,10 @@ namespace ZXing.Multi
                 for (int i = 0; i < points.Length; i++)
                 {
                     ResultPoint relative = points[i];
-                    points[i] = new ResultPoint(relative.X + leftOffset, relative.Y + topOffset);
+                    if (relative != null)
+                    {
+                        points[i] = new ResultPoint(relative.X + leftOffset, relative.Y + topOffset);
+                    }
                 }
             }
         }
