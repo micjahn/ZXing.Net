@@ -88,16 +88,7 @@ namespace ZXing.OneD
             }
 
             int[] widths = new int[9];
-            int codeWidth = 24 + 1 + length;
-            for (int i = 0; i < length; i++)
-            {
-                int indexInString = Code39Reader.ALPHABET_STRING.IndexOf(contents[i]);
-                toIntArray(Code39Reader.CHARACTER_ENCODINGS[indexInString], widths);
-                foreach (int width in widths)
-                {
-                    codeWidth += width;
-                }
-            }
+            int codeWidth = 24 + 1 + (13 * length);
             var result = new bool[codeWidth];
             toIntArray(Code39Reader.ASTERISK_ENCODING, widths);
             int pos = appendPattern(result, 0, widths, true);
