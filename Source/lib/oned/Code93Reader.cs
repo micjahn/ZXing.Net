@@ -44,7 +44,7 @@ namespace ZXing.OneD
                                                     0x12E, 0x1D4, 0x1D2, 0x1CA, 0x16E, 0x176, 0x1AE, // - - %
                                                     0x126, 0x1DA, 0x1D6, 0x132, 0x15E, // Control chars? $-*
                                                  };
-        private static readonly int ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
+        internal static readonly int ASTERISK_ENCODING = CHARACTER_ENCODINGS[47];
 
         private readonly StringBuilder decodeRowResult;
         private readonly int[] counters;
