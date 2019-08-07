@@ -127,7 +127,7 @@ namespace ZXing.OpenCV
 			for (int index = 0, luminanceIndex = 0; index < length && luminanceIndex < luminances.Length; luminanceIndex++)
 			{
 				// MemCopy should be faster
-				luminances[luminanceIndex] = rgbRawBytes[index];
+				luminances[luminanceIndex] = rgbRawBytes[index++];
 			}
 		}
 
