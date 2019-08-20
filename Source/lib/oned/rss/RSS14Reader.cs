@@ -199,7 +199,8 @@ namespace ZXing.OneD.RSS
 
             if (resultPointCallback != null)
             {
-                float center = (startEnd[0] + startEnd[1]) / 2.0f;
+                startEnd = pattern.StartEnd;
+                float center = (startEnd[0] + startEnd[1] - 1) / 2.0f;
                 if (right)
                 {
                     // row is actually reversed
@@ -234,7 +235,7 @@ namespace ZXing.OneD.RSS
             }
             else
             {
-                if (!recordPattern(row, pattern.StartEnd[1] + 1, counters))
+                if (!recordPattern(row, pattern.StartEnd[1], counters))
                     return null;
 
                 // reverse it

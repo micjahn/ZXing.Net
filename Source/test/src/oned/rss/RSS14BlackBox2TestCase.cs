@@ -27,7 +27,7 @@ namespace ZXing.OneD.RSS.Test
          : base("test/data/blackbox/rss14-2", new MultiFormatReader(), BarcodeFormat.RSS_14)
       {
          addTest(4, 8, 1, 1, 0.0f);
-         addTest(2, 8, 0, 1, 180.0f);
+         addTest(3, 8, 0, 1, 180.0f);
       }
    }
 }
