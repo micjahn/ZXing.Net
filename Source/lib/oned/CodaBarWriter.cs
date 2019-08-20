@@ -14,20 +14,37 @@
  * limitations under the License.
  */
 
-using System;
-
 namespace ZXing.OneD
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Common;
+
     /// <summary>
     /// This class renders CodaBar as <see cref="bool" />[].
     /// </summary>
     /// <author>dsbnatut@gmail.com (Kazuki Nishiura)</author>
     public sealed class CodaBarWriter : OneDimensionalCodeWriter
     {
-        private static readonly char[] START_END_CHARS = { 'A', 'B', 'C', 'D' };
-        private static readonly char[] ALT_START_END_CHARS = { 'T', 'N', '*', 'E' };
-        private static readonly char[] CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED = { '/', ':', '+', '.' };
+        private static readonly char[] START_END_CHARS = {'A', 'B', 'C', 'D'};
+        private static readonly char[] ALT_START_END_CHARS = {'T', 'N', '*', 'E'};
+        private static readonly char[] CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED = {'/', ':', '+', '.'};
         private static readonly char DEFAULT_GUARD = START_END_CHARS[0];
+
+        public override BitMatrix encode(String contents,
+            BarcodeFormat format,
+            int width,
+            int height,
+            IDictionary<EncodeHintType, object> hints)
+        {
+            if (format != BarcodeFormat.CODABAR)
+            {
+                throw new ArgumentException("Can only encode CODABAR, but got " + format);
+            }
+
+            return base.encode(contents, format, width, height, hints);
+        }
 
         public override bool[] encode(String contents)
         {
