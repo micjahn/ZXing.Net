@@ -150,5 +150,13 @@ namespace ZXing
         /// <see cref="System.String" /> value
         /// </summary>
         GS1_FORMAT,
+
+        /// <summary>
+        ///  Specifies the QR code mask pattern to be used. Allowed values are
+        /// 0..QRCode.NUM_MASK_PATTERNS-1. By default the code will automatically select
+        /// the optimal mask pattern.
+        /// (Type <see cref="System.Int32" />, or <see cref="System.String" /> representation of the integer value).
+        /// </summary>
+        QR_MASK_PATTERN,
     }
 }

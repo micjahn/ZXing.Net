@@ -182,7 +182,19 @@ namespace ZXing.QrCode.Internal
             //  Choose the mask pattern and set to "qrCode".
             var dimension = version.DimensionForVersion;
             var matrix = new ByteMatrix(dimension, dimension);
-            var maskPattern = chooseMaskPattern(finalBits, ecLevel, version, matrix);
+
+            // Enable manual selection of the pattern to be used via hint
+            var maskPattern = -1;
+            if (hints != null && hints.ContainsKey(EncodeHintType.QR_MASK_PATTERN))
+            {
+                var hintMaskPattern = Int32.Parse(hints[EncodeHintType.QR_MASK_PATTERN].ToString());
+                maskPattern = QRCode.isValidMaskPattern(hintMaskPattern) ? hintMaskPattern : -1;
+            }
+
+            if (maskPattern == -1)
+            {
+                maskPattern = chooseMaskPattern(finalBits, ecLevel, version, matrix);
+            }
             qrCode.MaskPattern = maskPattern;
 
             // Build the matrix and set it to "qrCode".
