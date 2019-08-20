@@ -26,24 +26,25 @@ namespace ZXing.OneD.RSS
     /// </summary>
     public sealed class RSS14Reader : AbstractRSSReader
     {
-        private static readonly int[] OUTSIDE_EVEN_TOTAL_SUBSET = { 1, 10, 34, 70, 126 };
-        private static readonly int[] INSIDE_ODD_TOTAL_SUBSET = { 4, 20, 48, 81 };
-        private static readonly int[] OUTSIDE_GSUM = { 0, 161, 961, 2015, 2715 };
-        private static readonly int[] INSIDE_GSUM = { 0, 336, 1036, 1516 };
-        private static readonly int[] OUTSIDE_ODD_WIDEST = { 8, 6, 4, 3, 1 };
-        private static readonly int[] INSIDE_ODD_WIDEST = { 2, 4, 6, 8 };
+        private static readonly int[] OUTSIDE_EVEN_TOTAL_SUBSET = {1, 10, 34, 70, 126};
+        private static readonly int[] INSIDE_ODD_TOTAL_SUBSET = {4, 20, 48, 81};
+        private static readonly int[] OUTSIDE_GSUM = {0, 161, 961, 2015, 2715};
+        private static readonly int[] INSIDE_GSUM = {0, 336, 1036, 1516};
+        private static readonly int[] OUTSIDE_ODD_WIDEST = {8, 6, 4, 3, 1};
+        private static readonly int[] INSIDE_ODD_WIDEST = {2, 4, 6, 8};
 
-        private static readonly int[][] FINDER_PATTERNS = {
-                                                           new[] {3, 8, 2, 1},
-                                                           new[] {3, 5, 5, 1},
-                                                           new[] {3, 3, 7, 1},
-                                                           new[] {3, 1, 9, 1},
-                                                           new[] {2, 7, 4, 1},
-                                                           new[] {2, 5, 6, 1},
-                                                           new[] {2, 3, 8, 1},
-                                                           new[] {1, 5, 7, 1},
-                                                           new[] {1, 3, 9, 1},
-                                                        };
+        private static readonly int[][] FINDER_PATTERNS =
+        {
+            new[] {3, 8, 2, 1},
+            new[] {3, 5, 5, 1},
+            new[] {3, 3, 7, 1},
+            new[] {3, 1, 9, 1},
+            new[] {2, 7, 4, 1},
+            new[] {2, 5, 6, 1},
+            new[] {2, 3, 8, 1},
+            new[] {1, 5, 7, 1},
+            new[] {1, 3, 9, 1},
+        };
 
         private readonly List<Pair> possibleLeftPairs;
         private readonly List<Pair> possibleRightPairs;
@@ -68,8 +69,8 @@ namespace ZXing.OneD.RSS
         ///   <see cref="Result"/>containing encoded string and start/end of barcode or null, if an error occurs or barcode cannot be found
         /// </returns>
         override public Result decodeRow(int rowNumber,
-                                BitArray row,
-                                IDictionary<DecodeHintType, object> hints)
+            BitArray row,
+            IDictionary<DecodeHintType, object> hints)
         {
             Pair leftPair = decodePair(row, false, rowNumber, hints);
             addOrTally(possibleLeftPairs, leftPair);
@@ -159,7 +160,7 @@ namespace ZXing.OneD.RSS
             return new Result(
                 buffer.ToString(),
                 null,
-                new ResultPoint[] { leftPoints[0], leftPoints[1], rightPoints[0], rightPoints[1], },
+                new ResultPoint[] {leftPoints[0], leftPoints[1], rightPoints[0], rightPoints[1],},
                 BarcodeFormat.RSS_14);
         }
 
@@ -194,8 +195,7 @@ namespace ZXing.OneD.RSS
             if (pattern == null)
                 return null;
 
-            ResultPointCallback resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK) ? null :
-               (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
+            ResultPointCallback resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK) ? null : (ResultPointCallback) hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
 
             if (resultPointCallback != null)
             {
@@ -215,8 +215,8 @@ namespace ZXing.OneD.RSS
             if (inside == null)
                 return null;
             return new Pair(1597 * outside.Value + inside.Value,
-                            outside.ChecksumPortion + 4 * inside.ChecksumPortion,
-                            pattern);
+                outside.ChecksumPortion + 4 * inside.ChecksumPortion,
+                pattern);
         }
 
         private DataCharacter decodeDataCharacter(BitArray row, FinderPattern pattern, bool outsideChar)
@@ -247,7 +247,7 @@ namespace ZXing.OneD.RSS
             }
 
             int numModules = outsideChar ? 16 : 15;
-            float elementWidth = (float)ZXing.Common.Detector.MathUtils.sum(counters) / (float)numModules;
+            float elementWidth = (float) ZXing.Common.Detector.MathUtils.sum(counters) / (float) numModules;
 
             int[] oddCounts = this.getOddCounts();
             int[] evenCounts = this.getEvenCounts();
@@ -256,8 +256,8 @@ namespace ZXing.OneD.RSS
 
             for (int i = 0; i < counters.Length; i++)
             {
-                float value = (float)counters[i] / elementWidth;
-                int rounded = (int)(value + 0.5f); // Round
+                float value = (float) counters[i] / elementWidth;
+                int rounded = (int) (value + 0.5f); // Round
                 if (rounded < 1)
                 {
                     rounded = 1;
@@ -369,7 +369,7 @@ namespace ZXing.OneD.RSS
                     {
                         if (isFinderPattern(counters))
                         {
-                            return new int[] { patternStart, x };
+                            return new int[] {patternStart, x};
                         }
                         patternStart += counters[0] + counters[1];
                         counters[0] = counters[2];
@@ -416,7 +416,7 @@ namespace ZXing.OneD.RSS
                 start = row.Size - 1 - start;
                 end = row.Size - 1 - end;
             }
-            return new FinderPattern(value, new int[] { firstElementStart, startEnd[1] }, start, end, rowNumber);
+            return new FinderPattern(value, new int[] {firstElementStart, startEnd[1]}, start, end, rowNumber);
         }
 
         private bool adjustOddEvenCounts(bool outsideChar, int numModules)
@@ -484,76 +484,74 @@ namespace ZXing.OneD.RSS
               incrementOdd = true;
               incrementEven = true;
             } else */
-            if (mismatch == 1)
+            switch (mismatch)
             {
-                if (oddParityBad)
-                {
-                    if (evenParityBad)
+                case 1:
+                    if (oddParityBad)
                     {
-                        return false;
-                    }
-                    decrementOdd = true;
-                }
-                else
-                {
-                    if (!evenParityBad)
-                    {
-                        return false;
-                    }
-                    decrementEven = true;
-                }
-            }
-            else if (mismatch == -1)
-            {
-                if (oddParityBad)
-                {
-                    if (evenParityBad)
-                    {
-                        return false;
-                    }
-                    incrementOdd = true;
-                }
-                else
-                {
-                    if (!evenParityBad)
-                    {
-                        return false;
-                    }
-                    incrementEven = true;
-                }
-            }
-            else if (mismatch == 0)
-            {
-                if (oddParityBad)
-                {
-                    if (!evenParityBad)
-                    {
-                        return false;
-                    }
-                    // Both bad
-                    if (oddSum < evenSum)
-                    {
-                        incrementOdd = true;
-                        decrementEven = true;
+                        if (evenParityBad)
+                        {
+                            return false;
+                        }
+                        decrementOdd = true;
                     }
                     else
                     {
-                        decrementOdd = true;
+                        if (!evenParityBad)
+                        {
+                            return false;
+                        }
+                        decrementEven = true;
+                    }
+                    break;
+                case -1:
+                    if (oddParityBad)
+                    {
+                        if (evenParityBad)
+                        {
+                            return false;
+                        }
+                        incrementOdd = true;
+                    }
+                    else
+                    {
+                        if (!evenParityBad)
+                        {
+                            return false;
+                        }
                         incrementEven = true;
                     }
-                }
-                else
-                {
-                    if (evenParityBad)
+                    break;
+                case 0:
+                    if (oddParityBad)
                     {
-                        return false;
+                        if (!evenParityBad)
+                        {
+                            return false;
+                        }
+                        // Both bad
+                        if (oddSum < evenSum)
+                        {
+                            incrementOdd = true;
+                            decrementEven = true;
+                        }
+                        else
+                        {
+                            decrementOdd = true;
+                            incrementEven = true;
+                        }
                     }
-                    // Nothing to do!
-                }
-            }
-            else
-            {
-                return false;
+                    else
+                    {
+                        if (evenParityBad)
+                        {
+                            return false;
+                        }
+                        // Nothing to do!
+                    }
+                    break;
+                default:
+                    return false;
             }
 
             if (incrementOdd)

@@ -113,7 +113,7 @@ namespace ZXing.OneD
 
                 if (ean13MayBeUPCA && canReturnUPCA)
                 {
-                    // Transfer the metdata across
+                    // Transfer the metadata across
                     var resultUPCA = new Result(result.Text.Substring(1),
                                                    result.RawBytes,
                                                    result.ResultPoints,

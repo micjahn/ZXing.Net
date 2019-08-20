@@ -286,15 +286,7 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
         private static String processVariableAI(int aiSize, int variableFieldSize, String rawInformation)
         {
             String ai = rawInformation.Substring(0, aiSize);
-            int maxSize;
-            if (rawInformation.Length < aiSize + variableFieldSize)
-            {
-                maxSize = rawInformation.Length;
-            }
-            else
-            {
-                maxSize = aiSize + variableFieldSize;
-            }
+            int maxSize = Math.Min(rawInformation.Length, aiSize + variableFieldSize);
             String field = rawInformation.Substring(aiSize, maxSize - aiSize);
             String remaining = rawInformation.Substring(maxSize);
             String result = '(' + ai + ')' + field;

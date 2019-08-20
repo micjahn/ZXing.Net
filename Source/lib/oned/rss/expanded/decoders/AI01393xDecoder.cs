@@ -39,11 +39,11 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
         private static int FIRST_THREE_DIGITS_SIZE = 10;
 
         internal AI01393xDecoder(BitArray information)
-           : base(information)
+            : base(information)
         {
         }
 
-        override public String parseInformation()
+        public override String parseInformation()
         {
             if (this.getInformation().Size < HEADER_SIZE + GTIN_SIZE)
             {
@@ -61,8 +61,8 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
             buf.Append(lastAIdigit);
             buf.Append(')');
 
-            int firstThreeDigits =
-                this.getGeneralDecoder().extractNumericValueFromBitArray(HEADER_SIZE + GTIN_SIZE + LAST_DIGIT_SIZE, FIRST_THREE_DIGITS_SIZE);
+            int firstThreeDigits = this.getGeneralDecoder().extractNumericValueFromBitArray(
+                HEADER_SIZE + GTIN_SIZE + LAST_DIGIT_SIZE, FIRST_THREE_DIGITS_SIZE);
             if (firstThreeDigits / 100 == 0)
             {
                 buf.Append('0');
@@ -73,8 +73,8 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
             }
             buf.Append(firstThreeDigits);
 
-            DecodedInformation generalInformation =
-                this.getGeneralDecoder().decodeGeneralPurposeField(HEADER_SIZE + GTIN_SIZE + LAST_DIGIT_SIZE + FIRST_THREE_DIGITS_SIZE, null);
+            DecodedInformation generalInformation = this.getGeneralDecoder().decodeGeneralPurposeField(
+                HEADER_SIZE + GTIN_SIZE + LAST_DIGIT_SIZE + FIRST_THREE_DIGITS_SIZE, null);
             buf.Append(generalInformation.getNewString());
 
             return buf.ToString();

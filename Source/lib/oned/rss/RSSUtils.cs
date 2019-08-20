@@ -21,66 +21,6 @@ namespace ZXing.OneD.RSS
     /// </summary>
     public static class RSSUtils
     {
-        /*
-        /// <summary>
-        /// Gets the RS swidths.
-        /// </summary>
-        /// <param name="val">The val.</param>
-        /// <param name="n">The n.</param>
-        /// <param name="elements">The elements.</param>
-        /// <param name="maxWidth">Width of the max.</param>
-        /// <param name="noNarrow">if set to <c>true</c> [no narrow].</param>
-        /// <returns></returns>
-        public static int[] getRSSwidths(int val, int n, int elements, int maxWidth, bool noNarrow)
-        {
-           int[] widths = new int[elements];
-           int bar;
-           int narrowMask = 0;
-           for (bar = 0; bar < elements - 1; bar++)
-           {
-              narrowMask |= 1 << bar;
-              int elmWidth = 1;
-              int subVal;
-              while (true)
-              {
-                 subVal = combins(n - elmWidth - 1, elements - bar - 2);
-                 if (noNarrow && (narrowMask == 0) &&
-                     (n - elmWidth - (elements - bar - 1) >= elements - bar - 1))
-                 {
-                    subVal -= combins(n - elmWidth - (elements - bar), elements - bar - 2);
-                 }
-                 if (elements - bar - 1 > 1)
-                 {
-                    int lessVal = 0;
-                    for (int mxwElement = n - elmWidth - (elements - bar - 2);
-                         mxwElement > maxWidth;
-                         mxwElement--)
-                    {
-                       lessVal += combins(n - elmWidth - mxwElement - 1, elements - bar - 3);
-                    }
-                    subVal -= lessVal * (elements - 1 - bar);
-                 }
-                 else if (n - elmWidth > maxWidth)
-                 {
-                    subVal--;
-                 }
-                 val -= subVal;
-                 if (val < 0)
-                 {
-                    break;
-                 }
-                 elmWidth++;
-                 narrowMask &= ~(1 << bar);
-              }
-              val += subVal;
-              n -= elmWidth;
-              widths[bar] = elmWidth;
-           }
-           widths[bar] = n;
-           return widths;
-        }
-        */
-
         /// <summary>
         /// Gets the RS svalue.
         /// </summary>

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections.Generic;
 
 using ZXing.Common;
@@ -92,21 +91,6 @@ namespace ZXing.Multi.QrCode
 
         internal static List<Result> ProcessStructuredAppend(List<Result> results)
         {
-            bool hasSA = false;
-            // first, check, if there is at least on SA result in the list
-            foreach (var result in results)
-            {
-                if (result.ResultMetadata.ContainsKey(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE))
-                {
-                    hasSA = true;
-                    break;
-                }
-            }
-            if (!hasSA)
-            {
-                return results;
-            }
-            // it is, second, split the lists and built a new result list
             var newResults = new List<Result>();
             var saResults = new List<Result>();
             foreach (var result in results)
@@ -120,48 +104,43 @@ namespace ZXing.Multi.QrCode
                     newResults.Add(result);
                 }
             }
+            if (saResults.Count == 0)
+            {
+                return results;
+            }
             // sort and concatenate the SA list items
             saResults.Sort(SaSequenceSort);
-            var concatedText = String.Empty;
-            var rawBytesLen = 0;
-            int byteSegmentLength = 0;
-            foreach (var saResult in saResults)
+            var newText = new System.Text.StringBuilder();
+            using (var newRawBytes = new System.IO.MemoryStream())
+            using (var newByteSegment = new System.IO.MemoryStream())
             {
-                concatedText += saResult.Text;
-                rawBytesLen += saResult.RawBytes.Length;
-                if (saResult.ResultMetadata.ContainsKey(ResultMetadataType.BYTE_SEGMENTS))
+                foreach (Result saResult in saResults)
                 {
-                    foreach (var segment in (IEnumerable<byte[]>) saResult.ResultMetadata[ResultMetadataType.BYTE_SEGMENTS])
+                    newText.Append(saResult.Text);
+                    byte[] saBytes = saResult.RawBytes;
+                    newRawBytes.Write(saBytes, 0, saBytes.Length);
+                    if (saResult.ResultMetadata.ContainsKey(ResultMetadataType.BYTE_SEGMENTS))
                     {
-                        byteSegmentLength += segment.Length;
+                        var byteSegments = (IEnumerable<byte[]>) saResult.ResultMetadata[ResultMetadataType.BYTE_SEGMENTS];
+                        if (byteSegments != null)
+                        {
+                            foreach (byte[] segment in byteSegments)
+                            {
+                                newByteSegment.Write(segment, 0, segment.Length);
+                            }
+                        }
                     }
                 }
-            }
-            var newRawBytes = new byte[rawBytesLen];
-            byte[] newByteSegment = new byte[byteSegmentLength];
-            int newRawBytesIndex = 0;
-            int byteSegmentIndex = 0;
-            foreach (var saResult in saResults)
-            {
-                Array.Copy(saResult.RawBytes, 0, newRawBytes, newRawBytesIndex, saResult.RawBytes.Length);
-                newRawBytesIndex += saResult.RawBytes.Length;
-                if (saResult.ResultMetadata.ContainsKey(ResultMetadataType.BYTE_SEGMENTS))
+
+                Result newResult = new Result(newText.ToString(), newRawBytes.ToArray(), NO_POINTS, BarcodeFormat.QR_CODE);
+                if (newByteSegment.Length > 0)
                 {
-                    foreach (var segment in (IEnumerable<byte[]>) saResult.ResultMetadata[ResultMetadataType.BYTE_SEGMENTS])
-                    {
-                        Array.Copy(segment, 0, newByteSegment, byteSegmentIndex, segment.Length);
-                        byteSegmentIndex += segment.Length;
-                    }
+                    var byteSegmentList = new List<byte[]>();
+                    byteSegmentList.Add(newByteSegment.ToArray());
+                    newResult.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegmentList);
                 }
+                newResults.Add(newResult);
             }
-            Result newResult = new Result(concatedText, newRawBytes, NO_POINTS, BarcodeFormat.QR_CODE);
-            if (byteSegmentLength > 0)
-            {
-                var byteSegmentList = new List<byte[]>();
-                byteSegmentList.Add(newByteSegment);
-                newResult.putMetadata(ResultMetadataType.BYTE_SEGMENTS, byteSegmentList);
-            }
-            newResults.Add(newResult);
             return newResults;
         }
 

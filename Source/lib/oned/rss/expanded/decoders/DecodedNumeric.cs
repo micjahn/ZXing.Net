@@ -38,7 +38,7 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
         internal static int FNC1 = 10;
 
         internal DecodedNumeric(int newPosition, int firstDigit, int secondDigit)
-           : base(newPosition)
+            : base(newPosition)
         {
             if (firstDigit < 0 || firstDigit > 10 || secondDigit < 0 || secondDigit > 10)
             {
@@ -72,11 +72,6 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
         internal bool isSecondDigitFNC1()
         {
             return this.secondDigit == FNC1;
-        }
-
-        internal bool isAnyFNC1()
-        {
-            return this.firstDigit == FNC1 || this.secondDigit == FNC1;
         }
     }
 }

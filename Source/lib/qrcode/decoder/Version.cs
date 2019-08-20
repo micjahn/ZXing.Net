@@ -207,12 +207,11 @@ namespace ZXing.QrCode.Internal
                 int i = alignmentPatternCenters[x] - 2;
                 for (int y = 0; y < max; y++)
                 {
-                    if ((x == 0 && (y == 0 || y == max - 1)) || (x == max - 1 && y == 0))
+                    if ((x != 0 || (y != 0 && y != max - 1)) && (x != max - 1 || y != 0))
                     {
-                        // No alignment patterns near the three finder patterns
-                        continue;
+                        bitMatrix.setRegion(alignmentPatternCenters[y] - 2, i, 5, 5);
                     }
-                    bitMatrix.setRegion(alignmentPatternCenters[y] - 2, i, 5, 5);
+                    // else no o alignment patterns near the three finder patterns
                 }
             }
 

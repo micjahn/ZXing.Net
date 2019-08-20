@@ -24,28 +24,25 @@ namespace ZXing.OneD.RSS.Expanded
     /// </summary>
     internal sealed class ExpandedRow
     {
+        private readonly bool wasReversed;
+
         internal ExpandedRow(List<ExpandedPair> pairs, int rowNumber, bool wasReversed)
         {
             Pairs = new List<ExpandedPair>(pairs);
             RowNumber = rowNumber;
-            IsReversed = wasReversed;
+            this.wasReversed = wasReversed;
         }
 
         internal List<ExpandedPair> Pairs { get; private set; }
 
         internal int RowNumber { get; private set; }
 
-        /// <summary>
-        /// Did this row of the image have to be reversed (mirrored) to recognize the pairs?
-        /// </summary>
-        internal bool IsReversed { get; private set; }
-
         internal bool IsEquivalent(List<ExpandedPair> otherPairs)
         {
             return Pairs.Equals(otherPairs);
         }
 
-        override public String ToString()
+        public override String ToString()
         {
             return "{ " + Pairs + " }";
         }
@@ -53,19 +50,19 @@ namespace ZXing.OneD.RSS.Expanded
         /// <summary>
         /// Two rows are equal if they contain the same pairs in the same order.
         /// </summary>
-        override public bool Equals(Object o)
+        public override bool Equals(Object o)
         {
             if (!(o is ExpandedRow))
             {
                 return false;
             }
-            ExpandedRow that = (ExpandedRow)o;
-            return Pairs.Equals(that.Pairs) && IsReversed == that.IsReversed;
+            ExpandedRow that = (ExpandedRow) o;
+            return Pairs.Equals(that.Pairs) && wasReversed == that.wasReversed;
         }
 
-        override public int GetHashCode()
+        public override int GetHashCode()
         {
-            return Pairs.GetHashCode() ^ IsReversed.GetHashCode();
+            return Pairs.GetHashCode() ^ wasReversed.GetHashCode();
         }
     }
 }

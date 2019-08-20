@@ -89,11 +89,7 @@ namespace ZXing.Multi.QrCode.Test
             var nsa = new Result("NotSA", new byte[] { }, new ResultPoint[] { }, BarcodeFormat.QR_CODE);
             nsa.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, "L");
 
-            var inputs = new List<Result>();
-            inputs.Add(sa3);
-            inputs.Add(sa1);
-            inputs.Add(nsa);
-            inputs.Add(sa2);
+            var inputs = new List<Result> {sa3, sa1, nsa, sa2};
 
             var results = QRCodeMultiReader.ProcessStructuredAppend(inputs);
             Assert.That(results, Is.Not.Null);

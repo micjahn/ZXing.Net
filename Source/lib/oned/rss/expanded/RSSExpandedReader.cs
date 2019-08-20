@@ -38,44 +38,47 @@ namespace ZXing.OneD.RSS.Expanded
     /// </summary>
     public sealed class RSSExpandedReader : AbstractRSSReader
     {
-        private static readonly int[] SYMBOL_WIDEST = { 7, 5, 4, 3, 1 };
-        private static readonly int[] EVEN_TOTAL_SUBSET = { 4, 20, 52, 104, 204 };
-        private static readonly int[] GSUM = { 0, 348, 1388, 2948, 3988 };
+        private static readonly int[] SYMBOL_WIDEST = {7, 5, 4, 3, 1};
+        private static readonly int[] EVEN_TOTAL_SUBSET = {4, 20, 52, 104, 204};
+        private static readonly int[] GSUM = {0, 348, 1388, 2948, 3988};
 
-        private static readonly int[][] FINDER_PATTERNS = {
-                                                  new[] {1, 8, 4, 1}, // A
-                                                  new[] {3, 6, 4, 1}, // B
-                                                  new[] {3, 4, 6, 1}, // C
-                                                  new[] {3, 2, 8, 1}, // D
-                                                  new[] {2, 6, 5, 1}, // E
-                                                  new[] {2, 2, 9, 1} // F
-                                               };
+        private static readonly int[][] FINDER_PATTERNS =
+        {
+            new[] {1, 8, 4, 1}, // A
+            new[] {3, 6, 4, 1}, // B
+            new[] {3, 4, 6, 1}, // C
+            new[] {3, 2, 8, 1}, // D
+            new[] {2, 6, 5, 1}, // E
+            new[] {2, 2, 9, 1} // F
+        };
 
-        private static readonly int[][] WEIGHTS = {
-                                          new[] {1, 3, 9, 27, 81, 32, 96, 77},
-                                          new[] {20, 60, 180, 118, 143, 7, 21, 63},
-                                          new[] {189, 145, 13, 39, 117, 140, 209, 205},
-                                          new[] {193, 157, 49, 147, 19, 57, 171, 91},
-                                          new[] {62, 186, 136, 197, 169, 85, 44, 132},
-                                          new[] {185, 133, 188, 142, 4, 12, 36, 108},
-                                          new[] {113, 128, 173, 97, 80, 29, 87, 50},
-                                          new[] {150, 28, 84, 41, 123, 158, 52, 156},
-                                          new[] {46, 138, 203, 187, 139, 206, 196, 166},
-                                          new[] {76, 17, 51, 153, 37, 111, 122, 155},
-                                          new[] {43, 129, 176, 106, 107, 110, 119, 146},
-                                          new[] {16, 48, 144, 10, 30, 90, 59, 177},
-                                          new[] {109, 116, 137, 200, 178, 112, 125, 164},
-                                          new[] {70, 210, 208, 202, 184, 130, 179, 115},
-                                          new[] {134, 191, 151, 31, 93, 68, 204, 190},
-                                          new[] {148, 22, 66, 198, 172, 94, 71, 2},
-                                          new[] {6, 18, 54, 162, 64, 192, 154, 40},
-                                          new[] {120, 149, 25, 75, 14, 42, 126, 167},
-                                          new[] {79, 26, 78, 23, 69, 207, 199, 175},
-                                          new[] {103, 98, 83, 38, 114, 131, 182, 124},
-                                          new[] {161, 61, 183, 127, 170, 88, 53, 159},
-                                          new[] {55, 165, 73, 8, 24, 72, 5, 15},
-                                          new[] {45, 135, 194, 160, 58, 174, 100, 89}
-                                       };
+        private static readonly int[][] WEIGHTS =
+        {
+            new[] {1, 3, 9, 27, 81, 32, 96, 77},
+            new[] {20, 60, 180, 118, 143, 7, 21, 63},
+            new[] {189, 145, 13, 39, 117, 140, 209, 205},
+            new[] {193, 157, 49, 147, 19, 57, 171, 91},
+            new[] {62, 186, 136, 197, 169, 85, 44, 132},
+            new[] {185, 133, 188, 142, 4, 12, 36, 108},
+            new[] {113, 128, 173, 97, 80, 29, 87, 50},
+            new[] {150, 28, 84, 41, 123, 158, 52, 156},
+            new[] {46, 138, 203, 187, 139, 206, 196, 166},
+            new[] {76, 17, 51, 153, 37, 111, 122, 155},
+            new[] {43, 129, 176, 106, 107, 110, 119, 146},
+            new[] {16, 48, 144, 10, 30, 90, 59, 177},
+            new[] {109, 116, 137, 200, 178, 112, 125, 164},
+            new[] {70, 210, 208, 202, 184, 130, 179, 115},
+            new[] {134, 191, 151, 31, 93, 68, 204, 190},
+            new[] {148, 22, 66, 198, 172, 94, 71, 2},
+            new[] {6, 18, 54, 162, 64, 192, 154, 40},
+            new[] {120, 149, 25, 75, 14, 42, 126, 167},
+            new[] {79, 26, 78, 23, 69, 207, 199, 175},
+            new[] {103, 98, 83, 38, 114, 131, 182, 124},
+            new[] {161, 61, 183, 127, 170, 88, 53, 159},
+            new[] {55, 165, 73, 8, 24, 72, 5, 15},
+            new[] {45, 135, 194, 160, 58, 174, 100, 89}
+        };
+
         private const int FINDER_PAT_A = 0;
         private const int FINDER_PAT_B = 1;
         private const int FINDER_PAT_C = 2;
@@ -83,18 +86,19 @@ namespace ZXing.OneD.RSS.Expanded
         private const int FINDER_PAT_E = 4;
         private const int FINDER_PAT_F = 5;
 
-        private static readonly int[][] FINDER_PATTERN_SEQUENCES = {
-         new[] { FINDER_PAT_A, FINDER_PAT_A },
-         new[] { FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B },
-         new[] { FINDER_PAT_A, FINDER_PAT_C, FINDER_PAT_B, FINDER_PAT_D },
-         new[] { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_C },
-         new[] { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_F },
-         new[] { FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
-         new[] { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D },
-         new[] { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E },
-         new[] { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
-         new[] { FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F },
-      };
+        private static readonly int[][] FINDER_PATTERN_SEQUENCES =
+        {
+            new[] {FINDER_PAT_A, FINDER_PAT_A},
+            new[] {FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B},
+            new[] {FINDER_PAT_A, FINDER_PAT_C, FINDER_PAT_B, FINDER_PAT_D},
+            new[] {FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_C},
+            new[] {FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_F},
+            new[] {FINDER_PAT_A, FINDER_PAT_E, FINDER_PAT_B, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F},
+            new[] {FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D},
+            new[] {FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E},
+            new[] {FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F},
+            new[] {FINDER_PAT_A, FINDER_PAT_A, FINDER_PAT_B, FINDER_PAT_B, FINDER_PAT_C, FINDER_PAT_D, FINDER_PAT_D, FINDER_PAT_E, FINDER_PAT_E, FINDER_PAT_F, FINDER_PAT_F},
+        };
 
         private const int MAX_PAIRS = 11;
 
@@ -103,7 +107,10 @@ namespace ZXing.OneD.RSS.Expanded
         private readonly int[] startEnd = new int[2];
         private bool startFromEven;
 
-        internal List<ExpandedPair> Pairs { get { return pairs; } }
+        internal List<ExpandedPair> Pairs
+        {
+            get { return pairs; }
+        }
 
         /// <summary>
         ///   <p>Attempts to decode a one-dimensional barcode format given a single row of
@@ -116,8 +123,8 @@ namespace ZXing.OneD.RSS.Expanded
         ///   <see cref="Result"/>containing encoded string and start/end of barcode or null, if an error occurs or barcode cannot be found
         /// </returns>
         override public Result decodeRow(int rowNumber,
-                                BitArray row,
-                                IDictionary<DecodeHintType, object> hints)
+            BitArray row,
+            IDictionary<DecodeHintType, object> hints)
         {
             // Rows can start with even pattern in case in prev rows there where odd number of patters.
             // So lets try twice
@@ -192,7 +199,7 @@ namespace ZXing.OneD.RSS.Expanded
             // Stacked barcode can have up to 11 rows, so 25 seems reasonable enough
             if (rows.Count > 25)
             {
-                rows.Clear();  // We will never have a chance to get result, so clear it
+                rows.Clear(); // We will never have a chance to get result, so clear it
                 return null;
             }
 
@@ -306,7 +313,7 @@ namespace ZXing.OneD.RSS.Expanded
             // it will prevent us from detecting the barcode.
             // Try to merge partial rows
 
-            // Check whether the row is part of an allready detected row
+            // Check whether the row is part of an already detected row
             if (isPartialRow(pairs, rows))
             {
                 return;
@@ -323,32 +330,22 @@ namespace ZXing.OneD.RSS.Expanded
             for (var index = 0; index < rows.Count; index++)
             {
                 var r = rows[index];
-                if (r.Pairs.Count == pairs.Count)
+                if (r.Pairs.Count != pairs.Count)
                 {
-                    continue;
-                }
-                bool allFound = true;
-                foreach (ExpandedPair p in r.Pairs)
-                {
-                    bool found = false;
-                    foreach (ExpandedPair pp in pairs)
+                    bool allFound = true;
+                    foreach (ExpandedPair p in r.Pairs)
                     {
-                        if (p.Equals(pp))
+                        if (!pairs.Contains(p))
                         {
-                            found = true;
+                            allFound = false;
                             break;
                         }
                     }
-                    if (!found)
+                    if (allFound)
                     {
-                        allFound = false;
-                        break;
+                        // 'pairs' contains all the pairs from the row 'r'
+                        rows.RemoveAt(index);
                     }
-                }
-                if (allFound)
-                {
-                    // 'pairs' contains all the pairs from the row 'r'
-                    rows.RemoveAt(index);
                 }
             }
         }
@@ -404,11 +401,11 @@ namespace ZXing.OneD.RSS.Expanded
             ResultPoint[] lastPoints = pairs[pairs.Count - 1].FinderPattern.ResultPoints;
 
             return new Result(
-                  resultingString,
-                  null,
-                  new ResultPoint[] { firstPoints[0], firstPoints[1], lastPoints[0], lastPoints[1] },
-                  BarcodeFormat.RSS_EXPANDED
-              );
+                resultingString,
+                null,
+                new ResultPoint[] {firstPoints[0], firstPoints[1], lastPoints[0], lastPoints[1]},
+                BarcodeFormat.RSS_EXPANDED
+            );
         }
 
         private bool checkChecksum()
@@ -649,13 +646,13 @@ namespace ZXing.OneD.RSS.Expanded
             if (!parseFinderValue(counters, FINDER_PATTERNS, out value))
                 return null;
 
-            return new FinderPattern(value, new int[] { start, end }, start, end, rowNumber);
+            return new FinderPattern(value, new int[] {start, end}, start, end, rowNumber);
         }
 
         internal DataCharacter decodeDataCharacter(BitArray row,
-                                          FinderPattern pattern,
-                                          bool isOddPattern,
-                                          bool leftChar)
+            FinderPattern pattern,
+            bool isOddPattern,
+            bool leftChar)
         {
             int[] counters = getDataCharacterCounters();
             for (int x = 0; x < counters.Length; x++)
@@ -679,10 +676,10 @@ namespace ZXing.OneD.RSS.Expanded
                     counters[i] = counters[j];
                     counters[j] = temp;
                 }
-            }//counters[] has the pixels of the module
+            } //counters[] has the pixels of the module
 
             const int numModules = 17; //left and right data characters have all the same length
-            float elementWidth = (float)ZXing.Common.Detector.MathUtils.sum(counters) / (float)numModules;
+            float elementWidth = (float) ZXing.Common.Detector.MathUtils.sum(counters) / (float) numModules;
 
             // Sanity check: element width for pattern and the character should match
             float expectedElementWidth = (pattern.StartEnd[1] - pattern.StartEnd[0]) / 15.0f;
@@ -699,7 +696,7 @@ namespace ZXing.OneD.RSS.Expanded
             for (int i = 0; i < counters.Length; i++)
             {
                 float divided = 1.0f * counters[i] / elementWidth;
-                int rounded = (int)(divided + 0.5f); // Round
+                int rounded = (int) (divided + 0.5f); // Round
                 if (rounded < 1)
                 {
                     if (divided < 0.3f)
@@ -746,7 +743,6 @@ namespace ZXing.OneD.RSS.Expanded
                 oddSum += oddCounts[i];
             }
             int evenChecksumPortion = 0;
-            //int evenSum = 0;
             for (int i = evenCounts.Length - 1; i >= 0; i--)
             {
                 if (isNotA1left(pattern, isOddPattern, leftChar))
@@ -754,7 +750,6 @@ namespace ZXing.OneD.RSS.Expanded
                     int weight = WEIGHTS[weightRowNumber][2 * i + 1];
                     evenChecksumPortion += evenCounts[i] * weight;
                 }
-                //evenSum += evenCounts[i];
             }
             int checksumPortion = oddChecksumPortion + evenChecksumPortion;
 
@@ -785,10 +780,6 @@ namespace ZXing.OneD.RSS.Expanded
         {
             int oddSum = ZXing.Common.Detector.MathUtils.sum(getOddCounts());
             int evenSum = ZXing.Common.Detector.MathUtils.sum(getEvenCounts());
-            int mismatch = oddSum + evenSum - numModules;
-            bool oddParityBad = (oddSum & 0x01) == 1;
-            bool evenParityBad = (evenSum & 0x01) == 0;
-
             bool incrementOdd = false;
             bool decrementOdd = false;
 
@@ -811,76 +802,77 @@ namespace ZXing.OneD.RSS.Expanded
                 incrementEven = true;
             }
 
-            if (mismatch == 1)
+            int mismatch = oddSum + evenSum - numModules;
+            bool oddParityBad = (oddSum & 0x01) == 1;
+            bool evenParityBad = (evenSum & 0x01) == 0;
+            switch (mismatch)
             {
-                if (oddParityBad)
-                {
-                    if (evenParityBad)
+                case 1:
+                    if (oddParityBad)
                     {
-                        return false;
-                    }
-                    decrementOdd = true;
-                }
-                else
-                {
-                    if (!evenParityBad)
-                    {
-                        return false;
-                    }
-                    decrementEven = true;
-                }
-            }
-            else if (mismatch == -1)
-            {
-                if (oddParityBad)
-                {
-                    if (evenParityBad)
-                    {
-                        return false;
-                    }
-                    incrementOdd = true;
-                }
-                else
-                {
-                    if (!evenParityBad)
-                    {
-                        return false;
-                    }
-                    incrementEven = true;
-                }
-            }
-            else if (mismatch == 0)
-            {
-                if (oddParityBad)
-                {
-                    if (!evenParityBad)
-                    {
-                        return false;
-                    }
-                    // Both bad
-                    if (oddSum < evenSum)
-                    {
-                        incrementOdd = true;
-                        decrementEven = true;
+                        if (evenParityBad)
+                        {
+                            return false;
+                        }
+                        decrementOdd = true;
                     }
                     else
                     {
-                        decrementOdd = true;
+                        if (!evenParityBad)
+                        {
+                            return false;
+                        }
+                        decrementEven = true;
+                    }
+                    break;
+                case -1:
+                    if (oddParityBad)
+                    {
+                        if (evenParityBad)
+                        {
+                            return false;
+                        }
+                        incrementOdd = true;
+                    }
+                    else
+                    {
+                        if (!evenParityBad)
+                        {
+                            return false;
+                        }
                         incrementEven = true;
                     }
-                }
-                else
-                {
-                    if (evenParityBad)
+                    break;
+                case 0:
+                    if (oddParityBad)
                     {
-                        return false;
+                        if (!evenParityBad)
+                        {
+                            return false;
+                        }
+                        // Both bad
+                        if (oddSum < evenSum)
+                        {
+                            incrementOdd = true;
+                            decrementEven = true;
+                        }
+                        else
+                        {
+                            decrementOdd = true;
+                            incrementEven = true;
+                        }
                     }
-                    // Nothing to do!
-                }
-            }
-            else
-            {
-                return false;
+                    else
+                    {
+                        if (evenParityBad)
+                        {
+                            return false;
+                        }
+                        // Nothing to do!
+                    }
+                    break;
+                default:
+                    return false;
             }
 
             if (incrementOdd)

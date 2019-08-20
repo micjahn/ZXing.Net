@@ -96,14 +96,14 @@ namespace ZXing.Datamatrix.Internal
             return new DetectorResult(bits, new ResultPoint[] { topLeft, bottomLeft, bottomRight, topRight });
         }
 
-        private ResultPoint shiftPoint(ResultPoint point, ResultPoint to, int div)
+        private static ResultPoint shiftPoint(ResultPoint point, ResultPoint to, int div)
         {
             float x = (to.X - point.X) / (div + 1);
             float y = (to.Y - point.Y) / (div + 1);
             return new ResultPoint(point.X + x, point.Y + y);
         }
 
-        private ResultPoint moveAway(ResultPoint point, float fromX, float fromY)
+        private static ResultPoint moveAway(ResultPoint point, float fromX, float fromY)
         {
             float x = point.X;
             float y = point.Y;

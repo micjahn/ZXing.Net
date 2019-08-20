@@ -31,7 +31,7 @@ namespace ZXing.QrCode.Internal
     public class FinderPatternFinder
     {
         private const int CENTER_QUORUM = 2;
-        private static EstimatedModuleComparator moduleComparator = new EstimatedModuleComparator();
+        private static readonly EstimatedModuleComparator moduleComparator = new EstimatedModuleComparator();
         /// <summary>
         /// 1 pixel/module times 3 modules/center
         /// </summary>
