@@ -58,17 +58,19 @@ namespace ZXing.OneD
 
         private bool forceCodesetB;
 
+        private static readonly IList<BarcodeFormat> supportedWriteFormats = new List<BarcodeFormat> { BarcodeFormat.CODE_128 };
+
+        protected override IList<BarcodeFormat> SupportedWriteFormats
+        {
+            get { return supportedWriteFormats; }
+        }
+
         public override BitMatrix encode(String contents,
             BarcodeFormat format,
             int width,
             int height,
             IDictionary<EncodeHintType, object> hints)
         {
-            if (format != BarcodeFormat.CODE_128)
-            {
-                throw new ArgumentException("Can only encode CODE_128, but got " + format);
-            }
-
             forceCodesetB = (hints != null &&
                              hints.ContainsKey(EncodeHintType.CODE128_FORCE_CODESET_B) &&
                              hints[EncodeHintType.CODE128_FORCE_CODESET_B] != null &&
@@ -87,7 +89,7 @@ namespace ZXing.OneD
             return base.encode(contents, format, width, height, hints);
         }
 
-        override public bool[] encode(String contents)
+        public override bool[] encode(String contents)
         {
             int length = contents.Length;
             // Check length

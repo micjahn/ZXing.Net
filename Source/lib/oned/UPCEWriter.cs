@@ -32,18 +32,11 @@ namespace ZXing.OneD
                                        (7 * 6) + // bars
                                        6; // end guard
 
-        public override BitMatrix encode(String contents,
-           BarcodeFormat format,
-           int width,
-           int height,
-           IDictionary<EncodeHintType, object> hints)
-        {
-            if (format != BarcodeFormat.UPC_E)
-            {
-                throw new ArgumentException("Can only encode UPC_E, but got " + format);
-            }
+        private static readonly IList<BarcodeFormat> supportedWriteFormats = new List<BarcodeFormat> { BarcodeFormat.UPC_E };
 
-            return base.encode(contents, format, width, height, hints);
+        protected override IList<BarcodeFormat> SupportedWriteFormats
+        {
+            get { return supportedWriteFormats; }
         }
 
         public override bool[] encode(String contents)

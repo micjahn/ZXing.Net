@@ -27,7 +27,9 @@ namespace ZXing.OneD
     /// </summary>
     public abstract class OneDimensionalCodeWriter : Writer
     {
-        private static System.Text.RegularExpressions.Regex NUMERIC = new System.Text.RegularExpressions.Regex("[0-9]+");
+        private static readonly System.Text.RegularExpressions.Regex NUMERIC = new System.Text.RegularExpressions.Regex("[0-9]+");
+
+        protected abstract IList<BarcodeFormat> SupportedWriteFormats { get; }
 
         /// <summary>
         /// Encode a barcode using the default settings.
@@ -52,10 +54,10 @@ namespace ZXing.OneD
         /// or {@code height}, {@code IllegalArgumentException} is thrown.
         /// </summary>
         public virtual BitMatrix encode(String contents,
-                                BarcodeFormat format,
-                                int width,
-                                int height,
-                                IDictionary<EncodeHintType, object> hints)
+            BarcodeFormat format,
+            int width,
+            int height,
+            IDictionary<EncodeHintType, object> hints)
         {
             if (String.IsNullOrEmpty(contents))
             {
@@ -66,6 +68,11 @@ namespace ZXing.OneD
             {
                 throw new ArgumentException("Negative size is not allowed. Input: "
                                             + width + 'x' + height);
+            }
+            var supportedFormats = SupportedWriteFormats;
+            if (supportedFormats != null && !supportedFormats.Contains(format))
+            {
+                throw new ArgumentException("Can only encode " + string.Join(", ", supportedFormats) + ", but got " + format);
             }
 
             int sidesMargin = DefaultMargin;

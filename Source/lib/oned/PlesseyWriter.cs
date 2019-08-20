@@ -53,30 +53,11 @@ namespace ZXing.OneD
         private static readonly int[] crc0Widths = new[] { 5, 20 };
         private static readonly int[] crc1Widths = new[] { 14, 11 };
 
-        /// <summary>
-        /// Encode the contents following specified format.
-        /// {@code width} and {@code height} are required size. This method may return bigger size
-        /// {@code BitMatrix} when specified size is too small. The user can set both {@code width} and
-        /// {@code height} to zero to get minimum size barcode. If negative value is set to {@code width}
-        /// or {@code height}, {@code IllegalArgumentException} is thrown.
-        /// </summary>
-        /// <param name="contents"></param>
-        /// <param name="format"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <param name="hints"></param>
-        /// <returns></returns>
-        public override BitMatrix encode(String contents,
-                                BarcodeFormat format,
-                                int width,
-                                int height,
-                                IDictionary<EncodeHintType, object> hints)
+        private static readonly IList<BarcodeFormat> supportedWriteFormats = new List<BarcodeFormat> { BarcodeFormat.PLESSEY };
+
+        protected override IList<BarcodeFormat> SupportedWriteFormats
         {
-            if (format != BarcodeFormat.PLESSEY)
-            {
-                throw new ArgumentException("Can only encode Plessey, but got " + format);
-            }
-            return base.encode(contents, format, width, height, hints);
+            get { return supportedWriteFormats; }
         }
 
         /// <summary>

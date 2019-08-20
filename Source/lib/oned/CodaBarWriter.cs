@@ -31,19 +31,11 @@ namespace ZXing.OneD
         private static readonly char[] ALT_START_END_CHARS = {'T', 'N', '*', 'E'};
         private static readonly char[] CHARS_WHICH_ARE_TEN_LENGTH_EACH_AFTER_DECODED = {'/', ':', '+', '.'};
         private static readonly char DEFAULT_GUARD = START_END_CHARS[0];
+        private static readonly IList<BarcodeFormat> supportedWriteFormats = new List<BarcodeFormat> {BarcodeFormat.CODABAR};
 
-        public override BitMatrix encode(String contents,
-            BarcodeFormat format,
-            int width,
-            int height,
-            IDictionary<EncodeHintType, object> hints)
+        protected override IList<BarcodeFormat> SupportedWriteFormats
         {
-            if (format != BarcodeFormat.CODABAR)
-            {
-                throw new ArgumentException("Can only encode CODABAR, but got " + format);
-            }
-
-            return base.encode(contents, format, width, height, hints);
+            get { return supportedWriteFormats; }
         }
 
         public override bool[] encode(String contents)

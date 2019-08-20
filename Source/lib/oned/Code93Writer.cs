@@ -26,13 +26,11 @@ namespace ZXing.OneD
     /// </summary>
     public class Code93Writer : OneDimensionalCodeWriter
     {
-        public override BitMatrix encode(String contents, BarcodeFormat format, int width, int height, IDictionary<EncodeHintType, object> hints)
+        private static readonly IList<BarcodeFormat> supportedWriteFormats = new List<BarcodeFormat> { BarcodeFormat.CODE_93 };
+
+        protected override IList<BarcodeFormat> SupportedWriteFormats
         {
-            if (format != BarcodeFormat.CODE_93)
-            {
-                throw new ArgumentException("Can only encode CODE_93, but got " + format);
-            }
-            return base.encode(contents, format, width, height, hints);
+            get { return supportedWriteFormats; }
         }
 
         /// <summary>
