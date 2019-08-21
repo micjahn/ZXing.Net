@@ -233,6 +233,7 @@
     <Compile Include="oned\ITFWriter.cs" />
     <Compile Include="oned\MSIReader.cs" />
     <Compile Include="oned\MSIWriter.cs" />
+    <Compile Include="oned\PharmaCodeReader.cs" />
     <Compile Include="oned\PlesseyWriter.cs" />
     <Compile Include="oned\MultiFormatOneDReader.cs" />
     <Compile Include="oned\MultiFormatUPCEANReader.cs" />

@@ -72,7 +72,14 @@ namespace ZXing.OneD
             var supportedFormats = SupportedWriteFormats;
             if (supportedFormats != null && !supportedFormats.Contains(format))
             {
+#if WindowsCE || WINDOWS_PHONE70 || NET20 || NET35 || UNITY
+                var supportedFormatsArray = new string[supportedFormats.Count];
+                for (var i = 0; i < supportedFormats.Count; i++)
+                    supportedFormatsArray[i] = supportedFormats[i].ToString();
+                throw new ArgumentException("Can only encode " + string.Join(", ", supportedFormatsArray) + ", but got " + format);
+#else
                 throw new ArgumentException("Can only encode " + string.Join(", ", supportedFormats) + ", but got " + format);
+#endif
             }
 
             int sidesMargin = DefaultMargin;
