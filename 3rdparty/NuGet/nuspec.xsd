@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema id="nuspec"
-    targetNamespace="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd"
+    targetNamespace="{0}"
     elementFormDefault="qualified"
-    xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd"
-    xmlns:mstns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd"
+    xmlns="{0}"
+    xmlns:mstns="{0}"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
 >
     <xs:complexType name="dependency">
@@ -40,7 +40,18 @@
         </xs:sequence>
         <xs:attribute name="targetFramework" type="xs:string" use="optional" />
     </xs:complexType>
-    
+
+    <xs:complexType name="frameworkReference">
+      <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="frameworkReferenceGroup">
+      <xs:sequence>
+        <xs:element name="frameworkReference" minOccurs="0" maxOccurs="unbounded" type="frameworkReference" />
+      </xs:sequence>
+      <xs:attribute name="targetFramework" type="xs:string" use="required" />
+    </xs:complexType>
+  
     <xs:element name="package">
         <xs:complexType>
             <xs:sequence>
@@ -68,6 +79,18 @@
                               <xs:complexType>
                                 <xs:attribute name="type" type="xs:string" use="optional" />
                                 <xs:attribute name="url" type="xs:anyURI" use="optional" />
+                                <xs:attribute name="branch" type="xs:string" use="optional" />
+                                <xs:attribute name="commit" type="xs:string" use="optional" />
+                              </xs:complexType>
+                            </xs:element>
+                            <xs:element name="license" maxOccurs="1" minOccurs="0">
+                              <xs:complexType>
+                                <xs:simpleContent>
+                                  <xs:extension base="xs:string">
+                                    <xs:attribute name="type" type="xs:string" use="required"/>
+                                    <xs:attribute name="version" type="xs:string" use="optional"/>
+                                  </xs:extension>
+                                </xs:simpleContent>
                               </xs:complexType>
                             </xs:element>
                             <xs:element name="packageTypes" maxOccurs="1" minOccurs="0">
@@ -104,6 +127,13 @@
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
+                          <xs:element name="frameworkReferences" maxOccurs="1" minOccurs="0">
+                            <xs:complexType>
+                              <xs:sequence>
+                                  <xs:element name="group" minOccurs="0" maxOccurs="unbounded" type="frameworkReferenceGroup" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
                             <xs:element name="references" maxOccurs="1" minOccurs="0">
                                 <xs:complexType>
                                     <xs:sequence>
