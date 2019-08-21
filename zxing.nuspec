@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.4</version>
+    <version>0.16.5</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
@@ -33,7 +33,7 @@ It is compatible with .Net 2.0, .Net 3.5, .Net 4.0, .Net 4.5, .Net 4.6, .Net 4.7
       <group targetFramework="windows8-managed" />
       <group targetFramework="windows8" />
       <group targetFramework="native" />
-      <group targetFramework="MonoAndroid" />
+      <group targetFramework="MonoAndroid10" />
       <group targetFramework="net20-cf" />
       <group targetFramework="net35-cf" />
       <group targetFramework="portable-win+net40+sl4+sl5+wp7+wp71+wp8" />
@@ -109,9 +109,9 @@ It is compatible with .Net 2.0, .Net 3.5, .Net 4.0, .Net 4.5, .Net 4.6, .Net 4.7
     <file src="Build\Release\winmd\ZXing.pdb" target="lib\native\zxing.pdb" />
     <file src="Build\Release\winmd\ZXing.XML" target="lib\native\zxing.XML" />
     <file src="Build\Release\winmd\ZXing.pri" target="lib\native\zxing.pri" />
-    <file src="Build\Release\monodroid\zxing.monoandroid.dll" target="lib\MonoAndroid\zxing.monoandroid.dll" />
-    <file src="Build\Release\monodroid\zxing.monoandroid.pdb" target="lib\MonoAndroid\zxing.monoandroid.pdb" />
-    <file src="Build\Release\monodroid\zxing.monoandroid.xml" target="lib\MonoAndroid\zxing.monoandroid.xml" />
+    <file src="Build\Release\monodroid10\zxing.monoandroid.dll" target="lib\MonoAndroid10\zxing.monoandroid.dll" />
+    <file src="Build\Release\monodroid10\zxing.monoandroid.pdb" target="lib\MonoAndroid10\zxing.monoandroid.pdb" />
+    <file src="Build\Release\monodroid10\zxing.monoandroid.xml" target="lib\MonoAndroid10\zxing.monoandroid.xml" />
     <file src="Build\Release\ce2.0\zxing.ce2.0.dll" target="lib\net20-cf\zxing.ce2.0.dll" />
     <file src="Build\Release\ce2.0\zxing.ce2.0.pdb" target="lib\net20-cf\zxing.ce2.0.pdb" />
     <file src="Build\Release\ce2.0\zxing.ce2.0.xml" target="lib\net20-cf\zxing.ce2.0.xml" />
