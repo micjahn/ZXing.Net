@@ -518,7 +518,9 @@ namespace ZXing.PDF417.Internal
                   0x10794, 0x10fb4, 0x10792, 0x10fb2, 0x1c7ea
                }
          };
-        private const float PREFERRED_RATIO = 3.0f;
+
+
+        internal const float DEFAULT_PREFERRED_RATIO = 3.0f;
         private const float DEFAULT_MODULE_WIDTH = 0.357f; //1px in mm
         private const float HEIGHT = 2.0f; //mm
 
@@ -531,6 +533,7 @@ namespace ZXing.PDF417.Internal
         private int maxCols;
         private int maxRows;
         private int minRows;
+        private float preferredRatio = DEFAULT_PREFERRED_RATIO;
 
         internal PDF417()
            : this(false)
@@ -781,7 +784,7 @@ namespace ZXing.PDF417.Internal
                 float newRatio = (((float)BarcodeMatrix.COLUMN_WIDTH * cols + start_stop_width) * DEFAULT_MODULE_WIDTH) / (rows * HEIGHT);
 
                 // ignore if previous ratio is closer to preferred ratio
-                if (dimension != null && Math.Abs(newRatio - PREFERRED_RATIO) > Math.Abs(ratio - PREFERRED_RATIO))
+                if (dimension != null && Math.Abs(newRatio - this.preferredRatio) > Math.Abs(ratio - this.preferredRatio))
                 {
                     continue;
                 }
@@ -806,6 +809,15 @@ namespace ZXing.PDF417.Internal
             }
 
             return dimension;
+        }
+
+        /// <summary>
+        /// Sets the desired aspect ratio for the output image.
+        /// </summary>
+        /// <param name="v"></param>
+        internal void setDesiredAspectRatio(float ratio)
+        {
+            this.preferredRatio = ratio;
         }
 
         /// <summary>

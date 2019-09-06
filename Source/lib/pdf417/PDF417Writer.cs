@@ -111,6 +111,18 @@ namespace ZXing.PDF417
                         }
                     }
                 }
+                if (hints.ContainsKey(EncodeHintType.PDF417_IMAGE_ASPECT_RATIO) && hints[EncodeHintType.PDF417_IMAGE_ASPECT_RATIO] != null)
+                {
+                    var value = hints[EncodeHintType.PDF417_IMAGE_ASPECT_RATIO];
+                    try
+                    {
+                        encoder.setDesiredAspectRatio(Convert.ToSingle(value));
+                    }
+                    catch
+                    {
+                        // User passed in something that wasn't convertible to single.
+                    }
+                }
                 if (hints.ContainsKey(EncodeHintType.ERROR_CORRECTION) && hints[EncodeHintType.ERROR_CORRECTION] != null)
                 {
                     var value = hints[EncodeHintType.ERROR_CORRECTION];
