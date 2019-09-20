@@ -72,6 +72,12 @@ namespace ZXing
         PDF417_ASPECT_RATIO,
 
         /// <summary>
+        /// Specifies the desired aspect ratio (number of columns / number of rows) of the output image.  Default is 3.
+        /// type: <see cref="System.Single" />.
+        /// </summary>
+        PDF417_IMAGE_ASPECT_RATIO,
+
+        /// <summary>
         /// Specifies whether to use compact mode for PDF417
         /// type: <see cref="System.Boolean" />, or "true" or "false"
         /// <see cref="System.String" /> value
