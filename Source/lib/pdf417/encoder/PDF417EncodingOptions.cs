@@ -102,7 +102,8 @@ namespace ZXing.PDF417
         }
 
         /// <summary>
-        /// Specifies what degree of error correction to use
+        /// Specifies the aspect ratio of the smallest codeword.
+        /// (Width of narrowest bar / Row Height)
         /// </summary>
         public PDF417AspectRatio AspectRatio
         {
@@ -126,7 +127,8 @@ namespace ZXing.PDF417
         }
 
         /// <summary>
-        /// Specifies what degree of error correction to use
+        /// Specifies the desired output image aspect ratio (Width / Height).
+        /// The actual aspect ratio is calculated based on the necessary number of codewords.
         /// </summary>
         public float ImageAspectRatio
         {
