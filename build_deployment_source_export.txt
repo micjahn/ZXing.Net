@@ -15,6 +15,7 @@ https://github.com/micjahn/ZXing.Net.git/trunk/zxing.sln Base
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.ce.sln Base
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.vs2015.sln Base
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.vs2017.sln Base
+https://github.com/micjahn/ZXing.Net.git/trunk/zxing.vs2019.sln Base
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.monoandroid.sln Base
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.monotouch.sln Base
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.nunit Base

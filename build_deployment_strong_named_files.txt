@@ -25,3 +25,4 @@
 %CURRENT_DIR%\Source\lib\netstandard2.0\bin\Release\netstandard1.1\zxing.dll
 %CURRENT_DIR%\Source\lib\netstandard2.0\bin\Release\netstandard1.3\zxing.dll
 %CURRENT_DIR%\Source\lib\netstandard2.0\bin\Release\netstandard2.0\zxing.dll
+%CURRENT_DIR%\Source\lib\netcoreapp3.0\bin\Release\netcoreapp3.0\zxing.dll

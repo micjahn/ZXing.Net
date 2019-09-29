@@ -10,3 +10,6 @@
 %CURRENT_DIR%\Source\lib\netstandard2.0\bin\Release\netstandard2.0\zxing.dll %BINARY_DIR%\netstandard\2.0\
 %CURRENT_DIR%\Source\lib\netstandard2.0\bin\Release\netstandard2.0\zxing.pdb %BINARY_DIR%\netstandard\2.0\
 %CURRENT_DIR%\Source\lib\netstandard2.0\bin\Release\netstandard2.0\zxing.xml %BINARY_DIR%\netstandard\2.0\
+%CURRENT_DIR%\Source\lib\netcoreapp3.0\bin\Release\netcoreapp3.0\zxing.dll %BINARY_DIR%\netcoreapp\3.0\
+%CURRENT_DIR%\Source\lib\netcoreapp3.0\bin\Release\netcoreapp3.0\zxing.pdb %BINARY_DIR%\netcoreapp\3.0\
+%CURRENT_DIR%\Source\lib\netcoreapp3.0\bin\Release\netcoreapp3.0\zxing.xml %BINARY_DIR%\netcoreapp\3.0\

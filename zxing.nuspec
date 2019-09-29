@@ -145,5 +145,8 @@ It is compatible with .Net 2.0, .Net 3.5, .Net 4.0, .Net 4.5, .Net 4.6, .Net 4.7
     <file src="Build\Release\netstandard\2.0\zxing.dll" target="lib\netstandard2.0\zxing.dll" />
     <file src="Build\Release\netstandard\2.0\zxing.pdb" target="lib\netstandard2.0\zxing.pdb" />
     <file src="Build\Release\netstandard\2.0\zxing.xml" target="lib\netstandard2.0\zxing.xml" />
+    <file src="Build\Release\netcoreapp\3.0\zxing.dll" target="lib\netcoreapp3.0\zxing.dll" />
+    <file src="Build\Release\netcoreapp\3.0\zxing.pdb" target="lib\netcoreapp3.0\zxing.pdb" />
+    <file src="Build\Release\netcoreapp\3.0\zxing.xml" target="lib\netcoreapp3.0\zxing.xml" />
   </files>
 </package>
