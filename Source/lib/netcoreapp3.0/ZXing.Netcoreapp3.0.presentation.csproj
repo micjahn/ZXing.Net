@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <VersionPrefix>0.16.4</VersionPrefix>
+    <TargetFrameworks>netcoreapp3.0</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+    <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD2_0;NETCOREAPP3_0;WPF</DefineConstants>
+    <PlatformTarget>anycpu</PlatformTarget>
+    <PublicSign>true</PublicSign>
+    <DebugType>portable</DebugType>
+    <AssemblyName>zxing</AssemblyName>
+    <AssemblyOriginatorKeyFile>../../../Key/private.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <PackageId>ZXing.Net</PackageId>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+	<EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Properties\AssemblyInfo.cs;..\renderer\IBarcodeRenderer.cs;..\renderer\PixelData.cs;..\renderer\PixelDataRenderer.cs;..\renderer\SVGRenderer.cs;..\BarcodeFormat.cs;..\BarcodeReader.ByteArray.cs;..\BarcodeReaderCustom.cs;..\BarcodeReaderGeneric.cs;..\BarcodeWriter.PixelData.cs;..\BarcodeWriter.SvgImage.cs;..\BarcodeWriterCustom.cs;..\BarcodeWriterGeneric.cs;..\BaseLuminanceSource.cs;..\Binarizer.cs;..\BinaryBitmap.cs;..\DecodeHintType.cs;..\Dimension.cs;..\EncodeHintType.cs;..\FormatException.cs;..\IBarcodeReader.cs;..\IBarcodeReader.Multiple.cs;..\IBarcodeReaderCustom.cs;..\IBarcodeReaderCustom.Multiple.cs;..\IBarcodeReaderGeneric.cs;..\IBarcodeReaderGeneric.Multiple.cs;..\IBarcodeWriter.cs;..\IBarcodeWriter.PixelData.cs;..\IBarcodeWriter.SvgImage.cs;..\IBarcodeWriterCustom.cs;..\IBarcodeWriterGeneric.cs;..\InvertedLuminanceSource.cs;..\LuminanceSource.cs;..\MultiFormatReader.cs;..\MultiFormatWriter.cs;..\PlanarYUVLuminanceSource.cs;..\Reader.cs;..\ReaderException.cs;..\Result.cs;..\ResultMetadataType.cs;..\ResultPoint.cs;..\ResultPointCallback.cs;..\RGBLuminanceSource.cs;..\SupportClass.cs;..\Writer.cs;..\WriterException.cs" Exclude="..\common\BitMatrix.Drawing.cs;..\common\BitMatrix.Silverlight.cs" />
+    <Compile Include="..\aztec\**;..\client\**;..\common\**;..\datamatrix\**;..\imb\**;..\maxicode\**;..\multi\**;..\oned\**;..\pdf417\**;..\qrcode\**" Exclude="..\client\result\optional\**\*;..\common\BigInteger\**\*;bin\**;obj\**;**\*.xproj;packages\**;" />
+    <Compile Remove="..\common\BitMatrix.Drawing.cs;..\common\BitMatrix.Silverlight.cs;..\common\advanced\rowedge\**" />
+    <Compile Include="..\presentation\BarcodeReader.cs;..\presentation\BarcodeWriter.cs;..\presentation\BarcodeWriterGeometry.cs;..\BitmapSourceLuminanceSource.cs;..\renderer\GeometryRenderer.cs;..\renderer\WriteableBitmapRenderer.Presentation.cs" />
+  </ItemGroup>
+</Project>
