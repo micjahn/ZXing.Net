@@ -15,6 +15,8 @@
 %BINARY_DIR%\net4.6\zxing.presentation.dll
 %BINARY_DIR%\net4.7\zxing.dll
 %BINARY_DIR%\net4.7\zxing.presentation.dll
+%BINARY_DIR%\net4.8\zxing.dll
+%BINARY_DIR%\net4.8\zxing.presentation.dll
 %BINARY_DIR%\portable\zxing.portable.dll
 %BINARY_DIR%\sl4\zxing.sl4.dll
 %BINARY_DIR%\sl5\zxing.sl5.dll
