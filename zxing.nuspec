@@ -52,6 +52,7 @@ It is compatible with .Net 2.0, .Net 3.5, .Net 4.0, .Net 4.5, .Net 4.6, .Net 4.7
       <group targetFramework="netstandard2.0">
         <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
       </group>
+      <group targetFramework="netcoreapp3.0" />
     </dependencies>
   </metadata>
   <files>
