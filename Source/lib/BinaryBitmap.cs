@@ -60,8 +60,8 @@ namespace ZXing
             {
                 return binarizer.Width;
             }
-
         }
+        
         /// <returns>
         /// The height of the bitmap.
         /// </returns>
@@ -71,7 +71,6 @@ namespace ZXing
             {
                 return binarizer.Height;
             }
-
         }
 
         /// <summary>
@@ -144,7 +143,6 @@ namespace ZXing
             {
                 return binarizer.LuminanceSource.RotateSupported;
             }
-
         }
 
         /// <summary>
