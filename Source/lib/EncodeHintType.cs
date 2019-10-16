@@ -98,6 +98,12 @@ namespace ZXing
         PDF417_DIMENSIONS,
 
         /// <summary>
+        /// The Specifies that the PDF417 will contain macro metadata.
+        /// type: <see cref="ZXing.PDF417.PDF417MacroMetadata"/>
+        /// </summary>
+        PDF417_MACRO_META_DATA,
+
+        /// <summary>
         /// Don't append ECI segment.
         /// That is against the specification of QR Code but some
         /// readers have problems if the charset is switched from

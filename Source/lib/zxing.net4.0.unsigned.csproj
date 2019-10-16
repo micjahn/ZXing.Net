@@ -258,6 +258,7 @@
     <Compile Include="pdf417\encoder\PDF417AspectRatio.cs" />
     <Compile Include="pdf417\encoder\PDF417EncodingOptions.cs" />
     <Compile Include="pdf417\PDF417Common.cs" />
+    <Compile Include="pdf417\PDF417MacroMetadata.cs" />
     <Compile Include="pdf417\PDF417ResultMetadata.cs" />
     <Compile Include="qrcode\decoder\QRCodeDecoderMetaData.cs" />
     <Compile Include="qrcode\encoder\QrCodeEncodingOptions.cs" />

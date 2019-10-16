@@ -39,6 +39,18 @@ namespace ZXing.PDF417.Internal
         private const int STOP_PATTERN = 0x3fa29;
 
         /// <summary>
+        /// The macro last segment
+        /// </summary>
+        private const int MACRO_LAST_SEGMENT = 0x39A;
+
+        /// <summary>
+        /// The macro segment identifier
+        /// </summary>
+        private const int MACRO_SEGMENT_ID = 0x3A0;
+
+        private const int MACRO_OPTIONAL_FIELD_TAG = 0x39B;
+
+        /// <summary>
         /// The codeword table from the Annex A of ISO/IEC 15438:2001(E).
         /// </summary>
         private static readonly int[][] CODEWORD_TABLE =
@@ -528,6 +540,7 @@ namespace ZXing.PDF417.Internal
         private bool compact;
         private Compaction compaction;
         private Encoding encoding;
+        private PDF417MacroMetadata metadata;
         private bool disableEci;
         private int minCols;
         private int maxCols;
@@ -669,6 +682,7 @@ namespace ZXing.PDF417.Internal
 
                     encodeChar(STOP_PATTERN, 18, logic.getCurrentRow());
                 }
+
             }
         }
 
@@ -683,7 +697,10 @@ namespace ZXing.PDF417.Internal
             //1. step: High-level encoding
             String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, compaction, encoding, disableEci);
             int sourceCodeWords = highLevel.Length;
-            errorCorrectionLevel = PDF417ErrorCorrection.getErrorCorrectionLevel(errorCorrectionLevel, sourceCodeWords);
+
+            string macroCodeWords = getMacroBlock(ref sourceCodeWords);
+
+                errorCorrectionLevel = PDF417ErrorCorrection.getErrorCorrectionLevel(errorCorrectionLevel, sourceCodeWords);
             int errorCorrectionCodeWords = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
 
             int[] dimension = determineDimensions(sourceCodeWords, errorCorrectionCodeWords, longDimension, shortDimension, ref aspectRatio);
@@ -700,24 +717,202 @@ namespace ZXing.PDF417.Internal
                 throw new WriterException(
                    "Encoded message contains too many code words, message too big (" + msg.Length + " bytes)");
             }
+
             int n = sourceCodeWords + pad + 1;
             StringBuilder sb = new StringBuilder(n);
             sb.Append((char)n);
             sb.Append(highLevel);
+
+
             for (int i = 0; i < pad; i++)
             {
                 sb.Append((char)900); //PAD characters
             }
+
+            if (!string.IsNullOrEmpty(macroCodeWords))
+            {
+                sb.Append(macroCodeWords);
+            }
+
+            //4. step: Error correction
             String dataCodewords = sb.ToString();
 
-            //3. step: Error correction
             String ec = PDF417ErrorCorrection.generateErrorCorrection(dataCodewords, errorCorrectionLevel);
+
             String fullCodewords = dataCodewords + ec;
 
-            //4. step: low-level encoding
+            //5. step: low-level encoding
             barcodeMatrix = new BarcodeMatrix(rows, cols, compact);
             encodeLowLevel(fullCodewords, cols, rows, errorCorrectionLevel, barcodeMatrix);
         }
+
+        /// <summary>
+        /// Gets the macro block.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        /// <exception cref="WriterException">
+        /// The macro segment index must be greater than or equal to 0.
+        /// or
+        /// The macro segment index must be less than the segment count.
+        /// or
+        /// The macro segment count must be greater than 0.
+        /// </exception>
+        private string getMacroBlock(ref int sourceCodeWords)
+        {
+            StringBuilder macroCodewords = null;
+
+            if (metadata != null)
+            {
+                macroCodewords = new StringBuilder();
+
+                if (metadata.SegmentIndex < 0)
+                {
+                    throw new WriterException(
+                        "The macro segment index must be greater than or equal to 0."
+                    );
+                }
+
+                if (this.metadata.SegmentIndex >= this.metadata.SegmentCount)
+                {
+                    throw new WriterException(
+                        "The macro segment index must be less than the segment count."
+                    );
+                }
+
+                if (this.metadata.SegmentCount < 1)
+                {
+                    throw new WriterException(
+                        "The macro segment count must be greater than 0."
+                    );
+                }
+
+                macroCodewords.Append((char)MACRO_SEGMENT_ID);
+                sourceCodeWords++;
+
+                // Segment index
+                string segmentIndex = PDF417HighLevelEncoder.encodeHighLevel(this.metadata.SegmentIndex.ToString("00000"), Compaction.NUMERIC, encoding, disableEci);
+
+                // Remove the latch to numeric prefix.
+                segmentIndex = segmentIndex.Replace(((char)0x386).ToString(), "");
+                macroCodewords.Append(segmentIndex);
+                sourceCodeWords += segmentIndex.Length;
+
+                // File Id
+                string fileId = PDF417HighLevelEncoder.encodeHighLevel(this.metadata.FileId, Compaction.TEXT, encoding, disableEci);
+                macroCodewords.Append(fileId);
+                sourceCodeWords += fileId.Length;
+
+                // Optional file name
+                if (!string.IsNullOrEmpty(this.metadata.FileName) && !string.IsNullOrWhiteSpace(this.metadata.FileName))
+                {
+                    macroCodewords.Append((char)MACRO_OPTIONAL_FIELD_TAG);
+                    sourceCodeWords++;
+
+                    // File name field designator
+                    macroCodewords.Append((char)0x0);
+                    sourceCodeWords++;
+
+                    string fileName = PDF417HighLevelEncoder.encodeHighLevel(this.metadata.FileName, Compaction.TEXT, encoding, disableEci);
+                    // Remove the latch to text prefix.
+                    fileName = fileName.Replace(((char)0x384).ToString(), "");
+
+                    macroCodewords.Append(fileName);
+                    sourceCodeWords += fileName.Length;
+                }
+
+                // Optional segment count
+                if (this.metadata.SegmentCount > 0)
+                {
+                    appendMacroOptionalField(PDF417OptionalMacroFields.SegmentCount, this.metadata.SegmentCount.ToString("00000"), ref sourceCodeWords, macroCodewords);
+                }
+
+                // Optional time stamp
+                if (this.metadata.Timestamp.HasValue) {
+                    appendMacroOptionalField(PDF417OptionalMacroFields.TimeStamp, this.metadata.Timestamp.Value.ToString(), ref sourceCodeWords, macroCodewords);
+                }
+
+                // Optional sender
+                if (!string.IsNullOrEmpty(this.metadata.Sender) && !string.IsNullOrWhiteSpace(this.metadata.Sender))
+                {
+                    appendMacroOptionalField(PDF417OptionalMacroFields.Sender, this.metadata.Sender, ref sourceCodeWords, macroCodewords);
+                }
+
+                // Optional addressee
+                if (!string.IsNullOrEmpty(this.metadata.Addressee) && !string.IsNullOrWhiteSpace(this.metadata.Addressee))
+                {
+                    appendMacroOptionalField(PDF417OptionalMacroFields.Addressee, this.metadata.Addressee, ref sourceCodeWords, macroCodewords);
+                }
+
+                // Optional file size
+                if (this.metadata.FileSize.HasValue)
+                {
+                    appendMacroOptionalField(PDF417OptionalMacroFields.FileSize, this.metadata.FileSize.Value.ToString("0000000000"), ref sourceCodeWords, macroCodewords);
+                }
+
+                // Optional checksum
+                if (this.metadata.Checksum.HasValue)
+                {
+                    appendMacroOptionalField(PDF417OptionalMacroFields.Checksum, this.metadata.Checksum.ToString(), ref sourceCodeWords, macroCodewords);
+                }
+
+                // Last segment
+                if (metadata.SegmentIndex == metadata.SegmentCount - 1)
+                {
+                    macroCodewords.Append((char)MACRO_LAST_SEGMENT);
+                    sourceCodeWords++;
+                }
+            }
+
+            return macroCodewords?.ToString();
+        }
+
+        /// <summary>
+        /// Appends optional macro fields.
+        /// </summary>
+        /// <param name="field">The field.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="sourceCodeWords">The source code word length.</param>
+        /// <param name="macroCodewords">The macro codewords.</param>
+        private void appendMacroOptionalField(PDF417OptionalMacroFields field, string value, ref int sourceCodeWords, StringBuilder macroCodewords)
+        {
+            string encodedValue = null;
+
+            switch (field)
+            {
+                case PDF417OptionalMacroFields.SegmentCount:
+                case PDF417OptionalMacroFields.TimeStamp:
+                case PDF417OptionalMacroFields.FileSize:
+                case PDF417OptionalMacroFields.Checksum:
+                    encodedValue = PDF417HighLevelEncoder.encodeHighLevel(value, Compaction.NUMERIC, encoding, disableEci);
+                    // Remove the latch to numeric prefix.
+                    encodedValue = encodedValue.Replace(((char)0x386).ToString(), "");
+                    break;
+
+                case PDF417OptionalMacroFields.FileName:
+                case PDF417OptionalMacroFields.Sender:
+                case PDF417OptionalMacroFields.Addressee:
+                    encodedValue = PDF417HighLevelEncoder.encodeHighLevel(this.metadata.Addressee, Compaction.TEXT, encoding, disableEci);
+                    // Remove the latch to text prefix.
+                    encodedValue = encodedValue.Replace(((char)0x384).ToString(), "");
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(encodedValue))
+            {
+                // Optional field separator tag & increment the source code word count
+                macroCodewords.Append((char)MACRO_OPTIONAL_FIELD_TAG);
+                sourceCodeWords++;
+
+                // Time stamp field designator & increment the source code word count
+                macroCodewords.Append((char)field);
+                sourceCodeWords++;
+
+                // Append the encoded value to the macro meta data & set the source code word count
+                macroCodewords.Append(encodedValue);
+                sourceCodeWords += encodedValue.Length;
+            }
+        }
+
 
         /// <summary>
         /// Determine optimal nr of columns and rows for the specified number of
@@ -882,6 +1077,15 @@ namespace ZXing.PDF417.Internal
         internal void setDisableEci(bool disabled)
         {
             this.disableEci = disabled;
+        }
+
+        /// <summary>
+        /// Sets the meta data.
+        /// </summary>
+        /// <param name="metadata">The metadata.</param>
+        internal void setMetaData(PDF417MacroMetadata metadata)
+        {
+            this.metadata = metadata;
         }
     }
 }
