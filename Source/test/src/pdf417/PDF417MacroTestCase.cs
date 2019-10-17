@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Linq;
 using NUnit.Framework;
 using ZXing.PDF417.Internal;
 
@@ -28,6 +29,8 @@ namespace ZXing.PDF417.Test
         [Test]
         public void TestMacroPdfCreation()
         {
+            List<Result> results = new List<Result>();
+
             var writer = new BarcodeWriter()
             {
                 Format = BarcodeFormat.PDF_417,
@@ -37,17 +40,21 @@ namespace ZXing.PDF417.Test
                     Height = 100,
                     ErrorCorrection = PDF417ErrorCorrectionLevel.L5,
                     Compact = false,
-                    Margin = 0
+                    Margin = 1
                 }
             };
 
-            //writer.Options.Hints.Add(EncodeHintType.ERROR_CORRECTION, PDF417ErrorCorrectionLevel.L5);
-            //writer.Options.Hints.Add(EncodeHintType.PDF417_COMPACTION, Compaction.TEXT);
             writer.Options.Hints.Add(EncodeHintType.PDF417_MACRO_META_DATA, new PDF417MacroMetadata()
             {
                 SegmentIndex = 0,
                 SegmentCount = 2,
-                FileId = "HELLO.WORLD"
+                FileId = "HELLO.WORLD",
+                FileName = "Bar.code",
+                Sender = "From",
+                Addressee = "To",
+                FileSize = 9001,
+                Checksum = 300,
+                Timestamp = (DateTime.UtcNow.Ticks - new DateTime(1970, 1, 1).Ticks) / TimeSpan.TicksPerSecond
             });
 
             var reader = new BarcodeReader
@@ -57,27 +64,42 @@ namespace ZXing.PDF417.Test
                     PureBarcode = true,
                     PossibleFormats = new List<BarcodeFormat> {BarcodeFormat.PDF_417},
                     TryHarder = true,
-                    ReturnCodabarStartEnd = true
+                    //ReturnCodabarStartEnd = true
                 }
             };
 
-            var matrix = new PDF417Writer().encode("Hello", BarcodeFormat.PDF_417, writer.Options.Width, writer.Options.Height, writer.Options.Hints);
+            var matrix1 = new PDF417Writer().encode("Hello", BarcodeFormat.PDF_417, writer.Options.Width, writer.Options.Height, writer.Options.Hints);
 
-            Result result;
-
-            using (Bitmap barcodeImg = writer.Write(matrix))
+            // Barcode 1 of 2
+            using (Bitmap barcodeImg = writer.Write(matrix1))
             {
-                result = reader.Decode(barcodeImg);
-                // Save the image
-                barcodeImg.Save($@"{AppDomain.CurrentDomain.BaseDirectory}\macro-test.png", ImageFormat.Png);
+                var result = reader.Decode(barcodeImg);
+                results.Add(result);
             }
 
-            using (Bitmap otherTestImg = (Bitmap)Bitmap.FromFile($@"{AppDomain.CurrentDomain.BaseDirectory}\php-generated-macro-test.png"))
+            writer.Options.Hints[EncodeHintType.PDF417_MACRO_META_DATA] = new PDF417MacroMetadata()
             {
-                result = reader.Decode(otherTestImg);
+                SegmentIndex = 1,
+                SegmentCount = 2,
+                FileId = "HELLO.WORLD"
+            };
+
+            var matrix2 = new PDF417Writer().encode(" World", BarcodeFormat.PDF_417, writer.Options.Width, writer.Options.Height, writer.Options.Hints);
+
+            // Barcode 2 of 2
+            using (Bitmap barcodeImg = writer.Write(matrix2))
+            {
+                var result = reader.Decode(barcodeImg);
+                results.Add(result);
             }
 
-            Assert.IsTrue(result != null);
+            Assert.IsTrue(
+                (
+                    from r in results
+                    where r != null && r?.ResultMetadata != null && r?.ResultMetadata.FileId == "HELLO.WORLD"
+                    select r
+                ).Count() == 2
+            );
         }
     }
 }
