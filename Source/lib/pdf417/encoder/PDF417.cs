@@ -803,7 +803,7 @@ namespace ZXing.PDF417.Internal
                 sourceCodeWords += fileId.Length;
 
                 // Optional file name
-                if (!string.IsNullOrEmpty(this.metadata.FileName) && !string.IsNullOrWhiteSpace(this.metadata.FileName))
+                if (!(string.IsNullOrEmpty(this.metadata.FileName) || this.metadata.FileName?.Trim().Length == 0))
                 {
                     macroCodewords.Append((char)MACRO_OPTIONAL_FIELD_TAG);
                     sourceCodeWords++;
@@ -832,13 +832,13 @@ namespace ZXing.PDF417.Internal
                 }
 
                 // Optional sender
-                if (!string.IsNullOrEmpty(this.metadata.Sender) && !string.IsNullOrWhiteSpace(this.metadata.Sender))
+                if (!(string.IsNullOrEmpty(this.metadata.Sender) || this.metadata.Sender?.Trim().Length == 0))
                 {
                     appendMacroOptionalField(PDF417OptionalMacroFields.Sender, this.metadata.Sender, ref sourceCodeWords, macroCodewords);
                 }
 
                 // Optional addressee
-                if (!string.IsNullOrEmpty(this.metadata.Addressee) && !string.IsNullOrWhiteSpace(this.metadata.Addressee))
+                if (!(string.IsNullOrEmpty(this.metadata.Addressee) || this.metadata.Addressee?.Trim().Length == 0))
                 {
                     appendMacroOptionalField(PDF417OptionalMacroFields.Addressee, this.metadata.Addressee, ref sourceCodeWords, macroCodewords);
                 }

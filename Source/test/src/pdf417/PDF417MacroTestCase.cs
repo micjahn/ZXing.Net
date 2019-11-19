@@ -96,7 +96,9 @@ namespace ZXing.PDF417.Test
             Assert.IsTrue(
                 (
                     from r in results
-                    where r != null && r?.ResultMetadata != null && r?.ResultMetadata.FileId == "HELLO.WORLD"
+                    where r != null
+                       && r.ResultMetadata.ContainsKey(ResultMetadataType.PDF417_EXTRA_METADATA) == true
+                       && ((PDF417ResultMetadata)r.ResultMetadata[ResultMetadataType.PDF417_EXTRA_METADATA]).FileId == "HELLO.WORLD"
                     select r
                 ).Count() == 2
             );
