@@ -211,6 +211,7 @@
     <Compile Include="pdf417\PDF417BlackBox4TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBoxZTestCase.cs" />
     <Compile Include="pdf417\PDF417DecodedBitStreamParserTestCase.cs" />
+    <Compile Include="pdf417\PDF417MacroTestCase.cs" />
     <Compile Include="pdf417\PDF417WriterTestCase.cs" />
     <Compile Include="PlanarYUVLuminanceSourceTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

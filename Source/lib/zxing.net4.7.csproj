@@ -288,7 +288,9 @@
     <Compile Include="pdf417\encoder\PDF417EncodingOptions.cs" />
     <Compile Include="pdf417\encoder\PDF417ErrorCorrection.cs" />
     <Compile Include="pdf417\encoder\PDF417HighLevelEncoder.cs" />
+    <Compile Include="pdf417\encoder\PDF417OptionalMacroFields.cs" />
     <Compile Include="pdf417\PDF417Common.cs" />
+    <Compile Include="pdf417\PDF417MacroMetadata.cs" />
     <Compile Include="pdf417\PDF417Reader.cs" />
     <Compile Include="pdf417\PDF417ResultMetadata.cs" />
     <Compile Include="pdf417\PDF417Writer.cs" />

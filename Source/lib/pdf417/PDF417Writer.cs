@@ -157,6 +157,12 @@ namespace ZXing.PDF417
                 {
                     encoder.setDisableEci(Convert.ToBoolean(hints[EncodeHintType.DISABLE_ECI].ToString()));
                 }
+
+                // Check for PDF417 Macro options
+                if (hints.ContainsKey(EncodeHintType.PDF417_MACRO_META_DATA))
+                {
+                    encoder.setMetaData((PDF417MacroMetadata)hints[EncodeHintType.PDF417_MACRO_META_DATA]);
+                }
             }
 
             return bitMatrixFromEncoder(encoder, contents, errorCorrectionLevel, width, height, margin, aspectRatio);
