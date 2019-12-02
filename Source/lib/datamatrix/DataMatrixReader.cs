@@ -63,7 +63,7 @@ namespace ZXing.Datamatrix
             else
             {
                 DetectorResult detectorResult = new Detector(image.BlackMatrix).detect();
-                if (detectorResult == null)
+                if (detectorResult == null || detectorResult.Bits == null)
                     return null;
                 decoderResult = decoder.decode(detectorResult.Bits);
                 points = detectorResult.Points;
