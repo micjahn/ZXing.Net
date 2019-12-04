@@ -15,6 +15,7 @@
  */
 
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
 
 namespace ZXing.ImageSharp
@@ -52,12 +53,13 @@ namespace ZXing.ImageSharp
 
             for (int y = 0; y < height; y++)
             {
+                var pixelRow = bitmap.GetPixelRowSpan(y);
                 // with alpha channel; some barcodes are completely black if you
                 // only look at the r, g and b channel but the alpha channel controls
                 // the view
                 for (int x = 0; x < width; x++)
                 {
-                    bitmap[x, y].ToRgba32(ref pixelRgba32);
+                    pixelRow[x].ToRgba32(ref pixelRgba32);
                     var luminance = (byte)((BChannelWeight * pixelRgba32.B +
                                              GChannelWeight * pixelRgba32.G +
                                              RChannelWeight * pixelRgba32.R) >> ChannelWeight);
