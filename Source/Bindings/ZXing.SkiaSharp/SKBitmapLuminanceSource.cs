@@ -93,32 +93,15 @@ namespace ZXing.SkiaSharp
 
                 unsafe
                 {
-                    byte* ptr = (byte*)pixelsAddr.ToPointer();
+                    uint* ptr = (uint*)pixelsAddr.ToPointer();
 
                     for (int row = 0; row < height; row++)
                     {
                         for (int col = 0; col < width; col++)
                         {
-                            byte byte1 = *ptr++;
-                            byte byte2 = *ptr++;
-                            byte byte3 = *ptr++;
-                            byte byte4 = *ptr++;
-
-                            SKColor pixel;
-                            if (colorType == SKColorType.Rgba8888 || colorType == SKColorType.RgbaF16)
-                            {
-                                pixel = new SKColor(byte1, byte2, byte3, byte4);
-                            }
-                            else if (colorType == SKColorType.Bgra8888)
-                            {
-                                pixel = new SKColor(byte3, byte2, byte1, byte4);
-                            }
-                            else
-                            {
-                                pixel = new SKColor(byte1, byte2, byte3, byte4);
-                            }
-
-                            int index = width * row + col;
+                            var index = width * row + col;
+                            uint colorVal = *ptr++;
+                            SKColor pixel = new SKColor(colorVal);
 
                             SetLuminance(index, pixel.Red, pixel.Green, pixel.Blue, pixel.Alpha);
                         }
@@ -128,6 +111,7 @@ namespace ZXing.SkiaSharp
             else
             {
                 // unknown type or other color types, use the 'old' way allocating more managed memory
+                // can potentially migrate this to the above case, but leaving here for safety
                 var pixels = src.Pixels;
                 var length = pixels.Length;
                 for (var index = 0; index < length; index++)
