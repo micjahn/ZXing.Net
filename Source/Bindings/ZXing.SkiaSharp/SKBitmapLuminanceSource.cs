@@ -74,10 +74,10 @@ namespace ZXing.SkiaSharp
                 // use the color table for indexed images
                 for (int row = 0; row < height; row++)
                 {
-                    for (int col = 0; col < width; col++)
+                    var index = width * row;
+                    for (int col = 0; col < width; col++, index++)
                     {
                         var pixel = src.GetIndex8Color(col, row);
-                        var index = width * row + col;
 
                         SetLuminance(index, pixel.Red, pixel.Green, pixel.Blue, pixel.Alpha);
                     }
@@ -97,9 +97,9 @@ namespace ZXing.SkiaSharp
 
                     for (int row = 0; row < height; row++)
                     {
-                        for (int col = 0; col < width; col++)
+                        var index = width * row;
+                        for (int col = 0; col < width; col++, index++)
                         {
-                            var index = width * row + col;
                             uint colorVal = *ptr++;
 
                             var alpha = (byte)((colorVal >> 24) & 0xff);
