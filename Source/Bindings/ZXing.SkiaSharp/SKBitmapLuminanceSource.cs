@@ -101,9 +101,13 @@ namespace ZXing.SkiaSharp
                         {
                             var index = width * row + col;
                             uint colorVal = *ptr++;
-                            SKColor pixel = new SKColor(colorVal);
 
-                            SetLuminance(index, pixel.Red, pixel.Green, pixel.Blue, pixel.Alpha);
+                            var alpha = (byte)((colorVal >> 24) & 0xff);
+                            var red = (byte)((colorVal >> 16) & 0xff);
+                            var green = (byte)((colorVal >> 8) & 0xff);
+                            var blue = (byte)((colorVal) & 0xff);
+
+                            SetLuminance(index, red, green, blue, alpha);
                         }
                     }
                 }
