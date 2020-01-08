@@ -16,18 +16,20 @@
 
 using ZXing.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.Aztec.Test
 {
    /// <summary>
-   /// <author>dswitkin@google.com (Daniel Switkin)</author>
+   /// <author>David Olivier</author>
    /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class AztecBlackBox1TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
    {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
+      public AztecBlackBox1TestCase()
+         : base("../../../../../test/data/blackbox/aztec-1", BarcodeFormat.AZTEC)
       {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
+         addTest(13, 13, 0.0f);
+         addTest(13, 13, 90.0f);
+         addTest(13, 13, 180.0f);
+         addTest(13, 13, 270.0f);
       }
    }
 }

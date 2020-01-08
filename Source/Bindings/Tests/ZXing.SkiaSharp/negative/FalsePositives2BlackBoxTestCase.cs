@@ -16,18 +16,22 @@
 
 using ZXing.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.Negative.Test
 {
    /// <summary>
+   /// Additional random images with high contrast patterns which should not find any barcodes.
+   ///
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class FalsePositives2BlackBoxTestCase : AbstractNegativeBlackBoxTestCase
    {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
+      public FalsePositives2BlackBoxTestCase()
+         : base("../../../../../test/data/blackbox/falsepositives-2")
       {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
+         addTest(4, 0.0f);
+         addTest(4, 90.0f);
+         addTest(4, 180.0f);
+         addTest(4, 270.0f);
       }
    }
 }

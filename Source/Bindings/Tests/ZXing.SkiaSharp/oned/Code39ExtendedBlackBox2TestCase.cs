@@ -19,15 +19,15 @@ using ZXing.Common.Test;
 namespace ZXing.OneD.Test
 {
    /// <summary>
-   /// <author>dswitkin@google.com (Daniel Switkin)</author>
+   /// <author>Sean Owen</author>
    /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class Code39ExtendedBlackBox2TestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
    {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
+      public Code39ExtendedBlackBox2TestCase()
+         : base("../../../../../test/data/blackbox/code39-2", BarcodeFormat.CODE_39)
       {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
+         addTest(2, 2, 0.0f);
+         addTest(2, 2, 180.0f);
       }
    }
 }

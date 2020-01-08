@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 ZXing authors
+ * Copyright 2011 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,22 @@
 
 using ZXing.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.Aztec.Test
 {
    /// <summary>
+   /// A test of Aztec barcodes under real world lighting conditions, taken with a mobile phone.
+   ///
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class AztecBlackBox2TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
    {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
+      public AztecBlackBox2TestCase()
+         : base("../../../../../test/data/blackbox/aztec-2", BarcodeFormat.AZTEC)
       {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
+         addTest(5, 5, 0.0f);
+         addTest(4, 4, 90.0f);
+         addTest(6, 6, 180.0f);
+         addTest(3, 3, 270.0f);
       }
    }
 }

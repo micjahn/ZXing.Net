@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 ZXing authors
+ * Copyright 2016 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,20 @@
 
 using ZXing.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.Maxicode.Test
 {
    /// <summary>
-   /// <author>dswitkin@google.com (Daniel Switkin)</author>
+   ///
    /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public class Maxicode1TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
    {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
+      public Maxicode1TestCase()
+         : base("../../../../../test/data/blackbox/maxicode-1", BarcodeFormat.MAXICODE)
       {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
+         addTest(5, 5, 0.0f);
+         //addTest(5, 5, 90.0f);
+         //addTest(5, 5, 180.0f);
+         //addTest(5, 5, 270.0f);
       }
    }
 }

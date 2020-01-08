@@ -19,15 +19,17 @@ using ZXing.Common.Test;
 namespace ZXing.OneD.Test
 {
    /// <summary>
+   /// This is a set of mobile image taken at 480x360 with difficult lighting.
+   ///
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class EAN13BlackBox2TestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
    {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
+      public EAN13BlackBox2TestCase()
+         : base("../../../../../test/data/blackbox/ean13-2", BarcodeFormat.EAN_13)
       {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
+         addTest(12, 17, 0, 1, 0.0f);
+         addTest(11, 17, 0, 1, 180.0f);
       }
    }
 }

@@ -60,14 +60,83 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\common\TestResult.cs">
-      <Link>Common\TestResult.cs</Link>
-    </Compile>
+    <Compile Include="aztec\AztecBlackBox1TestCase.cs" />
+    <Compile Include="aztec\AztecBlackBox2TestCase.cs" />
     <Compile Include="Common\AbstractBlackBoxTestCase.cs" />
+    <Compile Include="Common\AbstractNegativeBlackBoxTestCase.cs" />
+    <Compile Include="Common\BitArrayTestCase.cs" />
+    <Compile Include="Common\BitMatrixTestCase.cs" />
+    <Compile Include="Common\BitSourceBuilder.cs" />
+    <Compile Include="Common\BitSourceTestCase.cs" />
+    <Compile Include="Common\detector\MathUtilsTestCase.cs" />
+    <Compile Include="Common\PerspectiveTransformTestCase.cs" />
+    <Compile Include="Common\SkiaBarcodeBlackBoxTestCase.cs" />
+    <Compile Include="Common\StringUtilsTestCase.cs" />
+    <Compile Include="Common\TestResult.cs" />
+    <Compile Include="datamatrix\DataMatrixBlackBox1TestCase.cs" />
+    <Compile Include="datamatrix\DataMatrixBlackBox2TestCase.cs" />
+    <Compile Include="datamatrix\DataMatrixBlackBoxZTestCase.cs" />
+    <Compile Include="imb\IMBBlackBox1TestCase.cs" />
+    <Compile Include="maxicode\Maxicode1TestCase.cs" />
+    <Compile Include="multi\GenericMultipleBarcodeReaderTestCase.cs" />
+    <Compile Include="multi\MultiTestCase.cs" />
+    <Compile Include="multi\qrcode\MultiQRCodeBlackBox1TestCase.cs" />
+    <Compile Include="negative\FalsePositives2BlackBoxTestCase.cs" />
+    <Compile Include="negative\FalsePositivesBlackBoxTestCase.cs" />
+    <Compile Include="negative\PartialBlackBoxTestCase.cs" />
+    <Compile Include="negative\UnsupportedBlackBoxTestCase.cs" />
+    <Compile Include="oned\CodabarBlackBox1TestCase.cs" />
+    <Compile Include="oned\CodaBarWriterTestCase.cs" />
+    <Compile Include="oned\Code128BlackBox1TestCase.cs" />
+    <Compile Include="oned\Code128BlackBox2TestCase.cs" />
+    <Compile Include="oned\Code128BlackBox3TestCase.cs" />
+    <Compile Include="oned\Code128WriterTestCase.cs" />
+    <Compile Include="oned\Code39BlackBox1TestCase.cs" />
     <Compile Include="oned\Code39BlackBox3TestCase.cs" />
     <Compile Include="oned\Code39BlackBoxTestCase.cs" />
-    <Compile Include="Common\SkiaBarcodeBlackBoxTestCase.cs" />
+    <Compile Include="oned\Code39ExtendedBlackBox2TestCase.cs" />
+    <Compile Include="oned\Code39WriterTestCase.cs" />
+    <Compile Include="oned\Code93BlackBox1TestCase.cs" />
+    <Compile Include="oned\Code93ReaderTestCase.cs" />
+    <Compile Include="oned\EAN13BlackBox1TestCase.cs" />
+    <Compile Include="oned\EAN13BlackBox2TestCase.cs" />
+    <Compile Include="oned\EAN13BlackBox3TestCase.cs" />
+    <Compile Include="oned\EAN13BlackBox4TestCase.cs" />
+    <Compile Include="oned\EAN13BlackBox5BlurryTestCase.cs" />
+    <Compile Include="oned\EAN13WriterTestCase.cs" />
+    <Compile Include="oned\EAN8BlackBox1TestCase.cs" />
+    <Compile Include="oned\EAN8WriterTestCase.cs" />
+    <Compile Include="oned\ITFBlackBox1TestCase.cs" />
+    <Compile Include="oned\ITFBlackBox2TestCase.cs" />
+    <Compile Include="oned\ITFWriterTestCase.cs" />
+    <Compile Include="oned\MSIBlackBox1TestCase.cs" />
+    <Compile Include="oned\UPCABlackBox1TestCase.cs" />
+    <Compile Include="oned\UPCABlackBox2TestCase.cs" />
+    <Compile Include="oned\UPCABlackBox3ReflectiveTestCase.cs" />
+    <Compile Include="oned\UPCABlackBox4TestCase.cs" />
+    <Compile Include="oned\UPCABlackBox5TestCase.cs" />
+    <Compile Include="oned\UPCABlackBox6BlurryTestCase.cs" />
+    <Compile Include="oned\UPCAWriterTestCase.cs" />
+    <Compile Include="oned\UPCEANExtensionBlackBox1TestCase.cs" />
+    <Compile Include="oned\UPCEBlackBox1TestCase.cs" />
+    <Compile Include="oned\UPCEBlackBox2TestCase.cs" />
+    <Compile Include="oned\UPCEBlackBox3ReflectiveTestCase.cs" />
+    <Compile Include="oned\UPCEWriterTestCase.cs" />
+    <Compile Include="pdf417\PDF417BlackBox1TestCase.cs" />
+    <Compile Include="pdf417\PDF417BlackBox2TestCase.cs" />
+    <Compile Include="pdf417\PDF417BlackBox3TestCase.cs" />
+    <Compile Include="pdf417\PDF417BlackBox4TestCase.cs" />
+    <Compile Include="pdf417\PDF417BlackBoxZTestCase.cs" />
+    <Compile Include="pdf417\PDF417MacroTestCase.cs" />
+    <Compile Include="pdf417\PDF417WriterTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="qrcode\QRCodeBlackBox1TestCase.cs" />
+    <Compile Include="qrcode\QRCodeBlackBox2TestCase.cs" />
+    <Compile Include="qrcode\QRCodeBlackBox3TestCase.cs" />
+    <Compile Include="qrcode\QRCodeBlackBox4TestCase.cs" />
+    <Compile Include="qrcode\QRCodeBlackBox5TestCase.cs" />
+    <Compile Include="qrcode\QRCodeBlackBox6TestCase.cs" />
+    <Compile Include="qrcode\QRCodeWriterTestCase.cs" />
     <Compile Include="TestSetupFixture.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -81,6 +150,14 @@
       <Project>{66f2cf1d-59da-45e6-bb00-ecab29a98a04}</Project>
       <Name>ZXing.SkiaSharp</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="x64\libSkiaSharp.dll" />
+    <Content Include="x86\libSkiaSharp.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="client\" />
+    <Folder Include="Common\BigInteger\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -96,4 +173,13 @@
   <PropertyGroup>
     <PreBuildEvent>copy "$(MSBuildProjectDirectory)\..\..\..\..\Key\dummy-private.snk" "$(MSBuildProjectDirectory)\..\..\..\..\Key\private.snk"</PreBuildEvent>
   </PropertyGroup>
+  <!-- <PropertyGroup>
+    <PreBuildEvent>
+      echo $sourcePath = [System.IO.Path]::GetFullPath("$(MSBuildProjectDirectory)\..\Common") >> generated.ps1
+      echo Copy-Item -Path "$sourcePath\*" -Destination "$(MsBuildProjectDirectory)" -Recurse  >> generated.ps1
+      echo gci "$(MSBuildProjectDirectory)" *.cs -Recurse ^| ForEach { >> generated.ps1
+      echo (Get-Content ^$_ ^| ForEach { ^$_ -replace "$IMAGELIB_TESTCASE_BASECLASS", "SkiaBarcodeBlackBoxTestCase" }) ^| Set-Content ^$_ >> generated.ps1
+      echo } >> generated.ps1
+    </PreBuildEvent>
+  </PropertyGroup> -->
 </Project>

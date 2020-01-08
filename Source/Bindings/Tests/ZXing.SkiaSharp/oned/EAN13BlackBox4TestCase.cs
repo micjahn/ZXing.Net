@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 ZXing authors
+ * Copyright 2009 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,16 @@ using ZXing.Common.Test;
 namespace ZXing.OneD.Test
 {
    /// <summary>
+   /// A very difficult set of images taken with extreme shadows and highlights.
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class EAN13BlackBox4TestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
    {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
+      public EAN13BlackBox4TestCase()
+         : base("../../../../../test/data/blackbox/ean13-4", BarcodeFormat.EAN_13)
       {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
+         addTest(6, 13, 1, 1, 0.0f);
+         addTest(7, 13, 1, 1, 180.0f);
       }
    }
 }

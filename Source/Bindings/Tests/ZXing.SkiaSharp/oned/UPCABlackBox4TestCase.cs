@@ -18,16 +18,16 @@ using ZXing.Common.Test;
 
 namespace ZXing.OneD.Test
 {
-   /// <summary>
-   /// <author>dswitkin@google.com (Daniel Switkin)</author>
-   /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
-   {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
-      {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
-      }
-   }
+    /// <summary>
+    /// <author>dswitkin@google.com (Daniel Switkin)</author>
+    /// </summary>
+    public sealed class UPCABlackBox4TestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+    {
+        public UPCABlackBox4TestCase()
+           : base("../../../../../test/data/blackbox/upca-4", BarcodeFormat.UPC_A)
+        {
+            addTest(9, 11, 0, 1, 0.0f);
+            addTest(9, 11, 0, 1, 180.0f);
+        }
+    }
 }

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2008 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +15,22 @@
  */
 
 using ZXing.Common.Test;
+using ZXing.QrCode;
 
-namespace ZXing.OneD.Test
+namespace ZXing.Multi.QrCode.Test
 {
    /// <summary>
-   /// <author>dswitkin@google.com (Daniel Switkin)</author>
+   /// <author>Sean Owen</author>
    /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class GenericMultipleBarcodeReaderTestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
    {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
+      public GenericMultipleBarcodeReaderTestCase()
+         : base("../../../../../test/data/blackbox/multi-qrcode-1", BarcodeFormat.QR_CODE)
       {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
+         addTest(1, 1, 0.0f);
+         addTest(1, 1, 90.0f);
+         addTest(1, 1, 180.0f);
+         addTest(1, 1, 270.0f);
       }
    }
 }

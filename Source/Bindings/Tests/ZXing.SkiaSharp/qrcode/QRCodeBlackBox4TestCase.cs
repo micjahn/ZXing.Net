@@ -16,18 +16,22 @@
 
 using ZXing.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.QrCode.Test
 {
    /// <summary>
+   /// Tests of various QR Codes from t-shirts, which are notoriously not flat.
+   ///
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class QRCodeBlackBox4TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
    {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
+      public QRCodeBlackBox4TestCase()
+         : base("../../../../../test/data/blackbox/qrcode-4", BarcodeFormat.QR_CODE)
       {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
+         addTest(36, 36, 0.0f);
+         addTest(35, 35, 90.0f);
+         addTest(35, 35, 180.0f);
+         addTest(35, 35, 270.0f);
       }
    }
 }

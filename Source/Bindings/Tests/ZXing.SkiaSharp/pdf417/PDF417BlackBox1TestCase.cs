@@ -16,18 +16,20 @@
 
 using ZXing.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.PDF417.Test
 {
    /// <summary>
-   /// <author>dswitkin@google.com (Daniel Switkin)</author>
+   /// This test consists of perfect, computer-generated images. We should have 100% passing.
+   ///
+   /// <author>SITA Lab (kevin.osullivan@sita.aero)</author>
    /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class PDF417BlackBox1TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
    {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
+      public PDF417BlackBox1TestCase()
+         : base("../../../../../test/data/blackbox/pdf417-1", BarcodeFormat.PDF_417)
       {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
+         addTest(10, 10, 0.0f);
+         addTest(10, 10, 180.0f);
       }
    }
 }

@@ -16,18 +16,20 @@
 
 using ZXing.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.Datamatrix.Test
 {
    /// <summary>
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class DataMatrixBlackBox2TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
    {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
+      public DataMatrixBlackBox2TestCase()
+         : base("../../../../../test/data/blackbox/datamatrix-2", BarcodeFormat.DATA_MATRIX)
       {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
+         addTest(13, 13, 0, 1, 0.0f);
+         addTest(15, 15, 0, 1, 90.0f);
+         addTest(17, 17, 0, 1, 180.0f);
+         addTest(15, 15, 0, 1, 270.0f);
       }
    }
 }

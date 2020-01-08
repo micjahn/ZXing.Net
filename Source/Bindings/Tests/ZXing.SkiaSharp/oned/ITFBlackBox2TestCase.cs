@@ -21,13 +21,13 @@ namespace ZXing.OneD.Test
    /// <summary>
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
-   {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
+   public sealed class ITFBlackBox2TestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+    {
+      public ITFBlackBox2TestCase()
+         : base("../../../../../test/data/blackbox/itf-2", BarcodeFormat.ITF)
       {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
+         addTest(13, 13, 0.0f);
+         addTest(13, 13, 180.0f);
       }
    }
 }

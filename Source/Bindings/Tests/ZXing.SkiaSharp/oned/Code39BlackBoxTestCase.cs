@@ -18,7 +18,7 @@ using ZXing.SkiaSharp.Test.Common;
 
 namespace ZXing.SkiaSharp.Test.oned
 {
-    public sealed class Code39BlackBox1TestCase : SkiaBarcodeBlackBoxTestCase
+    public sealed class Code39BlackBox1TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
     {
         public Code39BlackBox1TestCase()
            : base("../../../../../test/data/blackbox/code39-1", BarcodeFormat.CODE_39)

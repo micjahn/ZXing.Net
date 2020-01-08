@@ -16,18 +16,18 @@
 
 using ZXing.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.OneD.RSS.Test
 {
    /// <summary>
-   /// <author>dswitkin@google.com (Daniel Switkin)</author>
+   /// <author>Sean Owen</author>
    /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class RSS14BlackBox2TestCase : $IMAGELIB_TESTCASE_BASECLASS
    {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
+      public RSS14BlackBox2TestCase()
+         : base("test/data/blackbox/rss14-2", new MultiFormatReader(), BarcodeFormat.RSS_14)
       {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
+         addTest(4, 8, 1, 1, 0.0f);
+         addTest(3, 8, 0, 1, 180.0f);
       }
    }
 }

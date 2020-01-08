@@ -16,18 +16,20 @@
 
 using ZXing.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.QrCode.Test
 {
    /// <summary>
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class QRCodeBlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
    {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
+      public QRCodeBlackBox3TestCase()
+         : base("../../../../../test/data/blackbox/qrcode-3", BarcodeFormat.QR_CODE)
       {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
+         addTest(38, 38, 0.0f);
+         addTest(39, 39, 90.0f);
+         addTest(36, 36, 180.0f);
+         addTest(39, 39, 270.0f);
       }
    }
 }

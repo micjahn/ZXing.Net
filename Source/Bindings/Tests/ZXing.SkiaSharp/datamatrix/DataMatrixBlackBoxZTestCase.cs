@@ -1,5 +1,5 @@
-/*
- * Copyright 2008 ZXing authors
+﻿/*
+ * Copyright 2013 ZXing.Net authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,20 @@
 
 using ZXing.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.Datamatrix.Test
 {
    /// <summary>
-   /// <author>dswitkin@google.com (Daniel Switkin)</author>
+   /// test class for additional pictures which only exist in ZXing.Net
    /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class DataMatrixBlackBoxZTestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
    {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
+      public DataMatrixBlackBoxZTestCase()
+         : base("../../../../../test/data/blackbox/datamatrix-z", BarcodeFormat.DATA_MATRIX)
       {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
+         addTest(0, 0, 0, 0, 0.0f);
+         addTest(0, 0, 0, 0, 90.0f);
+         addTest(0, 0, 0, 0, 180.0f);
+         addTest(0, 0, 0, 0, 270.0f);
       }
    }
 }

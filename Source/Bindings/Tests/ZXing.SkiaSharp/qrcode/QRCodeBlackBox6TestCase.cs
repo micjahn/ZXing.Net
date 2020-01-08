@@ -1,5 +1,5 @@
 /*
- * Copyright 2008 ZXing authors
+ * Copyright 2009 ZXing authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,21 @@
 
 using ZXing.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.QrCode.Test
 {
    /// <summary>
-   /// <author>dswitkin@google.com (Daniel Switkin)</author>
+   /// These tests are supplied by Tim Gernat and test finder pattern detection at small size and under
+   /// rotation, which was a weak spot.
    /// </summary>
-   public sealed class Code39BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class QRCodeBlackBox6TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
    {
-      public Code39BlackBox3TestCase()
-         : base("../../../../../test/data/blackbox/code39-3", BarcodeFormat.CODE_39)
+      public QRCodeBlackBox6TestCase()
+         : base("../../../../../test/data/blackbox/qrcode-6", BarcodeFormat.QR_CODE)
       {
-         addTest(17, 17, 0.0f);
-         addTest(17, 17, 180.0f);
+         addTest(15, 15, 0.0f);
+         addTest(14, 14, 90.0f);
+         addTest(13, 13, 180.0f);
+         addTest(14, 14, 270.0f);
       }
    }
 }
