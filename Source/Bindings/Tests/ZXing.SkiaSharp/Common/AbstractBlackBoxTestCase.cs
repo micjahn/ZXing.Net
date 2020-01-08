@@ -20,13 +20,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using ZXing.Multi;
 
 namespace ZXing.Common.Test
 {
     /// <summary>
     /// <author>Daniel Destouche</author>
     /// </summary>
-    public abstract class TestCaseBase<TBitmap>
+    public abstract class AbstractBlackBoxTestCase<TBitmap>
     {
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -45,15 +46,16 @@ namespace ZXing.Common.Test
         public static String buildTestBase(String testBasePathSuffix)
         {
             // A little workaround to prevent aggravation in my IDE
-            if (!Directory.Exists(testBasePathSuffix))
+            var fullPath = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, testBasePathSuffix));
+            if (!Directory.Exists(fullPath))
             {
                 // try starting with 'core' since the test base is often given as the project root
-                return Path.Combine("..\\..\\..\\Source", testBasePathSuffix);
+                return Path.GetFullPath(Path.Combine("..\\..\\..\\Source", testBasePathSuffix));
             }
-            return testBasePathSuffix;
+            return fullPath;
         }
 
-        protected TestCaseBase(String testBasePathSuffix,
+        protected AbstractBlackBoxTestCase(String testBasePathSuffix,
                                            IBarcodeReader<TBitmap> barcodeReader,
                                            BarcodeFormat? expectedFormat)
         {
@@ -160,7 +162,7 @@ namespace ZXing.Common.Test
                     var testResult = testResults[x];
                     float rotation = testResult.Rotation;
                     var rotatedImage = rotateImage(image, rotation);
-                    
+
                     try
                     {
                         if (decode(rotatedImage, rotation, expectedText, expectedMetadata, false))
@@ -287,56 +289,96 @@ namespace ZXing.Common.Test
                 // continue
             }
 
-            var expectedResults = expectedText.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-            var results = barcodeReader.DecodeMultiple(source);
-            if (results == null)
-                throw new ReaderException();
+            if (barcodeReader is MultipleBarcodeReader)
+            {
+                var expectedResults = expectedText.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+                var results = barcodeReader.DecodeMultiple(source);
+                if (results == null)
+                    throw new ReaderException();
 
-            if (expectedResults.Length != results.Length)
-            {
-                Log.InfoFormat("Count mismatch: expected '{0}' results but got '{1}'",
-                   expectedResults.Length, results.Length);
-                throw new ReaderException();
-            }
-            foreach (var oneResult in results)
-            {
-                if (expectedFormat != oneResult.BarcodeFormat)
+                if (expectedResults.Length != results.Length)
                 {
-                    Log.InfoFormat("Format mismatch: expected '{0}' but got '{1}'{2}",
-                       expectedFormat, oneResult.BarcodeFormat, suffix);
-                    return false;
+                    Log.InfoFormat("Count mismatch: expected '{0}' results but got '{1}'",
+                       expectedResults.Length, results.Length);
+                    throw new ReaderException();
                 }
-                String resultText = oneResult.Text;
-                bool found = false;
-                foreach (var expectedResult in expectedResults)
-                {
-                    if (expectedResult.Equals(resultText))
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found)
-                {
-                    Log.InfoFormat("Content was not expected: '{0}'", resultText);
-                    return false;
-                }
-            }
-            foreach (var expectedResult in expectedResults)
-            {
-                bool found = false;
                 foreach (var oneResult in results)
                 {
-                    String resultText = oneResult.Text;
-                    if (expectedResult.Equals(resultText))
+                    if (expectedFormat != oneResult.BarcodeFormat)
                     {
-                        found = true;
-                        break;
+                        Log.InfoFormat("Format mismatch: expected '{0}' but got '{1}'{2}",
+                           expectedFormat, oneResult.BarcodeFormat, suffix);
+                        return false;
+                    }
+                    String resultText = oneResult.Text;
+                    bool found = false;
+                    foreach (var expectedResult in expectedResults)
+                    {
+                        if (expectedResult.Equals(resultText))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        Log.InfoFormat("Content was not expected: '{0}'", resultText);
+                        return false;
                     }
                 }
-                if (!found)
+                foreach (var expectedResult in expectedResults)
                 {
-                    Log.InfoFormat("Content was expected but not found: '{0}'", expectedResult);
+                    bool found = false;
+                    foreach (var oneResult in results)
+                    {
+                        String resultText = oneResult.Text;
+                        if (expectedResult.Equals(resultText))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        Log.InfoFormat("Content was expected but not found: '{0}'", expectedResult);
+                        return false;
+                    }
+                }
+            }
+            else
+            {
+                if (result == null)
+                    result = barcodeReader.Decode(source);
+                if (result == null)
+                    throw new ReaderException();
+
+                if (expectedFormat != result.BarcodeFormat)
+                {
+                    Log.InfoFormat("Format mismatch: expected '{0}' but got '{1}'{2}",
+                       expectedFormat, result.BarcodeFormat, suffix);
+                    return false;
+                }
+
+                String resultText = result.Text;
+                if (!expectedText.Equals(resultText))
+                {
+                    Log.InfoFormat("Content mismatch: expected '{0}' but got '{1}'{2}",
+                       expectedText, resultText, suffix);
+                    return false;
+                }
+            }
+
+            IDictionary<ResultMetadataType, object> resultMetadata = result.ResultMetadata;
+            foreach (var metadatum in expectedMetadata)
+            {
+                ResultMetadataType key;
+                ResultMetadataType.TryParse(metadatum.Key, out key);
+                Object expectedValue = metadatum.Value;
+                Object actualValue = resultMetadata == null ? null : resultMetadata[key];
+                if (!expectedValue.Equals(actualValue))
+                {
+                    Log.InfoFormat("Metadata mismatch for key '{0}': expected '{1}' but got '{2}'",
+                       key, expectedValue, actualValue);
                     return false;
                 }
             }
