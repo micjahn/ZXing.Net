@@ -64,14 +64,7 @@
     <Compile Include="aztec\AztecBlackBox2TestCase.cs" />
     <Compile Include="Common\AbstractBlackBoxTestCase.cs" />
     <Compile Include="Common\AbstractNegativeBlackBoxTestCase.cs" />
-    <Compile Include="Common\BitArrayTestCase.cs" />
-    <Compile Include="Common\BitMatrixTestCase.cs" />
-    <Compile Include="Common\BitSourceBuilder.cs" />
-    <Compile Include="Common\BitSourceTestCase.cs" />
-    <Compile Include="Common\detector\MathUtilsTestCase.cs" />
-    <Compile Include="Common\PerspectiveTransformTestCase.cs" />
     <Compile Include="Common\SkiaBarcodeBlackBoxTestCase.cs" />
-    <Compile Include="Common\StringUtilsTestCase.cs" />
     <Compile Include="Common\TestResult.cs" />
     <Compile Include="datamatrix\DataMatrixBlackBox1TestCase.cs" />
     <Compile Include="datamatrix\DataMatrixBlackBox2TestCase.cs" />
@@ -86,16 +79,13 @@
     <Compile Include="negative\PartialBlackBoxTestCase.cs" />
     <Compile Include="negative\UnsupportedBlackBoxTestCase.cs" />
     <Compile Include="oned\CodabarBlackBox1TestCase.cs" />
-    <Compile Include="oned\CodaBarWriterTestCase.cs" />
     <Compile Include="oned\Code128BlackBox1TestCase.cs" />
     <Compile Include="oned\Code128BlackBox2TestCase.cs" />
     <Compile Include="oned\Code128BlackBox3TestCase.cs" />
-    <Compile Include="oned\Code128WriterTestCase.cs" />
     <Compile Include="oned\Code39BlackBox1TestCase.cs" />
     <Compile Include="oned\Code39BlackBox3TestCase.cs" />
     <Compile Include="oned\Code39BlackBoxTestCase.cs" />
     <Compile Include="oned\Code39ExtendedBlackBox2TestCase.cs" />
-    <Compile Include="oned\Code39WriterTestCase.cs" />
     <Compile Include="oned\Code93BlackBox1TestCase.cs" />
     <Compile Include="oned\Code93ReaderTestCase.cs" />
     <Compile Include="oned\EAN13BlackBox1TestCase.cs" />
@@ -103,12 +93,9 @@
     <Compile Include="oned\EAN13BlackBox3TestCase.cs" />
     <Compile Include="oned\EAN13BlackBox4TestCase.cs" />
     <Compile Include="oned\EAN13BlackBox5BlurryTestCase.cs" />
-    <Compile Include="oned\EAN13WriterTestCase.cs" />
     <Compile Include="oned\EAN8BlackBox1TestCase.cs" />
-    <Compile Include="oned\EAN8WriterTestCase.cs" />
     <Compile Include="oned\ITFBlackBox1TestCase.cs" />
     <Compile Include="oned\ITFBlackBox2TestCase.cs" />
-    <Compile Include="oned\ITFWriterTestCase.cs" />
     <Compile Include="oned\MSIBlackBox1TestCase.cs" />
     <Compile Include="oned\UPCABlackBox1TestCase.cs" />
     <Compile Include="oned\UPCABlackBox2TestCase.cs" />
@@ -116,12 +103,10 @@
     <Compile Include="oned\UPCABlackBox4TestCase.cs" />
     <Compile Include="oned\UPCABlackBox5TestCase.cs" />
     <Compile Include="oned\UPCABlackBox6BlurryTestCase.cs" />
-    <Compile Include="oned\UPCAWriterTestCase.cs" />
     <Compile Include="oned\UPCEANExtensionBlackBox1TestCase.cs" />
     <Compile Include="oned\UPCEBlackBox1TestCase.cs" />
     <Compile Include="oned\UPCEBlackBox2TestCase.cs" />
     <Compile Include="oned\UPCEBlackBox3ReflectiveTestCase.cs" />
-    <Compile Include="oned\UPCEWriterTestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox1TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox2TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox3TestCase.cs" />
@@ -151,28 +136,20 @@
       <Name>ZXing.SkiaSharp</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="x64\libSkiaSharp.dll" />
-    <Content Include="x86\libSkiaSharp.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="client\" />
-    <Folder Include="Common\BigInteger\" />
-  </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets'))" />
     <Error Condition="!Exists('..\..\..\..\packages\NUnit.3.12.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\NUnit.3.12.0\build\NUnit.props'))" />
     <Error Condition="!Exists('..\..\..\..\packages\NUnit3TestAdapter.3.16.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\NUnit3TestAdapter.3.16.0\build\net35\NUnit3TestAdapter.props'))" />
+    <Error Condition="!Exists('..\..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets'))" />
   </Target>
-  <Import Project="..\..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets" Condition="Exists('..\..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets')" />
   <PropertyGroup>
     <PreBuildEvent>copy "$(MSBuildProjectDirectory)\..\..\..\..\Key\dummy-private.snk" "$(MSBuildProjectDirectory)\..\..\..\..\Key\private.snk"</PreBuildEvent>
   </PropertyGroup>
+  <Import Project="..\..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets" Condition="Exists('..\..\..\..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets')" />
   <!-- <PropertyGroup>
     <PreBuildEvent>
       echo $sourcePath = [System.IO.Path]::GetFullPath("$(MSBuildProjectDirectory)\..\Common") >> generated.ps1
