@@ -37,11 +37,11 @@ namespace ZXing.QrCode.Test
 
         private static SKBitmap loadImage(String fileName)
         {
-            String file = BASE_IMAGE_PATH + fileName;
+            String file = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, BASE_IMAGE_PATH + fileName));
             if (!File.Exists(file))
             {
                 // try starting with 'core' since the test base is often given as the project root
-                file = "..\\..\\..\\Source\\" + BASE_IMAGE_PATH + fileName;
+                file = Path.GetFullPath("..\\..\\..\\Source\\" + BASE_IMAGE_PATH + fileName);
             }
             Assert.IsTrue(File.Exists(file), "Please run from the 'core' directory");
 
@@ -56,7 +56,6 @@ namespace ZXing.QrCode.Test
             var data = image.Pixels;
 
             BitMatrix matrix = new BitMatrix(width, height);
-            var length = data.Length;
 
             for (var y = 0; y < height; y++)
             {
@@ -86,17 +85,25 @@ namespace ZXing.QrCode.Test
         {
             // The QR should be multiplied up to fit, with extra padding if necessary
             int bigEnough = 256;
-            QRCodeWriter writer = new QRCodeWriter();
-            BitMatrix matrix = writer.encode("http://www.google.com/", BarcodeFormat.QR_CODE, bigEnough,
-                bigEnough, null);
+            var writer = new ZXing.SkiaSharp.BarcodeWriter
+            {
+                Format = BarcodeFormat.QR_CODE,
+                Options = new EncodingOptions
+                {
+                    Width = bigEnough,
+                    Height = bigEnough
+                }
+            };
+            BitMatrix matrix = writer.Encode("http://www.google.com/");
             Assert.NotNull(matrix);
             Assert.AreEqual(bigEnough, matrix.Width);
             Assert.AreEqual(bigEnough, matrix.Height);
 
             // The QR will not fit in this size, so the matrix should come back bigger
             int tooSmall = 20;
-            matrix = writer.encode("http://www.google.com/", BarcodeFormat.QR_CODE, tooSmall,
-                tooSmall, null);
+            writer.Options.Width = tooSmall;
+            writer.Options.Height = tooSmall;
+            matrix = writer.Encode("http://www.google.com/");
             Assert.NotNull(matrix);
             Assert.IsTrue(tooSmall < matrix.Width);
             Assert.IsTrue(tooSmall < matrix.Height);
@@ -104,8 +111,9 @@ namespace ZXing.QrCode.Test
             // We should also be able to handle non-square requests by padding them
             int strangeWidth = 500;
             int strangeHeight = 100;
-            matrix = writer.encode("http://www.google.com/", BarcodeFormat.QR_CODE, strangeWidth,
-                strangeHeight, null);
+            writer.Options.Width = strangeWidth;
+            writer.Options.Height = strangeHeight;
+            matrix = writer.Encode("http://www.google.com/");
             Assert.NotNull(matrix);
             Assert.AreEqual(strangeWidth, matrix.Width);
             Assert.AreEqual(strangeHeight, matrix.Height);
@@ -121,11 +129,15 @@ namespace ZXing.QrCode.Test
             BitMatrix goldenResult = createMatrixFromImage(image);
             Assert.NotNull(goldenResult);
 
-            QRCodeWriter writer = new QRCodeWriter();
-            IDictionary<EncodeHintType, Object> hints = new Dictionary<EncodeHintType, Object>();
-            hints[EncodeHintType.ERROR_CORRECTION] = ecLevel;
-            BitMatrix generatedResult = writer.encode(contents, BarcodeFormat.QR_CODE, resolution,
-                resolution, hints);
+            var writer = new ZXing.SkiaSharp.BarcodeWriter();
+            writer.Format = BarcodeFormat.QR_CODE;
+            writer.Options = new EncodingOptions
+            {
+                Width = resolution,
+                Height = resolution
+            };
+            writer.Options.Hints.Add(EncodeHintType.ERROR_CORRECTION, ecLevel);
+            BitMatrix generatedResult = writer.Encode(contents);
 
             Assert.AreEqual(resolution, generatedResult.Width);
             Assert.AreEqual(resolution, generatedResult.Height);

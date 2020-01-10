@@ -87,7 +87,6 @@
     <Compile Include="oned\Code39BlackBoxTestCase.cs" />
     <Compile Include="oned\Code39ExtendedBlackBox2TestCase.cs" />
     <Compile Include="oned\Code93BlackBox1TestCase.cs" />
-    <Compile Include="oned\Code93ReaderTestCase.cs" />
     <Compile Include="oned\EAN13BlackBox1TestCase.cs" />
     <Compile Include="oned\EAN13BlackBox2TestCase.cs" />
     <Compile Include="oned\EAN13BlackBox3TestCase.cs" />
@@ -112,8 +111,6 @@
     <Compile Include="pdf417\PDF417BlackBox3TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBox4TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBoxZTestCase.cs" />
-    <Compile Include="pdf417\PDF417MacroTestCase.cs" />
-    <Compile Include="pdf417\PDF417WriterTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="qrcode\QRCodeBlackBox1TestCase.cs" />
     <Compile Include="qrcode\QRCodeBlackBox2TestCase.cs" />
@@ -122,6 +119,7 @@
     <Compile Include="qrcode\QRCodeBlackBox5TestCase.cs" />
     <Compile Include="qrcode\QRCodeBlackBox6TestCase.cs" />
     <Compile Include="qrcode\QRCodeWriterTestCase.cs" />
+    <Compile Include="SKBitmapLuminanceSourceTests.cs" />
     <Compile Include="TestSetupFixture.cs" />
   </ItemGroup>
   <ItemGroup>
