@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
+using ZXing.SkiaSharp.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.SkiaSharp.OneD.Test
 {
    /// <summary>
    /// <author>Sean Owen</author>
    /// </summary>
-   public sealed class Code93BlackBox1TestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class Code93BlackBox1TestCase : SkiaBarcodeBlackBoxTestCase
    {
       public Code93BlackBox1TestCase()
          : base("../../../../../test/data/blackbox/code93-1", BarcodeFormat.CODE_93)

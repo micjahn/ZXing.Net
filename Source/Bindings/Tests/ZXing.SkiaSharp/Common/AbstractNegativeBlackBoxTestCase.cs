@@ -18,16 +18,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SkiaSharp;
-using ZXing.SkiaSharp;
-#if !SILVERLIGHT
-using System.Drawing;
-#else
-using System.Windows.Media.Imaging;
-#endif
 using NUnit.Framework;
 
-namespace ZXing.Common.Test
+namespace ZXing.SkiaSharp.Common.Test
 {
     /// <summary>
     /// This abstract class looks for negative results, i.e. it only allows a certain number of false
@@ -36,7 +29,7 @@ namespace ZXing.Common.Test
     /// <author>dswitkin@google.com (Daniel Switkin)</author>
     /// </summary>
     [TestFixture]
-    public abstract class AbstractNegativeBlackBoxTestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+    public abstract class AbstractNegativeBlackBoxTestCase : SkiaBarcodeBlackBoxTestCase
     {
 #if !SILVERLIGHT
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -92,7 +85,7 @@ namespace ZXing.Common.Test
                 var absPath = Path.GetFullPath(testImage);
                 Log.InfoFormat("Starting {0}", absPath);
 
-                var image = SKBitmap.Decode(testImage);
+                var image = openFromFile(testImage);
 
                 for (int x = 0; x < testResults.Count; x++)
                 {
@@ -131,38 +124,6 @@ namespace ZXing.Common.Test
                                testResult.getFalsePositivesAllowed());
                 Assert.IsTrue(falsePositives[x] <= testResult.getFalsePositivesAllowed(), "Rotation " + testResult.getRotation() + " degrees: Too many false positives found");
             }
-        }
-
-        /// <summary>
-        /// Make sure ZXing does NOT find a barcode in the image.
-        ///
-        /// <param name="image">The image to test</param>
-        /// <param name="rotationInDegrees">The amount of rotation to apply</param>
-        /// <returns>true if nothing found, false if a non-existent barcode was detected</returns>
-        /// </summary>
-        private bool checkForFalsePositives(SKBitmap image, float rotationInDegrees)
-        {
-            var rotatedImage = rotateImage(image, rotationInDegrees);
-            var result = getReader().Decode(rotatedImage);
-            if (result != null)
-            {
-                Log.InfoFormat("Found false positive: '{0}' with format '{1}' (rotation: {2})",
-                               result.Text, result.BarcodeFormat, (int)rotationInDegrees);
-                return false;
-            }
-
-            // Try "try harder" getMode
-            var barcodeReader = getReader();
-            var basicReader = barcodeReader as BarcodeReader;
-            basicReader.Options.TryHarder = true;
-            result = barcodeReader.Decode(rotatedImage);
-            if (result != null)
-            {
-                Log.InfoFormat("Try harder found false positive: '{0}' with format '{1}' (rotation: {2})",
-                               result.Text, result.BarcodeFormat, (int)rotationInDegrees);
-                return false;
-            }
-            return true;
         }
     }
 }

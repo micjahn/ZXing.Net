@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
+using ZXing.SkiaSharp.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.SkiaSharp.OneD.Test
 {
    /// <summary>
    /// <author>Sean Owen</author>
    /// </summary>
-   public sealed class MSIBlackBox1TestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class MSIBlackBox1TestCase : SkiaBarcodeBlackBoxTestCase
     {
       public MSIBlackBox1TestCase()
          : base("../../../../../test/data/blackbox/msi-1",BarcodeFormat.MSI)

@@ -52,11 +52,11 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
-    <Reference Include="zxing, Version=0.16.4.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\ZXing.Net.0.16.4\lib\net461\zxing.dll</HintPath>
+    <Reference Include="zxing, Version=0.16.5.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ZXing.Net.0.16.5\lib\net461\zxing.dll</HintPath>
     </Reference>
-    <Reference Include="zxing.presentation, Version=0.16.4.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\ZXing.Net.0.16.4\lib\net461\zxing.presentation.dll</HintPath>
+    <Reference Include="zxing.presentation, Version=0.16.5.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ZXing.Net.0.16.5\lib\net461\zxing.presentation.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -74,10 +74,6 @@
     <Compile Include="multi\GenericMultipleBarcodeReaderTestCase.cs" />
     <Compile Include="multi\MultiTestCase.cs" />
     <Compile Include="multi\qrcode\MultiQRCodeBlackBox1TestCase.cs" />
-    <Compile Include="negative\FalsePositives2BlackBoxTestCase.cs" />
-    <Compile Include="negative\FalsePositivesBlackBoxTestCase.cs" />
-    <Compile Include="negative\PartialBlackBoxTestCase.cs" />
-    <Compile Include="negative\UnsupportedBlackBoxTestCase.cs" />
     <Compile Include="oned\CodabarBlackBox1TestCase.cs" />
     <Compile Include="oned\Code128BlackBox1TestCase.cs" />
     <Compile Include="oned\Code128BlackBox2TestCase.cs" />
@@ -112,13 +108,6 @@
     <Compile Include="pdf417\PDF417BlackBox4TestCase.cs" />
     <Compile Include="pdf417\PDF417BlackBoxZTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="qrcode\QRCodeBlackBox1TestCase.cs" />
-    <Compile Include="qrcode\QRCodeBlackBox2TestCase.cs" />
-    <Compile Include="qrcode\QRCodeBlackBox3TestCase.cs" />
-    <Compile Include="qrcode\QRCodeBlackBox4TestCase.cs" />
-    <Compile Include="qrcode\QRCodeBlackBox5TestCase.cs" />
-    <Compile Include="qrcode\QRCodeBlackBox6TestCase.cs" />
-    <Compile Include="qrcode\QRCodeWriterTestCase.cs" />
     <Compile Include="SKBitmapLuminanceSourceTests.cs" />
     <Compile Include="TestSetupFixture.cs" />
   </ItemGroup>

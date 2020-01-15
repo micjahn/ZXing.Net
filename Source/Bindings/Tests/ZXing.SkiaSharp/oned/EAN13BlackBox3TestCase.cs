@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
 
-namespace ZXing.OneD.Test
+using ZXing.SkiaSharp.Common.Test;
+
+namespace ZXing.SkiaSharp.OneD.Test
 {
    /// <summary>
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class EAN13BlackBox3TestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class EAN13BlackBox3TestCase : SkiaBarcodeBlackBoxTestCase
    {
       public EAN13BlackBox3TestCase()
          : base("../../../../../test/data/blackbox/ean13-3", BarcodeFormat.EAN_13)

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
+using ZXing.SkiaSharp.Common.Test;
 
-namespace ZXing.PDF417.Test
+namespace ZXing.SkiaSharp.PDF417.Test
 {
    /// <summary>
    /// This test consists of perfect, computer-generated images. We should have 100% passing.
    ///
    /// <author>SITA Lab (kevin.osullivan@sita.aero)</author>
    /// </summary>
-   public sealed class PDF417BlackBox1TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class PDF417BlackBox1TestCase : SkiaBarcodeBlackBoxTestCase
    {
       public PDF417BlackBox1TestCase()
          : base("../../../../../test/data/blackbox/pdf417-1", BarcodeFormat.PDF_417)

@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-using System.Drawing;
-using System.IO;
-
 using NUnit.Framework;
 using SkiaSharp;
+using System.IO;
 using ZXing.Common;
-using ZXing.Common.Test;
-using ZXing.SkiaSharp;
+using ZXing.Multi;
+using ZXing.SkiaSharp.Common.Test;
 
-namespace ZXing.Multi.Test
+namespace ZXing.SkiaSharp.Multi.Test
 {
    public class MultiTestCase
    {

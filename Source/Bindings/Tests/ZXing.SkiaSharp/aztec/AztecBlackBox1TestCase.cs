@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
 
-namespace ZXing.Aztec.Test
+using ZXing.SkiaSharp.Common.Test;
+
+namespace ZXing.SkiaSharp.Aztec.Test
 {
    /// <summary>
    /// <author>David Olivier</author>
    /// </summary>
-   public sealed class AztecBlackBox1TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class AztecBlackBox1TestCase : SkiaBarcodeBlackBoxTestCase
    {
       public AztecBlackBox1TestCase()
          : base("../../../../../test/data/blackbox/aztec-1", BarcodeFormat.AZTEC)

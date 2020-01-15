@@ -22,7 +22,7 @@ using System.IO;
 using System.Linq;
 using ZXing.Multi;
 
-namespace ZXing.Common.Test
+namespace ZXing.SkiaSharp.Common.Test
 {
     /// <summary>
     /// <author>Daniel Destouche</author>
@@ -389,5 +389,39 @@ namespace ZXing.Common.Test
         protected abstract TBitmap rotateImage(TBitmap original, float degrees);
 
         protected abstract TBitmap openFromFile(string filePath);
+
+        protected abstract LuminanceSource getLuminanceSource(TBitmap image);
+
+        /// <summary>
+        /// Make sure ZXing does NOT find a barcode in the image.
+        ///
+        /// <param name="image">The image to test</param>
+        /// <param name="rotationInDegrees">The amount of rotation to apply</param>
+        /// <returns>true if nothing found, false if a non-existent barcode was detected</returns>
+        /// </summary>
+        protected bool checkForFalsePositives(TBitmap image, float rotationInDegrees)
+        {
+            var rotatedImage = rotateImage(image, rotationInDegrees);
+            var barcodeReader = getReader();
+            var result = barcodeReader.Decode(rotatedImage);
+            if (result != null)
+            {
+                Log.InfoFormat("Found false positive: '{0}' with format '{1}' (rotation: {2})",
+                               result.Text, result.BarcodeFormat, (int)rotationInDegrees);
+                return false;
+            }
+
+            // Try "try harder" getMode
+            var basicReader = barcodeReader as IBarcodeReader;
+            basicReader.Options.TryHarder = true;
+            result = barcodeReader.Decode(rotatedImage);
+            if (result != null)
+            {
+                Log.InfoFormat("Try harder found false positive: '{0}' with format '{1}' (rotation: {2})",
+                               result.Text, result.BarcodeFormat, (int)rotationInDegrees);
+                return false;
+            }
+            return true;
+        }
     }
 }

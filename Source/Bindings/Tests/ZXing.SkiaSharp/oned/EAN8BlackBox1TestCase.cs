@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
 
-namespace ZXing.OneD.Test
+using ZXing.SkiaSharp.Common.Test;
+
+namespace ZXing.SkiaSharp.OneD.Test
 {
    /// <summary>
    /// <author>Sean Owen</author>
    /// </summary>
-   public sealed class EAN8BlackBox1TestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class EAN8BlackBox1TestCase : SkiaBarcodeBlackBoxTestCase
    {
       public EAN8BlackBox1TestCase()
          : base("../../../../../test/data/blackbox/ean8-1", BarcodeFormat.EAN_8)

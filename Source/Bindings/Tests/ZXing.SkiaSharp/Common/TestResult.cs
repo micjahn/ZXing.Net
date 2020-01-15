@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-namespace ZXing.Common.Test
+namespace ZXing.SkiaSharp.Common.Test
 {
     /// <summary>
     /// Encapsulates the result of one test over a batch of black-box images.

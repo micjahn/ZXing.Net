@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
 
-namespace ZXing.OneD.Test
+using ZXing.SkiaSharp.Common.Test;
+
+namespace ZXing.SkiaSharp.OneD.Test
 {
    /// <summary>
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class UPCABlackBox5TestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class UPCABlackBox5TestCase : SkiaBarcodeBlackBoxTestCase
     {
       public UPCABlackBox5TestCase()
          : base("../../../../../test/data/blackbox/upca-5", BarcodeFormat.UPC_A)

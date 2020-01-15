@@ -16,14 +16,13 @@
 
 using SkiaSharp;
 using System;
-using ZXing.Common.Test;
 
-namespace ZXing.SkiaSharp.Test.Common
+namespace ZXing.SkiaSharp.Common.Test
 {
     public abstract class SkiaBarcodeBlackBoxTestCase : AbstractBlackBoxTestCase<SKBitmap>
     {
         public SkiaBarcodeBlackBoxTestCase(string testBasePathSuffix, BarcodeFormat? expectedFormat)
-            : base(testBasePathSuffix, new BarcodeReader(), expectedFormat)
+        : base(testBasePathSuffix, new BarcodeReader(), expectedFormat)
         {
 
         }
@@ -54,6 +53,11 @@ namespace ZXing.SkiaSharp.Test.Common
             }
 
             return rotatedBitmap;
+        }
+
+        protected override LuminanceSource getLuminanceSource(SKBitmap image)
+        {
+            return new SKBitmapLuminanceSource(image);
         }
     }
 }

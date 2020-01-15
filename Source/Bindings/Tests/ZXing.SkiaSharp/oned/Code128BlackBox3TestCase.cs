@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
+using ZXing.SkiaSharp.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.SkiaSharp.OneD.Test
 {
    /// <summary>
    /// <author>Sean Owen</author>
    /// </summary>
-   public sealed class Code128BlackBox3TestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class Code128BlackBox3TestCase : SkiaBarcodeBlackBoxTestCase
    {
       public Code128BlackBox3TestCase()
          : base("../../../../../test/data/blackbox/code128-3", BarcodeFormat.CODE_128)

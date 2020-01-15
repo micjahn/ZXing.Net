@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
-using ZXing.QrCode;
+using ZXing.SkiaSharp.Common.Test;
 
-namespace ZXing.Multi.QrCode.Test
+namespace ZXing.SkiaSharp.Multi.QrCode.Test
 {
    /// <summary>
    /// <author>Sean Owen</author>
    /// </summary>
-   public sealed class GenericMultipleBarcodeReaderTestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class GenericMultipleBarcodeReaderTestCase : SkiaBarcodeBlackBoxTestCase
    {
       public GenericMultipleBarcodeReaderTestCase()
          : base("../../../../../test/data/blackbox/multi-qrcode-1", BarcodeFormat.QR_CODE)

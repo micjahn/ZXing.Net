@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
+using ZXing.SkiaSharp.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.SkiaSharp.OneD.Test
 {
    /// <summary>
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class UPCEBlackBox3ReflectiveTestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class UPCEBlackBox3ReflectiveTestCase : SkiaBarcodeBlackBoxTestCase
    {
       public UPCEBlackBox3ReflectiveTestCase()
          : base("../../../../../test/data/blackbox/upce-3", BarcodeFormat.UPC_E)

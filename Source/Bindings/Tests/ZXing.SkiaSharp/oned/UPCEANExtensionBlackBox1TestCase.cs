@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
+using ZXing.SkiaSharp.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.SkiaSharp.OneD.Test
 {
    /// <summary>
    /// <author>Sean Owen</author>
    /// </summary>
-   public sealed class UPCEANExtensionBlackBox1TestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class UPCEANExtensionBlackBox1TestCase : SkiaBarcodeBlackBoxTestCase
     {
       public UPCEANExtensionBlackBox1TestCase()
          : base("../../../../../test/data/blackbox/upcean-extension-1", BarcodeFormat.EAN_13)

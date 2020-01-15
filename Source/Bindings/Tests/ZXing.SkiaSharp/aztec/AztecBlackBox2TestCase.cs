@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
+using ZXing.SkiaSharp.Common.Test;
 
-namespace ZXing.Aztec.Test
+namespace ZXing.SkiaSharp.Aztec.Test
 {
    /// <summary>
    /// A test of Aztec barcodes under real world lighting conditions, taken with a mobile phone.
    ///
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class AztecBlackBox2TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class AztecBlackBox2TestCase : SkiaBarcodeBlackBoxTestCase
    {
       public AztecBlackBox2TestCase()
          : base("../../../../../test/data/blackbox/aztec-2", BarcodeFormat.AZTEC)

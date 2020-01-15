@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
+using ZXing.SkiaSharp.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.SkiaSharp.OneD.Test
 {
    /// <summary>
    /// <author>kevin.osullivan@sita.aero</author>
    /// </summary>
-   public sealed class ITFBlackBox1TestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class ITFBlackBox1TestCase : SkiaBarcodeBlackBoxTestCase
    {
       public ITFBlackBox1TestCase()
          : base("../../../../../test/data/blackbox/itf-1", BarcodeFormat.ITF)

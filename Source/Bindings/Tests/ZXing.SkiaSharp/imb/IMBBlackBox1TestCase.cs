@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
+using ZXing.SkiaSharp.Common.Test;
 
-namespace ZXing.IMB.Test
+namespace ZXing.SkiaSharp.IMB.Test
 {
    /// <summary>
    ///
    /// </summary>
-   public sealed class IMBBlackBox1TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class IMBBlackBox1TestCase : SkiaBarcodeBlackBoxTestCase
    {
       public IMBBlackBox1TestCase()
          : base("../../../../../test/data/blackbox/imb-1", BarcodeFormat.IMB)

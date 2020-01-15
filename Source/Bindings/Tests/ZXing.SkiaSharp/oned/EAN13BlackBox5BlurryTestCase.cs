@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
+using ZXing.SkiaSharp.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.SkiaSharp.OneD.Test
 {
    /// <summary>
    /// A set of blurry images taken with a fixed-focus device.
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class EAN13BlackBox5BlurryTestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class EAN13BlackBox5BlurryTestCase : SkiaBarcodeBlackBoxTestCase
    {
       public EAN13BlackBox5BlurryTestCase()
          : base("../../../../../test/data/blackbox/ean13-5", BarcodeFormat.EAN_13)

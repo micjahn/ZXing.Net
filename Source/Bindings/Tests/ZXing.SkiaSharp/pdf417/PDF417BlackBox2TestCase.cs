@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
 
-namespace ZXing.PDF417.Test
+using ZXing.SkiaSharp.Common.Test;
+
+namespace ZXing.SkiaSharp.PDF417.Test
 {
    /// <summary>
    /// This test contains 480x240 images captured from an Android device at preview resolution.
    ///
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class PDF417BlackBox2TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class PDF417BlackBox2TestCase : SkiaBarcodeBlackBoxTestCase
    {
       public PDF417BlackBox2TestCase()
          : base("../../../../../test/data/blackbox/pdf417-2", BarcodeFormat.PDF_417)

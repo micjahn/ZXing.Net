@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
 
-namespace ZXing.PDF417.Test
+using ZXing.SkiaSharp.Common.Test;
+
+namespace ZXing.SkiaSharp.PDF417.Test
 {
    /// <summary>
    /// Regression tests
    /// </summary>
-   public sealed class PDF417BlackBox3TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class PDF417BlackBox3TestCase : SkiaBarcodeBlackBoxTestCase
    {
       public PDF417BlackBox3TestCase()
          : base("../../../../../test/data/blackbox/pdf417-3", BarcodeFormat.PDF_417)

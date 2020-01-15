@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
 
-namespace ZXing.OneD.Test
+using ZXing.SkiaSharp.Common.Test;
+
+namespace ZXing.SkiaSharp.OneD.Test
 {
    /// <summary>
    /// A very difficult set of images taken with extreme shadows and highlights.
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class EAN13BlackBox4TestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class EAN13BlackBox4TestCase : SkiaBarcodeBlackBoxTestCase
    {
       public EAN13BlackBox4TestCase()
          : base("../../../../../test/data/blackbox/ean13-4", BarcodeFormat.EAN_13)

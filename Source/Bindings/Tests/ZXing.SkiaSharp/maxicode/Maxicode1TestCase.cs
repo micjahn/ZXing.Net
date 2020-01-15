@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
+using ZXing.SkiaSharp.Common.Test;
 
-namespace ZXing.Maxicode.Test
+namespace ZXing.SkiaSharp.Maxicode.Test
 {
    /// <summary>
    ///
    /// </summary>
-   public class Maxicode1TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public class Maxicode1TestCase : SkiaBarcodeBlackBoxTestCase
    {
       public Maxicode1TestCase()
          : base("../../../../../test/data/blackbox/maxicode-1", BarcodeFormat.MAXICODE)
       {
          addTest(5, 5, 0.0f);
-         //addTest(5, 5, 90.0f);
-         //addTest(5, 5, 180.0f);
-         //addTest(5, 5, 270.0f);
       }
    }
 }

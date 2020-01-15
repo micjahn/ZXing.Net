@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
 
-namespace ZXing.Datamatrix.Test
+using ZXing.SkiaSharp.Common.Test;
+
+namespace ZXing.SkiaSharp.Datamatrix.Test
 {
-   /// <summary>
-   /// <author>bbrown@google.com (Brian Brown)</author>
-   /// </summary>
-   public sealed class DataMatrixBlackBox1TestCase : SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+    /// <summary>
+    /// <author>bbrown@google.com (Brian Brown)</author>
+    /// </summary>
+    public sealed class DataMatrixBlackBox1TestCase : SkiaBarcodeBlackBoxTestCase
     {
       public DataMatrixBlackBox1TestCase()
          : base("../../../../../test/data/blackbox/datamatrix-1", BarcodeFormat.DATA_MATRIX)

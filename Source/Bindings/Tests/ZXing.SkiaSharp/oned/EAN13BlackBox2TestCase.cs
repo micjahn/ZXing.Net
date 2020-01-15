@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
+using ZXing.SkiaSharp.Common.Test;
 
-namespace ZXing.OneD.Test
+namespace ZXing.SkiaSharp.OneD.Test
 {
    /// <summary>
    /// This is a set of mobile image taken at 480x360 with difficult lighting.
    ///
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class EAN13BlackBox2TestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class EAN13BlackBox2TestCase : SkiaBarcodeBlackBoxTestCase
    {
       public EAN13BlackBox2TestCase()
          : base("../../../../../test/data/blackbox/ean13-2", BarcodeFormat.EAN_13)

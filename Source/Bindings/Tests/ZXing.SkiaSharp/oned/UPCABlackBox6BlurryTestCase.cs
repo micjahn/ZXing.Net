@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-using ZXing.Common.Test;
 
-namespace ZXing.OneD.Test
+using ZXing.SkiaSharp.Common.Test;
+
+namespace ZXing.SkiaSharp.OneD.Test
 {
    /// <summary>
    /// A set of blurry images taken with a fixed-focus device.
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
-   public sealed class UPCABlackBox6BlurryTestCase : ZXing.SkiaSharp.Test.Common.SkiaBarcodeBlackBoxTestCase
+   public sealed class UPCABlackBox6BlurryTestCase : SkiaBarcodeBlackBoxTestCase
     {
       public UPCABlackBox6BlurryTestCase()
          : base("../../../../../test/data/blackbox/upca-6", BarcodeFormat.UPC_A)
