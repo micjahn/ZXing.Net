@@ -145,13 +145,8 @@ namespace ZXing.QrCode.Internal
                 return null;
             }
 
-#if WindowsCE
-         var resultString = result.ToString().Replace("\n", "\r\n");
-#else
-            var resultString = result.ToString().Replace("\r\n", "\n").Replace("\n", Environment.NewLine);
-#endif
             return new DecoderResult(bytes,
-                                     resultString,
+                                     result.ToString(),
                                      byteSegments.Count == 0 ? null : byteSegments,
                                      ecLevel == null ? null : ecLevel.ToString(),
                                      symbolSequence, parityData);
