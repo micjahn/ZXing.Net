@@ -65,7 +65,8 @@ namespace ZXing.SkiaSharp
                 throw new ArgumentNullException("src");
 
             var pixels = src.Pixels;
-            for (var index = 0; index < src.Width * src.Height; index++)
+            var length = pixels.Length;
+            for (var index = 0; index < length; index++)
             {
                 var pixel = pixels[index];
                 // Calculate luminance cheaply, favoring green.
