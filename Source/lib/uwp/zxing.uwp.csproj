@@ -824,8 +824,8 @@
     <Compile Include="..\pdf417\PDF417Common.cs">
       <Link>pdf417\PDF417Common.cs</Link>
     </Compile>
-    <Compile Include="..\pdf417\PDF417MacroMetadata.cs.cs">
-      <Link>pdf417\PDF417MacroMetadata.cs.cs</Link>
+    <Compile Include="..\pdf417\PDF417MacroMetadata.cs">
+      <Link>pdf417\PDF417MacroMetadata.cs</Link>
     </Compile>
     <Compile Include="..\pdf417\PDF417Reader.cs">
       <Link>pdf417\PDF417Reader.cs</Link>
