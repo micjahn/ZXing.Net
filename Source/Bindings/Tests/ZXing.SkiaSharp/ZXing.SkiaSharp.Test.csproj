@@ -51,6 +51,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="zxing, Version=0.16.5.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\ZXing.Net.0.16.5\lib\net461\zxing.dll</HintPath>
@@ -60,56 +61,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="aztec\AztecBlackBox1TestCase.cs" />
-    <Compile Include="aztec\AztecBlackBox2TestCase.cs" />
-    <Compile Include="Common\AbstractBlackBoxTestCase.cs" />
-    <Compile Include="Common\AbstractNegativeBlackBoxTestCase.cs" />
-    <Compile Include="Common\SkiaBarcodeBlackBoxTestCase.cs" />
-    <Compile Include="Common\TestResult.cs" />
-    <Compile Include="datamatrix\DataMatrixBlackBox1TestCase.cs" />
-    <Compile Include="datamatrix\DataMatrixBlackBox2TestCase.cs" />
-    <Compile Include="datamatrix\DataMatrixBlackBoxZTestCase.cs" />
-    <Compile Include="imb\IMBBlackBox1TestCase.cs" />
-    <Compile Include="maxicode\Maxicode1TestCase.cs" />
-    <Compile Include="multi\GenericMultipleBarcodeReaderTestCase.cs" />
-    <Compile Include="multi\MultiTestCase.cs" />
-    <Compile Include="multi\qrcode\MultiQRCodeBlackBox1TestCase.cs" />
-    <Compile Include="oned\CodabarBlackBox1TestCase.cs" />
-    <Compile Include="oned\Code128BlackBox1TestCase.cs" />
-    <Compile Include="oned\Code128BlackBox2TestCase.cs" />
-    <Compile Include="oned\Code128BlackBox3TestCase.cs" />
-    <Compile Include="oned\Code39BlackBox1TestCase.cs" />
-    <Compile Include="oned\Code39BlackBox3TestCase.cs" />
-    <Compile Include="oned\Code39BlackBoxTestCase.cs" />
-    <Compile Include="oned\Code39ExtendedBlackBox2TestCase.cs" />
-    <Compile Include="oned\Code93BlackBox1TestCase.cs" />
-    <Compile Include="oned\EAN13BlackBox1TestCase.cs" />
-    <Compile Include="oned\EAN13BlackBox2TestCase.cs" />
-    <Compile Include="oned\EAN13BlackBox3TestCase.cs" />
-    <Compile Include="oned\EAN13BlackBox4TestCase.cs" />
-    <Compile Include="oned\EAN13BlackBox5BlurryTestCase.cs" />
-    <Compile Include="oned\EAN8BlackBox1TestCase.cs" />
-    <Compile Include="oned\ITFBlackBox1TestCase.cs" />
-    <Compile Include="oned\ITFBlackBox2TestCase.cs" />
-    <Compile Include="oned\MSIBlackBox1TestCase.cs" />
-    <Compile Include="oned\UPCABlackBox1TestCase.cs" />
-    <Compile Include="oned\UPCABlackBox2TestCase.cs" />
-    <Compile Include="oned\UPCABlackBox3ReflectiveTestCase.cs" />
-    <Compile Include="oned\UPCABlackBox4TestCase.cs" />
-    <Compile Include="oned\UPCABlackBox5TestCase.cs" />
-    <Compile Include="oned\UPCABlackBox6BlurryTestCase.cs" />
-    <Compile Include="oned\UPCEANExtensionBlackBox1TestCase.cs" />
-    <Compile Include="oned\UPCEBlackBox1TestCase.cs" />
-    <Compile Include="oned\UPCEBlackBox2TestCase.cs" />
-    <Compile Include="oned\UPCEBlackBox3ReflectiveTestCase.cs" />
-    <Compile Include="pdf417\PDF417BlackBox1TestCase.cs" />
-    <Compile Include="pdf417\PDF417BlackBox2TestCase.cs" />
-    <Compile Include="pdf417\PDF417BlackBox3TestCase.cs" />
-    <Compile Include="pdf417\PDF417BlackBox4TestCase.cs" />
-    <Compile Include="pdf417\PDF417BlackBoxZTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SKBitmapLuminanceSourceTests.cs" />
-    <Compile Include="TestSetupFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\log4net.config">
