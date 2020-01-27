@@ -16,10 +16,8 @@
 
 using NUnit.Framework;
 using SkiaSharp;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 
 namespace ZXing.SkiaSharp.Test
 {
