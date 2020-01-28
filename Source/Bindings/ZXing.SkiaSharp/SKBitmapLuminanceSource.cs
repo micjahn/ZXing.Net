@@ -15,7 +15,7 @@
  */
 
 using System;
-
+using System.Runtime.CompilerServices;
 using SkiaSharp;
 
 namespace ZXing.SkiaSharp
@@ -64,15 +64,75 @@ namespace ZXing.SkiaSharp
             if (src == null)
                 throw new ArgumentNullException("src");
 
-            var pixels = src.Pixels;
-            var length = pixels.Length;
-            for (var index = 0; index < length; index++)
+            var imageInfo = src.Info;
+            var width = imageInfo.Width;
+            var height = imageInfo.Height;
+            var colorType = imageInfo.ColorType;
+
+            if (colorType == SKColorType.Index8)
             {
-                var pixel = pixels[index];
-                // Calculate luminance cheaply, favoring green.
-                var luminance = (byte)((RChannelWeight * pixel.Red + GChannelWeight * pixel.Green + BChannelWeight * pixel.Blue) >> ChannelWeight);
-                luminances[index] = (byte)(((luminance * pixel.Alpha) >> 8) + (255 * (255 - pixel.Alpha) >> 8));
+                // use the color table for indexed images
+                for (int row = 0; row < height; row++)
+                {
+                    var index = width * row;
+                    for (int col = 0; col < width; col++, index++)
+                    {
+                        var pixel = src.GetIndex8Color(col, row);
+
+                        SetLuminance(index, pixel.Red, pixel.Green, pixel.Blue, pixel.Alpha);
+                    }
+                }
             }
+            else if (colorType == SKColorType.Rgba8888
+                    || colorType == SKColorType.RgbaF16
+                    || colorType == SKColorType.Bgra8888)
+            {
+                // Read pixels from unmanaged memory to set luminance
+                // https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/graphics/skiasharp/bitmaps/pixel-bits
+                IntPtr pixelsAddr = src.GetPixels();
+
+                unsafe
+                {
+                    uint* ptr = (uint*)pixelsAddr.ToPointer();
+
+                    for (int row = 0; row < height; row++)
+                    {
+                        var index = width * row;
+                        for (int col = 0; col < width; col++, index++)
+                        {
+                            uint colorVal = *ptr++;
+
+                            var alpha = (byte)((colorVal >> 24) & 0xff);
+                            var red = (byte)((colorVal >> 16) & 0xff);
+                            var green = (byte)((colorVal >> 8) & 0xff);
+                            var blue = (byte)((colorVal) & 0xff);
+
+                            SetLuminance(index, red, green, blue, alpha);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // unknown type or other color types, use the 'old' way allocating more managed memory
+                // can potentially migrate this to the above case, but leaving here for safety
+                var pixels = src.Pixels;
+                var length = pixels.Length;
+                for (var index = 0; index < length; index++)
+                {
+                    var pixel = pixels[index];
+
+                    SetLuminance(index, pixel.Red, pixel.Green, pixel.Blue, pixel.Alpha);
+                }
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void SetLuminance(int index, byte red, byte green, byte blue, byte alpha)
+        {
+            // Calculate luminance cheaply, favoring green.
+            var luminance = (byte)((RChannelWeight * red + GChannelWeight * green + BChannelWeight * blue) >> ChannelWeight);
+            luminances[index] = (byte)(((luminance * alpha) >> 8) + (255 * (255 - alpha) >> 8));
         }
     }
 }
