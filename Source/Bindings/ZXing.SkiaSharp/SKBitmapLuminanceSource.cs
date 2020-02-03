@@ -69,6 +69,7 @@ namespace ZXing.SkiaSharp
             var height = imageInfo.Height;
             var colorType = imageInfo.ColorType;
 
+#if SKColorType_Index8_Support
             if (colorType == SKColorType.Index8)
             {
                 // use the color table for indexed images
@@ -83,7 +84,9 @@ namespace ZXing.SkiaSharp
                     }
                 }
             }
-            else if (colorType == SKColorType.Rgba8888
+            else
+#endif
+            if (colorType == SKColorType.Rgba8888
                     || colorType == SKColorType.RgbaF16
                     || colorType == SKColorType.Bgra8888)
             {
