@@ -59,6 +59,30 @@ Many thanks to the team of the [zxing project](https://github.com/zxing/zxing) f
 ## Usage examples
 The source code repository includes small examples for Windows Forms, Silverlight, Windows Phone and other project types.
 
+#### (easiest example to start with) Reading QR Code data with ImageMagick library (https://github.com/dlemstra/Magick.NET)
+
+- First you will need to install https://www.nuget.org/packages/ZXing.Net.Bindings.Magick/ ZXing.Net binding for usage with Magick.Net library.
+
+Then all you have to do:
+
+```csharp
+var reader = new BarcodeReader();
+
+reader.Options.PossibleFormats = new List<BarcodeFormat> {
+  BarcodeFormat.QR_CODE
+};
+
+using (var image = new MagickImage(filepath)) {
+  var result = reader.Decode(image);
+
+  if (result != null) {
+    return result.Text;
+  }
+}
+
+return null;
+```
+
 #### small example decoding a barcode inside a bitmap (.Net 2.0/3.5/4.x)
 ```csharp
 // create a barcode reader instance
