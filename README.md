@@ -31,6 +31,8 @@ The library is available in the release section [release section](https://github
 
 [![N|NuGet](https://img.shields.io/nuget/v/ZXing.Net.svg)](https://www.nuget.org/packages/ZXing.Net/)
 [![Build status](https://ci.appveyor.com/api/projects/status/49uvsxpw3ak9jtmm?svg=true)](https://ci.appveyor.com/project/MichaelJahn/zxing-net)
+[![OpenCollective](https://opencollective.com/zxingnet/backer/badge.svg)](#backers)
+[![OpenCollective](https://opencollective.com/zxingnet/sponsors/badge.svg)](#sponsors)
 
 #### Additional platform support without pre-built binaries
 The library can be built for Xamarin.iOS (formerly MonoTouch). The project file and solution are available in the source code repository.
@@ -96,6 +98,15 @@ If you find the project useful and you wish to support the future development fe
 [![N|Donate](https://www.paypal.com/en_US/i/btn/btn_donateCC_LG_global.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BYHN42UHPA86E)
 
 Beside a donation patches, bug reports, feedback and other useful help are always welcome!
+
+## Backers
+
+Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/zxingnet)]
+
+## Sponsors
+
+Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/zxingnet)]
+
 ## Donation WITHOUT money
 It would be really, really great if you could support one of my social projects. You can support it WITHOUT paying money.
 You only have to go to the following url before you buy anything from a supported online shop (like Amazon or eBay):  
