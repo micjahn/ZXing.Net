@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
 	<metadata>
-		<version>0.16.8</version>
+		<version>0.16.9</version>
 		<authors>Michael Jahn</authors>
 		<owners>Michael Jahn</owners>
-		<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+		<license type="expression">Apache-2.0</license>
+		<licenseUrl>https://licenses.nuget.org/Apache-2.0</licenseUrl>
 		<projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
 		<iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
 		<id>ZXing.Net.Bindings.SkiaSharp</id>
@@ -14,6 +15,7 @@
 		<summary>ZXing.Net Bindings for SkiaSharp</summary>
 		<releaseNotes></releaseNotes>
 		<tags>ZXing SkiaSharp</tags>
+		<repository type="git" url="https://github.com/micjahn/ZXing.Net/" />
 		<dependencies>
 			<group targetFramework="net45">
 				<dependency id="ZXing.Net" version="0.16.5.0" exclude="Build,Analyzers" />

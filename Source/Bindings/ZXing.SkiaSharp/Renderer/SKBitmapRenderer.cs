@@ -135,39 +135,41 @@ namespace ZXing.SkiaSharp.Rendering
             var pixelsizeWidth = width / matrix.Width;
             var pixelsizeHeight = height / matrix.Height;
 
-            using (var surface = SKSurface.Create(width, height, SKImageInfo.PlatformColorType, SKAlphaType.Premul))
-            using (var paint = new SKPaint())
-            {
-                var myCanvas = surface.Canvas;
-                paint.IsAntialias = true;
-                paint.Color = Foreground;
-                paint.Typeface = font;
-                paint.TextSize = TextSize < 1 ? 10 : TextSize;
+            SKBitmap bitmap = new SKBitmap(width, height, SKColorType.Bgra8888, SKAlphaType.Premul);
+            IntPtr pixelsAddr = bitmap.GetPixels();
 
-                for (int y = 0; y < matrix.Height; y++)
+            unsafe
+            {
+                var ptr = (uint*) pixelsAddr.ToPointer();
+                var forecolor = (uint) Foreground;
+                var backcolor = (uint) Background;
+                var textAreaHeight = (int) (TextSize < 1 ? 10 : TextSize);
+
+                emptyArea = outputContent && height + 10 > textAreaHeight ? textAreaHeight : 0;
+
+                for (int y = 0; y < matrix.Height - emptyArea; y++)
                 {
                     // stretching the line by the scaling factor
                     for (var pixelsizeHeightProcessed = 0;
-                       pixelsizeHeightProcessed < pixelsizeHeight;
-                       pixelsizeHeightProcessed++)
+                        pixelsizeHeightProcessed < pixelsizeHeight;
+                        pixelsizeHeightProcessed++)
                     {
                         // going through the columns of the current line
                         for (var x = 0; x < matrix.Width; x++)
                         {
-                            var color = matrix[x, y] ? Foreground : Background;
+                            var color = matrix[x, y] ? forecolor : backcolor;
                             // stretching the columns by the scaling factor
                             for (var pixelsizeWidthProcessed = 0;
-                               pixelsizeWidthProcessed < pixelsizeWidth;
-                               pixelsizeWidthProcessed++)
+                                pixelsizeWidthProcessed < pixelsizeWidth;
+                                pixelsizeWidthProcessed++)
                             {
-                                myCanvas.DrawPoint(x * pixelsizeWidth + pixelsizeWidthProcessed,
-                                   y * pixelsizeHeight + pixelsizeHeightProcessed, color);
+                                *ptr++ = color;
                             }
                         }
                         // fill up to the right if the barcode doesn't fully fit in
                         for (var x = pixelsizeWidth * matrix.Width; x < width; x++)
                         {
-                            myCanvas.DrawPoint(x, y * pixelsizeHeight + pixelsizeHeightProcessed, Background);
+                            *ptr++ = backcolor;
                         }
                     }
                 }
@@ -176,57 +178,66 @@ namespace ZXing.SkiaSharp.Rendering
                 {
                     for (var x = 0; x < width; x++)
                     {
-                        myCanvas.DrawPoint(x, y, Background);
+                        *ptr++ = backcolor;
                     }
                 }
                 // fill the bottom area with the background color if the content should be written below the barcode
                 if (outputContent)
                 {
-                    var textAreaHeight = (int)paint.TextSize;
-
-                    emptyArea = height + 10 > textAreaHeight ? textAreaHeight : 0;
-
                     if (emptyArea > 0)
                     {
                         for (int y = height - emptyArea; y < height; y++)
                         {
                             for (var x = 0; x < width; x++)
                             {
-                                myCanvas.DrawPoint(x, y, Background);
+                                *ptr++ = backcolor;
                             }
                         }
                     }
                 }
-
-                // output content text below the barcode
-                if (emptyArea > 0)
-                {
-                    switch (format)
-                    {
-                        case BarcodeFormat.EAN_8:
-                            if (content.Length < 8)
-                                content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-                            content = content.Insert(4, "   ");
-                            break;
-                        case BarcodeFormat.EAN_13:
-                            if (content.Length < 13)
-                                content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-                            content = content.Insert(7, "   ");
-                            content = content.Insert(1, "   ");
-                            break;
-                        default:
-                            break;
-                    }
-                    var textWidth = paint.MeasureText(content);
-                    var x = (pixelsizeWidth * matrix.Width - textWidth) / 2;
-                    var y = height - 1;
-                    x = x < 0 ? 0 : x;
-                    myCanvas.DrawText(content, x, y, paint);
-                }
-                myCanvas.Flush();
-
-                return SKBitmap.FromImage(surface.Snapshot());
             }
+
+            if (emptyArea > 0)
+            {
+                //using (var surface = SKSurface.Create(width, height, SKImageInfo.PlatformColorType, SKAlphaType.Premul))
+                using (SKCanvas myCanvas = new SKCanvas(bitmap))
+                using (var paint = new SKPaint())
+                {
+                    paint.IsAntialias = true;
+                    paint.Color = Foreground;
+                    paint.Typeface = font;
+                    paint.TextSize = TextSize < 1 ? 10 : TextSize;
+
+                    // output content text below the barcode
+                    if (emptyArea > 0)
+                    {
+                        switch (format)
+                        {
+                            case BarcodeFormat.EAN_8:
+                                if (content.Length < 8)
+                                    content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+                                content = content.Insert(4, "   ");
+                                break;
+                            case BarcodeFormat.EAN_13:
+                                if (content.Length < 13)
+                                    content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+                                content = content.Insert(7, "   ");
+                                content = content.Insert(1, "   ");
+                                break;
+                            default:
+                                break;
+                        }
+                        var textWidth = paint.MeasureText(content);
+                        var x = (pixelsizeWidth * matrix.Width - textWidth) / 2;
+                        var y = height - 1;
+                        x = x < 0 ? 0 : x;
+                        myCanvas.DrawText(content, x, y, paint);
+                    }
+                    myCanvas.Flush();
+                }
+            }
+
+            return bitmap;
         }
     }
 }
