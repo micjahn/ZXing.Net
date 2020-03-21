@@ -22,6 +22,8 @@ using ZXing.Interop.Common;
 
 namespace ZXing.Interop.Decoding
 {
+    using System.Linq;
+
     /// <summary>
     /// A smart class to decode the barcode inside a bitmap object
     /// </summary>
@@ -54,6 +56,15 @@ namespace ZXing.Interop.Decoding
             return new Result(wrappedReader.Decode(rawRGB, width, height, format.ToZXing()));
         }
 
+        public Result[] DecodeImageBytesMultiple([In, MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UI1)]ref byte[] rawRGB,
+            [In] int width,
+            [In] int height,
+            [In] BitmapFormat format)
+        {
+            var results = wrappedReader.DecodeMultiple(rawRGB, width, height, format.ToZXing());
+            return results?.Select(_ => new Result(_)).ToArray();
+        }
+
         public Result DecodeImageFile(String barcodeBitmapFilePath)
         {
             try
@@ -61,6 +72,22 @@ namespace ZXing.Interop.Decoding
                 using (var bitmap = (Bitmap)Bitmap.FromFile(barcodeBitmapFilePath))
                 {
                     return new Result(wrappedReader.Decode(bitmap));
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public Result[] DecodeImageFileMultiple(String barcodeBitmapFilePath)
+        {
+            try
+            {
+                using (var bitmap = (Bitmap)Bitmap.FromFile(barcodeBitmapFilePath))
+                {
+                    var results = wrappedReader.DecodeMultiple(bitmap);
+                    return results?.Select(_ => new Result(_)).ToArray();
                 }
             }
             catch (Exception)

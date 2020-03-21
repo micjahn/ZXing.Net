@@ -51,10 +51,33 @@ namespace ZXing.Interop.Decoding
            [In] BitmapFormat format);
 
         /// <summary>
+        /// Decodes the specified barcode bitmap which is given by a generic byte array with the order RGB24.
+        /// </summary>
+        /// <param name="rawRGB">The image as RGB24 array.</param>
+        /// <param name="width">The width.</param>
+        /// <param name="height">The height.</param>
+        /// <param name="format">The format.</param>
+        /// <returns>
+        /// the result data or null
+        /// </returns>
+        Result[] DecodeImageBytesMultiple(
+            [In, MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UI1)]ref byte[] rawRGB,
+            [In] int width,
+            [In] int height,
+            [In] BitmapFormat format);
+
+        /// <summary>
         /// Decodes the specified barcode bitmap.
         /// </summary>
-        /// <param name="barcodeBitmap">The barcode bitmap.</param>
+        /// <param name="barcodeBitmapFilePath">The filename with path to an image which should be decoded</param>
         /// <returns>the result data or null</returns>
         Result DecodeImageFile(String barcodeBitmapFilePath);
+
+        /// <summary>
+        /// Decodes the specified barcode bitmap.
+        /// </summary>
+        /// <param name="barcodeBitmapFilePath">The filename with path to an image which should be decoded</param>
+        /// <returns>the results data or null</returns>
+        Result[] DecodeImageFileMultiple(String barcodeBitmapFilePath);
     }
 }
