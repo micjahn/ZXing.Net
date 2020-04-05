@@ -92,12 +92,6 @@ namespace ZXing.OneD
         public override bool[] encode(String contents)
         {
             int length = contents.Length;
-            // Check length
-            if (length < 1 || length > 80)
-            {
-                throw new ArgumentException(
-                    "Contents length should be between 1 and 80 characters, but got " + length);
-            }
             // Check content
             for (int i = 0; i < length; i++)
             {
