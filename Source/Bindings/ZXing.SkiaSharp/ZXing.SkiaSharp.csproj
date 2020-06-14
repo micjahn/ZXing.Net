@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <VersionPrefix>0.16.9</VersionPrefix>
-    <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>net45;net462;netstandard1.3;netstandard2.0</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>anycpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
