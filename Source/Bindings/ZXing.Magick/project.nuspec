@@ -17,21 +17,21 @@
 		<dependencies>
 			<group targetFramework="net20">
 				<dependency id="ZXing.Net" version="0.16.5.0" exclude="Build,Analyzers" />
-				<dependency id="Magick.NET-Q8-AnyCPU" version="7.14.5" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET-Q8-AnyCPU" version="7.19.0.1" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="net40">
 				<dependency id="ZXing.Net" version="0.16.5.0" exclude="Build,Analyzers" />
-				<dependency id="Magick.NET-Q8-AnyCPU" version="7.14.5" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET-Q8-AnyCPU" version="7.19.0.1" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="netstandard1.3">
 				<dependency id="ZXing.Net" version="0.16.5.0" exclude="Build,Analyzers" />
-				<dependency id="Magick.NET-Q8-AnyCPU" version="7.14.5" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET-Q8-AnyCPU" version="7.19.0.1" exclude="Build,Analyzers" />
 				<dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="netstandard2.0">
 				<dependency id="ZXing.Net" version="0.16.5.0" exclude="Build,Analyzers" />
-				<dependency id="Magick.NET-Q8-AnyCPU" version="7.14.5" exclude="Build,Analyzers" />
-				<dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET-Q8-AnyCPU" version="7.19.0.1" exclude="Build,Analyzers" />
+				<dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
 			</group>
 		</dependencies>
 	</metadata>

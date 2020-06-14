@@ -16,12 +16,12 @@
     <tags>ZXing CoreCompat.System.Drawing</tags>
     <dependencies>
       <group targetFramework="netstandard1.3">
-        <dependency id="ZXing.Net" version="0.16.4" exclude="Build,Analyzers" />
+        <dependency id="ZXing.Net" version="0.16.5" exclude="Build,Analyzers" />
         <dependency id="CoreCompat.System.Drawing" version="1.0.0-beta006" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="ZXing.Net" version="0.16.4" exclude="Build,Analyzers" />
+        <dependency id="ZXing.Net" version="0.16.5" exclude="Build,Analyzers" />
         <dependency id="CoreCompat.System.Drawing.v2" version="5.2.0-preview1-r131" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
       </group>

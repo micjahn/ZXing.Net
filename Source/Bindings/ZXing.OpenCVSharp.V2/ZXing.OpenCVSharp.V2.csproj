@@ -28,7 +28,7 @@
 
   <ItemGroup>
     <PackageReference Include="OpenCvSharp-AnyCPU" Version="2.4.10.20170306" />
-    <PackageReference Include="ZXing.Net" Version="0.16.4" />
+    <PackageReference Include="ZXing.Net" Version="0.16.5" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net20' ">
