@@ -22,7 +22,7 @@ namespace ZXing.ImageSharp
     /// <summary>
     /// specific implementation of a barcode reader which can be used with ImageSharp ImageBase objects
     /// </summary>
-    public class BarcodeReader<TPixel> : ZXing.BarcodeReader<Image<TPixel>> where TPixel : struct, IPixel<TPixel>
+    public class BarcodeReader<TPixel> : ZXing.BarcodeReader<Image<TPixel>> where TPixel : unmanaged, IPixel<TPixel>
     {
         private static readonly System.Func<Image<TPixel>, LuminanceSource> defaultCreateLuminanceSource =
            (bitmap) => new ImageSharpLuminanceSource<TPixel>(bitmap);

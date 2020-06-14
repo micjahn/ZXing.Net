@@ -23,7 +23,7 @@ namespace ZXing.ImageSharp
     /// <summary>
     /// barcode writer which creates ImageSharp Image instances
     /// </summary>
-    public class BarcodeWriter<TPixel> : ZXing.BarcodeWriter<Image<TPixel>> where TPixel : struct, IPixel<TPixel>
+    public class BarcodeWriter<TPixel> : ZXing.BarcodeWriter<Image<TPixel>> where TPixel : unmanaged, IPixel<TPixel>
     {
         /// <summary>
         /// contructor

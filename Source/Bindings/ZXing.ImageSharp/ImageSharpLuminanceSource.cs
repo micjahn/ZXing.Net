@@ -23,7 +23,7 @@ namespace ZXing.ImageSharp
     /// <summary>
     /// specific implementation of a luminance source which can be used with ImageSharp Image objects
     /// </summary>
-    public class ImageSharpLuminanceSource<TPixel> : BaseLuminanceSource where TPixel : struct, IPixel<TPixel>
+    public class ImageSharpLuminanceSource<TPixel> : BaseLuminanceSource where TPixel : unmanaged, IPixel<TPixel>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageSharpLuminanceSource{TPixel}"/> class.

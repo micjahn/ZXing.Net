@@ -24,7 +24,7 @@ namespace ZXing.ImageSharp.Rendering
     /// <summary>
     /// IBarcodeRenderer implementation which creates an ImageSharp Image object from the barcode BitMatrix
     /// </summary>
-    public class ImageSharpRenderer<TPixel> : ZXing.Rendering.IBarcodeRenderer<Image<TPixel>> where TPixel : struct, IPixel<TPixel>
+    public class ImageSharpRenderer<TPixel> : ZXing.Rendering.IBarcodeRenderer<Image<TPixel>> where TPixel : unmanaged, IPixel<TPixel>
     {
         /// <summary>
         /// renders the image
