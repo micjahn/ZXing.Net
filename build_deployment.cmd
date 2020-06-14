@@ -45,29 +45,31 @@ FOR /F %%b IN (build_deployment_strong_named_files.txt) DO (
  SET f=!f:%%BINARY_DIR%%=%BINARY_DIR%!
  SET f=!f:%%CURRENT_DIR%%=%CURRENT_DIR%!
  
- REM validation of the strong name
- sn -q -vf !f!
- if ERRORLEVEL 1 (
-  ECHO Re-signing the assembly !f!...
-  sn -q -Ra !f! Key\private.snk
+ IF EXIST !f! (
+  REM validation of the strong name
   sn -q -vf !f!
   if ERRORLEVEL 1 (
-   echo Validation failed for !f!
-   SET HAS_VALIDATION_ERROR=1
-  )
- )
-
- REM validation of the correct signing key
- for /F "tokens=1 delims=" %%t in ('"%GET_PUBLICKEYTOKEN_TOOL% !f!"') DO (
-  SET VALIDATION_WAS_CALLED=1
-  IF NOT "%%t" == "4e88037ac681fe60" (
-   echo The assembly !f! is not signed with the correct key. required: 4e88037ac681fe60, found: %%t, re-signing...
+   ECHO Re-signing the assembly !f!...
    sn -q -Ra !f! Key\private.snk
-   
-   for /F "tokens=2 delims=:" %%t in ('"sn -q -T !f!"') DO (
-    IF NOT "%%t" == "4e88037ac681fe60" (
-     echo The assembly !f! is not signed with the correct key. required: 4e88037ac681fe60, found: %%t
-     SET HAS_VALIDATION_ERROR=1
+   sn -q -vf !f!
+   if ERRORLEVEL 1 (
+    echo Validation failed for !f!
+    SET HAS_VALIDATION_ERROR=1
+   )
+  )
+  
+  REM validation of the correct signing key
+  for /F "tokens=1 delims=" %%t in ('"%GET_PUBLICKEYTOKEN_TOOL% !f!"') DO (
+   SET VALIDATION_WAS_CALLED=1
+   IF NOT "%%t" == "4e88037ac681fe60" (
+    echo The assembly !f! is not signed with the correct key. required: 4e88037ac681fe60, found: %%t, re-signing...
+    sn -q -Ra !f! Key\private.snk
+    
+    for /F "tokens=2 delims=:" %%t in ('"sn -q -T !f!"') DO (
+     IF NOT "%%t" == "4e88037ac681fe60" (
+      echo The assembly !f! is not signed with the correct key. required: 4e88037ac681fe60, found: %%t
+      SET HAS_VALIDATION_ERROR=1
+     )
     )
    )
   )
