@@ -15,7 +15,10 @@
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\net20\zxing.opencv.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\net40\zxing.opencv.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\net46\zxing.opencv.dll
-%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\netstandard1.6\zxing.opencv.dll
+%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\netstandard2.0\zxing.opencv.dll
+%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\net461\zxing.opencv.dll
+%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\net48\zxing.opencv.dll
+%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\netstandard2.0\zxing.opencv.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\net45\zxing.skiasharp.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard1.3\zxing.skiasharp.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.Unity3D\bin\Release\net35\ZXing.Unity.dll

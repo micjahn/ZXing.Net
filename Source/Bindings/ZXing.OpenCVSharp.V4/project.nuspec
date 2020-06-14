@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+	<metadata>
+		<version>0.16.1</version>
+		<authors>Michael Jahn</authors>
+		<owners>Michael Jahn</owners>
+		<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+		<projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
+		<iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
+		<id>ZXing.Net.Bindings.OpenCV.V4</id>
+		<title>ZXing.Net.Bindings.OpenCVSharp.V4</title>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>ZXing.Net Bindings for OpenCVSharp 4.x - use OpenCV with ZXing.Net for barcode reading</description>
+		<summary>ZXing.Net Bindings for OpenCVSharp 4.x</summary>
+		<releaseNotes/>
+		<tags>ZXing OpenCV</tags>
+		<dependencies>
+			<group targetFramework="net461">
+				<dependency id="ZXing.Net" version="0.16.5.0" exclude="Build,Analyzers" />
+				<dependency id="OpenCvSharp4" version="4.3.0.20200524" exclude="Build,Analyzers" />
+			</group>
+			<group targetFramework="net48">
+				<dependency id="ZXing.Net" version="0.16.5.0" exclude="Build,Analyzers" />
+				<dependency id="OpenCvSharp4" version="4.3.0.20200524" exclude="Build,Analyzers" />
+			</group>
+			<group targetFramework="netstandard2.0">
+				<dependency id="ZXing.Net" version="0.16.5.0" exclude="Build,Analyzers" />
+				<dependency id="OpenCvSharp4" version="4.3.0.20200524" exclude="Build,Analyzers" />
+				<dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
+			</group>
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="bin\Release\net461\ZXing.OpenCv.dll" target="lib\net461\ZXing.OpenCv.dll" />
+		<file src="bin\Release\net461\ZXing.OpenCv.pdb" target="lib\net461\ZXing.OpenCv.pdb" />
+		<file src="bin\Release\net461\ZXing.OpenCv.xml" target="lib\net461\ZXing.OpenCv.xml" />
+	  <file src="bin\Release\net48\ZXing.OpenCv.dll" target="lib\net48\ZXing.OpenCv.dll" />
+	  <file src="bin\Release\net48\ZXing.OpenCv.pdb" target="lib\net48\ZXing.OpenCv.pdb" />
+	  <file src="bin\Release\net48\ZXing.OpenCv.xml" target="lib\net48\ZXing.OpenCv.xml" />
+		<file src="bin\Release\netstandard2.0\ZXing.OpenCv.dll" target="lib\netstandard2.0\ZXing.OpenCv.dll" />
+		<file src="bin\Release\netstandard2.0\ZXing.OpenCv.pdb" target="lib\netstandard2.0\ZXing.OpenCv.pdb" />
+		<file src="bin\Release\netstandard2.0\ZXing.OpenCv.xml" target="lib\netstandard2.0\ZXing.OpenCv.xml" />
+	</files>
+</package>
