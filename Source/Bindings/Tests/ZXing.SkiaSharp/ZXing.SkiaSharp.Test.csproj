@@ -84,8 +84,9 @@
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>copy "$(MSBuildProjectDirectory)\..\..\..\..\Key\dummy-private.snk" "$(MSBuildProjectDirectory)\..\..\..\..\Key\private.snk"</PreBuildEvent>
+  <PropertyGroup Condition="!Exists('$(MSBuildProjectDirectory)\..\..\..\..\Key\private.snk')">
+    <PreBuildEvent Condition=" '$(OS)' == 'Unix' ">cp "$(MSBuildProjectDirectory)\..\..\..\..\Key\dummy-private.snk" "$(MSBuildProjectDirectory)\..\..\..\..\Key\private.snk"</PreBuildEvent>
+    <PreBuildEvent Condition=" '$(OS)' != 'Unix' ">copy "$(MSBuildProjectDirectory)\..\..\..\..\Key\dummy-private.snk" "$(MSBuildProjectDirectory)\..\..\..\..\Key\private.snk"</PreBuildEvent>
   </PropertyGroup>
   <!-- <PropertyGroup>
     <PreBuildEvent>
