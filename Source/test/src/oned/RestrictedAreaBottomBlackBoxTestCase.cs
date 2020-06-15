@@ -29,7 +29,7 @@ namespace ZXing.OneD.Test
             addTest(3, 3, 0, 0, 0.0f, new RestrictedScanningArea(0.78f, 0.88f));
 
             //because we do have 3 barcodes on image we have to flip original restriction
-            addTest(0, 0,3, 3, 180.0f, new RestrictedScanningArea(0.78f, 0.88f));
+            addTest(0, 0, 3, 3, 180.0f, new RestrictedScanningArea(0.78f, 0.88f));
             addTest(3, 3, 0, 0, 180.0f, new RestrictedScanningArea(0.12f, 0.22f));
         }
     }

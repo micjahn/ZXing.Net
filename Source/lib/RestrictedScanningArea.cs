@@ -4,7 +4,7 @@ namespace ZXing
 {
     /// <summary>
     /// Representation of restricted scanning area in PERCENTAGE. 
-    /// Allowed values: 0 <= value <= 1 && startY != endY
+    /// Allowed values: 0 <= value <= 1 AND startY != endY
     /// Values of startY and endY are ABSOLUTE to image that means if use values of
     /// startY:0.49 and endY:0.51 we will scan only 2% of the whole image
     /// starting at 49% and finishing at 51% of the image height.
