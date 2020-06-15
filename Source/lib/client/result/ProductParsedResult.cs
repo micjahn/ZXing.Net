@@ -36,9 +36,13 @@ namespace ZXing.Client.Result
             NormalizedProductID = normalizedProductID;
             displayResultValue = productID;
         }
-
+        /// <summary>
+        /// product id
+        /// </summary>
         public String ProductID { get; private set; }
-
+        /// <summary>
+        /// normalized product id
+        /// </summary>
         public String NormalizedProductID { get; private set; }
     }
 }

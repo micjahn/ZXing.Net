@@ -79,6 +79,7 @@ namespace ZXing.Multi.QrCode.Internal
         /// <p>Creates a finder that will search the image for three finder patterns.</p>
         ///
         /// <param name="image">image to search</param>
+        /// <param name="resultPointCallback">callback for result points</param>
         /// </summary>
         internal MultiFinderPatternFinder(BitMatrix image, ResultPointCallback resultPointCallback)
             : base(image, resultPointCallback)

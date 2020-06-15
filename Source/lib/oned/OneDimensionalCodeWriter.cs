@@ -29,6 +29,9 @@ namespace ZXing.OneD
     {
         private static readonly System.Text.RegularExpressions.Regex NUMERIC = new System.Text.RegularExpressions.Regex("[0-9]+");
 
+        /// <summary>
+        /// returns supported formats
+        /// </summary>
         protected abstract IList<BarcodeFormat> SupportedWriteFormats { get; }
 
         /// <summary>

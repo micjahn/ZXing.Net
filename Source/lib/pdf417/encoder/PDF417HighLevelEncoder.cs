@@ -731,6 +731,7 @@ namespace ZXing.PDF417.Internal
         /// <param name="bytes">the message converted to a byte array</param>
         /// <param name="startpos">the start position within the message</param>
         /// <param name="encoding"></param>
+        /// <param name="byteCount"></param>
         /// <returns>the requested character count</returns>
         private static int determineConsecutiveBinaryCount(String msg, byte[] bytes, int startpos, Encoding encoding, out int byteCount)
         {

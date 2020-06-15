@@ -24,6 +24,9 @@ using System.Windows.Media.Imaging;
 
 namespace ZXing
 {
+    /// <summary>
+    /// class which represents the luminance source values for bitmap source objects
+    /// </summary>
     public partial class BitmapSourceLuminanceSource : BaseLuminanceSource
     {
         /// <summary>

@@ -30,7 +30,9 @@ namespace ZXing.Common
         internal static readonly IDictionary<string, CharacterSetECI> NAME_TO_ECI;
 
         private readonly String encodingName;
-
+        /// <summary>
+        /// encoding name
+        /// </summary>
         public String EncodingName
         {
             get

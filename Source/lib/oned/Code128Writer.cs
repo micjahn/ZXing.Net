@@ -60,11 +60,20 @@ namespace ZXing.OneD
 
         private static readonly IList<BarcodeFormat> supportedWriteFormats = new List<BarcodeFormat> { BarcodeFormat.CODE_128 };
 
+        /// <summary>
+        /// returns supported formats
+        /// </summary>
         protected override IList<BarcodeFormat> SupportedWriteFormats
         {
             get { return supportedWriteFormats; }
         }
-
+        /// <summary>
+        /// Encode the contents following specified format.
+        /// {@code width} and {@code height} are required size. This method may return bigger size
+        /// {@code BitMatrix} when specified size is too small. The user can set both {@code width} and
+        /// {@code height} to zero to get minimum size barcode. If negative value is set to {@code width}
+        /// or {@code height}, {@code IllegalArgumentException} is thrown.
+        /// </summary>
         public override BitMatrix encode(String contents,
             BarcodeFormat format,
             int width,
@@ -88,7 +97,9 @@ namespace ZXing.OneD
 
             return base.encode(contents, format, width, height, hints);
         }
-
+        /// <summary>
+        /// Encode the contents following specified format.
+        /// </summary>
         public override bool[] encode(String contents)
         {
             int length = contents.Length;

@@ -26,9 +26,14 @@ namespace ZXing.PDF417
         /// </summary>
         public int SegmentCount { get; set; }
 
-
+        /// <summary>
+        /// sender
+        /// </summary>
         public string Sender { get; set; }
 
+        /// <summary>
+        /// address
+        /// </summary>
         public string Addressee { get; set; }
 
         /// <summary>

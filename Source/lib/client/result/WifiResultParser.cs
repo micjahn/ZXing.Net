@@ -24,14 +24,19 @@ namespace ZXing.Client.Result
     /// <p>The fields can appear in any order. Only "S:" is required.</p>
     /// <p>For WPA2 enterprise(EAP), strings will be of the form:</p>
     /// <p>{@code WIFI:T:WPA2-EAP;S:[network SSID];H:[hidden?];E:[EAP method];H:[Phase 2 method];A:[anonymous identity];I:[username];P:[password];;}</p>
-    /// <p>"EAP method" can e.g.be "TTLS" or "PWD" or one of the other fields in <a href = "https://developer.android.com/reference/android/net/wifi/WifiEnterpriseConfig.Eap.html" > WifiEnterpriseConfig.Eap </ a > and "Phase 2 method" can e.g.be "MSCHAPV2" or any of the other fields in <a href = "https://developer.android.com/reference/android/net/wifi/WifiEnterpriseConfig.Phase2.html" > WifiEnterpriseConfig.Phase2 </ a ></ p >
+    /// <p>"EAP method" can e.g.be "TTLS" or "PWD" or one of the other fields in <a href = "https://developer.android.com/reference/android/net/wifi/WifiEnterpriseConfig.Eap.html"> WifiEnterpriseConfig.Eap </a> and "Phase 2 method" can e.g.be "MSCHAPV2" or any of the other fields in <a href = "https://developer.android.com/reference/android/net/wifi/WifiEnterpriseConfig.Phase2.html"> WifiEnterpriseConfig.Phase2 </a></p>
     /// </summary>
     /// <author>Vikram Aggarwal</author>
     /// <author>Sean Owen</author>
     /// <author>Steffen Kieﬂ</author>
     public class WifiResultParser : ResultParser
     {
-        override public ParsedResult parse(ZXing.Result result)
+        /// <summary>
+        /// attempt to parse the raw result to the specific type
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public override ParsedResult parse(ZXing.Result result)
         {
             var rawText = result.Text;
             if (!rawText.StartsWith("WIFI:"))

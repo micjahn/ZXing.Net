@@ -75,7 +75,9 @@ namespace ZXing.Maxicode
             }
             return result;
         }
-
+        /// <summary>
+        /// does nothing here
+        /// </summary>
         public void reset()
         {
             // do nothing

@@ -691,6 +691,9 @@ namespace ZXing.PDF417.Internal
         /// </summary>
         /// <param name="msg">the message to encode</param>
         /// <param name="errorCorrectionLevel">PDF417 error correction level to use</param>
+        /// <param name="longDimension"></param>
+        /// <param name="shortDimension"></param>
+        /// <param name="aspectRatio"></param>
         internal void generateBarcodeLogic(String msg, int errorCorrectionLevel, int longDimension, int shortDimension, ref int aspectRatio)
         {
 
@@ -1007,7 +1010,7 @@ namespace ZXing.PDF417.Internal
         /// <summary>
         /// Sets the desired aspect ratio for the output image.
         /// </summary>
-        /// <param name="v"></param>
+        /// <param name="ratio"></param>
         internal void setDesiredAspectRatio(float ratio)
         {
             this.preferredRatio = ratio;

@@ -306,7 +306,7 @@ namespace ZXing.Common.Test
             pureHints[DecodeHintType.PURE_BARCODE] = true;
             result = barcodeReader.decode(source, pureHints);
          }
-         catch (ReaderException re)
+         catch (ReaderException )
          {
             // continue
          }

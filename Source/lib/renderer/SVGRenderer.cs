@@ -39,7 +39,13 @@ namespace ZXing.Rendering
     /// </summary>
     public class SvgRenderer : IBarcodeRenderer<SvgRenderer.SvgImage>
     {
+        /// <summary>
+        /// the default font name if nothing else is set (Arial)
+        /// </summary>
         public const string DefaultFontName = "Arial";
+        /// <summary>
+        /// the default font size if nothing else is set (10)
+        /// </summary>
         public const int DefaultFontSize = 10;
 
 #if !UNITY

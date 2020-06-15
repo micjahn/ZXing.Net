@@ -42,22 +42,33 @@ namespace ZXing.Datamatrix.Encoder
             this.bits = new byte[numcols * numrows];
             SupportClass.Fill(this.bits, (byte)2); //Initialize with "not set" value
         }
-
+        /// <summary>
+        /// num rows
+        /// </summary>
         public int Numrows
         {
             get { return numrows; }
         }
-
+        /// <summary>
+        /// num cols
+        /// </summary>
         public int Numcols
         {
             get { return numcols; }
         }
-
+        /// <summary>
+        /// bits
+        /// </summary>
         public byte[] Bits
         {
             get { return bits; }
         }
-
+        /// <summary>
+        /// get a specific bit
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="row"></param>
+        /// <returns></returns>
         public bool getBit(int col, int row)
         {
             return bits[row * numcols + col] == 1;
@@ -72,7 +83,9 @@ namespace ZXing.Datamatrix.Encoder
         {
             return bits[row * numcols + col] == 2;
         }
-
+        /// <summary>
+        /// place
+        /// </summary>
         public void place()
         {
             int pos = 0;

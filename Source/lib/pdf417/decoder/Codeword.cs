@@ -27,10 +27,25 @@ namespace ZXing.PDF417.Internal
         /// </summary>
         private static readonly int BARCODE_ROW_UNKNOWN = -1;
 
+        /// <summary>
+        /// start of x coordinates
+        /// </summary>
         public int StartX { get; private set; }
+        /// <summary>
+        /// end of x coordinates
+        /// </summary>
         public int EndX { get; private set; }
+        /// <summary>
+        /// bucket
+        /// </summary>
         public int Bucket { get; private set; }
+        /// <summary>
+        /// value
+        /// </summary>
         public int Value { get; private set; }
+        /// <summary>
+        /// row number
+        /// </summary>
         public int RowNumber { get; set; }
 
         /// <summary>

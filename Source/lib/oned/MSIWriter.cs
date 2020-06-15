@@ -44,6 +44,9 @@ namespace ZXing.OneD
 
         private static readonly IList<BarcodeFormat> supportedWriteFormats = new List<BarcodeFormat> { BarcodeFormat.MSI };
 
+        /// <summary>
+        /// returns supported formats
+        /// </summary>
         protected override IList<BarcodeFormat> SupportedWriteFormats
         {
             get { return supportedWriteFormats; }

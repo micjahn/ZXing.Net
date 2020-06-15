@@ -35,16 +35,28 @@ namespace ZXing.Maxicode.Internal
 
         private readonly ReedSolomonDecoder rsDecoder;
 
+        /// <summary>
+        /// constructor
+        /// </summary>
         public Decoder()
         {
             rsDecoder = new ReedSolomonDecoder(GenericGF.MAXICODE_FIELD_64);
         }
-
+        /// <summary>
+        /// decode the bits
+        /// </summary>
+        /// <param name="bits"></param>
+        /// <returns></returns>
         public DecoderResult decode(BitMatrix bits)
         {
             return decode(bits, null);
         }
-
+        /// <summary>
+        /// decode the bits
+        /// </summary>
+        /// <param name="bits"></param>
+        /// <param name="hints"></param>
+        /// <returns></returns>
         public DecoderResult decode(BitMatrix bits,
                                     IDictionary<DecodeHintType, object> hints)
         {

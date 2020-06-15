@@ -25,6 +25,10 @@ namespace ZXing.Common
 {
     public sealed partial class BitMatrix
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [Obsolete("Use BarcodeWriter instead")]
         public Bitmap ToBitmap()
         {

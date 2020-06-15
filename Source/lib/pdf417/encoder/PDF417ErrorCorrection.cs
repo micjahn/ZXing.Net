@@ -248,15 +248,45 @@ namespace ZXing.PDF417.Internal
     /// </summary>
     public enum PDF417ErrorCorrectionLevel
     {
+        /// <summary>
+        /// level 0
+        /// </summary>
         L0 = 0,
+        /// <summary>
+        /// level 1
+        /// </summary>
         L1,
+        /// <summary>
+        /// level 2
+        /// </summary>
         L2,
+        /// <summary>
+        /// level 3
+        /// </summary>
         L3,
+        /// <summary>
+        /// level 4
+        /// </summary>
         L4,
+        /// <summary>
+        /// level 5
+        /// </summary>
         L5,
+        /// <summary>
+        /// level 6
+        /// </summary>
         L6,
+        /// <summary>
+        /// level 7
+        /// </summary>
         L7,
+        /// <summary>
+        /// level 8
+        /// </summary>
         L8,
+        /// <summary>
+        /// automatic selection
+        /// </summary>
         AUTO
     }
 }

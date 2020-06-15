@@ -34,11 +34,19 @@ namespace ZXing.OneD
 
         private static readonly IList<BarcodeFormat> supportedWriteFormats = new List<BarcodeFormat> { BarcodeFormat.UPC_E };
 
+        /// <summary>
+        /// returns supported formats
+        /// </summary>
         protected override IList<BarcodeFormat> SupportedWriteFormats
         {
             get { return supportedWriteFormats; }
         }
 
+        /// <summary>
+        /// content encoding method
+        /// </summary>
+        /// <param name="contents"></param>
+        /// <returns></returns>
         public override bool[] encode(String contents)
         {
             int length = contents.Length;

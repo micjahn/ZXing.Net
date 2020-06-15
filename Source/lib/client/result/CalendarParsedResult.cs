@@ -63,6 +63,19 @@ namespace ZXing.Client.Result
         private readonly double latitude;
         private readonly double longitude;
 
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="summary"></param>
+        /// <param name="startString"></param>
+        /// <param name="endString"></param>
+        /// <param name="durationString"></param>
+        /// <param name="location"></param>
+        /// <param name="organizer"></param>
+        /// <param name="attendees"></param>
+        /// <param name="description"></param>
+        /// <param name="latitude"></param>
+        /// <param name="longitude"></param>
         public CalendarParsedResult(String summary,
            String startString,
            String endString,
@@ -122,7 +135,9 @@ namespace ZXing.Client.Result
             maybeAppend(description, result);
             displayResultValue = result.ToString();
         }
-
+        /// <summary>
+        /// summary
+        /// </summary>
         public String Summary
         {
             get { return summary; }
@@ -161,32 +176,44 @@ namespace ZXing.Client.Result
         {
             get { return endAllDay; }
         }
-
+        /// <summary>
+        /// location
+        /// </summary>
         public String Location
         {
             get { return location; }
         }
-
+        /// <summary>
+        /// organizer
+        /// </summary>
         public String Organizer
         {
             get { return organizer; }
         }
-
+        /// <summary>
+        /// attendees
+        /// </summary>
         public String[] Attendees
         {
             get { return attendees; }
         }
-
+        /// <summary>
+        /// description
+        /// </summary>
         public String Description
         {
             get { return description; }
         }
-
+        /// <summary>
+        /// latitude
+        /// </summary>
         public double Latitude
         {
             get { return latitude; }
         }
-
+        /// <summary>
+        /// longitude
+        /// </summary>
         public double Longitude
         {
             get { return longitude; }

@@ -142,6 +142,13 @@ namespace ZXing.Common
             return bits;
         }
 
+        /// <summary>
+        /// parse the string representation to a bitmatrix
+        /// </summary>
+        /// <param name="stringRepresentation"></param>
+        /// <param name="setString"></param>
+        /// <param name="unsetString"></param>
+        /// <returns></returns>
         public static BitMatrix parse(String stringRepresentation, String setString, String unsetString)
         {
             if (stringRepresentation == null)
@@ -498,6 +505,10 @@ namespace ZXing.Common
             return new[] { x, y };
         }
 
+        /// <summary>
+        /// bottom right
+        /// </summary>
+        /// <returns></returns>
         public int[] getBottomRightOnBit()
         {
             int bitsOffset = bits.Length - 1;

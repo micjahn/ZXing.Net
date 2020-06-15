@@ -18,33 +18,60 @@ using ZXing.Common;
 
 namespace ZXing.Aztec.Internal
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract class Token
     {
+        /// <summary>
+        /// represents an empty token
+        /// </summary>
         public static Token EMPTY = new SimpleToken(null, 0, 0);
 
         private readonly Token previous;
 
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="previous"></param>
         protected Token(Token previous)
         {
             this.previous = previous;
         }
 
+        /// <summary>
+        /// previous token
+        /// </summary>
         public Token Previous
         {
             get { return previous; }
         }
-
+        /// <summary>
+        /// adds a new simple token
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="bitCount"></param>
+        /// <returns></returns>
         public Token add(int value, int bitCount)
         {
             return new SimpleToken(this, value, bitCount);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="byteCount"></param>
+        /// <returns></returns>
         public Token addBinaryShift(int start, int byteCount)
         {
             int bitCount = (byteCount * 8) + (byteCount <= 31 ? 10 : byteCount <= 62 ? 20 : 21);
             return new BinaryShiftToken(this, start, byteCount);
         }
-
+        /// <summary>
+        /// append to bitarray
+        /// </summary>
+        /// <param name="bitArray"></param>
+        /// <param name="text"></param>
         public abstract void appendTo(BitArray bitArray, byte[] text);
     }
 }

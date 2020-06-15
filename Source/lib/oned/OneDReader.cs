@@ -233,6 +233,7 @@ namespace ZXing.OneD
         /// <param name="row">row to count from</param>
         /// <param name="start">offset into row to start at</param>
         /// <param name="counters">array into which to record counts</param>
+        /// <param name="numCounters"></param>
         protected static bool recordPattern(BitArray row,
                                             int start,
                                             int[] counters,

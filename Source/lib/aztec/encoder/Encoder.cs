@@ -27,7 +27,13 @@ namespace ZXing.Aztec.Internal
     /// <author>Rustam Abdullaev</author>
     public static class Encoder
     {
+        /// <summary>
+        /// default EC percent 33
+        /// </summary>
         public const int DEFAULT_EC_PERCENT = 33; // default minimal percentage of error check words
+        /// <summary>
+        /// default layers 0
+        /// </summary>
         public const int DEFAULT_AZTEC_LAYERS = 0;
         private const int MAX_NB_BITS = 32;
         private const int MAX_NB_BITS_COMPACT = 4;

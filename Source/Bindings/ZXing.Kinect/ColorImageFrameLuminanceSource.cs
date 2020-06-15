@@ -98,6 +98,13 @@ namespace ZXing.Kinect
             }
         }
 
+        /// <summary>
+        /// creates a new instance of the luminance source. It is used internally to get a rotated image
+        /// </summary>
+        /// <param name="newLuminances"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         protected override LuminanceSource CreateLuminanceSource(byte[] newLuminances, int width, int height)
         {
             return new ColorImageFrameLuminanceSource(width, height) { luminances = newLuminances };

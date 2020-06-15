@@ -17,14 +17,29 @@
 namespace ZXing.PDF417.Internal
 {
     /// <summary>
-    /// defines the level of the error correction / count of error correction codewords
+    /// defines the aspect ratio of the image
     /// </summary>
     public enum PDF417AspectRatio
     {
+        /// <summary>
+        /// ratio 1
+        /// </summary>
         A1 = 1,
+        /// <summary>
+        /// ratio 2
+        /// </summary>
         A2,
+        /// <summary>
+        /// ratio 3
+        /// </summary>
         A3,
+        /// <summary>
+        /// ratio 4
+        /// </summary>
         A4,
+        /// <summary>
+        /// automatic selection
+        /// </summary>
         AUTO
     }
 }
