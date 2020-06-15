@@ -29,11 +29,11 @@ namespace ZXing.OneD
     public abstract class OneDReader : Reader
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         protected static int INTEGER_MATH_SHIFT = 8;
         /// <summary>
-        /// 
+        ///
         /// </summary>
         protected static int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
 
@@ -123,8 +123,30 @@ namespace ZXing.OneD
         /// <returns>The contents of the decoded barcode</returns>
         virtual protected Result doDecode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
         {
+            const int minAmountOfRows = 15; // 15 rows spaced 1/32 apart is roughly the middle half of the image
+
             int width = image.Width;
             int height = image.Height;
+            int startY = 0;
+
+            if (hints?.ContainsKey(DecodeHintType.NARROW_1D_HEIGHT_SCANNING_AREA) ?? false)
+            {
+                var narrowArea = hints[DecodeHintType.NARROW_1D_HEIGHT_SCANNING_AREA] as RestrictedScanningArea;
+
+                if (narrowArea != null)
+                {
+                    startY = (int) (height * narrowArea.StartY);
+                    height = (int) (height * narrowArea.EndY);
+
+                    if (height - startY < minAmountOfRows)
+                    {
+                        var diff = (height - startY - minAmountOfRows) / 2;
+                        height -= diff;
+                        startY += diff;
+                    }
+                }
+            }
+
             BitArray row = new BitArray(width);
 
             bool tryHarder = hints != null && hints.ContainsKey(DecodeHintType.TRY_HARDER);
@@ -136,13 +158,13 @@ namespace ZXing.OneD
             }
             else
             {
-                maxLines = 15; // 15 rows spaced 1/32 apart is roughly the middle half of the image
+                maxLines = minAmountOfRows;
             }
 
-            int middle = height >> 1;
+            int middle = ((height - startY) >> 1) + startY;
             for (int x = 0; x < maxLines; x++)
             {
-
+                
                 // Scanning from the middle out. Determine which row we're looking at next:
                 int rowStepsAboveOrBelow = (x + 1) >> 1;
                 bool isAbove = (x & 0x01) == 0; // i.e. is x even?
@@ -166,10 +188,10 @@ namespace ZXing.OneD
                     {
                         // trying again?
                         row.reverse(); // reverse the row and continue
-                                       // This means we will only ever draw result points *once* in the life of this method
-                                       // since we want to avoid drawing the wrong points after flipping the row, and,
-                                       // don't want to clutter with noise from every single row scan -- just the scans
-                                       // that start on the center line.
+                        // This means we will only ever draw result points *once* in the life of this method
+                        // since we want to avoid drawing the wrong points after flipping the row, and,
+                        // don't want to clutter with noise from every single row scan -- just the scans
+                        // that start on the center line.
                         if (hints != null && hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK))
                         {
                             IDictionary<DecodeHintType, Object> newHints = new Dictionary<DecodeHintType, Object>();
@@ -217,8 +239,8 @@ namespace ZXing.OneD
         /// <param name="start">offset into row to start at</param>
         /// <param name="counters">array into which to record counts</param>
         protected static bool recordPattern(BitArray row,
-                                            int start,
-                                            int[] counters)
+            int start,
+            int[] counters)
         {
             return recordPattern(row, start, counters, counters.Length);
         }
@@ -234,9 +256,9 @@ namespace ZXing.OneD
         /// <param name="start">offset into row to start at</param>
         /// <param name="counters">array into which to record counts</param>
         protected static bool recordPattern(BitArray row,
-                                            int start,
-                                            int[] counters,
-                                            int numCounters)
+            int start,
+            int[] counters,
+            int numCounters)
         {
             for (int idx = 0; idx < numCounters; idx++)
             {
@@ -316,8 +338,8 @@ namespace ZXing.OneD
         ///  the total variance between counters and patterns equals the pattern length, higher values mean
         ///  even more variance</returns>
         protected static int patternMatchVariance(int[] counters,
-                                                  int[] pattern,
-                                                  int maxIndividualVariance)
+            int[] pattern,
+            int maxIndividualVariance)
         {
             int numCounters = counters.Length;
             int total = 0;

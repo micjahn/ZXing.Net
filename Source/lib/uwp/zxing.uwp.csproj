@@ -980,6 +980,9 @@
     <Compile Include="..\WriterException.cs">
       <Link>WriterException.cs</Link>
     </Compile>
+    <Compile Include="..\RestrictedScanningArea.cs">
+      <Link>RestrictedScanningArea.cs</Link>
+    </Compile>
     <EmbeddedResource Include="Properties\zxing.uwp.rd.xml" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

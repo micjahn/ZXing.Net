@@ -78,6 +78,7 @@
     <Compile Include="PlanarYUVLuminanceSource.cs" />
     <Compile Include="Reader.cs" />
     <Compile Include="ReaderException.cs" />
+    <Compile Include="RestrictedScanningArea.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="ResultMetadataType.cs" />
     <Compile Include="ResultPoint.cs" />

@@ -166,6 +166,9 @@
     <Compile Include="oned\ITFBlackBox2TestCase.cs" />
     <Compile Include="oned\ITFWriterTestCase.cs" />
     <Compile Include="oned\MSIBlackBox1TestCase.cs" />
+    <Compile Include="oned\RestrictedAreaBottomBlackBoxTestCase.cs" />
+    <Compile Include="oned\RestrictedAreaMiddleBlackBoxTestCase.cs" />
+    <Compile Include="oned\RestrictedAreaTopBlackBoxTestCase.cs" />
     <Compile Include="oned\rss\expanded\BinaryUtil.cs" />
     <Compile Include="oned\rss\expanded\BinaryUtilTest.cs" />
     <Compile Include="oned\rss\expanded\BitArrayBuilderTest.cs" />
@@ -267,7 +270,7 @@
     <PreBuildEvent Condition=" '$(OS)' == 'Unix' ">cp "$(MSBuildProjectDirectory)\..\..\..\Key\dummy-private.snk" "$(MSBuildProjectDirectory)\..\..\..\Key\private.snk"</PreBuildEvent>
     <PreBuildEvent Condition=" '$(OS)' != 'Unix' ">copy "$(MSBuildProjectDirectory)\..\..\..\Key\dummy-private.snk" "$(MSBuildProjectDirectory)\..\..\..\Key\private.snk"</PreBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

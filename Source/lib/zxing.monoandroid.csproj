@@ -327,6 +327,7 @@
     <Compile Include="renderer\PixelData.AndroidBitmap.cs" />
     <Compile Include="renderer\PixelDataRenderer.cs" />
     <Compile Include="renderer\SVGRenderer.cs" />
+    <Compile Include="RestrictedScanningArea.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="ResultMetadataType.cs" />
     <Compile Include="ResultPoint.cs" />

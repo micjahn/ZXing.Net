@@ -81,6 +81,16 @@ namespace ZXing.Common.Test
          addTest(mustPassCount, tryHarderCount, 0, 0, rotation);
       }
 
+      protected void addTest(int mustPassCount,
+
+                             int tryHarderCount,
+                             int maxMisreads,
+                             int maxTryHarderMisreads,
+                             float rotation)
+      {
+         addTest(mustPassCount, tryHarderCount, maxMisreads, maxTryHarderMisreads, rotation, null);
+      }
+
       /// <summary>
       /// Adds a new test for the current directory of images.
       ///
@@ -90,14 +100,16 @@ namespace ZXing.Common.Test
       /// <param name="maxTryHarderMisreads">Maximum number of images which can fail due to successfully</param>
       ///                             reading the wrong contents using the try harder flag
       /// <param name="rotation">The rotation in degrees clockwise to use for this test.</param>
+      /// <param name="restrictedScanningArea">Narrowing scanned area</param>
       /// </summary>
       protected void addTest(int mustPassCount,
                              int tryHarderCount,
                              int maxMisreads,
                              int maxTryHarderMisreads,
-                             float rotation)
+                             float rotation,
+                             RestrictedScanningArea restrictedScanningArea)
       {
-         testResults.Add(new TestResult(mustPassCount, tryHarderCount, maxMisreads, maxTryHarderMisreads, rotation));
+         testResults.Add(new TestResult(mustPassCount, tryHarderCount, maxMisreads, maxTryHarderMisreads, rotation, restrictedScanningArea));
       }
 
       protected IEnumerable<string> getImageFiles()
@@ -182,7 +194,7 @@ namespace ZXing.Common.Test
                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
                try
                {
-                  if (decode(bitmap, rotation, expectedText, expectedMetadata, false))
+                  if (decode(bitmap, rotation, expectedText, expectedMetadata, false, testResult.RestrictedScanningArea))
                   {
                      passedCounts[x]++;
                      Log.Info("   without try-hard ... ok.");
@@ -200,7 +212,7 @@ namespace ZXing.Common.Test
                }
                try
                {
-                  if (decode(bitmap, rotation, expectedText, expectedMetadata, true))
+                  if (decode(bitmap, rotation, expectedText, expectedMetadata, true, testResult.RestrictedScanningArea))
                   {
                      tryHarderCounts[x]++;
                      Log.Info("   with try-hard ... ok.");
@@ -282,19 +294,24 @@ namespace ZXing.Common.Test
          }
       }
 
-      private bool decode(BinaryBitmap source,
-                             float rotation,
-                             String expectedText,
-                             IDictionary<string, string> expectedMetadata,
-                             bool tryHarder)
-      {
-
+        private bool decode(BinaryBitmap source,
+                               float rotation,
+                               String expectedText,
+                               IDictionary<string, string> expectedMetadata,
+                               bool tryHarder,
+                               RestrictedScanningArea restrictedScanningArea)
+        {
          String suffix = String.Format(" ({0}rotation: {1})", tryHarder ? "try harder, " : "", (int)rotation);
 
          IDictionary<DecodeHintType, Object> hints = new Dictionary<DecodeHintType, Object>();
          if (tryHarder)
          {
             hints[DecodeHintType.TRY_HARDER] = true;
+         }
+
+         if (restrictedScanningArea != null)
+         {
+            hints[DecodeHintType.NARROW_1D_HEIGHT_SCANNING_AREA] = restrictedScanningArea;
          }
 
          // Try in 'pure' mode mostly to exercise PURE_BARCODE code paths for exceptions;
@@ -304,6 +321,12 @@ namespace ZXing.Common.Test
          {
             var pureHints = new Dictionary<DecodeHintType, object>();
             pureHints[DecodeHintType.PURE_BARCODE] = true;
+
+            if (restrictedScanningArea != null)
+            {
+               pureHints[DecodeHintType.NARROW_1D_HEIGHT_SCANNING_AREA] = restrictedScanningArea;
+            }
+
             result = barcodeReader.decode(source, pureHints);
          }
          catch (ReaderException re)
@@ -327,7 +350,7 @@ namespace ZXing.Common.Test
             }
             foreach (var oneResult in results)
             {
-               if (expectedFormat != oneResult.BarcodeFormat)
+               if (expectedFormat != null && expectedFormat != oneResult.BarcodeFormat)
                {
                   Log.InfoFormat("Format mismatch: expected '{0}' but got '{1}'{2}",
                      expectedFormat, oneResult.BarcodeFormat, suffix);
@@ -375,7 +398,7 @@ namespace ZXing.Common.Test
             if (result == null)
                throw new ReaderException();
 
-            if (expectedFormat != result.BarcodeFormat)
+            if (expectedFormat != null && expectedFormat != result.BarcodeFormat)
             {
                Log.InfoFormat("Format mismatch: expected '{0}' but got '{1}'{2}",
                   expectedFormat, result.BarcodeFormat, suffix);
@@ -407,7 +430,7 @@ namespace ZXing.Common.Test
          }
 
          return true;
-      }
+        }
 
 #if !SILVERLIGHT
       protected static Bitmap rotateImage(Bitmap original, float degrees)

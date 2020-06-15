@@ -14,7 +14,6 @@
 * limitations under the License.
 */
 
-using System;
 using System.Collections.Generic;
 
 namespace ZXing
@@ -120,6 +119,11 @@ namespace ZXing
         /// and a UPC or EAN barcode is found but an extension is not, then no result will be returned
         /// at all.
         /// </summary>
-        ALLOWED_EAN_EXTENSIONS
+        ALLOWED_EAN_EXTENSIONS,
+
+        /// <summary>
+        /// Restrict vertical area while searching for 1D barcode; use <see cref="RestrictedScanningArea"/>.
+        /// </summary>
+        NARROW_1D_HEIGHT_SCANNING_AREA
     }
 }

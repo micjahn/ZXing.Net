@@ -21,6 +21,12 @@ namespace ZXing.Common.Test
     /// </summary>
     internal sealed class TestResult
     {
+        public TestResult(int mustPassCount, int tryHarderCount, int maxMisreads, int maxTryHarderMisreads, float rotation, RestrictedScanningArea restrictedScanningArea)
+            :this(mustPassCount, tryHarderCount, maxMisreads, maxTryHarderMisreads, rotation)
+        {
+            RestrictedScanningArea = restrictedScanningArea;
+        }
+
         public TestResult(int mustPassCount, int tryHarderCount, int maxMisreads, int maxTryHarderMisreads, float rotation)
         {
             MustPassCount = mustPassCount;
@@ -39,5 +45,7 @@ namespace ZXing.Common.Test
         public int MaxTryHarderMisreads { get; private set; }
 
         public float Rotation { get; private set; }
+
+        public RestrictedScanningArea RestrictedScanningArea { get; private set; }
     }
 }

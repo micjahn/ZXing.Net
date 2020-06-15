@@ -38,5 +38,6 @@
     <Compile Include="..\aztec\**;..\client\**;..\common\**;..\datamatrix\**;..\imb\**;..\maxicode\**;..\multi\**;..\oned\**;..\pdf417\**;..\qrcode\**" Exclude="..\client\result\optional\**\*;..\common\BigInteger\**\*;bin\**;obj\**;**\*.xproj;packages\**;" />
     <Compile Remove="..\common\BitMatrix.Drawing.cs;..\common\BitMatrix.Silverlight.cs;..\common\advanced\rowedge\**" />
     <Compile Include="..\presentation\BarcodeReader.cs;..\presentation\BarcodeWriter.cs;..\presentation\BarcodeWriterGeometry.cs;..\BitmapSourceLuminanceSource.cs;..\renderer\GeometryRenderer.cs;..\renderer\WriteableBitmapRenderer.Presentation.cs" />
+    <Compile Include="RestrictedScanningArea.cs" />
   </ItemGroup>
 </Project>
