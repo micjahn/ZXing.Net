@@ -768,7 +768,6 @@ namespace ZXing.QrCode.Internal
             possibleCenters.Sort(moduleComparator);
 
             double distortion = Double.MaxValue;
-            double[] squares = new double[3];
             FinderPattern[] bestPatterns = new FinderPattern[3];
 
             for (int i = 0; i < possibleCenters.Count - 2; i++)
@@ -791,17 +790,62 @@ namespace ZXing.QrCode.Internal
                             continue;
                         }
 
-                        squares[0] = squares0;
-                        squares[1] = squaredDistance(fpj, fpk);
-                        squares[2] = squaredDistance(fpi, fpk);
-                        Array.Sort(squares);
+                        var a = squares0;
+                        var b = squaredDistance(fpj, fpk);
+                        var c = squaredDistance(fpi, fpk);
+
+                        // sorts ascending - inlined
+                        if (a < b)
+                        {
+                            if (b > c)
+                            {
+                                if (a < c)
+                                {
+                                    var temp = b;
+                                    b = c;
+                                    c = temp;
+                                }
+                                else
+                                {
+                                    var temp = a;
+                                    a = c;
+                                    c = b;
+                                    b = temp;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (b < c)
+                            {
+                                if (a < c)
+                                {
+                                    var temp = a;
+                                    a = b;
+                                    b = temp;
+                                }
+                                else
+                                {
+                                    var temp = a;
+                                    a = b;
+                                    b = c;
+                                    c = temp;
+                                }
+                            }
+                            else
+                            {
+                                var temp = a;
+                                a = c;
+                                c = temp;
+                            }
+                        }
 
                         // a^2 + b^2 = c^2 (Pythagorean theorem), and a = b (isosceles triangle).
                         // Since any right triangle satisfies the formula c^2 - b^2 - a^2 = 0,
                         // we need to check both two equal sides separately.
                         // The value of |c^2 - 2 * b^2| + |c^2 - 2 * a^2| increases as dissimilarity
                         // from isosceles right triangle.
-                        double d = Math.Abs(squares[2] - 2 * squares[1]) + Math.Abs(squares[2] - 2 * squares[0]);
+                        double d = Math.Abs(c - 2 * b) + Math.Abs(c - 2 * a);
                         if (d < distortion)
                         {
                             distortion = d;
