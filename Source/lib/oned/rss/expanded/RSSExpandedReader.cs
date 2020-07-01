@@ -655,10 +655,7 @@ namespace ZXing.OneD.RSS.Expanded
             bool leftChar)
         {
             int[] counters = getDataCharacterCounters();
-            for (int x = 0; x < counters.Length; x++)
-            {
-                counters[x] = 0;
-            }
+            SupportClass.Fill(counters, 0);
 
             if (leftChar)
             {

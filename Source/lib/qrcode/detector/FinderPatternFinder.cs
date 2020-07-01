@@ -307,10 +307,7 @@ namespace ZXing.QrCode.Internal
         /// <param name="counts"></param>
         protected void clearCounts(int[] counts)
         {
-            for (int x = 0; x < counts.Length; x++)
-            {
-                counts[x] = 0;
-            }
+            SupportClass.Fill(counts, 0);
         }
 
         /// <summary>
