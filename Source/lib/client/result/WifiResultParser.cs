@@ -23,7 +23,7 @@ namespace ZXing.Client.Result
     /// <p>{@code WIFI:T:[network type];S:[network SSID];P:[network password];H:[hidden?];;}</p>
     /// <p>The fields can appear in any order. Only "S:" is required.</p>
     /// <p>For WPA2 enterprise(EAP), strings will be of the form:</p>
-    /// <p>{@code WIFI:T:WPA2-EAP;S:[network SSID];H:[hidden?];E:[EAP method];H:[Phase 2 method];A:[anonymous identity];I:[username];P:[password];;}</p>
+    /// <p>{@code WIFI:T:WPA2-EAP;S:[network SSID];H:[hidden?];E:[EAP method];PH2:[Phase 2 method];A:[anonymous identity];I:[username];P:[password];;}</p>
     /// <p>"EAP method" can e.g.be "TTLS" or "PWD" or one of the other fields in <a href = "https://developer.android.com/reference/android/net/wifi/WifiEnterpriseConfig.Eap.html"> WifiEnterpriseConfig.Eap </a> and "Phase 2 method" can e.g.be "MSCHAPV2" or any of the other fields in <a href = "https://developer.android.com/reference/android/net/wifi/WifiEnterpriseConfig.Phase2.html"> WifiEnterpriseConfig.Phase2 </a></p>
     /// </summary>
     /// <author>Vikram Aggarwal</author>
@@ -52,16 +52,33 @@ namespace ZXing.Client.Result
             var pass = matchSinglePrefixedField("P:", rawText, ';', false);
             var type = matchSinglePrefixedField("T:", rawText, ';', false) ?? "nopass";
 
+            // Unfortunately, in the past, H: was not just used for boolean 'hidden', but 'phase 2 method'.
+            // To try to retain backwards compatibility, we set one or the other based on whether the string
+            // is 'true' or 'false':
             bool hidden = false;
+            String phase2Method = matchSinglePrefixedField("PH2:", rawText, ';', false);
+            String hValue = matchSinglePrefixedField("H:", rawText, ';', false);
+            if (hValue != null)
+            {
+                // If PH2 was specified separately, or if the value is clearly boolean, interpret it as 'hidden'
+                if (phase2Method != null || String.Compare("true", hValue, StringComparison.OrdinalIgnoreCase) == 0 || String.Compare("false", hValue, StringComparison.OrdinalIgnoreCase) == 0)
+                {
 #if WindowsCE
-         try { hidden = Boolean.Parse(matchSinglePrefixedField("H:", rawText, ';', false)); } catch { }
+                    try { hidden = Boolean.Parse(hValue); } catch { }
 #else
-            Boolean.TryParse(matchSinglePrefixedField("H:", rawText, ';', false), out hidden);
+                    Boolean.TryParse(hValue, out hidden);
 #endif
+                }
+                else
+                {
+                    phase2Method = hValue;
+                }
+            }
+
             var identity = matchSinglePrefixedField("I:", rawText, ';', false);
             var anonymousIdentity = matchSinglePrefixedField("A:", rawText, ';', false);
             var eapMethod = matchSinglePrefixedField("E:", rawText, ';', false);
-            var phase2Method = matchSinglePrefixedField("H:", rawText, ';', false);
+
             return new WifiParsedResult(type, ssid, pass, hidden, identity, anonymousIdentity, eapMethod, phase2Method);
         }
     }
