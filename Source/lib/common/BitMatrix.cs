@@ -293,8 +293,7 @@ namespace ZXing.Common
         /// <param name="mask">The mask.</param>
         public void xor(BitMatrix mask)
         {
-            if (width != mask.Width || height != mask.Height
-                || rowSize != mask.RowSize)
+            if (width != mask.Width || height != mask.Height || rowSize != mask.RowSize)
             {
                 throw new ArgumentException("input matrix dimensions do not match");
             }
@@ -400,18 +399,18 @@ namespace ZXing.Common
         /// </summary>
         public void rotate180()
         {
-            var width = Width;
-            var height = Height;
             var topRow = new BitArray(width);
             var bottomRow = new BitArray(width);
-            for (int i = 0; i < (height + 1) / 2; i++)
+            int maxHeight = (height + 1) / 2;
+            for (int i = 0; i < maxHeight; i++)
             {
                 topRow = getRow(i, topRow);
-                bottomRow = getRow(height - 1 - i, bottomRow);
+                int bottomRowIndex = height - 1 - i;
+                bottomRow = getRow(bottomRowIndex, bottomRow);
                 topRow.reverse();
                 bottomRow.reverse();
                 setRow(i, bottomRow);
-                setRow(height - 1 - i, topRow);
+                setRow(bottomRowIndex, topRow);
             }
         }
 

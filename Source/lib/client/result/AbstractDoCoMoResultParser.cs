@@ -32,9 +32,9 @@ namespace ZXing.Client.Result
     /// </author>
     abstract class AbstractDoCoMoResultParser : ResultParser
     {
-        internal static String[] matchDoCoMoPrefixedField(String prefix, String rawText, bool trim)
+        internal static String[] matchDoCoMoPrefixedField(String prefix, String rawText)
         {
-            return matchPrefixedField(prefix, rawText, ';', trim);
+            return matchPrefixedField(prefix, rawText, ';', true);
         }
 
         internal static String matchSingleDoCoMoPrefixedField(String prefix, String rawText, bool trim)

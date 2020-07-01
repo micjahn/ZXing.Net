@@ -31,7 +31,7 @@ namespace ZXing.Client.Result
     sealed class BizcardResultParser : AbstractDoCoMoResultParser
     {
         // Yes, we extend AbstractDoCoMoResultParser since the format is very much
-        // like the DoCoMo MECARD format, but this is not technically one of 
+        // like the DoCoMo MECARD format, but this is not technically one of
         // DoCoMo's proposed formats
 
         override public ParsedResult parse(ZXing.Result result)
@@ -46,7 +46,7 @@ namespace ZXing.Client.Result
             String fullName = buildName(firstName, lastName);
             String title = matchSingleDoCoMoPrefixedField("T:", rawText, true);
             String org = matchSingleDoCoMoPrefixedField("C:", rawText, true);
-            String[] addresses = matchDoCoMoPrefixedField("A:", rawText, true);
+            String[] addresses = matchDoCoMoPrefixedField("A:", rawText);
             String phoneNumber1 = matchSingleDoCoMoPrefixedField("B:", rawText, true);
             String phoneNumber2 = matchSingleDoCoMoPrefixedField("M:", rawText, true);
             String phoneNumber3 = matchSingleDoCoMoPrefixedField("F:", rawText, true);

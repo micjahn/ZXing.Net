@@ -111,7 +111,7 @@ namespace ZXing.QrCode.Internal
             for (int i = iSkip - 1; i < maxI && !done; i += iSkip)
             {
                 // Get a row of black/white values
-                clearCounts(stateCount);
+                doClearCounts(stateCount);
                 int currentState = 0;
                 for (int j = 0; j < maxJ; j++)
                 {
@@ -167,18 +167,18 @@ namespace ZXing.QrCode.Internal
                                     }
                                     else
                                     {
-                                        shiftCounts2(stateCount);
+                                        doShiftCounts2(stateCount);
                                         currentState = 3;
                                         continue;
                                     }
                                     // Clear state to start looking again
                                     currentState = 0;
-                                    clearCounts(stateCount);
+                                    doClearCounts(stateCount);
                                 }
                                 else
                                 {
                                     // No, shift counts back by two
-                                    shiftCounts2(stateCount);
+                                    doShiftCounts2(stateCount);
                                     currentState = 3;
                                 }
                             }
@@ -296,7 +296,7 @@ namespace ZXing.QrCode.Internal
         {
             get
             {
-                clearCounts(crossCheckStateCount);
+                doClearCounts(crossCheckStateCount);
                 return crossCheckStateCount;
             }
         }
@@ -305,7 +305,27 @@ namespace ZXing.QrCode.Internal
         /// sets everything to 0
         /// </summary>
         /// <param name="counts"></param>
+        [Obsolete]
         protected void clearCounts(int[] counts)
+        {
+            doClearCounts(counts);
+        }
+
+        /// <summary>
+        /// shifts left by 2 index
+        /// </summary>
+        /// <param name="stateCount"></param>
+        [Obsolete]
+        protected void shiftCounts2(int[] stateCount)
+        {
+            doShiftCounts2(stateCount);
+        }
+
+        /// <summary>
+        /// sets everything to 0
+        /// </summary>
+        /// <param name="counts"></param>
+        protected static void doClearCounts(int[] counts)
         {
             SupportClass.Fill(counts, 0);
         }
@@ -314,7 +334,7 @@ namespace ZXing.QrCode.Internal
         /// shifts left by 2 index
         /// </summary>
         /// <param name="stateCount"></param>
-        protected void shiftCounts2(int[] stateCount)
+        protected static void doShiftCounts2(int[] stateCount)
         {
             stateCount[0] = stateCount[2];
             stateCount[1] = stateCount[3];

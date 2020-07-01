@@ -72,11 +72,6 @@ namespace ZXing.PDF417.Test
       [Test]
       public override void testBlackBox()
       {
-         testPDF417BlackBoxCountingResults(true);
-      }
-
-      private void testPDF417BlackBoxCountingResults(bool assertOnFailure)
-      {
          Assert.IsFalse(testResults.Count == 0);
 
          IDictionary<String, List<String>> imageFiles = getImageFileLists();
@@ -184,15 +179,12 @@ namespace ZXing.PDF417.Test
          }
 
          // Then run through again and assert if any failed
-         if (assertOnFailure)
+         for (int x = 0; x < testCount; x++)
          {
-            for (int x = 0; x < testCount; x++)
-            {
-               TestResult testResult = testResults[x];
-               String label = "Rotation " + testResult.Rotation + " degrees: Too many images failed";
-               Assert.IsTrue(passedCounts[x] >= testResult.MustPassCount, label);
-               Assert.IsTrue(tryHarderCounts[x] >= testResult.TryHarderCount, "Try harder, " + label);
-            }
+            TestResult testResult = testResults[x];
+            String label = "Rotation " + testResult.Rotation + " degrees: Too many images failed";
+            Assert.IsTrue(passedCounts[x] >= testResult.MustPassCount, label);
+            Assert.IsTrue(tryHarderCounts[x] >= testResult.TryHarderCount, "Try harder, " + label);
          }
       }
 
