@@ -52,6 +52,8 @@ namespace CommandLineEncoder
             var width = DEFAULT_WIDTH;
             var height = DEFAULT_HEIGHT;
             var clipboard = false;
+            var characterSet = (String)null;
+            var disableEci = false;
             foreach (var arg in args)
             {
                 if (arg.StartsWith("--barcode_format"))
@@ -108,6 +110,14 @@ namespace CommandLineEncoder
                 {
                     clipboard = true;
                 }
+                else if (arg.StartsWith("--character_set"))
+                {
+                    characterSet = arg.Split('=')[1];
+                }
+                else if (arg.StartsWith("--disable_eci"))
+                {
+                    disableEci = true;
+                }
             }
 
             if (DEFAULT_OUTPUT_FILE.Equals(outFileString))
@@ -140,6 +150,14 @@ namespace CommandLineEncoder
                     Width = width
                 }
             };
+            if (characterSet != null)
+            {
+                barcodeWriter.Options.Hints[EncodeHintType.CHARACTER_SET] = characterSet;
+            }
+            if (disableEci)
+            {
+                barcodeWriter.Options.Hints[EncodeHintType.DISABLE_ECI] = true;
+            }
             var bitmap = barcodeWriter.Write(contents);
             if (clipboard)
             {
@@ -162,6 +180,8 @@ namespace CommandLineEncoder
             Console.Out.WriteLine("  --width=pixels: Image width. Defaults to 300");
             Console.Out.WriteLine("  --height=pixels: Image height. Defaults to 300");
             Console.Out.WriteLine("  --copy_to_clipboard: Copy the image to the clipboard instead saving to a file");
+            Console.Out.WriteLine("  --character_set=set: Use a specific character set for binary encoding (if supported by the selected barcode format)");
+            Console.Out.WriteLine("  --disable_eci: don't generate ECI segment if non-default character set is used");
         }
     }
 }
