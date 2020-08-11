@@ -29,7 +29,7 @@ namespace ZXing
         /// <param name="writer"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        public static ImageMagick.IMagickImage WriteAsMagickImage(this IBarcodeWriterGeneric writer, string content)
+        public static ImageMagick.IMagickImage<byte> WriteAsMagickImage(this IBarcodeWriterGeneric writer, string content)
         {
             var bitmatrix = writer.Encode(content);
             var renderer = new MagickImageRenderer();
