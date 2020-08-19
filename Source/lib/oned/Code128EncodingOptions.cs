@@ -15,13 +15,14 @@
  */
 
 using System;
+using System.ComponentModel;
 
 using ZXing.Common;
 
 namespace ZXing.OneD
 {
     /// <summary>
-    /// The class holds the available options for the QrCodeWriter
+    /// The class holds the available options for the Code128 1D Writer
     /// </summary>
     [Serializable]
     public class Code128EncodingOptions : EncodingOptions
@@ -29,6 +30,9 @@ namespace ZXing.OneD
         /// <summary>
         /// if true, don't switch to codeset C for numbers
         /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("If true, don't switch to codeset C for numbers.")]
+#endif
         public bool ForceCodesetB
         {
             get
