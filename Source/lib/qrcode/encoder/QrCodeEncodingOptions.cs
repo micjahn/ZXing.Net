@@ -34,7 +34,8 @@ namespace ZXing.QrCode
         /// <see cref="ErrorCorrectionLevel"/>.
         /// </summary>
 #if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
-      [TypeConverter(typeof(ErrorLevelConverter))]
+        [TypeConverter(typeof(ErrorLevelConverter))]
+        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies what degree of error correction to use.")]
 #endif
         public ErrorCorrectionLevel ErrorCorrection
         {
@@ -63,6 +64,10 @@ namespace ZXing.QrCode
         /// <summary>
         /// Specifies what character encoding to use where applicable (type <see cref="String"/>)
         /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies what character encoding to " +
+            "use where applicable.")]
+#endif
         public string CharacterSet
         {
             get
@@ -95,6 +100,10 @@ namespace ZXing.QrCode
         /// If you set the property to true you can use UTF-8 encoding
         /// and the ECI segment is omitted.
         /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("Explicitly disables ECI segment when generating QR Code." +
+            "That is against the specification but some readers have problems otherwise when switching charset to UTF-8.")]
+#endif
         public bool DisableECI
         {
             get
@@ -115,6 +124,11 @@ namespace ZXing.QrCode
         /// Specifies the exact version of QR code to be encoded. An integer, range 1 to 40. If the data specified
         /// cannot fit within the required version, a WriterException will be thrown.
         /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies the exact version of QR code to be encoded. " +
+            "An integer, range 1 to 40. If the data specified cannot fit within the required version, " +
+            "a WriterException will be thrown.")]
+#endif
         public int? QrVersion
         {
             get
