@@ -28,6 +28,9 @@ using System.Runtime.InteropServices;
 #if NET47
 [assembly: AssemblyTitle("zxing.net for .net 4.7")]
 #endif
+#if NET48
+[assembly: AssemblyTitle("zxing.net for .net 4.8")]
+#endif
 #if SILVERLIGHT4
 [assembly: AssemblyTitle("zxing.net for silverlight 4")]
 #endif
