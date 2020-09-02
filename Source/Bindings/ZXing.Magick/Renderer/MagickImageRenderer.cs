@@ -24,7 +24,7 @@ namespace ZXing.Magick.Rendering
     /// <summary>
     /// renderer class which generates a IMagickImage from a BitMatrix
     /// </summary>
-    public class MagickImageRenderer : IBarcodeRenderer<IMagickImage>
+    public class MagickImageRenderer : IBarcodeRenderer<IMagickImage<byte>>
     {
         private readonly MagickFactory magickFactory;
 
@@ -55,7 +55,7 @@ namespace ZXing.Magick.Rendering
         /// <param name="format"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        public IMagickImage Render(BitMatrix matrix, BarcodeFormat format, string content)
+        public IMagickImage<byte> Render(BitMatrix matrix, BarcodeFormat format, string content)
         {
             return Render(matrix, format, content, new EncodingOptions());
         }
@@ -68,7 +68,7 @@ namespace ZXing.Magick.Rendering
         /// <param name="content"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public IMagickImage Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+        public IMagickImage<byte> Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
         {
             byte[] header = System.Text.Encoding.UTF8.GetBytes($"P4\n{matrix.Width} {matrix.Height}\n");
 

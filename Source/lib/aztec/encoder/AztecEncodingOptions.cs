@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.ComponentModel;
 
 using ZXing.Common;
 
@@ -30,6 +31,9 @@ namespace ZXing.Aztec
         /// Representing the minimal percentage of error correction words. 
         /// Note: an Aztec symbol should have a minimum of 25% EC words.
         /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("The minimal percentage of error correction words (> 25%).")]
+#endif
         public int? ErrorCorrection
         {
             get
@@ -60,6 +64,11 @@ namespace ZXing.Aztec
         /// 0 indicates to use the minimum number of layers (the default)
         /// a positive number (1, 2, .. 32) specifies a normal (non-compact) Aztec code
         /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("The required number of layers for an Aztec code" +
+		" -1 to -4 specify a compact code, 0 indicates to use the minimum number of layers and" +
+		" 1 to 32 specify a normal (non-compact) Aztec code.")]
+#endif
         public int? Layers
         {
             get
