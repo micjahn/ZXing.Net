@@ -39,7 +39,7 @@ namespace ZXing.Datamatrix.Encoder
                 int count = buffer.Length;
                 if (count >= 4)
                 {
-                    context.writeCodewords(encodeToCodewords(buffer, 0));
+                    context.writeCodewords(encodeToCodewords(buffer));
                     buffer.Remove(0, 4);
 
                     int newMode = HighLevelEncoder.lookAheadTest(context.Message, context.Pos, EncodingMode);
@@ -92,7 +92,7 @@ namespace ZXing.Datamatrix.Encoder
                     throw new InvalidOperationException("Count must not exceed 4");
                 }
                 int restChars = count - 1;
-                String encoded = encodeToCodewords(buffer, 0);
+                String encoded = encodeToCodewords(buffer);
                 bool endOfSymbolReached = !context.HasMoreCharacters;
                 bool restInAscii = endOfSymbolReached && restChars <= 2;
 
@@ -140,17 +140,17 @@ namespace ZXing.Datamatrix.Encoder
             }
         }
 
-        private static String encodeToCodewords(StringBuilder sb, int startPos)
+        private static String encodeToCodewords(StringBuilder sb)
         {
-            int len = sb.Length - startPos;
+            int len = sb.Length;
             if (len == 0)
             {
                 throw new InvalidOperationException("StringBuilder must not be empty");
             }
-            char c1 = sb[startPos];
-            char c2 = len >= 2 ? sb[startPos + 1] : (char)0;
-            char c3 = len >= 3 ? sb[startPos + 2] : (char)0;
-            char c4 = len >= 4 ? sb[startPos + 3] : (char)0;
+            char c1 = sb[0];
+            char c2 = len >= 2 ? sb[1] : (char)0;
+            char c3 = len >= 3 ? sb[2] : (char)0;
+            char c4 = len >= 4 ? sb[3] : (char)0;
 
             int v = (c1 << 18) + (c2 << 12) + (c3 << 6) + c4;
             char cw1 = (char)((v >> 16) & 255);
