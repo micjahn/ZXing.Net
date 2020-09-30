@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="7.21.1" />
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="7.22.0" />
     <PackageReference Include="ZXing.Net" Version="0.16.5" />
   </ItemGroup>
 
