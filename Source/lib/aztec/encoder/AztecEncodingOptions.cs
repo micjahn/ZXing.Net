@@ -40,7 +40,7 @@ namespace ZXing.Aztec
             {
                 if (Hints.ContainsKey(EncodeHintType.ERROR_CORRECTION))
                 {
-                    return (int)Hints[EncodeHintType.ERROR_CORRECTION];
+                    return (int) Hints[EncodeHintType.ERROR_CORRECTION];
                 }
                 return null;
             }
@@ -66,8 +66,8 @@ namespace ZXing.Aztec
         /// </summary>
 #if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
         [CategoryAttribute("Standard"), DescriptionAttribute("The required number of layers for an Aztec code" +
-		" -1 to -4 specify a compact code, 0 indicates to use the minimum number of layers and" +
-		" 1 to 32 specify a normal (non-compact) Aztec code.")]
+                                                             " -1 to -4 specify a compact code, 0 indicates to use the minimum number of layers and" +
+                                                             " 1 to 32 specify a normal (non-compact) Aztec code.")]
 #endif
         public int? Layers
         {
@@ -75,7 +75,7 @@ namespace ZXing.Aztec
             {
                 if (Hints.ContainsKey(EncodeHintType.AZTEC_LAYERS))
                 {
-                    return (int)Hints[EncodeHintType.AZTEC_LAYERS];
+                    return (int) Hints[EncodeHintType.AZTEC_LAYERS];
                 }
                 return null;
             }
@@ -89,6 +89,37 @@ namespace ZXing.Aztec
                 else
                 {
                     Hints[EncodeHintType.AZTEC_LAYERS] = value;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Specifies what character encoding to use where applicable (type <see cref="String"/>)
+        /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies what character encoding to use where applicable.")]
+#endif
+        public string CharacterSet
+        {
+            get
+            {
+                if (Hints.ContainsKey(EncodeHintType.CHARACTER_SET))
+                {
+                    return (string) Hints[EncodeHintType.CHARACTER_SET];
+                }
+                return null;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    if (Hints.ContainsKey(EncodeHintType.CHARACTER_SET))
+                        Hints.Remove(EncodeHintType.CHARACTER_SET);
+                }
+                else
+                {
+                    Hints[EncodeHintType.CHARACTER_SET] = value;
                 }
             }
         }
