@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <VersionPrefix>0.16.5</VersionPrefix>
-    <TargetFrameworks>net461;net48;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net461;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>anycpu</PlatformTarget>
     <PublicSign>true</PublicSign>
@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenCvSharp4" Version="4.3.0.20200524" />
+    <PackageReference Include="OpenCvSharp4" Version="4.4.0.20200915" />
     <PackageReference Include="ZXing.Net" Version="0.16.5" />
   </ItemGroup>
 
@@ -53,6 +53,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
     <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
     <DebugType>portable</DebugType>
   </PropertyGroup>
