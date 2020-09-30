@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <VersionPrefix>0.16.9</VersionPrefix>
-    <TargetFrameworks>net45;net462;netstandard1.3;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net462;netstandard1.3;netstandard2.0</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>anycpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -27,13 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SkiaSharp" Version="1.68.3" />
+    <PackageReference Include="SkiaSharp" Version="2.80.2" />
     <PackageReference Include="ZXing.Net" Version="0.16.5" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
@@ -41,11 +36,6 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">
-    <DefineConstants>$(DefineConstants);NET45</DefineConstants>
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
     <DefineConstants>$(DefineConstants);NET46</DefineConstants>
     <DebugType>full</DebugType>
