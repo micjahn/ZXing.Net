@@ -20,9 +20,10 @@
 %BINARY_DIR%\sl5\zxing.sl5.dll
 %BINARY_DIR%\uwp\zxing.dll
 %BINARY_DIR%\winrt\zxing.winrt.dll
-%BINARY_DIR%\monodroid\zxing.monoandroid.dll
 %CURRENT_DIR%\Source\lib\netstandard2.0\bin\Release\netstandard1.0\zxing.dll
 %CURRENT_DIR%\Source\lib\netstandard2.0\bin\Release\netstandard1.1\zxing.dll
 %CURRENT_DIR%\Source\lib\netstandard2.0\bin\Release\netstandard1.3\zxing.dll
 %CURRENT_DIR%\Source\lib\netstandard2.0\bin\Release\netstandard2.0\zxing.dll
+%CURRENT_DIR%\Source\lib\netstandard2.0\bin\Release\netstandard2.1\zxing.dll
 %CURRENT_DIR%\Source\lib\netcoreapp3.0\bin\Release\netcoreapp3.0\zxing.dll
+%CURRENT_DIR%\Source\lib\netcoreapp3.0\bin\Release\netcoreapp3.1\zxing.dll

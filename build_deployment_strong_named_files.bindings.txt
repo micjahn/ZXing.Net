@@ -1,3 +1,4 @@
+%BINARY_DIR%\Bindings\Android\zxing.monoandroid.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.dll
 %BINARY_DIR%\Bindings\kinect\V1\zxing.kinect.dll
 %BINARY_DIR%\Bindings\kinect\V2\zxing.kinect.dll
@@ -15,4 +16,3 @@
 %CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\net45\zxing.skiasharp.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard1.3\zxing.skiasharp.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.Windows.Compatibility\bin\Release\netstandard2.0\zxing.windows.compatibility.dll
-%CURRENT_DIR%\Source\Bindings\ZXing.Eto.Forms\bin\Release\netstandard1.0\ZXing.Eto.Forms.dll
