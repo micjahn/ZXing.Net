@@ -4,7 +4,8 @@
     <version>0.16.4</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
-    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <license type="expression">Apache-2.0</license>
+    <licenseUrl>https://licenses.nuget.org/Apache-2.0</licenseUrl>
     <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
     <id>ZXing.Net.Bindings.ZKWeb.System.Drawing</id>
