@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZXing.Net", "Source\lib\netstandard2.0\ZXing.Net.csproj", "{832C3EF1-56B8-4164-B140-4A2D01DB3CA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZXing.Net", "Source\lib\netstandard\ZXing.Net.csproj", "{832C3EF1-56B8-4164-B140-4A2D01DB3CA2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bindings", "Bindings", "{E3647B3A-B903-402A-B7F7-711A4A1512B9}"
 EndProject
@@ -141,8 +141,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZXing.Eto.Forms", "Source\Bindings\ZXing.Eto.Forms\ZXing.Eto.Forms.csproj", "{0E1CE6CC-7377-4854-9598-A18EEC924D51}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZXing.Unity3D", "Source\Bindings\ZXing.Unity3D\ZXing.Unity3D.csproj", "{35EFB92B-6C72-48B4-ABFA-39CECE270FF6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZXing.Netcoreapp3.0.presentation", "Source\lib\netcoreapp3.0\ZXing.Netcoreapp3.0.presentation.csproj", "{C15BC6D6-A6EE-46DB-8706-E7317F124126}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZXing.SkiaSharp.Test", "Source\Bindings\Tests\ZXing.SkiaSharp\ZXing.SkiaSharp.Test.csproj", "{92327639-AD1C-4671-9AE9-7B39820526F1}"
 EndProject
@@ -1524,37 +1522,6 @@ Global
 		{35EFB92B-6C72-48B4-ABFA-39CECE270FF6}.Release|x64.Build.0 = Release|Any CPU
 		{35EFB92B-6C72-48B4-ABFA-39CECE270FF6}.Release|x86.ActiveCfg = Release|Any CPU
 		{35EFB92B-6C72-48B4-ABFA-39CECE270FF6}.Release|x86.Build.0 = Release|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Debug - Reduced|Any CPU.ActiveCfg = Debug|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Debug - Reduced|ARM.ActiveCfg = Debug|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Debug - Reduced|ARM.Build.0 = Debug|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Debug - Reduced|x64.ActiveCfg = Debug|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Debug - Reduced|x64.Build.0 = Debug|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Debug - Reduced|x86.ActiveCfg = Debug|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Debug - Reduced|x86.Build.0 = Debug|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Debug|ARM.Build.0 = Debug|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Debug|x64.Build.0 = Debug|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Debug|x86.Build.0 = Debug|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Release with Documentation|Any CPU.ActiveCfg = Release|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Release with Documentation|Any CPU.Build.0 = Release|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Release with Documentation|ARM.ActiveCfg = Release|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Release with Documentation|ARM.Build.0 = Release|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Release with Documentation|x64.ActiveCfg = Release|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Release with Documentation|x64.Build.0 = Release|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Release with Documentation|x86.ActiveCfg = Release|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Release with Documentation|x86.Build.0 = Release|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Release|ARM.ActiveCfg = Release|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Release|ARM.Build.0 = Release|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Release|x64.ActiveCfg = Release|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Release|x64.Build.0 = Release|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Release|x86.ActiveCfg = Release|Any CPU
-		{C15BC6D6-A6EE-46DB-8706-E7317F124126}.Release|x86.Build.0 = Release|Any CPU
 		{92327639-AD1C-4671-9AE9-7B39820526F1}.Debug - Reduced|Any CPU.ActiveCfg = Debug|Any CPU
 		{92327639-AD1C-4671-9AE9-7B39820526F1}.Debug - Reduced|ARM.ActiveCfg = Debug|Any CPU
 		{92327639-AD1C-4671-9AE9-7B39820526F1}.Debug - Reduced|ARM.Build.0 = Debug|Any CPU
