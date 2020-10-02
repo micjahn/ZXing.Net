@@ -892,7 +892,7 @@ namespace ZXing.PDF417.Internal
                 case PDF417OptionalMacroFields.FileName:
                 case PDF417OptionalMacroFields.Sender:
                 case PDF417OptionalMacroFields.Addressee:
-                    encodedValue = PDF417HighLevelEncoder.encodeHighLevel(this.metadata.Addressee, Compaction.TEXT, encoding, disableEci);
+                    encodedValue = PDF417HighLevelEncoder.encodeHighLevel(value, Compaction.TEXT, encoding, disableEci);
                     // Remove the latch to text prefix.
                     encodedValue = encodedValue.Replace(((char)0x384).ToString(), "");
                     break;
