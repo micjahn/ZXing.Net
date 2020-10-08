@@ -35,7 +35,7 @@ namespace ZXing.Multi.QrCode.Internal
     /// <author>Sean Owen</author>
     /// <author>Hannes Erven</author>
     /// </summary>
-    sealed class MultiFinderPatternFinder : FinderPatternFinder
+    public sealed class MultiFinderPatternFinder : FinderPatternFinder
     {
         private static readonly FinderPatternInfo[] EMPTY_RESULT_ARRAY = new FinderPatternInfo[0];
 
@@ -81,7 +81,7 @@ namespace ZXing.Multi.QrCode.Internal
         /// <param name="image">image to search</param>
         /// <param name="resultPointCallback">callback for result points</param>
         /// </summary>
-        internal MultiFinderPatternFinder(BitMatrix image, ResultPointCallback resultPointCallback)
+        public MultiFinderPatternFinder(BitMatrix image, ResultPointCallback resultPointCallback)
             : base(image, resultPointCallback)
         {
         }
