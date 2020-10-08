@@ -25,6 +25,7 @@
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
     <DelaySign>false</DelaySign>
+    <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
