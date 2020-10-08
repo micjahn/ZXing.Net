@@ -113,10 +113,10 @@ namespace ZXing.Datamatrix.Encoder
         }
         */
 
-        private static char randomize253State(char ch, int codewordPosition)
+        private static char randomize253State(int codewordPosition)
         {
             int pseudoRandom = ((149 * codewordPosition) % 253) + 1;
-            int tempVariable = ch + pseudoRandom;
+            int tempVariable = PAD + pseudoRandom;
             return (char)(tempVariable <= 254 ? tempVariable : tempVariable - 254);
         }
 
@@ -221,7 +221,7 @@ namespace ZXing.Datamatrix.Encoder
             }
             while (codewords.Length < capacity)
             {
-                codewords.Append(randomize253State(PAD, codewords.Length + 1));
+                codewords.Append(randomize253State(codewords.Length + 1));
             }
 
             return context.Codewords.ToString();

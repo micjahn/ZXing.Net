@@ -172,7 +172,7 @@ namespace ZXing.OneD.RSS.Expanded
             }
 
             bool tryStackedDecode = rows.Count != 0;
-            storeRow(rowNumber, false); // TODO: deal with reversed rows
+            storeRow(rowNumber); // TODO: deal with reversed rows
             if (tryStackedDecode)
             {
                 // When the image is 180-rotated, then rows are sorted in wrong direction.
@@ -287,7 +287,7 @@ namespace ZXing.OneD.RSS.Expanded
             return false;
         }
 
-        private void storeRow(int rowNumber, bool wasReversed)
+        private void storeRow(int rowNumber)
         {
             // Discard if duplicate above or below; otherwise insert in order by row number.
             int insertPos = 0;
@@ -319,7 +319,7 @@ namespace ZXing.OneD.RSS.Expanded
                 return;
             }
 
-            rows.Insert(insertPos, new ExpandedRow(pairs, rowNumber, wasReversed));
+            rows.Insert(insertPos, new ExpandedRow(pairs, rowNumber, false));
 
             removePartialRows(pairs, rows);
         }

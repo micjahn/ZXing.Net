@@ -39,7 +39,7 @@ namespace ZXing.PDF417.Internal
         /// Sets a specific location in the bar
         ///
         /// <param name="x">The location in the bar</param>
-        /// <param name="value">Black if true, white if false;</param>
+        /// <return>Black if true, white if false;</return>
         /// </summary>
         internal sbyte this[int x]
         {
