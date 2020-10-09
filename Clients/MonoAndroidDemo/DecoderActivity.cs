@@ -15,7 +15,9 @@ using ZXing;
 
 namespace MonoAndroidDemo
 {
-   [Activity (Label = "Read:")]			
+    using ZXing.Android;
+
+    [Activity (Label = "Read:")]			
    public class DecoderActivity : Activity
    {
       public static BarcodeFormat CurrentFormat = BarcodeFormat.QR_CODE;
@@ -160,7 +162,7 @@ namespace MonoAndroidDemo
       {
          try 
          {
-            var reader = new BarcodeReader ();
+            var reader = new BarcodeReader();
             reader.Options.PossibleFormats = new List<BarcodeFormat> () { CurrentFormat };
             reader.Options.TryHarder = true;
             var result = reader.Decode (image);
