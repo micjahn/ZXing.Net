@@ -25,7 +25,6 @@
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\net48\zxing.opencv.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\netstandard2.0\zxing.opencv.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\netstandard2.1\zxing.opencv.dll
-%CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\net45\zxing.skiasharp.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\net462\zxing.skiasharp.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard1.3\zxing.skiasharp.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard2.0\zxing.skiasharp.dll
