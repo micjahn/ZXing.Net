@@ -2,6 +2,8 @@
 
 SET CURRENT_DIR=%CD%
 
+CD "%CURRENT_DIR%\Source\Bindings\ZXing.Android\"
+CALL nuget-pack.cmd
 CD "%CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\"
 CALL nuget-pack.cmd
 CD "%CURRENT_DIR%\Source\Bindings\ZXing.Eto.Forms\"

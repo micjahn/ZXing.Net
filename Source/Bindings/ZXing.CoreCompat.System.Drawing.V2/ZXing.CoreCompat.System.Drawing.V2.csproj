@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.16.5-beta</VersionPrefix>
+    <VersionPrefix>0.16.6-beta</VersionPrefix>
     <TargetFramework>netstandard2.0</TargetFramework>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageId>ZXing.CoreCompat.System.Drawing.v2</PackageId>
@@ -38,7 +38,7 @@
 
   <ItemGroup>
     <PackageReference Include="CoreCompat.System.Drawing.v2" Version="5.2.0-preview1-r131" />
-    <PackageReference Include="ZXing.Net" Version="0.16.5" />
+    <PackageReference Include="ZXing.Net" Version="0.16.6" />
   </ItemGroup>
 
 </Project>

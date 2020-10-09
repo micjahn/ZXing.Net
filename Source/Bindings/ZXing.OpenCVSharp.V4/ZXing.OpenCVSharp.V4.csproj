@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.16.5</VersionPrefix>
+    <VersionPrefix>0.16.6</VersionPrefix>
     <TargetFrameworks>net461;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>anycpu</PlatformTarget>
@@ -29,7 +29,7 @@
 
   <ItemGroup>
     <PackageReference Include="OpenCvSharp4" Version="4.4.0.20200915" />
-    <PackageReference Include="ZXing.Net" Version="0.16.5" />
+    <PackageReference Include="ZXing.Net" Version="0.16.6" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">

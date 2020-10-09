@@ -10,13 +10,13 @@ https://github.com/micjahn/ZXing.Net.git/trunk/3rdparty/NUnit.NET Base\3rdparty\
 https://github.com/micjahn/ZXing.Net.git/trunk/3rdparty/NUnit.Silverlight Base\3rdparty\NUnit.Silverlight
 https://github.com/micjahn/ZXing.Net.git/trunk/3rdparty/Unity Base\3rdparty\Unity
 https://github.com/micjahn/ZXing.Net.git/trunk/3rdparty/Kinect Base\3rdparty\Kinect
+https://github.com/micjahn/ZXing.Net.git/trunk/3rdparty/PDFsharp Base\3rdparty\PDFsharp
 https://github.com/micjahn/ZXing.Net.git/trunk/Key Base\Key
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.sln Base
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.ce.sln Base
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.vs2015.sln Base
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.vs2017.sln Base
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.vs2019.sln Base
-https://github.com/micjahn/ZXing.Net.git/trunk/zxing.monoandroid.sln Base
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.monotouch.sln Base
 https://github.com/micjahn/ZXing.Net.git/trunk/zxing.nunit Base
 https://github.com/micjahn/ZXing.Net.git/trunk/THANKS Base

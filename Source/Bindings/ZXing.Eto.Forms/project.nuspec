@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.0</version>
+    <version>0.16.1</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <license type="expression">Apache-2.0</license>
@@ -17,12 +17,12 @@
     <tags>ZXing Eto</tags>
     <dependencies>
       <group targetFramework="netstandard1.0">
-        <dependency id="ZXing.Net" version="0.16.5" exclude="Build,Analyzers" />
+        <dependency id="ZXing.Net" version="0.16.6" exclude="Build,Analyzers" />
         <dependency id="Eto.Forms" version="2.5.6" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="ZXing.Net" version="0.16.5" exclude="Build,Analyzers" />
+        <dependency id="ZXing.Net" version="0.16.6" exclude="Build,Analyzers" />
         <dependency id="Eto.Forms" version="2.5.6" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
       </group>
