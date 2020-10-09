@@ -61,9 +61,9 @@
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\net461\zxing.opencv.dll %BINARY_DIR%\Bindings\OpenCVSharp.V4\net4.6.1\
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\net461\zxing.opencv.pdb %BINARY_DIR%\Bindings\OpenCVSharp.V4\net4.6.1\
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\net461\zxing.opencv.xml %BINARY_DIR%\Bindings\OpenCVSharp.V4\net4.6.1\
-%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\net48\zxing.opencv.dll %BINARY_DIR%\Bindings\OpenCVSharp.V4\net4.6\
-%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\net48\zxing.opencv.pdb %BINARY_DIR%\Bindings\OpenCVSharp.V4\net4.6\
-%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\net48\zxing.opencv.xml %BINARY_DIR%\Bindings\OpenCVSharp.V4\net4.6\
+%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\net48\zxing.opencv.dll %BINARY_DIR%\Bindings\OpenCVSharp.V4\net4.8\
+%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\net48\zxing.opencv.pdb %BINARY_DIR%\Bindings\OpenCVSharp.V4\net4.8\
+%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\net48\zxing.opencv.xml %BINARY_DIR%\Bindings\OpenCVSharp.V4\net4.8\
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\netstandard2.0\zxing.opencv.dll %BINARY_DIR%\Bindings\OpenCVSharp.V4\netstandard2.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\netstandard2.0\zxing.opencv.pdb %BINARY_DIR%\Bindings\OpenCVSharp.V4\netstandard2.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\netstandard2.0\zxing.opencv.xml %BINARY_DIR%\Bindings\OpenCVSharp.V4\netstandard2.0\
