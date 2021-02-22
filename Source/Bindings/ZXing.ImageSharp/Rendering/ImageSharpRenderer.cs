@@ -73,7 +73,7 @@ namespace ZXing.ImageSharp.Rendering
                 }
             }
 
-            var result = new Image<TPixel>(matrix.Width, matrix.Height);
+            var result = new Image<TPixel>(width, height);
             for (int y = 0; y < matrix.Height; y++)
             {
                 for (var pixelsizeHeight = 0; pixelsizeHeight < pixelsize; pixelsizeHeight++)
