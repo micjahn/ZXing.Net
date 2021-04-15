@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+using System;
+
 using NUnit.Framework;
 
 using ZXing.Aztec.Internal;
@@ -24,6 +26,32 @@ namespace ZXing.Aztec.Test
     public sealed class DecoderTest
     {
         private static readonly ResultPoint[] NO_POINTS = new ResultPoint[0];
+
+        [Test]
+        public void testHighLevelDecode()
+        {
+            // no ECI codes
+            testHighLevelDecodeString("A. b.",
+          // 'A'  P/S   '. ' L/L    b    D/L    '.'
+          "...X. ..... ...XX XXX.. ...XX XXXX. XX.X");
+
+            // initial ECI code 26 (switch to UTF-8)
+            testHighLevelDecodeString("Ça",
+                // P/S FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
+                "..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.");
+
+            // initial character without ECI (must be interpreted as ISO_8859_1)
+            // followed by ECI code 26 (= UTF-8) and UTF-8 text
+            testHighLevelDecodeString("±Ça",
+             // B/S 1     0xb1     P/S   FLG(n) 2  '2'  '6'  B/S   2     0xc3     0x87     L/L   'a'
+             "XXXXX ....X X.XX...X ..... ..... .X. .X.. X... XXXXX ...X. XX....XX X....XXX XXX.. ...X.");
+        }
+
+        private static void testHighLevelDecodeString(String expectedString, String b)
+        {
+            BitArray bits = EncoderTest.toBitArray(EncoderTest.stripSpace(b));
+            Assert.AreEqual(expectedString, Decoder.highLevelDecode(EncoderTest.toBooleanArray(bits)), "highLevelDecode() failed for input bits: " + b);
+        }
 
         [Test]
         public void testAztecResult()
@@ -65,6 +93,36 @@ namespace ZXing.Aztec.Test
                 },
                 result.RawBytes);
             Assert.AreEqual(180, result.NumBits);
+        }
+
+
+        [Test]
+        public void testAztecResultECI()
+        {
+            BitMatrix matrix = BitMatrix.parse(
+                "      X     X X X   X           X     \n" +
+                "    X X   X X   X X X X X X X   X     \n" +
+                "    X X                         X   X \n" +
+                "  X X X X X X X X X X X X X X X X X   \n" +
+                "      X                       X       \n" +
+                "      X   X X X X X X X X X   X   X   \n" +
+                "  X X X   X               X   X X X   \n" +
+                "  X   X   X   X X X X X   X   X X X   \n" +
+                "      X   X   X       X   X   X X X   \n" +
+                "  X   X   X   X   X   X   X   X   X   \n" +
+                "X   X X   X   X       X   X   X     X \n" +
+                "  X X X   X   X X X X X   X   X X     \n" +
+                "      X   X               X   X X   X \n" +
+                "      X   X X X X X X X X X   X   X X \n" +
+                "  X   X                       X       \n" +
+                "X X   X X X X X X X X X X X X X X X   \n" +
+                "X X     X   X         X X X       X X \n" +
+                "  X   X   X   X X X X X     X X   X   \n" +
+                "X     X       X X   X X X       X     \n",
+                "X ", "  ");
+            AztecDetectorResult r = new AztecDetectorResult(matrix, NO_POINTS, false, 15, 1);
+            DecoderResult result = new Decoder().decode(r);
+            Assert.AreEqual("Français", result.Text);
         }
 
         [Test]
@@ -152,9 +210,9 @@ namespace ZXing.Aztec.Test
         public void testRawBytes()
         {
             var bool0 = new bool[0];
-            var bool1 = new bool[] {true};
-            var bool7 = new bool[] {true, false, true, false, true, false, true};
-            var bool8 = new bool[] {true, false, true, false, true, false, true, false};
+            var bool1 = new bool[] { true };
+            var bool7 = new bool[] { true, false, true, false, true, false, true };
+            var bool8 = new bool[] { true, false, true, false, true, false, true, false };
             var bool9 = new bool[]
             {
                 true, false, true, false, true, false, true, false,
@@ -166,11 +224,11 @@ namespace ZXing.Aztec.Test
                 true, true, false, false, false, false, false, true
             };
             var byte0 = new byte[0];
-            var byte1 = new byte[] {128};
-            var byte7 = new byte[] {170};
-            var byte8 = new byte[] {170};
-            var byte9 = new byte[] {170, 128};
-            var byte16 = new byte[] {99, 193};
+            var byte1 = new byte[] { 128 };
+            var byte7 = new byte[] { 170 };
+            var byte8 = new byte[] { 170 };
+            var byte9 = new byte[] { 170, 128 };
+            var byte16 = new byte[] { 99, 193 };
 
             assertEqualByteArrays(byte0, Decoder.convertBoolArrayToByteArray(bool0));
             assertEqualByteArrays(byte1, Decoder.convertBoolArrayToByteArray(bool1));

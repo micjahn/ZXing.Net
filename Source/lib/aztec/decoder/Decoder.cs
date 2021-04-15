@@ -61,7 +61,7 @@ namespace ZXing.Aztec.Internal
 
         private static readonly String[] PUNCT_TABLE =
         {
-         "", "\r", "\r\n", ". ", ", ", ": ", "!", "\"", "#", "$", "%", "&", "'", "(", ")",
+         "FLG(n)", "\r", "\r\n", ". ", ", ", ": ", "!", "\"", "#", "$", "%", "&", "'", "(", ")",
          "*", "+", ",", "-", ".", "/", ":", ";", "<", "=", ">", "?", "[", "]", "{", "}", "CTRL_UL"
       };
 
@@ -69,6 +69,8 @@ namespace ZXing.Aztec.Internal
         {
          "CTRL_PS", " ", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ",", ".", "CTRL_UL", "CTRL_US"
       };
+
+        private static Encoding DEFAULT_ENCODING = AztecWriter.DEFAULT_CHARSET;
 
         private static readonly IDictionary<Table, String[]> codeTables = new Dictionary<Table, String[]>
       {
@@ -109,13 +111,14 @@ namespace ZXing.Aztec.Internal
             if (correctedBits == null)
                 return null;
 
-            var result = getEncodedData(correctedBits);
+            var result = getEncodedData(correctedBits.correctBits);
             if (result == null)
                 return null;
 
-            var rawBytes = convertBoolArrayToByteArray(correctedBits);
+            var rawBytes = convertBoolArrayToByteArray(correctedBits.correctBits);
 
-            return new DecoderResult(rawBytes, correctedBits.Length, result, null, null);
+            var decoderResult = new DecoderResult(rawBytes, correctedBits.correctBits.Length, result, null, String.Format("{0}", correctedBits.ecLevel));
+            return decoderResult;
         }
 
         /// <summary>
@@ -139,74 +142,146 @@ namespace ZXing.Aztec.Internal
             var latchTable = Table.UPPER; // table most recently latched to
             var shiftTable = Table.UPPER; // table to use for the next read
             var strTable = UPPER_TABLE;
-            var result = new StringBuilder(20);
             var index = 0;
 
-            while (index < endIndex)
+
+            // Final decoded string result
+            // (correctedBits-5) / 4 is an upper bound on the size (all-digit result)
+            var result = new StringBuilder((correctedBits.Length - 5) / 4);
+
+            // Intermediary buffer of decoded bytes, which is decoded into a string and flushed
+            // when character encoding changes (ECI) or input ends.
+            using (var decodedBytes = new System.IO.MemoryStream())
             {
-                if (shiftTable == Table.BINARY)
+                var encoding = DEFAULT_ENCODING;
+
+                while (index < endIndex)
                 {
-                    if (endIndex - index < 5)
+                    if (shiftTable == Table.BINARY)
                     {
-                        break;
-                    }
-                    int length = readCode(correctedBits, index, 5);
-                    index += 5;
-                    if (length == 0)
-                    {
-                        if (endIndex - index < 11)
+                        if (endIndex - index < 5)
                         {
                             break;
                         }
-                        length = readCode(correctedBits, index, 11) + 31;
-                        index += 11;
-                    }
-                    for (int charCount = 0; charCount < length; charCount++)
-                    {
-                        if (endIndex - index < 8)
+                        int length = readCode(correctedBits, index, 5);
+                        index += 5;
+                        if (length == 0)
                         {
-                            index = endIndex; // Force outer loop to exit
-                            break;
+                            if (endIndex - index < 11)
+                            {
+                                break;
+                            }
+                            length = readCode(correctedBits, index, 11) + 31;
+                            index += 11;
                         }
-                        int code = readCode(correctedBits, index, 8);
-                        result.Append((char)code);
-                        index += 8;
-                    }
-                    // Go back to whatever mode we had been in
-                    shiftTable = latchTable;
-                    strTable = codeTables[shiftTable];
-                }
-                else
-                {
-                    int size = shiftTable == Table.DIGIT ? 4 : 5;
-                    if (endIndex - index < size)
-                    {
-                        break;
-                    }
-                    int code = readCode(correctedBits, index, size);
-                    index += size;
-                    String str = getCharacter(strTable, code);
-                    if (str.StartsWith("CTRL_"))
-                    {
-                        // Table changes
-                        // ISO/IEC 24778:2008 prescribes ending a shift sequence in the mode from which it was invoked.
-                        // That's including when that mode is a shift.
-                        // Our test case dlusbs.png for issue #642 exercises that.
-                        latchTable = shiftTable;  // Latch the current mode, so as to return to Upper after U/S B/S
-                        shiftTable = getTable(str[5]);
-                        strTable = codeTables[shiftTable];
-                        if (str[6] == 'L')
+                        for (int charCount = 0; charCount < length; charCount++)
                         {
-                            latchTable = shiftTable;
+                            if (endIndex - index < 8)
+                            {
+                                index = endIndex; // Force outer loop to exit
+                                break;
+                            }
+                            int code = readCode(correctedBits, index, 8);
+                            decodedBytes.WriteByte((byte)code);
+                            index += 8;
                         }
-                    }
-                    else
-                    {
-                        result.Append(str);
                         // Go back to whatever mode we had been in
                         shiftTable = latchTable;
                         strTable = codeTables[shiftTable];
                     }
+                    else
+                    {
+                        int size = shiftTable == Table.DIGIT ? 4 : 5;
+                        if (endIndex - index < size)
+                        {
+                            break;
+                        }
+                        int code = readCode(correctedBits, index, size);
+                        index += size;
+                        String str = getCharacter(strTable, code);
+                        if ("FLG(n)".Equals(str))
+                        {
+                            if (endIndex - index < 3)
+                            {
+                                break;
+                            }
+                            int n = readCode(correctedBits, index, 3);
+                            index += 3;
+                            switch (n)
+                            {
+                                case 0:
+                                    result.Append((char)29);  // translate FNC1 as ASCII 29
+                                    break;
+                                case 7:
+                                    throw new FormatException("FLG(7) is reserved and illegal");
+                                default:
+                                    // flush bytes before changing character set
+                                    if (decodedBytes.Length > 0)
+                                    {
+                                        var byteArray = decodedBytes.ToArray();
+                                        result.Append(encoding.GetString(byteArray, 0, byteArray.Length));
+                                        decodedBytes.SetLength(0);
+                                    }
+
+                                    // ECI is decimal integer encoded as 1-6 codes in DIGIT mode
+                                    int eci = 0;
+                                    if (endIndex - index < 4 * n)
+                                    {
+                                        break;
+                                    }
+                                    while (n-- > 0)
+                                    {
+                                        int nextDigit = readCode(correctedBits, index, 4);
+                                        index += 4;
+                                        if (nextDigit < 2 || nextDigit > 11)
+                                        {
+                                            throw new FormatException("Not a decimal digit");
+                                        }
+                                        eci = eci * 10 + (nextDigit - 2);
+                                    }
+                                    CharacterSetECI charsetECI = CharacterSetECI.getCharacterSetECIByValue(eci);
+                                    encoding = CharacterSetECI.getEncoding(charsetECI);
+                                    break;
+                            }
+                            // Go back to whatever mode we had been in
+                            shiftTable = latchTable;
+                            strTable = codeTables[shiftTable];
+                        }
+                        else if (str.StartsWith("CTRL_"))
+                        {
+                            // Table changes
+                            // ISO/IEC 24778:2008 prescribes ending a shift sequence in the mode from which it was invoked.
+                            // That's including when that mode is a shift.
+                            // Our test case dlusbs.png for issue #642 exercises that.
+                            latchTable = shiftTable;  // Latch the current mode, so as to return to Upper after U/S B/S
+                            shiftTable = getTable(str[5]);
+                            strTable = codeTables[shiftTable];
+                            if (str[6] == 'L')
+                            {
+                                latchTable = shiftTable;
+                            }
+                        }
+                        else
+                        {
+                            // Though stored as a table of strings for convenience, codes actually represent 1 or 2 *bytes*.
+#if (PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1)
+                            var b = Encoding.GetEncoding(StringUtils.PLATFORM_DEFAULT_ENCODING).GetBytes(str);
+#else
+
+                            var b = Encoding.ASCII.GetBytes(str);
+#endif
+                            decodedBytes.Write(b, 0, b.Length);
+                            // Go back to whatever mode we had been in
+                            shiftTable = latchTable;
+                            strTable = codeTables[shiftTable];
+                        }
+                    }
+                }
+
+                if (decodedBytes.Length > 0)
+                {
+                    var byteArray = decodedBytes.ToArray();
+                    result.Append(encoding.GetString(byteArray, 0, byteArray.Length));
                 }
             }
             return result.ToString();
@@ -235,12 +310,24 @@ namespace ZXing.Aztec.Internal
             return table[code];
         }
 
+        internal sealed class CorrectedBitsResult
+        {
+            public bool[] correctBits;
+            public int ecLevel;
+
+            public CorrectedBitsResult(bool[] correctBits, int ecLevel)
+            {
+                this.correctBits = correctBits;
+                this.ecLevel = ecLevel;
+            }
+        }
+
         /// <summary>
         ///Performs RS error correction on an array of bits.
         /// </summary>
         /// <param name="rawbits">The rawbits.</param>
         /// <returns>the corrected array</returns>
-        private bool[] correctBits(bool[] rawbits)
+        private CorrectedBitsResult correctBits(bool[] rawbits)
         {
             GenericGF gf;
             int codewordSize;
@@ -324,7 +411,7 @@ namespace ZXing.Aztec.Internal
             if (index != correctedBits.Length)
                 return null;
 
-            return correctedBits;
+            return new CorrectedBitsResult(correctedBits, 100 * (numCodewords - numDataCodewords) / numCodewords);
         }
 
         /// <summary>

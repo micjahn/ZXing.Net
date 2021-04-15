@@ -614,7 +614,7 @@ namespace ZXing.Aztec.Test
             Assert.AreEqual(stripSpace(expected), stripSpace(stuffed.ToString()), "stuffBits() failed for input string: " + bits);
         }
 
-        private static BitArray toBitArray(string bits)
+        public static BitArray toBitArray(string bits)
         {
             var @in = new BitArray();
             var str = DOTX.Replace(bits, "");
@@ -625,7 +625,7 @@ namespace ZXing.Aztec.Test
             return @in;
         }
 
-        private static bool[] toBooleanArray(BitArray bitArray)
+        public static bool[] toBooleanArray(BitArray bitArray)
         {
             bool[] result = new bool[bitArray.Size];
             for (int i = 0; i < result.Length; i++)
@@ -651,7 +651,7 @@ namespace ZXing.Aztec.Test
             Assert.AreEqual(s, Internal.Decoder.highLevelDecode(toBooleanArray(bits)));
         }
 
-        private static String stripSpace(String s)
+        public static String stripSpace(String s)
         {
             return SPACES.Replace(s, "");
         }

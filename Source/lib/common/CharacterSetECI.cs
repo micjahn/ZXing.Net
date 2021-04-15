@@ -119,5 +119,61 @@ namespace ZXing.Common
         {
             return NAME_TO_ECI[name.ToUpper()];
         }
+
+        public static System.Text.Encoding getEncoding(CharacterSetECI charsetECI)
+        {
+            return getEncoding(charsetECI.EncodingName);
+        }
+
+        public static System.Text.Encoding getEncoding(string encodingName)
+        {
+            System.Text.Encoding encoding = null;
+
+            try
+            {
+                encoding = System.Text.Encoding.GetEncoding(encodingName);
+            }
+#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || NETSTANDARD || MONOANDROID || MONOTOUCH)
+            catch (ArgumentException)
+            {
+                try
+                {
+                    // Silverlight only supports a limited number of character sets, trying fallback to UTF-8
+                    encoding = System.Text.Encoding.GetEncoding(StringUtils.UTF8);
+                }
+                catch (Exception)
+                {
+                }
+            }
+#endif
+#if WindowsCE
+         catch (PlatformNotSupportedException)
+         {
+            try
+            {
+               // WindowsCE doesn't support all encodings. But it is device depended.
+               // So we try here the some different ones
+               if (encodingName == StringUtils.ISO88591)
+               {
+                  encoding = Encoding.GetEncoding(1252);
+               }
+               else
+               {
+                  encoding = Encoding.GetEncoding(StringUtils.UTF8);
+               }
+            }
+            catch (Exception)
+            {
+            }
+         }
+#endif
+            catch (Exception)
+            {
+                return null;
+            }
+
+            return encoding;
+        }
+
     }
 }

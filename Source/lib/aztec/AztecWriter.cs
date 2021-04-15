@@ -28,7 +28,7 @@ namespace ZXing.Aztec
     /// </summary>
     public sealed class AztecWriter : Writer
     {
-        private static readonly Encoding DEFAULT_CHARSET;
+        public static readonly Encoding DEFAULT_CHARSET;
 
         static AztecWriter()
         {

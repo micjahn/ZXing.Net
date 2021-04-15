@@ -132,11 +132,11 @@ namespace ZXing.PDF417.Internal
                         break;
                     case BYTE_COMPACTION_MODE_LATCH:
                     case BYTE_COMPACTION_MODE_LATCH_6:
-                        codeIndex = byteCompaction(code, codewords, encoding ?? (encoding = getEncoding(PDF417HighLevelEncoder.DEFAULT_ENCODING_NAME)), codeIndex, result);
+                        codeIndex = byteCompaction(code, codewords, encoding ?? (encoding = CharacterSetECI.getEncoding(PDF417HighLevelEncoder.DEFAULT_ENCODING_NAME)), codeIndex, result);
                         break;
                     case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
                         if (encoding == null)
-                            encoding = getEncoding(PDF417HighLevelEncoder.DEFAULT_ENCODING_NAME);
+                            encoding = CharacterSetECI.getEncoding(PDF417HighLevelEncoder.DEFAULT_ENCODING_NAME);
                         result.Append(encoding.GetString(new []{(byte)codewords[codeIndex++]}, 0, 1));
                         break;
                     case NUMERIC_COMPACTION_MODE_LATCH:
@@ -144,7 +144,7 @@ namespace ZXing.PDF417.Internal
                         break;
                     case ECI_CHARSET:
                         var charsetECI = CharacterSetECI.getCharacterSetECIByValue(codewords[codeIndex++]);
-                        encoding = getEncoding(charsetECI.EncodingName);
+                        encoding = CharacterSetECI.getEncoding(charsetECI.EncodingName);
                         break;
                     case ECI_GENERAL_PURPOSE:
                         // Can't do anything with generic ECI; skip its 2 characters
@@ -189,56 +189,6 @@ namespace ZXing.PDF417.Internal
             var decoderResult = new DecoderResult(null, result.ToString(), null, ecLevel);
             decoderResult.Other = resultMetadata;
             return decoderResult;
-        }
-
-        private static Encoding getEncoding(string encodingName)
-        {
-            Encoding encoding = null;
-
-            try
-            {
-                encoding = Encoding.GetEncoding(encodingName);
-            }
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || NETSTANDARD || MONOANDROID || MONOTOUCH)
-            catch (ArgumentException)
-            {
-                try
-                {
-                    // Silverlight only supports a limited number of character sets, trying fallback to UTF-8
-                    encoding = Encoding.GetEncoding("UTF-8");
-                }
-                catch (Exception)
-                {
-                }
-            }
-#endif
-#if WindowsCE
-         catch (PlatformNotSupportedException)
-         {
-            try
-            {
-               // WindowsCE doesn't support all encodings. But it is device depended.
-               // So we try here the some different ones
-               if (encodingName == "ISO-8859-1")
-               {
-                  encoding = Encoding.GetEncoding(1252);
-               }
-               else
-               {
-                  encoding = Encoding.GetEncoding("UTF-8");
-               }
-            }
-            catch (Exception)
-            {
-            }
-         }
-#endif
-            catch (Exception)
-            {
-                return null;
-            }
-
-            return encoding;
         }
 
         internal static int decodeMacroBlock(int[] codewords, int codeIndex, PDF417ResultMetadata resultMetadata)
