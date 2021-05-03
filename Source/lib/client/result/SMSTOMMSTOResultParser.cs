@@ -28,7 +28,12 @@ namespace ZXing.Client.Result
     /// <author>Sean Owen</author>
     public class SMSTOMMSTOResultParser : ResultParser
     {
-        override public ParsedResult parse(ZXing.Result result)
+        /// <summary>
+        /// attempt to parse the raw result to the specific type
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public override ParsedResult parse(ZXing.Result result)
         {
             String rawText = result.Text;
             if (!(rawText.StartsWith("smsto:") || rawText.StartsWith("SMSTO:") ||

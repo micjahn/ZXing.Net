@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.ComponentModel;
 
 using ZXing.Common;
 using ZXing.PDF417.Internal;
@@ -30,6 +31,9 @@ namespace ZXing.PDF417
         /// <summary>
         /// Specifies whether to use compact mode for PDF417 (type <see cref="bool" />).
         /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+        [CategoryAttribute("Output options"), DescriptionAttribute("Specifies whether to use compact mode.")]
+#endif
         public bool Compact
         {
             get
@@ -47,6 +51,9 @@ namespace ZXing.PDF417
         /// Specifies what compaction mode to use for PDF417 (type
         /// <see cref="Compaction" />).
         /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies what compaction mode to use.")]
+#endif
         public Compaction Compaction
         {
             get
@@ -64,6 +71,9 @@ namespace ZXing.PDF417
         /// Specifies the minimum and maximum number of rows and columns for PDF417 (type
         /// <see cref="Dimensions" />).
         /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies the minimum and maximum number of rows and columns.")]
+#endif
         public Dimensions Dimensions
         {
             get
@@ -80,6 +90,9 @@ namespace ZXing.PDF417
         /// <summary>
         /// Specifies what degree of error correction to use
         /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies what degree of error correction to use.")]
+#endif
         public PDF417ErrorCorrectionLevel ErrorCorrection
         {
             get
@@ -105,6 +118,10 @@ namespace ZXing.PDF417
         /// Specifies the aspect ratio of the smallest codeword.
         /// (Width of narrowest bar / Row Height)
         /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+        [CategoryAttribute("Output options"), DescriptionAttribute("Specifies the aspect ratio of the " +
+            "smallest codeword. (Width of narrowest bar / row height).")]
+#endif
         public PDF417AspectRatio AspectRatio
         {
             get
@@ -130,6 +147,10 @@ namespace ZXing.PDF417
         /// Specifies the desired output image aspect ratio (Width / Height).
         /// The actual aspect ratio is calculated based on the necessary number of codewords.
         /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+        [CategoryAttribute("Output options"), DescriptionAttribute("Specifies the desired output image aspect ratio (Width / Height)." +
+            "The actual aspect ratio is calculated based on the necessary number of codewords.")]
+#endif
         public float ImageAspectRatio
         {
             get
@@ -150,6 +171,10 @@ namespace ZXing.PDF417
         /// <summary>
         /// Specifies what character encoding to use where applicable (type {@link String})
         /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies what character encoding to " +
+            "use where applicable.")]
+#endif
         public string CharacterSet
         {
             get
@@ -182,6 +207,10 @@ namespace ZXing.PDF417
         /// If you set the property to true you can use different encodings
         /// and the ECI segment is omitted.
         /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("Explicitly disables ECI segment when generating PDF417 Code." +
+            "That is against the specification but some readers have problems otherwise when switching charset to UTF-8.")]
+#endif
         public bool DisableECI
         {
             get

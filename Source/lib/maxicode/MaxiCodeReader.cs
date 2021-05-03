@@ -75,7 +75,9 @@ namespace ZXing.Maxicode
             }
             return result;
         }
-
+        /// <summary>
+        /// does nothing here
+        /// </summary>
         public void reset()
         {
             // do nothing
@@ -103,6 +105,12 @@ namespace ZXing.Maxicode
             int top = enclosingRectangle[1];
             int width = enclosingRectangle[2];
             int height = enclosingRectangle[3];
+
+            // correct corner cases: the enclosing rectangle borders the right or bottom edge
+            if (left + width >= image.Width)
+                width = image.Width - left - 1;
+            if (top + height >= image.Height)
+                height = image.Height - top - 1;
 
             // Now just read off the bits
             BitMatrix bits = new BitMatrix(MATRIX_WIDTH, MATRIX_HEIGHT);

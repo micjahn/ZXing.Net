@@ -199,20 +199,21 @@ namespace ZXing.QrCode.Internal
                 int y1 = coordinates[1];
                 matrix[x1, y1] = bit;
 
+                int x2;
+                int y2;
                 if (i < 8)
                 {
                     // Right top corner.
-                    int x2 = matrix.Width - i - 1;
-                    int y2 = 8;
-                    matrix[x2, y2] = bit;
+                    x2 = matrix.Width - i - 1;
+                    y2 = 8;
                 }
                 else
                 {
                     // Left bottom corner.
-                    int x2 = 8;
-                    int y2 = matrix.Height - 7 + (i - 8);
-                    matrix[x2, y2] = bit;
+                    x2 = 8;
+                    y2 = matrix.Height - 7 + (i - 8);
                 }
+                matrix[x2, y2] = bit;
             }
         }
 

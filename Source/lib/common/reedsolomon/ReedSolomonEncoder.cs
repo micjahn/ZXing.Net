@@ -29,6 +29,10 @@ namespace ZXing.Common.ReedSolomon
         private readonly GenericGF field;
         private readonly IList<GenericGFPoly> cachedGenerators;
 
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="field"></param>
         public ReedSolomonEncoder(GenericGF field)
         {
             this.field = field;
@@ -51,6 +55,11 @@ namespace ZXing.Common.ReedSolomon
             return cachedGenerators[degree];
         }
 
+        /// <summary>
+        /// encodes
+        /// </summary>
+        /// <param name="toEncode"></param>
+        /// <param name="ecBytes"></param>
         public void encode(int[] toEncode, int ecBytes)
         {
             if (ecBytes == 0)

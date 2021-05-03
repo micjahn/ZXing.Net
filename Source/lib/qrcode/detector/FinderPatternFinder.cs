@@ -111,7 +111,7 @@ namespace ZXing.QrCode.Internal
             for (int i = iSkip - 1; i < maxI && !done; i += iSkip)
             {
                 // Get a row of black/white values
-                clearCounts(stateCount);
+                doClearCounts(stateCount);
                 int currentState = 0;
                 for (int j = 0; j < maxJ; j++)
                 {
@@ -167,18 +167,18 @@ namespace ZXing.QrCode.Internal
                                     }
                                     else
                                     {
-                                        shiftCounts2(stateCount);
+                                        doShiftCounts2(stateCount);
                                         currentState = 3;
                                         continue;
                                     }
                                     // Clear state to start looking again
                                     currentState = 0;
-                                    clearCounts(stateCount);
+                                    doClearCounts(stateCount);
                                 }
                                 else
                                 {
                                     // No, shift counts back by two
-                                    shiftCounts2(stateCount);
+                                    doShiftCounts2(stateCount);
                                     currentState = 3;
                                 }
                             }
@@ -296,20 +296,45 @@ namespace ZXing.QrCode.Internal
         {
             get
             {
-                clearCounts(crossCheckStateCount);
+                doClearCounts(crossCheckStateCount);
                 return crossCheckStateCount;
             }
         }
 
+        /// <summary>
+        /// sets everything to 0
+        /// </summary>
+        /// <param name="counts"></param>
+        [Obsolete]
         protected void clearCounts(int[] counts)
         {
-            for (int x = 0; x < counts.Length; x++)
-            {
-                counts[x] = 0;
-            }
+            doClearCounts(counts);
         }
 
+        /// <summary>
+        /// shifts left by 2 index
+        /// </summary>
+        /// <param name="stateCount"></param>
+        [Obsolete]
         protected void shiftCounts2(int[] stateCount)
+        {
+            doShiftCounts2(stateCount);
+        }
+
+        /// <summary>
+        /// sets everything to 0
+        /// </summary>
+        /// <param name="counts"></param>
+        protected static void doClearCounts(int[] counts)
+        {
+            SupportClass.Fill(counts, 0);
+        }
+
+        /// <summary>
+        /// shifts left by 2 index
+        /// </summary>
+        /// <param name="stateCount"></param>
+        protected static void doShiftCounts2(int[] stateCount)
         {
             stateCount[0] = stateCount[2];
             stateCount[1] = stateCount[3];
@@ -743,7 +768,6 @@ namespace ZXing.QrCode.Internal
             possibleCenters.Sort(moduleComparator);
 
             double distortion = Double.MaxValue;
-            double[] squares = new double[3];
             FinderPattern[] bestPatterns = new FinderPattern[3];
 
             for (int i = 0; i < possibleCenters.Count - 2; i++)
@@ -766,17 +790,62 @@ namespace ZXing.QrCode.Internal
                             continue;
                         }
 
-                        squares[0] = squares0;
-                        squares[1] = squaredDistance(fpj, fpk);
-                        squares[2] = squaredDistance(fpi, fpk);
-                        Array.Sort(squares);
+                        var a = squares0;
+                        var b = squaredDistance(fpj, fpk);
+                        var c = squaredDistance(fpi, fpk);
+
+                        // sorts ascending - inlined
+                        if (a < b)
+                        {
+                            if (b > c)
+                            {
+                                if (a < c)
+                                {
+                                    var temp = b;
+                                    b = c;
+                                    c = temp;
+                                }
+                                else
+                                {
+                                    var temp = a;
+                                    a = c;
+                                    c = b;
+                                    b = temp;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (b < c)
+                            {
+                                if (a < c)
+                                {
+                                    var temp = a;
+                                    a = b;
+                                    b = temp;
+                                }
+                                else
+                                {
+                                    var temp = a;
+                                    a = b;
+                                    b = c;
+                                    c = temp;
+                                }
+                            }
+                            else
+                            {
+                                var temp = a;
+                                a = c;
+                                c = temp;
+                            }
+                        }
 
                         // a^2 + b^2 = c^2 (Pythagorean theorem), and a = b (isosceles triangle).
                         // Since any right triangle satisfies the formula c^2 - b^2 - a^2 = 0,
                         // we need to check both two equal sides separately.
                         // The value of |c^2 - 2 * b^2| + |c^2 - 2 * a^2| increases as dissimilarity
                         // from isosceles right triangle.
-                        double d = Math.Abs(squares[2] - 2 * squares[1]) + Math.Abs(squares[2] - 2 * squares[0]);
+                        double d = Math.Abs(c - 2 * b) + Math.Abs(c - 2 * a);
                         if (d < distortion)
                         {
                             distortion = d;

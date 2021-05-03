@@ -41,6 +41,7 @@
             this.chkCode39ExtendedMode = new System.Windows.Forms.CheckBox();
             this.chkCode39ExtendedModeRelaxed = new System.Windows.Forms.CheckBox();
             this.chkCode39CheckDigit = new System.Windows.Forms.CheckBox();
+            this.chkUseGlobalHistogramBinarizer = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBarcodeFormats)).BeginInit();
             this.SuspendLayout();
             // 
@@ -122,9 +123,9 @@
             this.dataGridViewBarcodeFormats.AllowUserToDeleteRows = false;
             this.dataGridViewBarcodeFormats.AllowUserToResizeColumns = false;
             this.dataGridViewBarcodeFormats.AllowUserToResizeRows = false;
-            this.dataGridViewBarcodeFormats.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-               | System.Windows.Forms.AnchorStyles.Left)
-               | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewBarcodeFormats.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewBarcodeFormats.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewBarcodeFormats.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnSelected,
@@ -181,6 +182,16 @@
             this.chkCode39CheckDigit.Text = "assume Code 39 check digit";
             this.chkCode39CheckDigit.UseVisualStyleBackColor = true;
             // 
+            // chkUseGlobalHistogramBinarizer
+            // 
+            this.chkUseGlobalHistogramBinarizer.AutoSize = true;
+            this.chkUseGlobalHistogramBinarizer.Location = new System.Drawing.Point(12, 150);
+            this.chkUseGlobalHistogramBinarizer.Name = "chkUseGlobalHistogramBinarizer";
+            this.chkUseGlobalHistogramBinarizer.Size = new System.Drawing.Size(163, 17);
+            this.chkUseGlobalHistogramBinarizer.TabIndex = 11;
+            this.chkUseGlobalHistogramBinarizer.Text = "use GlobalHistogramBinarizer";
+            this.chkUseGlobalHistogramBinarizer.UseVisualStyleBackColor = true;
+            // 
             // DecodingOptionsForm
             // 
             this.AcceptButton = this.btnOk;
@@ -188,6 +199,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(542, 282);
+            this.Controls.Add(this.chkUseGlobalHistogramBinarizer);
             this.Controls.Add(this.chkCode39CheckDigit);
             this.Controls.Add(this.chkCode39ExtendedModeRelaxed);
             this.Controls.Add(this.chkCode39ExtendedMode);
@@ -223,5 +235,6 @@
         private System.Windows.Forms.CheckBox chkCode39ExtendedMode;
         private System.Windows.Forms.CheckBox chkCode39ExtendedModeRelaxed;
         private System.Windows.Forms.CheckBox chkCode39CheckDigit;
+        private System.Windows.Forms.CheckBox chkUseGlobalHistogramBinarizer;
     }
 }

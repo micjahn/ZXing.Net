@@ -87,7 +87,7 @@ namespace ZXing.Datamatrix.Encoder
 
         internal static void writeNextTriplet(EncoderContext context, StringBuilder buffer)
         {
-            context.writeCodewords(encodeToCodewords(buffer, 0));
+            context.writeCodewords(encodeToCodewords(buffer));
             buffer.Remove(0, 3);
         }
 
@@ -201,12 +201,9 @@ namespace ZXing.Datamatrix.Encoder
             return len;
         }
 
-        private static String encodeToCodewords(StringBuilder sb, int startPos)
+        private static String encodeToCodewords(StringBuilder sb)
         {
-            char c1 = sb[startPos];
-            char c2 = sb[startPos + 1];
-            char c3 = sb[startPos + 2];
-            int v = (1600 * c1) + (40 * c2) + c3 + 1;
+            int v = (1600 * sb[0]) + (40 * sb[1]) + sb[2] + 1;
             char cw1 = (char) (v / 256);
             char cw2 = (char) (v % 256);
             return new String(new char[] {cw1, cw2});

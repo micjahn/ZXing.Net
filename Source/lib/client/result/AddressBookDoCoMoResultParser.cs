@@ -28,7 +28,7 @@ namespace ZXing.Client.Result
     /// 
     /// Our understanding of the MECARD format is based on this document:
     /// 
-    /// http://www.mobicode.org.tw/files/OMIA%20Mobile%20Bar%20Code%20Standard%20v3.2.1.doc 
+    /// http://www.mobicode.org.tw/files/OMIA%20Mobile%20Bar%20Code%20Standard%20v3.2.1.doc
     /// 
     /// </summary>
     /// <author>  Sean Owen
@@ -44,24 +44,24 @@ namespace ZXing.Client.Result
             {
                 return null;
             }
-            String[] rawName = matchDoCoMoPrefixedField("N:", rawText, true);
+            String[] rawName = matchDoCoMoPrefixedField("N:", rawText);
             if (rawName == null)
             {
                 return null;
             }
             String name = parseName(rawName[0]);
             String pronunciation = matchSingleDoCoMoPrefixedField("SOUND:", rawText, true);
-            String[] phoneNumbers = matchDoCoMoPrefixedField("TEL:", rawText, true);
-            String[] emails = matchDoCoMoPrefixedField("EMAIL:", rawText, true);
+            String[] phoneNumbers = matchDoCoMoPrefixedField("TEL:", rawText);
+            String[] emails = matchDoCoMoPrefixedField("EMAIL:", rawText);
             String note = matchSingleDoCoMoPrefixedField("NOTE:", rawText, false);
-            String[] addresses = matchDoCoMoPrefixedField("ADR:", rawText, true);
+            String[] addresses = matchDoCoMoPrefixedField("ADR:", rawText);
             String birthday = matchSingleDoCoMoPrefixedField("BDAY:", rawText, true);
             if (!isStringOfDigits(birthday, 8))
             {
                 // No reason to throw out the whole card because the birthday is formatted wrong.
                 birthday = null;
             }
-            String[] urls = matchDoCoMoPrefixedField("URL:", rawText, true);
+            String[] urls = matchDoCoMoPrefixedField("URL:", rawText);
 
             // Although ORG may not be strictly legal in MECARD, it does exist in VCARD and we might as well
             // honor it when found in the wild.

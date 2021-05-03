@@ -32,6 +32,7 @@ namespace ZXing.PDF417.Internal
         /// <summary>
         /// <param name="height">the height of the matrix (Rows)</param>
         /// <param name="width">the width of the matrix (Cols)</param>
+        /// <param name="compact">defines if a compact PDF417 should be encoded</param>
         /// </summary>
         internal BarcodeMatrix(int height, int width, bool compact)
         {

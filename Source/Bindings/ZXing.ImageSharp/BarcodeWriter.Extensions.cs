@@ -31,7 +31,7 @@ namespace ZXing
         /// <param name="writer"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        public static Image<TPixel> WriteAsImageSharp<TPixel>(this IBarcodeWriterGeneric writer, string content) where TPixel : struct, IPixel<TPixel>
+        public static Image<TPixel> WriteAsImageSharp<TPixel>(this IBarcodeWriterGeneric writer, string content) where TPixel : unmanaged, IPixel<TPixel>
         {
             var bitmatrix = writer.Encode(content);
             var renderer = new ImageSharpRenderer<TPixel>();

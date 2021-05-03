@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
 	<metadata>
-		<version>0.16.7</version>
+		<version>0.16.8</version>
 		<authors>Michael Jahn</authors>
 		<owners>Michael Jahn</owners>
-		<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+		<license type="expression">Apache-2.0</license>
+		<licenseUrl>https://licenses.nuget.org/Apache-2.0</licenseUrl>
 		<projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
 		<iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
 		<id>ZXing.Net.Bindings.Magick</id>
@@ -16,22 +17,22 @@
 		<tags>ZXing Magick</tags>
 		<dependencies>
 			<group targetFramework="net20">
-				<dependency id="ZXing.Net" version="0.16.5.0" exclude="Build,Analyzers" />
-				<dependency id="Magick.NET-Q8-AnyCPU" version="7.14.5" exclude="Build,Analyzers" />
+				<dependency id="ZXing.Net" version="0.16.6.0" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET-Q8-AnyCPU" version="7.22.0" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="net40">
-				<dependency id="ZXing.Net" version="0.16.5.0" exclude="Build,Analyzers" />
-				<dependency id="Magick.NET-Q8-AnyCPU" version="7.14.5" exclude="Build,Analyzers" />
+				<dependency id="ZXing.Net" version="0.16.6.0" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET-Q8-AnyCPU" version="7.22.0" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="netstandard1.3">
-				<dependency id="ZXing.Net" version="0.16.5.0" exclude="Build,Analyzers" />
-				<dependency id="Magick.NET-Q8-AnyCPU" version="7.14.5" exclude="Build,Analyzers" />
+				<dependency id="ZXing.Net" version="0.16.6.0" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET-Q8-AnyCPU" version="7.22.0" exclude="Build,Analyzers" />
 				<dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="netstandard2.0">
-				<dependency id="ZXing.Net" version="0.16.5.0" exclude="Build,Analyzers" />
-				<dependency id="Magick.NET-Q8-AnyCPU" version="7.14.5" exclude="Build,Analyzers" />
-				<dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+				<dependency id="ZXing.Net" version="0.16.6.0" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET-Q8-AnyCPU" version="7.22.0" exclude="Build,Analyzers" />
+				<dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
 			</group>
 		</dependencies>
 	</metadata>

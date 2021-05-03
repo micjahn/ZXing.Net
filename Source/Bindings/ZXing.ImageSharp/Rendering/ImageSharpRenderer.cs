@@ -24,7 +24,7 @@ namespace ZXing.ImageSharp.Rendering
     /// <summary>
     /// IBarcodeRenderer implementation which creates an ImageSharp Image object from the barcode BitMatrix
     /// </summary>
-    public class ImageSharpRenderer<TPixel> : ZXing.Rendering.IBarcodeRenderer<Image<TPixel>> where TPixel : struct, IPixel<TPixel>
+    public class ImageSharpRenderer<TPixel> : ZXing.Rendering.IBarcodeRenderer<Image<TPixel>> where TPixel : unmanaged, IPixel<TPixel>
     {
         /// <summary>
         /// renders the image
@@ -73,7 +73,7 @@ namespace ZXing.ImageSharp.Rendering
                 }
             }
 
-            var result = new Image<TPixel>(matrix.Width, matrix.Height);
+            var result = new Image<TPixel>(width, height);
             for (int y = 0; y < matrix.Height; y++)
             {
                 for (var pixelsizeHeight = 0; pixelsizeHeight < pixelsize; pixelsizeHeight++)

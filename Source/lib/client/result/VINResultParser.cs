@@ -33,6 +33,11 @@ namespace ZXing.Client.Result
       private static readonly Regex AZ09 = new Regex(@"\A(?:" + "[A-Z0-9]{17}" + @")\z", RegexOptions.Compiled);
 #endif
 
+        /// <summary>
+        /// attempt to parse the raw result to the specific type
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
         public override ParsedResult parse(ZXing.Result result)
         {
             try

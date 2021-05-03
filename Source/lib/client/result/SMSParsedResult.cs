@@ -25,6 +25,13 @@ namespace ZXing.Client.Result
     /// <author>Sean Owen</author>
     public sealed class SMSParsedResult : ParsedResult
     {
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="number"></param>
+        /// <param name="via"></param>
+        /// <param name="subject"></param>
+        /// <param name="body"></param>
         public SMSParsedResult(String number,
                                String via,
                                String subject,
@@ -32,7 +39,13 @@ namespace ZXing.Client.Result
            : this(new[] { number }, new[] { via }, subject, body)
         {
         }
-
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="numbers"></param>
+        /// <param name="vias"></param>
+        /// <param name="subject"></param>
+        /// <param name="body"></param>
         public SMSParsedResult(String[] numbers,
                                String[] vias,
                                String subject,
@@ -97,14 +110,25 @@ namespace ZXing.Client.Result
             return result.ToString();
         }
 
+        /// <summary>
+        /// numbers
+        /// </summary>
         public String[] Numbers { get; private set; }
-
+        /// <summary>
+        ///  vias
+        /// </summary>
         public String[] Vias { get; private set; }
-
+        /// <summary>
+        /// subject
+        /// </summary>
         public String Subject { get; private set; }
-
+        /// <summary>
+        /// body
+        /// </summary>
         public String Body { get; private set; }
-
+        /// <summary>
+        /// sms uri
+        /// </summary>
         public String SMSURI { get; private set; }
     }
 }

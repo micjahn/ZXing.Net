@@ -45,11 +45,12 @@ namespace WindowsFormsDemo
         private Type Renderer { get; set; }
         private bool TryMultipleBarcodes { get; set; }
         private bool TryOnlyMultipleQRCodes { get; set; }
+        private bool UseGlobalHistogramBinarizer { get; set; }
 
         public WindowsFormsDemoForm()
         {
             InitializeComponent();
-            barcodeReader = new BarcodeReader
+            barcodeReader = new BarcodeReader(null, null, source => UseGlobalHistogramBinarizer ? new GlobalHistogramBinarizer(source) : new HybridBinarizer(source))
             {
                 AutoRotate = true,
                 TryInverted = true,
@@ -453,6 +454,7 @@ namespace WindowsFormsDemo
                 {
                     TryMultipleBarcodes = dlg.MultipleBarcodes;
                     TryOnlyMultipleQRCodes = dlg.MultipleBarcodesOnlyQR;
+                    UseGlobalHistogramBinarizer = dlg.UseGlobalHistogramBinarizer;
                 }
             }
         }

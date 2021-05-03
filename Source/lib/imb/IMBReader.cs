@@ -16,7 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-#if (SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NET46 || NET47 || NETFX_CORE || NETSTANDARD) && !NETSTANDARD1_0
+#if (SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NET46 || NET47 || NET48 || NETFX_CORE || NETSTANDARD) && !NETSTANDARD1_0
 using System.Numerics;
 #else
 using BigIntegerLibrary;
@@ -80,13 +80,20 @@ namespace ZXing.IMB
             for (int k = 0; k < table2.Length; k++)
                 table2Check.Add(table2[k], k);
         }
-
+        /// <summary>
+        /// decode the image
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="hints"></param>
+        /// <returns></returns>
         protected override Result doDecode(BinaryBitmap image, IDictionary<DecodeHintType, object> hints)
         {
             currentBitmap = image;
             return base.doDecode(image, hints);
         }
-
+        /// <summary>
+        /// resets internal state
+        /// </summary>
         public override void reset()
         {
             base.reset();
@@ -436,7 +443,16 @@ namespace ZXing.IMB
 
             return countBars;
         }
-
+        /// <summary>
+        ///   <p>Attempts to decode a one-dimensional barcode format given a single row of
+        /// an image.</p>
+        /// </summary>
+        /// <param name="rowNumber">row number from top of the row</param>
+        /// <param name="row">the black/white pixel data of the row</param>
+        /// <param name="hints">decode hints</param>
+        /// <returns>
+        ///   <see cref="Result"/>containing encoded string and start/end of barcode or null, if an error occurs or barcode cannot be found
+        /// </returns>
         public override Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
         {
             if (currentBitmap == null)

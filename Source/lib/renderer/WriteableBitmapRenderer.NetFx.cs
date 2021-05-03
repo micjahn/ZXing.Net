@@ -167,20 +167,34 @@ namespace ZXing.Rendering
              * renders at the wrong position
             if (outputContent)
             {
-               switch (format)
-               {
-                  case BarcodeFormat.EAN_8:
-                     if (content.Length < 8)
-                        content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-                     content = content.Insert(4, "   ");
-                     break;
-                  case BarcodeFormat.EAN_13:
-                     if (content.Length < 13)
-                        content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
-                     content = content.Insert(7, "   ");
-                     content = content.Insert(1, "   ");
-                     break;
-               }
+                    switch (format)
+                    {
+                        case BarcodeFormat.UPC_E:
+                        case BarcodeFormat.EAN_8:
+                            if (content.Length < 8)
+                                content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+                            if (content.Length > 4)
+                                content = content.Insert(4, "   ");
+                            break;
+                        case BarcodeFormat.EAN_13:
+                            if (content.Length < 13)
+                                content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+                            if (content.Length > 7)
+                                content = content.Insert(7, "   ");
+                            if (content.Length > 1)
+                                content = content.Insert(1, "   ");
+                            break;
+                        case BarcodeFormat.UPC_A:
+                            if (content.Length < 12)
+                                content = OneDimensionalCodeWriter.CalculateChecksumDigitModulo10(content);
+                            if (content.Length > 11)
+                                content = content.Insert(11, "   ");
+                            if (content.Length > 6)
+                                content = content.Insert(6, "   ");
+                            if (content.Length > 1)
+                                content = content.Insert(1, "   ");
+                            break;
+                    }
                var txt1 = new TextBlock {Text = content, FontSize = 10, Foreground = new SolidColorBrush(Colors.Black)};
                bmp.Render(txt1, new RotateTransform { Angle = 0, CenterX = width / 2, CenterY = height - 14});
                bmp.Invalidate();

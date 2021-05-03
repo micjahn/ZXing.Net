@@ -1,54 +1,52 @@
 <Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<VersionPrefix>0.16.5</VersionPrefix>
+		<TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+		<PackageId>ZXing.Net.Bindings.ZKWeb.System.Drawing</PackageId>
+		<PlatformTarget>anycpu</PlatformTarget>
+		<SignAssembly>False</SignAssembly>
+		<AssemblyTitle>ZXing.Net.Bindings.ZKWeb.System.Drawing</AssemblyTitle>
+		<Title>ZXing.ZKWeb.System.Drawing</Title>
+		<Description>ZXing.Net binding to ZKWeb.System.Drawing</Description>
+		<AssemblyOriginatorKeyFile>../../../Key/private.snk</AssemblyOriginatorKeyFile>
+		<Authors>Michael Jahn</Authors>
+		<PackageProjectUrl>https://github.com/micjahn/ZXing.Net/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/micjahn/ZXing.Net/</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>ZXing ZKWeb.System.Drawing</PackageTags>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<AssemblyName>ZXing.ZKWeb.System.Drawing</AssemblyName>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+		<EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+		<RootNamespace>ZXing.ZKWeb</RootNamespace>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <VersionPrefix>0.16.4</VersionPrefix>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <PackageId>ZXing.Net.Bindings.ZKWeb.System.Drawing</PackageId>
-    <PlatformTarget>anycpu</PlatformTarget>
-    <SignAssembly>False</SignAssembly>
-    <AssemblyTitle>ZXing.Net.Bindings.ZKWeb.System.Drawing</AssemblyTitle>
-    <Title>ZXing.ZKWeb.System.Drawing</Title>
-    <Description>ZXing.Net binding to ZKWeb.System.Drawing</Description>
-    <AssemblyOriginatorKeyFile>../../../Key/private.snk</AssemblyOriginatorKeyFile>
-    <Authors>Michael Jahn</Authors>
-    <PackageProjectUrl>https://github.com/micjahn/ZXing.Net/</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/micjahn/ZXing.Net/</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageTags>ZXing ZKWeb.System.Drawing</PackageTags>
-	<GenerateDocumentationFile>true</GenerateDocumentationFile>
-	<AssemblyName>ZXing.ZKWeb.System.Drawing</AssemblyName>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
-    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-	<EnableDefaultCompileItems>False</EnableDefaultCompileItems>												   
-	<RootNamespace>ZXing.ZKWeb</RootNamespace>
-  </PropertyGroup>
+	<ItemGroup>
+		<Compile Include="Properties\AssemblyInfo.cs" />
+		<Compile Include="Rendering\BitmapRenderer.cs" />
+		<Compile Include="BitmapLuminanceSource.cs" />
+		<Compile Include="BarcodeWriter.Extensions.cs" />
+		<Compile Include="BarcodeWriter.cs" />
+		<Compile Include="BarcodeReader.cs" />
+		<Compile Include="BarcodeReader.Extensions.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rendering\BitmapRenderer.cs" />
-    <Compile Include="BitmapLuminanceSource.cs" />
-    <Compile Include="BarcodeWriter.Extensions.cs" />
-    <Compile Include="BarcodeWriter.cs" />
-    <Compile Include="BarcodeReader.cs" />
-    <Compile Include="BarcodeReader.Extensions.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" />
+		<PackageReference Include="ZXing.Net" Version="0.16.6" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" />
-    <PackageReference Include="ZXing.Net" Version="0.16.4" />
-  </ItemGroup>
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">
+		<DefineConstants>$(DefineConstants);NET45</DefineConstants>
+		<DebugType>full</DebugType>
+	</PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">
-    <DefineConstants>$(DefineConstants);NET45</DefineConstants>
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
-    <DebugType>portable</DebugType>
-    <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
-  </PropertyGroup>
-
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+		<DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
+		<DebugType>portable</DebugType>
+		<NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
+	</PropertyGroup>
 </Project>

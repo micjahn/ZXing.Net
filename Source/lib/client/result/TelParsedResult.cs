@@ -24,6 +24,12 @@ namespace ZXing.Client.Result
     /// <author>Sean Owen</author>
     public sealed class TelParsedResult : ParsedResult
     {
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="number"></param>
+        /// <param name="telURI"></param>
+        /// <param name="title"></param>
         public TelParsedResult(String number, String telURI, String title)
            : base(ParsedResultType.TEL)
         {
@@ -37,10 +43,17 @@ namespace ZXing.Client.Result
             displayResultValue = result.ToString();
         }
 
+        /// <summary>
+        /// number
+        /// </summary>
         public String Number { get; private set; }
-
+        /// <summary>
+        /// URI
+        /// </summary>
         public String TelURI { get; private set; }
-
+        /// <summary>
+        /// title
+        /// </summary>
         public String Title { get; private set; }
     }
 }

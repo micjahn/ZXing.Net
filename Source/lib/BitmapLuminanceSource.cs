@@ -47,6 +47,11 @@ namespace ZXing
             CalculateLuminanceValues(bitmap, luminances);
         }
 
+        /// <summary>
+        /// calculates the luminance values for bitmaps
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="luminances"></param>
         protected static void CalculateLuminanceValues(Bitmap bitmap, byte[] luminances)
         {
             var height = bitmap.Height;
@@ -146,6 +151,12 @@ namespace ZXing
         }
 
 #if !WindowsCE
+        /// <summary>
+        /// calculates the luminance values for 1-bit indexed bitmaps
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="data"></param>
+        /// <param name="luminances"></param>
         protected static void CalculateLuminanceValuesForIndexed1Bit(Bitmap bitmap, BitmapData data, byte[] luminances)
         {
             var height = data.Height;
@@ -174,7 +185,7 @@ namespace ZXing
             {
                 // copy a scanline not the whole bitmap because of memory usage
                 Marshal.Copy(ptrInBitmap, buffer, 0, stride);
-#if NET40 || NET45 || NET46 || NET47
+#if NET40 || NET45 || NET46 || NET47 || NET48
                 ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
 #else
                 ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
@@ -193,6 +204,12 @@ namespace ZXing
             }
         }
 
+        /// <summary>
+        /// calculates the luminance values for 4-bit indexed bitmaps
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="data"></param>
+        /// <param name="luminances"></param>
         protected static void CalculateLuminanceValuesForIndexed4Bit(Bitmap bitmap, BitmapData data, byte[] luminances)
         {
             if (bitmap.PixelFormat != PixelFormat.Format4bppIndexed)
@@ -225,7 +242,7 @@ namespace ZXing
             {
                 // copy a scanline not the whole bitmap because of memory usage
                 Marshal.Copy(ptrInBitmap, buffer, 0, stride);
-#if NET40 || NET45 || NET46 || NET47
+#if NET40 || NET45 || NET46 || NET47 || NET48
                 ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
 #else
                 ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
@@ -250,6 +267,12 @@ namespace ZXing
             }
         }
 
+        /// <summary>
+        /// calculates the luminance values for 8-bit indexed bitmaps
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="data"></param>
+        /// <param name="luminances"></param>
         protected static void CalculateLuminanceValuesForIndexed8Bit(Bitmap bitmap, BitmapData data, byte[] luminances)
         {
             var height = data.Height;
@@ -278,7 +301,7 @@ namespace ZXing
             {
                 // copy a scanline not the whole bitmap because of memory usage
                 Marshal.Copy(ptrInBitmap, buffer, 0, stride);
-#if NET40 || NET45 || NET46 || NET47
+#if NET40 || NET45 || NET46 || NET47 || NET48
                 ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
 #else
                 ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
@@ -292,6 +315,12 @@ namespace ZXing
         }
 #endif
 
+        /// <summary>
+        /// calculates the luminance values for 565 encoded bitmaps
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="data"></param>
+        /// <param name="luminances"></param>
         private static void CalculateLuminanceValues565(Bitmap bitmap, BitmapData data, byte[] luminances)
         {
             var height = data.Height;
@@ -313,7 +342,7 @@ namespace ZXing
             {
                 // copy a scanline not the whole bitmap because of memory usage
                 Marshal.Copy(ptrInBitmap, buffer, 0, stride);
-#if NET40 || NET45 || NET46 || NET47
+#if NET40 || NET45 || NET46 || NET47 || NET48
                 ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
 #else
                 ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
@@ -338,6 +367,12 @@ namespace ZXing
             }
         }
 
+        /// <summary>
+        /// calculates the luminance values for 24-bit encoded bitmaps
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="data"></param>
+        /// <param name="luminances"></param>
         private static void CalculateLuminanceValues24Bit(Bitmap bitmap, BitmapData data, byte[] luminances)
         {
             var height = data.Height;
@@ -359,7 +394,7 @@ namespace ZXing
             {
                 // copy a scanline not the whole bitmap because of memory usage
                 Marshal.Copy(ptrInBitmap, buffer, 0, stride);
-#if NET40 || NET45 || NET46 || NET47
+#if NET40 || NET45 || NET46 || NET47 || NET48
                 ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
 #else
                 ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
@@ -377,6 +412,12 @@ namespace ZXing
             }
         }
 
+        /// <summary>
+        /// calculates the luminance values for 32-bit encoded bitmaps without respecting the alpha channel
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="data"></param>
+        /// <param name="luminances"></param>
         private static void CalculateLuminanceValues32BitWithoutAlpha(Bitmap bitmap, BitmapData data, byte[] luminances)
         {
             var height = data.Height;
@@ -399,7 +440,7 @@ namespace ZXing
             {
                 // copy a scanline not the whole bitmap because of memory usage
                 Marshal.Copy(ptrInBitmap, buffer, 0, stride);
-#if NET40 || NET45 || NET46 || NET47
+#if NET40 || NET45 || NET46 || NET47 || NET48
                 ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
 #else
                 ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
@@ -418,6 +459,7 @@ namespace ZXing
             }
         }
 
+        /// calculates the luminance values for 32-bit encoded bitmaps with alpha channel
         private static void CalculateLuminanceValues32BitWithAlpha(Bitmap bitmap, BitmapData data, byte[] luminances)
         {
             var height = data.Height;
@@ -440,7 +482,7 @@ namespace ZXing
             {
                 // copy a scanline not the whole bitmap because of memory usage
                 Marshal.Copy(ptrInBitmap, buffer, 0, stride);
-#if NET40 || NET45 || NET46 || NET47
+#if NET40 || NET45 || NET46 || NET47 || NET48
                 ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
 #else
                 ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);
@@ -466,6 +508,7 @@ namespace ZXing
             }
         }
 
+        /// calculates the luminance values for 32-bit CMYK encoded bitmaps (k is ignored at the momen)
         private static void CalculateLuminanceValues32BitCMYK(Bitmap bitmap, BitmapData data, byte[] luminances)
         {
             var height = data.Height;
@@ -488,7 +531,7 @@ namespace ZXing
             {
                 // copy a scanline not the whole bitmap because of memory usage
                 Marshal.Copy(ptrInBitmap, buffer, 0, stride);
-#if NET40 || NET45 || NET46 || NET47
+#if NET40 || NET45 || NET46 || NET47 || NET48
                 ptrInBitmap = IntPtr.Add(ptrInBitmap, strideStep);
 #else
                 ptrInBitmap = new IntPtr(ptrInBitmap.ToInt64() + strideStep);

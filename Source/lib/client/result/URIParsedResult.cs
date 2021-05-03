@@ -24,8 +24,13 @@ namespace ZXing.Client.Result
     /// <author>Sean Owen</author>
     public sealed class URIParsedResult : ParsedResult
     {
+        /// <summary>
+        /// URI
+        /// </summary>
         public String URI { get; private set; }
-
+        /// <summary>
+        /// title
+        /// </summary>
         public String Title { get; private set; }
 
         /// <returns> true if the URI contains suspicious patterns that may suggest it intends to
@@ -38,6 +43,11 @@ namespace ZXing.Client.Result
         [Obsolete("deprecated, see {@link URIResultParser#isPossiblyMaliciousURI(String)")]
         public bool PossiblyMaliciousURI { get; private set; }
 
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="title"></param>
         public URIParsedResult(String uri, String title)
            : base(ParsedResultType.URI)
         {

@@ -59,7 +59,11 @@ namespace ZXing.OneD
                 Large++;
             }
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="m"></param>
+        /// <returns></returns>
         public static double mean(double[] m)
         {
             double sum = 0;
@@ -71,7 +75,16 @@ namespace ZXing.OneD
 
             return sum / m.Length;
         }
-
+        /// <summary>
+        ///   <p>Attempts to decode a one-dimensional barcode format given a single row of
+        /// an image.</p>
+        /// </summary>
+        /// <param name="rowNumber">row number from top of the row</param>
+        /// <param name="row">the black/white pixel data of the row</param>
+        /// <param name="hints">decode hints</param>
+        /// <returns>
+        ///   <see cref="Result"/>containing encoded string and start/end of barcode or null, if an error occurs or barcode cannot be found
+        /// </returns>
         public override Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
         {
             var gaps = new List<PixelInterval>();

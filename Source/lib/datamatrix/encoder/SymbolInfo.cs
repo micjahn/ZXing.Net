@@ -65,7 +65,13 @@ namespace ZXing.Datamatrix.Encoder
         private readonly bool rectangular;
         internal readonly int dataCapacity;
         internal readonly int errorCodewords;
+        /// <summary>
+        /// matrix width
+        /// </summary>
         public readonly int matrixWidth;
+        /// <summary>
+        /// matrix height
+        /// </summary>
         public readonly int matrixHeight;
         private readonly int dataRegions;
         private readonly int rsBlockData;
@@ -80,7 +86,15 @@ namespace ZXing.Datamatrix.Encoder
         {
             symbols = @override;
         }
-
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="rectangular"></param>
+        /// <param name="dataCapacity"></param>
+        /// <param name="errorCodewords"></param>
+        /// <param name="matrixWidth"></param>
+        /// <param name="matrixHeight"></param>
+        /// <param name="dataRegions"></param>
         public SymbolInfo(bool rectangular, int dataCapacity, int errorCodewords,
                           int matrixWidth, int matrixHeight, int dataRegions)
            : this(rectangular, dataCapacity, errorCodewords, matrixWidth, matrixHeight, dataRegions,
@@ -101,17 +115,32 @@ namespace ZXing.Datamatrix.Encoder
             this.rsBlockData = rsBlockData;
             this.rsBlockError = rsBlockError;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataCodewords"></param>
+        /// <returns></returns>
         public static SymbolInfo lookup(int dataCodewords)
         {
             return lookup(dataCodewords, SymbolShapeHint.FORCE_NONE, true);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataCodewords"></param>
+        /// <param name="shape"></param>
+        /// <returns></returns>
         public static SymbolInfo lookup(int dataCodewords, SymbolShapeHint shape)
         {
             return lookup(dataCodewords, shape, true);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataCodewords"></param>
+        /// <param name="allowRectangular"></param>
+        /// <param name="fail"></param>
+        /// <returns></returns>
         public static SymbolInfo lookup(int dataCodewords, bool allowRectangular, bool fail)
         {
             SymbolShapeHint shape = allowRectangular
@@ -123,7 +152,15 @@ namespace ZXing.Datamatrix.Encoder
         {
             return lookup(dataCodewords, shape, null, null, fail);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataCodewords"></param>
+        /// <param name="shape"></param>
+        /// <param name="minSize"></param>
+        /// <param name="maxSize"></param>
+        /// <param name="fail"></param>
+        /// <returns></returns>
         public static SymbolInfo lookup(int dataCodewords,
                                         SymbolShapeHint shape,
                                         Dimension minSize,
@@ -202,46 +239,77 @@ namespace ZXing.Datamatrix.Encoder
             }
         }
 
+        /// <summary>
+        /// symbol data width
+        /// </summary>
+        /// <returns></returns>
         public int getSymbolDataWidth()
         {
             return getHorizontalDataRegions() * matrixWidth;
         }
-
+        /// <summary>
+        /// symbol data height
+        /// </summary>
+        /// <returns></returns>
         public int getSymbolDataHeight()
         {
             return getVerticalDataRegions() * matrixHeight;
         }
-
+        /// <summary>
+        /// symbol width
+        /// </summary>
+        /// <returns></returns>
         public int getSymbolWidth()
         {
             return getSymbolDataWidth() + (getHorizontalDataRegions() * 2);
         }
-
+        /// <summary>
+        /// symbol height
+        /// </summary>
+        /// <returns></returns>
         public int getSymbolHeight()
         {
             return getSymbolDataHeight() + (getVerticalDataRegions() * 2);
         }
-
+        /// <summary>
+        /// codeword count
+        /// </summary>
+        /// <returns></returns>
         public int getCodewordCount()
         {
             return dataCapacity + errorCodewords;
         }
-
-        virtual public int getInterleavedBlockCount()
+        /// <summary>
+        /// interleaved block count
+        /// </summary>
+        /// <returns></returns>
+        public virtual int getInterleavedBlockCount()
         {
             return dataCapacity / rsBlockData;
         }
-
-        virtual public int getDataLengthForInterleavedBlock(int index)
+        /// <summary>
+        /// data length for interleaved block
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public virtual int getDataLengthForInterleavedBlock(int index)
         {
             return rsBlockData;
         }
-
+        /// <summary>
+        /// error length for interleaved block
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public int getErrorLengthForInterleavedBlock(int index)
         {
             return rsBlockError;
         }
 
+        /// <summary>
+        /// user friendly representation
+        /// </summary>
+        /// <returns></returns>
         public override String ToString()
         {
             var sb = new StringBuilder();

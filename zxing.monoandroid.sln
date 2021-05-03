@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoAndroidDemo", "Clients\MonoAndroidDemo\MonoAndroidDemo.csproj", "{14DFA0B8-A311-46BD-A1BD-A0808473CD80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zxing.monoandroid", "Source\lib\zxing.monoandroid.csproj", "{8971B59D-78F1-49BA-808D-CBADB37F571F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZXing.Android", "Source\Bindings\ZXing.Android\ZXing.Android.csproj", "{8080C792-EB9B-4CE8-B52E-740ABB68AE50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,19 +15,26 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8971B59D-78F1-49BA-808D-CBADB37F571F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8971B59D-78F1-49BA-808D-CBADB37F571F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8971B59D-78F1-49BA-808D-CBADB37F571F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8971B59D-78F1-49BA-808D-CBADB37F571F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{14DFA0B8-A311-46BD-A1BD-A0808473CD80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{14DFA0B8-A311-46BD-A1BD-A0808473CD80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14DFA0B8-A311-46BD-A1BD-A0808473CD80}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{14DFA0B8-A311-46BD-A1BD-A0808473CD80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14DFA0B8-A311-46BD-A1BD-A0808473CD80}.Release|Any CPU.Build.0 = Release|Any CPU
 		{14DFA0B8-A311-46BD-A1BD-A0808473CD80}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{8971B59D-78F1-49BA-808D-CBADB37F571F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8971B59D-78F1-49BA-808D-CBADB37F571F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8971B59D-78F1-49BA-808D-CBADB37F571F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8971B59D-78F1-49BA-808D-CBADB37F571F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {40DE6A59-2C55-4919-A5D1-16E0E6433645}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Clients\MonoAndroidDemo\MonoAndroidDemo.csproj

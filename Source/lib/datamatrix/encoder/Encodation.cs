@@ -21,11 +21,29 @@ namespace ZXing.Datamatrix.Encoder
     /// </summary>
     public sealed class Encodation
     {
+        /// <summary>
+        /// ASCII
+        /// </summary>
         public const int ASCII = 0;
+        /// <summary>
+        /// C40
+        /// </summary>
         public const int C40 = 1;
+        /// <summary>
+        /// TEXT
+        /// </summary>
         public const int TEXT = 2;
+        /// <summary>
+        /// X12
+        /// </summary>
         public const int X12 = 3;
+        /// <summary>
+        /// EDIFACT
+        /// </summary>
         public const int EDIFACT = 4;
+        /// <summary>
+        /// BASE256
+        /// </summary>
         public const int BASE256 = 5;
     }
 }

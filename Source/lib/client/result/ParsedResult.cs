@@ -30,21 +30,39 @@ namespace ZXing.Client.Result
     /// <author>Sean Owen</author>
     public abstract class ParsedResult
     {
+        /// <summary>
+        /// user friendly value
+        /// </summary>
         protected string displayResultValue;
-
+        /// <summary>
+        /// gets the type of the parsed result
+        /// </summary>
         public virtual ParsedResultType Type { get; private set; }
+        /// <summary>
+        /// user friendly value
+        /// </summary>
         public virtual String DisplayResult { get { return displayResultValue; } }
-
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="type"></param>
         protected ParsedResult(ParsedResultType type)
         {
             Type = type;
         }
-
+        /// <summary>
+        /// gets a user friendly value
+        /// </summary>
+        /// <returns></returns>
         public override String ToString()
         {
             return DisplayResult;
         }
-
+        /// <summary>
+        /// compare two objects
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             var other = obj as ParsedResult;
@@ -52,12 +70,19 @@ namespace ZXing.Client.Result
                 return false;
             return other.Type.Equals(Type) && other.DisplayResult.Equals(DisplayResult);
         }
-
+        /// <summary>
+        /// gets the hashcode
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             return Type.GetHashCode() + DisplayResult.GetHashCode();
         }
-
+        /// <summary>
+        /// append to result if not null or empty
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="result"></param>
         public static void maybeAppend(String value, StringBuilder result)
         {
             if (String.IsNullOrEmpty(value))
@@ -70,7 +95,11 @@ namespace ZXing.Client.Result
             }
             result.Append(value);
         }
-
+        /// <summary>
+        /// append to result if not null or empty
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="result"></param>
         public static void maybeAppend(String[] values, StringBuilder result)
         {
             if (values != null)

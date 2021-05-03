@@ -24,16 +24,55 @@ namespace ZXing.Client.Result
     /// </summary>
     public class VINParsedResult : ParsedResult
     {
+        /// <summary>
+        /// VIN
+        /// </summary>
         public String VIN { get; private set; }
+        /// <summary>
+        /// manufacturer id
+        /// </summary>
         public String WorldManufacturerID { get; private set; }
+        /// <summary>
+        /// vehicle descriptor section
+        /// </summary>
         public String VehicleDescriptorSection { get; private set; }
+        /// <summary>
+        /// vehicle identifier section
+        /// </summary>
         public String VehicleIdentifierSection { get; private set; }
+        /// <summary>
+        /// country code
+        /// </summary>
         public String CountryCode { get; private set; }
+        /// <summary>
+        /// vehicle attributes
+        /// </summary>
         public String VehicleAttributes { get; private set; }
+        /// <summary>
+        /// model year
+        /// </summary>
         public int ModelYear { get; private set; }
+        /// <summary>
+        /// plant code
+        /// </summary>
         public char PlantCode { get; private set; }
+        /// <summary>
+        /// sequential number
+        /// </summary>
         public String SequentialNumber { get; private set; }
 
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="vin"></param>
+        /// <param name="worldManufacturerID"></param>
+        /// <param name="vehicleDescriptorSection"></param>
+        /// <param name="vehicleIdentifierSection"></param>
+        /// <param name="countryCode"></param>
+        /// <param name="vehicleAttributes"></param>
+        /// <param name="modelYear"></param>
+        /// <param name="plantCode"></param>
+        /// <param name="sequentialNumber"></param>
         public VINParsedResult(String vin,
                                String worldManufacturerID,
                                String vehicleDescriptorSection,
@@ -55,7 +94,9 @@ namespace ZXing.Client.Result
             PlantCode = plantCode;
             SequentialNumber = sequentialNumber;
         }
-
+        /// <summary>
+        /// a user friendly representation
+        /// </summary>
         public override string DisplayResult
         {
             get

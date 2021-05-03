@@ -243,7 +243,9 @@ namespace ZXing.Client.Result
             get { return title; }
         }
 
-        // the organisation
+        /// <summary>
+        /// the organisations
+        /// </summary>
         public String Org
         {
             get { return org; }

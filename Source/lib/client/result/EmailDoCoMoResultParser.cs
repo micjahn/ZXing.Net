@@ -42,7 +42,7 @@ namespace ZXing.Client.Result
                 return null;
             }
 
-            var tos = matchDoCoMoPrefixedField("TO:", rawText, true);
+            var tos = matchDoCoMoPrefixedField("TO:", rawText);
             if (tos == null)
             {
                 return null;

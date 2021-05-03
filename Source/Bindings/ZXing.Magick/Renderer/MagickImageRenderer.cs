@@ -21,27 +21,54 @@ using ImageMagick;
 
 namespace ZXing.Magick.Rendering
 {
-    public class MagickImageRenderer : IBarcodeRenderer<IMagickImage>
+    /// <summary>
+    /// renderer class which generates a IMagickImage from a BitMatrix
+    /// </summary>
+    public class MagickImageRenderer : IBarcodeRenderer<IMagickImage<byte>>
     {
-        private readonly IMagickFactory magickFactory;
+        private readonly MagickFactory magickFactory;
 
+        /// <summary>
+        /// default constructor
+        /// </summary>
         public MagickImageRenderer()
             : this(null)
         {
 
         }
 
+        /// <summary>
+        /// constructor, which can be used if a special implementation of IMagickFactory is need.
+        /// TODO: at the moment the instance of magickFactory has to be a subtype of MagickFactory because ImagickFactory doesn't provide the property Image
+        /// </summary>
+        /// <param name="magickFactory"></param>
         public MagickImageRenderer(IMagickFactory magickFactory)
         {
-            this.magickFactory = magickFactory ?? new MagickFactory();
+            // TODO: current version of Magick doesn't have all necessary properties defined for IMagickFactory
+            this.magickFactory = magickFactory as MagickFactory ?? new MagickFactory();
         }
 
-        public IMagickImage Render(BitMatrix matrix, BarcodeFormat format, string content)
+        /// <summary>
+        /// renders the BitMatrix as MagickImage
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="format"></param>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        public IMagickImage<byte> Render(BitMatrix matrix, BarcodeFormat format, string content)
         {
             return Render(matrix, format, content, new EncodingOptions());
         }
 
-        public IMagickImage Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+        /// <summary>
+        /// renders the BitMatrix as MagickImage
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="format"></param>
+        /// <param name="content"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        public IMagickImage<byte> Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
         {
             byte[] header = System.Text.Encoding.UTF8.GetBytes($"P4\n{matrix.Width} {matrix.Height}\n");
 
@@ -79,7 +106,7 @@ namespace ZXing.Magick.Rendering
                 }
             }
 
-            return this.magickFactory.CreateImage(totalBuffer);
+            return this.magickFactory.Image.Create(totalBuffer);
         }
     }
 }

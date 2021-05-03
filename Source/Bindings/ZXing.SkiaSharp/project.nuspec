@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
 	<metadata>
-		<version>0.16.9</version>
+		<version>0.16.10</version>
 		<authors>Michael Jahn</authors>
 		<owners>Michael Jahn</owners>
 		<license type="expression">Apache-2.0</license>
@@ -17,23 +17,31 @@
 		<tags>ZXing SkiaSharp</tags>
 		<repository type="git" url="https://github.com/micjahn/ZXing.Net/" />
 		<dependencies>
-			<group targetFramework="net45">
-				<dependency id="ZXing.Net" version="0.16.5.0" exclude="Build,Analyzers" />
-				<dependency id="SkiaSharp" version="1.68.1.1" exclude="Build,Analyzers" />
+			<group targetFramework="net462">
+				<dependency id="ZXing.Net" version="0.16.6.0" exclude="Build,Analyzers" />
+				<dependency id="SkiaSharp" version="2.80.2" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="netstandard1.3">
-				<dependency id="ZXing.Net" version="0.16.5.0" exclude="Build,Analyzers" />
-				<dependency id="SkiaSharp" version="1.68.1.1" exclude="Build,Analyzers" />
+				<dependency id="ZXing.Net" version="0.16.6.0" exclude="Build,Analyzers" />
+				<dependency id="SkiaSharp" version="2.80.2" exclude="Build,Analyzers" />
 				<dependency id="NETStandard.Library" version="1.6.0" exclude="Build,Analyzers" />
+			</group>
+			<group targetFramework="netstandard2.0">
+				<dependency id="ZXing.Net" version="0.16.6.0" exclude="Build,Analyzers" />
+				<dependency id="SkiaSharp" version="2.80.2" exclude="Build,Analyzers" />
+				<dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
 			</group>
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="bin\Release\net45\ZXing.SkiaSharp.dll" target="lib\net45\ZXing.SkiaSharp.dll" />
-		<file src="bin\Release\net45\ZXing.SkiaSharp.pdb" target="lib\net45\ZXing.SkiaSharp.pdb" />
-		<file src="bin\Release\net45\ZXing.SkiaSharp.xml" target="lib\net45\ZXing.SkiaSharp.xml" />
+		<file src="bin\Release\net462\ZXing.SkiaSharp.dll" target="lib\net462\ZXing.SkiaSharp.dll" />
+		<file src="bin\Release\net462\ZXing.SkiaSharp.pdb" target="lib\net462\ZXing.SkiaSharp.pdb" />
+		<file src="bin\Release\net462\ZXing.SkiaSharp.xml" target="lib\net462\ZXing.SkiaSharp.xml" />
 		<file src="bin\Release\netstandard1.3\ZXing.SkiaSharp.dll" target="lib\netstandard1.3\ZXing.SkiaSharp.dll" />
 		<file src="bin\Release\netstandard1.3\ZXing.SkiaSharp.pdb" target="lib\netstandard1.3\ZXing.SkiaSharp.pdb" />
 		<file src="bin\Release\netstandard1.3\ZXing.SkiaSharp.xml" target="lib\netstandard1.3\ZXing.SkiaSharp.xml" />
+		<file src="bin\Release\netstandard2.0\ZXing.SkiaSharp.dll" target="lib\netstandard2.0\ZXing.SkiaSharp.dll" />
+		<file src="bin\Release\netstandard2.0\ZXing.SkiaSharp.pdb" target="lib\netstandard2.0\ZXing.SkiaSharp.pdb" />
+		<file src="bin\Release\netstandard2.0\ZXing.SkiaSharp.xml" target="lib\netstandard2.0\ZXing.SkiaSharp.xml" />
 	</files>
 </package>

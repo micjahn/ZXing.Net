@@ -223,10 +223,7 @@ namespace ZXing.OneD.RSS
         private DataCharacter decodeDataCharacter(BitArray row, FinderPattern pattern, bool outsideChar)
         {
             int[] counters = getDataCharacterCounters();
-            for (int x = 0; x < counters.Length; x++)
-            {
-                counters[x] = 0;
-            }
+            SupportClass.Fill(counters, 0);
 
             if (outsideChar)
             {

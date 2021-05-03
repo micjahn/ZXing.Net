@@ -20,24 +20,40 @@ using ZXing.Common;
 
 namespace ZXing.Aztec.Internal
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed class SimpleToken : Token
     {
         // For normal words, indicates value and bitCount
         private readonly short value;
         private readonly short bitCount;
 
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="previous"></param>
+        /// <param name="value"></param>
+        /// <param name="bitCount"></param>
         public SimpleToken(Token previous, int value, int bitCount)
            : base(previous)
         {
             this.value = (short)value;
             this.bitCount = (short)bitCount;
         }
-
+        /// <summary>
+        /// append token to bitarray
+        /// </summary>
+        /// <param name="bitArray"></param>
+        /// <param name="text"></param>
         public override void appendTo(BitArray bitArray, byte[] text)
         {
             bitArray.appendBits(value, bitCount);
         }
-
+        /// <summary>
+        /// string representation
+        /// </summary>
+        /// <returns></returns>
         public override String ToString()
         {
             int value = this.value & ((1 << bitCount) - 1);

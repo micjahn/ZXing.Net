@@ -33,6 +33,10 @@ namespace WindowsFormsDemo
         {
             get { return chkMultipleDecodeOnlyQR.Checked; }
         }
+        public bool UseGlobalHistogramBinarizer
+        {
+            get { return chkUseGlobalHistogramBinarizer.Checked; }
+        }
 
         public DecodingOptionsForm(BarcodeReader reader, bool multipleBarcodes, bool multipleBarcodesOnlyQR)
         {

@@ -45,8 +45,8 @@ namespace ZXing.Client.Result
             var name = matchSinglePrefixedField("NAME1:", rawText, '\r', true);
             var pronunciation = matchSinglePrefixedField("NAME2:", rawText, '\r', true);
 
-            var phoneNumbers = matchMultipleValuePrefix("TEL", 3, rawText, true);
-            var emails = matchMultipleValuePrefix("MAIL", 3, rawText, true);
+            var phoneNumbers = matchMultipleValuePrefix("TEL", rawText);
+            var emails = matchMultipleValuePrefix("MAIL", rawText);
             var note = matchSinglePrefixedField("MEMORY:", rawText, '\r', false);
             var address = matchSinglePrefixedField("ADD:", rawText, '\r', true);
             var addresses = address == null ? null : new[] { address };
@@ -68,12 +68,13 @@ namespace ZXing.Client.Result
                                                null);
         }
 
-        private static String[] matchMultipleValuePrefix(String prefix, int max, String rawText, bool trim)
+        private static String[] matchMultipleValuePrefix(String prefix, String rawText)
         {
             IList<string> values = null;
-            for (int i = 1; i <= max; i++)
+            // For now, always 3, and always trim
+            for (int i = 1; i <= 3; i++)
             {
-                var value = matchSinglePrefixedField(prefix + i + ':', rawText, '\r', trim);
+                var value = matchSinglePrefixedField(prefix + i + ':', rawText, '\r', true);
                 if (value == null)
                 {
                     break;

@@ -27,21 +27,42 @@ namespace ZXing.PDF417.Internal
     {
         private const int ADJUST_ROW_NUMBER_SKIP = 2;
 
+        /// <summary>
+        /// metadata which are found
+        /// </summary>
         public BarcodeMetadata Metadata { get; private set; }
+        /// <summary>
+        /// result columns
+        /// </summary>
         public DetectionResultColumn[] DetectionResultColumns { get; set; }
+        /// <summary>
+        /// bounding box of the detected result
+        /// </summary>
         public BoundingBox Box { get; internal set; }
+        /// <summary>
+        /// column count
+        /// </summary>
         public int ColumnCount { get; private set; }
-
+        /// <summary>
+        /// row count
+        /// </summary>
         public int RowCount
         {
             get { return Metadata.RowCount; }
         }
-
+        /// <summary>
+        /// error correction level
+        /// </summary>
         public int ErrorCorrectionLevel
         {
             get { return Metadata.ErrorCorrectionLevel; }
         }
 
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="metadata"></param>
+        /// <param name="box"></param>
         public DetectionResult(BarcodeMetadata metadata, BoundingBox box)
         {
             Metadata = metadata;

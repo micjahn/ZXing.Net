@@ -207,11 +207,6 @@ namespace ZXing.Datamatrix.Encoder
 
         private static String createECCBlock(String codewords, int numECWords)
         {
-            return createECCBlock(codewords, 0, codewords.Length, numECWords);
-        }
-
-        private static String createECCBlock(String codewords, int start, int len, int numECWords)
-        {
             int table = -1;
             for (int i = 0; i < FACTOR_SETS.Length; i++)
             {
@@ -232,7 +227,8 @@ namespace ZXing.Datamatrix.Encoder
             {
                 ecc[i] = (char) 0;
             }
-            for (int i = start; i < start + len; i++)
+            var len = codewords.Length;
+            for (int i = 0; i < len; i++)
             {
                 int m = ecc[numECWords - 1] ^ codewords[i];
                 for (int k = numECWords - 1; k > 0; k--)

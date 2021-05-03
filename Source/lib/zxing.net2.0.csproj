@@ -342,6 +342,7 @@
     <Compile Include="qrcode\QRCodeWriter.cs" />
     <Compile Include="Reader.cs" />
     <Compile Include="ReaderException.cs" />
+    <Compile Include="renderer\AlternateBitmapRenderer.cs" />
     <Compile Include="renderer\BitmapRenderer.cs" />
     <Compile Include="renderer\IBarcodeRenderer.cs" />
     <Compile Include="renderer\PixelData.Bitmap.cs" />

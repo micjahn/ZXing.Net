@@ -24,6 +24,11 @@ namespace ZXing.Client.Result
     /// <author>Sean Owen</author>
     public sealed class TextParsedResult : ParsedResult
     {
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="language"></param>
         public TextParsedResult(String text, String language)
            : base(ParsedResultType.TEXT)
         {
@@ -31,9 +36,13 @@ namespace ZXing.Client.Result
             Language = language;
             displayResultValue = text;
         }
-
+        /// <summary>
+        /// text
+        /// </summary>
         public String Text { get; private set; }
-
+        /// <summary>
+        /// language
+        /// </summary>
         public String Language { get; private set; }
     }
 }

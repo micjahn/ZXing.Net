@@ -27,10 +27,10 @@ namespace ZXing.QrCode.Internal.Test
    public class BitVectorTestCase
    {
 
-      private static long getUnsignedInt(BitArray v, int index)
+      private static long getUnsignedInt(BitArray v)
       {
          long result = 0L;
-         for (int i = 0, offset = index << 3; i < 32; i++)
+         for (int i = 0, offset = 0; i < 32; i++)
          {
             if (v[offset + i])
             {
@@ -48,43 +48,43 @@ namespace ZXing.QrCode.Internal.Test
          // 1
          v.appendBit(true);
          Assert.AreEqual(1, v.Size);
-         Assert.AreEqual(0x80000000L, getUnsignedInt(v, 0));
+         Assert.AreEqual(0x80000000L, getUnsignedInt(v));
          // 10
          v.appendBit(false);
          Assert.AreEqual(2, v.Size);
-         Assert.AreEqual(0x80000000L, getUnsignedInt(v, 0));
+         Assert.AreEqual(0x80000000L, getUnsignedInt(v));
          // 101
          v.appendBit(true);
          Assert.AreEqual(3, v.Size);
-         Assert.AreEqual(0xa0000000L, getUnsignedInt(v, 0));
+         Assert.AreEqual(0xa0000000L, getUnsignedInt(v));
          // 1010
          v.appendBit(false);
          Assert.AreEqual(4, v.Size);
-         Assert.AreEqual(0xa0000000L, getUnsignedInt(v, 0));
+         Assert.AreEqual(0xa0000000L, getUnsignedInt(v));
          // 10101
          v.appendBit(true);
          Assert.AreEqual(5, v.Size);
-         Assert.AreEqual(0xa8000000L, getUnsignedInt(v, 0));
+         Assert.AreEqual(0xa8000000L, getUnsignedInt(v));
          // 101010
          v.appendBit(false);
          Assert.AreEqual(6, v.Size);
-         Assert.AreEqual(0xa8000000L, getUnsignedInt(v, 0));
+         Assert.AreEqual(0xa8000000L, getUnsignedInt(v));
          // 1010101
          v.appendBit(true);
          Assert.AreEqual(7, v.Size);
-         Assert.AreEqual(0xaa000000L, getUnsignedInt(v, 0));
+         Assert.AreEqual(0xaa000000L, getUnsignedInt(v));
          // 10101010
          v.appendBit(false);
          Assert.AreEqual(8, v.Size);
-         Assert.AreEqual(0xaa000000L, getUnsignedInt(v, 0));
+         Assert.AreEqual(0xaa000000L, getUnsignedInt(v));
          // 10101010 1
          v.appendBit(true);
          Assert.AreEqual(9, v.Size);
-         Assert.AreEqual(0xaa800000L, getUnsignedInt(v, 0));
+         Assert.AreEqual(0xaa800000L, getUnsignedInt(v));
          // 10101010 10
          v.appendBit(false);
          Assert.AreEqual(10, v.Size);
-         Assert.AreEqual(0xaa800000L, getUnsignedInt(v, 0));
+         Assert.AreEqual(0xaa800000L, getUnsignedInt(v));
       }
 
       [Test]
@@ -93,15 +93,15 @@ namespace ZXing.QrCode.Internal.Test
          var v = new BitArray();
          v.appendBits(0x1, 1);
          Assert.AreEqual(1, v.Size);
-         Assert.AreEqual(0x80000000L, getUnsignedInt(v, 0));
+         Assert.AreEqual(0x80000000L, getUnsignedInt(v));
          v = new BitArray();
          v.appendBits(0xff, 8);
          Assert.AreEqual(8, v.Size);
-         Assert.AreEqual(0xff000000L, getUnsignedInt(v, 0));
+         Assert.AreEqual(0xff000000L, getUnsignedInt(v));
          v = new BitArray();
          v.appendBits(0xff7, 12);
          Assert.AreEqual(12, v.Size);
-         Assert.AreEqual(0xff700000L, getUnsignedInt(v, 0));
+         Assert.AreEqual(0xff700000L, getUnsignedInt(v));
       }
 
       [Test]
@@ -141,7 +141,7 @@ namespace ZXing.QrCode.Internal.Test
          var v2 = new BitArray();
          v2.appendBits(-1431677611, 32); // 0xaaaa5555
          v1.xor(v2);
-         Assert.AreEqual(0xffffffffL, getUnsignedInt(v1, 0));
+         Assert.AreEqual(0xffffffffL, getUnsignedInt(v1));
       }
 
       [Test]
@@ -152,7 +152,7 @@ namespace ZXing.QrCode.Internal.Test
          var v2 = new BitArray();
          v2.appendBits(0x55, 7); // 101 0101
          v1.xor(v2);
-         Assert.AreEqual(0xfe000000L, getUnsignedInt(v1, 0)); // 1111 1110
+         Assert.AreEqual(0xfe000000L, getUnsignedInt(v1)); // 1111 1110
       }
 
       [Test]

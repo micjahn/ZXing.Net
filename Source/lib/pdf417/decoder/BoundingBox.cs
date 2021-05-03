@@ -27,14 +27,38 @@ namespace ZXing.PDF417.Internal
     {
         private readonly BitMatrix image;
 
+        /// <summary>
+        /// top left corner of the box
+        /// </summary>
         public ResultPoint TopLeft { get; private set; }
+        /// <summary>
+        /// top right corner of the box
+        /// </summary>
         public ResultPoint TopRight { get; private set; }
+        /// <summary>
+        /// bottom left corner of the box
+        /// </summary>
         public ResultPoint BottomLeft { get; private set; }
+        /// <summary>
+        /// bottom right corner of the box
+        /// </summary>
         public ResultPoint BottomRight { get; private set; }
 
+        /// <summary>
+        /// min x
+        /// </summary>
         public int MinX { get; private set; }
+        /// <summary>
+        /// max x
+        /// </summary>
         public int MaxX { get; private set; }
+        /// <summary>
+        /// min y
+        /// </summary>
         public int MinY { get; private set; }
+        /// <summary>
+        /// max y
+        /// </summary>
         public int MaxY { get; private set; }
 
         /// <summary>

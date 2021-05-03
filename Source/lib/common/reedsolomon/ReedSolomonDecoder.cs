@@ -41,6 +41,10 @@ namespace ZXing.Common.ReedSolomon
     {
         private readonly GenericGF field;
 
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="field"></param>
         public ReedSolomonDecoder(GenericGF field)
         {
             this.field = field;

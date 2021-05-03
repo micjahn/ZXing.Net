@@ -22,8 +22,17 @@ namespace ZXing.Datamatrix.Encoder
     /// </summary>
     public enum SymbolShapeHint
     {
+        /// <summary>
+        /// doesn't force anything
+        /// </summary>
         FORCE_NONE,
+        /// <summary>
+        /// forces square image
+        /// </summary>
         FORCE_SQUARE,
+        /// <summary>
+        /// forces rectangle image
+        /// </summary>
         FORCE_RECTANGLE,
     }
 }

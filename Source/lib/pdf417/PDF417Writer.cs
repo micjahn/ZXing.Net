@@ -175,7 +175,6 @@ namespace ZXing.PDF417
         /// <param name="format">The barcode format to generate</param>
         /// <param name="width">The preferred width in pixels</param>
         /// <param name="height">The preferred height in pixels</param>
-        /// <param name="aspectRatio">The height of a row in the barcode</param>
         /// <returns>
         /// The generated barcode as a Matrix of unsigned bytes (0 == black, 255 == white)
         /// </returns>

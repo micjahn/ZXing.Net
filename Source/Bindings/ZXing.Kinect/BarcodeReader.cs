@@ -67,6 +67,7 @@ namespace ZXing.Kinect
         /// If null, default is used</param>
         /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
         /// If null then HybridBinarizer is used</param>
+        /// <param name="createRGBLuminanceSource">Sets the function to create a luminance source object for a rgb raw byte array.</param>
         public BarcodeReader(Reader reader,
            Func<ColorImageFrame, LuminanceSource> createLuminanceSource,
            Func<LuminanceSource, Binarizer> createBinarizer,

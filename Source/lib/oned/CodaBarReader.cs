@@ -65,13 +65,25 @@ namespace ZXing.OneD
         private int[] counters;
         private int counterLength;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public CodaBarReader()
         {
             decodeRowResult = new StringBuilder(20);
             counters = new int[80];
             counterLength = 0;
         }
-
+        /// <summary>
+        ///   <p>Attempts to decode a one-dimensional barcode format given a single row of
+        /// an image.</p>
+        /// </summary>
+        /// <param name="rowNumber">row number from top of the row</param>
+        /// <param name="row">the black/white pixel data of the row</param>
+        /// <param name="hints">decode hints</param>
+        /// <returns>
+        ///   <see cref="Result"/>containing encoded string and start/end of barcode or null, if an error occurs or barcode cannot be found
+        /// </returns>
         public override Result decodeRow(int rowNumber, BitArray row, IDictionary<DecodeHintType, object> hints)
         {
             for (var index = 0; index < counters.Length; index++)

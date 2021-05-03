@@ -26,10 +26,11 @@
 %BINARY_DIR%\wp7.0\zxing.wp7.0.dll
 %BINARY_DIR%\wp7.1\zxing.wp7.1.dll
 %BINARY_DIR%\wp8.0\zxing.wp8.0.dll
-%BINARY_DIR%\monodroid\zxing.monoandroid.dll
 %BINARY_DIR%\winmd\zxing.winmd
-%CURRENT_DIR%\Source\lib\netstandard2.0\bin\Release\netstandard1.0\zxing.dll
-%CURRENT_DIR%\Source\lib\netstandard2.0\bin\Release\netstandard1.1\zxing.dll
-%CURRENT_DIR%\Source\lib\netstandard2.0\bin\Release\netstandard1.3\zxing.dll
-%CURRENT_DIR%\Source\lib\netstandard2.0\bin\Release\netstandard2.0\zxing.dll
-%CURRENT_DIR%\Source\lib\netcoreapp3.0\bin\Release\netcoreapp3.0\zxing.dll
+%CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard1.0\zxing.dll
+%CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard1.1\zxing.dll
+%CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard1.3\zxing.dll
+%CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard2.0\zxing.dll
+%CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard2.1\zxing.dll
+%CURRENT_DIR%\Source\lib\netstandard\bin\Release\netcoreapp3.0\zxing.dll
+%CURRENT_DIR%\Source\lib\netstandard\bin\Release\netcoreapp3.1\zxing.dll

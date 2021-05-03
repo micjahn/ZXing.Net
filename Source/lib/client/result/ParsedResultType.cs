@@ -23,17 +23,53 @@ namespace ZXing.Client.Result
     /// <author>Sean Owen</author>
     public enum ParsedResultType
     {
+        /// <summary>
+        /// address book
+        /// </summary>
         ADDRESSBOOK,
+        /// <summary>
+        /// email address
+        /// </summary>
         EMAIL_ADDRESS,
+        /// <summary>
+        /// product
+        /// </summary>
         PRODUCT,
+        /// <summary>
+        /// URI
+        /// </summary>
         URI,
+        /// <summary>
+        /// Text
+        /// </summary>
         TEXT,
+        /// <summary>
+        /// geo coordinates
+        /// </summary>
         GEO,
+        /// <summary>
+        /// telefon
+        /// </summary>
         TEL,
+        /// <summary>
+        /// sms
+        /// </summary>
         SMS,
+        /// <summary>
+        /// calendar
+        /// </summary>
         CALENDAR,
+        /// <summary>
+        /// wifi
+        /// </summary>
         WIFI,
+        /// <summary>
+        /// ISBN
+        /// </summary>
         ISBN,
+        /// <summary>
+        /// VIN
+        /// </summary>
         VIN
     }
 }

@@ -1,3 +1,4 @@
+%BINARY_DIR%\Bindings\Android\zxing.monoandroid.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.dll
 %BINARY_DIR%\Bindings\kinect\V1\zxing.kinect.dll
 %BINARY_DIR%\Bindings\kinect\V2\zxing.kinect.dll
@@ -8,8 +9,12 @@
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\net20\zxing.opencv.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\net40\zxing.opencv.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\net46\zxing.opencv.dll
-%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\netstandard1.6\zxing.opencv.dll
-%CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\net45\zxing.skiasharp.dll
+%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V3\bin\Release\netstandard2.0\zxing.opencv.dll
+%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\net461\zxing.opencv.dll
+%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\net48\zxing.opencv.dll
+%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\netstandard2.0\zxing.opencv.dll
+%CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V4\bin\Release\netstandard2.1\zxing.opencv.dll
+%CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\net462\zxing.skiasharp.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard1.3\zxing.skiasharp.dll
+%CURRENT_DIR%\Source\Bindings\ZXing.SkiaSharp\bin\Release\netstandard2.0\zxing.skiasharp.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.Windows.Compatibility\bin\Release\netstandard2.0\zxing.windows.compatibility.dll
-%CURRENT_DIR%\Source\Bindings\ZXing.Eto.Forms\bin\Release\netstandard1.0\ZXing.Eto.Forms.dll
