@@ -486,7 +486,7 @@ namespace ZXing.Rendering
          internal static string GetBackgroundStyle(Color32 color)
          {
             double alpha = ConvertAlpha(color);
-            return string.Format("style=\"background-color:rgb({0},{1},{2});background-color:rgba({3});\"",
+            return string.Format("style=\"background-color:rgb({0},{1},{2});background-color:rgba({0},{1},{2},{3});\"",
                 color.r, color.g, color.b, alpha);
          }
 
