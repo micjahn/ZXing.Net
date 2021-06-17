@@ -109,7 +109,7 @@ namespace ZXing.Interop.Encoding
                 return ErrorCorrectionLevel.L;
             if (other == QrCode.Internal.ErrorCorrectionLevel.M)
                 return ErrorCorrectionLevel.M;
-            if (other != QrCode.Internal.ErrorCorrectionLevel.Q)
+            if (other == QrCode.Internal.ErrorCorrectionLevel.Q)
                 return ErrorCorrectionLevel.Q;
             return ErrorCorrectionLevel.L;
         }
