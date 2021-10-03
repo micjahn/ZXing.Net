@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
 	<metadata>
-		<version>0.16.6</version>
+		<version>0.16.7</version>
 		<authors>Michael Jahn</authors>
 		<owners>Michael Jahn</owners>
 		<license type="expression">Apache-2.0</license>
@@ -18,20 +18,20 @@
 		<dependencies>
 			<group targetFramework="net461">
 				<dependency id="ZXing.Net" version="0.16.6.0" exclude="Build,Analyzers" />
-				<dependency id="OpenCvSharp4" version="4.4.0.20200915" exclude="Build,Analyzers" />
+				<dependency id="OpenCvSharp4" version="4.5.3.20210817" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="net48">
 				<dependency id="ZXing.Net" version="0.16.6.0" exclude="Build,Analyzers" />
-				<dependency id="OpenCvSharp4" version="4.4.0.20200915" exclude="Build,Analyzers" />
+				<dependency id="OpenCvSharp4" version="4.5.3.20210817" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="netstandard2.0">
 				<dependency id="ZXing.Net" version="0.16.6.0" exclude="Build,Analyzers" />
-				<dependency id="OpenCvSharp4" version="4.4.0.20200915" exclude="Build,Analyzers" />
+				<dependency id="OpenCvSharp4" version="4.5.3.20210817" exclude="Build,Analyzers" />
 				<dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="netstandard2.1">
 				<dependency id="ZXing.Net" version="0.16.6.0" exclude="Build,Analyzers" />
-				<dependency id="OpenCvSharp4" version="4.4.0.20200915" exclude="Build,Analyzers" />
+				<dependency id="OpenCvSharp4" version="4.5.3.20210817" exclude="Build,Analyzers" />
 				<dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
 			</group>
 		</dependencies>

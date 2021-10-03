@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.7</version>
+    <version>0.16.8</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <license type="expression">Apache-2.0</license>
@@ -18,7 +18,12 @@
     <dependencies>
       <group targetFramework="netstandard2.0">
         <dependency id="ZXing.Net" version="0.16.6" exclude="Build,Analyzers" />
-        <dependency id="System.Drawing.Common" version="4.7.0" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="5.0.2" exclude="Build,Analyzers" />
+        <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="netcoreapp3.0">
+        <dependency id="ZXing.Net" version="0.16.6" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="5.0.2" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
@@ -27,5 +32,8 @@
     <file src="bin\Release\netstandard2.0\ZXing.Windows.Compatibility.dll" target="lib\netstandard2.0\ZXing.Windows.Compatibility.dll" />
     <file src="bin\Release\netstandard2.0\ZXing.Windows.Compatibility.pdb" target="lib\netstandard2.0\ZXing.Windows.Compatibility.pdb" />
     <file src="bin\Release\netstandard2.0\ZXing.Windows.Compatibility.xml" target="lib\netstandard2.0\ZXing.Windows.Compatibility.xml" />
+    <file src="bin\Release\netcoreapp3.0\ZXing.Windows.Compatibility.dll" target="lib\netcoreapp3.0\ZXing.Windows.Compatibility.dll" />
+    <file src="bin\Release\netcoreapp3.0\ZXing.Windows.Compatibility.pdb" target="lib\netcoreapp3.0\ZXing.Windows.Compatibility.pdb" />
+    <file src="bin\Release\netcoreapp3.0\ZXing.Windows.Compatibility.xml" target="lib\netcoreapp3.0\ZXing.Windows.Compatibility.xml" />
   </files>
 </package>
