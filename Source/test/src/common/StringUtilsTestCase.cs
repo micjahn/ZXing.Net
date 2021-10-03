@@ -20,62 +20,71 @@ using NUnit.Framework;
 
 namespace ZXing.Common.Test
 {
-   [TestFixture]
-   public class StringUtilsTestCase
-   {
-      [Test]
-      public void testShortShiftJIS_1()
-      {
-         // ÈáëÈ≠ö
-         doTest(new byte[] {0x8b, 0xe0, 0x8b, 0x9b,}, "SJIS");
-      }
+    [TestFixture]
+    public class StringUtilsTestCase
+    {
+        [Test]
+        public void testShortShiftJIS_1()
+        {
+            // 金魚
+            doTest(new byte[] { 0x8b, 0xe0, 0x8b, 0x9b, }, StringUtils.SHIFT_JIS_ENCODING, "SJIS");
+        }
 
-      [Test]
-      public void testShortISO88591_1()
-      {
-         // b√•d
-         doTest(new byte[] {0x62, 0xe5, 0x64,}, "ISO-8859-1");
-      }
+        [Test]
+        public void testShortISO88591_1()
+        {
+            // båd
+            doTest(new byte[] { 0x62, 0xe5, 0x64, }, StringUtils.ISO88591_ENCODING, "ISO-8859-1");
+        }
 
-      [Test]
-      public void testMixedShiftJIS_1()
-      {
-         // Hello Èáë!
-         doTest(new byte[]
-                   {
+        [Test]
+        public void testShortUTF81()
+        {
+            // Español
+            doTest(new byte[] { (byte) 0x45, (byte) 0x73, (byte) 0x70, (byte) 0x61, (byte) 0xc3,
+                        (byte) 0xb1, (byte) 0x6f, (byte) 0x6c },
+                   Encoding.UTF8, "UTF-8");
+        }
+
+        [Test]
+        public void testMixedShiftJIS_1()
+        {
+            // Hello 金!
+            doTest(new byte[]
+                      {
                       0x48, 0x65, 0x6c, 0x6c, 0x6f,
                       0x20, 0x8b, 0xe0, 0x21,
-                   },
-                "SJIS");
-      }
+                      },
+                   StringUtils.SHIFT_JIS_ENCODING, "SJIS");
+        }
 
-      private static void doTest(byte[] bytes, String charsetName)
-      {
-         var charset = Encoding.GetEncoding(charsetName);
-         String guessedName = StringUtils.guessEncoding(bytes, null);
-         var guessedEncoding = Encoding.GetEncoding(guessedName);
-         Assert.AreEqual(charset, guessedEncoding);
-      }
+        private static void doTest(byte[] bytes, Encoding encoding, String encodingName)
+        {
+            Encoding guessedCharset = StringUtils.guessCharset(bytes, null);
+            String guessedEncoding = StringUtils.guessEncoding(bytes, null);
+            Assert.AreEqual(encoding, guessedCharset);
+            Assert.AreEqual(encodingName, guessedEncoding);
+        }
 
-      /**
-       * Utility for printing out a string in given encoding as a Java statement, since it's better
-       * to write that into the Java source file rather than risk character encoding issues in the 
-       * source file itself
-       */
-      public static void main(String[] args)
-      {
-         var text = args[0];
-         var charset = Encoding.GetEncoding(args[1]);
-         var declaration = new StringBuilder();
-         declaration.Append("new byte[] { ");
-         foreach (byte b in charset.GetBytes(text))
-         {
-            declaration.Append("(byte) 0x");
-            declaration.Append((b & 0xFF).ToString("X"));
-            declaration.Append(", ");
-         }
-         declaration.Append('}');
-         Console.WriteLine(declaration);
-      }
-   }
+        /**
+         * Utility for printing out a string in given encoding as a Java statement, since it's better
+         * to write that into the Java source file rather than risk character encoding issues in the
+         * source file itself
+         */
+        public static void main(String[] args)
+        {
+            var text = args[0];
+            var charset = Encoding.GetEncoding(args[1]);
+            var declaration = new StringBuilder();
+            declaration.Append("new byte[] { ");
+            foreach (byte b in charset.GetBytes(text))
+            {
+                declaration.Append("(byte) 0x");
+                declaration.Append((b & 0xFF).ToString("X"));
+                declaration.Append(", ");
+            }
+            declaration.Append('}');
+            Console.WriteLine(declaration);
+        }
+    }
 }

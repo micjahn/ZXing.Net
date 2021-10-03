@@ -44,30 +44,102 @@ namespace ZXing.Aztec.Internal
                                                 };
 
         /// <summary>
-        /// Encodes the given binary content as an Aztec symbol
+        /// Encodes the given string content as an Aztec symbol (without ECI code)
+        /// </summary>
+        /// <param name="data">input data string; must be encodable as ISO/IEC 8859-1 (Latin-1)</param>
+        /// <returns>Aztec symbol matrix with metadata</returns>
+        public static AztecCode encode(String data)
+        {
+            return encode(AztecWriter.DEFAULT_CHARSET.GetBytes(data));
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="data">input data string; must be encodable as ISO/IEC 8859-1 (Latin-1)</param>
+        /// <param name="minECCPercent">minimal percentage of error check words (According to ISO/IEC 24778:2008, a minimum of 23% + 3 words is recommended)</param>
+        /// <param name="userSpecifiedLayers">if non-zero, a user-specified value for the number of layers</param>
+        /// <returns>Aztec symbol matrix with metadata</returns>
+        public static AztecCode encode(String data, int minECCPercent, int userSpecifiedLayers)
+        {
+            return encode(data, minECCPercent, userSpecifiedLayers, null, false);
+        }
+
+        /// <summary>
+        /// Encodes the given string content as an Aztec symbol
         /// </summary>
         /// <param name="data">input data string</param>
+        /// <param name="minECCPercent">minimal percentage of error check words (According to ISO/IEC 24778:2008, a minimum of 23% + 3 words is recommended)</param>
+        /// <param name="userSpecifiedLayers">if non-zero, a user-specified value for the number of layers</param>
+        /// <param name="encoding">character set in which to encode string using ECI; if null, no ECI code will be inserted, and the string must be encodable as ISO/IEC 8859-1 (Latin-1), the default encoding of the symbol.</param>
         /// <returns>Aztec symbol matrix with metadata</returns>
+        public static AztecCode encode(String data, int minECCPercent, int userSpecifiedLayers, System.Text.Encoding encoding)
+        {
+            return encode(data, minECCPercent, userSpecifiedLayers, encoding, false);
+        }
 
+        /// <summary>
+        /// Encodes the given string content as an Aztec symbol
+        /// </summary>
+        /// <param name="data">input data string</param>
+        /// <param name="minECCPercent">minimal percentage of error check words (According to ISO/IEC 24778:2008, a minimum of 23% + 3 words is recommended)</param>
+        /// <param name="userSpecifiedLayers">if non-zero, a user-specified value for the number of layers</param>
+        /// <param name="encoding">character set in which to encode string using ECI; if null, no ECI code will be inserted, and the string must be encodable as ISO/IEC 8859-1 (Latin-1), the default encoding of the symbol.</param>
+        /// <returns>Aztec symbol matrix with metadata</returns>
+        public static AztecCode encode(String data, int minECCPercent, int userSpecifiedLayers, System.Text.Encoding encoding, bool disableEci)
+        {
+            byte[] bytes = (null != encoding ? encoding : AztecWriter.DEFAULT_CHARSET).GetBytes(data);
+            return encode(bytes, minECCPercent, userSpecifiedLayers, encoding, disableEci);
+        }
+
+        /// <summary>
+        /// Encodes the given binary content as an Aztec symbol (without ECI code)
+        /// </summary>
+        /// <param name="data">input data</param>
+        /// <returns>Aztec symbol matrix with metadata</returns>
         public static AztecCode encode(byte[] data)
         {
-            return encode(data, DEFAULT_EC_PERCENT, DEFAULT_AZTEC_LAYERS);
+            return encode(data, DEFAULT_EC_PERCENT, DEFAULT_AZTEC_LAYERS, null, false);
+        }
+
+        /// <summary>
+        /// Encodes the given binary content as an Aztec symbol (without ECI code)
+        /// </summary>
+        /// <param name="data">input data string</param>
+        /// <param name="minECCPercent">minimal percentage of error check words (According to ISO/IEC 24778:2008, a minimum of 23% + 3 words is recommended)</param>
+        /// <param name="userSpecifiedLayers">if non-zero, a user-specified value for the number of layers</param>
+        /// <returns>Aztec symbol matrix with metadata</returns>
+        public static AztecCode encode(byte[] data, int minECCPercent, int userSpecifiedLayers)
+        {
+            return encode(data, minECCPercent, userSpecifiedLayers, null, false);
         }
 
         /// <summary>
         /// Encodes the given binary content as an Aztec symbol
         /// </summary>
         /// <param name="data">input data string</param>
-        /// <param name="minECCPercent">minimal percentage of error check words (According to ISO/IEC 24778:2008,
-        /// a minimum of 23% + 3 words is recommended)</param>
+        /// <param name="minECCPercent">minimal percentage of error check words (According to ISO/IEC 24778:2008, a minimum of 23% + 3 words is recommended)</param>
         /// <param name="userSpecifiedLayers">if non-zero, a user-specified value for the number of layers</param>
-        /// <returns>
-        /// Aztec symbol matrix with metadata
-        /// </returns>
-        public static AztecCode encode(byte[] data, int minECCPercent, int userSpecifiedLayers)
+        /// <param name="encoding">character set to mark using ECI; if null, no ECI code will be inserted, and the default encoding of ISO/IEC 8859-1 will be assuming by readers.</param>
+        /// <returns>Aztec symbol matrix with metadata</returns>
+
+        public static AztecCode encode(byte[] data, int minECCPercent, int userSpecifiedLayers, System.Text.Encoding encoding)
+        {
+            return encode(data, minECCPercent, userSpecifiedLayers, encoding, false);
+        }
+
+        /// <summary>
+        /// Encodes the given binary content as an Aztec symbol
+        /// </summary>
+        /// <param name="data">input data string</param>
+        /// <param name="minECCPercent">minimal percentage of error check words (According to ISO/IEC 24778:2008, a minimum of 23% + 3 words is recommended)</param>
+        /// <param name="userSpecifiedLayers">if non-zero, a user-specified value for the number of layers</param>
+        /// <param name="encoding">character set to mark using ECI; if null, no ECI code will be inserted, and the default encoding of ISO/IEC 8859-1 will be assuming by readers.</param>
+        /// <param name="disableEci">if true, don't add ECI segment, regardless if encoding ist set</param>
+        /// <returns>Aztec symbol matrix with metadata</returns>
+        public static AztecCode encode(byte[] data, int minECCPercent, int userSpecifiedLayers, System.Text.Encoding encoding, bool disableEci)
         {
             // High-level encode
-            var bits = new HighLevelEncoder(data).encode();
+            BitArray bits = new HighLevelEncoder(data, encoding, disableEci).encode();
 
             // stuff bits and choose symbol size
             int eccBits = bits.Size * minECCPercent / 100 + 11;

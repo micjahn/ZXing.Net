@@ -114,10 +114,19 @@ namespace ZXing.Common
         }
 
         /// <param name="name">character set ECI encoding name</param>
-        /// <returns><see cref="CharacterSetECI"/> representing ECI for character encoding, or null if it is legalbut unsupported</returns>
+        /// <returns><see cref="CharacterSetECI"/> representing ECI for character encoding, or null if it is legal but unsupported</returns>
         public static CharacterSetECI getCharacterSetECIByName(String name)
         {
             return NAME_TO_ECI[name.ToUpper()];
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="encoding">encoding</param>
+        /// <returns>CharacterSetECI representing ECI for character encoding, or null if it is legal but unsupported</returns>
+        public static CharacterSetECI getCharacterSetECI(System.Text.Encoding encoding)
+        {
+            return NAME_TO_ECI[encoding.WebName.ToUpper()];
         }
 
         public static System.Text.Encoding getEncoding(CharacterSetECI charsetECI)
@@ -147,25 +156,25 @@ namespace ZXing.Common
             }
 #endif
 #if WindowsCE
-         catch (PlatformNotSupportedException)
-         {
-            try
+            catch (PlatformNotSupportedException)
             {
-               // WindowsCE doesn't support all encodings. But it is device depended.
-               // So we try here the some different ones
-               if (encodingName == StringUtils.ISO88591)
-               {
-                  encoding = Encoding.GetEncoding(1252);
-               }
-               else
-               {
-                  encoding = Encoding.GetEncoding(StringUtils.UTF8);
-               }
+                try
+                {
+                    // WindowsCE doesn't support all encodings. But it is device depended.
+                    // So we try here the some different ones
+                    if (encodingName == StringUtils.ISO88591)
+                    {
+                        encoding = Encoding.GetEncoding(1252);
+                    }
+                    else
+                    {
+                        encoding = Encoding.GetEncoding(StringUtils.UTF8);
+                    }
+                }
+                catch (Exception)
+                {
+                }
             }
-            catch (Exception)
-            {
-            }
-         }
 #endif
             catch (Exception)
             {

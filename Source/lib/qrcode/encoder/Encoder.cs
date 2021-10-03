@@ -40,7 +40,7 @@ namespace ZXing.QrCode.Internal
          25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1,  // 0x50-0x5f
       };
 
-        internal static String DEFAULT_BYTE_MODE_ENCODING = "ISO-8859-1";
+        internal static Encoding DEFAULT_BYTE_MODE_ENCODING = StringUtils.ISO88591_ENCODING;
 
         // The mask penalty calculation is complicated.  See Table 21 of JISX0510:2004 (p.45) for details.
         // Basically it applies four rules and summate all penalties.
@@ -84,18 +84,24 @@ namespace ZXing.QrCode.Internal
             bool hasEncodingHint = hints != null && hints.ContainsKey(EncodeHintType.CHARACTER_SET);
 
 #if !SILVERLIGHT || WINDOWS_PHONE
-            var encoding = hints == null || !hints.ContainsKey(EncodeHintType.CHARACTER_SET) ? null : (String)hints[EncodeHintType.CHARACTER_SET];
-            if (encoding == null)
+            var encoding = DEFAULT_BYTE_MODE_ENCODING;
+            var encodingName = hasEncodingHint ? (String)hints[EncodeHintType.CHARACTER_SET] : null;
+            if (encodingName != null)
             {
-                encoding = DEFAULT_BYTE_MODE_ENCODING;
+                var eci = CharacterSetECI.getCharacterSetECIByName(encodingName);
+                if (eci == null)
+                    throw new WriterException(string.Format("Encoding {0} isn't supported", encodingName));
+                encoding = CharacterSetECI.getEncoding(eci);
+                if (encoding == null)
+                    throw new WriterException(string.Format("Encoding {0} isn't supported", encodingName));
             }
             var generateECI = hasEncodingHint || !DEFAULT_BYTE_MODE_ENCODING.Equals(encoding);
 #else
-         // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
-         const string encoding = "UTF-8";
-         // caller of the method can only control if the ECI segment should be written
-         // character set is fixed to UTF-8; but some scanners doesn't like the ECI segment
-         var generateECI = hasEncodingHint;
+            // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
+            var encoding = StringUtils.UTF8;
+            // caller of the method can only control if the ECI segment should be written
+            // character set is fixed to UTF-8; but some scanners doesn't like the ECI segment
+            var generateECI = hasEncodingHint;
 #endif
 
             // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
@@ -109,7 +115,7 @@ namespace ZXing.QrCode.Internal
             // Append ECI segment if applicable
             if (mode == Mode.BYTE && generateECI)
             {
-                var eci = CharacterSetECI.getCharacterSetECIByName(encoding);
+                var eci = CharacterSetECI.getCharacterSetECI(encoding);
                 if (eci != null)
                 {
                     var eciIsExplicitDisabled = (hints != null && hints.ContainsKey(EncodeHintType.DISABLE_ECI) && hints[EncodeHintType.DISABLE_ECI] != null && Convert.ToBoolean(hints[EncodeHintType.DISABLE_ECI].ToString()));
@@ -258,9 +264,9 @@ namespace ZXing.QrCode.Internal
         /// <param name="content">The content.</param>
         /// <param name="encoding">The encoding.</param>
         /// <returns></returns>
-        private static Mode chooseMode(String content, String encoding)
+        private static Mode chooseMode(String content, Encoding encoding)
         {
-            if ("Shift_JIS".Equals(encoding) && isOnlyDoubleByteKanji(content))
+            if (StringUtils.SHIFT_JIS_ENCODING != null && StringUtils.SHIFT_JIS_ENCODING.Equals(encoding) && isOnlyDoubleByteKanji(content))
             {
                 // Choose Kanji mode if all input are double-byte characters
                 return Mode.KANJI;
@@ -301,7 +307,9 @@ namespace ZXing.QrCode.Internal
             byte[] bytes;
             try
             {
-                bytes = Encoding.GetEncoding("Shift_JIS").GetBytes(content);
+                if (StringUtils.SHIFT_JIS_ENCODING == null)
+                    return false;
+                bytes = StringUtils.SHIFT_JIS_ENCODING.GetBytes(content);
             }
             catch (Exception)
             {
@@ -641,7 +649,7 @@ namespace ZXing.QrCode.Internal
         internal static void appendBytes(String content,
                                 Mode mode,
                                 BitArray bits,
-                                String encoding)
+                                Encoding encoding)
         {
             if (mode.Equals(Mode.NUMERIC))
                 appendNumericBytes(content, bits);
@@ -722,39 +730,9 @@ namespace ZXing.QrCode.Internal
             }
         }
 
-        internal static void append8BitBytes(String content, BitArray bits, String encoding)
+        internal static void append8BitBytes(String content, BitArray bits, Encoding encoding)
         {
-            byte[] bytes;
-            try
-            {
-                bytes = Encoding.GetEncoding(encoding).GetBytes(content);
-            }
-#if WindowsCE
-         catch (PlatformNotSupportedException)
-         {
-            try
-            {
-               // WindowsCE doesn't support all encodings. But it is device depended.
-               // So we try here the some different ones
-               if (encoding == "ISO-8859-1")
-               {
-                  bytes = Encoding.GetEncoding(1252).GetBytes(content);
-               }
-               else
-               {
-                  bytes = Encoding.GetEncoding("UTF-8").GetBytes(content);
-               }
-            }
-            catch (Exception uee)
-            {
-               throw new WriterException(uee.Message, uee);
-            }
-         }
-#endif
-            catch (Exception uee)
-            {
-                throw new WriterException(uee.Message, uee);
-            }
+            var bytes = encoding.GetBytes(content);
             foreach (byte b in bytes)
             {
                 bits.appendBits(b, 8);
@@ -763,15 +741,9 @@ namespace ZXing.QrCode.Internal
 
         internal static void appendKanjiBytes(String content, BitArray bits)
         {
-            byte[] bytes;
-            try
-            {
-                bytes = Encoding.GetEncoding("Shift_JIS").GetBytes(content);
-            }
-            catch (Exception uee)
-            {
-                throw new WriterException(uee.Message, uee);
-            }
+            if (StringUtils.SHIFT_JIS_ENCODING == null)
+                throw new WriterException("Encoding SHIFT_JIS isn't supported at this platform");
+            var bytes = Encoding.GetEncoding("Shift_JIS").GetBytes(content);
             if (bytes.Length % 2 != 0)
             {
                 throw new WriterException("Kanji byte size not even");

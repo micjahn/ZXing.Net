@@ -31,8 +31,6 @@ namespace ZXing.Aztec.Test
    /// </summary>
    public class DetectorTest
    {
-      private static readonly Encoding LATIN_1 = Encoding.GetEncoding("ISO-8859-1");
-
       [Test]
       public void testErrorInParameterLocatorZeroZero()
       {
@@ -57,7 +55,7 @@ namespace ZXing.Aztec.Test
       // Test that we can tolerate errors in the parameter locator bits
       private static void testErrorInParameterLocator(String data)
       {
-         var aztec = Internal.Encoder.encode(LATIN_1.GetBytes(data), 25, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
+         var aztec = Internal.Encoder.encode(data, 25, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
          var random = new Random(aztec.Matrix.GetHashCode()); // pseudo-random, but deterministic
          var layers = aztec.Layers;
          var compact = aztec.isCompact;

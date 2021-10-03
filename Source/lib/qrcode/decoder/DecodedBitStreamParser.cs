@@ -194,28 +194,11 @@ namespace ZXing.QrCode.Internal
                 count--;
             }
 
-            try
-            {
-                result.Append(Encoding.GetEncoding(StringUtils.GB2312).GetString(buffer, 0, buffer.Length));
-            }
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || MONOANDROID || MONOTOUCH)
-         catch (ArgumentException)
-         {
-            try
-            {
-               // Silverlight only supports a limited number of character sets, trying fallback to UTF-8
-               result.Append(Encoding.GetEncoding("UTF-8").GetString(buffer, 0, buffer.Length));
-            }
-            catch (Exception)
-            {
-               return false;
-            }
-         }
-#endif
-            catch (Exception)
-            {
-                return false;
-            }
+            var encoding = StringUtils.GB2312_ENCODING;
+            if (encoding == null)
+                encoding = StringUtils.PLATFORM_DEFAULT_ENCODING_T;
+
+            result.Append(encoding.GetString(buffer, 0, buffer.Length));
 
             return true;
         }
@@ -255,28 +238,12 @@ namespace ZXing.QrCode.Internal
                 count--;
             }
             // Shift_JIS may not be supported in some environments:
-            try
-            {
-                result.Append(Encoding.GetEncoding(StringUtils.SHIFT_JIS).GetString(buffer, 0, buffer.Length));
-            }
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || MONOANDROID || MONOTOUCH)
-         catch (ArgumentException)
-         {
-            try
-            {
-               // Silverlight only supports a limited number of character sets, trying fallback to UTF-8
-               result.Append(Encoding.GetEncoding("UTF-8").GetString(buffer, 0, buffer.Length));
-            }
-            catch (Exception)
-            {
-               return false;
-            }
-         }
-#endif
-            catch (Exception)
-            {
-                return false;
-            }
+            var encoding = StringUtils.SHIFT_JIS_ENCODING;
+            if (encoding == null)
+                encoding = StringUtils.PLATFORM_DEFAULT_ENCODING_T;
+
+            result.Append(encoding.GetString(buffer, 0, buffer.Length));
+            
             return true;
         }
 
@@ -298,7 +265,7 @@ namespace ZXing.QrCode.Internal
             {
                 readBytes[i] = (byte)bits.readBits(8);
             }
-            String encoding;
+            Encoding encoding;
             if (currentCharacterSetECI == null)
             {
                 // The spec isn't clear on this mode; see
@@ -306,56 +273,18 @@ namespace ZXing.QrCode.Internal
                 // upon decoding. I have seen ISO-8859-1 used as well as
                 // Shift_JIS -- without anything like an ECI designator to
                 // give a hint.
-                encoding = StringUtils.guessEncoding(readBytes, hints);
+                encoding = StringUtils.guessCharset(readBytes, hints);
             }
             else
             {
-                encoding = currentCharacterSetECI.EncodingName;
+                encoding = CharacterSetECI.getEncoding(currentCharacterSetECI.EncodingName);
             }
-            try
+            if (encoding == null)
             {
-                result.Append(Encoding.GetEncoding(encoding).GetString(readBytes, 0, readBytes.Length));
+                encoding = StringUtils.PLATFORM_DEFAULT_ENCODING_T;
             }
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || MONOANDROID || MONOTOUCH)
-         catch (ArgumentException)
-         {
-            try
-            {
-               // Silverlight only supports a limited number of character sets, trying fallback to UTF-8
-               result.Append(Encoding.GetEncoding("UTF-8").GetString(readBytes, 0, readBytes.Length));
-            }
-            catch (Exception)
-            {
-               return false;
-            }
-         }
-#endif
-#if WindowsCE
-         catch (PlatformNotSupportedException)
-         {
-            try
-            {
-               // WindowsCE doesn't support all encodings. But it is device depended.
-               // So we try here the some different ones
-               if (encoding == "ISO-8859-1")
-               {
-                  result.Append(Encoding.GetEncoding(1252).GetString(readBytes, 0, readBytes.Length));
-               }
-               else
-               {
-                  result.Append(Encoding.GetEncoding("UTF-8").GetString(readBytes, 0, readBytes.Length));
-               }
-            }
-            catch (Exception)
-            {
-               return false;
-            }
-         }
-#endif
-            catch (Exception)
-            {
-                return false;
-            }
+            result.Append(encoding.GetString(readBytes, 0, readBytes.Length));
+
             byteSegments.Add(readBytes);
 
             return true;

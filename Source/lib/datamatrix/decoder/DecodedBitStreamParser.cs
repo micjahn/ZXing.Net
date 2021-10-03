@@ -650,12 +650,12 @@ namespace ZXing.Datamatrix.Internal
             {
 #if (WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || WindowsCE || PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
 #if WindowsCE
-            result.Append(Encoding.GetEncoding(1252).GetString(bytes, 0, bytes.Length));
+                result.Append(Encoding.GetEncoding(1252).GetString(bytes, 0, bytes.Length));
 #else
-                result.Append(Encoding.GetEncoding("ISO-8859-1").GetString(bytes, 0, bytes.Length));
+                result.Append(Encoding.GetEncoding(StringUtils.ISO88591).GetString(bytes, 0, bytes.Length));
 #endif
 #else
-            result.Append(Encoding.GetEncoding("ISO-8859-1").GetString(bytes));
+                result.Append(Encoding.GetEncoding(StringUtils.ISO88591).GetString(bytes));
 #endif
             }
             catch (Exception uee)

@@ -99,6 +99,8 @@ namespace ZXing.Aztec.Internal
         // A map showing the available shift codes.  (The shifts to BINARY are not shown
         internal static readonly int[][] SHIFT_TABLE = new int[6][]; // mode shift codes, per table
         private readonly byte[] text;
+        private readonly System.Text.Encoding encoding;
+        private readonly bool disableEci;
 
         static HighLevelEncoder()
         {
@@ -175,6 +177,32 @@ namespace ZXing.Aztec.Internal
         public HighLevelEncoder(byte[] text)
         {
             this.text = text;
+            this.encoding = null;
+            this.disableEci = false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="encoding"></param>
+        public HighLevelEncoder(byte[] text, System.Text.Encoding encoding)
+        {
+            this.text = text;
+            this.encoding = encoding;
+            this.disableEci = false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="encoding"></param>
+        public HighLevelEncoder(byte[] text, System.Text.Encoding encoding, bool disableEci)
+        {
+            this.text = text;
+            this.encoding = encoding;
+            this.disableEci = disableEci;
         }
 
         /// <summary>
@@ -183,8 +211,19 @@ namespace ZXing.Aztec.Internal
         /// <returns>text represented by this encoder encoded as a <see cref="BitArray"/></returns>
         public BitArray encode()
         {
+            State initialState = State.INITIAL_STATE;
+            if (encoding != null && !disableEci)
+            {
+                CharacterSetECI eci = CharacterSetECI.getCharacterSetECI(encoding);
+                if (null == eci)
+                {
+                    throw new ArgumentException("No ECI code for character set " + encoding.WebName);
+                }
+                initialState = initialState.appendFLGn(eci.Value);
+            }
             ICollection<State> states = new Collection<State>();
-            states.Add(State.INITIAL_STATE);
+
+            states.Add(initialState);
             for (int index = 0; index < text.Length; index++)
             {
                 int pairCode;

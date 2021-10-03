@@ -175,9 +175,9 @@ namespace ZXing.PDF417.Internal
             //the codewords 0..928 are encoded as Unicode characters
             var sb = new StringBuilder(msg.Length);
 
-            if (encoding != null && !disableEci && String.Compare(DEFAULT_ENCODING_NAME, encoding.WebName, StringComparison.Ordinal) != 0)
+            if (encoding != null && !disableEci && String.Compare(DEFAULT_ENCODING_NAME, encoding.WebName.ToUpper(), StringComparison.Ordinal) != 0)
             {
-                CharacterSetECI eci = CharacterSetECI.getCharacterSetECIByName(encoding.WebName);
+                CharacterSetECI eci = CharacterSetECI.getCharacterSetECI(encoding);
                 if (eci != null)
                 {
                     encodingECI(eci.Value, sb);

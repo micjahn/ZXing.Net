@@ -75,6 +75,32 @@ namespace ZXing.Aztec.Internal
             get { return bitCount; }
         }
 
+        public State appendFLGn(int eci)
+        {
+            State result = shiftAndAppend(HighLevelEncoder.MODE_PUNCT, 0); // 0: FLG(n)
+            Token token = result.token;
+            int bitsAdded = 3;
+            if (eci < 0)
+            {
+                token = token.add(0, 3); // 0: FNC1
+            }
+            else if (eci > 999999)
+            {
+                throw new ArgumentException("ECI code must be between 0 and 999999");
+            }
+            else
+            {
+                byte[] eciDigits = AztecWriter.DEFAULT_CHARSET.GetBytes(eci.ToString());
+                token = token.add(eciDigits.Length, 3); // 1-6: number of ECI digits
+                for (int ii = 0; ii < eciDigits.Length; ii++)
+                {
+                    token = token.add(eciDigits[ii] - '0' + 2, 4);
+                }
+                bitsAdded += eciDigits.Length * 4;
+            }
+            return new State(token, mode, 0, bitCount + bitsAdded);
+        }
+
         /// <summary>
         /// Create a new state representing this state with a latch to a (not
         /// necessary different) mode, and then a code.

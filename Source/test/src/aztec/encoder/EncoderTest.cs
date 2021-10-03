@@ -36,7 +36,7 @@ namespace ZXing.Aztec.Test
     [TestFixture]
     public sealed class EncoderTest
     {
-        private static readonly Encoding LATIN_1 = Encoding.GetEncoding("ISO-8859-1");
+        private static readonly Encoding ISO_8859_1 = StringUtils.ISO88591_ENCODING;
 
         private static readonly Regex SPACES = new Regex("\\s+"
 #if !SILVERLIGHT
@@ -132,20 +132,30 @@ namespace ZXing.Aztec.Test
                 "X       X           X   X   X     X X   X               X     X     X X X         \r\n");
         }
 
-        [Test]
-        public void testAztecWriter()
+        [TestCase("Espa\u00F1ol", null, 25, true, 1, false)] // Without ECI (implicit ISO-8859-1)
+        [TestCase("Espa\u00F1ol", "ISO-8859-1", 25, true, 2, false)] // Explicit ISO-8859-1
+        [TestCase("Espa\u00F1ol", "ISO-8859-1", 25, true, 1, true)] // Explicit ISO-8859-1, disable ECI segment
+        [TestCase("\u20AC 1 sample data.", "WINDOWS-1252", 25, true, 2, false)] // Standard ISO-8859-1 cannot encode Euro symbol; Windows-1252 superset can
+        [TestCase("\u20AC 1 sample data.", "ISO-8859-15", 25, true, 2, false)]
+        [TestCase("\u20AC 1 sample data.", "UTF-8", 25, true, 2, false)]
+        [TestCase("\u20AC 1 sample data.", "UTF-8", 100, true, 3, false)]
+        [TestCase("\u20AC 1 sample data.", "UTF-8", 300, true, 4, false)]
+        [TestCase("\u20AC 1 sample data.", "UTF-8", 500, false, 5, false)]
+        [TestCase("The capital of Japan is named \u6771\u4EAC.", "SHIFT_JIS", 25, true, 3, false)]
+        public void testAztecWriter(string content, string charset, int eccPercent, bool compact, int layers, bool disableEci)
         {
-            testWriter("\u20AC 1 sample data.", "ISO-8859-1", 25, true, 2);
-            testWriter("\u20AC 1 sample data.", "ISO-8859-15", 25, true, 2);
-            testWriter("\u20AC 1 sample data.", "UTF-8", 25, true, 2);
-            testWriter("\u20AC 1 sample data.", "UTF-8", 100, true, 3);
-            testWriter("\u20AC 1 sample data.", "UTF-8", 300, true, 4);
-            testWriter("\u20AC 1 sample data.", "UTF-8", 500, false, 5);
+            var encoding = charset != null ? Encoding.GetEncoding(charset) : null;
+            testWriter(content, encoding, eccPercent, compact, layers, disableEci);
+        }
+
+        [Test]
+        public void testAztecWriterDefaults()
+        {
             // Test AztecWriter defaults
             const string data = "In ut magna vel mauris malesuada";
             var writer = new AztecWriter();
             var matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0);
-            var aztec = Internal.Encoder.encode(Encoding.GetEncoding("ISO8859-1").GetBytes(data),
+            var aztec = Internal.Encoder.encode(data,
                 Internal.Encoder.DEFAULT_EC_PERCENT, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
             var expectedMatrix = aztec.Matrix;
             Assert.AreEqual(matrix, expectedMatrix);
@@ -265,33 +275,27 @@ namespace ZXing.Aztec.Test
                              " hendrerit felis turpis nec lorem.", false, 31);
         }
 
-        [Test]
-        public void testGenerateModeMessage()
+        [TestCase(true, 2, 29, ".X .XXX.. ...X XX.. ..X .XX. .XX.X")]
+        [TestCase(true, 4, 64, "XX XXXXXX .X.. ...X ..XX .X.. XX..")]
+        [TestCase(false, 21, 660, "X.X.. .X.X..X..XX .XXX ..X.. .XXX. .X... ..XXX")]
+        [TestCase(false, 32, 4096, "XXXXX XXXXXXXXXXX X.X. ..... XXX.X ..X.. X.XXX")]
+        public void testGenerateModeMessage(bool compact, int layers, int words, String expected)
         {
-            testModeMessage(true, 2, 29, ".X .XXX.. ...X XX.. ..X .XX. .XX.X");
-            testModeMessage(true, 4, 64, "XX XXXXXX .X.. ...X ..XX .X.. XX..");
-            testModeMessage(false, 21, 660, "X.X.. .X.X..X..XX .XXX ..X.. .XXX. .X... ..XXX");
-            testModeMessage(false, 32, 4096, "XXXXX XXXXXXXXXXX X.X. ..... XXX.X ..X.. X.XXX");
+            testModeMessage(compact, layers, words, expected);
         }
 
-        [Test]
-        public void testStuffBits()
-        {
-            testStuffBits(5, ".X.X. X.X.X .X.X.",
-                ".X.X. X.X.X .X.X.");
-            testStuffBits(5, ".X.X. ..... .X.X",
-                ".X.X. ....X ..X.X");
-            testStuffBits(3, "XX. ... ... ..X XXX .X. ..",
-                "XX. ..X ..X ..X ..X .XX XX. .X. ..X");
-            testStuffBits(6, ".X.X.. ...... ..X.XX",
-                ".X.X.. .....X. ..X.XX XXXX.");
-            testStuffBits(6, ".X.X.. ...... ...... ..X.X.",
-                ".X.X.. .....X .....X ....X. X.XXXX");
-            testStuffBits(6, ".X.X.. XXXXXX ...... ..X.XX",
-                ".X.X.. XXXXX. X..... ...X.X XXXXX.");
-            testStuffBits(6,
+        [TestCase(5, ".X.X. X.X.X .X.X.", ".X.X. X.X.X .X.X.")]
+        [TestCase(5, ".X.X. ..... .X.X", ".X.X. ....X ..X.X")]
+        [TestCase(3, "XX. ... ... ..X XXX .X. ..", "XX. ..X ..X ..X ..X .XX XX. .X. ..X")]
+        [TestCase(6, ".X.X.. ...... ..X.XX", ".X.X.. .....X. ..X.XX XXXX.")]
+        [TestCase(6, ".X.X.. ...... ...... ..X.X.", ".X.X.. .....X .....X ....X. X.XXXX")]
+        [TestCase(6, ".X.X.. XXXXXX ...... ..X.XX", ".X.X.. XXXXX. X..... ...X.X XXXXX.")]
+        [TestCase(6,
                 "...... ..XXXX X..XX. .X.... .X.X.X .....X .X.... ...X.X .....X ....XX ..X... ....X. X..XXX X.XX.X",
-                ".....X ...XXX XX..XX ..X... ..X.X. X..... X.X... ....X. X..... X....X X..X.. .....X X.X..X XXX.XX .XXXXX");
+                ".....X ...XXX XX..XX ..X... ..X.X. X..... X.X... ....X. X..... X....X X..X.. .....X X.X..X XXX.XX .XXXXX")]
+        public void testStuffBitsTests(int wordSize, String bits, String expected)
+        {
+            testStuffBits(wordSize, bits, expected);
         }
 
         [Test]
@@ -358,7 +362,7 @@ namespace ZXing.Aztec.Test
             StringBuilder sbBuild = new StringBuilder();
             for (int i = 0; i <= 3000; i++)
             {
-                sbBuild.Append((char) (128 + (i % 30)));
+                sbBuild.Append((char)(128 + (i % 30)));
             }
 
             string sb = sbBuild.ToString();
@@ -462,7 +466,7 @@ namespace ZXing.Aztec.Test
         [Test]
         public void testUserSpecifiedLayers()
         {
-            byte[] alphabet = LATIN_1.GetBytes("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             AztecCode aztec = Internal.Encoder.encode(alphabet, 25, -2);
             Assert.AreEqual(2, aztec.Layers);
             Assert.IsTrue(aztec.isCompact);
@@ -498,10 +502,9 @@ namespace ZXing.Aztec.Test
             const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             // encodes as 26 * 5 * 4 = 520 bits of data
             const string alphabet4 = alphabet + alphabet + alphabet + alphabet;
-            byte[] data = LATIN_1.GetBytes(alphabet4);
             try
             {
-                Internal.Encoder.encode(data, 0, -4);
+                Internal.Encoder.encode(alphabet4, 0, -4);
                 Assert.Fail("Encode should have failed.  Text can't fit in 1-layer compact");
             }
             catch (ArgumentException)
@@ -509,13 +512,13 @@ namespace ZXing.Aztec.Test
             }
 
             // If we just try to encode it normally, it will go to a non-compact 4 layer
-            AztecCode aztecCode = Internal.Encoder.encode(data, 0, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
+            AztecCode aztecCode = Internal.Encoder.encode(alphabet4, 0, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
             Assert.IsFalse(aztecCode.isCompact);
             Assert.AreEqual(4, aztecCode.Layers);
 
             // But shortening the string to 100 bytes (500 bits of data), compact works fine, even if we
             // include more error checking.
-            aztecCode = Internal.Encoder.encode(LATIN_1.GetBytes(alphabet4.Substring(0, 100)), 10, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
+            aztecCode = Internal.Encoder.encode(alphabet4.Substring(0, 100), 10, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
             Assert.IsTrue(aztecCode.isCompact);
             Assert.AreEqual(4, aztecCode.Layers);
         }
@@ -524,7 +527,7 @@ namespace ZXing.Aztec.Test
 
         private static void testEncode(String data, bool compact, int layers, String expected)
         {
-            AztecCode aztec = Internal.Encoder.encode(LATIN_1.GetBytes(data), 33, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
+            AztecCode aztec = Internal.Encoder.encode(data, 33, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
             Assert.AreEqual(compact, aztec.isCompact, "Unexpected symbol format (compact)");
             Assert.AreEqual(layers, aztec.Layers, "Unexpected nr. of layers");
             BitMatrix matrix = aztec.Matrix;
@@ -533,7 +536,7 @@ namespace ZXing.Aztec.Test
 
         private static void testEncodeDecode(String data, bool compact, int layers)
         {
-            AztecCode aztec = Internal.Encoder.encode(LATIN_1.GetBytes(data), 25, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
+            AztecCode aztec = Internal.Encoder.encode(data, 25, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
             Assert.AreEqual(compact, aztec.isCompact, "Unexpected symbol format (compact)");
             Assert.AreEqual(layers, aztec.Layers, "Unexpected nr. of layers");
             BitMatrix matrix = aztec.Matrix;
@@ -554,29 +557,30 @@ namespace ZXing.Aztec.Test
 
 
         private static void testWriter(String data,
-            String charset,
+            Encoding encoding,
             int eccPercent,
             bool compact,
-            int layers)
+            int layers,
+            bool disableEci)
         {
-            // 1. Perform an encode-decode round-trip because it can be lossy.
-            // 2. Aztec Decoder currently always decodes the data with a LATIN-1 charset:
-            var byteData = Encoding.GetEncoding(charset).GetBytes(data);
-            var expectedData = LATIN_1.GetString(byteData, 0, byteData.Length);
+            // Perform an encode-decode round-trip because it can be lossy.
             var hints = new Dictionary<EncodeHintType, Object>()
                 ;
-            hints[EncodeHintType.CHARACTER_SET] = charset;
+            if (encoding != null)
+                hints[EncodeHintType.CHARACTER_SET] = encoding.WebName.ToUpper();
+            if (disableEci)
+                hints[EncodeHintType.DISABLE_ECI] = true;
             hints[EncodeHintType.ERROR_CORRECTION] = eccPercent;
             var writer = new AztecWriter();
             var matrix = writer.encode(data, BarcodeFormat.AZTEC, 0, 0, hints);
-            var aztec = Internal.Encoder.encode(Encoding.GetEncoding(charset).GetBytes(data), eccPercent, Internal.Encoder.DEFAULT_AZTEC_LAYERS);
+            var aztec = Internal.Encoder.encode(data, eccPercent, Internal.Encoder.DEFAULT_AZTEC_LAYERS, encoding, disableEci);
             Assert.AreEqual(compact, aztec.isCompact, "Unexpected symbol format (compact)");
             Assert.AreEqual(layers, aztec.Layers, "Unexpected nr. of layers");
             var matrix2 = aztec.Matrix;
             Assert.AreEqual(matrix, matrix2);
             var r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers);
             var res = new Internal.Decoder().decode(r);
-            Assert.AreEqual(expectedData, res.Text);
+            Assert.AreEqual(data, res.Text);
             // Check error correction by introducing up to eccPercent/2 errors
             int ecWords = aztec.CodeWords * eccPercent / 100 / 2;
             var random = getPseudoRandom();
@@ -593,7 +597,7 @@ namespace ZXing.Aztec.Test
             }
             r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers);
             res = new Internal.Decoder().decode(r);
-            Assert.AreEqual(expectedData, res.Text);
+            Assert.AreEqual(data, res.Text);
         }
 
         private static Random getPseudoRandom()
@@ -637,7 +641,7 @@ namespace ZXing.Aztec.Test
 
         private static void testHighLevelEncodeString(String s, String expectedBits)
         {
-            BitArray bits = new HighLevelEncoder(LATIN_1.GetBytes(s)).encode();
+            BitArray bits = new HighLevelEncoder(ISO_8859_1.GetBytes(s)).encode();
             String receivedBits = stripSpace(bits.ToString());
             Assert.AreEqual(stripSpace(expectedBits), receivedBits, "highLevelEncode() failed for input string: " + s);
             Assert.AreEqual(s, Internal.Decoder.highLevelDecode(toBooleanArray(bits)));
@@ -645,7 +649,7 @@ namespace ZXing.Aztec.Test
 
         private static void testHighLevelEncodeString(String s, int expectedReceivedBits)
         {
-            BitArray bits = new HighLevelEncoder(LATIN_1.GetBytes(s)).encode();
+            BitArray bits = new HighLevelEncoder(ISO_8859_1.GetBytes(s)).encode();
             int receivedBitCount = stripSpace(bits.ToString()).Length;
             Assert.AreEqual(expectedReceivedBits, receivedBitCount, "highLevelEncode() failed for input string: " + s);
             Assert.AreEqual(s, Internal.Decoder.highLevelDecode(toBooleanArray(bits)));

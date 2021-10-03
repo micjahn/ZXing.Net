@@ -29,9 +29,20 @@ namespace ZXing.Common
     {
 #if (WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || NETSTANDARD)
         public static readonly String PLATFORM_DEFAULT_ENCODING = UTF8;
+        public static readonly Encoding PLATFORM_DEFAULT_ENCODING_T = Encoding.UTF8;
 #else
-        public static readonly String PLATFORM_DEFAULT_ENCODING = Encoding.Default.WebName;
+        public static readonly String PLATFORM_DEFAULT_ENCODING = Encoding.Default.WebName.ToUpper();
+        public static readonly Encoding PLATFORM_DEFAULT_ENCODING_T = Encoding.Default;
 #endif
+        public static readonly Encoding SHIFT_JIS_ENCODING = CharacterSetECI.getEncoding(SHIFT_JIS);
+        public static readonly Encoding GB2312_ENCODING = CharacterSetECI.getEncoding(GB2312);
+        public static readonly Encoding EUC_JP_ENCODING = CharacterSetECI.getEncoding(EUC_JP);
+        public static readonly Encoding ISO88591_ENCODING = CharacterSetECI.getEncoding(ISO88591);
+        private static readonly bool ASSUME_SHIFT_JIS =
+            SHIFT_JIS_ENCODING.Equals(PLATFORM_DEFAULT_ENCODING_T) ||
+            EUC_JP_ENCODING.Equals(PLATFORM_DEFAULT_ENCODING_T);
+
+        // Retained for ABI compatibility with earlier versions
         /// <summary>
         /// SJIS
         /// </summary>
@@ -43,26 +54,42 @@ namespace ZXing.Common
         public const String EUC_JP = "EUC-JP";
         public const String UTF8 = "UTF-8";
         public const String ISO88591 = "ISO-8859-1";
-        private static readonly bool ASSUME_SHIFT_JIS =
-           String.Compare(SHIFT_JIS, PLATFORM_DEFAULT_ENCODING, StringComparison.OrdinalIgnoreCase) == 0 ||
-           String.Compare(EUC_JP, PLATFORM_DEFAULT_ENCODING, StringComparison.OrdinalIgnoreCase) == 0;
 
         /// <summary>
         /// Guesses the encoding.
         /// </summary>
         /// <param name="bytes">bytes encoding a string, whose encoding should be guessed</param>
         /// <param name="hints">decode hints if applicable</param>
-        /// <returns>name of guessed encoding; at the moment will only guess one of:
-        /// {@link #SHIFT_JIS}, {@link #UTF8}, {@link #ISO88591}, or the platform
-        /// default encoding if none of these can possibly be correct</returns>
+        /// <return> name of guessed encoding; at the moment will only guess one of:
+        /// "SJIS", "UTF8", "ISO8859_1", or the platform default encoding if none
+        /// of these can possibly be correct</return>
         public static String guessEncoding(byte[] bytes, IDictionary<DecodeHintType, object> hints)
+        {
+            var c = guessCharset(bytes, hints);
+            if (c == SHIFT_JIS_ENCODING && SHIFT_JIS_ENCODING != null)
+            {
+                return "SJIS";
+            }
+            return c.WebName.ToUpper();
+        }
+
+        /// <summary></summary>
+        /// <param name="bytes">bytes encoding a string, whose encoding should be guessed</param>
+        /// <param name="hints">decode hints if applicable</param>
+        /// <returns>Charset of guessed encoding; at the moment will only guess one of:
+        ///  {@link #SHIFT_JIS_CHARSET}, {@link StandardCharsets#UTF_8},
+        /// {@link StandardCharsets#ISO_8859_1}, or the platform default encoding if
+        /// none of these can possibly be correct</returns>
+        public static Encoding guessCharset(byte[] bytes, IDictionary<DecodeHintType, object> hints)
         {
             if (hints != null && hints.ContainsKey(DecodeHintType.CHARACTER_SET))
             {
                 String characterSet = (String)hints[DecodeHintType.CHARACTER_SET];
                 if (characterSet != null)
                 {
-                    return characterSet;
+                    var encoding = CharacterSetECI.getEncoding(characterSet);
+                    if (encoding != null)
+                        return encoding;
                 }
             }
 
@@ -223,12 +250,12 @@ namespace ZXing.Common
             // Easy -- if there is BOM or at least 1 valid not-single byte character (and no evidence it can't be UTF-8), done
             if (canBeUTF8 && (utf8bom || utf2BytesChars + utf3BytesChars + utf4BytesChars > 0))
             {
-                return UTF8;
+                return Encoding.UTF8;
             }
             // Easy -- if assuming Shift_JIS or >= 3 valid consecutive not-ascii characters (and no evidence it can't be), done
             if (canBeShiftJIS && (ASSUME_SHIFT_JIS || sjisMaxKatakanaWordLength >= 3 || sjisMaxDoubleBytesWordLength >= 3))
             {
-                return SHIFT_JIS;
+                return SHIFT_JIS_ENCODING;
             }
             // Distinguishing Shift_JIS and ISO-8859-1 can be a little tough for short words. The crude heuristic is:
             // - If we saw
@@ -238,24 +265,24 @@ namespace ZXing.Common
             if (canBeISO88591 && canBeShiftJIS)
             {
                 return (sjisMaxKatakanaWordLength == 2 && sjisKatakanaChars == 2) || isoHighOther * 10 >= length
-                    ? SHIFT_JIS : ISO88591;
+                    ? SHIFT_JIS_ENCODING : ISO88591_ENCODING;
             }
 
             // Otherwise, try in order ISO-8859-1, Shift JIS, UTF-8 and fall back to default platform encoding
             if (canBeISO88591)
             {
-                return ISO88591;
+                return ISO88591_ENCODING;
             }
             if (canBeShiftJIS)
             {
-                return SHIFT_JIS;
+                return SHIFT_JIS_ENCODING;
             }
             if (canBeUTF8)
             {
-                return UTF8;
+                return Encoding.UTF8;
             }
             // Otherwise, we take a wild guess with platform encoding
-            return PLATFORM_DEFAULT_ENCODING;
+            return PLATFORM_DEFAULT_ENCODING_T;
         }
     }
 }
