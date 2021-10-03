@@ -63,6 +63,7 @@ namespace ZXing.Datamatrix
         /// </summary>
 #if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
         [CategoryAttribute("Standard"), DescriptionAttribute("Specifies a minimum barcode size.")]
+        [TypeConverter(typeof(DimensionConverter))]
 #endif
         public Dimension MinSize
         {
@@ -93,6 +94,7 @@ namespace ZXing.Datamatrix
         /// </summary>
 #if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
         [CategoryAttribute("Standard"), DescriptionAttribute("Specifies a maximum barcode size.")]
+        [TypeConverter(typeof(DimensionConverter))]
 #endif
         public Dimension MaxSize
         {
@@ -152,4 +154,73 @@ namespace ZXing.Datamatrix
             }
         }
     }
+
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+    internal class DimensionConverter : TypeConverter
+    {
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            if (sourceType == typeof(Dimension))
+                return true;
+            if (sourceType == typeof(String))
+                return true;
+            return base.CanConvertFrom(context, sourceType);
+        }
+
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            if (destinationType == typeof(Dimension))
+                return true;
+            return base.CanConvertTo(context, destinationType);
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        {
+            var dim = value as Dimension;
+            if (dim != null)
+            {
+                return dim.Height + "x" + dim.Width;
+            }
+            if (value is String)
+            {
+                var valStr = value.ToString();
+                var valStrParts = valStr.Split('x');
+                if (valStrParts.Length > 1)
+                {
+                    int h;
+                    int w;
+                    if (int.TryParse(valStrParts[0], out h) &&
+                        int.TryParse(valStrParts[1], out w))
+                        return new Dimension(w, h);
+                }
+            }
+            return base.ConvertFrom(context, culture, value);
+        }
+
+        public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+        {
+            if (value == null)
+                return null;
+            var dim = value as Dimension;
+            if (dim != null)
+            {
+                return dim.Height + "x" + dim.Width;
+            }
+            if (destinationType == typeof(Dimension))
+            {
+                var valStr = value.ToString();
+                var valStrParts = valStr.Split('x');
+                if (valStrParts.Length > 1)
+                {
+                    int h;
+                    int w;
+                    if (int.TryParse(valStrParts[0], out h) &&
+                        int.TryParse(valStrParts[1], out w))
+                        return new Dimension(w, h);
+                }
+            }
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+    }
+#endif
 }
