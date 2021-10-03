@@ -239,21 +239,19 @@ namespace ZXing.Common
             get
             {
                 int offset = y * rowSize + (x >> 5);
-                return offset < bits.Length && (((int)((uint)(bits[offset]) >> (x & 0x1f))) & 1) != 0;
+                return (((int)((uint)(bits[offset]) >> (x & 0x1f))) & 1) != 0;
             }
             set
             {
                 if (value)
                 {
                     int offset = y * rowSize + (x >> 5);
-                    if (offset < bits.Length)
-                        bits[offset] |= 1 << (x & 0x1f);
+                    bits[offset] |= 1 << (x & 0x1f);
                 }
                 else
                 {
                     int offset = y * rowSize + (x / 32);
-                    if (offset < bits.Length)
-                        bits[offset] &= ~(1 << (x & 0x1f));
+                    bits[offset] &= ~(1 << (x & 0x1f));
                 }
             }
         }
@@ -266,8 +264,7 @@ namespace ZXing.Common
         public void flip(int x, int y)
         {
             int offset = y * rowSize + (x >> 5);
-            if (offset < bits.Length)
-                bits[offset] ^= 1 << (x & 0x1f);
+            bits[offset] ^= 1 << (x & 0x1f);
         }
 
         /// <summary>

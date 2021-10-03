@@ -158,9 +158,7 @@ namespace ZXing.Datamatrix.Internal
                 }
             } while ((row < numRows) || (column < numColumns));
 
-            var totalCodewords = version.getTotalCodewords();
-            if (resultOffset != totalCodewords &&
-                resultOffset != totalCodewords - 1)
+            if (resultOffset != version.getTotalCodewords())
             {
                 return null;
             }
@@ -188,6 +186,10 @@ namespace ZXing.Datamatrix.Internal
             {
                 column += numColumns;
                 row += 4 - ((numColumns + 4) & 0x07);
+            }
+            if (row >= numRows)
+            {
+                row -= numRows;
             }
             readMappingMatrix[column, row] = true;
             return mappingBitMatrix[column, row];

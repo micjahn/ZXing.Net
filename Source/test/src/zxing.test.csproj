@@ -123,6 +123,7 @@
     </Compile>
     <Compile Include="datamatrix\DataMatrixBlackBox1TestCase.cs" />
     <Compile Include="datamatrix\DataMatrixBlackBox2TestCase.cs" />
+    <Compile Include="datamatrix\DataMatrixBlackBox3TestCase.cs" />
     <Compile Include="datamatrix\DataMatrixBlackBoxZTestCase.cs" />
     <Compile Include="datamatrix\DataMatrixWriterTestCase.cs" />
     <Compile Include="datamatrix\decoder\DecodedBitStreamParserTestCase.cs" />
