@@ -158,7 +158,9 @@ namespace ZXing.Datamatrix.Internal
                 }
             } while ((row < numRows) || (column < numColumns));
 
-            if (resultOffset != version.getTotalCodewords())
+            var totalCodewords = version.getTotalCodewords();
+            if (resultOffset != totalCodewords &&
+                resultOffset != totalCodewords - 1)
             {
                 return null;
             }
