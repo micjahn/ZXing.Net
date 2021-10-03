@@ -119,7 +119,9 @@ namespace ZXing.Maxicode
                 int iy = top + (y * height + height / 2) / MATRIX_HEIGHT;
                 for (int x = 0; x < MATRIX_WIDTH; x++)
                 {
-                    int ix = left + (x * width + width / 2 + (y & 0x01) * width / 2) / MATRIX_WIDTH;
+                    // srowen: I don't quite understand why the formula below is necessary, but it
+                    // can walk off the image if left + width = the right boundary. So cap it.
+                    int ix = left + System.Math.Min((x * width + width / 2 + (y & 0x01) * width / 2) / MATRIX_WIDTH, width);
                     if (image[ix, iy])
                     {
                         bits[x, y] = true;
