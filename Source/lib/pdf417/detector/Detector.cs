@@ -68,7 +68,7 @@ namespace ZXing.PDF417.Internal
         private const int BARCODE_MIN_HEIGHT = 10;
 
         /// <summary>
-        ///   <p>Detects a PDF417 Code in an image. Only checks 0 and 180 degree rotations.</p>
+        ///   <p>Detects a PDF417 Code in an image. Checks 0, 90, 180, and 270 degree rotations.</p>
         /// </summary>
         /// <param name="image">barcode image to decode</param>
         /// <param name="hints">optional hints to detector</param>
@@ -87,13 +87,24 @@ namespace ZXing.PDF417.Internal
                 return null;
 
             List<ResultPoint[]> barcodeCoordinates = detect(multiple, bitMatrix);
-            if (barcodeCoordinates == null ||
-                barcodeCoordinates.Count == 0)
+            // Try 180, 270, 90 degree rotations, in that order
+            if (barcodeCoordinates.Count == 0)
             {
                 bitMatrix = (BitMatrix)bitMatrix.Clone();
-                bitMatrix.rotate180();
-                barcodeCoordinates = detect(multiple, bitMatrix);
+                for (int rotate = 0; barcodeCoordinates.Count == 0 && rotate < 3; rotate++)
+                {
+                    if (rotate != 1)
+                    {
+                        bitMatrix.rotate180();
+                    }
+                    else
+                    {
+                        bitMatrix.rotate90();
+                    }
+                    barcodeCoordinates = detect(multiple, bitMatrix);
+                }
             }
+
             return new PDF417DetectorResult(bitMatrix, barcodeCoordinates);
         }
 

@@ -33,10 +33,10 @@ namespace ZXing.Common
     /// <author>dswitkin@google.com (Daniel Switkin)</author>
     public sealed partial class BitMatrix
     {
-        private readonly int width;
-        private readonly int height;
-        private readonly int rowSize;
-        private readonly int[] bits;
+        private int width;
+        private int height;
+        private int rowSize;
+        private int[] bits;
 
         /// <returns> The width of the matrix
         /// </returns>
@@ -412,6 +412,36 @@ namespace ZXing.Common
                 setRow(i, bottomRow);
                 setRow(bottomRowIndex, topRow);
             }
+        }
+
+        /// <summary>
+        /// Modifies this {@code BitMatrix} to represent the same but rotated 90 degrees counterclockwise
+        /// </summary>
+        public void rotate90()
+        {
+            int newWidth = height;
+            int newHeight = width;
+            int newRowSize = (newWidth + 31) / 32;
+            int[] newBits = new int[newRowSize * newHeight];
+
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    int offset = y * rowSize + (x / 32);
+                    if ((((int)(((uint)bits[offset]) >> (x & 0x1f))) & 1) != 0)
+                    {
+                        int newY = newHeight - 1 - x;
+                        int newX = y;
+                        int newOffset = newY * newRowSize + (newX / 32);
+                        newBits[newOffset] |= 1 << (newX & 0x1f);
+                    }
+                }
+            }
+            width = newWidth;
+            height = newHeight;
+            rowSize = newRowSize;
+            bits = newBits;
         }
 
         /// <summary>
