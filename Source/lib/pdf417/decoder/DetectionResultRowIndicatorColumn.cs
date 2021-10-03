@@ -92,14 +92,6 @@ namespace ZXing.PDF417.Internal
                     continue;
                 }
 
-                //      float expectedRowNumber = (codewordsRow - firstRow) / averageRowHeight;
-                //      if (Math.abs(codeword.getRowNumber() - expectedRowNumber) > 2) {
-                //        SimpleLog.log(LEVEL.WARNING,
-                //            "Removing codeword, rowNumberSkew too high, codeword[" + codewordsRow + "]: Expected Row: " +
-                //                expectedRowNumber + ", RealRow: " + codeword.getRowNumber() + ", value: " + codeword.getValue());
-                //        codewords[codewordsRow] = null;
-                //      }
-
                 int rowDifference = codeword.RowNumber - barcodeRow;
 
                 // TODO improve handling with case where first row indicator doesn't start with 0

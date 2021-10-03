@@ -224,7 +224,7 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
                 current.setAlpha();
                 current.incrementPosition(4);
             }
-            return new BlockParsedResult(false);
+            return new BlockParsedResult();
         }
 
         private BlockParsedResult parseIsoIec646Block()
@@ -260,7 +260,7 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
 
                 current.setAlpha();
             }
-            return new BlockParsedResult(false);
+            return new BlockParsedResult();
         }
 
         private BlockParsedResult parseAlphaBlock()
@@ -297,7 +297,7 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
 
                 current.setIsoIec646();
             }
-            return new BlockParsedResult(false);
+            return new BlockParsedResult();
         }
 
         private bool isStillIsoIec646(int pos)

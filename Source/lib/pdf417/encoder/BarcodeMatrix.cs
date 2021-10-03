@@ -54,13 +54,6 @@ namespace ZXing.PDF417.Internal
             matrix[y][x] = value;
         }
 
-        /*
-        internal void setMatrix(int x, int y, bool black)
-        {
-           set(x, y, (sbyte) (black ? 1 : 0));
-        }
-        */
-
         internal void startRow()
         {
             ++currentRow;
@@ -75,13 +68,6 @@ namespace ZXing.PDF417.Internal
         {
             return getScaledMatrix(1, 1);
         }
-
-        /*
-        internal sbyte[][] getScaledMatrix(int Scale)
-        {
-           return getScaledMatrix(Scale, Scale);
-        }
-        */
 
         internal sbyte[][] getScaledMatrix(int xScale, int yScale)
         {

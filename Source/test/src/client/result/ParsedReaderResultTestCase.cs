@@ -290,42 +290,6 @@ namespace ZXing.Client.Result.Test
              "212-555-1212\nHere's a longer message. Should be fine.", ParsedResultType.SMS);
       }
 
-      /*
-      [Test]
-      public void testNDEFText() {
-        doTestResult(new byte[] {(byte)0xD1,(byte)0x01,(byte)0x05,(byte)0x54,
-                                 (byte)0x02,(byte)0x65,(byte)0x6E,(byte)0x68,
-                                 (byte)0x69},
-                     ParsedResultType.TEXT);
-      }
-
-      [Test]
-      public void testNDEFURI() {
-        doTestResult(new byte[] {(byte)0xD1,(byte)0x01,(byte)0x08,(byte)0x55,
-                                 (byte)0x01,(byte)0x6E,(byte)0x66,(byte)0x63,
-                                 (byte)0x2E,(byte)0x63,(byte)0x6F,(byte)0x6D},
-                     ParsedResultType.URI);
-      }
-
-      [Test]
-      public void testNDEFSmartPoster() {
-        doTestResult(new byte[] {(byte)0xD1,(byte)0x02,(byte)0x2F,(byte)0x53,
-                                 (byte)0x70,(byte)0x91,(byte)0x01,(byte)0x0E,
-                                 (byte)0x55,(byte)0x01,(byte)0x6E,(byte)0x66,
-                                 (byte)0x63,(byte)0x2D,(byte)0x66,(byte)0x6F,
-                                 (byte)0x72,(byte)0x75,(byte)0x6D,(byte)0x2E,
-                                 (byte)0x6F,(byte)0x72,(byte)0x67,(byte)0x11,
-                                 (byte)0x03,(byte)0x01,(byte)0x61,(byte)0x63,
-                                 (byte)0x74,(byte)0x00,(byte)0x51,(byte)0x01,
-                                 (byte)0x12,(byte)0x54,(byte)0x05,(byte)0x65,
-                                 (byte)0x6E,(byte)0x2D,(byte)0x55,(byte)0x53,
-                                 (byte)0x48,(byte)0x65,(byte)0x6C,(byte)0x6C,
-                                 (byte)0x6F,(byte)0x2C,(byte)0x20,(byte)0x77,
-                                 (byte)0x6F,(byte)0x72,(byte)0x6C,(byte)0x64},
-                     ParsedResultType.NDEF_SMART_POSTER);
-      }
-      */
-
       private static void doTestResult(String contents,
                                        String goldenResult,
                                        ParsedResultType type)

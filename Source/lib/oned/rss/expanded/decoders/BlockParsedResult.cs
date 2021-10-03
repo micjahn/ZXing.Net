@@ -35,8 +35,8 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
         private DecodedInformation decodedInformation;
         private bool finished;
 
-        internal BlockParsedResult(bool finished)
-           : this(null, finished)
+        internal BlockParsedResult()
+           : this(null, false)
         {
         }
 

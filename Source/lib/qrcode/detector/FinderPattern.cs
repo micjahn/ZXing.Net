@@ -65,13 +65,6 @@ namespace ZXing.QrCode.Internal
             }
         }
 
-        /*
-        internal void incrementCount()
-        {
-           this.count++;
-        }
-        */
-
         /// <summary> <p>Determines if this finder pattern "about equals" a finder pattern at the stated
         /// position and size -- meaning, it is at nearly the same center with nearly the same size.</p>
         /// </summary>

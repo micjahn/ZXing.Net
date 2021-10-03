@@ -27,9 +27,6 @@ namespace ZXing.Maxicode.Test
          : base("test/data/blackbox/maxicode-1", new MultiFormatReader(), BarcodeFormat.MAXICODE)
       {
          addTest(5, 5, 0.0f);
-         //addTest(5, 5, 90.0f);
-         //addTest(5, 5, 180.0f);
-         //addTest(5, 5, 270.0f);
       }
    }
 }

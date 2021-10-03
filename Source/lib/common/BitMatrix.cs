@@ -431,10 +431,8 @@ namespace ZXing.Common
                     int offset = y * rowSize + (x / 32);
                     if ((((int)(((uint)bits[offset]) >> (x & 0x1f))) & 1) != 0)
                     {
-                        int newY = newHeight - 1 - x;
-                        int newX = y;
-                        int newOffset = newY * newRowSize + (newX / 32);
-                        newBits[newOffset] |= 1 << (newX & 0x1f);
+                        int newOffset = (newHeight - 1 - x) * newRowSize + (y / 32);
+                        newBits[newOffset] |= 1 << (y & 0x1f);
                     }
                 }
             }

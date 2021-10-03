@@ -284,42 +284,6 @@ namespace ZXing.PDF417.Internal.EC
             return new ModulusPoly(field, product);
         }
 
-        /*
-        /// <summary>
-        /// Divide by another modulus
-        /// </summary>
-        /// <param name="other">Other.</param>
-        internal ModulusPoly[] divide(ModulusPoly other)
-        {
-           if (!field.Equals(other.field))
-           {
-              throw new ArgumentException("ModulusPolys do not have same ModulusGF field");
-           }
-           if (other.isZero)
-           {
-              throw new DivideByZeroException();
-           }
-
-           ModulusPoly quotient = field.Zero;
-           ModulusPoly remainder = this;
-
-           int denominatorLeadingTerm = other.getCoefficient(other.Degree);
-           int inverseDenominatorLeadingTerm = field.inverse(denominatorLeadingTerm);
-
-           while (remainder.Degree >= other.Degree && !remainder.isZero)
-           {
-              int degreeDifference = remainder.Degree - other.Degree;
-              int scale = field.multiply(remainder.getCoefficient(remainder.Degree), inverseDenominatorLeadingTerm);
-              ModulusPoly term = other.multiplyByMonomial(degreeDifference, scale);
-              ModulusPoly iterationQuotient = field.buildMonomial(degreeDifference, scale);
-              quotient = quotient.add(iterationQuotient);
-              remainder = remainder.subtract(term);
-           }
-
-           return new ModulusPoly[] { quotient, remainder };
-        }
-        */
-
         /// <summary>
         /// Returns a <see cref="System.String"/> that represents the current <see cref="ZXing.PDF417.Internal.EC.ModulusPoly"/>.
         /// </summary>

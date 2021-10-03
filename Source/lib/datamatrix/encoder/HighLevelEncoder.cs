@@ -100,19 +100,6 @@ namespace ZXing.Datamatrix.Encoder
         /// </summary>
         public const String MACRO_TRAILER = "\u001E\u0004";
 
-        /*
-        /// <summary>
-        /// Converts the message to a byte array using the default encoding (cp437) as defined by the
-        /// specification
-        /// </summary>
-        /// <param name="msg">the message</param>
-        /// <returns>the byte array of the message</returns>
-        public static byte[] getBytesForMessage(String msg)
-        {
-           return Encoding.GetEncoding("CP437").GetBytes(msg); //See 4.4.3 and annex B of ISO/IEC 15438:2001(E)
-        }
-        */
-
         private static char randomize253State(int codewordPosition)
         {
             int pseudoRandom = ((149 * codewordPosition) % 253) + 1;

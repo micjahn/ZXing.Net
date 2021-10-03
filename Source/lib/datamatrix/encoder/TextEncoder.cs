@@ -69,7 +69,7 @@ namespace ZXing.Datamatrix.Encoder
             if (c == '\u0060')
             {
                 sb.Append('\u0002'); //Shift 3 Set
-                sb.Append((char) (c - 96));
+                sb.Append((char)0); // '`' - 96 == 0
                 return 2;
             }
             if (c <= 'Z')
