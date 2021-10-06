@@ -108,6 +108,8 @@ namespace ZXing.Aztec
             result.putMetadata(ResultMetadataType.AZTEC_EXTRA_METADATA,
                                new AztecResultMetadata(detectorResult.Compact, detectorResult.NbDatablocks, detectorResult.NbLayers));
 
+            result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]z" + decoderResult.SymbologyModifier);
+
             return result;
         }
 

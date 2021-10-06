@@ -221,7 +221,7 @@ namespace ZXing.OneD
                 resultPointCallback(new ResultPoint(right, rowNumber));
             }
 
-            return new Result(
+            var resultObject = new Result(
                resultString,
                null,
                new[]
@@ -230,6 +230,8 @@ namespace ZXing.OneD
                   new ResultPoint(right, rowNumber)
                   },
                BarcodeFormat.CODE_39);
+            resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]A0");
+            return resultObject;
         }
 
         private static int[] findAsteriskPattern(BitArray row, int[] counters)

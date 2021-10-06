@@ -46,11 +46,14 @@ namespace ZXing.QrCode.Internal
             var byteSegments = new List<byte[]>(1);
             var symbolSequence = -1;
             var parityData = -1;
+            int symbologyModifier = 1;
 
             try
             {
                 CharacterSetECI currentCharacterSetECI = null;
                 bool fc1InEffect = false;
+                bool hasFNC1first = false;
+                bool hasFNC1second = false;
                 Mode mode;
                 do
                 {
@@ -76,7 +79,12 @@ namespace ZXing.QrCode.Internal
                         case Mode.Names.TERMINATOR:
                             break;
                         case Mode.Names.FNC1_FIRST_POSITION:
+                            hasFNC1first = true; // symbology detection
+                                                 // We do little with FNC1 except alter the parsed result a bit according to the spec
+                            fc1InEffect = true;
+                            break;
                         case Mode.Names.FNC1_SECOND_POSITION:
+                            hasFNC1second = true; // symbology detection
                             // We do little with FNC1 except alter the parsed result a bit according to the spec
                             fc1InEffect = true;
                             break;
@@ -138,6 +146,37 @@ namespace ZXing.QrCode.Internal
                             break;
                     }
                 } while (mode != Mode.TERMINATOR);
+
+                if (currentCharacterSetECI != null)
+                {
+                    if (hasFNC1first)
+                    {
+                        symbologyModifier = 4;
+                    }
+                    else if (hasFNC1second)
+                    {
+                        symbologyModifier = 6;
+                    }
+                    else
+                    {
+                        symbologyModifier = 2;
+                    }
+                }
+                else
+                {
+                    if (hasFNC1first)
+                    {
+                        symbologyModifier = 3;
+                    }
+                    else if (hasFNC1second)
+                    {
+                        symbologyModifier = 5;
+                    }
+                    else
+                    {
+                        symbologyModifier = 1;
+                    }
+                }
             }
             catch (ArgumentException)
             {
@@ -149,7 +188,7 @@ namespace ZXing.QrCode.Internal
                                      result.ToString(),
                                      byteSegments.Count == 0 ? null : byteSegments,
                                      ecLevel == null ? null : ecLevel.ToString(),
-                                     symbolSequence, parityData);
+                                     symbolSequence, parityData, symbologyModifier);
         }
 
         /// <summary>

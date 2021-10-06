@@ -40,7 +40,8 @@ namespace ZXing.Datamatrix.Internal
             TEXT_ENCODE,
             ANSIX12_ENCODE,
             EDIFACT_ENCODE,
-            BASE256_ENCODE
+            BASE256_ENCODE,
+            ECI_ENCODE
         }
 
         /// <summary>
@@ -87,12 +88,15 @@ namespace ZXing.Datamatrix.Internal
             StringBuilder result = new StringBuilder(100);
             StringBuilder resultTrailer = new StringBuilder(0);
             List<byte[]> byteSegments = new List<byte[]>(1);
+            int symbologyModifier = 0;
             Mode mode = Mode.ASCII_ENCODE;
+            List<int> fnc1Positions = new List<int>(); // Would be replaceable by looking directly at 'bytes', if we're sure to not having to account for multi byte values.
+            bool isECIencoded = false;
             do
             {
                 if (mode == Mode.ASCII_ENCODE)
                 {
-                    if (!decodeAsciiSegment(bits, result, resultTrailer, out mode))
+                    if (!decodeAsciiSegment(bits, result, resultTrailer, fnc1Positions, out mode))
                         return null;
                 }
                 else
@@ -100,11 +104,11 @@ namespace ZXing.Datamatrix.Internal
                     switch (mode)
                     {
                         case Mode.C40_ENCODE:
-                            if (!decodeC40Segment(bits, result))
+                            if (!decodeC40Segment(bits, result, fnc1Positions))
                                 return null;
                             break;
                         case Mode.TEXT_ENCODE:
-                            if (!decodeTextSegment(bits, result))
+                            if (!decodeTextSegment(bits, result, fnc1Positions))
                                 return null;
                             break;
                         case Mode.ANSIX12_ENCODE:
@@ -119,6 +123,9 @@ namespace ZXing.Datamatrix.Internal
                             if (!decodeBase256Segment(bits, result, byteSegments))
                                 return null;
                             break;
+                        case Mode.ECI_ENCODE:
+                            isECIencoded = true; // ECI detection only, atm continue decoding as ASCII
+                            break;
                         default:
                             return null;
                     }
@@ -129,7 +136,39 @@ namespace ZXing.Datamatrix.Internal
             {
                 result.Append(resultTrailer.ToString());
             }
-            return new DecoderResult(bytes, result.ToString(), byteSegments.Count == 0 ? null : byteSegments, null);
+            if (isECIencoded)
+            {
+                // Examples for this numbers can be found in this documentation of a hardware barcode scanner:
+                // https://honeywellaidc.force.com/supportppr/s/article/List-of-barcode-symbology-AIM-Identifiers
+                if (fnc1Positions.Contains(0) || fnc1Positions.Contains(4))
+                {
+                    symbologyModifier = 5;
+                }
+                else if (fnc1Positions.Contains(1) || fnc1Positions.Contains(5))
+                {
+                    symbologyModifier = 6;
+                }
+                else
+                {
+                    symbologyModifier = 4;
+                }
+            }
+            else
+            {
+                if (fnc1Positions.Contains(0) || fnc1Positions.Contains(4))
+                {
+                    symbologyModifier = 2;
+                }
+                else if (fnc1Positions.Contains(1) || fnc1Positions.Contains(5))
+                {
+                    symbologyModifier = 3;
+                }
+                else
+                {
+                    symbologyModifier = 1;
+                }
+            }
+            return new DecoderResult(bytes, result.ToString(), byteSegments.Count == 0 ? null : byteSegments, null, symbologyModifier);
         }
 
         /// <summary>
@@ -138,6 +177,7 @@ namespace ZXing.Datamatrix.Internal
         private static bool decodeAsciiSegment(BitSource bits,
                                                StringBuilder result,
                                                StringBuilder resultTrailer,
+                                               List<int> fnc1positions,
                                                out Mode mode)
         {
             bool upperShift = false;
@@ -189,6 +229,7 @@ namespace ZXing.Datamatrix.Internal
                             mode = Mode.BASE256_ENCODE;
                             return true;
                         case 232: // FNC1
+                            fnc1positions.Add(result.Length);
                             result.Append((char)29); // translate as ASCII 29
                             break;
                         case 233: // Structured Append
@@ -217,10 +258,8 @@ namespace ZXing.Datamatrix.Internal
                             mode = Mode.EDIFACT_ENCODE;
                             return true;
                         case 241: // ECI Character
-                                  // TODO(bbrown): I think we need to support ECI
-                                  //throw ReaderException.getInstance();
-                                  // Ignore this symbol for now
-                            break;
+                            mode = Mode.ECI_ENCODE;
+                            return true;
                         default:
                             // Not to be used in ASCII encodation
                             // but work around encoders that end with 254, latch back to ASCII
@@ -239,7 +278,7 @@ namespace ZXing.Datamatrix.Internal
         /// <summary>
         /// See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
         /// </summary>
-        private static bool decodeC40Segment(BitSource bits, StringBuilder result)
+        private static bool decodeC40Segment(BitSource bits, StringBuilder result, List<int> fnc1positions)
         {
             // Three C40 values are encoded in a 16-bit value as
             // (1600 * C1) + (40 * C2) + C3 + 1
@@ -324,6 +363,7 @@ namespace ZXing.Datamatrix.Internal
                                 switch (cValue)
                                 {
                                     case 27: // FNC1
+                                        fnc1positions.Add(result.Length);
                                         result.Append((char)29); // translate as ASCII 29
                                         break;
                                     case 30: // Upper Shift
@@ -359,7 +399,7 @@ namespace ZXing.Datamatrix.Internal
         /// <summary>
         /// See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
         /// </summary>
-        private static bool decodeTextSegment(BitSource bits, StringBuilder result)
+        private static bool decodeTextSegment(BitSource bits, StringBuilder result, List<int> fnc1positions)
         {
             // Three Text values are encoded in a 16-bit value as
             // (1600 * C1) + (40 * C2) + C3 + 1
@@ -444,6 +484,7 @@ namespace ZXing.Datamatrix.Internal
                                 switch (cValue)
                                 {
                                     case 27: // FNC1
+                                        fnc1positions.Add(result.Length);
                                         result.Append((char)29); // translate as ASCII 29
                                         break;
                                     case 30: // Upper Shift

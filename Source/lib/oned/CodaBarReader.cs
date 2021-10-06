@@ -187,7 +187,7 @@ namespace ZXing.OneD
                 resultPointCallback(new ResultPoint(right, rowNumber));
             }
 
-            return new Result(
+            var result = new Result(
                decodeRowResult.ToString(),
                null,
                new[]
@@ -196,6 +196,8 @@ namespace ZXing.OneD
                   new ResultPoint(right, rowNumber)
                   },
                BarcodeFormat.CODABAR);
+            result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]F0");
+            return result;
         }
 
         private bool validatePattern(int start)

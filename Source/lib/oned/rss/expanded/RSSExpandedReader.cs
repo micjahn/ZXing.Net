@@ -400,12 +400,14 @@ namespace ZXing.OneD.RSS.Expanded
             ResultPoint[] firstPoints = pairs[0].FinderPattern.ResultPoints;
             ResultPoint[] lastPoints = pairs[pairs.Count - 1].FinderPattern.ResultPoints;
 
-            return new Result(
+            var result = new Result(
                 resultingString,
                 null,
                 new ResultPoint[] {firstPoints[0], firstPoints[1], lastPoints[0], lastPoints[1]},
                 BarcodeFormat.RSS_EXPANDED
             );
+            result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]e0");
+            return result;
         }
 
         private bool checkChecksum()

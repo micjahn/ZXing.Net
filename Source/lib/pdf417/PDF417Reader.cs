@@ -126,6 +126,7 @@ namespace ZXing.PDF417
                     {
                         result.putMetadata(ResultMetadataType.PDF417_EXTRA_METADATA, pdf417ResultMetadata);
                     }
+                    result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]L" + decoderResult.SymbologyModifier);
                     results.Add(result);
                 }
             }

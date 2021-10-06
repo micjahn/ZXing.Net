@@ -163,6 +163,7 @@ namespace ZXing.OneD
         {
             var resultPointCallback = hints == null || !hints.ContainsKey(DecodeHintType.NEED_RESULT_POINT_CALLBACK) ? null :
                 (ResultPointCallback)hints[DecodeHintType.NEED_RESULT_POINT_CALLBACK];
+            int symbologyIdentifier = 0;
 
             if (resultPointCallback != null)
             {
@@ -263,6 +264,12 @@ namespace ZXing.OneD
                     decodeResult.putMetadata(ResultMetadataType.POSSIBLE_COUNTRY, countryID);
                 }
             }
+            if (format == BarcodeFormat.EAN_8)
+            {
+                symbologyIdentifier = 4;
+            }
+
+            decodeResult.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]E" + symbologyIdentifier);
 
             return decodeResult;
         }

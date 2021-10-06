@@ -87,15 +87,53 @@ namespace ZXing.Common
         public object Other { get; set; }
 
         /// <summary>
+        /// gives the symbology identifier
+        /// </summary>
+        public int SymbologyModifier { get; set; }
+
+        /// <summary>
         /// initializing constructor
         /// </summary>
         /// <param name="rawBytes"></param>
         /// <param name="text"></param>
         /// <param name="byteSegments"></param>
         /// <param name="ecLevel"></param>
-        public DecoderResult(byte[] rawBytes, String text, IList<byte[]> byteSegments, String ecLevel)
-           : this(rawBytes, text, byteSegments, ecLevel, -1, -1)
+        public DecoderResult(byte[] rawBytes, String text, List<byte[]> byteSegments, String ecLevel)
+            : this(rawBytes, text, byteSegments, ecLevel, -1, -1, 0)
         {
+            
+        }
+
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="rawBytes"></param>
+        /// <param name="text"></param>
+        /// <param name="byteSegments"></param>
+        /// <param name="ecLevel"></param>
+        /// <param name="symbologyModifier"></param>
+        public DecoderResult(byte[] rawBytes, String text, IList<byte[]> byteSegments, String ecLevel, int symbologyModifier)
+           : this(rawBytes, text, byteSegments, ecLevel, -1, -1, symbologyModifier)
+        {
+        }
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="rawBytes"></param>
+        /// <param name="text"></param>
+        /// <param name="byteSegments"></param>
+        /// <param name="ecLevel"></param>
+        /// <param name="saSequence"></param>
+        /// <param name="saParity"></param>
+        public DecoderResult(byte[] rawBytes,
+                     String text,
+                     List<byte[]> byteSegments,
+                     String ecLevel,
+                     int saSequence,
+                     int saParity)
+             : this(rawBytes, text, byteSegments, ecLevel, saSequence, saParity, 0)
+        {
+            
         }
 
         /// <summary>
@@ -107,8 +145,9 @@ namespace ZXing.Common
         /// <param name="ecLevel"></param>
         /// <param name="saSequence"></param>
         /// <param name="saParity"></param>
-        public DecoderResult(byte[] rawBytes, String text, IList<byte[]> byteSegments, String ecLevel, int saSequence, int saParity)
-           : this(rawBytes, rawBytes == null ? 0 : 8 * rawBytes.Length, text, byteSegments, ecLevel, saSequence, saParity)
+        /// <param name="symbologyModifier"></param>
+        public DecoderResult(byte[] rawBytes, String text, IList<byte[]> byteSegments, String ecLevel, int saSequence, int saParity, int symbologyModifier)
+           : this(rawBytes, rawBytes == null ? 0 : 8 * rawBytes.Length, text, byteSegments, ecLevel, saSequence, saParity, symbologyModifier)
         {
         }
 
@@ -121,7 +160,7 @@ namespace ZXing.Common
         /// <param name="byteSegments"></param>
         /// <param name="ecLevel"></param>
         public DecoderResult(byte[] rawBytes, int numBits, String text, IList<byte[]> byteSegments, String ecLevel)
-           : this(rawBytes, numBits, text, byteSegments, ecLevel, -1, -1)
+           : this(rawBytes, numBits, text, byteSegments, ecLevel, -1, -1, 0)
         {
         }
 
@@ -135,7 +174,8 @@ namespace ZXing.Common
         /// <param name="ecLevel"></param>
         /// <param name="saSequence"></param>
         /// <param name="saParity"></param>
-        public DecoderResult(byte[] rawBytes, int numBits, String text, IList<byte[]> byteSegments, String ecLevel, int saSequence, int saParity)
+        /// <param name="symbologyModifier"></param>
+        public DecoderResult(byte[] rawBytes, int numBits, String text, IList<byte[]> byteSegments, String ecLevel, int saSequence, int saParity, int symbologyModifier)
         {
             if (rawBytes == null && text == null)
             {
@@ -148,6 +188,7 @@ namespace ZXing.Common
             ECLevel = ecLevel;
             StructuredAppendParity = saParity;
             StructuredAppendSequenceNumber = saSequence;
+            SymbologyModifier = symbologyModifier;
         }
     }
 }
