@@ -58,6 +58,24 @@ namespace ZXing.Common.Test
                    StringUtils.SHIFT_JIS_ENCODING, "SJIS");
         }
 
+        [Test]
+        public void testUTF16BE()
+        {
+            // 调压柜
+            doTest(new byte[] { (byte) 0xFE, (byte) 0xFF, (byte) 0x8c, (byte) 0x03, (byte) 0x53, (byte) 0x8b,
+                        (byte) 0x67, (byte) 0xdc, },
+              Encoding.Unicode, Encoding.Unicode.WebName.ToUpper());
+        }
+
+        [Test]
+        public void testUTF16LE()
+        {
+            // 调压柜
+            doTest(new byte[] { (byte) 0xFF, (byte) 0xFE, (byte) 0x03, (byte) 0x8c, (byte) 0x8b, (byte) 0x53,
+                        (byte) 0xdc, (byte) 0x67, },
+              Encoding.Unicode, Encoding.Unicode.WebName.ToUpper());
+        }
+
         private static void doTest(byte[] bytes, Encoding encoding, String encodingName)
         {
             Encoding guessedCharset = StringUtils.guessCharset(bytes, null);
@@ -81,6 +99,12 @@ namespace ZXing.Common.Test
             {
                 declaration.Append("(byte) 0x");
                 declaration.Append((b & 0xFF).ToString("X"));
+                int value = b & 0xFF;
+                if (value < 0x10)
+                {
+                    declaration.Append('0');
+                }
+                declaration.Append(value.ToString("X"));
                 declaration.Append(", ");
             }
             declaration.Append('}');

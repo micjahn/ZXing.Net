@@ -78,8 +78,9 @@ namespace ZXing.Common
         /// <param name="hints">decode hints if applicable</param>
         /// <returns>Charset of guessed encoding; at the moment will only guess one of:
         ///  {@link #SHIFT_JIS_CHARSET}, {@link StandardCharsets#UTF_8},
-        /// {@link StandardCharsets#ISO_8859_1}, or the platform default encoding if
-        /// none of these can possibly be correct</returns>
+        ///  {@link StandardCharsets#ISO_8859_1}, {@link StandardCharsets#UTF_16},
+        ///  or the platform default encoding if
+        ///  none of these can possibly be correct</returns>
         public static Encoding guessCharset(byte[] bytes, IDictionary<DecodeHintType, object> hints)
         {
             if (hints != null && hints.ContainsKey(DecodeHintType.CHARACTER_SET))
@@ -91,6 +92,14 @@ namespace ZXing.Common
                     if (encoding != null)
                         return encoding;
                 }
+            }
+
+            // First try UTF-16, assuming anything with its BOM is UTF-16
+            if (bytes.Length > 2 &&
+                ((bytes[0] == (byte)0xFE && bytes[1] == (byte)0xFF) ||
+                 (bytes[0] == (byte)0xFF && bytes[1] == (byte)0xFE)))
+            {
+                return Encoding.Unicode;
             }
 
             // For now, merely tries to distinguish ISO-8859-1, UTF-8 and Shift_JIS,
