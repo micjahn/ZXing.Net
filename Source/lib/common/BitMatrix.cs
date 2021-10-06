@@ -268,6 +268,18 @@ namespace ZXing.Common
         }
 
         /// <summary>
+        /// <p>Flips every bit in the matrix.</p>
+        /// </summary>
+        public void flip()
+        {
+            int max = bits.Length;
+            for (int i = 0; i < max; i++)
+            {
+                bits[i] = ~bits[i];
+            }
+        }
+
+        /// <summary>
         /// flip all of the bits, if shouldBeFlipped is true for the coordinates
         /// </summary>
         /// <param name="shouldBeFlipped">should return true, if the bit at a given coordinate should be flipped</param>

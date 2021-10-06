@@ -120,6 +120,12 @@ namespace ZXing
         /// and a UPC or EAN barcode is found but an extension is not, then no result will be returned
         /// at all.
         /// </summary>
-        ALLOWED_EAN_EXTENSIONS
+        ALLOWED_EAN_EXTENSIONS,
+
+        /// <summary>
+        /// If true, also tries to decode as inverted image. All configured decoders are simply called a
+        /// second time with an inverted image. Doesn't matter what it maps to; use {@link Boolean#TRUE}.
+        /// </summary>
+        ALSO_INVERTED
     }
 }

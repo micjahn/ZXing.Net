@@ -53,8 +53,7 @@ namespace WindowsFormsDemo
             barcodeReader = new BarcodeReader(null, null, source => UseGlobalHistogramBinarizer ? new GlobalHistogramBinarizer(source) : new HybridBinarizer(source))
             {
                 AutoRotate = true,
-                TryInverted = true,
-                Options = new DecodingOptions { TryHarder = true }
+                Options = new DecodingOptions { TryHarder = true, TryInverted = true }
             };
             barcodeReader.ResultPointFound += point =>
             {
@@ -479,7 +478,7 @@ namespace WindowsFormsDemo
                 Thread.Sleep(1000);
                 picBarcode.Image = ScreenCapture.CaptureScreen();
                 Visible = true;
-                Decode(new[] { (Bitmap)picBarcode.Image }, false, null);
+                Decode(new[] { (Bitmap)picBarcode.Image }, TryMultipleBarcodes, null);
             }
             catch (Exception exc)
             {

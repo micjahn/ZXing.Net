@@ -132,6 +132,8 @@
     <Compile Include="datamatrix\encoder\HighLevelEncodeTestCase.cs" />
     <Compile Include="datamatrix\encoder\PlacementTestCase.cs" />
     <Compile Include="datamatrix\encoder\SymbolInfoTestCase.cs" />
+    <Compile Include="inverted\InvertedDataMatrixBlackBoxTestCase.cs" />
+    <Compile Include="inverted\NoHintInvertedDataMatrixBlackBoxTestCase.cs" />
     <Compile Include="maxicode\Maxicode1TestCase.cs" />
     <Compile Include="multi\GenericMultipleBarcodeReaderTestCase.cs" />
     <Compile Include="multi\MultiTestCase.cs" />

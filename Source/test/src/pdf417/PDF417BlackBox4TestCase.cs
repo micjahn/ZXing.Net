@@ -37,7 +37,7 @@ namespace ZXing.PDF417.Test
    /// @author Guenther Grau
    /// </summary>
    [TestFixture]
-   public sealed class PDF417BlackBox4TestCase : AbstractBlackBoxTestCase
+   public sealed class PDF417BlackBox4TestCase : AbstractBlackBoxBaseTestCase
    {
 #if !SILVERLIGHT
       private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -48,13 +48,12 @@ namespace ZXing.PDF417.Test
       private static readonly Encoding UTF8 = Encoding.UTF8;
       private static readonly Encoding ISO88591 = Encoding.GetEncoding("ISO8859-1");
       private const String TEST_BASE_PATH_SUFFIX = "test/data/blackbox/pdf417-4";
-      private readonly PDF417Reader barcodeReader = new PDF417Reader();
 
       private readonly List<TestResult> testResults = new List<TestResult>();
       private String testBase;
 
       public PDF417BlackBox4TestCase()
-         : base(TEST_BASE_PATH_SUFFIX, null, BarcodeFormat.PDF_417)
+         : base(TEST_BASE_PATH_SUFFIX, new PDF417Reader(), BarcodeFormat.PDF_417)
       {
          // A little workaround to prevent aggravation in my IDE
          if (!Directory.Exists(TEST_BASE_PATH_SUFFIX))
@@ -70,7 +69,7 @@ namespace ZXing.PDF417.Test
       }
 
       [Test]
-      public override void testBlackBox()
+      public void testBlackBox()
       {
          Assert.IsFalse(testResults.Count == 0);
 
@@ -201,7 +200,7 @@ namespace ZXing.PDF417.Test
             hints[DecodeHintType.TRY_HARDER] = true;
          }
 
-         return barcodeReader.decodeMultiple(source, hints);
+         return ((PDF417Reader)barcodeReader).decodeMultiple(source, hints);
       }
 
       private IDictionary<String, List<String>> getImageFileLists()

@@ -141,7 +141,8 @@ namespace ZXing
         /// <value>
         ///   <c>true</c> if image should be inverted; otherwise, <c>false</c>.
         /// </value>
-        public bool TryInverted { get; set; }
+        [Obsolete("Please use Options.TryInverted")]
+        public bool TryInverted { get { return Options.TryInverted; } set { Options.TryInverted = value; } }
 
         /// <summary>
         /// Optional: Gets or sets the function to create a binarizer object for a luminance source.
@@ -228,23 +229,6 @@ namespace ZXing
                     usePreviousState = true;
                 }
 
-                if (result == null)
-                {
-                    if (TryInverted && luminanceSource.InversionSupported)
-                    {
-                        binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource.invert()));
-                        if (usePreviousState && multiformatReader != null)
-                        {
-                            result = multiformatReader.decodeWithState(binaryBitmap);
-                        }
-                        else
-                        {
-                            result = Reader.decode(binaryBitmap, Options.Hints);
-                            usePreviousState = true;
-                        }
-                    }
-                }
-
                 if (result != null ||
                     !luminanceSource.RotateSupported ||
                     !AutoRotate)
@@ -316,15 +300,6 @@ namespace ZXing
             for (; rotationCount < rotationMaxCount; rotationCount++)
             {
                 results = multiReader.decodeMultiple(binaryBitmap, Options.Hints);
-
-                if (results == null)
-                {
-                    if (TryInverted && luminanceSource.InversionSupported)
-                    {
-                        binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource.invert()));
-                        results = multiReader.decodeMultiple(binaryBitmap, Options.Hints);
-                    }
-                }
 
                 if (results != null ||
                     !luminanceSource.RotateSupported ||

@@ -65,7 +65,7 @@ namespace WindowsFormsDemo
         {
             base.OnLoad(e);
 
-            chkTryInverted.Checked = reader.TryInverted;
+            chkTryInverted.Checked = reader.Options.TryInverted;
             chkTryHarder.Checked = reader.Options.TryHarder;
             chkAutoRotate.Checked = reader.AutoRotate;
             chkPureBarcode.Checked = reader.Options.PureBarcode;
@@ -77,7 +77,7 @@ namespace WindowsFormsDemo
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            reader.TryInverted = chkTryInverted.Checked;
+            reader.Options.TryInverted = chkTryInverted.Checked;
             reader.Options.TryHarder = chkTryHarder.Checked;
             reader.AutoRotate = chkAutoRotate.Checked;
             reader.Options.PureBarcode = chkPureBarcode.Checked;

@@ -71,6 +71,38 @@ namespace ZXing.Common
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the image should be automatically inverted
+        /// if no result is found in the original image.
+        /// ATTENTION: Please be carefully because it slows down the decoding process if it is used
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if image should be inverted; otherwise, <c>false</c>.
+        /// </value>
+        public bool TryInverted
+        {
+            get
+            {
+                if (Hints.ContainsKey(DecodeHintType.ALSO_INVERTED))
+                    return (bool)Hints[DecodeHintType.ALSO_INVERTED];
+                return false;
+            }
+            set
+            {
+                if (value)
+                {
+                    Hints[DecodeHintType.ALSO_INVERTED] = true;
+                }
+                else
+                {
+                    if (Hints.ContainsKey(DecodeHintType.ALSO_INVERTED))
+                    {
+                        Hints.Remove(DecodeHintType.ALSO_INVERTED);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Image is a pure monochrome image of a barcode.
         /// </summary>
         /// <value>

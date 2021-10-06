@@ -34,7 +34,7 @@ namespace ZXing.Common.Test
    /// <author>dswitkin@google.com (Daniel Switkin)</author>
    /// </summary>
    [TestFixture]
-   public abstract class AbstractNegativeBlackBoxTestCase : AbstractBlackBoxTestCase
+   public abstract class AbstractNegativeBlackBoxTestCase : AbstractBlackBoxBaseTestCase
    {
 #if !SILVERLIGHT
       private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -79,7 +79,7 @@ namespace ZXing.Common.Test
       }
 
       [Test]
-      public new void testBlackBox()
+      public void testBlackBox()
       {
          Assert.IsFalse(testResults.Count == 0);
 
