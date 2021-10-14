@@ -22,6 +22,14 @@ namespace ZXing.PDF417
     /// </summary>
     public sealed class PDF417ResultMetadata
     {
+        public PDF417ResultMetadata()
+        {
+            SegmentCount = -1;
+            FileSize = -1;
+            Timestamp = -1;
+            Checksum = -1;
+        }
+
         /// <summary>
         /// The Segment ID represents the segment of the whole file distributed over different symbols.
         /// </summary>
