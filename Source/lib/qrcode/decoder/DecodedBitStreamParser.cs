@@ -46,7 +46,7 @@ namespace ZXing.QrCode.Internal
             var byteSegments = new List<byte[]>(1);
             var symbolSequence = -1;
             var parityData = -1;
-            int symbologyModifier = 1;
+            int symbologyModifier;
 
             try
             {

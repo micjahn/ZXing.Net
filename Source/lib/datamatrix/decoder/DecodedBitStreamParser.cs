@@ -88,9 +88,9 @@ namespace ZXing.Datamatrix.Internal
             StringBuilder result = new StringBuilder(100);
             StringBuilder resultTrailer = new StringBuilder(0);
             List<byte[]> byteSegments = new List<byte[]>(1);
-            int symbologyModifier = 0;
             Mode mode = Mode.ASCII_ENCODE;
             List<int> fnc1Positions = new List<int>(); // Would be replaceable by looking directly at 'bytes', if we're sure to not having to account for multi byte values.
+            int symbologyModifier;
             bool isECIencoded = false;
             do
             {
