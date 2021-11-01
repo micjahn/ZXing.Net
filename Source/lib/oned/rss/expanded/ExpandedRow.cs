@@ -24,13 +24,10 @@ namespace ZXing.OneD.RSS.Expanded
     /// </summary>
     internal sealed class ExpandedRow
     {
-        private readonly bool wasReversed;
-
-        internal ExpandedRow(List<ExpandedPair> pairs, int rowNumber, bool wasReversed)
+        internal ExpandedRow(List<ExpandedPair> pairs, int rowNumber)
         {
             Pairs = new List<ExpandedPair>(pairs);
             RowNumber = rowNumber;
-            this.wasReversed = wasReversed;
         }
 
         internal List<ExpandedPair> Pairs { get; private set; }
@@ -57,12 +54,12 @@ namespace ZXing.OneD.RSS.Expanded
                 return false;
             }
             ExpandedRow that = (ExpandedRow) o;
-            return Pairs.Equals(that.Pairs) && wasReversed == that.wasReversed;
+            return Pairs.Equals(that.Pairs);
         }
 
         public override int GetHashCode()
         {
-            return Pairs.GetHashCode() ^ wasReversed.GetHashCode();
+            return Pairs.GetHashCode();
         }
     }
 }

@@ -319,7 +319,7 @@ namespace ZXing.OneD.RSS.Expanded
                 return;
             }
 
-            rows.Insert(insertPos, new ExpandedRow(pairs, rowNumber, false));
+            rows.Insert(insertPos, new ExpandedRow(pairs, rowNumber));
 
             removePartialRows(pairs, rows);
         }
