@@ -98,9 +98,115 @@ namespace ZXing.PDF417.Test
                     from r in results
                     where r != null
                        && r.ResultMetadata.ContainsKey(ResultMetadataType.PDF417_EXTRA_METADATA) == true
-                       && ((PDF417ResultMetadata)r.ResultMetadata[ResultMetadataType.PDF417_EXTRA_METADATA]).FileId == "HELLO.WORLD"
+                       && ((PDF417ResultMetadata)r.ResultMetadata[ResultMetadataType.PDF417_EXTRA_METADATA]).FileId == "214341448538674521119"
+                       // && ((PDF417ResultMetadata)r.ResultMetadata[ResultMetadataType.PDF417_EXTRA_METADATA]).FileId == "HELLO.WORLD" <- encoded with TEXT compaction, isn't spec conform
+                       // fileId has to be between 0 and 899 and is directly encoded as codeword
                     select r
                 ).Count() == 2
+            );
+
+            writer.Options.Hints[EncodeHintType.PDF417_MACRO_META_DATA] = new PDF417MacroMetadata()
+            {
+                SegmentIndex = 1,
+                SegmentCount = 2,
+                FileId = "023" // file id has to be a sequence of numbers between 000 and 899, otherwise TEXT compaction will be done
+            };
+
+            var matrix3 = new PDF417Writer().encode(" World", BarcodeFormat.PDF_417, writer.Options.Width, writer.Options.Height, writer.Options.Hints);
+
+            results.Clear();
+            using (Bitmap barcodeImg = writer.Write(matrix3))
+            {
+                var result = reader.Decode(barcodeImg);
+                results.Add(result);
+            }
+
+            Assert.IsTrue(
+                (
+                    from r in results
+                    where r != null
+                       && r.ResultMetadata.ContainsKey(ResultMetadataType.PDF417_EXTRA_METADATA) == true
+                       && ((PDF417ResultMetadata)r.ResultMetadata[ResultMetadataType.PDF417_EXTRA_METADATA]).FileId == "023"
+                    select r
+                ).Count() == 1
+            );
+
+            writer.Options.Hints[EncodeHintType.PDF417_MACRO_META_DATA] = new PDF417MacroMetadata()
+            {
+                SegmentIndex = 1,
+                SegmentCount = 2,
+                FileId = "023899257" // file id has to be a sequence of numbers between 000 and 899, otherwise TEXT compaction will be done
+            };
+
+            matrix3 = new PDF417Writer().encode(" World", BarcodeFormat.PDF_417, writer.Options.Width, writer.Options.Height, writer.Options.Hints);
+
+            results.Clear();
+            using (Bitmap barcodeImg = writer.Write(matrix3))
+            {
+                var result = reader.Decode(barcodeImg);
+                results.Add(result);
+            }
+
+            Assert.IsTrue(
+                (
+                    from r in results
+                    where r != null
+                       && r.ResultMetadata.ContainsKey(ResultMetadataType.PDF417_EXTRA_METADATA) == true
+                       && ((PDF417ResultMetadata)r.ResultMetadata[ResultMetadataType.PDF417_EXTRA_METADATA]).FileId == "023899257"
+                    select r
+                ).Count() == 1
+            );
+
+            writer.Options.Hints[EncodeHintType.PDF417_MACRO_META_DATA] = new PDF417MacroMetadata()
+            {
+                SegmentIndex = 1,
+                SegmentCount = 2,
+                FileId = "023899257ABC" // file id has to be a sequence of numbers between 000 and 899, otherwise TEXT compaction will be done
+            };
+
+            matrix3 = new PDF417Writer().encode(" World", BarcodeFormat.PDF_417, writer.Options.Width, writer.Options.Height, writer.Options.Hints);
+
+            results.Clear();
+            using (Bitmap barcodeImg = writer.Write(matrix3))
+            {
+                var result = reader.Decode(barcodeImg);
+                results.Add(result);
+            }
+
+            Assert.IsTrue(
+                (
+                    from r in results
+                    where r != null
+                       && r.ResultMetadata.ContainsKey(ResultMetadataType.PDF417_EXTRA_METADATA) == true
+                       && ((PDF417ResultMetadata)r.ResultMetadata[ResultMetadataType.PDF417_EXTRA_METADATA]).FileId == "840063249272157840032"
+                    select r
+                ).Count() == 1
+            );
+
+            writer.Options.Hints[EncodeHintType.PDF417_MACRO_META_DATA] = new PDF417MacroMetadata()
+            {
+                SegmentIndex = 1,
+                SegmentCount = 2,
+                FileId = "02389925" // file id has to be a sequence of numbers between 000 and 899, otherwise TEXT compaction will be done
+            };
+
+            matrix3 = new PDF417Writer().encode(" World", BarcodeFormat.PDF_417, writer.Options.Width, writer.Options.Height, writer.Options.Hints);
+
+            results.Clear();
+            using (Bitmap barcodeImg = writer.Write(matrix3))
+            {
+                var result = reader.Decode(barcodeImg);
+                results.Add(result);
+            }
+
+            Assert.IsTrue(
+                (
+                    from r in results
+                    where r != null
+                       && r.ResultMetadata.ContainsKey(ResultMetadataType.PDF417_EXTRA_METADATA) == true
+                       && ((PDF417ResultMetadata)r.ResultMetadata[ResultMetadataType.PDF417_EXTRA_METADATA]).FileId == "840063249272179"
+                    select r
+                ).Count() == 1
             );
         }
     }
