@@ -494,10 +494,12 @@ namespace ZXing.Aztec.Internal
         {
             const int corr = 3;
 
-            p1 = new Point(p1.X - corr, p1.Y + corr);
-            p2 = new Point(p2.X - corr, p2.Y - corr);
-            p3 = new Point(p3.X + corr, p3.Y - corr);
-            p4 = new Point(p4.X + corr, p4.Y + corr);
+            p1 = new Point(Math.Max(0, p1.X - corr), Math.Min(image.Height - 1, p1.Y + corr));
+            p2 = new Point(Math.Max(0, p2.X - corr), Math.Max(0, p2.Y - corr));
+            p3 = new Point(Math.Min(image.Width - 1, p3.X + corr),
+                           Math.Max(0, Math.Min(image.Height - 1, p3.Y - corr)));
+            p4 = new Point(Math.Min(image.Width - 1, p4.X + corr),
+                           Math.Min(image.Height - 1, p4.Y + corr));
 
             int cInit = getColor(p4, p1);
 
