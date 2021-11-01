@@ -565,9 +565,6 @@ namespace ZXing.OneD
                                         }
                                     }
                                     break;
-                                case CODE_FNC_2:
-                                    symbologyModifier = 4;
-                                    break;
                                 case CODE_CODE_A:
                                     codeSet = CODE_CODE_A;
                                     break;

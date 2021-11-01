@@ -173,15 +173,17 @@ namespace ZXing.OneD
                 resultPointCallback(new ResultPoint(endRange[0], rowNumber));
             }
 
-            return new Result(
-               resultString,
-               null, // no natural byte representation for these barcodes
-               new ResultPoint[]
-                  {
-                  new ResultPoint(startRange[1], rowNumber),
-                  new ResultPoint(endRange[0], rowNumber)
-                  },
-               BarcodeFormat.ITF);
+            var resultObject = new Result(
+                resultString,
+                null, // no natural byte representation for these barcodes
+                new ResultPoint[]
+                    {
+                    new ResultPoint(startRange[1], rowNumber),
+                    new ResultPoint(endRange[0], rowNumber)
+                    },
+                BarcodeFormat.ITF);
+            resultObject.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]I0");
+            return resultObject;
         }
 
         /// <summary>
