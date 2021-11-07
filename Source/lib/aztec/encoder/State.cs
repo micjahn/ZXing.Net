@@ -40,6 +40,7 @@ namespace ZXing.Aztec.Internal
         private readonly int binaryShiftByteCount;
         // The total number of bits generated (including Binary Shift).
         private readonly int bitCount;
+        private readonly int binaryShiftCost;
 
         public State(Token token, int mode, int binaryBytes, int bitCount)
         {
@@ -47,6 +48,7 @@ namespace ZXing.Aztec.Internal
             this.mode = mode;
             this.binaryShiftByteCount = binaryBytes;
             this.bitCount = bitCount;
+            this.binaryShiftCost = calculateBinaryShiftCost(binaryBytes);
         }
 
         public int Mode
@@ -185,7 +187,7 @@ namespace ZXing.Aztec.Internal
             if (this.binaryShiftByteCount < other.binaryShiftByteCount)
             {
                 // add additional B/S encoding cost of other, if any
-                newModeBitCount += calculateBinaryShiftCost(other) - calculateBinaryShiftCost(this);
+                newModeBitCount += other.binaryShiftCost - this.binaryShiftCost;
             }
             else if (this.binaryShiftByteCount > other.binaryShiftByteCount && other.binaryShiftByteCount > 0)
             {
@@ -219,17 +221,17 @@ namespace ZXing.Aztec.Internal
             return String.Format("{0} bits={1} bytes={2}", HighLevelEncoder.MODE_NAMES[mode], bitCount, binaryShiftByteCount);
         }
 
-        private static int calculateBinaryShiftCost(State state)
+        private static int calculateBinaryShiftCost(int binaryShiftByteCount)
         {
-            if (state.binaryShiftByteCount > 62)
+            if (binaryShiftByteCount > 62)
             {
                 return 21; // B/S with extended length
             }
-            if (state.binaryShiftByteCount > 31)
+            if (binaryShiftByteCount > 31)
             {
                 return 20; // two B/S
             }
-            if (state.binaryShiftByteCount > 0)
+            if (binaryShiftByteCount > 0)
             {
                 return 10; // one B/S
             }
