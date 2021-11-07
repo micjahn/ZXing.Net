@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 using NUnit.Framework;
 using ZXing.Common;
@@ -142,7 +143,7 @@ namespace ZXing.OneD.Test
 
             for (var i = 0; i < 128; i++)
             {
-                contents += (char) i;
+                contents += (char)i;
                 if ((i + 1) % 32 == 0)
                 {
                     Should_Encode(contents);
@@ -196,6 +197,97 @@ namespace ZXing.OneD.Test
             var rtResult = reader.decodeRow(0, row, null);
             var actualRoundtripResultText = rtResult.Text;
             Assert.AreEqual(toEncode, actualRoundtripResultText);
+        }
+
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void testEncodeWithForcedCodeSetFailureCodeSetABadCharacter()
+        {
+            // Lower case characters should not be accepted when the code set is forced to A.
+            String toEncode = "ASDFx0123";
+
+            var options = new Code128EncodingOptions();
+            options.ForceCodeset = Code128EncodingOptions.Codesets.A;
+            BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void testEncodeWithForcedCodeSetFailureCodeSetBBadCharacter()
+        {
+            String toEncode = "ASdf\00123"; // \0 (ascii value 0)
+                                            // Characters with ASCII value below 32 should not be accepted when the code set is forced to B.
+
+            var options = new Code128EncodingOptions();
+            options.ForceCodeset = Code128EncodingOptions.Codesets.B;
+            BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void testEncodeWithForcedCodeSetFailureCodeSetCBadCharactersNonNum()
+        {
+            String toEncode = "123a5678";
+            // Non-digit characters should not be accepted when the code set is forced to C.
+
+            var options = new Code128EncodingOptions();
+            options.ForceCodeset = Code128EncodingOptions.Codesets.C;
+            BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void testEncodeWithForcedCodeSetFailureCodeSetCBadCharactersFncCode()
+        {
+            String toEncode = "123\u00f2a678";
+            // Function codes other than 1 should not be accepted when the code set is forced to C.
+
+            var options = new Code128EncodingOptions();
+            options.ForceCodeset = Code128EncodingOptions.Codesets.C;
+            BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void testEncodeWithForcedCodeSetFailureCodeSetCWrongAmountOfDigits()
+        {
+            String toEncode = "123456789";
+            // An uneven amount of digits should not be accepted when the code set is forced to C.
+
+            var options = new Code128EncodingOptions();
+            options.ForceCodeset = Code128EncodingOptions.Codesets.C;
+            BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+        }
+
+        [Test]
+        public void testEncodeWithForcedCodeSetFailureCodeSetA()
+        {
+            String toEncode = "AB123";
+            //                          would default to B             "A"             "B"             "1"             "2"             "3"  check digit 10
+            String expected = QUIET_SPACE + START_CODE_A + "10100011000" + "10001011000" + "10011100110" + "11001110010" + "11001011100" + "11001000100" + STOP + QUIET_SPACE;
+
+            var options = new Code128EncodingOptions();
+            options.ForceCodeset = Code128EncodingOptions.Codesets.A;
+            BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+
+            String actual = BitMatrixTestCase.matrixToString(result);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void testEncodeWithForcedCodeSetFailureCodeSetB()
+        {
+            String toEncode = "1234";
+            //                          would default to C           "1"             "2"             "3"             "4"  check digit 88
+            String expected = QUIET_SPACE + START_CODE_B + "10011100110" + "11001110010" + "11001011100" + "11001001110" + "11110010010" + STOP + QUIET_SPACE;
+
+            var options = new Code128EncodingOptions();
+            options.ForceCodeset = Code128EncodingOptions.Codesets.B;
+            BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+
+            String actual = BitMatrixTestCase.matrixToString(result);
+            Assert.AreEqual(expected, actual);
         }
     }
 }

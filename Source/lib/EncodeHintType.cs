@@ -170,5 +170,11 @@ namespace ZXing
         /// (Type <see cref="System.Int32" />, or <see cref="System.String" /> representation of the integer value).
         /// </summary>
         QR_MASK_PATTERN,
+
+        /// <summary>
+        /// Forces which encoding will be used. Currently only used for Code-128 code sets (Type <see cref="System.String" />). Valid values are "A", "B", "C".
+        /// see also CODE128_FORCE_CODESET_B
+        /// </summary>
+        FORCE_CODE_SET
     }
 }

@@ -35,6 +35,25 @@ namespace ZXing.OneD
         protected abstract IList<BarcodeFormat> SupportedWriteFormats { get; }
 
         /// <summary>
+        /// Encode the contents to boolean array expression of one-dimensional barcode.
+        /// Start code and end code should be included in result, and side margins should not be included.
+        /// </summary>
+        /// <param name="contents">barcode contents to encode</param>
+        /// <returns>a <c>bool[]</c> of horizontal pixels (false = white, true = black)</returns>
+        public abstract bool[] encode(String contents);
+
+        /// <summary>
+        /// Can be overwritten if the encode requires to read the hints map. Otherwise it defaults to {@code encode}.
+        /// </summary>
+        /// <param name="contents">barcode contents to encode</param>
+        /// <param name="hints">encoding hints</param>
+        /// <returns>a <c>bool[]</c> of horizontal pixels (false = white, true = black)</returns>
+        protected virtual bool[] encode(String contents, IDictionary<EncodeHintType, object> hints)
+        {
+            return encode(contents);
+        }
+
+        /// <summary>
         /// Encode a barcode using the default settings.
         /// </summary>
         /// <param name="contents">The contents to encode in the barcode</param>
@@ -95,7 +114,7 @@ namespace ZXing.OneD
                 }
             }
 
-            var code = encode(contents);
+            var code = encode(contents, hints);
             return renderResult(code, width, height, sidesMargin);
         }
 
@@ -173,14 +192,6 @@ namespace ZXing.OneD
                 return 10;
             }
         }
-
-        /// <summary>
-        /// Encode the contents to bool array expression of one-dimensional barcode.
-        /// Start code and end code should be included in result, and side margins should not be included.
-        /// </summary>
-        /// <param name="contents">barcode contents to encode</param>
-        /// <returns>a <c>bool[]</c> of horizontal pixels (false = white, true = black)</returns>
-        public abstract bool[] encode(String contents);
 
         /// <summary>
         /// Calculates the checksum digit modulo10.
