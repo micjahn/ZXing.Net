@@ -409,7 +409,7 @@ namespace ZXing.Aztec.Internal
                 }
                 if (add)
                 {
-                    result.AddLast(newState);
+                    result.AddFirst(newState);
                 }
                 foreach (var removeItem in removeList)
                 {
