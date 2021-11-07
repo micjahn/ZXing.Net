@@ -131,6 +131,8 @@ namespace ZXing.Common
 
         public static System.Text.Encoding getEncoding(CharacterSetECI charsetECI)
         {
+            if (charsetECI == null)
+                return null;
             return getEncoding(charsetECI.EncodingName);
         }
 

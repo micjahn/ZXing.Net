@@ -241,6 +241,10 @@ namespace ZXing.Aztec.Internal
                                     }
                                     CharacterSetECI charsetECI = CharacterSetECI.getCharacterSetECIByValue(eci);
                                     encoding = CharacterSetECI.getEncoding(charsetECI);
+                                    if (encoding == null)
+                                    {
+                                        throw new FormatException("Encoding for ECI " + eci + " can't be resolved");
+                                    }
                                     break;
                             }
                             // Go back to whatever mode we had been in
