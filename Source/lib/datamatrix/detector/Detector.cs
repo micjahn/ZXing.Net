@@ -392,7 +392,8 @@ namespace ZXing.Datamatrix.Internal
             int fromX = (int)from.X;
             int fromY = (int)from.Y;
             int toX = (int)to.X;
-            int toY = (int)to.Y;
+            int toY = Math.Min(image.Height - 1, (int)to.Y);
+
             bool steep = Math.Abs(toY - fromY) > Math.Abs(toX - fromX);
             if (steep)
             {
