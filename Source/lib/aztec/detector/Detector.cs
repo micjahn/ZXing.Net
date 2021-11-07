@@ -546,7 +546,7 @@ namespace ZXing.Aztec.Internal
 
             bool colorModel = image[p1.X, p1.Y];
 
-            int iMax = (int)Math.Ceiling(d);
+            int iMax = (int)Math.Floor(d);
             for (int i = 0; i < iMax; i++)
             {
                 px += dx;
