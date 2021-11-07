@@ -537,6 +537,10 @@ namespace ZXing.Aztec.Internal
         private int getColor(Point p1, Point p2)
         {
             float d = distance(p1, p2);
+            if (d == 0.0f)
+            {
+                return 0;
+            }
             float dx = (p2.X - p1.X) / d;
             float dy = (p2.Y - p1.Y) / d;
             int error = 0;
@@ -549,12 +553,12 @@ namespace ZXing.Aztec.Internal
             int iMax = (int)Math.Floor(d);
             for (int i = 0; i < iMax; i++)
             {
-                px += dx;
-                py += dy;
                 if (image[MathUtils.round(px), MathUtils.round(py)] != colorModel)
                 {
                     error++;
                 }
+                px += dx;
+                py += dy;
             }
 
             float errRatio = error / d;
