@@ -638,7 +638,7 @@ namespace ZXing.Aztec.Internal
 
         private bool isValid(int x, int y)
         {
-            return x >= 0 && x < image.Width && y > 0 && y < image.Height;
+            return x >= 0 && x < image.Width && y >= 0 && y < image.Height;
         }
 
         private bool isValid(ResultPoint point)
