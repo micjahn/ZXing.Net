@@ -217,6 +217,10 @@ namespace ZXing.PDF417.Internal.EC
                                           int[] errorLocations)
         {
             int errorLocatorDegree = errorLocator.Degree;
+            if (errorLocatorDegree < 1)
+            {
+                return new int[0];
+            }
             int[] formalDerivativeCoefficients = new int[errorLocatorDegree];
             for (int i = 1; i <= errorLocatorDegree; i++)
             {
