@@ -25,8 +25,8 @@ namespace ZXing.Aztec.Internal
     /// </summary>
     public sealed class BinaryShiftToken : Token
     {
-        private readonly short binaryShiftStart;
-        private readonly short binaryShiftByteCount;
+        private readonly int binaryShiftStart;
+        private readonly int binaryShiftByteCount;
 
         /// <summary>
         /// initializing constructor
@@ -39,8 +39,8 @@ namespace ZXing.Aztec.Internal
                                 int binaryShiftByteCount)
            : base(previous)
         {
-            this.binaryShiftStart = (short)binaryShiftStart;
-            this.binaryShiftByteCount = (short)binaryShiftByteCount;
+            this.binaryShiftStart = binaryShiftStart;
+            this.binaryShiftByteCount = binaryShiftByteCount;
         }
 
         /// <summary>
