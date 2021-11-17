@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>0.16.1</VersionPrefix>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
+    <PlatformTarget>anycpu</PlatformTarget>
+    <DebugType>portable</DebugType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>ZXing.EmguCV</AssemblyName>
+    <PackageId>ZXing.Net.Bindings.EmguCV</PackageId>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+	<EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ImageLuminanceSource.cs" />
+    <Compile Include="BarcodeReader.cs" />
+    <Compile Include="IBarcodeReader.cs" />
+    <Compile Include="BarcodeReader.Extensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Emgu.CV" Version="4.5.4.4788" />
+    <PackageReference Include="ZXing.Net" Version="0.16.6" />
+  </ItemGroup>
+  
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
+  </PropertyGroup>
+
+</Project>

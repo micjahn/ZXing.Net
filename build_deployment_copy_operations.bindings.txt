@@ -4,6 +4,9 @@
 %CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing.V2\bin\Release\netstandard2.0\zxing.corecompat.system.drawing.V2.dll %BINARY_DIR%\Bindings\CoreCompat.System.Drawing\netstandard2.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing.V2\bin\Release\netstandard2.0\zxing.corecompat.system.drawing.V2.pdb %BINARY_DIR%\Bindings\CoreCompat.System.Drawing\netstandard2.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing.V2\bin\Release\netstandard2.0\zxing.corecompat.system.drawing.V2.xml %BINARY_DIR%\Bindings\CoreCompat.System.Drawing\netstandard2.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.EmguCV\bin\Release\netstandard2.0\ZXing.EmguCV.dll %BINARY_DIR%\Bindings\ZXing.EmguCV\netstandard2.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.EmguCV\bin\Release\netstandard2.0\ZXing.EmguCV.pdb %BINARY_DIR%\Bindings\ZXing.EmguCV\netstandard2.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.EmguCV\bin\Release\netstandard2.0\ZXing.EmguCV.xml %BINARY_DIR%\Bindings\ZXing.EmguCV\netstandard2.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.Eto.Forms\bin\Release\netstandard1.0\ZXing.Eto.Forms.dll %BINARY_DIR%\Bindings\ZXing.Eto.Forms\netstandard1.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.Eto.Forms\bin\Release\netstandard1.0\ZXing.Eto.Forms.pdb %BINARY_DIR%\Bindings\ZXing.Eto.Forms\netstandard1.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.Eto.Forms\bin\Release\netstandard1.0\ZXing.Eto.Forms.xml %BINARY_DIR%\Bindings\ZXing.Eto.Forms\netstandard1.0\

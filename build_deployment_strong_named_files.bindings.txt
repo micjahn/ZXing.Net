@@ -1,5 +1,6 @@
 %BINARY_DIR%\Bindings\Android\zxing.monoandroid.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\bin\Release\netstandard1.3\zxing.corecompat.system.drawing.dll
+%CURRENT_DIR%\Source\Bindings\ZXing.EmguCV\bin\Release\netstandard2.0\ZXing.EmguCV.dll
 %BINARY_DIR%\Bindings\kinect\V1\zxing.kinect.dll
 %BINARY_DIR%\Bindings\kinect\V2\zxing.kinect.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.OpenCVSharp.V2\bin\Release\net20\zxing.opencvsharp.v2.dll
