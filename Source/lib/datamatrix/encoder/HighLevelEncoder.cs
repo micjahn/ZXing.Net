@@ -498,23 +498,13 @@ namespace ZXing.Datamatrix.Encoder
         /// <returns>the requested character count</returns>
         public static int determineConsecutiveDigitCount(String msg, int startpos)
         {
-            int count = 0;
             int len = msg.Length;
             int idx = startpos;
-            if (idx < len)
+            while (idx < len && isDigit(msg[idx]))
             {
-                char ch = msg[idx];
-                while (isDigit(ch) && idx < len)
-                {
-                    count++;
-                    idx++;
-                    if (idx < len)
-                    {
-                        ch = msg[idx];
-                    }
-                }
+                idx++;
             }
-            return count;
+            return idx - startpos;
         }
 
         internal static void illegalCharacter(char c)
