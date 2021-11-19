@@ -60,5 +60,14 @@ namespace ZXing.Interop.Encoding
             get { return wrappedAztecEncodingOptions.Layers.GetValueOrDefault(0); }
             set { wrappedAztecEncodingOptions.Layers = value == 0 ? (int?)null : value; }
         }
+
+        /// <summary>
+        /// Specifies what character encoding to use where applicable (type <see cref="String"/>)
+        /// </summary>
+        public string CharacterSet
+        {
+            get { return wrappedAztecEncodingOptions.CharacterSet; }
+            set { wrappedAztecEncodingOptions.CharacterSet = value; }
+        }
     }
 }

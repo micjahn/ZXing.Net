@@ -78,6 +78,26 @@ namespace ZXing.Interop.Encoding
         }
 
         /// <summary>
+        /// Specifies the aspect ratio of the smallest codeword.
+        /// (Width of narrowest bar / Row Height)
+        /// </summary>
+        public PDF417AspectRatio AspectRatio
+        {
+            get { return wrappedPDF417EncodingOptions.AspectRatio.ToInterop(); }
+            set { wrappedPDF417EncodingOptions.AspectRatio = value.ToZXing(); }
+        }
+
+        /// <summary>
+        /// Specifies the desired output image aspect ratio (Width / Height).
+        /// The actual aspect ratio is calculated based on the necessary number of codewords.
+        /// </summary>
+        public float ImageAspectRatio
+        {
+            get { return wrappedPDF417EncodingOptions.ImageAspectRatio; }
+            set { wrappedPDF417EncodingOptions.ImageAspectRatio = value; }
+        }
+
+        /// <summary>
         /// Specifies what character encoding to use where applicable (type {@link String})
         /// </summary>
         public string CharacterSet
@@ -282,6 +302,71 @@ namespace ZXing.Interop.Encoding
                 case PDF417ErrorCorrectionLevel.L0:
                 default:
                     return PDF417.Internal.PDF417ErrorCorrectionLevel.L0;
+            }
+        }
+    }
+
+    /// <summary>
+    /// defines the aspect ratio of the image
+    /// </summary>
+    [ComVisible(true)]
+    [Guid("0D9D4E12-681F-4199-9C1C-D04889C5C2BA")]
+    public enum PDF417AspectRatio
+    {
+        /// <summary>
+        /// ratio 1
+        /// </summary>
+        A1 = 1,
+        /// <summary>
+        /// ratio 2
+        /// </summary>
+        A2,
+        /// <summary>
+        /// ratio 3
+        /// </summary>
+        A3,
+        /// <summary>
+        /// ratio 4
+        /// </summary>
+        A4,
+        /// <summary>
+        /// automatic selection
+        /// </summary>
+        AUTO
+    }
+
+    internal static class PDF417AspectRatioExtensions
+    {
+        public static PDF417AspectRatio ToInterop(this PDF417.Internal.PDF417AspectRatio other)
+        {
+            switch (other)
+            {
+                case PDF417.Internal.PDF417AspectRatio.A1:
+                    return PDF417AspectRatio.A1;
+                case PDF417.Internal.PDF417AspectRatio.A2:
+                    return PDF417AspectRatio.A2;
+                case PDF417.Internal.PDF417AspectRatio.A3:
+                    return PDF417AspectRatio.A3;
+                case PDF417.Internal.PDF417AspectRatio.A4:
+                    return PDF417AspectRatio.A4;
+                default:
+                    return PDF417AspectRatio.AUTO;
+            }
+        }
+        public static PDF417.Internal.PDF417AspectRatio ToZXing(this PDF417AspectRatio other)
+        {
+            switch (other)
+            {
+                case PDF417AspectRatio.A1:
+                    return PDF417.Internal.PDF417AspectRatio.A1;
+                case PDF417AspectRatio.A2:
+                    return PDF417.Internal.PDF417AspectRatio.A2;
+                case PDF417AspectRatio.A3:
+                    return PDF417.Internal.PDF417AspectRatio.A3;
+                case PDF417AspectRatio.A4:
+                    return PDF417.Internal.PDF417AspectRatio.A4;
+                default:
+                    return PDF417.Internal.PDF417AspectRatio.AUTO;
             }
         }
     }
