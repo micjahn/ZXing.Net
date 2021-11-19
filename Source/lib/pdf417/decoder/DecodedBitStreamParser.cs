@@ -211,8 +211,22 @@ namespace ZXing.PDF417.Internal
             var segmentIndexString = decodeBase900toBase10(segmentIndexArray, NUMBER_OF_SEQUENCE_CODEWORDS);
             if (segmentIndexString == null)
                 return -1;
-            int segmentIndex = string.IsNullOrEmpty(segmentIndexString) ? 0 : Int32.Parse(segmentIndexString);
-            resultMetadata.SegmentIndex = segmentIndex;
+            if (string.IsNullOrEmpty(segmentIndexString))
+            {
+                resultMetadata.SegmentIndex = 0;
+            }
+            else
+            {
+                try
+                {
+                    resultMetadata.SegmentIndex = Int32.Parse(segmentIndexString));
+                }
+                catch (Exception )
+                {
+                    // too large; bad input?
+                    return -1;
+                }
+            }
 
             // Decoding the fileId codewords as 0-899 numbers, each 0-filled to width 3. This follows the spec
             // (See ISO/IEC 15438:2015 Annex H.6) and preserves all info, but some generators (e.g. TEC-IT) write
