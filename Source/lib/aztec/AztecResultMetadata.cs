@@ -49,5 +49,14 @@ namespace ZXing.Aztec
             Datablocks = datablocks;
             Layers = layers;
         }
+
+        /// <summary>
+        /// string represenation of that instance
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("Compact:{0};DataBlocks:{1};Layers:{2};", Compact, Datablocks, Layers);
+        }
     }
 }

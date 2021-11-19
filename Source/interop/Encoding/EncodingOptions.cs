@@ -72,5 +72,15 @@ namespace ZXing.Interop.Encoding
             get { return wrappedEncodingOptions.Margin; }
             set { wrappedEncodingOptions.Margin = value; }
         }
+
+        /// <summary>
+        /// Specifies whether the data should be encoded to the GS1 standard;
+        /// FNC1 character is added in front of the data
+        /// </summary>
+        public bool GS1Format
+        {
+            get { return wrappedEncodingOptions.GS1Format; }
+            set { wrappedEncodingOptions.GS1Format = value; }
+        }
     }
 }

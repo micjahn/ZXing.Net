@@ -81,7 +81,11 @@ namespace ZXing.Interop.Decoding
                     var index = 0;
                     foreach (var item in result.ResultMetadata)
                     {
-                        ResultMetadata[index] = new ResultMetadataItem { Key = item.Key.ToInterop(), Value = item.Value != null ? item.Value.ToString() : null };
+                        ResultMetadata[index] = new ResultMetadataItem
+                        {
+                            Key = item.Key.ToInterop(),
+                            Value = item.Value != null ? item.Value.ToString() : null
+                        };
                         index++;
                     }
                 }
@@ -213,7 +217,13 @@ namespace ZXing.Interop.Decoding
         /// <summary>
         /// Aztec-specific metadata
         /// </summary>
-        AZTEC_EXTRA_METADATA
+        AZTEC_EXTRA_METADATA,
+
+        /// <summary>
+        /// Barcode Symbology Identifier.
+        /// Note: According to the GS1 specification the identifier may have to replace a leading FNC1/GS character when prepending to the barcode content.
+        /// </summary>
+        SYMBOLOGY_IDENTIFIER
     }
 
     internal static class ResultMetadataTypeExtensions
@@ -222,6 +232,8 @@ namespace ZXing.Interop.Decoding
         {
             switch (metadataType)
             {
+                case ZXing.ResultMetadataType.SYMBOLOGY_IDENTIFIER:
+                    return ResultMetadataType.SYMBOLOGY_IDENTIFIER;
                 case ZXing.ResultMetadataType.AZTEC_EXTRA_METADATA:
                     return ResultMetadataType.AZTEC_EXTRA_METADATA;
                 case ZXing.ResultMetadataType.BYTE_SEGMENTS:

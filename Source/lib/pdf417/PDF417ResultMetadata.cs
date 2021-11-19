@@ -85,5 +85,15 @@ namespace ZXing.PDF417
         /// returns elapsed seconds, -1 if not set
         /// </summary>
         public long Timestamp { get; set; }
+
+        /// <summary>
+        /// string represenation of that instance
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return string.Format("SegmentIndex:{0};SegmentCount:{1};IsLastSegment:{2};FileSize:{3};Checksum:{4};Timestamp:{5};FileId:{6};FileName:{7};Sender:{8};Addressee:{9};", SegmentIndex, SegmentCount, IsLastSegment, FileSize, Checksum, Timestamp, FileId, FileName, Sender, Addressee);
+        }
+
     }
 }
