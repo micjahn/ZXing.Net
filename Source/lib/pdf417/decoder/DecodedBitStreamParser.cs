@@ -219,7 +219,7 @@ namespace ZXing.PDF417.Internal
             {
                 try
                 {
-                    resultMetadata.SegmentIndex = Int32.Parse(segmentIndexString));
+                    resultMetadata.SegmentIndex = Int32.Parse(segmentIndexString);
                 }
                 catch (Exception )
                 {

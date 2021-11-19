@@ -50,26 +50,27 @@ namespace ZXing.Aztec.Internal
         /// <param name="text"></param>
         public override void appendTo(BitArray bitArray, byte[] text)
         {
-            for (int i = 0; i < binaryShiftByteCount; i++)
+            int bsbc = binaryShiftByteCount;
+            for (int i = 0; i < bsbc; i++)
             {
-                if (i == 0 || (i == 31 && binaryShiftByteCount <= 62))
+                if (i == 0 || (i == 31 && bsbc <= 62))
                 {
                     // We need a header before the first character, and before
                     // character 31 when the total byte code is <= 62
                     bitArray.appendBits(31, 5);  // BINARY_SHIFT
-                    if (binaryShiftByteCount > 62)
+                    if (bsbc > 62)
                     {
-                        bitArray.appendBits(binaryShiftByteCount - 31, 16);
+                        bitArray.appendBits(bsbc - 31, 16);
                     }
                     else if (i == 0)
                     {
                         // 1 <= binaryShiftByteCode <= 62
-                        bitArray.appendBits(Math.Min(binaryShiftByteCount, (short)31), 5);
+                        bitArray.appendBits(Math.Min(bsbc, 31), 5);
                     }
                     else
                     {
                         // 32 <= binaryShiftCount <= 62 and i == 31
-                        bitArray.appendBits(binaryShiftByteCount - 31, 5);
+                        bitArray.appendBits(bsbc - 31, 5);
                     }
                 }
                 bitArray.appendBits(text[binaryShiftStart + i], 8);

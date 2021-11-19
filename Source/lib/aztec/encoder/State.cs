@@ -199,20 +199,17 @@ namespace ZXing.Aztec.Internal
 
         public BitArray toBitArray(byte[] text)
         {
-            // Reverse the tokens, so that they are in the order that they should
-            // be output
-            var symbols = new LinkedList<Token>();
+            var symbols = new List<Token>();
             for (Token token = endBinaryShift(text.Length).token; token != null; token = token.Previous)
             {
-                symbols.AddFirst(token);
+                symbols.Add(token);
             }
-            BitArray bitArray = new BitArray();
-            // Add each token to the result.
-            foreach (Token symbol in symbols)
+            var bitArray = new BitArray();
+            // Add each token to the result in forward order
+            for (int i = symbols.Count - 1; i >= 0; i--)
             {
-                symbol.appendTo(bitArray, text);
+                symbols[i].appendTo(bitArray, text);
             }
-            //assert bitArray.getSize() == this.bitCount;
             return bitArray;
         }
 
