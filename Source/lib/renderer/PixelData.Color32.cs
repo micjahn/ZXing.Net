@@ -34,9 +34,9 @@ namespace ZXing.Rendering
             var result = new Color32[Width * Height];
             var resultIndex = 0;
 
-            for (int y = 0; y < Height; y++)
+            for (int y = Height - 1; y >= 0; y--)
             {
-                var row = y * Width;
+                var row = y * Width * 4;
                 for (int x = 0; x < Width; x++)
                 {
                     var pixelIndex = row + 4 * x;
