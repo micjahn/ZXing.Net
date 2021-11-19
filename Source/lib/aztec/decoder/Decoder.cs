@@ -207,6 +207,13 @@ namespace ZXing.Aztec.Internal
                             }
                             int n = readCode(correctedBits, index, 3);
                             index += 3;
+                            //  flush bytes, FLG changes state
+                            if (decodedBytes.Length > 0)
+                            {
+                                var byteArray = decodedBytes.ToArray();
+                                result.Append(encoding.GetString(byteArray, 0, byteArray.Length));
+                                decodedBytes.SetLength(0);
+                            }
                             switch (n)
                             {
                                 case 0:
@@ -215,14 +222,6 @@ namespace ZXing.Aztec.Internal
                                 case 7:
                                     throw new FormatException("FLG(7) is reserved and illegal");
                                 default:
-                                    // flush bytes before changing character set
-                                    if (decodedBytes.Length > 0)
-                                    {
-                                        var byteArray = decodedBytes.ToArray();
-                                        result.Append(encoding.GetString(byteArray, 0, byteArray.Length));
-                                        decodedBytes.SetLength(0);
-                                    }
-
                                     // ECI is decimal integer encoded as 1-6 codes in DIGIT mode
                                     int eci = 0;
                                     if (endIndex - index < 4 * n)
