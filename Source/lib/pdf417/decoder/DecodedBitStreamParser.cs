@@ -218,10 +218,13 @@ namespace ZXing.PDF417.Internal
             // (See ISO/IEC 15438:2015 Annex H.6) and preserves all info, but some generators (e.g. TEC-IT) write
             // the fileId using text compaction, so in those cases the fileId will appear mangled.
             var fileId = new StringBuilder();
-            for (int i = 0; codeIndex < codewords[0] && codewords[codeIndex] != MACRO_PDF417_TERMINATOR
-                            && codewords[codeIndex] != BEGIN_MACRO_PDF417_OPTIONAL_FIELD; i++, codeIndex++)
+            while (codeIndex < codewords[0] &&
+                   codeIndex < codewords.Length &&
+                   codewords[codeIndex] != MACRO_PDF417_TERMINATOR &&
+                   codewords[codeIndex] != BEGIN_MACRO_PDF417_OPTIONAL_FIELD)
             {
                 fileId.Append(codewords[codeIndex].ToString("D3"));
+                codeIndex++;
             }
             if (fileId.Length == 0)
             {
