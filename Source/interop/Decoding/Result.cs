@@ -62,6 +62,11 @@ namespace ZXing.Interop.Decoding
         /// </summary>
         public int NumBits { get; private set; }
 
+        /// <summary>
+        /// error message if something was wrong
+        /// </summary>
+        public String Error { get; private set; }
+
         internal Result(ZXing.Result result)
         {
             if (result != null)
@@ -85,6 +90,12 @@ namespace ZXing.Interop.Decoding
             }
         }
 
+        internal Result(Exception exc)
+        {
+            BarcodeFormat = Common.BarcodeFormat.Error;
+            Error = exc == null ? "unspecified error" : exc.ToString();
+        }
+
         /// <summary>
         /// Returns a <see cref="System.String"/> that represents this instance.
         /// </summary>
@@ -93,6 +104,10 @@ namespace ZXing.Interop.Decoding
         /// </returns>
         public override String ToString()
         {
+            if (!string.IsNullOrEmpty(Error))
+            {
+                return Error;
+            }
             if (Text == null)
             {
                 return "[" + RawBytes.Length + " bytes]";

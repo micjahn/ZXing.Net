@@ -24,6 +24,9 @@ namespace ZXing.Interop.Common
     [Guid("AB573F22-4F28-494C-BEF5-47940DC94924")]
     public enum BarcodeFormat
     {
+        /// <summary>didn't find something</summary>
+        None = 0,
+
         /// <summary>Aztec 2D barcode format.</summary>
         AZTEC = 1,
 
@@ -88,7 +91,9 @@ namespace ZXing.Interop.Common
         /// UPC_A | UPC_E | EAN_13 | EAN_8 | CODABAR | CODE_39 | CODE_93 | CODE_128 | ITF | RSS_14 | RSS_EXPANDED
         /// without MSI (to many false-positives) and IMB (not enough tested, and it looks more like a 2D)
         /// </summary>
-        All_1D = UPC_A | UPC_E | EAN_13 | EAN_8 | CODABAR | CODE_39 | CODE_93 | CODE_128 | ITF | RSS_14 | RSS_EXPANDED
+        All_1D = UPC_A | UPC_E | EAN_13 | EAN_8 | CODABAR | CODE_39 | CODE_93 | CODE_128 | ITF | RSS_14 | RSS_EXPANDED,
+
+        Error = int.MaxValue
     }
 
     internal static class BarcodeFormatExtensions

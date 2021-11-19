@@ -53,7 +53,14 @@ namespace ZXing.Interop.Decoding
            [In] int height,
            [In] BitmapFormat format)
         {
-            return new Result(wrappedReader.Decode(rawRGB, width, height, format.ToZXing()));
+            try
+            {
+                return new Result(wrappedReader.Decode(rawRGB, width, height, format.ToZXing()));
+            }
+            catch (Exception e)
+            {
+                return new Result(e);
+            }
         }
 
         public Result[] DecodeImageBytesMultiple([In, MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UI1)]ref byte[] rawRGB,
@@ -61,8 +68,15 @@ namespace ZXing.Interop.Decoding
             [In] int height,
             [In] BitmapFormat format)
         {
-            var results = wrappedReader.DecodeMultiple(rawRGB, width, height, format.ToZXing());
-            return results?.Select(_ => new Result(_)).ToArray();
+            try
+            {
+                var results = wrappedReader.DecodeMultiple(rawRGB, width, height, format.ToZXing());
+                return results?.Select(_ => new Result(_)).ToArray();
+            }
+            catch (Exception e)
+            {
+                return new Result[] { new Result(e) };
+            }
         }
 
         public Result DecodeImageFile(String barcodeBitmapFilePath)
@@ -74,9 +88,9 @@ namespace ZXing.Interop.Decoding
                     return new Result(wrappedReader.Decode(bitmap));
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return null;
+                return new Result(e);
             }
         }
 
@@ -90,9 +104,9 @@ namespace ZXing.Interop.Decoding
                     return results?.Select(_ => new Result(_)).ToArray();
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return null;
+                return new[] { new Result(e) };
             }
         }
     }
