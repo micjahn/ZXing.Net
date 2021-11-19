@@ -24,7 +24,7 @@ namespace ZXing.Unity
     /// <summary>
     /// a barcode renderer which returns a Color32 array
     /// </summary>
-    public class Color32Renderer : IBarcodeRenderer<Color32[]>
+    public class Color32Renderer : IBarcodeRenderer<Color32Image>
     {
         /// <summary>
         /// Gets or sets the foreground color.
@@ -60,7 +60,7 @@ namespace ZXing.Unity
         /// <param name="content">The content.</param>
         /// <returns></returns>
         [System.CLSCompliant(false)]
-        public Color32[] Render(BitMatrix matrix, BarcodeFormat format, string content)
+        public Color32Image Render(BitMatrix matrix, BarcodeFormat format, string content)
         {
             return Render(matrix, format, content, null);
         }
@@ -74,7 +74,7 @@ namespace ZXing.Unity
         /// <param name="options">The options.</param>
         /// <returns></returns>
         [System.CLSCompliant(false)]
-        public Color32[] Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+        public Color32Image Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
         {
             var result = new Color32[matrix.Width * matrix.Height];
             var offset = matrix.Height - 1;
@@ -113,7 +113,7 @@ namespace ZXing.Unity
                 }
             }
 
-            return result;
+            return new Color32Image(matrix.Width, matrix.Height, result);
         }
     }
 }

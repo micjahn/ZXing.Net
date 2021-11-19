@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-using ZXing.Rendering;
-
 namespace ZXing.Unity
 {
     /// <summary>
     /// A smart class to encode some content to a barcode image
     /// </summary>
     [System.CLSCompliant(false)]
-    public class BarcodeWriter : BarcodeWriter<UnityEngine.Color32[]>, IBarcodeWriter
+    public class BarcodeWriter : BarcodeWriter<Color32Image>, IBarcodeWriter
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.

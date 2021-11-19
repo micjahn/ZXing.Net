@@ -28,11 +28,11 @@ namespace ZXing.Unity
         /// Creates a visual representation of the contents
         /// </summary>
         [System.CLSCompliant(false)]
-        UnityEngine.Color32[] Write(string contents);
+        Color32Image Write(string contents);
         /// <summary>
         /// Returns a rendered instance of the barcode which is given by a BitMatrix.
         /// </summary>
         [System.CLSCompliant(false)]
-        UnityEngine.Color32[] Write(BitMatrix matrix);
+        Color32Image Write(BitMatrix matrix);
     }
 }

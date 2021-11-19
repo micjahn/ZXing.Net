@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-using UnityEngine;
-using ZXing.Unity;
-
 namespace ZXing
 {
+    using ZXing.Unity;
+
     /// <summary>
     /// extensions methods which are working directly on any BarcodeWriterGeneric implementation
     /// </summary>
     public static class BarcodeWriterExtensions
     {
         /// <summary>
-        /// uses the BarcodeWriterGeneric implementation and the <see cref="Color32Renderer"/> class for decoding
+        /// uses the BarcodeWriterGeneric implementation and the <see cref="Color32Renderer"/> class for encoding
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        public static Color32[] WriteAsColor32(this IBarcodeWriterGeneric writer, string content)
+        public static Color32Image WriteAsColor32(this IBarcodeWriterGeneric writer, string content)
         {
             var bitmatrix = writer.Encode(content);
             var renderer = new Color32Renderer();

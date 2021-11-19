@@ -28,6 +28,7 @@
 	
 	
   <ItemGroup>
+    <Compile Include="Color32Image.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Color32Renderer.cs" />
     <Compile Include="BarcodeReader.cs" />
