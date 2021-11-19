@@ -8,7 +8,15 @@
 
    Set res = reader.DecodeImageFile("D:\Barcodes\QrCodes\www.png")
 
-   End Function
+   If res.BarcodeFormat = BarcodeFormat.Error Then
+      Rem TODO: error handling
+   ElseIf res.BarcodeFormat = BarcodeFormat.None Then
+      Rem TODO: no barcode found
+   Else
+      Rem TODO: barcode found
+   End If
+
+End Function
 
 Function Decode_QR_Code_From_Byte_Array()
    Dim reader As IBarcodeReader
@@ -21,6 +29,14 @@ Function Decode_QR_Code_From_Byte_Array()
 
    Rem TODO: load bitmap data to byte array rawRGB
    Set res = reader.DecodeImageBytes(rawRGB, 10, 10, BitmapFormat.BitmapFormat_Gray8)
+
+   If res.BarcodeFormat = BarcodeFormat.Error Then
+      Rem TODO: error handling
+   ElseIf res.BarcodeFormat = BarcodeFormat.None Then
+      Rem TODO: no barcode found
+   Else
+      Rem TODO: barcode found
+   End If
 
 End Function
 
@@ -57,5 +73,13 @@ Function Decode_QR_Code_From_File_CreateObject()
    reader.options.PossibleFormats.Add BarcodeFormat_QR_CODE
 
    Set res = reader.DecodeImageFile("D:\Barcodes\QrCodes\www.png")
+
+   If res.BarcodeFormat = BarcodeFormat.Error Then
+      Rem TODO: error handling
+   ElseIf res.BarcodeFormat = BarcodeFormat.None Then
+      Rem TODO: no barcode found
+   Else
+      Rem TODO: barcode found
+   End If
 
 End Function
