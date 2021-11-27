@@ -121,6 +121,10 @@ namespace ZXing.QrCode.Internal
 
         private static bool isWhiteHorizontal(byte[] rowArray, int from, int to)
         {
+            if (from < 0 || rowArray.Length < to)
+            {
+                return false;
+            }
             from = Math.Max(from, 0);
             to = Math.Min(to, rowArray.Length);
             for (int i = from; i < to; i++)
@@ -135,6 +139,10 @@ namespace ZXing.QrCode.Internal
 
         private static bool isWhiteVertical(byte[][] array, int col, int from, int to)
         {
+            if (from < 0 || array.Length < to)
+            {
+                return false;
+            }
             from = Math.Max(from, 0);
             to = Math.Min(to, array.Length);
             for (int i = from; i < to; i++)
