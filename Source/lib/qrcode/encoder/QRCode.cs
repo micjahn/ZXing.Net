@@ -37,7 +37,7 @@ namespace ZXing.QrCode.Internal
         }
 
         /// <summary>
-        /// Gets or sets the mode, not relevant if {@link com.google.zxing.EncodeHintType.java#QR_COMPACT} is selected.
+        /// Gets or sets the mode, not relevant if <see cref="ZXing.EncodeHintType.QR_COMPACT"/> is selected.
         /// </summary>
         /// <value>
         /// The mode.
