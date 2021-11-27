@@ -80,91 +80,125 @@ namespace ZXing.QrCode.Internal
                                   ErrorCorrectionLevel ecLevel,
                                   IDictionary<EncodeHintType, object> hints)
         {
-            // Determine what character encoding has been specified by the caller, if any
-            bool hasEncodingHint = hints != null && hints.ContainsKey(EncodeHintType.CHARACTER_SET);
-
-#if !SILVERLIGHT || WINDOWS_PHONE
-            var encoding = DEFAULT_BYTE_MODE_ENCODING;
-            var encodingName = hasEncodingHint ? (String)hints[EncodeHintType.CHARACTER_SET] : null;
-            if (encodingName != null)
-            {
-                var eci = CharacterSetECI.getCharacterSetECIByName(encodingName);
-                if (eci == null)
-                    throw new WriterException(string.Format("Encoding {0} isn't supported", encodingName));
-                encoding = CharacterSetECI.getEncoding(eci);
-                if (encoding == null)
-                    throw new WriterException(string.Format("Encoding {0} isn't supported", encodingName));
-            }
-            var generateECI = hasEncodingHint || !DEFAULT_BYTE_MODE_ENCODING.Equals(encoding);
-#else
-            // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
-            var encoding = StringUtils.UTF8;
-            // caller of the method can only control if the ECI segment should be written
-            // character set is fixed to UTF-8; but some scanners doesn't like the ECI segment
-            var generateECI = hasEncodingHint;
-#endif
-
-            // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
-            // multiple modes / segments even if that were more efficient. Twould be nice.
-            var mode = chooseMode(content, encoding);
-
-            // This will store the header information, like mode and
-            // length, as well as "header" segments like an ECI segment.
-            var headerBits = new BitArray();
-
-            // Append ECI segment if applicable
-            if (mode == Mode.BYTE && generateECI)
-            {
-                var eci = CharacterSetECI.getCharacterSetECI(encoding);
-                if (eci != null)
-                {
-                    var eciIsExplicitDisabled = (hints != null && hints.ContainsKey(EncodeHintType.DISABLE_ECI) && hints[EncodeHintType.DISABLE_ECI] != null && Convert.ToBoolean(hints[EncodeHintType.DISABLE_ECI].ToString()));
-                    if (!eciIsExplicitDisabled)
-                    {
-                        appendECI(eci, headerBits);
-                    }
-                }
-            }
-
-            // Append the FNC1 mode header for GS1 formatted data if applicable
-            var hasGS1FormatHint = hints != null && hints.ContainsKey(EncodeHintType.GS1_FORMAT);
-            if (hasGS1FormatHint && hints[EncodeHintType.GS1_FORMAT] != null && Convert.ToBoolean(hints[EncodeHintType.GS1_FORMAT].ToString()))
-            {
-                // GS1 formatted codes are prefixed with a FNC1 in first position mode header
-                appendModeInfo(Mode.FNC1_FIRST_POSITION, headerBits);
-            }
-
-            // (With ECI in place,) Write the mode marker
-            appendModeInfo(mode, headerBits);
-
-            // Collect data within the main segment, separately, to count its size if needed. Don't add it to
-            // main payload yet.
-            var dataBits = new BitArray();
-            appendBytes(content, mode, dataBits, encoding);
 
             Version version;
-            if (hints != null && hints.ContainsKey(EncodeHintType.QR_VERSION))
+            BitArray headerAndDataBits;
+            Mode mode;
+
+            var hasGS1FormatHint = hints != null && hints.ContainsKey(EncodeHintType.GS1_FORMAT)
+                && hints[EncodeHintType.GS1_FORMAT] != null && Convert.ToBoolean(hints[EncodeHintType.GS1_FORMAT].ToString());
+            var hasCompactionHint = hints != null && hints.ContainsKey(EncodeHintType.QR_COMPACT)
+                && hints[EncodeHintType.QR_COMPACT] != null && Convert.ToBoolean(hints[EncodeHintType.QR_COMPACT].ToString());
+
+            if (hasCompactionHint)
             {
-                int versionNumber = Int32.Parse(hints[EncodeHintType.QR_VERSION].ToString());
-                version = Version.getVersionForNumber(versionNumber);
-                int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, version);
-                if (!willFit(bitsNeeded, version, ecLevel))
+                mode = Mode.BYTE;
+
+                MinimalEncoder.ResultList rn = MinimalEncoder.encode(content, null, hasGS1FormatHint);
+
+                while (!willFit(rn.Size, rn.getVersion(ecLevel), ecLevel))
                 {
-                    throw new WriterException("Data too big for requested version");
+                    if (rn.getVersion(ecLevel).VersionNumber <= 26)
+                    {
+                        int nextVersionNumber = rn.getVersion(ecLevel).VersionNumber <= 9 ? 10 : 27;
+                        rn = MinimalEncoder.encode(content, Version.getVersionForNumber(nextVersionNumber), hasGS1FormatHint);
+                    }
+                    else
+                    {
+                        throw new WriterException("Data too big for any version");
+                    }
                 }
+
+                headerAndDataBits = new BitArray();
+                rn.getBits(headerAndDataBits);
+                version = rn.getVersion(ecLevel);
             }
             else
             {
-                version = recommendVersion(ecLevel, mode, headerBits, dataBits);
-            }
+                // Determine what character encoding has been specified by the caller, if any
+                bool hasEncodingHint = hints != null && hints.ContainsKey(EncodeHintType.CHARACTER_SET);
 
-            var headerAndDataBits = new BitArray();
-            headerAndDataBits.appendBitArray(headerBits);
-            // Find "length" of main segment and write it
-            var numLetters = mode == Mode.BYTE ? dataBits.SizeInBytes : content.Length;
-            appendLengthInfo(numLetters, version, mode, headerAndDataBits);
-            // Put data together into the overall payload
-            headerAndDataBits.appendBitArray(dataBits);
+#if !SILVERLIGHT || WINDOWS_PHONE
+                var encoding = DEFAULT_BYTE_MODE_ENCODING;
+                var encodingName = hasEncodingHint ? (String)hints[EncodeHintType.CHARACTER_SET] : null;
+                if (encodingName != null)
+                {
+                    var eci = CharacterSetECI.getCharacterSetECIByName(encodingName);
+                    if (eci == null)
+                        throw new WriterException(string.Format("Encoding {0} isn't supported", encodingName));
+                    encoding = CharacterSetECI.getEncoding(eci);
+                    if (encoding == null)
+                        throw new WriterException(string.Format("Encoding {0} isn't supported", encodingName));
+                }
+                var generateECI = hasEncodingHint || !DEFAULT_BYTE_MODE_ENCODING.Equals(encoding);
+#else
+                // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
+                var encoding = StringUtils.UTF8;
+                // caller of the method can only control if the ECI segment should be written
+                // character set is fixed to UTF-8; but some scanners doesn't like the ECI segment
+                var generateECI = hasEncodingHint;
+#endif
+
+                // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
+                // multiple modes / segments even if that were more efficient. Twould be nice.
+                mode = chooseMode(content, encoding);
+
+                // This will store the header information, like mode and
+                // length, as well as "header" segments like an ECI segment.
+                var headerBits = new BitArray();
+
+                // Append ECI segment if applicable
+                if (mode == Mode.BYTE && generateECI)
+                {
+                    var eci = CharacterSetECI.getCharacterSetECI(encoding);
+                    if (eci != null)
+                    {
+                        var eciIsExplicitDisabled = (hints != null && hints.ContainsKey(EncodeHintType.DISABLE_ECI) && hints[EncodeHintType.DISABLE_ECI] != null && Convert.ToBoolean(hints[EncodeHintType.DISABLE_ECI].ToString()));
+                        if (!eciIsExplicitDisabled)
+                        {
+                            appendECI(eci, headerBits);
+                        }
+                    }
+                }
+
+                // Append the FNC1 mode header for GS1 formatted data if applicable
+                if (hasGS1FormatHint)
+                {
+                    // GS1 formatted codes are prefixed with a FNC1 in first position mode header
+                    appendModeInfo(Mode.FNC1_FIRST_POSITION, headerBits);
+                }
+
+                // (With ECI in place,) Write the mode marker
+                appendModeInfo(mode, headerBits);
+
+                // Collect data within the main segment, separately, to count its size if needed. Don't add it to
+                // main payload yet.
+                var dataBits = new BitArray();
+                appendBytes(content, mode, dataBits, encoding);
+
+                if (hints != null && hints.ContainsKey(EncodeHintType.QR_VERSION))
+                {
+                    int versionNumber = Int32.Parse(hints[EncodeHintType.QR_VERSION].ToString());
+                    version = Version.getVersionForNumber(versionNumber);
+                    int bitsNeeded = calculateBitsNeeded(mode, headerBits, dataBits, version);
+                    if (!willFit(bitsNeeded, version, ecLevel))
+                    {
+                        throw new WriterException("Data too big for requested version");
+                    }
+                }
+                else
+                {
+                    version = recommendVersion(ecLevel, mode, headerBits, dataBits);
+                }
+
+                headerAndDataBits = new BitArray();
+                headerAndDataBits.appendBitArray(headerBits);
+                // Find "length" of main segment and write it
+                var numLetters = mode == Mode.BYTE ? dataBits.SizeInBytes : content.Length;
+                appendLengthInfo(numLetters, version, mode, headerAndDataBits);
+                // Put data together into the overall payload
+                headerAndDataBits.appendBitArray(dataBits);
+            }
 
             var ecBlocks = version.getECBlocksForLevel(ecLevel);
             var numDataBytes = version.TotalCodewords - ecBlocks.TotalECCodewords;
@@ -302,7 +336,7 @@ namespace ZXing.QrCode.Internal
             return Mode.BYTE;
         }
 
-        private static bool isOnlyDoubleByteKanji(String content)
+        internal static bool isOnlyDoubleByteKanji(String content)
         {
             byte[] bytes;
             try
@@ -372,7 +406,7 @@ namespace ZXing.QrCode.Internal
 
         /// <summary></summary>
         /// <returns>true if the number of input bits will fit in a code with the specified version and error correction level.</returns>
-        private static bool willFit(int numInputBits, Version version, ErrorCorrectionLevel ecLevel)
+        internal static bool willFit(int numInputBits, Version version, ErrorCorrectionLevel ecLevel)
         {
             // In the following comments, we use numbers of Version 7-H.
             // numBytes = 196

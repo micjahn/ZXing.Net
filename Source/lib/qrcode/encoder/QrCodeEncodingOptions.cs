@@ -152,10 +152,36 @@ namespace ZXing.QrCode
                 }
             }
         }
+
+
+        /// <summary>
+        /// Specifies whether to use compact mode for QR code (type <see cref="System.Boolean" />, or "true" or "false"
+        /// When compaction is performed the value for {@link CHARACTER_SET} is ignored.
+        /// <see cref="System.String" /> value).
+        /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies whether to use compact mode for QR code" +
+            "When compaction is performed the value for CharacterSet is ignored.")]
+#endif
+        public bool QrCompact
+        {
+            get
+            {
+                if (Hints.ContainsKey(EncodeHintType.QR_COMPACT))
+                {
+                    return (bool)Hints[EncodeHintType.QR_COMPACT];
+                }
+                return false;
+            }
+            set
+            {
+                Hints[EncodeHintType.QR_COMPACT] = value;
+            }
+        }
     }
 
 #if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
-   internal class ErrorLevelConverter : TypeConverter
+    internal class ErrorLevelConverter : TypeConverter
    {
       public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
       {

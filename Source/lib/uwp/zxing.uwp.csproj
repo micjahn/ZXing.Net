@@ -905,6 +905,9 @@
     <Compile Include="..\qrcode\encoder\MatrixUtil.cs">
       <Link>qrcode\encoder\MatrixUtil.cs</Link>
     </Compile>
+    <Compile Include="..\qrcode\encoder\MinimalEncoder.cs">
+      <Link>qrcode\encoder\MinimalEncoder.cs</Link>
+    </Compile>
     <Compile Include="..\qrcode\encoder\QRCode.cs">
       <Link>qrcode\encoder\QRCode.cs</Link>
     </Compile>

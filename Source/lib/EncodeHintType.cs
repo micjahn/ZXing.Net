@@ -175,6 +175,13 @@ namespace ZXing
         /// Forces which encoding will be used. Currently only used for Code-128 code sets (Type <see cref="System.String" />). Valid values are "A", "B", "C".
         /// see also CODE128_FORCE_CODESET_B
         /// </summary>
-        FORCE_CODE_SET
+        FORCE_CODE_SET,
+
+        /// <summary>
+        /// Specifies whether to use compact mode for QR code (type <see cref="System.Boolean" />, or "true" or "false"
+        /// When compaction is performed the value for {@link CHARACTER_SET} is ignored.
+        /// <see cref="System.String" /> value).
+        /// </summary>
+        QR_COMPACT,
     }
 }

@@ -31,6 +31,12 @@ using System.Runtime.InteropServices;
 #if NET48
 [assembly: AssemblyTitle("zxing.net for .net 4.8")]
 #endif
+#if NET5_0
+[assembly: AssemblyTitle("zxing.net for .net 5.0")]
+#endif
+#if NET6_0
+[assembly: AssemblyTitle("zxing.net for .net 6.0")]
+#endif
 #if SILVERLIGHT4
 [assembly: AssemblyTitle("zxing.net for silverlight 4")]
 #endif
@@ -64,7 +70,7 @@ using System.Runtime.InteropServices;
 #if NETFX_CORE && !WINDOWS_UWP
 [assembly: AssemblyTitle("zxing.net for windows rt")]
 #endif
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 08.10.2021 04:31:16)")]
+[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 09.10.2021 17:50:46)")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyProduct("ZXing.Net")]
 [assembly: AssemblyCopyright("Copyright © 2012")]

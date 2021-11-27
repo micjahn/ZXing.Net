@@ -80,42 +80,44 @@ namespace ZXing.QrCode.Internal
         // No, we can't use an enum here. J2ME doesn't support it.
 
         /// <summary>
+        /// Not really a mode...
+        /// </summary>
+        public static readonly Mode TERMINATOR = new Mode(new int[] { 0, 0, 0 }, 0x00, Names.TERMINATOR);
+        /// <summary>
         /// 
         /// </summary>
-        public static readonly Mode TERMINATOR = new Mode(new int[] { 0, 0, 0 }, 0x00, Names.TERMINATOR); // Not really a mode...
-                                                                                                          /// <summary>
-                                                                                                          /// 
-                                                                                                          /// </summary>
         public static readonly Mode NUMERIC = new Mode(new int[] { 10, 12, 14 }, 0x01, Names.NUMERIC);
         /// <summary>
         /// 
         /// </summary>
         public static readonly Mode ALPHANUMERIC = new Mode(new int[] { 9, 11, 13 }, 0x02, Names.ALPHANUMERIC);
         /// <summary>
-        /// 
+        /// Not supported
         /// </summary>
-        public static readonly Mode STRUCTURED_APPEND = new Mode(new int[] { 0, 0, 0 }, 0x03, Names.STRUCTURED_APPEND); // Not supported
-                                                                                                                        /// <summary>
-                                                                                                                        /// 
-                                                                                                                        /// </summary>
-        public static readonly Mode BYTE = new Mode(new int[] { 8, 16, 16 }, 0x04, Names.BYTE);
+        public static readonly Mode STRUCTURED_APPEND = new Mode(new int[] { 0, 0, 0 }, 0x03, Names.STRUCTURED_APPEND);
         /// <summary>
         /// 
         /// </summary>
-        public static readonly Mode ECI = new Mode(null, 0x07, Names.ECI); // character counts don't apply
-                                                                           /// <summary>
-                                                                           /// 
-                                                                           /// </summary>
+        public static readonly Mode BYTE = new Mode(new int[] { 8, 16, 16 }, 0x04, Names.BYTE);
+        /// <summary>
+        /// character counts don't apply
+        /// </summary>
+        public static readonly Mode ECI = new Mode(new int[] { 0, 0, 0 }, 0x07, Names.ECI);
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly Mode KANJI = new Mode(new int[] { 8, 10, 12 }, 0x08, Names.KANJI);
         /// <summary>
         /// 
         /// </summary>
-        public static readonly Mode FNC1_FIRST_POSITION = new Mode(null, 0x05, Names.FNC1_FIRST_POSITION);
+        public static readonly Mode FNC1_FIRST_POSITION = new Mode(new int[] { 0, 0, 0 }, 0x05, Names.FNC1_FIRST_POSITION);
         /// <summary>
         /// 
         /// </summary>
-        public static readonly Mode FNC1_SECOND_POSITION = new Mode(null, 0x09, Names.FNC1_SECOND_POSITION);
-        /// <summary>See GBT 18284-2000; "Hanzi" is a transliteration of this mode name.</summary>
+        public static readonly Mode FNC1_SECOND_POSITION = new Mode(new int[] { 0, 0, 0 }, 0x09, Names.FNC1_SECOND_POSITION);
+        /// <summary>
+        /// See GBT 18284-2000; "Hanzi" is a transliteration of this mode name.
+        /// </summary>
         public static readonly Mode HANZI = new Mode(new int[] { 8, 10, 12 }, 0x0D, Names.HANZI);
 
         private readonly int[] characterCountBitsForVersions;
