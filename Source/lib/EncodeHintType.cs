@@ -179,7 +179,7 @@ namespace ZXing
 
         /// <summary>
         /// Specifies whether to use compact mode for QR code (type <see cref="System.Boolean" />, or "true" or "false"
-        /// When compaction is performed the value for {@link CHARACTER_SET} is ignored.
+        /// When compaction is performed the value for <see cref="CHARACTER_SET"/> is ignored.
         /// <see cref="System.String" /> value).
         /// </summary>
         QR_COMPACT,

@@ -70,8 +70,6 @@ namespace ZXing.QrCode.Internal
     /// </summary>
     internal class MinimalEncoder
     {
-        //  static final boolean DEBUG = false;
-
         internal enum VersionSize
         {
             SMALL,
@@ -225,8 +223,8 @@ namespace ZXing.QrCode.Internal
                     }
                 }
 
-                encoders[index++] = Clone(Encoding.UTF8);
-                encoders[index++] = Clone(Encoding.BigEndianUnicode);
+                encoders[index] = Clone(Encoding.UTF8);
+                encoders[index + 1] = Clone(Encoding.BigEndianUnicode);
             }
         }
 
@@ -298,11 +296,6 @@ namespace ZXing.QrCode.Internal
             return count == 0 ? 0 : 1 << count;
         }
 
-        public static int getMaximumNumberOfEncodeableCharacters(VersionSize versionSize, Mode mode)
-        {
-            return getMaximumNumberOfEncodeableCharacters(getVersion(versionSize), mode);
-        }
-
         public bool canEncode(Mode mode, char c)
         {
             switch (mode.Name)
@@ -346,11 +339,11 @@ namespace ZXing.QrCode.Internal
         private static ResultList smallest(ResultList[] results)
         {
             ResultList smallestResult = null;
-            for (int i = 0; i < results.Length; i++)
+            foreach (ResultList result in results)
             {
-                if (smallestResult == null || (results[i] != null && results[i].Size < smallestResult.Size))
+                if (smallestResult == null || (result != null && result.Size < smallestResult.Size))
                 {
-                    smallestResult = results[i];
+                    smallestResult = result;
                 }
             }
             return smallestResult;
@@ -395,7 +388,7 @@ namespace ZXing.QrCode.Internal
                 }
             }
             //Add TERMINATOR according to "8.4.8 Terminator"
-            //TODO: The terminiator can be omitted if there are less than 4 bit in the capacity of the symbol.
+            //TODO: The terminator can be omitted if there are less than 4 bit in the capacity of the symbol.
             result.AddLast(new ResultList.ResultNode(Mode.TERMINATOR, stringToEncode.Length, 0, 0, this, result));
             return result;
         }
@@ -403,57 +396,29 @@ namespace ZXing.QrCode.Internal
         private int getEdgeCharsetEncoderIndex(ResultList edge)
         {
             var last = edge.Last;
-            // assert last != null;
             return last != null ? last.Value.charsetEncoderIndex : 0;
         }
 
         private Mode getEdgeMode(ResultList edge)
         {
             var last = edge.Last;
-            // assert last != null;
             return last != null ? last.Value.mode : Mode.BYTE;
         }
 
         private int getEdgePosition(ResultList edge)
         {
-            //The algorithm appends an edge at some point (in the method addEdge() with a minimal solution.
-            //This function works regardless if the concatenation has already taken place or not.
+            // The algorithm appends an edge at some point (in the method addEdge() with a minimal solution.
+            // This function works regardless if the concatenation has already taken place or not.
             var last = edge.Last;
-            // assert last != null;
             return last != null ? last.Value.position : 0;
         }
 
         private int getEdgeLength(ResultList edge)
         {
-            //The algorithm appends an edge at some point (in the method addEdge() with a minimal solution.
-            //This function works regardless if the concatenation has already taken place or not.
+            // The algorithm appends an edge at some point (in the method addEdge() with a minimal solution.
+            // This function works regardless if the concatenation has already taken place or not.
             var last = edge.Last;
-            // assert last != null;
             return last != null ? last.Value.CharacterLength : 0;
-        }
-
-        private ResultList.ResultNode getEdgePrevious(ResultList edge)
-        {
-            var node = edge.Last;
-            // assert it.hasNext();
-            if (node == null)
-            {
-                return null;
-            }
-            var previousNode = node.Previous;
-            if (previousNode == null)
-            {
-                return null;
-            }
-            if (previousNode.Value.mode == Mode.ECI)
-            {
-                previousNode = previousNode.Previous;
-                if (previousNode == null)
-                {
-                    return null;
-                }
-            }
-            return previousNode.Value;
         }
 
         private void addEdge(List<ResultList>[][][] vertices, ResultList edge, ResultList previous)
@@ -464,16 +429,6 @@ namespace ZXing.QrCode.Internal
                 vertices[vertexIndex][getEdgeCharsetEncoderIndex(edge)][getCompactedOrdinal(getEdgeMode(edge))] = new List<ResultList>();
             }
             vertices[vertexIndex][getEdgeCharsetEncoderIndex(edge)][getCompactedOrdinal(getEdgeMode(edge))].Add(edge);
-
-            //    if (DEBUG) {
-            //      if (previous == null) {
-            //        System.err.println("DEBUG adding edge " + edge + " from " + edge.getPosition() + " to " + vertexIndex +
-            //            " with an accumulated size of " + edge.getSize());
-            //      } else {
-            //        System.err.println("DEBUG adding edge " + edge + " from " + vertexToString(previous.getPosition(), previous)
-            //            + " to " + vertexToString(vertexIndex, edge) + " with an accumulated size of " + edge.getSize());
-            //      }
-            //    }
 
             if (previous != null)
             {
@@ -531,88 +486,8 @@ namespace ZXing.QrCode.Internal
             }
         }
 
-        //  String vertexToString(int position, ResultList rl) {
-        //    return (position >= stringToEncode.length() ? "end vertex" : "vertex for character '" +
-        //      stringToEncode.charAt(position) + "' at position " + position) + " with encoding " +
-        //        encoders[getEdgeCharsetEncoderIndex(rl)].charset().name() + " and mode " + getEdgeMode(rl);
-        //  }
-        //  void printEdges(ArrayList<ResultList>[][][] vertices) {
-        //
-        //    final boolean showCompacted = true;
-        //
-        //    boolean willHaveECI = encoders.length > 1;
-        //    ArrayList<String> edgeStrings = new ArrayList<String>();
-        //    int inputLength = stringToEncode.length();
-        //    for (int i = 1; i <= inputLength; i++) {
-        //      for (int j = 0; j < encoders.length; j++) {
-        //        for (int k = 0; k < 4; k++) {
-        //          if (vertices[i][j][k] != null) {
-        //            ArrayList<ResultList> edges = vertices[i][j][k];
-        //            assert edges.size() > 0;
-        //            if (edges.size() > 0) {
-        //              ResultList edge = edges.get(0);
-        //              String vertexKey = "" + i + "_" + getEdgeMode(edge) + (willHaveECI ? "_" +
-        //                  encoders[getEdgeCharsetEncoderIndex(edge)].charset().name() : "");
-        //              int fromPosition = getEdgePosition(edge);
-        //              ResultList.ResultNode previous = getEdgePrevious(edge);
-        //              String fromKey = previous == null ? "initial" : "" + fromPosition + "_" + previous.mode +
-        //                  (willHaveECI ? "_" + encoders[previous.charsetEncoderIndex].charset().name() : "");
-        //              int toPosition = fromPosition + getEdgeLength(edge);
-        //              edgeStrings.add("(" + fromKey + ") -- " + getEdgeMode(edge) + (toPosition - 
-        //                  fromPosition > 0 ? "(" + stringToEncode.substring(fromPosition, toPosition) + 
-        //                  ")" : "") + " (" + edge.getSize() + ")" + " --> " + "(" + vertexKey + ")");
-        //            }
-        //          }
-        //        }
-        //      }
-        //    }
-        //
-        //    if (showCompacted) {
-        //      boolean modifiedSomething;
-        //      do {
-        //        modifiedSomething = false;
-        //        for (Iterator<String> it = edgeStrings.iterator(); it.hasNext();) {
-        //          String edge = it.next();
-        //          if (edge.startsWith("(initial)")) {
-        //            int pos = edge.lastIndexOf("--> (");
-        //            String toKey = edge.substring(pos + 4);
-        //            int cnt = 0;
-        //            for (Iterator<String> it1 = edgeStrings.iterator(); it1.hasNext();) {
-        //              String edge1 = it1.next();
-        //              String fromKey = edge1.substring(0, edge1.indexOf(')') + 1);
-        //              if (fromKey.equals(toKey)) {
-        //                cnt++;
-        //              }
-        //            }
-        //            for (Iterator<String> it1 = edgeStrings.iterator(); it1.hasNext();) {
-        //              String edge1 = it1.next();
-        //              String fromKey = edge1.substring(0, edge1.indexOf(')') + 1);
-        //              if (fromKey.equals(toKey)) {
-        //                modifiedSomething = true;
-        //                if (cnt == 1) {
-        //                  edgeStrings.remove(edgeStrings.indexOf(edge));
-        //                }
-        //                edgeStrings.remove(edgeStrings.indexOf(edge1));
-        //                edgeStrings.add(edge.substring(0, pos + 4) + edge1);
-        //                break;
-        //              }
-        //            }
-        //            if (modifiedSomething) {
-        //              break;
-        //            }
-        //          }
-        //        }
-        //      } while (modifiedSomething);
-        //    }
-        //  
-        //    for (Iterator<String> it = edgeStrings.iterator(); it.hasNext();) {
-        //      System.err.println("DEBUG " + it.next());
-        //    }
-        //  }
-
         public ResultList encode(Version version)
         {
-
             /* A vertex represents a tuple of a position in the input, a mode and an a character encoding where position 0
              * denotes the position left of the first character, 1 the position left of the second character and so on.
              * Likewise the end vertices are located after the last character at position stringToEncode.length().
@@ -623,10 +498,10 @@ namespace ZXing.QrCode.Internal
              * encoding. They differ only by their source vertices who are all located at i+1 minus the number of encoded
              * characters.
              *
-             * The edges leading to a vertex are stored in such a way that there is a fast way to enumerate the edges ending on a
-             * particular vertex.
+             * The edges leading to a vertex are stored in such a way that there is a fast way to enumerate the edges ending
+             * on a particular vertex.
              *
-             * The algorithm processes the vertices in order of their position therby performing the following:
+             * The algorithm processes the vertices in order of their position thereby performing the following:
              *
              * For every vertex at position i the algorithm enumerates the edges ending on the vertex and removes all but the
              * shortest from that list.
@@ -660,38 +535,27 @@ namespace ZXing.QrCode.Internal
              * (initial) -- BYTE(A) (20) --> (1_BYTE) -- BYTE(B) (28) --> (2_BYTE)
                                            * (1_BYTE) -- ALPHANUMERIC(BC)                             (44) --> (3_ALPHANUMERIC)
              * (initial) -- ALPHANUMERIC(AB)                     (24) --> (2_ALPHANUMERIC) -- BYTE(C) (44) --> (3_BYTE)
-             *                                                            (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                     \
-             *        (35) --> (4_ALPHANUMERIC)
+             *                                                            (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                             (35) --> (4_ALPHANUMERIC)
              *
              * Situation after adding edges to vertices at position 3
              * (initial) -- BYTE(A) (20) --> (1_BYTE) -- BYTE(B) (28) --> (2_BYTE) -- BYTE(C)         (36) --> (3_BYTE)
-             *                               (1_BYTE) -- ALPHANUMERIC(BC)                             (44) --> (3_ALPHANUMERIC) -- \
-             *BYTE(D) (64) --> (4_BYTE)
-             *                                                                                                 (3_ALPHANUMERIC) -- \
-             *ALPHANUMERIC(DE)                             (55) --> (5_ALPHANUMERIC)
-             * (initial) -- ALPHANUMERIC(AB)                     (24) --> (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                     \
-             *        (35) --> (4_ALPHANUMERIC)
-             *                                                            (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                     \
-             *        (35) --> (4_ALPHANUMERIC)
+             *                               (1_BYTE) -- ALPHANUMERIC(BC)                             (44) --> (3_ALPHANUMERIC) -- BYTE(D) (64) --> (4_BYTE)
+             *                                                                                                 (3_ALPHANUMERIC) -- ALPHANUMERIC(DE)                             (55) --> (5_ALPHANUMERIC)
+             * (initial) -- ALPHANUMERIC(AB)                     (24) --> (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                             (35) --> (4_ALPHANUMERIC)
+             *                                                            (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                             (35) --> (4_ALPHANUMERIC)
              *
              * Situation after adding edges to vertices at position 4
-             * (initial) -- BYTE(A) (20) --> (1_BYTE) -- BYTE(B) (28) --> (2_BYTE) -- BYTE(C)         (36) --> (3_BYTE) -- BYTE(D) \
-             *(44) --> (4_BYTE)
-             *                               (1_BYTE) -- ALPHANUMERIC(BC)                             (44) --> (3_ALPHANUMERIC) -- \
-             *ALPHANUMERIC(DE)                             (55) --> (5_ALPHANUMERIC)
-             * (initial) -- ALPHANUMERIC(AB)                     (24) --> (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                     \
-             *        (35) --> (4_ALPHANUMERIC) -- BYTE(E) (55) --> (5_BYTE)
+             * (initial) -- BYTE(A) (20) --> (1_BYTE) -- BYTE(B) (28) --> (2_BYTE) -- BYTE(C)         (36) --> (3_BYTE) -- BYTE(D) (44) --> (4_BYTE)
+             *                               (1_BYTE) -- ALPHANUMERIC(BC)                             (44) --> (3_ALPHANUMERIC) -- ALPHANUMERIC(DE)                             (55) --> (5_ALPHANUMERIC)
+             * (initial) -- ALPHANUMERIC(AB)                     (24) --> (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                             (35) --> (4_ALPHANUMERIC) -- BYTE(E) (55) --> (5_BYTE)
              *
              * Situation after adding edges to vertices at position 5
-             * (initial) -- BYTE(A) (20) --> (1_BYTE) -- BYTE(B) (28) --> (2_BYTE) -- BYTE(C)         (36) --> (3_BYTE) -- BYTE(D) \
-             *        (44) --> (4_BYTE) -- BYTE(E)         (52) --> (5_BYTE)
-             *                               (1_BYTE) -- ALPHANUMERIC(BC)                             (44) --> (3_ALPHANUMERIC) -- \
-             *ALPHANUMERIC(DE)                             (55) --> (5_ALPHANUMERIC)
-             * (initial) -- ALPHANUMERIC(AB)                     (24) --> (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                     \
-             *        (35) --> (4_ALPHANUMERIC)
+             * (initial) -- BYTE(A) (20) --> (1_BYTE) -- BYTE(B) (28) --> (2_BYTE) -- BYTE(C)         (36) --> (3_BYTE) -- BYTE(D)         (44) --> (4_BYTE) -- BYTE(E)         (52) --> (5_BYTE)
+             *                               (1_BYTE) -- ALPHANUMERIC(BC)                             (44) --> (3_ALPHANUMERIC) -- ALPHANUMERIC(DE)                             (55) --> (5_ALPHANUMERIC)
+             * (initial) -- ALPHANUMERIC(AB)                     (24) --> (2_ALPHANUMERIC) -- ALPHANUMERIC(CD)                             (35) --> (4_ALPHANUMERIC)
              *
-             * Encoding as BYTE(ABCDE) has the smallest size of 52 and is hence chosen. The encodation ALPHANUMERIC(ABCD), BYTE(E)
-             * is longer with a size of 55.
+             * Encoding as BYTE(ABCDE) has the smallest size of 52 and is hence chosen. The encodation ALPHANUMERIC(ABCD),
+             * BYTE(E) is longer with a size of 55.
              *
              * Example 2 encoding the string "XXYY" where X denotes a character unique to character set ISO-8859-2 and Y a
              * character unique to ISO-8859-3. Both characters encode as double byte in UTF-8:
@@ -710,41 +574,29 @@ namespace ZXing.QrCode.Internal
              *
              * Situation after adding edges to vertices at position 2
              * (initial) -- BYTE(X) (32) --> (1_BYTE_ISO-8859-2) -- BYTE(X) (40) --> (2_BYTE_ISO-8859-2)
-             *                                                                       (2_BYTE_ISO-8859-2) -- BYTE(Y) (72) --> (3_BYT\
-             *E_ISO-8859-3)
-             *                                                                       (2_BYTE_ISO-8859-2) -- BYTE(Y) (80) --> (3_BYT\
-             *E_UTF-8)
-             *                                                                       (2_BYTE_ISO-8859-2) -- BYTE(Y) (80) --> (3_BYT\
-             *E_UTF-16BE)
+             *                                                                       (2_BYTE_ISO-8859-2) -- BYTE(Y) (72) --> (3_BYTE_ISO-8859-3)
+             *                                                                       (2_BYTE_ISO-8859-2) -- BYTE(Y) (80) --> (3_BYTE_UTF-8)
+             *                                                                       (2_BYTE_ISO-8859-2) -- BYTE(Y) (80) --> (3_BYTE_UTF-16BE)
              * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-8) -- BYTE(X) (56) --> (2_BYTE_UTF-8)
              * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-16BE) -- BYTE(X) (56) --> (2_BYTE_UTF-16BE)
              *
              * Situation after adding edges to vertices at position 3
-             * (initial) -- BYTE(X) (32) --> (1_BYTE_ISO-8859-2) -- BYTE(X) (40) --> (2_BYTE_ISO-8859-2) -- BYTE(Y) (72) --> (3_BYT\
-             *E_ISO-8859-3)
-             *                                                                                                               (3_BYT\
-             *E_ISO-8859-3) -- BYTE(Y) (80) --> (4_BYTE_ISO-8859-3)
-             *                                                                                                               (3_BYT\
-             *E_ISO-8859-3) -- BYTE(Y) (112) --> (4_BYTE_UTF-8)
-             *                                                                                                               (3_BYT\
-             *E_ISO-8859-3) -- BYTE(Y) (112) --> (4_BYTE_UTF-16BE)
+             * (initial) -- BYTE(X) (32) --> (1_BYTE_ISO-8859-2) -- BYTE(X) (40) --> (2_BYTE_ISO-8859-2) -- BYTE(Y) (72) --> (3_BYTE_ISO-8859-3)
+             *                                                                                                               (3_BYTE_ISO-8859-3) -- BYTE(Y) (80) --> (4_BYTE_ISO-8859-3)
+             *                                                                                                               (3_BYTE_ISO-8859-3) -- BYTE(Y) (112) --> (4_BYTE_UTF-8)
+             *                                                                                                               (3_BYTE_ISO-8859-3) -- BYTE(Y) (112) --> (4_BYTE_UTF-16BE)
              * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-8) -- BYTE(X) (56) --> (2_BYTE_UTF-8) -- BYTE(Y) (72) --> (3_BYTE_UTF-8)
-             * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-16BE) -- BYTE(X) (56) --> (2_BYTE_UTF-16BE) -- BYTE(Y) (72) --> (3_BYTE_UT\
-             *F-16BE)
+             * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-16BE) -- BYTE(X) (56) --> (2_BYTE_UTF-16BE) -- BYTE(Y) (72) --> (3_BYTE_UTF-16BE)
              *
              * Situation after adding edges to vertices at position 4
-             * (initial) -- BYTE(X) (32) --> (1_BYTE_ISO-8859-2) -- BYTE(X) (40) --> (2_BYTE_ISO-8859-2) -- BYTE(Y) (72) --> (3_BYT\
-             *E_ISO-8859-3) -- BYTE(Y) (80) --> (4_BYTE_ISO-8859-3)
-             *                                                                                                               (3_BYT\
-             *E_UTF-8) -- BYTE(Y) (88) --> (4_BYTE_UTF-8)
-             *                                                                                                               (3_BYT\
-             *E_UTF-16BE) -- BYTE(Y) (88) --> (4_BYTE_UTF-16BE)
+             * (initial) -- BYTE(X) (32) --> (1_BYTE_ISO-8859-2) -- BYTE(X) (40) --> (2_BYTE_ISO-8859-2) -- BYTE(Y) (72) --> (3_BYTE_ISO-8859-3) -- BYTE(Y) (80) --> (4_BYTE_ISO-8859-3)
+             *                                                                                                               (3_BYTE_UTF-8) -- BYTE(Y) (88) --> (4_BYTE_UTF-8)
+             *                                                                                                               (3_BYTE_UTF-16BE) -- BYTE(Y) (88) --> (4_BYTE_UTF-16BE)
              * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-8) -- BYTE(X) (56) --> (2_BYTE_UTF-8) -- BYTE(Y) (72) --> (3_BYTE_UTF-8)
-             * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-16BE) -- BYTE(X) (56) --> (2_BYTE_UTF-16BE) -- BYTE(Y) (72) --> (3_BYTE_UT\
-             *F-16BE)
+             * (initial) -- BYTE(X) (40) --> (1_BYTE_UTF-16BE) -- BYTE(X) (56) --> (2_BYTE_UTF-16BE) -- BYTE(Y) (72) --> (3_BYTE_UTF-16BE)
              *
-             * Encoding as ECI(ISO-8859-2),BYTE(XX),ECI(ISO-8859-3),BYTE(YY) has the smallest size of 80 and is hence chosen. The
-             * encodation ECI(UTF-8),BYTE(XXYY) is longer with a size of 88.
+             * Encoding as ECI(ISO-8859-2),BYTE(XX),ECI(ISO-8859-3),BYTE(YY) has the smallest size of 80 and is hence chosen.
+             * The encodation ECI(UTF-8),BYTE(XXYY) is longer with a size of 88.
              */
             int inputLength = stringToEncode.Length;
 
@@ -765,19 +617,13 @@ namespace ZXing.QrCode.Internal
             }
             addEdges(version, vertices, 0, null);
 
-            //    if (DEBUG) {
-            //      System.err.println("DEBUG computing solution for " + getVersionSize(version));
-            //      System.err.println("DEBUG Initial situation");
-            //      printEdges(vertices);
-            //    }
-
             for (int i = 1; i <= inputLength; i++)
             {
                 for (int j = 0; j < encoders.Length; j++)
                 {
                     for (int k = 0; k < 4; k++)
                     {
-                        ResultList minimalEdge = null;
+                        ResultList minimalEdge;
                         if (vertices[i][j][k] != null)
                         {
                             List<ResultList> edges = vertices[i][j][k];
@@ -799,31 +645,17 @@ namespace ZXing.QrCode.Internal
                                         minimalSize = edge.Size;
                                     }
                                 }
-                                // assert minimalIndex != -1;
                                 minimalEdge = edges[minimalIndex];
                                 edges.Clear();
                                 edges.Add(minimalEdge);
                             }
                             if (i < inputLength)
                             {
-                                //assert minimalEdge != null;
-
-                                //              if (DEBUG && minimalEdge != null) {
-                                //                System.err.println("DEBUG processing " + vertexToString(i, minimalEdge) +
-                                //                    ". The minimal edge leading to this vertex is " + minimalEdge + " with a size of " 
-                                //                    + minimalEdge.getSize());
-                                //              }
-
                                 addEdges(version, vertices, i, minimalEdge);
                             }
                         }
                     }
                 }
-
-                //      if (DEBUG) {
-                //        System.err.println("DEBUG situation after adding edges to vertices at position " + i);
-                //        printEdges(vertices);
-                //      }
             }
             {
                 int minimalJ = -1;
@@ -836,7 +668,6 @@ namespace ZXing.QrCode.Internal
                         if (vertices[inputLength][j][k] != null)
                         {
                             List<ResultList> edges = vertices[inputLength][j][k];
-                            // assert edges.size() == 1;
                             ResultList edge = edges[0];
                             if (edge.Size < minimalSize)
                             {
@@ -847,20 +678,11 @@ namespace ZXing.QrCode.Internal
                         }
                     }
                 }
-                // assert minimalJ != -1;
-                if (minimalJ >= 0)
-                {
-                    //      if (DEBUG) {
-                    //        System.err.println("DEBUG the minimal solution for version " + version + " is " + vertices[inputLength]
-                    //            [minimalJ][minimalK].get(0));
-                    //      }
-
-                    return vertices[inputLength][minimalJ][minimalK][0];
-                }
-                else
+                if (minimalJ < 0)
                 {
                     throw new WriterException("Internal error: failed to encode");
                 }
+                return vertices[inputLength][minimalJ][minimalK][0];
             }
         }
 
@@ -909,16 +731,12 @@ namespace ZXing.QrCode.Internal
 
             public LinkedListNode<ResultNode> addFirst(ResultNode n)
             {
-
                 var next = First;
                 if (next != null)
                 {
-                    next.Value.declaresMode = true;
-                    if (n.mode == next.Value.mode && next.Value.mode != Mode.ECI && n.CharacterLength + next.Value.CharacterLength <
-                          getMaximumNumberOfEncodeableCharacters(version, next.Value.mode))
-                    {
-                        next.Value.declaresMode = false;
-                    }
+                    next.Value.declaresMode = n.mode != next.Value.mode ||
+                        next.Value.mode == Mode.ECI ||
+                        n.CharacterLength + next.Value.CharacterLength >= getMaximumNumberOfEncodeableCharacters(version, next.Value.mode);
                 }
 
                 return AddFirst(n);
@@ -935,53 +753,6 @@ namespace ZXing.QrCode.Internal
                     foreach (var item in this)
                     {
                         result += item.Size;
-                    }
-                    return result;
-                }
-            }
-
-            /// <summary>
-            /// returns the start position
-            /// </summary>
-            /// <returns></returns>
-            private int Position
-            {
-                get
-                {
-                    return First != null ? First.Value.position : 0;
-                }
-            }
-
-            /// <summary>
-            /// returns the length in characters
-            /// </summary>
-            /// <returns></returns>
-            public int CharacterLength
-            {
-                get
-                {
-                    int result = 0;
-                    foreach (var item in this)
-                    {
-                        result += item.CharacterLength;
-                    }
-                    return result;
-                }
-            }
-
-            /// <summary>
-            /// returns the length in characters according to the specification (differs from getCharacterLength() in BYTE mode
-            /// for multi byte encoded characters)
-            /// </summary>
-            /// <returns></returns>
-            public int CharacterCountIndicator
-            {
-                get
-                {
-                    int result = 0;
-                    foreach (var item in this)
-                    {
-                        result += item.CharacterCountIndicator;
                     }
                     return result;
                 }
@@ -1040,15 +811,13 @@ namespace ZXing.QrCode.Internal
                         upperLimit = 40;
                         break;
                 }
-                //increase version if needed
-                while (versionNumber < upperLimit && !Encoder.willFit(Size, Version.getVersionForNumber(versionNumber),
-                  ecLevel))
+                // increase version if needed
+                while (versionNumber < upperLimit && !Encoder.willFit(Size, Version.getVersionForNumber(versionNumber), ecLevel))
                 {
                     versionNumber++;
                 }
-                //shrink version if possible
-                while (versionNumber > lowerLimit && Encoder.willFit(Size, Version.getVersionForNumber(versionNumber - 1),
-                  ecLevel))
+                // shrink version if possible
+                while (versionNumber > lowerLimit && Encoder.willFit(Size, Version.getVersionForNumber(versionNumber - 1), ecLevel))
                 {
                     versionNumber--;
                 }
@@ -1091,7 +860,6 @@ namespace ZXing.QrCode.Internal
 
                 public ResultNode(Mode mode, int position, int charsetEncoderIndex, int length, MinimalEncoder encoder, ResultList resultList)
                 {
-                    // assert mode != null;
                     this.mode = mode;
                     this.position = position;
                     this.charsetEncoderIndex = charsetEncoderIndex;
@@ -1178,7 +946,7 @@ namespace ZXing.QrCode.Internal
                     var result = new StringBuilder();
                     if (declaresMode)
                     {
-                        result.Append(mode + "(");
+                        result.Append(mode).Append('(');
                     }
                     if (mode == Mode.ECI)
                     {
@@ -1193,19 +961,19 @@ namespace ZXing.QrCode.Internal
 
                 private String makePrintable(String s)
                 {
-                    String result = "";
+                    var result = new StringBuilder();
                     for (int i = 0; i < s.Length; i++)
                     {
                         if (s[i] < 32 || s[i] > 126)
                         {
-                            result += ".";
+                            result.Append('.');
                         }
                         else
                         {
-                            result += s[i];
+                            result.Append(s[i]);
                         }
                     }
-                    return result;
+                    return result.ToString();
                 }
             }
         }
