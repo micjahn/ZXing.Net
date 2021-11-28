@@ -718,223 +718,264 @@ namespace ZXing.QrCode.Internal.Test
         [Test]
         public void testMinimalEncoder1()
         {
-            Assert.AreEqual(MinimalEncoder.encode("A", null, false).ToString(), "BYTE(A),TERMINATOR()");
+            verifyMinimalEncoding("A", "ALPHANUMERIC(A),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder2()
         {
-            Assert.AreEqual(MinimalEncoder.encode("AB", null, false).ToString(), "ALPHANUMERIC(AB),TERMINATOR()");
+            verifyMinimalEncoding("AB", "ALPHANUMERIC(AB),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder3()
         {
-            Assert.AreEqual(MinimalEncoder.encode("ABC", null, false).ToString(), "BYTE(A,B,C),TERMINATOR()");
+            verifyMinimalEncoding("ABC", "ALPHANUMERIC(AB,C),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder4()
         {
-            Assert.AreEqual(MinimalEncoder.encode("ABCD", null, false).ToString(), "ALPHANUMERIC(AB,CD),TERMINATOR()");
+            verifyMinimalEncoding("ABCD", "ALPHANUMERIC(AB,CD),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder5()
         {
-            Assert.AreEqual(MinimalEncoder.encode("ABCDE", null, false).ToString(), "BYTE(A,B,C,D,E),TERMINATOR()");
+            verifyMinimalEncoding("ABCDE", "ALPHANUMERIC(AB,CD,E),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder6()
         {
-            Assert.AreEqual(MinimalEncoder.encode("ABCDEF", null, false).ToString(), "ALPHANUMERIC(AB,CD,EF),TERMINATOR()");
+            verifyMinimalEncoding("ABCDEF", "ALPHANUMERIC(AB,CD,EF),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder7()
         {
-            Assert.AreEqual(MinimalEncoder.encode("ABCDEFG", null, false).ToString(), "BYTE(A),ALPHANUMERIC(BC,DE,FG),TERMINATO" +
-            "R()");
+            verifyMinimalEncoding("ABCDEFG", "ALPHANUMERIC(AB,CD,EF,G),TERMINATO" +
+            "R()", false);
         }
 
         [Test]
         public void testMinimalEncoder8()
         {
-            Assert.AreEqual(MinimalEncoder.encode("1", null, false).ToString(), "BYTE(1),TERMINATOR()");
+            verifyMinimalEncoding("1", "NUMERIC(1),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder9()
         {
-            Assert.AreEqual(MinimalEncoder.encode("12", null, false).ToString(), "ALPHANUMERIC(12),TERMINATOR()");
+            verifyMinimalEncoding("12", "NUMERIC(12),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder10()
         {
-            Assert.AreEqual(MinimalEncoder.encode("123", null, false).ToString(), "NUMERIC(123),TERMINATOR()");
+            verifyMinimalEncoding("123", "NUMERIC(123),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder11()
         {
-            Assert.AreEqual(MinimalEncoder.encode("1234", null, false).ToString(), "ALPHANUMERIC(12,34),TERMINATOR()");
+            verifyMinimalEncoding("1234", "NUMERIC(123,4),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder12()
         {
-            Assert.AreEqual(MinimalEncoder.encode("12345", null, false).ToString(), "NUMERIC(123),ALPHANUMERIC(45),TERMINATOR()");
+            verifyMinimalEncoding("12345", "NUMERIC(123,45),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder13()
         {
-            Assert.AreEqual(MinimalEncoder.encode("123456", null, false).ToString(), "NUMERIC(123,456),TERMINATOR()");
+            verifyMinimalEncoding("123456", "NUMERIC(123,456),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder14()
         {
-            Assert.AreEqual(MinimalEncoder.encode("123A", null, false).ToString(), "ALPHANUMERIC(12,3A),TERMINATOR()");
+            verifyMinimalEncoding("123A", "ALPHANUMERIC(12,3A),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder15()
         {
-            Assert.AreEqual(MinimalEncoder.encode("A1", null, false).ToString(), "ALPHANUMERIC(A1),TERMINATOR()");
+            verifyMinimalEncoding("A1", "ALPHANUMERIC(A1),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder16()
         {
-            Assert.AreEqual(MinimalEncoder.encode("A12", null, false).ToString(), "BYTE(A,1,2),TERMINATOR()");
+            verifyMinimalEncoding("A12", "ALPHANUMERIC(A1,2),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder17()
         {
-            Assert.AreEqual(MinimalEncoder.encode("A123", null, false).ToString(), "ALPHANUMERIC(A1,23),TERMINATOR()");
+            verifyMinimalEncoding("A123", "ALPHANUMERIC(A1,23),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder18()
         {
-            Assert.AreEqual(MinimalEncoder.encode("A1234", null, false).ToString(), "ALPHANUMERIC(A1),NUMERIC(234),TERMINATOR()");
+            verifyMinimalEncoding("A1234", "ALPHANUMERIC(A1,23,4),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder19()
         {
-            Assert.AreEqual(MinimalEncoder.encode("AB1", null, false).ToString(), "BYTE(A,B,1),TERMINATOR()");
+            verifyMinimalEncoding("A12345", "ALPHANUMERIC(A1,23,45),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder20()
         {
-            Assert.AreEqual(MinimalEncoder.encode("AB12", null, false).ToString(), "ALPHANUMERIC(AB,12),TERMINATOR()");
+            verifyMinimalEncoding("A123456", "ALPHANUMERIC(A1,23,45,6),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder21()
         {
-            Assert.AreEqual(MinimalEncoder.encode("AB123", null, false).ToString(), "ALPHANUMERIC(AB),NUMERIC(123),TERMINATOR()");
+            verifyMinimalEncoding("A1234567", "ALPHANUMERIC(A1,23,45,67),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder22()
         {
-            Assert.AreEqual(MinimalEncoder.encode("AB1234", null, false).ToString(), "ALPHANUMERIC(AB,12,34),TERMINATOR()");
+            verifyMinimalEncoding("A12345678", "BYTE(A),NUMERIC(123,456,78),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder23()
         {
-            Assert.AreEqual(MinimalEncoder.encode("ABC1", null, false).ToString(), "ALPHANUMERIC(AB,C1),TERMINATOR()");
+            verifyMinimalEncoding("A123456789", "BYTE(A),NUMERIC(123,456,789),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder24()
         {
-            Assert.AreEqual(MinimalEncoder.encode("ABC12", null, false).ToString(), "BYTE(A,B,C,1,2),TERMINATOR()");
+            verifyMinimalEncoding("A1234567890", "ALPHANUMERIC(A1),NUMERIC(234,567,890),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder25()
         {
-            Assert.AreEqual(MinimalEncoder.encode("ABC1234", null, false).ToString(), "ALPHANUMERIC(AB,C1),NUMERIC(234),TERMINA" +
-            "TOR()");
+            verifyMinimalEncoding("AB1", "ALPHANUMERIC(AB,1),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder26()
         {
-            Assert.AreEqual(MinimalEncoder.encode("http://foo.com", null, false).ToString(), "BYTE(h,t,t,p,:,/,/,f,o,o,.,c,o,m)" +
-            ",TERMINATOR()");
+            verifyMinimalEncoding("AB12", "ALPHANUMERIC(AB,12),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder27()
         {
-            Assert.AreEqual(MinimalEncoder.encode("HTTP://FOO.COM", null, false).ToString(), "ALPHANUMERIC(HT,TP,:/,/F,OO,.C,OM" +
-            "),TERMINATOR()");
+            verifyMinimalEncoding("AB123", "ALPHANUMERIC(AB,12,3),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder28()
         {
-            Assert.AreEqual(MinimalEncoder.encode("1001114670010%01201220%107211220%140045003267781", null, false).ToString(),
-            "NUMERIC(100,111,467,001),ALPHANUMERIC(0%,01,20,12,20,%1,07,21,12,20,%1,40),NUMERIC(045,003,267,781),TERMINA" +
-            "TOR()");
+            verifyMinimalEncoding("AB1234", "ALPHANUMERIC(AB,12,34),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder29()
         {
-            Assert.AreEqual(MinimalEncoder.encode("\u0150", null, false).ToString(), "ECI(ISO-8859-2),BYTE(.),TERMINATOR()");
+            verifyMinimalEncoding("ABC1", "ALPHANUMERIC(AB,C1),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder30()
         {
-            Assert.AreEqual(MinimalEncoder.encode("\u015C", null, false).ToString(), "ECI(ISO-8859-3),BYTE(.),TERMINATOR()");
+            verifyMinimalEncoding("ABC12", "ALPHANUMERIC(AB,C1,2),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder31()
         {
-            Assert.AreEqual(MinimalEncoder.encode("\u0150\u015C", null, false).ToString(), "ECI(UTF-8),BYTE(.,.),TERMINATOR()");
+            verifyMinimalEncoding("ABC1234", "ALPHANUMERIC(AB,C1,23,4),TERMINA" +
+            "TOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder32()
         {
-            Assert.AreEqual(MinimalEncoder.encode("\u0150\u0150\u015C\u015C", null, false).ToString(), "ECI(ISO-8859-2),BYTE(.," +
-            ".),ECI(ISO-8859-3),BYTE(.,.),TERMINATOR()");
+            verifyMinimalEncoding("http://foo.com", "BYTE(h,t,t,p,:,/,/,f,o,o,.,c,o,m)" +
+            ",TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder33()
         {
-            Assert.AreEqual(MinimalEncoder.encode("abcdef\u0150ghij", null, false).ToString(), "ECI(ISO-8859-2),BYTE(a,b,c,d,e," +
-            "f,.,g,h,i,j),TERMINATOR()");
+            verifyMinimalEncoding("HTTP://FOO.COM", "ALPHANUMERIC(HT,TP,:/,/F,OO,.C,OM" +
+            "),TERMINATOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder34()
         {
-            Assert.AreEqual(MinimalEncoder.encode("2938928329832983\u01502938928329832983\u015C2938928329832983", null, false)
-            .ToString(), "NUMERIC(293,892,832,983,298),ECI(ISO-8859-2),BYTE(3,.,2),NUMERIC(938,928,329,832,983),ECI(ISO-8" +
-            "859-3),BYTE(.,2),NUMERIC(938,928,329,832,983),TERMINATOR()");
+            verifyMinimalEncoding("1001114670010%01201220%107211220%140045003267781",
+            "NUMERIC(100,111,467,001,0),ALPHANUMERIC(%0,12,01,22,0%,10,72,11,22,0%),NUMERIC(140,045,003,267,781),TERMINA" +
+            "TOR()", false);
         }
 
         [Test]
         public void testMinimalEncoder35()
         {
-            Assert.AreEqual(MinimalEncoder.encode("1001114670010%01201220%107211220%140045003267781", null, true).ToString(),
-            "FNC1_FIRST_POSITION(),NUMERIC(100,111,467,001),ALPHANUMERIC(0%,01,20,12,20,%1,07,21,12,20,%1,40),NUMERIC(04" +
-            "5,003,267,781),TERMINATOR()");
+            verifyMinimalEncoding("\u0150", "ECI(ISO-8859-2),BYTE(.),TERMINATOR()", false);
+        }
+
+        [Test]
+        public void testMinimalEncoder36()
+        {
+            verifyMinimalEncoding("\u015C", "ECI(ISO-8859-3),BYTE(.),TERMINATOR()", false);
+        }
+
+        [Test]
+        public void testMinimalEncoder37()
+        {
+            verifyMinimalEncoding("\u0150\u015C", "ECI(UTF-8),BYTE(.,.),TERMINATOR()", false);
+        }
+
+        [Test]
+        public void testMinimalEncoder38()
+        {
+            verifyMinimalEncoding("\u0150\u0150\u015C\u015C", "ECI(ISO-8859-2),BYTE(.," +
+            ".),ECI(ISO-8859-3),BYTE(.,.),TERMINATOR()", false);
+        }
+
+        [Test]
+        public void testMinimalEncoder39()
+        {
+            verifyMinimalEncoding("abcdef\u0150ghij", "ECI(ISO-8859-2),BYTE(a,b,c,d,e," +
+            "f,.,g,h,i,j),TERMINATOR()", false);
+        }
+
+        [Test]
+        public void testMinimalEncoder40()
+        {
+            verifyMinimalEncoding("2938928329832983\u01502938928329832983\u015C2938928329832983",
+            "NUMERIC(293,892,832,983,298,3),ECI(ISO-8859-2),BYTE(.),NUMERIC(293,892,832,983,298,3),ECI(ISO-8" +
+            "859-3),BYTE(.),NUMERIC(293,892,832,983,298,3),TERMINATOR()", false);
+        }
+
+        [Test]
+        public void testMinimalEncoder41()
+        {
+            verifyMinimalEncoding("1001114670010%01201220%107211220%140045003267781", "FNC1_FIRST_POSITION(),NUMERIC(100,111" +
+            ",467,001,0),ALPHANUMERIC(%0,12,01,22,0%,10,72,11,22,0%),NUMERIC(140,045,003,267,781),TERMINATOR()", true);
+        }
+
+        static void verifyMinimalEncoding(String input, String expectedResult, bool isGS1)
+        {
+            MinimalEncoder.ResultList result = MinimalEncoder.encode(input, null, isGS1);
+            Assert.AreEqual(expectedResult, result.ToString());
         }
 
         private void verifyGS1EncodedData(QRCode qrCode)

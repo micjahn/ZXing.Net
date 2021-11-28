@@ -286,52 +286,6 @@ namespace ZXing.QrCode.Internal
         }
 
         /// <summary>
-        /// Example: to encode alphanumerically at least 2 characters are needed(5.5 bits per character). Similarily three
-        /// digits are needed to encode numerically(3+1/3 bits per digit)
-        /// </summary>
-        /// <param name="mode"></param>
-        /// <returns></returns>
-        public static int getEncodingGranularity(Mode mode)
-        {
-            switch (mode.Name)
-            {
-                case Mode.Names.KANJI:
-                case Mode.Names.BYTE:
-                    return 1;
-                case Mode.Names.ALPHANUMERIC:
-                    return 2;
-                case Mode.Names.NUMERIC:
-                    return 3;
-                default:
-                    return 0;
-            }
-        }
-
-        /// <summary>
-        /// Example: to encode alphanumerically 11 bits are used per 2 characters.Similarily 10 bits are used to encode 3
-        /// numeric digits.
-        /// </summary>
-        /// <param name="mode"></param>
-        /// <returns></returns>
-        static int getBitsPerEncodingUnit(Mode mode)
-        {
-            switch (mode.Name)
-            {
-                case Mode.Names.KANJI:
-                    return 16;
-                case Mode.Names.ALPHANUMERIC:
-                    return 11;
-                case Mode.Names.NUMERIC:
-                    return 10;
-                case Mode.Names.BYTE:
-                    return 8;
-                case Mode.Names.ECI:
-                default:
-                    return 0;
-            }
-        }
-
-        /// <summary>
         /// Returns the maximum number of encodeable characters in the given mode for the given version. Example: in
         /// Version 1, 2^10 digits or 2^8 bytes can be encoded. In Version 3 it is 2^14 digits and 2^16 bytes
         /// </summary>
@@ -423,7 +377,7 @@ namespace ZXing.QrCode.Internal
                         if (haveECI)
                         {
                             //prepend a default character set ECI
-                            result.addFirst(new ResultList.ResultNode(Mode.ECI, 0, 0, this, result));
+                            result.addFirst(new ResultList.ResultNode(Mode.ECI, 0, 0, 0, this, result));
                         }
                     }
                 }
@@ -432,17 +386,17 @@ namespace ZXing.QrCode.Internal
                 if (first.Value.mode != Mode.ECI)
                 {
                     //prepend a FNC1_FIRST_POSITION
-                    result.addFirst(new ResultList.ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, this, result));
+                    result.addFirst(new ResultList.ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0, this, result));
                 }
                 else
                 {
                     //insert a FNC1_FIRST_POSITION after the ECI
-                    result.AddAfter(first, new ResultList.ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, this, result));
+                    result.AddAfter(first, new ResultList.ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0, this, result));
                 }
             }
             //Add TERMINATOR according to "8.4.8 Terminator"
             //TODO: The terminiator can be omitted if there are less than 4 bit in the capacity of the symbol.
-            result.AddLast(new ResultList.ResultNode(Mode.TERMINATOR, stringToEncode.Length, 0, this, result));
+            result.AddLast(new ResultList.ResultNode(Mode.TERMINATOR, stringToEncode.Length, 0, 0, this, result));
             return result;
         }
 
@@ -533,12 +487,12 @@ namespace ZXing.QrCode.Internal
             {
                 if (canEncode(encoders[i], stringToEncode[from]))
                 {
-                    ResultList edge = new ResultList(version, Mode.BYTE, from, i, this);
+                    ResultList edge = new ResultList(version, Mode.BYTE, from, i, 1, this);
                     bool needECI = (previous == null && i > 0) ||
                                       (previous != null && getEdgeCharsetEncoderIndex(previous) != i);
                     if (needECI)
                     {
-                        var eci = new ResultList.ResultNode(Mode.ECI, from, i, this, edge);
+                        var eci = new ResultList.ResultNode(Mode.ECI, from, i, 0, this, edge);
                         edge.AddFirst(eci);
                     }
                     addEdge(vertices, edge, previous);
@@ -546,18 +500,34 @@ namespace ZXing.QrCode.Internal
             }
             if (canEncode(Mode.KANJI, stringToEncode[from]))
             {
-                addEdge(vertices, new ResultList(version, Mode.KANJI, from, 0, this), previous);
+                addEdge(vertices, new ResultList(version, Mode.KANJI, from, 0, 1, this), previous);
             }
             int inputLength = stringToEncode.Length;
-            if (from + 1 < inputLength && canEncode(Mode.ALPHANUMERIC, stringToEncode[from]) &&
-                canEncode(Mode.ALPHANUMERIC, stringToEncode[from + 1]))
+            if (canEncode(Mode.ALPHANUMERIC, stringToEncode[from]))
             {
-                addEdge(vertices, new ResultList(version, Mode.ALPHANUMERIC, from, 0, this), previous);
+                if (from + 1 >= inputLength || !canEncode(Mode.ALPHANUMERIC, stringToEncode[from + 1]))
+                {
+                    addEdge(vertices, new ResultList(version, Mode.ALPHANUMERIC, from, 0, 1, this), previous);
+                }
+                else
+                {
+                    addEdge(vertices, new ResultList(version, Mode.ALPHANUMERIC, from, 0, 2, this), previous);
+                }
             }
-            if (from + 2 < inputLength && canEncode(Mode.NUMERIC, stringToEncode[from]) && canEncode(Mode.NUMERIC,
-                stringToEncode[from + 1]) && canEncode(Mode.NUMERIC, stringToEncode[from + 2]))
+            if (canEncode(Mode.NUMERIC, stringToEncode[from]))
             {
-                addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, this), previous);
+                if (from + 1 >= inputLength || !canEncode(Mode.NUMERIC, stringToEncode[from + 1]))
+                {
+                    addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, 1, this), previous);
+                }
+                else if (from + 2 >= inputLength || !canEncode(Mode.NUMERIC, stringToEncode[from + 2]))
+                {
+                    addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, 2, this), previous);
+                }
+                else
+                {
+                    addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, 3, this), previous);
+                }
             }
         }
 
@@ -587,7 +557,7 @@ namespace ZXing.QrCode.Internal
         //              ResultList.ResultNode previous = getEdgePrevious(edge);
         //              String fromKey = previous == null ? "initial" : "" + fromPosition + "_" + previous.mode +
         //                  (willHaveECI ? "_" + encoders[previous.charsetEncoderIndex].charset().name() : "");
-        //              int toPosition = fromPosition + getEncodingGranularity(getEdgeMode(edge));
+        //              int toPosition = fromPosition + getEdgeLength(edge);
         //              edgeStrings.add("(" + fromKey + ") -- " + getEdgeMode(edge) + (toPosition - 
         //                  fromPosition > 0 ? "(" + stringToEncode.substring(fromPosition, toPosition) + 
         //                  ")" : "") + " (" + edge.getSize() + ")" + " --> " + "(" + vertexKey + ")");
@@ -910,17 +880,17 @@ namespace ZXing.QrCode.Internal
             }
 
             /// <summary>
-            /// Short for rl=new ResultList(version); rl.add(rl.new ResultNode(modes, position, charsetEncoderIndex));                          
+            /// Short for rl=new ResultList(version); rl.add(rl.new ResultNode(modes, position, charsetEncoderIndex, length));                          
             /// </summary>
             /// <param name="version"></param>
             /// <param name="mode"></param>
             /// <param name="position"></param>
             /// <param name="charsetEncoderIndex"></param>
-            public ResultList(Version version, Mode mode, int position, int charsetEncoderIndex, MinimalEncoder encoder)
+            public ResultList(Version version, Mode mode, int position, int charsetEncoderIndex, int length, MinimalEncoder encoder)
                 : this(version)
             {
 
-                AddLast(new ResultList.ResultNode(mode, position, charsetEncoderIndex, encoder, this));
+                AddLast(new ResultList.ResultNode(mode, position, charsetEncoderIndex, length, encoder, this));
             }
 
             public void addFirst(ResultList resultList)
@@ -1023,9 +993,29 @@ namespace ZXing.QrCode.Internal
             /// <param name="bits"></param>
             public void getBits(BitArray bits)
             {
-                foreach (var item in this)
+                var rni = First;
+                while (rni != null)
                 {
-                    item.getBits(bits);
+                    if (rni.Value.declaresMode)
+                    {
+                        // append mode
+                        bits.appendBits(rni.Value.mode.Bits, 4);
+                        if (rni.Value.CharacterLength > 0)
+                        {
+                            int length = rni.Value.CharacterCountIndicator;
+                            var rnj = rni.Next;
+                            while (rnj != null)
+                            {
+                                if (rnj.Value.declaresMode)
+                                {
+                                    break;
+                                }
+                                length += rnj.Value.CharacterCountIndicator;
+                            }
+                            bits.appendBits(length, rni.Value.mode.getCharacterCountBits(version));
+                        }
+                    }
+                    rni.Value.getBits(bits);
                 }
             }
 
@@ -1095,15 +1085,17 @@ namespace ZXing.QrCode.Internal
                 public bool declaresMode = true;
                 public int position;
                 public int charsetEncoderIndex;
+                public int length;
                 public ResultList resultList;
                 public MinimalEncoder encoder;
 
-                public ResultNode(Mode mode, int position, int charsetEncoderIndex, MinimalEncoder encoder, ResultList resultList)
+                public ResultNode(Mode mode, int position, int charsetEncoderIndex, int length, MinimalEncoder encoder, ResultList resultList)
                 {
                     // assert mode != null;
                     this.mode = mode;
                     this.position = position;
                     this.charsetEncoderIndex = charsetEncoderIndex;
+                    this.length = length;
                     this.encoder = encoder;
                     this.resultList = resultList;
                 }
@@ -1117,17 +1109,23 @@ namespace ZXing.QrCode.Internal
                     get
                     {
                         int size = declaresMode ? 4 + mode.getCharacterCountBits(resultList.version) : 0;
-                        if (mode == Mode.ECI)
+                        switch (mode.Name)
                         {
-                            size += 8; // the ECI assignment numbers for ISO-8859-x, UTF-8 and UTF-16 are all 8 bit long
-                        }
-                        else if (mode == Mode.BYTE)
-                        {
-                            size += 8 * encoder.getBytesOfCharacter(position, charsetEncoderIndex).Length;
-                        }
-                        else
-                        {
-                            size += getBitsPerEncodingUnit(mode);
+                            case Mode.Names.KANJI:
+                                size += 13;
+                                break;
+                            case Mode.Names.ALPHANUMERIC:
+                                size += length == 1 ? 6 : 11;
+                                break;
+                            case Mode.Names.NUMERIC:
+                                size += length == 1 ? 4 : length == 2 ? 7 : 10;
+                                break;
+                            case Mode.Names.BYTE:
+                                size += 8 * encoder.getBytesOfCharacter(position, charsetEncoderIndex).Length;
+                                break;
+                            case Mode.Names.ECI:
+                                size += 8; // the ECI assignment numbers for ISO-8859-x, UTF-8 and UTF-16 are all 8 bit long
+                                break;
                         }
                         return size;
                     }
@@ -1141,7 +1139,7 @@ namespace ZXing.QrCode.Internal
                 {
                     get
                     {
-                        return (getBitsPerEncodingUnit(mode) == 0 ? 0 : 1) * getEncodingGranularity(mode);
+                        return length;
                     }
                 }
 
@@ -1164,25 +1162,11 @@ namespace ZXing.QrCode.Internal
                 /// <param name="bits"></param>
                 public void getBits(BitArray bits)
                 {
-                    if (declaresMode)
+                    if (mode == Mode.ECI)
                     {
-                        // append mode
-                        bits.appendBits(mode.Bits, 4);
-                        if (mode == Mode.ECI)
-                        {
-                            bits.appendBits(CharacterSetECI.getCharacterSetECI(encoder.encoders[charsetEncoderIndex]).Value, 8);
-                        }
-                        else
-                        {
-                            int characterLength = CharacterCountIndicator;
-                            if (characterLength > 0)
-                            {
-                                // append length
-                                bits.appendBits(characterLength, mode.getCharacterCountBits(resultList.version));
-                            }
-                        }
+                        bits.appendBits(CharacterSetECI.getCharacterSetECI(encoder.encoders[charsetEncoderIndex]).Value, 8);
                     }
-                    if (CharacterLength > 0)
+                    else if (CharacterLength > 0)
                     {
                         // append data
                         Encoder.appendBytes(encoder.stringToEncode.Substring(position, CharacterLength), mode, bits, encoder.encoders[charsetEncoderIndex]);
@@ -1202,7 +1186,7 @@ namespace ZXing.QrCode.Internal
                     }
                     else
                     {
-                        result.Append(makePrintable(encoder.stringToEncode.Substring(position, getEncodingGranularity(mode))));
+                        result.Append(makePrintable(encoder.stringToEncode.Substring(position, length)));
                     }
                     return result.ToString();
                 }

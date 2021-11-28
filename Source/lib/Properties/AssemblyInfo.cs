@@ -64,13 +64,13 @@ using System.Runtime.InteropServices;
 #if WINDOWS_UWP
 [assembly: AssemblyTitle("zxing.net for windows uwp")]
 #endif
-#if NETSTANDARD
+#if NETSTANDARD && !NET5_0 && !NET6_0
 [assembly: AssemblyTitle("zxing.net for .net core standard")]
 #endif
-#if NETFX_CORE && !WINDOWS_UWP && !NET5_0 && !NET6_0
+#if NETFX_CORE && !WINDOWS_UWP
 [assembly: AssemblyTitle("zxing.net for windows rt")]
 #endif
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 11.10.2021 18:44:10)")]
+[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 12.10.2021 16:09:19)")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyProduct("ZXing.Net")]
 [assembly: AssemblyCopyright("Copyright © 2012")]
