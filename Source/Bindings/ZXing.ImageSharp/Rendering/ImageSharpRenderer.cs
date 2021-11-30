@@ -27,6 +27,27 @@ namespace ZXing.ImageSharp.Rendering
     public class ImageSharpRenderer<TPixel> : ZXing.Rendering.IBarcodeRenderer<Image<TPixel>> where TPixel : unmanaged, IPixel<TPixel>
     {
         /// <summary>
+        /// Gets or sets the foreground color.
+        /// </summary>
+        /// <value>The foreground color.</value>
+        public Color Foreground { get; set; }
+
+        /// <summary>
+        /// Gets or sets the background color.
+        /// </summary>
+        /// <value>The background color.</value>
+        public Color Background { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ImageSharpRenderer{TPixel}"/> class.
+        /// </summary>
+        public ImageSharpRenderer()
+        {
+            Foreground = Color.White;
+            Background = Color.Black;
+        }
+
+        /// <summary>
         /// renders the image
         /// </summary>
         /// <param name="matrix"></param>
@@ -50,10 +71,8 @@ namespace ZXing.ImageSharp.Rendering
         {
             var width = matrix.Width;
             var height = matrix.Height;
-            var black = new Rgba32(0xFF000000);
-            var white = new Rgba32(0xFFFFFFFF);
-            var foreColor = white;
-            var backColor = black;
+            var foreColor = Foreground;
+            var backColor = Background;
 
             var pixelsize = 1;
 
@@ -95,7 +114,7 @@ namespace ZXing.ImageSharp.Rendering
                     for (var x = pixelsize * matrix.Width; x < width; x++)
                     {
                         var pixel = new TPixel();
-                        pixel.FromRgba32(white);
+                        pixel.FromRgba32(foreColor);
                         result[x, rowOffset] = pixel;
                     }
                 }
