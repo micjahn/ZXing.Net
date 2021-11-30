@@ -52,6 +52,8 @@ namespace ZXing.ImageSharp.Rendering
             var height = matrix.Height;
             var black = new Rgba32(0xFF000000);
             var white = new Rgba32(0xFFFFFFFF);
+            var foreColor = white;
+            var backColor = black;
 
             var pixelsize = 1;
 
@@ -82,7 +84,7 @@ namespace ZXing.ImageSharp.Rendering
 
                     for (var x = 0; x < matrix.Width; x++)
                     {
-                        var color = matrix[x, y] ? black : white;
+                        var color = matrix[x, y] ? foreColor : backColor;
                         for (var pixelsizeWidth = 0; pixelsizeWidth < pixelsize; pixelsizeWidth++)
                         {
                             var pixel = new TPixel();
