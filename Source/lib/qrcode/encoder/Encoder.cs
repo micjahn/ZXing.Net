@@ -90,47 +90,22 @@ namespace ZXing.QrCode.Internal
             var hasCompactionHint = hints != null && hints.ContainsKey(EncodeHintType.QR_COMPACT)
                 && hints[EncodeHintType.QR_COMPACT] != null && Convert.ToBoolean(hints[EncodeHintType.QR_COMPACT].ToString());
 
-            if (hasCompactionHint)
-            {
-                mode = Mode.BYTE;
-
-                MinimalEncoder.ResultList rn = MinimalEncoder.encode(content, null, hasGS1FormatHint);
-
-                while (!willFit(rn.Size, rn.getVersion(ecLevel), ecLevel))
-                {
-                    if (rn.getVersion(ecLevel).VersionNumber <= 26)
-                    {
-                        int nextVersionNumber = rn.getVersion(ecLevel).VersionNumber <= 9 ? 10 : 27;
-                        rn = MinimalEncoder.encode(content, Version.getVersionForNumber(nextVersionNumber), hasGS1FormatHint);
-                    }
-                    else
-                    {
-                        throw new WriterException("Data too big for any version");
-                    }
-                }
-
-                headerAndDataBits = new BitArray();
-                rn.getBits(headerAndDataBits);
-                version = rn.getVersion(ecLevel);
-            }
-            else
-            {
-                // Determine what character encoding has been specified by the caller, if any
-                bool hasEncodingHint = hints != null && hints.ContainsKey(EncodeHintType.CHARACTER_SET);
+            // Determine what character encoding has been specified by the caller, if any
+            bool hasEncodingHint = hints != null && hints.ContainsKey(EncodeHintType.CHARACTER_SET);
 
 #if !SILVERLIGHT || WINDOWS_PHONE
-                var encoding = DEFAULT_BYTE_MODE_ENCODING;
-                var encodingName = hasEncodingHint ? (String)hints[EncodeHintType.CHARACTER_SET] : null;
-                if (encodingName != null)
-                {
-                    var eci = CharacterSetECI.getCharacterSetECIByName(encodingName);
-                    if (eci == null)
-                        throw new WriterException(string.Format("Encoding {0} isn't supported", encodingName));
-                    encoding = CharacterSetECI.getEncoding(eci);
-                    if (encoding == null)
-                        throw new WriterException(string.Format("Encoding {0} isn't supported", encodingName));
-                }
-                var generateECI = hasEncodingHint || !DEFAULT_BYTE_MODE_ENCODING.Equals(encoding);
+            var encoding = DEFAULT_BYTE_MODE_ENCODING;
+            var encodingName = hasEncodingHint ? (String)hints[EncodeHintType.CHARACTER_SET] : null;
+            if (encodingName != null)
+            {
+                var eci = CharacterSetECI.getCharacterSetECIByName(encodingName);
+                if (eci == null)
+                    throw new WriterException(string.Format("Encoding {0} isn't supported", encodingName));
+                encoding = CharacterSetECI.getEncoding(eci);
+                if (encoding == null)
+                    throw new WriterException(string.Format("Encoding {0} isn't supported", encodingName));
+            }
+            var generateECI = hasEncodingHint || !DEFAULT_BYTE_MODE_ENCODING.Equals(encoding);
 #else
                 // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
                 var encoding = StringUtils.UTF8;
@@ -139,6 +114,19 @@ namespace ZXing.QrCode.Internal
                 var generateECI = hasEncodingHint;
 #endif
 
+            if (hasCompactionHint)
+            {
+                mode = Mode.BYTE;
+
+                var priorityEncoding = encoding.Equals(DEFAULT_BYTE_MODE_ENCODING) ? null : encoding;
+                var rn = MinimalEncoder.encode(content, null, priorityEncoding, hasGS1FormatHint, ecLevel);
+
+                headerAndDataBits = new BitArray();
+                rn.getBits(headerAndDataBits);
+                version = rn.getVersion();
+            }
+            else
+            {
                 // Pick an encoding mode appropriate for the content. Note that this will not attempt to use
                 // multiple modes / segments even if that were more efficient. Twould be nice.
                 mode = chooseMode(content, encoding);

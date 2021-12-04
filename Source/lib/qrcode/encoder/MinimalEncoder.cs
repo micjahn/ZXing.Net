@@ -62,9 +62,9 @@ namespace ZXing.QrCode.Internal
     /// * ECI switching:
     /// *
     /// * In multi language content the algorithm selects the most compact representation using ECI modes. For example the
-    /// * it is more compactly represented using one ECI to UTF-8 rather than two ECIs to ISO-8859-6 and ISO-8859-1 if the
-    /// * text contains more ASCII characters (since they are represented as one byte sequence) as opposed to the case where
-    /// * there are proportionally more Arabic characters that require two bytes in UTF-8 and only one in ISO-8859-6.
+    /// * most compact representation of the string "\u0625\u05D0" is ECI(UTF-8),BYTE(arabic_aleph, hebrew_aleph) while
+    /// * the encoding the string "\u0625\u0625\u05D0" is most compactly represented with two ECIs as 
+    /// * ECI(ISO-8859-6),BYTE(arabic_aleph, arabic_aleph),ECI(ISO-8859-8),BYTE(hebew_aleph).
     /// *
     /// * @author Alex Geller
     /// </summary>
@@ -78,9 +78,10 @@ namespace ZXing.QrCode.Internal
         }
 
         private String stringToEncode;
-        private Version version;
         private bool isGS1;
         private Encoding[] encoders;
+        private int priorityEncoderIndex;
+        private ErrorCorrectionLevel ecLevel;
 
         private static bool canEncode(Encoding encoding, char c)
         {
@@ -126,22 +127,39 @@ namespace ZXing.QrCode.Internal
 #endif
         }
 
+        /**
+         * 
+         *
+         * @param stringToEncode 
+         * @param priorityCharset The preferred {@link Charset}. When the value of the argument is null, the algorithm
+         *   chooses charsets that leads to a minimal representation. Otherwise the algorithm will use the priority 
+         *   charset to encode any character in the input that can be encoded by it if the charset is among the 
+         *   supported charsets.
+         * @param isGS1 {@code true} if a FNC1 is to be prepended; {@code false} otherwise
+         * @param ecLevel The error correction level.
+         * @see ResultList#getVersion
+         */
+
         /// <summary>
-        /// Encoding is optional (default ISO-8859-1) and version is optional (minimal version is computed if not specified.
+        /// Creates a MinimalEncoder
         /// </summary>
-        /// <param name="stringToEncode"></param>
-        /// <param name="version"></param>
-        /// <param name="isGS1"></param>
-        public MinimalEncoder(String stringToEncode, Version version, bool isGS1)
+        /// <param name="stringToEncode">The string to encode</param>
+        /// <param name="priorityCharset">The preferred <see cref="System.Text.Encoding"/>. When the value of the argument is null, the algorithm
+        /// *   chooses charsets that leads to a minimal representation.Otherwise the algorithm will use the priority
+        /// *   charset to encode any character in the input that can be encoded by it if the charset is among the 
+        /// *   supported charsets.</param>
+        /// <param name="isGS1"> {@code true} if a FNC1 is to be prepended; {@code false} otherwise</param>
+        /// <param name="ecLevel">The error correction level.</param>
+        public MinimalEncoder(String stringToEncode, Encoding priorityCharset, bool isGS1, ErrorCorrectionLevel ecLevel)
         {
             this.stringToEncode = stringToEncode;
-            this.version = version;
             this.isGS1 = isGS1;
+            this.ecLevel = ecLevel;
 
             // encodings have to be cloned to change the EncoderFallback property later
             var isoEncoders = new Encoding[15]; //room for the 15 ISO-8859 charsets 1 through 16.
             isoEncoders[0] = Clone(StringUtils.ISO88591_ENCODING);
-            bool needUnicodeEncoder = false;
+            var needUnicodeEncoder = priorityCharset != null && priorityCharset.WebName.StartsWith("UTF", StringComparison.OrdinalIgnoreCase);
 
             for (int i = 0; i < stringToEncode.Length; i++)
             {
@@ -200,9 +218,16 @@ namespace ZXing.QrCode.Internal
             int numberOfEncoders = 0;
             for (int j = 0; j < 15; j++)
             {
-                if (isoEncoders[j] != null && CharacterSetECI.getCharacterSetECI(isoEncoders[j]) != null)
+                if (isoEncoders[j] != null)
                 {
-                    numberOfEncoders++;
+                    if (CharacterSetECI.getCharacterSetECI(isoEncoders[j]) != null)
+                    {
+                        numberOfEncoders++;
+                    }
+                    else
+                    {
+                        needUnicodeEncoder = true;
+                    }
                 }
             }
 
@@ -226,25 +251,89 @@ namespace ZXing.QrCode.Internal
                 encoders[index] = Clone(Encoding.UTF8);
                 encoders[index + 1] = Clone(Encoding.BigEndianUnicode);
             }
+
+            int priorityEncoderIndexValue = -1;
+            if (priorityCharset != null)
+            {
+                for (int i = 0; i < encoders.Length; i++)
+                {
+                    if (priorityCharset.WebName.Equals(encoders[i].WebName))
+                    {
+                        priorityEncoderIndexValue = i;
+                        break;
+                    }
+                }
+            }
+            priorityEncoderIndex = priorityEncoderIndexValue;
         }
 
-        public static ResultList encode(String stringToEncode, Version version, bool isGS1)
+        /// <summary>
+        /// Encodes the string minimally
+        /// </summary>
+        /// <param name="stringToEncode">The string to encode</param>
+        /// <param name="version">The preferred <see cref="Version"/>. A minimal version is computed(see
+        //*   {
+        //        @link ResultList#getVersion method} when the value of the argument is null</param>
+        /// <param name="priorityCharset">The preferred { @link Charset}. When the value of the argument is null, the algorithm
+        // *chooses charsets that leads to a minimal representation.Otherwise the algorithm will use the priority
+        //* charset to encode any character in the input that can be encoded by it if the charset is among the
+        //* supported charsets.</param>
+        /// <param name="isGS1">{ @code true}
+        //        if a FNC1 is to be prepended;
+        //        { @code false}
+        //        otherwise</param>
+        /// <param name="ecLevel">The error correction level.</param>
+        /// <returns>An instance of { @code ResultList}
+        //        representing the minimal solution.
+        // *@see ResultList#getBits
+        // * @see ResultList#getVersion
+        // * @see ResultList#getSize</returns>
+        public static ResultList encode(String stringToEncode, Version version, Encoding priorityCharset, bool isGS1, ErrorCorrectionLevel ecLevel)
         {
-            return new MinimalEncoder(stringToEncode, version, isGS1).encode();
+            return new MinimalEncoder(stringToEncode, priorityCharset, isGS1, ecLevel).encode(version);
         }
-
-        public ResultList encode()
+        public ResultList encode(Version version)
         {
-            if (version == null) { //compute minimal encoding trying the three version sizes.
+            if (version == null)
+            {
+                //compute minimal encoding trying the three version sizes.
+                Version[] versions =
+                {
+                    getVersion(VersionSize.SMALL),
+                    getVersion(VersionSize.MEDIUM),
+                    getVersion(VersionSize.LARGE)
+                };
                 ResultList[] results =
                 {
-                    encode(getVersion(VersionSize.SMALL)),
-                    encode(getVersion(VersionSize.MEDIUM)),
-                    encode(getVersion(VersionSize.LARGE))
+                    encodeSpecificVersion(versions[0]),
+                    encodeSpecificVersion(versions[1]),
+                    encodeSpecificVersion(versions[2])
                 };
-                return postProcess(smallest(results));
-            } else { //compute minimal encoding for a given version
-                return postProcess(encode(version));
+                int smallestSize = Int32.MaxValue;
+                int smallestResult = -1;
+                for (int i = 0; i < 3; i++)
+                {
+                    int size = results[i].Size;
+                    if (Encoder.willFit(size, versions[i], ecLevel) && size < smallestSize)
+                    {
+                        smallestSize = size;
+                        smallestResult = i;
+                    }
+                }
+                if (smallestResult < 0)
+                {
+                    throw new WriterException("Data too big for any version");
+                }
+                return results[smallestResult];
+            }
+            else
+            { //compute minimal encoding for a given version
+                ResultList result = encodeSpecificVersion(version);
+                if (!Encoder.willFit(result.Size, getVersion(getVersionSize(result.getVersion())), ecLevel))
+                {
+                    throw new WriterException("Data too big for version" + version);
+                }
+                return result;
             }
         }
 
@@ -328,7 +417,6 @@ namespace ZXing.QrCode.Internal
                     return 1;
                 case Mode.Names.NUMERIC:
                     return 2;
-                case Mode.Names.ECI:
                 case Mode.Names.BYTE:
                     return 3;
                 default:
@@ -336,21 +424,10 @@ namespace ZXing.QrCode.Internal
             }
         }
 
-        private static ResultList smallest(ResultList[] results)
+        private ResultList postProcess(Edge solution, Version version)
         {
-            ResultList smallestResult = null;
-            foreach (ResultList result in results)
-            {
-                if (smallestResult == null || (result != null && result.Size < smallestResult.Size))
-                {
-                    smallestResult = result;
-                }
-            }
-            return smallestResult;
-        }
-
-        private ResultList postProcess(ResultList result)
-        {
+            var result = new ResultList(version, solution, this);
+            var edge = solution;
             if (isGS1)
             {
                 var first = result.First;
@@ -370,7 +447,7 @@ namespace ZXing.QrCode.Internal
                         if (haveECI)
                         {
                             //prepend a default character set ECI
-                            result.addFirst(new ResultList.ResultNode(Mode.ECI, 0, 0, 0, this, result));
+                            result.AddFirst(new ResultList.ResultNode(Mode.ECI, 0, 0, 0, this, result));
                         }
                     }
                 }
@@ -379,7 +456,7 @@ namespace ZXing.QrCode.Internal
                 if (first.Value.mode != Mode.ECI)
                 {
                     //prepend a FNC1_FIRST_POSITION
-                    result.addFirst(new ResultList.ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0, this, result));
+                    result.AddFirst(new ResultList.ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0, this, result));
                 }
                 else
                 {
@@ -393,100 +470,55 @@ namespace ZXing.QrCode.Internal
             return result;
         }
 
-        private int getEdgeCharsetEncoderIndex(ResultList edge)
+        void addEdge(List<Edge>[][][] edges, int position, Edge edge)
         {
-            var last = edge.Last;
-            return last != null ? last.Value.charsetEncoderIndex : 0;
-        }
-
-        private Mode getEdgeMode(ResultList edge)
-        {
-            var last = edge.Last;
-            return last != null ? last.Value.mode : Mode.BYTE;
-        }
-
-        private int getEdgePosition(ResultList edge)
-        {
-            // The algorithm appends an edge at some point (in the method addEdge() with a minimal solution.
-            // This function works regardless if the concatenation has already taken place or not.
-            var last = edge.Last;
-            return last != null ? last.Value.position : 0;
-        }
-
-        private int getEdgeLength(ResultList edge)
-        {
-            // The algorithm appends an edge at some point (in the method addEdge() with a minimal solution.
-            // This function works regardless if the concatenation has already taken place or not.
-            var last = edge.Last;
-            return last != null ? last.Value.CharacterLength : 0;
-        }
-
-        private void addEdge(List<ResultList>[][][] vertices, ResultList edge, ResultList previous)
-        {
-            int vertexIndex = getEdgePosition(edge) + getEdgeLength(edge);
-            if (vertices[vertexIndex][getEdgeCharsetEncoderIndex(edge)][getCompactedOrdinal(getEdgeMode(edge))] == null)
+            int vertexIndex = position + edge.characterLength;
+            if (edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)] == null)
             {
-                vertices[vertexIndex][getEdgeCharsetEncoderIndex(edge)][getCompactedOrdinal(getEdgeMode(edge))] = new List<ResultList>();
+                edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)] = new List<Edge>();
             }
-            vertices[vertexIndex][getEdgeCharsetEncoderIndex(edge)][getCompactedOrdinal(getEdgeMode(edge))].Add(edge);
-
-            if (previous != null)
-            {
-                edge.addFirst(previous);
-            }
+            edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)].Add(edge);
         }
 
-        private void addEdges(Version version, List<ResultList>[][][] vertices, int from, ResultList previous)
+        void addEdges(Version version, List<Edge>[][][] edges, int from, Edge previous)
         {
-            for (int i = 0; i < encoders.Length; i++)
+            int start = 0;
+            int end = encoders.Length;
+            if (priorityEncoderIndex >= 0 && canEncode(encoders[priorityEncoderIndex], stringToEncode[from]))
+            {
+                start = priorityEncoderIndex;
+                end = priorityEncoderIndex + 1;
+            }
+
+            for (int i = start; i < end; i++)
             {
                 if (canEncode(encoders[i], stringToEncode[from]))
                 {
-                    ResultList edge = new ResultList(version, Mode.BYTE, from, i, 1, this);
-                    bool needECI = (previous == null && i > 0) ||
-                                      (previous != null && getEdgeCharsetEncoderIndex(previous) != i);
-                    if (needECI)
-                    {
-                        var eci = new ResultList.ResultNode(Mode.ECI, from, i, 0, this, edge);
-                        edge.AddFirst(eci);
-                    }
-                    addEdge(vertices, edge, previous);
+                    addEdge(edges, from, new Edge(Mode.BYTE, from, i, 1, previous, version, this));
                 }
             }
+
             if (canEncode(Mode.KANJI, stringToEncode[from]))
             {
-                addEdge(vertices, new ResultList(version, Mode.KANJI, from, 0, 1, this), previous);
+                addEdge(edges, from, new Edge(Mode.KANJI, from, 0, 1, previous, version, this));
             }
+
             int inputLength = stringToEncode.Length;
             if (canEncode(Mode.ALPHANUMERIC, stringToEncode[from]))
             {
-                if (from + 1 >= inputLength || !canEncode(Mode.ALPHANUMERIC, stringToEncode[from + 1]))
-                {
-                    addEdge(vertices, new ResultList(version, Mode.ALPHANUMERIC, from, 0, 1, this), previous);
-                }
-                else
-                {
-                    addEdge(vertices, new ResultList(version, Mode.ALPHANUMERIC, from, 0, 2, this), previous);
-                }
+                addEdge(edges, from, new Edge(Mode.ALPHANUMERIC, from, 0, from + 1 >= inputLength ||
+                    !canEncode(Mode.ALPHANUMERIC, stringToEncode[from + 1]) ? 1 : 2, previous, version, this));
             }
+
             if (canEncode(Mode.NUMERIC, stringToEncode[from]))
             {
-                if (from + 1 >= inputLength || !canEncode(Mode.NUMERIC, stringToEncode[from + 1]))
-                {
-                    addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, 1, this), previous);
-                }
-                else if (from + 2 >= inputLength || !canEncode(Mode.NUMERIC, stringToEncode[from + 2]))
-                {
-                    addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, 2, this), previous);
-                }
-                else
-                {
-                    addEdge(vertices, new ResultList(version, Mode.NUMERIC, from, 0, 3, this), previous);
-                }
+                addEdge(edges, from, new Edge(Mode.NUMERIC, from, 0, from + 1 >= inputLength ||
+                    !canEncode(Mode.NUMERIC, stringToEncode[from + 1]) ? 1 : from + 2 >= inputLength ||
+                    !canEncode(Mode.NUMERIC, stringToEncode[from + 2]) ? 2 : 3, previous, version, this));
             }
         }
 
-        public ResultList encode(Version version)
+        public ResultList encodeSpecificVersion(Version version)
         {
             /* A vertex represents a tuple of a position in the input, a mode and an a character encoding where position 0
              * denotes the position left of the first character, 1 the position left of the second character and so on.
@@ -514,11 +546,9 @@ namespace ZXing.QrCode.Internal
              * An edge is drawn as follows "(" + fromVertex + ") -- " + encodingMode + "(" + encodedInput + ") (" +
              * accumulatedSize + ") --> (" + toVertex + ")"
              *
-             * The coding conversions of this project require lines to not exceed 120 characters. In order to view the examples
-             * below join lines that end with a backslash. This can be achieved by running the command
-             * sed -e ':a' -e 'N' -e '$!ba' -e 's/\\\n *[*]/ /g' on this file.
-             *
              * Example 1 encoding the string "ABCDE":
+             * Note: This example assumes that alphanumeric encoding is only possible in multiples of two characters so that
+             * the example is both short and showing the principle. In reality this restriction does not exist. 
              *
              * Initial situation
              * (initial) -- BYTE(A) (20) --> (1_BYTE)
@@ -606,16 +636,16 @@ namespace ZXing.QrCode.Internal
 
             //The last dimension in the array below encodes the 4 modes KANJI, ALPHANUMERIC, NUMERIC and BYTE via the
             //function getCompactedOrdinal(Mode)
-            List<ResultList>[][][] vertices = new List<ResultList>[inputLength + 1][][];
+            var edges = new List<Edge>[inputLength + 1][][];
             for (var indexDim1 = 0; indexDim1 < inputLength + 1; indexDim1++)
             {
-                vertices[indexDim1] = new List<ResultList>[encoders.Length][];
+                edges[indexDim1] = new List<Edge>[encoders.Length][];
                 for (var indexDim2 = 0; indexDim2 < encoders.Length; indexDim2++)
                 {
-                    vertices[indexDim1][indexDim2] = new List<ResultList>[4];
+                    edges[indexDim1][indexDim2] = new List<Edge>[4];
                 }
             }
-            addEdges(version, vertices, 0, null);
+            addEdges(version, edges, 0, null);
 
             for (int i = 1; i <= inputLength; i++)
             {
@@ -623,35 +653,28 @@ namespace ZXing.QrCode.Internal
                 {
                     for (int k = 0; k < 4; k++)
                     {
-                        ResultList minimalEdge;
-                        if (vertices[i][j][k] != null)
+                        Edge minimalEdge;
+                        if (edges[i][j][k] != null)
                         {
-                            List<ResultList> edges = vertices[i][j][k];
-                            if (edges.Count == 1)
+                            var localEdges = edges[i][j][k];
+                            int minimalIndex = -1;
+                            int minimalSize = Int32.MaxValue;
+                            for (int l = 0; l < localEdges.Count; l++)
                             {
-                                //Optimization: if there is only one edge then that's the minimal one
-                                minimalEdge = edges[0];
-                            }
-                            else
-                            {
-                                int minimalIndex = -1;
-                                int minimalSize = int.MaxValue;
-                                for (int l = 0; l < edges.Count; l++)
+                                var edge = localEdges[l];
+                                if (edge.cachedTotalSize < minimalSize)
                                 {
-                                    ResultList edge = edges[l];
-                                    if (edge.Size < minimalSize)
-                                    {
-                                        minimalIndex = l;
-                                        minimalSize = edge.Size;
-                                    }
+                                    minimalIndex = l;
+                                    minimalSize = edge.cachedTotalSize;
                                 }
-                                minimalEdge = edges[minimalIndex];
-                                edges.Clear();
-                                edges.Add(minimalEdge);
                             }
+                            // assert minimalIndex != -1;
+                            minimalEdge = localEdges[minimalIndex];
+                            localEdges.Clear();
+                            localEdges.Add(minimalEdge);
                             if (i < inputLength)
                             {
-                                addEdges(version, vertices, i, minimalEdge);
+                                addEdges(version, edges, i, minimalEdge);
                             }
                         }
                     }
@@ -660,86 +683,117 @@ namespace ZXing.QrCode.Internal
             {
                 int minimalJ = -1;
                 int minimalK = -1;
-                int minimalSize = int.MaxValue;
+                int minimalSize = Int32.MaxValue;
                 for (int j = 0; j < encoders.Length; j++)
                 {
                     for (int k = 0; k < 4; k++)
                     {
-                        if (vertices[inputLength][j][k] != null)
+                        if (edges[inputLength][j][k] != null)
                         {
-                            List<ResultList> edges = vertices[inputLength][j][k];
-                            ResultList edge = edges[0];
-                            if (edge.Size < minimalSize)
+                            var localEdges = edges[inputLength][j][k];
+                            //assert localEdges.size() == 1;
+                            var edge = localEdges[0];
+                            if (edge.cachedTotalSize < minimalSize)
                             {
-                                minimalSize = edge.Size;
+                                minimalSize = edge.cachedTotalSize;
                                 minimalJ = j;
                                 minimalK = k;
                             }
                         }
                     }
                 }
+
                 if (minimalJ < 0)
                 {
-                    throw new WriterException("Internal error: failed to encode");
+                    throw new WriterException("Internal error: failed to encode \"" + stringToEncode + "\"");
                 }
-                return vertices[inputLength][minimalJ][minimalK][0];
+                return postProcess(edges[inputLength][minimalJ][minimalK][0], version);
             }
         }
 
-        private byte[] getBytesOfCharacter(int position, int charsetEncoderIndex)
+        internal sealed class Edge
         {
-            //TODO: Is there a more efficient way for a single character?
-            return encoders[charsetEncoderIndex].GetBytes(stringToEncode.Substring(position, 1));
+            public Mode mode;
+            public int fromPosition;
+            public int charsetEncoderIndex;
+            public int characterLength;
+            public Edge previous;
+            public int cachedTotalSize;
+
+            public Edge(Mode mode, int fromPosition, int charsetEncoderIndex, int characterLength, Edge previous, Version version, MinimalEncoder encoder)
+            {
+                this.mode = mode;
+                this.fromPosition = fromPosition;
+                this.charsetEncoderIndex = mode == Mode.BYTE || previous == null ? charsetEncoderIndex :
+                    previous.charsetEncoderIndex; //inherit the encoding if not of type BYTE
+                this.characterLength = characterLength;
+                this.previous = previous;
+
+                int size = previous != null ? previous.cachedTotalSize : 0;
+
+                bool needECI = mode == Mode.BYTE &&
+                    (previous == null && this.charsetEncoderIndex != 0) || // at the beginning and charset is not ISO-8859-1
+                    (previous != null && this.charsetEncoderIndex != previous.charsetEncoderIndex);
+
+                if (previous == null || mode != previous.mode || needECI)
+                {
+                    size += 4 + mode.getCharacterCountBits(version);
+                }
+                switch (mode.Name)
+                {
+                    case Mode.Names.KANJI:
+                        size += 13;
+                        break;
+                    case Mode.Names.ALPHANUMERIC:
+                        size += characterLength == 1 ? 6 : 11;
+                        break;
+                    case Mode.Names.NUMERIC:
+                        size += characterLength == 1 ? 4 : characterLength == 2 ? 7 : 10;
+                        break;
+                    case Mode.Names.BYTE:
+                        size += 8 * encoder.encoders[charsetEncoderIndex].GetBytes(encoder.stringToEncode.Substring(fromPosition, characterLength)).Length;
+                        if (needECI)
+                        {
+                            size += 4 + 8; // the ECI assignment numbers for ISO-8859-x, UTF-8 and UTF-16 are all 8 bit long
+                        }
+                        break;
+                }
+                cachedTotalSize = size;
+            }
         }
 
-        internal class ResultList : LinkedList<ResultList.ResultNode> {
-
+        internal class ResultList : LinkedList<ResultList.ResultNode>
+        {
             private Version version;
+            private MinimalEncoder encoder;
 
-            public ResultList(Version version)
+            public ResultList(Version version, Edge solution, MinimalEncoder encoder)
             {
+                this.encoder = encoder;
                 this.version = version;
-            }
-
-            /// <summary>
-            /// Short for rl=new ResultList(version); rl.add(rl.new ResultNode(modes, position, charsetEncoderIndex, length));                          
-            /// </summary>
-            /// <param name="version"></param>
-            /// <param name="mode"></param>
-            /// <param name="position"></param>
-            /// <param name="charsetEncoderIndex"></param>
-            public ResultList(Version version, Mode mode, int position, int charsetEncoderIndex, int length, MinimalEncoder encoder)
-                : this(version)
-            {
-
-                AddLast(new ResultList.ResultNode(mode, position, charsetEncoderIndex, length, encoder, this));
-            }
-
-            public void addFirst(ResultList resultList)
-            {
-                LinkedListNode<ResultNode> node = resultList.Last;
-                while (node != null)
+                int length = 0;
+                Edge current = solution;
+                while (current != null)
                 {
-                    addFirst(node.Value);
-                    node = node.Previous;
+                    length += current.characterLength;
+                    Edge previous = current.previous;
+
+                    bool needECI = current.mode == Mode.BYTE &&
+                        (previous == null && current.charsetEncoderIndex != 0) || // at the beginning and charset is not ISO-8859-1
+                        (previous != null && current.charsetEncoderIndex != previous.charsetEncoderIndex);
+
+                    if (previous == null || previous.mode != current.mode || needECI)
+                    {
+                        AddFirst(new ResultNode(current.mode, current.fromPosition, current.charsetEncoderIndex, length, encoder, this));
+                        length = 0;
+                    }
+
+                    if (needECI)
+                    {
+                        AddFirst(new ResultNode(Mode.ECI, current.fromPosition, current.charsetEncoderIndex, 0, encoder, this));
+                    }
+                    current = previous;
                 }
-            }
-
-            /**
-             * Prepends n and may modify this.getFirst().declaresMode before doing so.
-             */
-
-            public LinkedListNode<ResultNode> addFirst(ResultNode n)
-            {
-                var next = First;
-                if (next != null)
-                {
-                    next.Value.declaresMode = n.mode != next.Value.mode ||
-                        next.Value.mode == Mode.ECI ||
-                        n.CharacterLength + next.Value.CharacterLength >= getMaximumNumberOfEncodeableCharacters(version, next.Value.mode);
-                }
-
-                return AddFirst(n);
             }
 
             /// <summary>
@@ -764,33 +818,13 @@ namespace ZXing.QrCode.Internal
             /// <param name="bits"></param>
             public void getBits(BitArray bits)
             {
-                var rni = First;
-                while (rni != null)
+                foreach (ResultNode resultNode in this)
                 {
-                    if (rni.Value.declaresMode)
-                    {
-                        // append mode
-                        bits.appendBits(rni.Value.mode.Bits, 4);
-                        if (rni.Value.CharacterLength > 0)
-                        {
-                            int length = rni.Value.CharacterCountIndicator;
-                            var rnj = rni.Next;
-                            while (rnj != null)
-                            {
-                                if (rnj.Value.declaresMode)
-                                {
-                                    break;
-                                }
-                                length += rnj.Value.CharacterCountIndicator;
-                            }
-                            bits.appendBits(length, rni.Value.mode.getCharacterCountBits(version));
-                        }
-                    }
-                    rni.Value.getBits(bits);
+                    resultNode.getBits(bits);
                 }
             }
 
-            public Version getVersion(ErrorCorrectionLevel ecLevel)
+            public Version getVersion()
             {
                 int versionNumber = version.VersionNumber;
                 int lowerLimit;
@@ -812,12 +846,12 @@ namespace ZXing.QrCode.Internal
                         break;
                 }
                 // increase version if needed
-                while (versionNumber < upperLimit && !Encoder.willFit(Size, Version.getVersionForNumber(versionNumber), ecLevel))
+                while (versionNumber < upperLimit && !Encoder.willFit(Size, Version.getVersionForNumber(versionNumber), encoder.ecLevel))
                 {
                     versionNumber++;
                 }
                 // shrink version if possible
-                while (versionNumber > lowerLimit && Encoder.willFit(Size, Version.getVersionForNumber(versionNumber - 1), ecLevel))
+                while (versionNumber > lowerLimit && Encoder.willFit(Size, Version.getVersionForNumber(versionNumber - 1), encoder.ecLevel))
                 {
                     versionNumber--;
                 }
@@ -832,18 +866,10 @@ namespace ZXing.QrCode.Internal
                 {
                     if (previous != null)
                     {
-                        if (current.declaresMode)
-                        {
-                            result.Append(")");
-                        }
                         result.Append(",");
                     }
                     result.Append(current.ToString());
                     previous = current;
-                }
-                if (previous != null)
-                {
-                    result.Append(")");
                 }
                 return result.ToString();
             }
@@ -851,19 +877,18 @@ namespace ZXing.QrCode.Internal
             internal class ResultNode
             {
                 public Mode mode;
-                public bool declaresMode = true;
-                public int position;
+                public int fromPosition;
                 public int charsetEncoderIndex;
-                public int length;
+                public int characterLength;
                 public ResultList resultList;
                 public MinimalEncoder encoder;
 
-                public ResultNode(Mode mode, int position, int charsetEncoderIndex, int length, MinimalEncoder encoder, ResultList resultList)
+                public ResultNode(Mode mode, int fromPosition, int charsetEncoderIndex, int characterLength, MinimalEncoder encoder, ResultList resultList)
                 {
                     this.mode = mode;
-                    this.position = position;
+                    this.fromPosition = fromPosition;
                     this.charsetEncoderIndex = charsetEncoderIndex;
-                    this.length = length;
+                    this.characterLength = characterLength;
                     this.encoder = encoder;
                     this.resultList = resultList;
                 }
@@ -876,38 +901,29 @@ namespace ZXing.QrCode.Internal
                 {
                     get
                     {
-                        int size = declaresMode ? 4 + mode.getCharacterCountBits(resultList.version) : 0;
+                        int size = 4 + mode.getCharacterCountBits(resultList.version);
                         switch (mode.Name)
                         {
                             case Mode.Names.KANJI:
-                                size += 13;
+                                size += 13 * characterLength;
                                 break;
                             case Mode.Names.ALPHANUMERIC:
-                                size += length == 1 ? 6 : 11;
+                                size += (characterLength / 2) * 11;
+                                size += (characterLength % 2) == 1 ? 6 : 0;
                                 break;
                             case Mode.Names.NUMERIC:
-                                size += length == 1 ? 4 : length == 2 ? 7 : 10;
+                                size += (characterLength / 3) * 10;
+                                int rest = characterLength % 3;
+                                size += rest == 1 ? 4 : rest == 2 ? 7 : 0;
                                 break;
                             case Mode.Names.BYTE:
-                                size += 8 * encoder.getBytesOfCharacter(position, charsetEncoderIndex).Length;
+                                size += 8 * CharacterCountIndicator;
                                 break;
                             case Mode.Names.ECI:
                                 size += 8; // the ECI assignment numbers for ISO-8859-x, UTF-8 and UTF-16 are all 8 bit long
                                 break;
                         }
                         return size;
-                    }
-                }
-
-                /// <summary>
-                /// returns the length in characters
-                /// </summary>
-                /// <returns></returns>
-                public int CharacterLength
-                {
-                    get
-                    {
-                        return length;
                     }
                 }
 
@@ -920,7 +936,7 @@ namespace ZXing.QrCode.Internal
                 {
                     get
                     {
-                        return mode == Mode.BYTE ? encoder.getBytesOfCharacter(position, charsetEncoderIndex).Length : CharacterLength;
+                        return mode == Mode.BYTE ? encoder.encoders[charsetEncoderIndex].GetBytes(encoder.stringToEncode.Substring(fromPosition, characterLength)).Length : characterLength;
                     }
                 }
 
@@ -930,32 +946,37 @@ namespace ZXing.QrCode.Internal
                 /// <param name="bits"></param>
                 public void getBits(BitArray bits)
                 {
+                    bits.appendBits(mode.Bits, 4);
+                    if (characterLength > 0)
+                    {
+                        int length = CharacterCountIndicator;
+                        bits.appendBits(length, mode.getCharacterCountBits(resultList.version));
+                    }
                     if (mode == Mode.ECI)
                     {
                         bits.appendBits(CharacterSetECI.getCharacterSetECI(encoder.encoders[charsetEncoderIndex]).Value, 8);
                     }
-                    else if (CharacterLength > 0)
+                    else if (characterLength > 0)
                     {
                         // append data
-                        Encoder.appendBytes(encoder.stringToEncode.Substring(position, CharacterLength), mode, bits, encoder.encoders[charsetEncoderIndex]);
+                        Encoder.appendBytes(encoder.stringToEncode.Substring(fromPosition, characterLength), mode, bits,
+                            encoder.encoders[charsetEncoderIndex]);
                     }
                 }
 
                 public override String ToString()
                 {
                     var result = new StringBuilder();
-                    if (declaresMode)
-                    {
-                        result.Append(mode).Append('(');
-                    }
+                    result.Append(mode).Append('(');
                     if (mode == Mode.ECI)
                     {
                         result.Append(encoder.encoders[charsetEncoderIndex].WebName.ToUpper());
                     }
                     else
                     {
-                        result.Append(makePrintable(encoder.stringToEncode.Substring(position, length)));
+                        result.Append(makePrintable(encoder.stringToEncode.Substring(fromPosition, characterLength)));
                     }
+                    result.Append(')');
                     return result.ToString();
                 }
 
