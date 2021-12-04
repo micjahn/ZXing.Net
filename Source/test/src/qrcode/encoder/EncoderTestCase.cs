@@ -968,6 +968,32 @@ namespace ZXing.QrCode.Internal.Test
                 "4670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781)", null, true);
         }
 
+        [Test]
+        public void testMinimalEncoder42()
+        {
+            // test halfwidth Katakana character (they are single byte encoded in Shift_JIS)
+            verifyMinimalEncoding("Katakana:\uFF66\uFF66\uFF66\uFF66\uFF66\uFF66", "ECI(SHIFT_JIS),BYTE(Katakana:......)", null
+        , false);
+        }
+
+        [Test]
+        public void testMinimalEncoder43()
+        {
+            // The character \u30A2 encodes as double byte in Shift_JIS so KANJI is more compact in this case
+            verifyMinimalEncoding("Katakana:\u30A2\u30A2\u30A2\u30A2\u30A2\u30A2", "BYTE(Katakana:),KANJI(......)", null,
+            false);
+        }
+
+        [Test]
+        public void testMinimalEncoder44()
+        {
+            // The character \u30A2 encodes as double byte in Shift_JIS but KANJI is not more compact in this case because
+            // KANJI is only more compact when it encodes pairs of characters. In the case of mixed text it can however be
+            // that Shift_JIS encoding is more compact as in this example
+            verifyMinimalEncoding("Katakana:\u30A2a\u30A2a\u30A2a\u30A2a\u30A2a\u30A2", "ECI(SHIFT_JIS),BYTE(Katakana:.a.a.a" +
+            ".a.a.)", null, false);
+        }
+
         static void verifyMinimalEncoding(String input, String expectedResult, Encoding priorityCharset, bool isGS1)
         {
             MinimalEncoder.ResultList result = MinimalEncoder.encode(input, null, priorityCharset, isGS1, ErrorCorrectionLevel.L);

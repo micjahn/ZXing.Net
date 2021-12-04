@@ -156,8 +156,10 @@ namespace ZXing.QrCode
 
         /// <summary>
         /// Specifies whether to use compact mode for QR code (type <see cref="System.Boolean" />, or "true" or "false"
-        /// When compaction is performed the value for {@link CHARACTER_SET} is ignored.
-        /// <see cref="System.String" /> value).
+        /// Please note that when compaction is performed, the most compact character encoding is chosen
+        /// for characters in the input that are not in the ISO-8859-1 character set. Based on experience,
+        /// some scanners do not support encodings like cp-1256 (Arabic). In such cases the encoding can
+        /// be forced to UTF-8 by means of the <see cref="CHARACTER_SET"/> encoding hint.
         /// </summary>
 #if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
         [CategoryAttribute("Standard"), DescriptionAttribute("Specifies whether to use compact mode for QR code" +

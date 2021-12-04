@@ -58,6 +58,53 @@ namespace ZXing.QrCode.Internal
             LARGE
         }
 
+        // List of encoders that potentially encode characters not in ISO-8859-1 in one byte.
+        private static List<Encoding> ENCODERS = new List<Encoding>();
+        static MinimalEncoder()
+        {
+            var names = new[]
+            {
+                "ISO-8859-2",
+                "ISO-8859-3",
+                "ISO-8859-4",
+                "ISO-8859-5",
+                "ISO-8859-6",
+                "ISO-8859-7",
+                "ISO-8859-8",
+                "ISO-8859-9",
+                "ISO-8859-10",
+                "ISO-8859-11",
+                "ISO-8859-13",
+                "ISO-8859-14",
+                "ISO-8859-15",
+                "ISO-8859-16",
+                "windows-1250",
+                "windows-1251",
+                "windows-1252",
+                "windows-1253",
+                "windows-1254",
+                "windows-1255",
+                "windows-1256",
+                "windows-1257",
+                "windows-1258",
+                "Shift_JIS"
+            };
+            foreach (String name in names)
+            {
+                if (CharacterSetECI.getCharacterSetECIByName(name) != null)
+                {
+                    try
+                    {
+                        ENCODERS.Add(Clone(Encoding.GetEncoding(name)));
+                    }
+                    catch (Exception e)
+                    {
+                        // continue
+                    }
+                }
+            }
+        }
+
         private String stringToEncode;
         private bool isGS1;
         private Encoding[] encoders;
@@ -108,19 +155,6 @@ namespace ZXing.QrCode.Internal
 #endif
         }
 
-        /**
-         * 
-         *
-         * @param stringToEncode 
-         * @param priorityCharset The preferred {@link Charset}. When the value of the argument is null, the algorithm
-         *   chooses charsets that leads to a minimal representation. Otherwise the algorithm will use the priority 
-         *   charset to encode any character in the input that can be encoded by it if the charset is among the 
-         *   supported charsets.
-         * @param isGS1 {@code true} if a FNC1 is to be prepended; {@code false} otherwise
-         * @param ecLevel The error correction level.
-         * @see ResultList#getVersion
-         */
-
         /// <summary>
         /// Creates a MinimalEncoder
         /// </summary>
@@ -137,96 +171,53 @@ namespace ZXing.QrCode.Internal
             this.isGS1 = isGS1;
             this.ecLevel = ecLevel;
 
-            // encodings have to be cloned to change the EncoderFallback property later
-            var isoEncoders = new Encoding[15]; // room for the 15 ISO-8859 charsets 1 through 16.
-            isoEncoders[0] = Clone(StringUtils.ISO88591_ENCODING);
+            var neededEncoders = new List<Encoding>();
+            neededEncoders.Add(Clone(StringUtils.ISO88591_ENCODING));
             var needUnicodeEncoder = priorityCharset != null && priorityCharset.WebName.StartsWith("UTF", StringComparison.OrdinalIgnoreCase);
 
             for (int i = 0; i < stringToEncode.Length; i++)
             {
-                int cnt = 0;
-                int j;
-                for (j = 0; j < 15; j++)
+                bool canEnc = false;
+                foreach (var encoder in neededEncoders)
                 {
-                    if (isoEncoders[j] != null)
+                    if (canEncode(encoder, stringToEncode[i]))
                     {
-                        cnt++;
-                        if (canEncode(isoEncoders[j], stringToEncode[i]))
+                        canEnc = true;
+                        break;
+                    }
+                }
+
+                if (!canEnc)
+                {
+                    foreach (var encoder in ENCODERS)
+                    {
+                        if (canEncode(encoder, stringToEncode[i]))
                         {
+                            neededEncoders.Add(encoder);
+                            canEnc = true;
                             break;
                         }
                     }
                 }
 
-                if (cnt == 14)
+                if (!canEnc)
                 {
-                    // we need all. Can stop looking further.
-                    break;
-                }
-
-                if (j >= 15)
-                {
-                    // no encoder found
-                    for (j = 0; j < 15; j++)
-                    {
-                        if (j != 11 && isoEncoders[j] == null)
-                        {
-                            // ISO-8859-12 doesn't exist
-                            try
-                            {
-                                var ce = Clone(Encoding.GetEncoding("ISO-8859-" + (j + 1)));
-                                if (canEncode(ce, stringToEncode[i]))
-                                {
-                                    isoEncoders[j] = ce;
-                                    break;
-                                }
-                            }
-                            catch (Exception ) { }
-                        }
-                    }
-                    if (j >= 15)
-                    {
-                        if (!canEncode(Clone(Encoding.BigEndianUnicode), stringToEncode[i]))
-                        {
-                            throw new WriterException("Can not encode character \\u" + String.Format("%04X",
-                                (int)stringToEncode[i]) + " at position " + i + " in input \"" + stringToEncode + "\"");
-                        }
-                        needUnicodeEncoder = true;
-                    }
+                    needUnicodeEncoder = true;
                 }
             }
 
-            int numberOfEncoders = 0;
-            for (int j = 0; j < 15; j++)
-            {
-                if (isoEncoders[j] != null)
-                {
-                    if (CharacterSetECI.getCharacterSetECI(isoEncoders[j]) != null)
-                    {
-                        numberOfEncoders++;
-                    }
-                    else
-                    {
-                        needUnicodeEncoder = true;
-                    }
-                }
-            }
-
-            if (numberOfEncoders == 1 && !needUnicodeEncoder)
+            if (neededEncoders.Count == 1 && !needUnicodeEncoder)
             {
                 encoders = new Encoding[1];
-                encoders[0] = isoEncoders[0];
+                encoders[0] = neededEncoders[0];
             }
             else
             {
-                encoders = new Encoding[numberOfEncoders + 2];
+                encoders = new Encoding[neededEncoders.Count + 2];
                 int index = 0;
-                for (int j = 0; j < 15; j++)
+                foreach (var encoder in neededEncoders)
                 {
-                    if (isoEncoders[j] != null && CharacterSetECI.getCharacterSetECI(isoEncoders[j]) != null)
-                    {
-                        encoders[index++] = isoEncoders[j];
-                    }
+                    encoders[index++] = encoder;
                 }
 
                 encoders[index] = Clone(Encoding.UTF8);
@@ -456,7 +447,7 @@ namespace ZXing.QrCode.Internal
 
         public ResultList encodeSpecificVersion(Version version)
         {
-            /* A vertex represents a tuple of a position in the input, a mode and an a character encoding where position 0
+            /* A vertex represents a tuple of a position in the input, a mode and a character encoding where position 0
              * denotes the position left of the first character, 1 the position left of the second character and so on.
              * Likewise the end vertices are located after the last character at position stringToEncode.length().
              *
