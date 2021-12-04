@@ -216,6 +216,34 @@ namespace ZXing.Datamatrix.Encoder
 
         internal static int lookAheadTest(String msg, int startpos, int currentMode)
         {
+            int newMode = lookAheadTestIntern(msg, startpos, currentMode);
+            if (currentMode == Encodation.X12 && newMode == Encodation.X12)
+            {
+                int endpos = Math.Min(startpos + 3, msg.Length);
+                for (int i = startpos; i < endpos; i++)
+                {
+                    if (!isNativeX12(msg[i]))
+                    {
+                        return Encodation.ASCII;
+                    }
+                }
+            }
+            else if (currentMode == Encodation.EDIFACT && newMode == Encodation.EDIFACT)
+            {
+                int endpos = Math.Min(startpos + 4, msg.Length);
+                for (int i = startpos; i < endpos; i++)
+                {
+                    if (!isNativeEDIFACT(msg[i]))
+                    {
+                        return Encodation.ASCII;
+                    }
+                }
+            }
+            return newMode;
+        }
+
+        internal static int lookAheadTestIntern(String msg, int startpos, int currentMode)
+        {
             if (startpos >= msg.Length)
             {
                 return currentMode;
