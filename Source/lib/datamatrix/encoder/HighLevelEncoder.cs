@@ -358,37 +358,39 @@ namespace ZXing.Datamatrix.Encoder
                     var intCharCounts = new int[6];
                     var mins = new byte[6];
                     findMinimums(charCounts, intCharCounts, Int32.MaxValue, mins);
-                    int minCount = getMinimumCount(mins);
 
-                    if (intCharCounts[Encodation.ASCII] < intCharCounts[Encodation.BASE256]
-                        && intCharCounts[Encodation.ASCII] < intCharCounts[Encodation.C40]
-                        && intCharCounts[Encodation.ASCII] < intCharCounts[Encodation.TEXT]
-                        && intCharCounts[Encodation.ASCII] < intCharCounts[Encodation.X12]
-                        && intCharCounts[Encodation.ASCII] < intCharCounts[Encodation.EDIFACT])
+                    if (intCharCounts[Encodation.ASCII] < min(intCharCounts[Encodation.BASE256],
+                          intCharCounts[Encodation.C40], intCharCounts[Encodation.TEXT], intCharCounts[Encodation.X12],
+                          intCharCounts[Encodation.EDIFACT]))
                     {
                         return Encodation.ASCII;
                     }
-                    if (intCharCounts[Encodation.BASE256] < intCharCounts[Encodation.ASCII]
-                        || (mins[Encodation.C40] + mins[Encodation.TEXT] + mins[Encodation.X12] + mins[Encodation.EDIFACT]) == 0)
+                    if (intCharCounts[Encodation.BASE256] < intCharCounts[Encodation.ASCII] ||
+                          intCharCounts[Encodation.BASE256] + 1 < min(intCharCounts[Encodation.C40],
+                          intCharCounts[Encodation.TEXT], intCharCounts[Encodation.X12], intCharCounts[Encodation.EDIFACT]))
                     {
                         return Encodation.BASE256;
                     }
-                    if (minCount == 1 && mins[Encodation.EDIFACT] > 0)
+                    if (intCharCounts[Encodation.EDIFACT] + 1 < min(intCharCounts[Encodation.BASE256],
+                          intCharCounts[Encodation.C40], intCharCounts[Encodation.TEXT], intCharCounts[Encodation.X12],
+                          intCharCounts[Encodation.ASCII]))
                     {
                         return Encodation.EDIFACT;
                     }
-                    if (minCount == 1 && mins[Encodation.TEXT] > 0)
+                    if (intCharCounts[Encodation.TEXT] + 1 < min(intCharCounts[Encodation.BASE256],
+                          intCharCounts[Encodation.C40], intCharCounts[Encodation.EDIFACT], intCharCounts[Encodation.X12],
+                          intCharCounts[Encodation.ASCII]))
                     {
                         return Encodation.TEXT;
                     }
-                    if (minCount == 1 && mins[Encodation.X12] > 0)
+                    if (intCharCounts[Encodation.X12] + 1 < min(intCharCounts[Encodation.BASE256],
+                          intCharCounts[Encodation.C40], intCharCounts[Encodation.EDIFACT], intCharCounts[Encodation.TEXT],
+                          intCharCounts[Encodation.ASCII]))
                     {
                         return Encodation.X12;
                     }
-                    if (intCharCounts[Encodation.C40] + 1 < intCharCounts[Encodation.ASCII]
-                        && intCharCounts[Encodation.C40] + 1 < intCharCounts[Encodation.BASE256]
-                        && intCharCounts[Encodation.C40] + 1 < intCharCounts[Encodation.EDIFACT]
-                        && intCharCounts[Encodation.C40] + 1 < intCharCounts[Encodation.TEXT])
+                    if (intCharCounts[Encodation.C40] + 1 < min(intCharCounts[Encodation.ASCII],
+                          intCharCounts[Encodation.BASE256], intCharCounts[Encodation.EDIFACT], intCharCounts[Encodation.TEXT]))
                     {
                         if (intCharCounts[Encodation.C40] < intCharCounts[Encodation.X12])
                         {
@@ -415,6 +417,16 @@ namespace ZXing.Datamatrix.Encoder
                     }
                 }
             }
+        }
+
+        private static int min(int f1, int f2, int f3, int f4, int f5)
+        {
+            return Math.Min(min(f1, f2, f3, f4), f5);
+        }
+
+        private static int min(int f1, int f2, int f3, int f4)
+        {
+            return Math.Min(f1, Math.Min(f2, Math.Min(f3, f4)));
         }
 
         private static int findMinimums(float[] charCounts, int[] intCharCounts, int min, byte[] mins)

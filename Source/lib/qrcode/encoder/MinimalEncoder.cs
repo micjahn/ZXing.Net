@@ -243,22 +243,18 @@ namespace ZXing.QrCode.Internal
         /// </summary>
         /// <param name="stringToEncode">The string to encode</param>
         /// <param name="version">The preferred <see cref="Version"/>. A minimal version is computed(see
-        //*   {
-        //        @link ResultList#getVersion method} when the value of the argument is null</param>
+        ///  {@link ResultList#getVersion method} when the value of the argument is null</param>
         /// <param name="priorityCharset">The preferred { @link Charset}. When the value of the argument is null, the algorithm
-        // *chooses charsets that leads to a minimal representation.Otherwise the algorithm will use the priority
-        //* charset to encode any character in the input that can be encoded by it if the charset is among the
-        //* supported charsets.</param>
-        /// <param name="isGS1">{ @code true}
-        //        if a FNC1 is to be prepended;
-        //        { @code false}
-        //        otherwise</param>
+        ///  chooses charsets that leads to a minimal representation.Otherwise the algorithm will use the priority
+        /// charset to encode any character in the input that can be encoded by it if the charset is among the
+        /// supported charsets.</param>
+        /// <param name="isGS1">{ @code true} if a FNC1 is to be prepended;{ @code false}otherwise</param>
         /// <param name="ecLevel">The error correction level.</param>
         /// <returns>An instance of { @code ResultList}
-        //        representing the minimal solution.
-        // *@see ResultList#getBits
-        // * @see ResultList#getVersion
-        // * @see ResultList#getSize</returns>
+        ///        representing the minimal solution.
+        /// @see ResultList#getBits
+        /// @see ResultList#getVersion
+        /// @see ResultList#getSize</returns>
         public static ResultList encode(String stringToEncode, Version version, Encoding priorityCharset, bool isGS1, ErrorCorrectionLevel ecLevel)
         {
             return new MinimalEncoder(stringToEncode, priorityCharset, isGS1, ecLevel).encode(version);
