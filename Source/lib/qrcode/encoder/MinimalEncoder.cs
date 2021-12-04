@@ -161,7 +161,7 @@ namespace ZXing.QrCode.Internal
         /// <param name="stringToEncode">The string to encode</param>
         /// <param name="priorityCharset">The preferred <see cref="System.Text.Encoding"/>. When the value of the argument is null, the algorithm
         /// *   chooses charsets that leads to a minimal representation.Otherwise the algorithm will use the priority
-        /// *   charset to encode any character in the input that can be encoded by it if the charset is among the 
+        /// *   charset to encode any character in the input that can be encoded by it if the charset is among the
         /// *   supported charsets.</param>
         /// <param name="isGS1"> {@code true} if a FNC1 is to be prepended; {@code false} otherwise</param>
         /// <param name="ecLevel">The error correction level.</param>
@@ -208,8 +208,7 @@ namespace ZXing.QrCode.Internal
 
             if (neededEncoders.Count == 1 && !needUnicodeEncoder)
             {
-                encoders = new Encoding[1];
-                encoders[0] = neededEncoders[0];
+                encoders = new Encoding[] { neededEncoders[0] };
             }
             else
             {
@@ -229,7 +228,7 @@ namespace ZXing.QrCode.Internal
             {
                 for (int i = 0; i < encoders.Length; i++)
                 {
-                    if (priorityCharset.WebName.Equals(encoders[i].WebName))
+                    if (encoders[i] != null && priorityCharset.WebName.Equals(encoders[i].WebName))
                     {
                         priorityEncoderIndexValue = i;
                         break;
@@ -343,19 +342,6 @@ namespace ZXing.QrCode.Internal
         static bool isAlphanumeric(char c)
         {
             return Encoder.getAlphanumericCode(c) != -1;
-        }
-
-        /// <summary>
-        /// Returns the maximum number of encodeable characters in the given mode for the given version. Example: in
-        /// Version 1, 2^10 digits or 2^8 bytes can be encoded. In Version 3 it is 2^14 digits and 2^16 bytes
-        /// </summary>
-        /// <param name="version"></param>
-        /// <param name="mode"></param>
-        /// <returns></returns>
-        public static int getMaximumNumberOfEncodeableCharacters(Version version, Mode mode)
-        {
-            int count = mode.getCharacterCountBits(version);
-            return count == 0 ? 0 : 1 << count;
         }
 
         public bool canEncode(Mode mode, char c)
@@ -475,7 +461,7 @@ namespace ZXing.QrCode.Internal
              *
              * Example 1 encoding the string "ABCDE":
              * Note: This example assumes that alphanumeric encoding is only possible in multiples of two characters so that
-             * the example is both short and showing the principle. In reality this restriction does not exist. 
+             * the example is both short and showing the principle. In reality this restriction does not exist.
              *
              * Initial situation
              * (initial) -- BYTE(A) (20) --> (1_BYTE)
@@ -689,8 +675,9 @@ namespace ZXing.QrCode.Internal
             }
         }
 
-        internal class ResultList : LinkedList<ResultList.ResultNode>
+        internal class ResultList
         {
+            private List<ResultList.ResultNode> list = new List<ResultList.ResultNode>();
             private Version version;
             private MinimalEncoder encoder;
 
@@ -717,13 +704,13 @@ namespace ZXing.QrCode.Internal
 
                     if (previous == null || previous.mode != current.mode || needECI)
                     {
-                        AddFirst(new ResultNode(current.mode, current.fromPosition, current.charsetEncoderIndex, length, encoder, this));
+                        list.Insert(0, new ResultNode(current.mode, current.fromPosition, current.charsetEncoderIndex, length, encoder, this));
                         length = 0;
                     }
 
                     if (needECI)
                     {
-                        AddFirst(new ResultNode(Mode.ECI, current.fromPosition, current.charsetEncoderIndex, 0, encoder, this));
+                        list.Insert(0, new ResultNode(Mode.ECI, current.fromPosition, current.charsetEncoderIndex, 0, encoder, this));
                     }
                     current = previous;
                 }
@@ -732,19 +719,19 @@ namespace ZXing.QrCode.Internal
                 // If there is no ECI at the beginning then we put an ECI to the default charset (ISO-8859-1)
                 if (encoder.isGS1)
                 {
-                    var first = First;
-                    if (first != null && first.Value.mode != Mode.ECI && containsECI)
+                    var first = list[0];
+                    if (first != null && first.mode != Mode.ECI && containsECI)
                     {
                         // prepend a default character set ECI
-                        AddFirst(new ResultNode(Mode.ECI, 0, 0, 0, encoder, this));
+                        list.Insert(0, new ResultNode(Mode.ECI, 0, 0, 0, encoder, this));
                     }
-                    first = First;
+                    first = list[0];
                     // prepend or insert a FNC1_FIRST_POSITION after the ECI (if any)
                     var node = new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0, encoder, this);
-                    if (first?.Value.mode != Mode.ECI)
-                        AddFirst(node);
+                    if (first?.mode != Mode.ECI)
+                        list.Insert(0, node);
                     else
-                        AddAfter(first, node);
+                        list.Insert(1, node);
                 }
 
                 // set version to smallest version into which the bits fit.
@@ -795,7 +782,7 @@ namespace ZXing.QrCode.Internal
             private int getSize(Version version)
             {
                 int result = 0;
-                foreach (var resultNode in this)
+                foreach (var resultNode in list)
                 {
                     result += resultNode.getSize(version);
                 }
@@ -808,7 +795,7 @@ namespace ZXing.QrCode.Internal
             /// <param name="bits"></param>
             public void getBits(BitArray bits)
             {
-                foreach (ResultNode resultNode in this)
+                foreach (ResultNode resultNode in list)
                 {
                     resultNode.getBits(bits);
                 }
@@ -823,7 +810,7 @@ namespace ZXing.QrCode.Internal
             {
                 var result = new StringBuilder();
                 ResultNode previous = null;
-                foreach (var current in this)
+                foreach (var current in list)
                 {
                     if (previous != null)
                     {
