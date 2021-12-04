@@ -718,243 +718,239 @@ namespace ZXing.QrCode.Internal.Test
         [Test]
         public void testMinimalEncoder1()
         {
-            verifyMinimalEncoding("A", "ALPHANUMERIC(A),TERMINATOR()", null, false);
+            verifyMinimalEncoding("A", "ALPHANUMERIC(A)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder2()
         {
-            verifyMinimalEncoding("AB", "ALPHANUMERIC(AB),TERMINATOR()", null, false);
+            verifyMinimalEncoding("AB", "ALPHANUMERIC(AB)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder3()
         {
-            verifyMinimalEncoding("ABC", "ALPHANUMERIC(ABC),TERMINATOR()", null, false);
+            verifyMinimalEncoding("ABC", "ALPHANUMERIC(ABC)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder4()
         {
-            verifyMinimalEncoding("ABCD", "ALPHANUMERIC(ABCD),TERMINATOR()", null, false);
+            verifyMinimalEncoding("ABCD", "ALPHANUMERIC(ABCD)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder5()
         {
-            verifyMinimalEncoding("ABCDE", "ALPHANUMERIC(ABCDE),TERMINATOR()", null, false);
+            verifyMinimalEncoding("ABCDE", "ALPHANUMERIC(ABCDE)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder6()
         {
-            verifyMinimalEncoding("ABCDEF", "ALPHANUMERIC(ABCDEF),TERMINATOR()", null, false);
+            verifyMinimalEncoding("ABCDEF", "ALPHANUMERIC(ABCDEF)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder7()
         {
-            verifyMinimalEncoding("ABCDEFG", "ALPHANUMERIC(ABCDEFG),TERMINATO" +
-            "R()", null, false);
+            verifyMinimalEncoding("ABCDEFG", "ALPHANUMERIC(ABCDEFG)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder8()
         {
-            verifyMinimalEncoding("1", "NUMERIC(1),TERMINATOR()", null, false);
+            verifyMinimalEncoding("1", "NUMERIC(1)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder9()
         {
-            verifyMinimalEncoding("12", "NUMERIC(12),TERMINATOR()", null, false);
+            verifyMinimalEncoding("12", "NUMERIC(12)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder10()
         {
-            verifyMinimalEncoding("123", "NUMERIC(123),TERMINATOR()", null, false);
+            verifyMinimalEncoding("123", "NUMERIC(123)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder11()
         {
-            verifyMinimalEncoding("1234", "NUMERIC(1234),TERMINATOR()", null, false);
+            verifyMinimalEncoding("1234", "NUMERIC(1234)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder12()
         {
-            verifyMinimalEncoding("12345", "NUMERIC(12345),TERMINATOR()", null, false);
+            verifyMinimalEncoding("12345", "NUMERIC(12345)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder13()
         {
-            verifyMinimalEncoding("123456", "NUMERIC(123456),TERMINATOR()", null, false);
+            verifyMinimalEncoding("123456", "NUMERIC(123456)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder14()
         {
-            verifyMinimalEncoding("123A", "ALPHANUMERIC(123A),TERMINATOR()", null, false);
+            verifyMinimalEncoding("123A", "ALPHANUMERIC(123A)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder15()
         {
-            verifyMinimalEncoding("A1", "ALPHANUMERIC(A1),TERMINATOR()", null, false);
+            verifyMinimalEncoding("A1", "ALPHANUMERIC(A1)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder16()
         {
-            verifyMinimalEncoding("A12", "ALPHANUMERIC(A12),TERMINATOR()", null, false);
+            verifyMinimalEncoding("A12", "ALPHANUMERIC(A12)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder17()
         {
-            verifyMinimalEncoding("A123", "ALPHANUMERIC(A123),TERMINATOR()", null, false);
+            verifyMinimalEncoding("A123", "ALPHANUMERIC(A123)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder18()
         {
-            verifyMinimalEncoding("A1234", "ALPHANUMERIC(A1234),TERMINATOR()", null, false);
+            verifyMinimalEncoding("A1234", "ALPHANUMERIC(A1234)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder19()
         {
-            verifyMinimalEncoding("A12345", "ALPHANUMERIC(A12345),TERMINATOR()", null, false);
+            verifyMinimalEncoding("A12345", "ALPHANUMERIC(A12345)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder20()
         {
-            verifyMinimalEncoding("A123456", "ALPHANUMERIC(A123456),TERMINATOR()", null, false);
+            verifyMinimalEncoding("A123456", "ALPHANUMERIC(A123456)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder21()
         {
-            verifyMinimalEncoding("A1234567", "ALPHANUMERIC(A1234567),TERMINATOR()", null, false);
+            verifyMinimalEncoding("A1234567", "ALPHANUMERIC(A1234567)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder22()
         {
-            verifyMinimalEncoding("A12345678", "BYTE(A),NUMERIC(12345678),TERMINATOR()", null, false);
+            verifyMinimalEncoding("A12345678", "BYTE(A),NUMERIC(12345678)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder23()
         {
-            verifyMinimalEncoding("A123456789", "BYTE(A),NUMERIC(123456789),TERMINATOR()", null, false);
+            verifyMinimalEncoding("A123456789", "BYTE(A),NUMERIC(123456789)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder24()
         {
-            verifyMinimalEncoding("A1234567890", "ALPHANUMERIC(A1),NUMERIC(234567890),TERMINATOR()", null, false);
+            verifyMinimalEncoding("A1234567890", "ALPHANUMERIC(A1),NUMERIC(234567890)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder25()
         {
-            verifyMinimalEncoding("AB1", "ALPHANUMERIC(AB1),TERMINATOR()", null, false);
+            verifyMinimalEncoding("AB1", "ALPHANUMERIC(AB1)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder26()
         {
-            verifyMinimalEncoding("AB12", "ALPHANUMERIC(AB12),TERMINATOR()", null, false);
+            verifyMinimalEncoding("AB12", "ALPHANUMERIC(AB12)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder27()
         {
-            verifyMinimalEncoding("AB123", "ALPHANUMERIC(AB123),TERMINATOR()", null, false);
+            verifyMinimalEncoding("AB123", "ALPHANUMERIC(AB123)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder28()
         {
-            verifyMinimalEncoding("AB1234", "ALPHANUMERIC(AB1234),TERMINATOR()", null, false);
+            verifyMinimalEncoding("AB1234", "ALPHANUMERIC(AB1234)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder29()
         {
-            verifyMinimalEncoding("ABC1", "ALPHANUMERIC(ABC1),TERMINATOR()", null, false);
+            verifyMinimalEncoding("ABC1", "ALPHANUMERIC(ABC1)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder30()
         {
-            verifyMinimalEncoding("ABC12", "ALPHANUMERIC(ABC12),TERMINATOR()", null, false);
+            verifyMinimalEncoding("ABC12", "ALPHANUMERIC(ABC12)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder31()
         {
-            verifyMinimalEncoding("ABC1234", "ALPHANUMERIC(ABC1234),TERMINA" +
-                "TOR()", null, false);
+            verifyMinimalEncoding("ABC1234", "ALPHANUMERIC(ABC1234)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder32()
         {
-            verifyMinimalEncoding("http://foo.com", "BYTE(http://foo.com)" +
-                ",TERMINATOR()", null, false);
+            verifyMinimalEncoding("http://foo.com", "BYTE(http://foo.com)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder33()
         {
             verifyMinimalEncoding("HTTP://FOO.COM", "ALPHANUMERIC(HTTP://FOO.COM" +
-                "),TERMINATOR()", null, false);
+                ")", null, false);
         }
 
         [Test]
         public void testMinimalEncoder34()
         {
             verifyMinimalEncoding("1001114670010%01201220%107211220%140045003267781",
-                "NUMERIC(1001114670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781),TERMINA" +
-                "TOR()", null, false);
+                "NUMERIC(1001114670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder35()
         {
-            verifyMinimalEncoding("\u0150", "ECI(ISO-8859-2),BYTE(.),TERMINATOR()", null, false);
+            verifyMinimalEncoding("\u0150", "ECI(ISO-8859-2),BYTE(.)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder36()
         {
-            verifyMinimalEncoding("\u015C", "ECI(ISO-8859-3),BYTE(.),TERMINATOR()", null, false);
+            verifyMinimalEncoding("\u015C", "ECI(ISO-8859-3),BYTE(.)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder37()
         {
-            verifyMinimalEncoding("\u0150\u015C", "ECI(UTF-8),BYTE(..),TERMINATOR()", null, false);
+            verifyMinimalEncoding("\u0150\u015C", "ECI(UTF-8),BYTE(..)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder38()
         {
             verifyMinimalEncoding("\u0150\u0150\u015C\u015C", "ECI(ISO-8859-2),BYTE(." +
-                ".),ECI(ISO-8859-3),BYTE(..),TERMINATOR()", null, false);
+                ".),ECI(ISO-8859-3),BYTE(..)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder39()
         {
             verifyMinimalEncoding("abcdef\u0150ghij", "ECI(ISO-8859-2),BYTE(abcde" +
-                "f.ghij),TERMINATOR()", null, false);
+                "f.ghij)", null, false);
         }
 
         [Test]
@@ -962,14 +958,14 @@ namespace ZXing.QrCode.Internal.Test
         {
             verifyMinimalEncoding("2938928329832983\u01502938928329832983\u015C2938928329832983",
                 "NUMERIC(2938928329832983),ECI(ISO-8859-2),BYTE(.),NUMERIC(2938928329832983),ECI(ISO-8" +
-                "859-3),BYTE(.),NUMERIC(2938928329832983),TERMINATOR()", null, false);
+                "859-3),BYTE(.),NUMERIC(2938928329832983)", null, false);
         }
 
         [Test]
         public void testMinimalEncoder41()
         {
             verifyMinimalEncoding("1001114670010%01201220%107211220%140045003267781", "FNC1_FIRST_POSITION(),NUMERIC(100111" +
-                "4670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781),TERMINATOR()", null, true);
+                "4670010),ALPHANUMERIC(%01201220%107211220%),NUMERIC(140045003267781)", null, true);
         }
 
         static void verifyMinimalEncoding(String input, String expectedResult, Encoding priorityCharset, bool isGS1)

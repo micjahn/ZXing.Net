@@ -25,46 +25,27 @@ namespace ZXing.QrCode.Internal
     /// <summary>
     /// * Encoder that encodes minimally
     /// *
-    /// * Version selection:
-    /// * The version can be preset in the constructor. If it isn't specified then the algorithm will compute three solutions
-    /// * for the three different version classes 1-9, 10-26 and 27-40.
+    /// * Algorithm:
     /// *
-    /// * It is not clear to me if ever a solution using for example Medium (Versions 10-26) could be smaller than a Small
-    /// * solution (Versions 1-9) (proof for or against would be nice to have).
-    /// * With hypothetical values for the number of length bits, the number of bits per mode and the number of bits per
-    /// * encoded character it can be shown that it can happen at all as follows:
-    /// * We hypothetically assume that a mode is encoded using 1 bit (instead of 4) and a character is encoded in BYTE mode
-    /// * using 2 bit (instead of 8). Using these values we now attempt to encode the four characters "1234".
-    /// * If we furthermore assume that in Version 1-9 the length field has 1 bit length so that it can encode up to 2
-    /// * characters and that in Version 10-26 it has 2 bits length so that we can encode up to 2 characters then it is more
-    /// * efficient to encode with Version 10-26 than with Version 1-9 as shown below:
+    /// * The eleventh commandment was "Thou Shalt Compute" or "Thou Shalt Not Compute" - I forget which(Alan Perilis).
     /// *
-    /// * Number of length bits small version (1-9): 1
-    /// * Number of length bits large version (10-26): 2
-    /// * Number of bits per mode item: 1
-    /// * Number of bits per character item: 2
-    /// * BYTE(1,2),BYTE(3,4): 1+1+2+2,1+1+2+2=12 bits
-    /// * BYTE(1,2,3,4): 1+2+2+2+2+2          =11 bits
+    /// * This implementation computes.As an alternative, the QR-Code specification suggests heuristics like this one:
     /// *
-    /// * If we however change the capacity of the large encoding from 2 bit to 4 bit so that it potentially can encode 16
-    /// * items, then it is more efficient to encode using the small encoding
-    /// * as shown below:
+    /// * If initial input data is in the exclusive subset of the Alphanumeric character set AND if there are less than
+    /// * [6,7,8] characters followed by data from the remainder of the 8-bit byte character set, THEN select the 8-
+    /// * bit byte mode ELSE select Alphanumeric mode;
     /// *
-    /// * Number of length bits small version (1-9): 1
-    /// * Number of length bits large version (10-26): 4
-    /// * Number of bits per mode item: 1
-    /// * Number of bits per character item: 2
-    /// * BYTE(1,2),BYTE(3,4): 1+1+2+2,1+1+2+2=12 bits
-    /// * BYTE(1,2,3,4): 1+4+2+2+2+2          =13 bits
-    /// *
-    /// * But as mentioned, it is not clear to me if this can ever happen with the actual values.
+    /// * This is probably right for 99.99% of cases but there is at least this one counter example: The string "AAAAAAa"
+    /// * encodes 2 bits smaller as ALPHANUMERIC(AAAAAA), BYTE(a) than by encoding it as BYTE(AAAAAAa).
+    /// * Perhaps that is the only counter example but without having proof, it remains unclear.
     /// *
     /// * ECI switching:
     /// *
-    /// * In multi language content the algorithm selects the most compact representation using ECI modes. For example the
-    /// * most compact representation of the string "\u0625\u05D0" is ECI(UTF-8),BYTE(arabic_aleph, hebrew_aleph) while
-    /// * the encoding the string "\u0625\u0625\u05D0" is most compactly represented with two ECIs as 
-    /// * ECI(ISO-8859-6),BYTE(arabic_aleph, arabic_aleph),ECI(ISO-8859-8),BYTE(hebew_aleph).
+    /// * In multi language content the algorithm selects the most compact representation using ECI modes.
+    /// * For example the most compact representation of the string "\u0150\u015C" (O-double-acute, S-circumflex) is
+    /// * ECI(UTF-8), BYTE(\u0150\u015C) while prepending one or more times the same leading character as in
+    /// * "\u0150\u0150\u015C", the most compact representation  uses two ECIs so that the string is encoded as
+    /// * ECI(ISO-8859-2), BYTE(\u0150\u0150), ECI(ISO-8859-3), BYTE(\u015C).
     /// *
     /// * @author Alex Geller
     /// </summary>
@@ -157,7 +138,7 @@ namespace ZXing.QrCode.Internal
             this.ecLevel = ecLevel;
 
             // encodings have to be cloned to change the EncoderFallback property later
-            var isoEncoders = new Encoding[15]; //room for the 15 ISO-8859 charsets 1 through 16.
+            var isoEncoders = new Encoding[15]; // room for the 15 ISO-8859 charsets 1 through 16.
             isoEncoders[0] = Clone(StringUtils.ISO88591_ENCODING);
             var needUnicodeEncoder = priorityCharset != null && priorityCharset.WebName.StartsWith("UTF", StringComparison.OrdinalIgnoreCase);
 
@@ -179,13 +160,13 @@ namespace ZXing.QrCode.Internal
 
                 if (cnt == 14)
                 {
-                    //we need all. Can stop looking further.
+                    // we need all. Can stop looking further.
                     break;
                 }
 
                 if (j >= 15)
                 {
-                    //no encoder found
+                    // no encoder found
                     for (j = 0; j < 15; j++)
                     {
                         if (j != 11 && isoEncoders[j] == null)
@@ -296,7 +277,7 @@ namespace ZXing.QrCode.Internal
         {
             if (version == null)
             {
-                //compute minimal encoding trying the three version sizes.
+                // compute minimal encoding trying the three version sizes.
                 Version[] versions =
                 {
                     getVersion(VersionSize.SMALL),
@@ -327,7 +308,8 @@ namespace ZXing.QrCode.Internal
                 return results[smallestResult];
             }
             else
-            { //compute minimal encoding for a given version
+            {
+                // compute minimal encoding for a given version
                 ResultList result = encodeSpecificVersion(version);
                 if (!Encoder.willFit(result.Size, getVersion(getVersionSize(result.getVersion())), ecLevel))
                 {
@@ -396,8 +378,8 @@ namespace ZXing.QrCode.Internal
                 case Mode.Names.NUMERIC:
                     return isNumeric(c);
                 case Mode.Names.BYTE:
-                    return true; //any character can be encoded as byte(s). Up to the caller to manage splitting into
-                                 //multiple bytes when String.getBytes(Charset) return more than one byte.
+                    return true; // any character can be encoded as byte(s). Up to the caller to manage splitting into
+                                 // multiple bytes when String.getBytes(Charset) return more than one byte.
                 default:
                     return false;
             }
@@ -422,52 +404,6 @@ namespace ZXing.QrCode.Internal
                 default:
                     throw new InvalidOperationException("Illegal mode " + mode);
             }
-        }
-
-        private ResultList postProcess(Edge solution, Version version)
-        {
-            var result = new ResultList(version, solution, this);
-            var edge = solution;
-            if (isGS1)
-            {
-                var first = result.First;
-                if (first != null)
-                {
-                    if (first.Value.mode != Mode.ECI)
-                    {
-                        bool haveECI = false;
-                        foreach (var node in result)
-                        {
-                            if (node.mode == Mode.ECI)
-                            {
-                                haveECI = true;
-                                break;
-                            }
-                        }
-                        if (haveECI)
-                        {
-                            //prepend a default character set ECI
-                            result.AddFirst(new ResultList.ResultNode(Mode.ECI, 0, 0, 0, this, result));
-                        }
-                    }
-                }
-
-                first = result.First;
-                if (first.Value.mode != Mode.ECI)
-                {
-                    //prepend a FNC1_FIRST_POSITION
-                    result.AddFirst(new ResultList.ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0, this, result));
-                }
-                else
-                {
-                    //insert a FNC1_FIRST_POSITION after the ECI
-                    result.AddAfter(first, new ResultList.ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0, this, result));
-                }
-            }
-            //Add TERMINATOR according to "8.4.8 Terminator"
-            //TODO: The terminator can be omitted if there are less than 4 bit in the capacity of the symbol.
-            result.AddLast(new ResultList.ResultNode(Mode.TERMINATOR, stringToEncode.Length, 0, 0, this, result));
-            return result;
         }
 
         void addEdge(List<Edge>[][][] edges, int position, Edge edge)
@@ -707,7 +643,7 @@ namespace ZXing.QrCode.Internal
                 {
                     throw new WriterException("Internal error: failed to encode \"" + stringToEncode + "\"");
                 }
-                return postProcess(edges[inputLength][minimalJ][minimalK][0], version);
+                return new ResultList(version, edges[inputLength][minimalJ][minimalK][0], this);
             }
         }
 
@@ -725,7 +661,7 @@ namespace ZXing.QrCode.Internal
                 this.mode = mode;
                 this.fromPosition = fromPosition;
                 this.charsetEncoderIndex = mode == Mode.BYTE || previous == null ? charsetEncoderIndex :
-                    previous.charsetEncoderIndex; //inherit the encoding if not of type BYTE
+                    previous.charsetEncoderIndex; // inherit the encoding if not of type BYTE
                 this.characterLength = characterLength;
                 this.previous = previous;
 
@@ -771,8 +707,9 @@ namespace ZXing.QrCode.Internal
             {
                 this.encoder = encoder;
                 this.version = version;
-                int length = 0;
-                Edge current = solution;
+                var length = 0;
+                var current = solution;
+                var containsECI = false;
                 while (current != null)
                 {
                     length += current.characterLength;
@@ -781,6 +718,11 @@ namespace ZXing.QrCode.Internal
                     bool needECI = current.mode == Mode.BYTE &&
                         (previous == null && current.charsetEncoderIndex != 0) || // at the beginning and charset is not ISO-8859-1
                         (previous != null && current.charsetEncoderIndex != previous.charsetEncoderIndex);
+
+                    if (needECI)
+                    {
+                        containsECI = true;
+                    }
 
                     if (previous == null || previous.mode != current.mode || needECI)
                     {
@@ -794,38 +736,27 @@ namespace ZXing.QrCode.Internal
                     }
                     current = previous;
                 }
-            }
 
-            /// <summary>
-            /// returns the size in bits
-            /// </summary>
-            public int Size
-            {
-                get
+                // prepend FNC1 if needed. If the bits contain an ECI then the FNC1 must be preceeded by an ECI.
+                // If there is no ECI at the beginning then we put an ECI to the default charset (ISO-8859-1)
+                if (encoder.isGS1)
                 {
-                    int result = 0;
-                    foreach (var item in this)
+                    var first = First;
+                    if (first != null && first.Value.mode != Mode.ECI && containsECI)
                     {
-                        result += item.Size;
+                        // prepend a default character set ECI
+                        AddFirst(new ResultNode(Mode.ECI, 0, 0, 0, encoder, this));
                     }
-                    return result;
+                    first = First;
+                    // prepend or insert a FNC1_FIRST_POSITION after the ECI (if any)
+                    var node = new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0, encoder, this);
+                    if (first?.Value.mode != Mode.ECI)
+                        AddFirst(node);
+                    else
+                        AddAfter(first, node);
                 }
-            }
 
-            /// <summary>
-            /// appends the bits
-            /// </summary>
-            /// <param name="bits"></param>
-            public void getBits(BitArray bits)
-            {
-                foreach (ResultNode resultNode in this)
-                {
-                    resultNode.getBits(bits);
-                }
-            }
-
-            public Version getVersion()
-            {
+                // set version to smallest version into which the bits fit.
                 int versionNumber = version.VersionNumber;
                 int lowerLimit;
                 int upperLimit;
@@ -845,17 +776,56 @@ namespace ZXing.QrCode.Internal
                         upperLimit = 40;
                         break;
                 }
+                int size = getSize(version);
                 // increase version if needed
-                while (versionNumber < upperLimit && !Encoder.willFit(Size, Version.getVersionForNumber(versionNumber), encoder.ecLevel))
+                while (versionNumber < upperLimit && !Encoder.willFit(size, Version.getVersionForNumber(versionNumber), encoder.ecLevel))
                 {
                     versionNumber++;
                 }
                 // shrink version if possible
-                while (versionNumber > lowerLimit && Encoder.willFit(Size, Version.getVersionForNumber(versionNumber - 1), encoder.ecLevel))
+                while (versionNumber > lowerLimit && Encoder.willFit(size, Version.getVersionForNumber(versionNumber - 1), encoder.ecLevel))
                 {
                     versionNumber--;
                 }
-                return Version.getVersionForNumber(versionNumber);
+                this.version = Version.getVersionForNumber(versionNumber);
+            }
+
+            /// <summary>
+            /// returns the size in bits
+            /// </summary>
+            public int Size
+            {
+                get
+                {
+                    return getSize(version);
+                }
+            }
+
+            private int getSize(Version version)
+            {
+                int result = 0;
+                foreach (var resultNode in this)
+                {
+                    result += resultNode.getSize(version);
+                }
+                return result;
+            }
+
+            /// <summary>
+            /// appends the bits
+            /// </summary>
+            /// <param name="bits"></param>
+            public void getBits(BitArray bits)
+            {
+                foreach (ResultNode resultNode in this)
+                {
+                    resultNode.getBits(bits);
+                }
+            }
+
+            public Version getVersion()
+            {
+                return version;
             }
 
             public override String ToString()
@@ -897,34 +867,31 @@ namespace ZXing.QrCode.Internal
                 /// returns the size in bits
                 /// </summary>
                 /// <returns></returns>
-                public int Size
+                public int getSize(Version version)
                 {
-                    get
+                    int size = 4 + mode.getCharacterCountBits(resultList.version);
+                    switch (mode.Name)
                     {
-                        int size = 4 + mode.getCharacterCountBits(resultList.version);
-                        switch (mode.Name)
-                        {
-                            case Mode.Names.KANJI:
-                                size += 13 * characterLength;
-                                break;
-                            case Mode.Names.ALPHANUMERIC:
-                                size += (characterLength / 2) * 11;
-                                size += (characterLength % 2) == 1 ? 6 : 0;
-                                break;
-                            case Mode.Names.NUMERIC:
-                                size += (characterLength / 3) * 10;
-                                int rest = characterLength % 3;
-                                size += rest == 1 ? 4 : rest == 2 ? 7 : 0;
-                                break;
-                            case Mode.Names.BYTE:
-                                size += 8 * CharacterCountIndicator;
-                                break;
-                            case Mode.Names.ECI:
-                                size += 8; // the ECI assignment numbers for ISO-8859-x, UTF-8 and UTF-16 are all 8 bit long
-                                break;
-                        }
-                        return size;
+                        case Mode.Names.KANJI:
+                            size += 13 * characterLength;
+                            break;
+                        case Mode.Names.ALPHANUMERIC:
+                            size += (characterLength / 2) * 11;
+                            size += (characterLength % 2) == 1 ? 6 : 0;
+                            break;
+                        case Mode.Names.NUMERIC:
+                            size += (characterLength / 3) * 10;
+                            int rest = characterLength % 3;
+                            size += rest == 1 ? 4 : rest == 2 ? 7 : 0;
+                            break;
+                        case Mode.Names.BYTE:
+                            size += 8 * CharacterCountIndicator;
+                            break;
+                        case Mode.Names.ECI:
+                            size += 8; // the ECI assignment numbers for ISO-8859-x, UTF-8 and UTF-16 are all 8 bit long
+                            break;
                     }
+                    return size;
                 }
 
                 /// <summary>
