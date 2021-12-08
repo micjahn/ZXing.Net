@@ -27,6 +27,8 @@ namespace ZXing.Unity
         /// Decodes the specified barcode bitmap.
         /// </summary>
         /// <param name="rawColor32">The image as Color32 array.</param>
+        /// <param name="width">width of the image which is represented by rawColor32</param>
+        /// <param name="height">height of the image which is represented by rawColor32</param>
         /// <returns>the result data or null</returns>
         [System.CLSCompliant(false)]
         Result[] DecodeMultiple(Color32[] rawColor32, int width, int height);

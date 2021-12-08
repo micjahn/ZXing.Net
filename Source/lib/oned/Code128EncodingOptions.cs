@@ -70,11 +70,26 @@ namespace ZXing.OneD
             }
         }
 
+        /// <summary>
+        /// avaiable codesets
+        /// </summary>
         public enum Codesets
         {
+            /// <summary>
+            /// none specified
+            /// </summary>
             None = -1,
+            /// <summary>
+            /// Codeset A
+            /// </summary>
             A,
+            /// <summary>
+            /// Codeset B
+            /// </summary>
             B,
+            /// <summary>
+            /// Codeset C
+            /// </summary>
             C
         }
     }

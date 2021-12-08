@@ -135,6 +135,11 @@ namespace ZXing.Common
             return NAME_TO_ECI[name];
         }
 
+        /// <summary>
+        /// returns the encoding object fo the specified charset
+        /// </summary>
+        /// <param name="charsetECI"></param>
+        /// <returns></returns>
         public static System.Text.Encoding getEncoding(CharacterSetECI charsetECI)
         {
             if (charsetECI == null)
@@ -142,6 +147,11 @@ namespace ZXing.Common
             return getEncoding(charsetECI.EncodingName);
         }
 
+        /// <summary>
+        /// returns the encoding object fo the specified name
+        /// </summary>
+        /// <param name="encodingName"></param>
+        /// <returns></returns>
         public static System.Text.Encoding getEncoding(string encodingName)
         {
             System.Text.Encoding encoding = null;
@@ -172,11 +182,11 @@ namespace ZXing.Common
                     // So we try here the some different ones
                     if (encodingName == StringUtils.ISO88591)
                     {
-                        encoding = Encoding.GetEncoding(1252);
+                        encoding = System.Text.Encoding.GetEncoding(1252);
                     }
                     else
                     {
-                        encoding = Encoding.GetEncoding(StringUtils.UTF8);
+                        encoding = System.Text.Encoding.GetEncoding(StringUtils.UTF8);
                     }
                 }
                 catch (Exception)

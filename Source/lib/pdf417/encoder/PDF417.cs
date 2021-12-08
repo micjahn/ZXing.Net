@@ -810,6 +810,26 @@ namespace ZXing.PDF417.Internal
                     for (var index = 0; index < metadata.FileId.Length && isEncodedAsCodewords; index += 3)
                     {
                         int fileIdInt;
+#if WindowsCE
+                        try
+                        {
+                            fileIdInt = Int32.Parse(this.metadata.FileId.Substring(index, 3));
+                            if (fileIdInt >= 0 && fileIdInt <= 899)
+                            {
+                                macroCodewords.Append((char)fileIdInt);
+                                sourceCodeWords += 1;
+                                codewordCount++;
+                            }
+                            else
+                            {
+                                isEncodedAsCodewords = false;
+                            }
+                        }
+                        catch 
+                        {
+                            isEncodedAsCodewords = false;
+                        }
+#else
                         if (Int32.TryParse(this.metadata.FileId.Substring(index, 3), out fileIdInt) && fileIdInt >= 0 && fileIdInt <= 899)
                         {
                             macroCodewords.Append((char)fileIdInt);
@@ -820,6 +840,7 @@ namespace ZXing.PDF417.Internal
                         {
                             isEncodedAsCodewords = false;
                         }
+#endif
                     }
                     if (!isEncodedAsCodewords)
                     {

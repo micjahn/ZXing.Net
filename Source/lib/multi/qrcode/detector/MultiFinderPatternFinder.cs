@@ -234,6 +234,11 @@ namespace ZXing.Multi.QrCode.Internal
             return null;
         }
 
+        /// <summary>
+        /// try to find patterns
+        /// </summary>
+        /// <param name="hints"></param>
+        /// <returns></returns>
         public FinderPatternInfo[] findMulti(IDictionary<DecodeHintType, object> hints)
         {
             bool tryHarder = hints != null && hints.ContainsKey(DecodeHintType.TRY_HARDER);

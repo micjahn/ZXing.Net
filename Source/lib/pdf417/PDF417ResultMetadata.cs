@@ -22,6 +22,9 @@ namespace ZXing.PDF417
     /// </summary>
     public sealed class PDF417ResultMetadata
     {
+        /// <summary>
+        /// default constructor
+        /// </summary>
         public PDF417ResultMetadata()
         {
             SegmentCount = -1;

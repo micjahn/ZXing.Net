@@ -28,8 +28,11 @@ namespace ZXing
         /// uses the IBarcodeReaderGeneric implementation and the <see cref="Color32LuminanceSource"/> class for decoding
         /// </summary>
         /// <param name="reader"></param>
-        /// <param name="rawColor32"></param>
+        /// <param name="rawColor32">the raw image which should be decoded</param>
+        /// <param name="width">width of the image which is represented by rawColor32</param>
+        /// <param name="height">height of the image which is represented by rawColor32</param>
         /// <returns></returns>
+        [System.CLSCompliant(false)]
         public static Result Decode(this IBarcodeReaderGeneric reader, Color32[] rawColor32, int width, int height)
         {
             var luminanceSource = new Color32LuminanceSource(rawColor32, width, height);
@@ -41,7 +44,10 @@ namespace ZXing
         /// </summary>
         /// <param name="reader"></param>
         /// <param name="rawColor32"></param>
+        /// <param name="width">width of the image which is represented by rawColor32</param>
+        /// <param name="height">height of the image which is represented by rawColor32</param>
         /// <returns></returns>
+        [System.CLSCompliant(false)]
         public static Result[] DecodeMultiple(this IBarcodeReaderGeneric reader, Color32[] rawColor32, int width, int height)
         {
             var luminanceSource = new Color32LuminanceSource(rawColor32, width, height);

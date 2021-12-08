@@ -76,6 +76,12 @@ namespace ZXing.OneD
             return encode(contents, null);
         }
 
+        /// <summary>
+        /// starts encoding
+        /// </summary>
+        /// <param name="contents"></param>
+        /// <param name="hints"></param>
+        /// <returns></returns>
         protected override bool[] encode(String contents, IDictionary<EncodeHintType, object> hints)
         {
             int forcedCodeSet = -1;

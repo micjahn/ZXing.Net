@@ -28,15 +28,39 @@ namespace ZXing.Common
     public static class StringUtils
     {
 #if (WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || NETSTANDARD)
+        /// <summary>
+        /// default encoding of the current platform (name) (UTF-8)
+        /// </summary>
         public static readonly String PLATFORM_DEFAULT_ENCODING = UTF8;
+        /// <summary>
+        /// default encoding of the current platform (name) (UTF-8)
+        /// </summary>
         public static readonly Encoding PLATFORM_DEFAULT_ENCODING_T = Encoding.UTF8;
 #else
+        /// <summary>
+        /// default encoding of the current platform (name)
+        /// </summary>
         public static readonly String PLATFORM_DEFAULT_ENCODING = Encoding.Default.WebName.ToUpper();
+        /// <summary>
+        /// default encoding of the current platform (type)
+        /// </summary>
         public static readonly Encoding PLATFORM_DEFAULT_ENCODING_T = Encoding.Default;
 #endif
+        /// <summary>
+        /// Shift JIS encoding if available
+        /// </summary>
         public static readonly Encoding SHIFT_JIS_ENCODING = CharacterSetECI.getEncoding(SHIFT_JIS);
+        /// <summary>
+        /// GB 2312 encoding if available
+        /// </summary>
         public static readonly Encoding GB2312_ENCODING = CharacterSetECI.getEncoding(GB2312);
+        /// <summary>
+        /// ECU JP encoding if available
+        /// </summary>
         public static readonly Encoding EUC_JP_ENCODING = CharacterSetECI.getEncoding(EUC_JP);
+        /// <summary>
+        /// ISO8859-1 encoding if available
+        /// </summary>
         public static readonly Encoding ISO88591_ENCODING = CharacterSetECI.getEncoding(ISO88591);
         private static readonly bool ASSUME_SHIFT_JIS =
             SHIFT_JIS_ENCODING.Equals(PLATFORM_DEFAULT_ENCODING_T) ||
@@ -51,8 +75,17 @@ namespace ZXing.Common
         /// GB2312
         /// </summary>
         public const String GB2312 = "GB2312";
+        /// <summary>
+        /// EUC-JP
+        /// </summary>
         public const String EUC_JP = "EUC-JP";
+        /// <summary>
+        /// UTF-8
+        /// </summary>
         public const String UTF8 = "UTF-8";
+        /// <summary>
+        /// ISO-8859-1
+        /// </summary>
         public const String ISO88591 = "ISO-8859-1";
 
         /// <summary>

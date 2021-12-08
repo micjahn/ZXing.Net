@@ -33,6 +33,7 @@ namespace ZXing.Unity
         /// <summary>
         /// the generated code as Color32 array
         /// </summary>
+        [System.CLSCompliant(false)]
         public Color32[] Pixels { get; private set; }
 
         /// <summary>

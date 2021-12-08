@@ -84,6 +84,7 @@ namespace ZXing.Aztec.Internal
         /// <param name="minECCPercent">minimal percentage of error check words (According to ISO/IEC 24778:2008, a minimum of 23% + 3 words is recommended)</param>
         /// <param name="userSpecifiedLayers">if non-zero, a user-specified value for the number of layers</param>
         /// <param name="encoding">character set in which to encode string using ECI; if null, no ECI code will be inserted, and the string must be encodable as ISO/IEC 8859-1 (Latin-1), the default encoding of the symbol.</param>
+        /// <param name="disableEci">if true, dont't add ECI segment</param>
         /// <returns>Aztec symbol matrix with metadata</returns>
         public static AztecCode encode(String data, int minECCPercent, int userSpecifiedLayers, System.Text.Encoding encoding, bool disableEci)
         {

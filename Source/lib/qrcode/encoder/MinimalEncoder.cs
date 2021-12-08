@@ -97,7 +97,7 @@ namespace ZXing.QrCode.Internal
                     {
                         ENCODERS.Add(Clone(Encoding.GetEncoding(name)));
                     }
-                    catch (Exception e)
+                    catch (Exception )
                     {
                         // continue
                     }
@@ -111,18 +111,29 @@ namespace ZXing.QrCode.Internal
         private int priorityEncoderIndex;
         private ErrorCorrectionLevel ecLevel;
 
+#if NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_3 || WINDOWS_UWP || PORTABLE || WINDOWS_PHONE || NETFX_CORE || WindowsCE
+        private static bool canEncode(Encoding encoding, char c)
+        {
+            // very limited support on old platforms; not sure, if it would work; and not sure, if somebody need the old platform support
+            try
+            {
+                var result = encoding.GetByteCount(new char[] { c });
+                return result > 0;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+#else
         private static bool canEncode(Encoding encoding, char c)
         {
             try
             {
-#if !NETSTANDARD1_0 && !NETSTANDARD1_1 && !NETSTANDARD1_3 && !WINDOWS_UWP && !PORTABLE
                 var prevFallback = encoding.EncoderFallback;
-#endif
                 try
                 {
-#if !NETSTANDARD1_0 && !NETSTANDARD1_1 && !NETSTANDARD1_3 && !WINDOWS_UWP && !PORTABLE
                     encoding.EncoderFallback = EncoderFallback.ExceptionFallback;
-#endif
                     var result = encoding.GetByteCount(new char[] { c });
                     return result > 0;
                 }
@@ -132,9 +143,7 @@ namespace ZXing.QrCode.Internal
                 }
                 finally
                 {
-#if !NETSTANDARD1_0 && !NETSTANDARD1_1 && !NETSTANDARD1_3 && !WINDOWS_UWP && !PORTABLE
                     encoding.EncoderFallback = prevFallback;
-#endif
                 }
             }
             catch
@@ -142,12 +151,13 @@ namespace ZXing.QrCode.Internal
                 return false;
             }
         }
+#endif
 
         private static Encoding Clone(Encoding encoding)
         {
             // encodings have to be cloned to change the EncoderFallback property later
 
-#if !NETSTANDARD1_0 && !NETSTANDARD1_1 && !PORTABLE
+#if !NETSTANDARD1_0 && !NETSTANDARD1_1 && !PORTABLE && !WINDOWS_PHONE && !NETFX_CORE
             // Clone isn't supported by .net standard 1.0, 1.1 and portable
             return (Encoding)encoding.Clone();
 #else
@@ -724,7 +734,7 @@ namespace ZXing.QrCode.Internal
                     first = list[0];
                     // prepend or insert a FNC1_FIRST_POSITION after the ECI (if any)
                     var node = new ResultNode(Mode.FNC1_FIRST_POSITION, 0, 0, 0, encoder, this);
-                    if (first?.mode != Mode.ECI)
+                    if (first == null || first.mode != Mode.ECI)
                         list.Insert(0, node);
                     else
                         list.Insert(1, node);

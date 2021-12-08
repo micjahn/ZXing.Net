@@ -113,7 +113,7 @@ public class BarcodeCam : MonoBehaviour
     void DecodeQR()
     {
         // create a reader with a custom luminance source
-        var barcodeReader = new BarcodeReader { AutoRotate = false, TryHarder = false };
+        var barcodeReader = new BarcodeReader { AutoRotate = false, Options = new ZXing.Common.DecodingOptions { TryHarder = false } };
 
         while (true)
         {

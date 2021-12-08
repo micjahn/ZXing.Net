@@ -26,16 +26,41 @@ namespace ZXing.Rendering
     [Obsolete("please use PixelDataRenderer instead")]
     public class RawRenderer : IBarcodeRenderer<byte[]>
     {
+        /// <summary>
+        /// platform independent representation of a color as ARGB struct
+        /// </summary>
         public struct Color
         {
+            /// <summary>
+            /// pre-defined black
+            /// </summary>
             public static Color Black = new Color(0);
+            /// <summary>
+            /// pre-defined white
+            /// </summary>
             public static Color White = new Color(0x00FFFFFF);
 
+            /// <summary>
+            /// alpha channel
+            /// </summary>
             public byte A;
+            /// <summary>
+            /// red channel
+            /// </summary>
             public byte R;
+            /// <summary>
+            /// green channel
+            /// </summary>
             public byte G;
+            /// <summary>
+            /// blue channel
+            /// </summary>
             public byte B;
 
+            /// <summary>
+            /// constructs a color struct from an int value ARGB
+            /// </summary>
+            /// <param name="color"></param>
             public Color(int color)
             {
                 A = (byte)((color & 0xFF000000) >> 24);

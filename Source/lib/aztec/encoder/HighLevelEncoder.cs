@@ -198,6 +198,7 @@ namespace ZXing.Aztec.Internal
         /// </summary>
         /// <param name="text"></param>
         /// <param name="encoding"></param>
+        /// <param name="disableEci">if true, disable ECI segment</param>
         public HighLevelEncoder(byte[] text, System.Text.Encoding encoding, bool disableEci)
         {
             this.text = text;
