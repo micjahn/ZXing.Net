@@ -55,7 +55,7 @@ namespace WindowsPhone8Demo.Extensions
             if (photoResult.TaskResult == TaskResult.OK)
             {
                 _reader.Options.TryHarder = false;
-                _reader.TryInverted = false;
+                _reader.Options = new ZXing.Common.DecodingOptions { TryInverted = false };
                 _reader.AutoRotate = false;
 
                 _image.SetSource(photoResult.ChosenPhoto);
@@ -106,7 +106,7 @@ namespace WindowsPhone8Demo.Extensions
                     else if (_reader.Options.TryHarder && _reader.AutoRotate)
                     {
                         SetActivityMessage(".TryHarder & .AutoRotate & .TryInverted", true);
-                        _reader.TryInverted = true;
+                        _reader.Options = new ZXing.Common.DecodingOptions { TryInverted = false };
                         _worker.RunWorkerAsync(new WriteableBitmap(_image));
                     }
                     else

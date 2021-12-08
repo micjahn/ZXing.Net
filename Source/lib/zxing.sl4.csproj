@@ -341,6 +341,7 @@
     <Compile Include="qrcode\encoder\Encoder.cs" />
     <Compile Include="qrcode\encoder\MaskUtil.cs" />
     <Compile Include="qrcode\encoder\MatrixUtil.cs" />
+    <Compile Include="qrcode\encoder\MinimalEncoder.cs" />
     <Compile Include="qrcode\encoder\QRCode.cs" />
     <Compile Include="qrcode\encoder\QrCodeEncodingOptions.cs" />
     <Compile Include="qrcode\QRCodeReader.cs" />

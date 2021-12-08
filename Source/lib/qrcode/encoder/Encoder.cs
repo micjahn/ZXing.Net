@@ -80,7 +80,6 @@ namespace ZXing.QrCode.Internal
                                   ErrorCorrectionLevel ecLevel,
                                   IDictionary<EncodeHintType, object> hints)
         {
-
             Version version;
             BitArray headerAndDataBits;
             Mode mode;
@@ -107,11 +106,11 @@ namespace ZXing.QrCode.Internal
             }
             var generateECI = hasEncodingHint || !DEFAULT_BYTE_MODE_ENCODING.Equals(encoding);
 #else
-                // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
-                var encoding = StringUtils.UTF8;
-                // caller of the method can only control if the ECI segment should be written
-                // character set is fixed to UTF-8; but some scanners doesn't like the ECI segment
-                var generateECI = hasEncodingHint;
+            // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
+            var encoding = StringUtils.PLATFORM_DEFAULT_ENCODING_T;
+            // caller of the method can only control if the ECI segment should be written
+            // character set is fixed to UTF-8; but some scanners doesn't like the ECI segment
+            var generateECI = hasEncodingHint;
 #endif
 
             if (hasCompactionHint)
