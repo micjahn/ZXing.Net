@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <VersionPrefix>0.16.8</VersionPrefix>
-    <TargetFrameworks>netstandard2.0;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.0;netstandard2.1;netcoreapp3.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <PackageId>ZXing.Net.Bindings.Windows.Compatibility</PackageId>
     <PlatformTarget>anycpu</PlatformTarget>
     <SignAssembly>true</SignAssembly>
@@ -27,6 +28,10 @@
     <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <NoWarn>$(NoWarn);1701;1702</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="Rendering/BitmapRenderer.cs" />
     <Compile Include="BitmapLuminanceSource.cs" />
@@ -38,8 +43,31 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
     <PackageReference Include="ZXing.Net" Version="0.16.6" />
+  </ItemGroup>
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
   </ItemGroup>
 
 </Project>
