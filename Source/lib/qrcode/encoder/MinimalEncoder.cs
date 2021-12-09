@@ -335,17 +335,17 @@ namespace ZXing.QrCode.Internal
             }
         }
 
-        static bool isNumeric(char c)
+        private static bool isNumeric(char c)
         {
             return c >= '0' && c <= '9';
         }
 
-        static bool isDoubleByteKanji(char c)
+        private static bool isDoubleByteKanji(char c)
         {
             return Encoder.isOnlyDoubleByteKanji(new String(new[] { c }));
         }
 
-        static bool isAlphanumeric(char c)
+        private static bool isAlphanumeric(char c)
         {
             return Encoder.getAlphanumericCode(c) != -1;
         }
@@ -389,17 +389,18 @@ namespace ZXing.QrCode.Internal
             }
         }
 
-        void addEdge(List<Edge>[][][] edges, int position, Edge edge)
+        private void addEdge(Edge[][][] edges, int position, Edge edge)
         {
             int vertexIndex = position + edge.characterLength;
-            if (edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)] == null)
+            Edge[] modeEdges = edges[vertexIndex][edge.charsetEncoderIndex];
+            int modeOrdinal = getCompactedOrdinal(edge.mode);
+            if (modeEdges[modeOrdinal] == null || modeEdges[modeOrdinal].cachedTotalSize > edge.cachedTotalSize)
             {
-                edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)] = new List<Edge>();
+                modeEdges[modeOrdinal] = edge;
             }
-            edges[vertexIndex][edge.charsetEncoderIndex][getCompactedOrdinal(edge.mode)].Add(edge);
         }
 
-        void addEdges(Version version, List<Edge>[][][] edges, int from, Edge previous)
+        private void addEdges(Version version, Edge[][][] edges, int from, Edge previous)
         {
             int start = 0;
             int end = encoders.Length;
@@ -555,13 +556,13 @@ namespace ZXing.QrCode.Internal
 
             //The last dimension in the array below encodes the 4 modes KANJI, ALPHANUMERIC, NUMERIC and BYTE via the
             //function getCompactedOrdinal(Mode)
-            var edges = new List<Edge>[inputLength + 1][][];
+            var edges = new Edge[inputLength + 1][][];
             for (var indexDim1 = 0; indexDim1 < inputLength + 1; indexDim1++)
             {
-                edges[indexDim1] = new List<Edge>[encoders.Length][];
+                edges[indexDim1] = new Edge[encoders.Length][];
                 for (var indexDim2 = 0; indexDim2 < encoders.Length; indexDim2++)
                 {
-                    edges[indexDim1][indexDim2] = new List<Edge>[4];
+                    edges[indexDim1][indexDim2] = new Edge[4];
                 }
             }
             addEdges(version, edges, 0, null);
@@ -572,46 +573,24 @@ namespace ZXing.QrCode.Internal
                 {
                     for (int k = 0; k < 4; k++)
                     {
-                        Edge minimalEdge;
-                        if (edges[i][j][k] != null)
+                        if (edges[i][j][k] != null && i < inputLength)
                         {
-                            var localEdges = edges[i][j][k];
-                            int minimalIndex = -1;
-                            int minimalSize = Int32.MaxValue;
-                            for (int l = 0; l < localEdges.Count; l++)
-                            {
-                                var edge = localEdges[l];
-                                if (edge.cachedTotalSize < minimalSize)
-                                {
-                                    minimalIndex = l;
-                                    minimalSize = edge.cachedTotalSize;
-                                }
-                            }
-                            // assert minimalIndex != -1;
-                            minimalEdge = localEdges[minimalIndex];
-                            localEdges.Clear();
-                            localEdges.Add(minimalEdge);
-                            if (i < inputLength)
-                            {
-                                addEdges(version, edges, i, minimalEdge);
-                            }
+                            addEdges(version, edges, i, edges[i][j][k]);
                         }
                     }
                 }
             }
             {
-                int minimalJ = -1;
-                int minimalK = -1;
-                int minimalSize = Int32.MaxValue;
+                var minimalJ = -1;
+                var minimalK = -1;
+                var minimalSize = Int32.MaxValue;
                 for (int j = 0; j < encoders.Length; j++)
                 {
                     for (int k = 0; k < 4; k++)
                     {
                         if (edges[inputLength][j][k] != null)
                         {
-                            var localEdges = edges[inputLength][j][k];
-                            //assert localEdges.size() == 1;
-                            var edge = localEdges[0];
+                            var edge = edges[inputLength][j][k];
                             if (edge.cachedTotalSize < minimalSize)
                             {
                                 minimalSize = edge.cachedTotalSize;
@@ -626,7 +605,7 @@ namespace ZXing.QrCode.Internal
                 {
                     throw new WriterException("Internal error: failed to encode \"" + stringToEncode + "\"");
                 }
-                return new ResultList(version, edges[inputLength][minimalJ][minimalK][0], this);
+                return new ResultList(version, edges[inputLength][minimalJ][minimalK], this);
             }
         }
 
