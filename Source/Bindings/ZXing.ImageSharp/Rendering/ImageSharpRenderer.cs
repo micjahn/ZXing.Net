@@ -43,8 +43,8 @@ namespace ZXing.ImageSharp.Rendering
         /// </summary>
         public ImageSharpRenderer()
         {
-            Foreground = Color.White;
-            Background = Color.Black;
+            Foreground = Color.Black;
+            Background = Color.White;
         }
 
         /// <summary>
