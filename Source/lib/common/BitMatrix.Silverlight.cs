@@ -25,23 +25,26 @@ namespace ZXing.Common
 {
    public sealed partial class BitMatrix
    {
+      /// <summary>
+      /// Converts this ByteMatrix to a black and white bitmap.
+      /// </summary>
+      /// <returns>A black and white bitmap converted from this BitMatrix.</returns>
       [Obsolete("Use BarcodeWriter instead")]
       [System.CLSCompliant(false)]
       public WriteableBitmap ToBitmap()
       {
-         return ToBitmap(BarcodeFormat.EAN_8, null);
+         return new ZXing.Rendering.WriteableBitmapRenderer().Render(this, BarcodeFormat.QR_CODE, null);
       }
 
       /// <summary>
       /// Converts this ByteMatrix to a black and white bitmap.
       /// </summary>
-      /// <returns>A black and white bitmap converted from this ByteMatrix.</returns>
+      /// <returns>A black and white bitmap converted from this BitMatrix.</returns>
       [Obsolete("Use BarcodeWriter instead")]
       [System.CLSCompliant(false)]
       public WriteableBitmap ToBitmap(BarcodeFormat format, String content)
       {
-         var writer = new BarcodeWriter { Format = format };
-         return writer.Write(content);
+         return new ZXing.Rendering.WriteableBitmapRenderer().Render(this, format, content);
       }
    }
 }
