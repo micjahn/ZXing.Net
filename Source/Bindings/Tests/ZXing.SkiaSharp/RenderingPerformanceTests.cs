@@ -40,7 +40,7 @@ namespace ZXing.SkiaSharp.Test
             using (var fileStream = System.IO.File.Create("C:\\ZXing.Net\\test.png"))
             using (var dst = new SKManagedWStream(fileStream))
             {
-                SKPixmap.Encode(dst, bitmap, SKEncodedImageFormat.Png, 100);
+                bitmap.Encode(dst, SKEncodedImageFormat.Png, 100);
             }
         }
     }
