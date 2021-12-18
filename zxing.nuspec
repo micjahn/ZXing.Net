@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.6</version>
+    <version>0.16.7</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <license type="expression">Apache-2.0</license>
@@ -11,12 +11,13 @@
     <id>ZXing.Net</id>
     <title>ZXing.Net</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.
-It has been ported by hand with a lot of optimizations and improvements.
+    <description>
+      ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.
+      It has been ported by hand with a lot of optimizations and improvements.
 
-It is compatible with .Net 2.0, .Net 3.5, .Net 4.x, Windows RT Class Library and Components, UWP, .Net Standard 1.x and 2.0x, .Net Core App 3.x, Silverlight 4, Silverlight 5, Windows Phone 7.x and Windows Phone 8.x and Xamarin.Android</description>
+      It is compatible with .Net 2.0, .Net 3.5, .Net 4.x, .Net 5.x, .Net 6.x, Windows RT Class Library and Components, UWP, .Net Standard 1.x and 2.0x, .Net Core App 3.x, Silverlight 4, Silverlight 5, Windows Phone 7.x and Windows Phone 8.x and Xamarin.Android</description>
     <summary>ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.</summary>
-    <releaseNotes>* changes of the java version are reflected until 2020/10/08
+    <releaseNotes>* changes of the java version are reflected until 2021/12/08
 * many small bug fixes and improvements</releaseNotes>
     <tags>ZXing barcode scanning 1D 2D UPC-A UPC-E EAN-8 EAN-13 QR ITF Codabar RSS-14 Data Matrix PDF 417 PDF417 Aztec</tags>
     <dependencies>
@@ -27,6 +28,8 @@ It is compatible with .Net 2.0, .Net 3.5, .Net 4.x, Windows RT Class Library and
       <group targetFramework="net461" />
       <group targetFramework="net47" />
       <group targetFramework="net48" />
+      <group targetFramework="net50" />
+      <group targetFramework="net60" />
       <group targetFramework="sl4" />
       <group targetFramework="sl5" />
       <group targetFramework="sl3-wp" />
@@ -95,6 +98,12 @@ It is compatible with .Net 2.0, .Net 3.5, .Net 4.x, Windows RT Class Library and
     <file src="Build\Release\net4.8\zxing.presentation.dll" target="lib\net48\zxing.presentation.dll" />
     <file src="Build\Release\net4.8\zxing.presentation.pdb" target="lib\net48\zxing.presentation.pdb" />
     <file src="Build\Release\net4.8\zxing.presentation.XML" target="lib\net48\zxing.presentation.XML" />
+    <file src="Build\Release\net5.0\zxing.dll" target="lib\net50\zxing.dll" />
+    <file src="Build\Release\net5.0\zxing.pdb" target="lib\net50\zxing.pdb" />
+    <file src="Build\Release\net5.0\zxing.XML" target="lib\net50\zxing.XML" />
+    <file src="Build\Release\net6.0\zxing.dll" target="lib\net60\zxing.dll" />
+    <file src="Build\Release\net6.0\zxing.pdb" target="lib\net60\zxing.pdb" />
+    <file src="Build\Release\net6.0\zxing.XML" target="lib\net60\zxing.XML" />
     <file src="Build\Release\sl4\zxing.sl4.dll" target="lib\sl4\zxing.sl4.dll" />
     <file src="Build\Release\sl4\zxing.sl4.pdb" target="lib\sl4\zxing.sl4.pdb" />
     <file src="Build\Release\sl4\zxing.sl4.XML" target="lib\sl4\zxing.sl4.XML" />
