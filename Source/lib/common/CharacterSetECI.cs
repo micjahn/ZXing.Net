@@ -106,10 +106,8 @@ namespace ZXing.Common
         /// <returns><see cref="CharacterSetECI"/> representing ECI of given value, or null if it is legal but unsupported</returns>
         public static CharacterSetECI getCharacterSetECIByValue(int value)
         {
-            if (value < 0 || value >= 900)
-            {
+            if (!VALUE_TO_ECI.ContainsKey(value))
                 return null;
-            }
             return VALUE_TO_ECI[value];
         }
 
