@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <!-- The configuration and platform will be used to determine which
          assemblies to include from solution and project documentation
@@ -70,11 +71,17 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="zxing.wp7.0, Version=0.16.2.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="zxing.wp7.0, Version=0.16.7.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\..\Build\Release\wp7.0\zxing.wp7.0.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="EWSoftware.SHFB.WindowsPhone">
+      <Version>8.1.0.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="'$(MSBuildRestoreSessionId)' != ''" />
   <!-- Import the SHFB build targets -->
-  <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
+  <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" Condition="'$(MSBuildRestoreSessionId)' == ''" />
 </Project>
