@@ -141,7 +141,7 @@ CD "%BINARY_DIR%"
 echo Build assembly archive...
 echo.
 
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net2.0.unsigned net3.5 net4.0 net4.0.unsigned net4.5 net4.6 net4.7 net4.8 winrt uwp netcoreapp netstandard unity sl4 sl5 wp7.0 wp7.1 wp8.0 winmd portable interop ..\..\THANKS ..\..\COPYING -xr^^!Documentation >> %LOGFILE% 2>&1
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net2.0.unsigned net3.5 net4.0 net4.0.unsigned net4.5 net4.6 net4.7 net4.8 net5.0 net6.0 winrt uwp netcoreapp netstandard unity sl4 sl5 wp7.0 wp7.1 wp8.0 winmd portable interop ..\..\THANKS ..\..\COPYING -xr^^!Documentation >> %LOGFILE% 2>&1
 if ERRORLEVEL 1 GOTO ERROR_OPERATION
 
 echo Build assembly archive - demo clients...
@@ -195,7 +195,7 @@ FOR /F "tokens=1,2 delims= " %%b IN (build_deployment_source_export.txt) DO (
 )
 
 CD "%SOURCE_EXPORT_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Base\Source\lib\*.* Base\Source\Bindings\*.* Base\Source\interop\*.* Base\Source\test\src\*.* Base\Clients\*.* Base\3rdparty\*.* Base\Key\*.* Base\zxing.sln Base\zxing.ce.sln Base\zxing.vs2012.sln Base\zxing.vs2015.sln Base\zxing.vs2017.sln Base\zxing.monoandroid.sln Base\zxing.monotouch.sln Base\zxing.nunit Base\THANKS Base\COPYING WinMD\Source\lib\*.* WinMD\Clients\*.* WinMD\Key\*.* WinMD\zxing.vs2012.sln -xr^^!..svnbridge >> %LOGFILE% 2>&1
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Base\Source\lib\*.* Base\Source\Bindings\*.* Base\Source\interop\*.* Base\Source\test\src\*.* Base\Clients\*.* Base\3rdparty\*.* Base\Key\*.* Base\zxing.sln Base\zxing.ce.sln Base\zxing.vs2012.sln Base\zxing.vs2015.sln Base\zxing.vs2017.sln Base\zxing.vs2019.sln Base\zxing.vs2022.sln Base\zxing.monoandroid.sln Base\zxing.monotouch.sln Base\zxing.nunit Base\THANKS Base\COPYING WinMD\Source\lib\*.* WinMD\Clients\*.* WinMD\Key\*.* WinMD\zxing.vs2012.sln -xr^^!..svnbridge >> %LOGFILE% 2>&1
 CD "%CURRENT_DIR%"
 
 RMDIR /S /Q "%SOURCE_EXPORT_DIR%" >NUL: 2>&1
