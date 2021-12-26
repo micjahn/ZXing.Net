@@ -24,4 +24,4 @@ https://github.com/micjahn/ZXing.Net.git/trunk/COPYING Base
 https://github.com/micjahn/ZXing.Net-WINMD.git/trunk/Source/lib WinMD\Source\lib
 https://github.com/micjahn/ZXing.Net-WINMD.git/trunk/Clients WinMD\Clients
 https://github.com/micjahn/ZXing.Net-WINMD.git/trunk/Key WinMD\Key
-https://github.com/micjahn/ZXing.Net-WINMD.git/trunk/zxing.vs2012.sln WinMD
+https://github.com/micjahn/ZXing.Net-WINMD.git/trunk/zxing.vs2015.sln WinMD
