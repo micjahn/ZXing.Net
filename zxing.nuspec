@@ -7,7 +7,7 @@
     <license type="expression">Apache-2.0</license>
     <licenseUrl>https://licenses.nuget.org/Apache-2.0</licenseUrl>
     <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
+    <icon>logo.jpg</icon>
     <id>ZXing.Net</id>
     <title>ZXing.Net</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -62,6 +62,7 @@
     </dependencies>
   </metadata>
   <files>
+    <file src="Icons\logo.jpg" target="." />
     <file src="Build\Release\net2.0\zxing.dll" target="lib\net20\zxing.dll" />
     <file src="Build\Release\net2.0\zxing.pdb" target="lib\net20\zxing.pdb" />
     <file src="Build\Release\net2.0\zxing.XML" target="lib\net20\zxing.XML" />
@@ -98,12 +99,12 @@
     <file src="Build\Release\net4.8\zxing.presentation.dll" target="lib\net48\zxing.presentation.dll" />
     <file src="Build\Release\net4.8\zxing.presentation.pdb" target="lib\net48\zxing.presentation.pdb" />
     <file src="Build\Release\net4.8\zxing.presentation.XML" target="lib\net48\zxing.presentation.XML" />
-    <file src="Build\Release\net5.0\zxing.dll" target="lib\net50\zxing.dll" />
-    <file src="Build\Release\net5.0\zxing.pdb" target="lib\net50\zxing.pdb" />
-    <file src="Build\Release\net5.0\zxing.XML" target="lib\net50\zxing.XML" />
-    <file src="Build\Release\net6.0\zxing.dll" target="lib\net60\zxing.dll" />
-    <file src="Build\Release\net6.0\zxing.pdb" target="lib\net60\zxing.pdb" />
-    <file src="Build\Release\net6.0\zxing.XML" target="lib\net60\zxing.XML" />
+    <file src="Build\Release\net5.0\zxing.dll" target="lib\net5.0\zxing.dll" />
+    <file src="Build\Release\net5.0\zxing.pdb" target="lib\net5.0\zxing.pdb" />
+    <file src="Build\Release\net5.0\zxing.XML" target="lib\net5.0\zxing.XML" />
+    <file src="Build\Release\net6.0\zxing.dll" target="lib\net6.0\zxing.dll" />
+    <file src="Build\Release\net6.0\zxing.pdb" target="lib\net6.0\zxing.pdb" />
+    <file src="Build\Release\net6.0\zxing.XML" target="lib\net6.0\zxing.XML" />
     <file src="Build\Release\sl4\zxing.sl4.dll" target="lib\sl4\zxing.sl4.dll" />
     <file src="Build\Release\sl4\zxing.sl4.pdb" target="lib\sl4\zxing.sl4.pdb" />
     <file src="Build\Release\sl4\zxing.sl4.XML" target="lib\sl4\zxing.sl4.XML" />
