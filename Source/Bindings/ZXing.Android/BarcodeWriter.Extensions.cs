@@ -31,6 +31,7 @@ namespace ZXing
         /// <param name="writer"></param>
         /// <param name="content"></param>
         /// <returns></returns>
+        [System.CLSCompliant(false)]
         public static Android::Android.Graphics.Bitmap WriteAsBitmap(this IBarcodeWriterGeneric writer, string content)
         {
             var bitmatrix = writer.Encode(content);

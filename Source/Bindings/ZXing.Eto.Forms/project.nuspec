@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.2</version>
+    <version>0.16.3</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <license type="expression">Apache-2.0</license>
     <licenseUrl>https://licenses.nuget.org/Apache-2.0</licenseUrl>
     <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg</iconUrl>
+    <icon>logo.jpg</icon>
     <id>ZXing.Net.Bindings.Eto.Forms</id>
     <title>ZXing.Net.Bindings.Eto.Forms</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -17,18 +17,19 @@
     <tags>ZXing Eto</tags>
     <dependencies>
       <group targetFramework="netstandard1.0">
-        <dependency id="ZXing.Net" version="0.16.6" exclude="Build,Analyzers" />
+        <dependency id="ZXing.Net" version="0.16.7" exclude="Build,Analyzers" />
         <dependency id="Eto.Forms" version="2.5.11" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="ZXing.Net" version="0.16.6" exclude="Build,Analyzers" />
+        <dependency id="ZXing.Net" version="0.16.7" exclude="Build,Analyzers" />
         <dependency id="Eto.Forms" version="2.5.11" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>
   <files>
+    <file src="..\..\..\Icons\logo.jpg" target="." />
     <file src="bin\Release\netstandard1.0\ZXing.Eto.Forms.dll" target="lib\netstandard1.0\ZXing.Eto.Forms.dll" />
     <file src="bin\Release\netstandard1.0\ZXing.Eto.Forms.pdb" target="lib\netstandard1.0\ZXing.Eto.Forms.pdb" />
     <file src="bin\Release\netstandard1.0\ZXing.Eto.Forms.xml" target="lib\netstandard1.0\ZXing.Eto.Forms.xml" />

@@ -6,6 +6,8 @@ CD "%CURRENT_DIR%\Source\Bindings\ZXing.Android\"
 CALL nuget-pack.cmd
 CD "%CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing\"
 CALL nuget-pack.cmd
+CD "%CURRENT_DIR%\Source\Bindings\ZXing.EmguCV\"
+CALL nuget-pack.cmd
 CD "%CURRENT_DIR%\Source\Bindings\ZXing.Eto.Forms\"
 CALL nuget-pack.cmd
 CD "%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\"

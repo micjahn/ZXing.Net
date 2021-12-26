@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<VersionPrefix>0.16.5</VersionPrefix>
+		<VersionPrefix>0.16.6</VersionPrefix>
 		<TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
 		<PackageId>ZXing.Net.Bindings.ZKWeb.System.Drawing</PackageId>
 		<PlatformTarget>anycpu</PlatformTarget>
@@ -36,7 +36,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" />
-		<PackageReference Include="ZXing.Net" Version="0.16.6" />
+		<PackageReference Include="ZXing.Net" Version="0.16.7" />
 	</ItemGroup>
 
 	<PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">

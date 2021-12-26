@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.16.11</VersionPrefix>
+    <VersionPrefix>0.16.12</VersionPrefix>
     <TargetFrameworks>netstandard1.3;netstandard2.0;netstandard2.1;net472;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
@@ -29,7 +29,7 @@
 
   <ItemGroup>
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
-    <PackageReference Include="ZXing.Net" Version="0.16.6" />
+    <PackageReference Include="ZXing.Net" Version="0.16.7" />
   </ItemGroup>
   
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">

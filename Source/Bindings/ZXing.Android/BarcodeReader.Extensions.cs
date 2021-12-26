@@ -29,6 +29,7 @@ namespace ZXing
         /// <param name="reader"></param>
         /// <param name="bitmap"></param>
         /// <returns></returns>
+        [System.CLSCompliant(false)]
         public static Result Decode(this IBarcodeReaderGeneric reader, Android::Android.Graphics.Bitmap bitmap)
         {
             var luminanceSource = new BitmapLuminanceSource(bitmap);
@@ -41,6 +42,7 @@ namespace ZXing
         /// <param name="reader"></param>
         /// <param name="bitmap"></param>
         /// <returns></returns>
+        [System.CLSCompliant(false)]
         public static Result[] DecodeMultiple(this IBarcodeReaderGeneric reader, Android::Android.Graphics.Bitmap bitmap)
         {
             var luminanceSource = new BitmapLuminanceSource(bitmap);

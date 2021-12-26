@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.16.1</VersionPrefix>
+    <VersionPrefix>0.16.2</VersionPrefix>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
     <PlatformTarget>anycpu</PlatformTarget>
@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <PackageReference Include="Emgu.CV" Version="4.5.4.4788" />
-    <PackageReference Include="ZXing.Net" Version="0.16.6" />
+    <PackageReference Include="ZXing.Net" Version="0.16.7" />
   </ItemGroup>
   
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">

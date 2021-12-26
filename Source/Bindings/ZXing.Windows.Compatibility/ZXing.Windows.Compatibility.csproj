@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.16.8</VersionPrefix>
-    <TargetFrameworks>netstandard2.0;netcoreapp3.0;netstandard2.1;netcoreapp3.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+    <VersionPrefix>0.16.9</VersionPrefix>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.0;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <PackageId>ZXing.Net.Bindings.Windows.Compatibility</PackageId>
     <PlatformTarget>anycpu</PlatformTarget>
@@ -43,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ZXing.Net" Version="0.16.6" />
+    <PackageReference Include="ZXing.Net" Version="0.16.7" />
   </ItemGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">

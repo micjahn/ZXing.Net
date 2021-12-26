@@ -23,6 +23,7 @@ namespace ZXing.Android
     /// <summary>
     /// Interface for a smart class to encode some content into a barcode
     /// </summary>
+    [System.CLSCompliant(false)]
     public interface IBarcodeWriter
     {
         /// <summary>
