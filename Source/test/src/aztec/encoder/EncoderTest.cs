@@ -39,15 +39,11 @@ namespace ZXing.Aztec.Test
         private static readonly Encoding ISO_8859_1 = StringUtils.ISO88591_ENCODING;
 
         private static readonly Regex SPACES = new Regex("\\s+"
-#if !SILVERLIGHT
             , RegexOptions.Compiled
-#endif
         );
 
         private static readonly Regex DOTX = new Regex("[^.X]"
-#if !SILVERLIGHT
             , RegexOptions.Compiled
-#endif
         );
 
         private static readonly ResultPoint[] NO_POINTS = new ResultPoint[0];

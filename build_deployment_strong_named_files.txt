@@ -1,7 +1,5 @@
 %BINARY_DIR%\ce2.0\zxing.ce2.0.dll
 %BINARY_DIR%\ce3.5\zxing.ce3.5.dll
-%BINARY_DIR%\ce2.0\zxing.ce2.0.dll
-%BINARY_DIR%\ce3.5\zxing.ce3.5.dll
 %BINARY_DIR%\interop\zxing.interop.dll
 %BINARY_DIR%\net2.0\zxing.dll
 %BINARY_DIR%\net3.5\zxing.dll
@@ -16,8 +14,6 @@
 %BINARY_DIR%\net4.8\zxing.dll
 %BINARY_DIR%\net4.8\zxing.presentation.dll
 %BINARY_DIR%\portable\zxing.portable.dll
-%BINARY_DIR%\sl4\zxing.sl4.dll
-%BINARY_DIR%\sl5\zxing.sl5.dll
 %BINARY_DIR%\uwp\zxing.dll
 %BINARY_DIR%\winrt\zxing.winrt.dll
 %CURRENT_DIR%\Source\lib\netstandard\bin\Release\netstandard1.0\zxing.dll

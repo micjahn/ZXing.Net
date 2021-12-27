@@ -142,14 +142,14 @@ namespace ZXing.PDF417
                 }
                 if (hints.ContainsKey(EncodeHintType.CHARACTER_SET))
                 {
-#if !SILVERLIGHT || WINDOWS_PHONE
+#if WINDOWS_PHONE
                     var encoding = (String)hints[EncodeHintType.CHARACTER_SET];
                     if (encoding != null)
                     {
                         encoder.setEncoding(encoding);
                     }
 #else
-               // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
+               // these .NET profiles support only UTF-8 and UTF-16 out-of-the-box
                encoder.setEncoding("UTF-8");
 #endif
                 }

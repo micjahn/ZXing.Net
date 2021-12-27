@@ -26,11 +26,7 @@
 
 using System;
 using System.Collections.Generic;
-#if !SILVERLIGHT
 using System.Drawing;
-#else
-using System.Windows.Media.Imaging;
-#endif
 
 using NUnit.Framework;
 
@@ -114,11 +110,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
 
          int[] startEnd = { 145, 243 };//image pixels where the A1 pattern starts (at 124) and ends (at 214)
          int value = 0;// A
-#if !SILVERLIGHT
          var finderPatternA1 = new FinderPattern(value, startEnd, startEnd[0], startEnd[1], image.Height / 2);
-#else
-         var finderPatternA1 = new FinderPattern(value, startEnd, startEnd[0], startEnd[1], image.PixelHeight / 2);
-#endif
          //{1, 8, 4, 1, 1};
          var dataCharacter = rssExpandedReader.decodeDataCharacter(row, finderPatternA1, true, true);
 
@@ -136,11 +128,7 @@ namespace ZXing.OneD.RSS.Expanded.Test
 
          int[] startEnd = { 145, 243 };//image pixels where the A1 pattern starts (at 124) and ends (at 214)
          int value = 0; // A
-#if !SILVERLIGHT
          var finderPatternA1 = new FinderPattern(value, startEnd, startEnd[0], startEnd[1], image.Height / 2);
-#else
-         var finderPatternA1 = new FinderPattern(value, startEnd, startEnd[0], startEnd[1], image.PixelHeight / 2);
-#endif
          //{1, 8, 4, 1, 1};
          var dataCharacter = rssExpandedReader.decodeDataCharacter(row, finderPatternA1, true, false);
 

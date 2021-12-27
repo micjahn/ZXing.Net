@@ -19,13 +19,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-#if !SILVERLIGHT
 using System.Drawing;
-#else
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-#endif
 using NUnit.Framework;
 using ZXing.Multi;
 
@@ -37,11 +31,7 @@ namespace ZXing.Common.Test
     /// </summary>
     public abstract class AbstractBlackBoxBaseTestCase
     {
-#if !SILVERLIGHT
         private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-#else
-      private static readonly DanielVaughan.Logging.ILog Log = DanielVaughan.Logging.LogManager.GetLog(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-#endif
 
         public bool accept(String dir, String name)
         {
@@ -225,12 +215,7 @@ namespace ZXing.Common.Test
                 var absPath = Path.GetFullPath(testImage);
                 Log.InfoFormat("Starting {0}", absPath);
 
-#if !SILVERLIGHT
                 var image = new Bitmap(Image.FromFile(testImage));
-#else
-            var image = new WriteableBitmap(0, 0);
-            image.SetSource(File.OpenRead(testImage));
-#endif
 
                 String expectedText;
                 String expectedTextFile = Path.Combine(Path.GetDirectoryName(absPath), Path.GetFileNameWithoutExtension(absPath) + ".txt");

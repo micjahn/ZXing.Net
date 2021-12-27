@@ -2,7 +2,7 @@
 #if !(WindowsCE || PORTABLE || NETSTANDARD1_0)
 using System.Runtime.Serialization;
 #endif
-#if !(WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || WindowsCE || PORTABLE || NETSTANDARD1_0)
+#if !(WINDOWS_PHONE || WindowsCE || PORTABLE || NETSTANDARD1_0)
 using System.Runtime.Serialization.Formatters;
 #endif
 #if !(PORTABLE || NETSTANDARD1_0)
@@ -21,7 +21,7 @@ namespace BigIntegerLibrary
 #if WindowsCE
     [Serializable]
     internal sealed class BigInteger :
-#elif !(WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || MONOTOUCH || MONOANDROID || PORTABLE || NETSTANDARD1_0)
+#elif !(WINDOWS_PHONE || MONOTOUCH || MONOANDROID || PORTABLE || NETSTANDARD1_0)
     [Serializable]
     internal sealed class BigInteger : ISerializable, 
 #else
@@ -205,7 +205,7 @@ namespace BigIntegerLibrary
             }
         }
 
-#if !(WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || WindowsCE || PORTABLE || NETSTANDARD1_0)
+#if !(WINDOWS_PHONE || WindowsCE || PORTABLE || NETSTANDARD1_0)
         /// <summary>
         /// Constructor deserializing a BigInteger.
         /// </summary>
@@ -233,7 +233,7 @@ namespace BigIntegerLibrary
 
         #region Public Methods
 
-#if !(WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || WindowsCE || MONOTOUCH || MONOANDROID || PORTABLE || NETSTANDARD1_0)
+#if !(WINDOWS_PHONE || WindowsCE || MONOTOUCH || MONOANDROID || PORTABLE || NETSTANDARD1_0)
         /// <summary>
         /// BigInteger serializing method, which should not be called manually.
         /// </summary>

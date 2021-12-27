@@ -299,7 +299,7 @@ namespace ZXing.PDF417.Internal
                      encoding = Encoding.GetEncoding("CP437");
                   }
 #else
-                        // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
+                        // these .NET profiles support only UTF-8 and UTF-16 out-of-the-box
                         encoding = Encoding.GetEncoding("UTF-8");
 #endif
 
@@ -573,11 +573,7 @@ namespace ZXing.PDF417.Internal
             tmp.Length = 0;
             int len = Math.Min(44, count - idx);
             String part = '1' + msg.Substring(startpos + idx, len);
-#if SILVERLIGHT4 || SILVERLIGHT5
-            BigInteger bigint = BigIntegerExtensions.Parse(part);
-#else
             BigInteger bigint = BigInteger.Parse(part);
-#endif
             do
             {
                BigInteger c = bigint%num900;

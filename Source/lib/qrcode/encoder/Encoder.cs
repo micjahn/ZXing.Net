@@ -92,7 +92,7 @@ namespace ZXing.QrCode.Internal
             // Determine what character encoding has been specified by the caller, if any
             bool hasEncodingHint = hints != null && hints.ContainsKey(EncodeHintType.CHARACTER_SET);
 
-#if !SILVERLIGHT || WINDOWS_PHONE
+#if WINDOWS_PHONE
             var encoding = DEFAULT_BYTE_MODE_ENCODING;
             var encodingName = hasEncodingHint ? (String)hints[EncodeHintType.CHARACTER_SET] : null;
             if (encodingName != null)
@@ -106,7 +106,7 @@ namespace ZXing.QrCode.Internal
             }
             var generateECI = hasEncodingHint || !DEFAULT_BYTE_MODE_ENCODING.Equals(encoding);
 #else
-            // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
+            // these .NET profiles support only UTF-8 and UTF-16 out-of-the-box
             var encoding = StringUtils.PLATFORM_DEFAULT_ENCODING_T;
             // caller of the method can only control if the ECI segment should be written
             // character set is fixed to UTF-8; but some scanners doesn't like the ECI segment

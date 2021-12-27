@@ -21,8 +21,6 @@ using System.IO;
 
 #if NETFX_CORE
 using Windows.UI;
-#elif SILVERLIGHT
-using System.Windows.Media;
 #elif UNITY
 using UnityEngine;
 #elif !(PORTABLE || NETSTANDARD)
@@ -150,7 +148,7 @@ namespace ZXing.Rendering
         /// </summary>
         public SvgRenderer()
         {
-#if NETFX_CORE || SILVERLIGHT
+#if NETFX_CORE
          Foreground = Colors.Black;
          Background = Colors.White;
 #elif UNITY
