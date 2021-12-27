@@ -349,7 +349,7 @@
     <Compile Include="ResultPoint.cs" />
     <Compile Include="ResultPointCallback.cs" />
     <Compile Include="RGBLuminanceSource.cs" />
-    <Compile Include="silverlight\BrowsableAttribute.cs" />
+    <Compile Include="uwp\BrowsableAttribute.cs" />
     <Compile Include="SupportClass.cs" />
     <Compile Include="Writer.cs" />
     <Compile Include="WriterException.cs" />

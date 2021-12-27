@@ -327,9 +327,9 @@
     <Compile Include="ResultPoint.cs" />
     <Compile Include="ResultPointCallback.cs" />
     <Compile Include="RGBLuminanceSource.cs" />
-    <Compile Include="silverlight\BrowsableAttribute.cs" />
-    <Compile Include="silverlight\NonSerializedAttribute.cs" />
-    <Compile Include="silverlight\SerializableAttribute.cs" />
+    <Compile Include="uwp\BrowsableAttribute.cs" />
+    <Compile Include="uwp\NonSerializedAttribute.cs" />
+    <Compile Include="uwp\SerializableAttribute.cs" />
     <Compile Include="SupportClass.cs" />
     <Compile Include="Writer.cs" />
     <Compile Include="WriterException.cs" />

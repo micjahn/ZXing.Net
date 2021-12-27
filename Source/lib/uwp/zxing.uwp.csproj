@@ -965,14 +965,14 @@
     <Compile Include="..\RGBLuminanceSource.cs">
       <Link>RGBLuminanceSource.cs</Link>
     </Compile>
-    <Compile Include="..\silverlight\BrowsableAttribute.cs">
-      <Link>silverlight\BrowsableAttribute.cs</Link>
+    <Compile Include=".\BrowsableAttribute.cs">
+      <Link>BrowsableAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\silverlight\NonSerializedAttribute.cs">
-      <Link>silverlight\NonSerializedAttribute.cs</Link>
+    <Compile Include=".\NonSerializedAttribute.cs">
+      <Link>NonSerializedAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\silverlight\SerializableAttribute.cs">
-      <Link>silverlight\SerializableAttribute.cs</Link>
+    <Compile Include=".\SerializableAttribute.cs">
+      <Link>SerializableAttribute.cs</Link>
     </Compile>
     <Compile Include="..\SupportClass.cs">
       <Link>SupportClass.cs</Link>

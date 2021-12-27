@@ -33,7 +33,7 @@ namespace ZXing.QrCode
         /// Type depends on the encoder. For example for QR codes it's type
         /// <see cref="ErrorCorrectionLevel"/>.
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !PORTABLE && !UNITY
         [TypeConverter(typeof(ErrorLevelConverter))]
         [CategoryAttribute("Standard"), DescriptionAttribute("Specifies what degree of error correction to use.")]
 #endif
@@ -182,7 +182,7 @@ namespace ZXing.QrCode
         }
     }
 
-#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !PORTABLE && !UNITY
     internal class ErrorLevelConverter : TypeConverter
    {
       public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)

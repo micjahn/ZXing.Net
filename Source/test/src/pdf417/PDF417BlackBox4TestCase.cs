@@ -16,11 +16,7 @@
 
 using System;
 using System.Collections.Generic;
-#if !SILVERLIGHT
 using System.Drawing;
-#else
-using System.Windows.Media.Imaging;
-#endif
 using System.IO;
 using System.Text;
 
@@ -39,11 +35,7 @@ namespace ZXing.PDF417.Test
    [TestFixture]
    public sealed class PDF417BlackBox4TestCase : AbstractBlackBoxBaseTestCase
    {
-#if !SILVERLIGHT
       private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-#else
-      private static readonly DanielVaughan.Logging.ILog log = DanielVaughan.Logging.LogManager.GetLog(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-#endif
 
       private static readonly Encoding UTF8 = Encoding.UTF8;
       private static readonly Encoding ISO88591 = Encoding.GetEncoding("ISO8859-1");
@@ -102,12 +94,7 @@ namespace ZXing.PDF417.Test
                List<Result> results = new List<Result>();
                foreach (var imageFile in testImageGroup.Value)
                {
-#if !SILVERLIGHT
                   var image = new Bitmap(Image.FromFile(imageFile));
-#else
-                  var image = new WriteableBitmap(0, 0);
-                  image.SetSource(File.OpenRead(imageFile));
-#endif
                   var rotation = testResults[x].Rotation;
                   var rotatedImage = rotateImage(image, rotation);
                   var source = new BitmapLuminanceSource(rotatedImage);

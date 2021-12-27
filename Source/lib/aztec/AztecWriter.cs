@@ -35,7 +35,7 @@ namespace ZXing.Aztec
 
         static AztecWriter()
         {
-#if !(WindowsCE || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE)
+#if !(WindowsCE || NETFX_CORE || PORTABLE)
             DEFAULT_CHARSET = Encoding.GetEncoding(StringUtils.ISO88591);
 #elif WindowsCE
          try

@@ -16,7 +16,6 @@ UPC-A, EAN-8, EAN-13, Code 39, Code 128, ITF, Codabar, Plessey, MSI, QR Code, PD
 #### Assemblies are available for the following platforms:
 
 * .Net 2.0, 3.5, 4.0, 4.5, 4.6 and 4.7
-* Silverlight 4 and 5
 * Windows Phone 7.0, 7.1 and 8.0
 * Windows CE
 * Windows RT Class Library and Runtime Components (winmd)
@@ -27,9 +26,15 @@ UPC-A, EAN-8, EAN-13, Code 39, Code 128, ITF, Codabar, Plessey, MSI, QR Code, PD
 * bindings to CoreCompat.System.Drawing, ImageSharp, SkiaSharp, OpenCVSharp, Magick, Kinect V1 and V2
 * support COM interop, can be used with VBA
 
-The library is available in the release section [release section](https://github.com/micjahn/ZXing.Net/releases) and as [NuGet package](https://www.nuget.org/packages/ZXing.Net/), too.
+#### obsolete Assemblies are available for the following platforms up to release 0.16:
+* Silverlight 4 and 5
 
-[![N|NuGet](https://img.shields.io/nuget/v/Nuget.Core.svg)](https://www.nuget.org/packages/ZXing.Net/)
+The library is available in the [release section](https://github.com/micjahn/ZXing.Net/releases) and as [NuGet package](https://www.nuget.org/packages/ZXing.Net/), too.
+
+[![N|NuGet](https://img.shields.io/nuget/v/ZXing.Net.svg)](https://www.nuget.org/packages/ZXing.Net/)
+[![Build status](https://ci.appveyor.com/api/projects/status/49uvsxpw3ak9jtmm?svg=true)](https://ci.appveyor.com/project/MichaelJahn/zxing-net)
+[![OpenCollective](https://opencollective.com/zxingnet/backer/badge.svg)](#backers)
+[![OpenCollective](https://opencollective.com/zxingnet/sponsors/badge.svg)](#sponsors)
 
 #### Additional platform support without pre-built binaries
 The library can be built for Xamarin.iOS (formerly MonoTouch). The project file and solution are available in the source code repository.
@@ -48,7 +53,6 @@ A special version for the [.Net Micro Framework](http://www.microsoft.com/netmf/
 * Windows RT demo (demonstrates decoding of static images)
 * Windows Store App with HTML5/JS (demonstrates decoding of static images)
 * Unity3D and Vuforia demo (demonstrates encoding of barcodes and decoding of images from a camera with [Unity3D](http://unity3d.com/))
-* Silverlight demo (demonstrates decoding and encoding of static images)
 * EmguCV demo (demonstrates decoding of images from a camera and uses the [EmguCV framework](http://www.emgu.com/))
 * OpenCV demo (demonstrates decoding of images from a camera and uses the [OpenCVSharp framework](https://github.com/shimat/opencvsharp/))
 * AForge demo (demonstrates decoding of images from a camera and uses the [AForge framework](http://www.aforgenet.com/))
@@ -56,7 +60,9 @@ A special version for the [.Net Micro Framework](http://www.microsoft.com/netmf/
 ## Thanks
 Many thanks to the team of the [zxing project](https://github.com/zxing/zxing) for their great work. ZXing.Net would not be possible without your work!
 ## Usage examples
-The source code repository includes small examples for Windows Forms, Silverlight, Windows Phone and other project types.
+The source code repository includes small examples for Windows Forms, Windows Phone and other project types.
+Obsolete examples are available for the following platforms in separate branches:
+0.16: Silverlight 4 and 5
 
 #### small example decoding a barcode inside a bitmap (.Net 2.0/3.5/4.x)
 ```csharp
@@ -95,6 +101,15 @@ If you find the project useful and you wish to support the future development fe
 [![N|Donate](https://www.paypal.com/en_US/i/btn/btn_donateCC_LG_global.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BYHN42UHPA86E)
 
 Beside a donation patches, bug reports, feedback and other useful help are always welcome!
+
+## Backers
+
+Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/zxingnet)]
+
+## Sponsors
+
+Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/zxingnet)]
+
 ## Donation WITHOUT money
 It would be really, really great if you could support one of my social projects. You can support it WITHOUT paying money.
 You only have to go to the following url before you buy anything from a supported online shop (like Amazon or eBay):  
