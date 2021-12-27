@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#if !SILVERLIGHT
-
 using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
@@ -207,5 +205,3 @@ namespace ZXing.PDF417.Test
 
     }
 }
-
-#endif

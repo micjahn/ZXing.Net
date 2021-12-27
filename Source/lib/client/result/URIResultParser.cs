@@ -26,13 +26,13 @@ namespace ZXing.Client.Result
     sealed class URIResultParser : ResultParser
     {
         private static readonly Regex ALLOWED_URI_CHARS_PATTERN = new Regex("^[-._~:/?#\\[\\]@!$&'()*+,;=%A-Za-z0-9]+$"
-#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || UNITY || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
+#if !(NETFX_CORE || PORTABLE || UNITY || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
             , RegexOptions.Compiled);
 #else
 );
 #endif
         private static readonly Regex USER_IN_HOST = new Regex(":/*([^/@]+)@[^/]+"
-#if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || UNITY || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
+#if !(NETFX_CORE || PORTABLE || UNITY || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
             , RegexOptions.Compiled);
 #else
 );

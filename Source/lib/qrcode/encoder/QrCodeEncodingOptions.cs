@@ -64,7 +64,7 @@ namespace ZXing.QrCode
         /// <summary>
         /// Specifies what character encoding to use where applicable (type <see cref="String"/>)
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !PORTABLE && !UNITY
         [CategoryAttribute("Standard"), DescriptionAttribute("Specifies what character encoding to " +
             "use where applicable.")]
 #endif
@@ -100,7 +100,7 @@ namespace ZXing.QrCode
         /// If you set the property to true you can use UTF-8 encoding
         /// and the ECI segment is omitted.
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !PORTABLE && !UNITY
         [CategoryAttribute("Standard"), DescriptionAttribute("Explicitly disables ECI segment when generating QR Code." +
             "That is against the specification but some readers have problems otherwise when switching charset to UTF-8.")]
 #endif
@@ -124,7 +124,7 @@ namespace ZXing.QrCode
         /// Specifies the exact version of QR code to be encoded. An integer, range 1 to 40. If the data specified
         /// cannot fit within the required version, a WriterException will be thrown.
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !PORTABLE && !UNITY
         [CategoryAttribute("Standard"), DescriptionAttribute("Specifies the exact version of QR code to be encoded. " +
             "An integer, range 1 to 40. If the data specified cannot fit within the required version, " +
             "a WriterException will be thrown.")]
@@ -161,7 +161,7 @@ namespace ZXing.QrCode
         /// some scanners do not support encodings like cp-1256 (Arabic). In such cases the encoding can
         /// be forced to UTF-8 by means of the <see cref="CharacterSet"/> encoding hint.
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !PORTABLE && !UNITY
         [CategoryAttribute("Standard"), DescriptionAttribute("Specifies whether to use compact mode for QR code" +
             "When compaction is performed the value for CharacterSet is ignored.")]
 #endif

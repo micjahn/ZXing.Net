@@ -7,7 +7,6 @@ https://github.com/micjahn/ZXing.Net.git/trunk/3rdparty/AForge Base\3rdparty\AFo
 https://github.com/micjahn/ZXing.Net.git/trunk/3rdparty/EmguCV Base\3rdparty\EmguCV
 https://github.com/micjahn/ZXing.Net.git/trunk/3rdparty/OpenCV Base\3rdparty\OpenCV
 https://github.com/micjahn/ZXing.Net.git/trunk/3rdparty/NUnit.NET Base\3rdparty\NUnit.NET
-https://github.com/micjahn/ZXing.Net.git/trunk/3rdparty/NUnit.Silverlight Base\3rdparty\NUnit.Silverlight
 https://github.com/micjahn/ZXing.Net.git/trunk/3rdparty/Unity Base\3rdparty\Unity
 https://github.com/micjahn/ZXing.Net.git/trunk/3rdparty/Kinect Base\3rdparty\Kinect
 https://github.com/micjahn/ZXing.Net.git/trunk/3rdparty/PDFsharp Base\3rdparty\PDFsharp

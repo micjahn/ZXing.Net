@@ -15,7 +15,7 @@
       ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.
       It has been ported by hand with a lot of optimizations and improvements.
 
-      It is compatible with .Net 2.0, .Net 3.5, .Net 4.x, .Net 5.x, .Net 6.x, Windows RT Class Library and Components, UWP, .Net Standard 1.x and 2.0x, .Net Core App 3.x, Silverlight 4, Silverlight 5, Windows Phone 7.x and Windows Phone 8.x and Xamarin.Android</description>
+      It is compatible with .Net 2.0, .Net 3.5, .Net 4.x, .Net 5.x, .Net 6.x, Windows RT Class Library and Components, UWP, .Net Standard 1.x and 2.0x, .Net Core App 3.x, Silverlight 4 (only up to 0.16.x), Silverlight 5 (only up to 0.16.x), Windows Phone 7.x and Windows Phone 8.x and Xamarin.Android</description>
     <summary>ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.</summary>
     <releaseNotes>* changes of the java version are reflected until 2021/12/08
 * many small bug fixes and improvements</releaseNotes>
@@ -30,8 +30,6 @@
       <group targetFramework="net48" />
       <group targetFramework="net50" />
       <group targetFramework="net60" />
-      <group targetFramework="sl4" />
-      <group targetFramework="sl5" />
       <group targetFramework="sl3-wp" />
       <group targetFramework="sl4-wp71" />
       <group targetFramework="wp8" />
@@ -105,12 +103,6 @@
     <file src="Build\Release\net6.0\zxing.dll" target="lib\net6.0\zxing.dll" />
     <file src="Build\Release\net6.0\zxing.pdb" target="lib\net6.0\zxing.pdb" />
     <file src="Build\Release\net6.0\zxing.XML" target="lib\net6.0\zxing.XML" />
-    <file src="Build\Release\sl4\zxing.sl4.dll" target="lib\sl4\zxing.sl4.dll" />
-    <file src="Build\Release\sl4\zxing.sl4.pdb" target="lib\sl4\zxing.sl4.pdb" />
-    <file src="Build\Release\sl4\zxing.sl4.XML" target="lib\sl4\zxing.sl4.XML" />
-    <file src="Build\Release\sl5\zxing.sl5.dll" target="lib\sl5\zxing.sl5.dll" />
-    <file src="Build\Release\sl5\zxing.sl5.pdb" target="lib\sl5\zxing.sl5.pdb" />
-    <file src="Build\Release\sl5\zxing.sl5.XML" target="lib\sl5\zxing.sl5.XML" />
     <file src="Build\Release\wp7.0\zxing.wp7.0.dll" target="lib\sl3-wp\zxing.wp7.0.dll" />
     <file src="Build\Release\wp7.0\zxing.wp7.0.pdb" target="lib\sl3-wp\zxing.wp7.0.pdb" />
     <file src="Build\Release\wp7.0\zxing.wp7.0.XML" target="lib\sl3-wp\zxing.wp7.0.XML" />

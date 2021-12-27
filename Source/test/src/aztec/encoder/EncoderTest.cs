@@ -325,7 +325,6 @@ namespace ZXing.Aztec.Test
                 823);
         }
 
-#if !SILVERLIGHT
         [Test]
         public void testHighLevelEncodeBinary()
         {
@@ -430,7 +429,6 @@ namespace ZXing.Aztec.Test
             // expect B/S(64)
             testHighLevelEncodeString(sbBuild.ToString(), 21 + 64 * 8);
         }
-#endif
 
         [Test]
         public void testHighLevelEncodePairs()

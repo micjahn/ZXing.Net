@@ -37,12 +37,6 @@ using System.Runtime.InteropServices;
 #if NET6_0
 [assembly: AssemblyTitle("zxing.net for .net 6.0")]
 #endif
-#if SILVERLIGHT4
-[assembly: AssemblyTitle("zxing.net for silverlight 4")]
-#endif
-#if SILVERLIGHT5
-[assembly: AssemblyTitle("zxing.net for silverlight 5")]
-#endif
 #if WINDOWS_PHONE70
 [assembly: AssemblyTitle("zxing.net for windows phone 7.0")]
 #endif

@@ -26,17 +26,6 @@ namespace ZXing.Test
       [TestCase("1234567890")]
       [TestCase("12345678901234567890")]
       [TestCase("-12345678901234567890")]
-      public void Extensions_Parse_Should_Return_The_Same_Result_Like_Internal_BigInteger_Parse(string number)
-      {
-         var left = BigIntegerExtensions.Parse(number).ToString();
-         var right = BigInteger.Parse(number).ToString();
-
-         Assert.AreEqual(left, right);
-      }
-
-      [TestCase("1234567890")]
-      [TestCase("12345678901234567890")]
-      [TestCase("-12345678901234567890")]
       public void System_Numerics_BigInteger_And_BigIntegerLibrary_Should_Be_The_Same(string number)
       {
          var systemBigInt900 = new BigInteger(900);
