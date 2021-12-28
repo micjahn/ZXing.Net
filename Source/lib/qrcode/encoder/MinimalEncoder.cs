@@ -111,7 +111,7 @@ namespace ZXing.QrCode.Internal
         private int priorityEncoderIndex;
         private ErrorCorrectionLevel ecLevel;
 
-#if NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_3 || WINDOWS_UWP || PORTABLE || WINDOWS_PHONE || NETFX_CORE
+#if NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_3 || WINDOWS_UWP || PORTABLE || NETFX_CORE
         private static bool canEncode(Encoding encoding, char c)
         {
             // very limited support on old platforms; not sure, if it would work; and not sure, if somebody need the old platform support
@@ -157,7 +157,7 @@ namespace ZXing.QrCode.Internal
         {
             // encodings have to be cloned to change the EncoderFallback property later
 
-#if !NETSTANDARD1_0 && !NETSTANDARD1_1 && !PORTABLE && !WINDOWS_PHONE && !NETFX_CORE
+#if !NETSTANDARD1_0 && !NETSTANDARD1_1 && !PORTABLE && !NETFX_CORE
             // Clone isn't supported by .net standard 1.0, 1.1 and portable
             return (Encoding)encoding.Clone();
 #else

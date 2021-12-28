@@ -689,7 +689,7 @@ namespace ZXing.Datamatrix.Internal
             byteSegments.Add(bytes);
             try
             {
-#if (WINDOWS_PHONE || NETFX_CORE || PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
+#if (NETFX_CORE || PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
                 result.Append(Encoding.GetEncoding(StringUtils.ISO88591).GetString(bytes, 0, bytes.Length));
 #else
                 result.Append(Encoding.GetEncoding(StringUtils.ISO88591).GetString(bytes));

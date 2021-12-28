@@ -267,7 +267,7 @@ namespace ZXing.Aztec.Internal
                         else
                         {
                             // Though stored as a table of strings for convenience, codes actually represent 1 or 2 *bytes*.
-#if (PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || WINDOWS_PHONE || NETFX_CORE)
+#if (PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETFX_CORE)
                             var b = StringUtils.PLATFORM_DEFAULT_ENCODING_T.GetBytes(str);
 #else
 

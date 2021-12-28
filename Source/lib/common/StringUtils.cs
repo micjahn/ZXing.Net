@@ -27,7 +27,7 @@ namespace ZXing.Common
     /// <author>Alex Dupre</author>
     public static class StringUtils
     {
-#if (WINDOWS_PHONE || NETFX_CORE || PORTABLE || NETSTANDARD)
+#if (NETFX_CORE || PORTABLE || NETSTANDARD)
         /// <summary>
         /// default encoding of the current platform (name) (UTF-8)
         /// </summary>

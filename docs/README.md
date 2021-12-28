@@ -16,7 +16,6 @@ UPC-A, EAN-8, EAN-13, Code 39, Code 128, ITF, Codabar, Plessey, MSI, QR Code, PD
 #### Assemblies are available for the following platforms:
 
 * .Net 2.0, 3.5, 4.0, 4.5, 4.6 and 4.7
-* Windows Phone 7.0, 7.1 and 8.0
 * Windows RT Class Library and Runtime Components (winmd)
 * .NET Standard / .NET Core / UWP
 * Portable Class Library
@@ -28,6 +27,7 @@ UPC-A, EAN-8, EAN-13, Code 39, Code 128, ITF, Codabar, Plessey, MSI, QR Code, PD
 #### obsolete Assemblies are available for the following platforms up to release 0.16:
 * Silverlight 4 and 5
 * Windows CE
+* Windows Phone 7.0, 7.1 and 8.0
 
 The library is available in the [release section](https://github.com/micjahn/ZXing.Net/releases) and as [NuGet package](https://www.nuget.org/packages/ZXing.Net/), too.
 
@@ -46,7 +46,6 @@ A special version for the [.Net Micro Framework](http://www.microsoft.com/netmf/
 * decoder for the command line
 * encoder for the command line
 * Windows Forms demo (demonstrates decoding and encoding of static images and from a camera)
-* Windows Phone demo (demonstrates decoding of static images and from a camera)
 * Windows Service demo (demonstrates decoding of static images)
 * Windows Presentation Framework demo (demonstrates decoding of static images)
 * Windows RT demo (demonstrates decoding of static images)
@@ -64,6 +63,7 @@ Obsolete examples are available for the following platforms in separate branches
 0.16: 
 * Silverlight 4 and 5
 * Windows CE demo (demonstrates decoding of static images)
+* Windows Phone demo (demonstrates decoding of static images and from a camera)
 
 #### small example decoding a barcode inside a bitmap (.Net 2.0/3.5/4.x)
 ```csharp

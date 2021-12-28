@@ -94,7 +94,7 @@ namespace ZXing.OneD
             var supportedFormats = SupportedWriteFormats;
             if (supportedFormats != null && !supportedFormats.Contains(format))
             {
-#if WINDOWS_PHONE70 || NET20 || NET35 || UNITY || PORTABLE
+#if NET20 || NET35 || UNITY || PORTABLE
                 var supportedFormatsArray = new string[supportedFormats.Count];
                 for (var i = 0; i < supportedFormats.Count; i++)
                     supportedFormatsArray[i] = supportedFormats[i].ToString();

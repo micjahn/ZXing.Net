@@ -142,16 +142,7 @@ namespace ZXing.PDF417
                 }
                 if (hints.ContainsKey(EncodeHintType.CHARACTER_SET))
                 {
-#if WINDOWS_PHONE
-                    var encoding = (String)hints[EncodeHintType.CHARACTER_SET];
-                    if (encoding != null)
-                    {
-                        encoder.setEncoding(encoding);
-                    }
-#else
-               // these .NET profiles support only UTF-8 and UTF-16 out-of-the-box
-               encoder.setEncoding("UTF-8");
-#endif
+                    encoder.setEncoding(StringUtils.UTF8);
                 }
                 if (hints.ContainsKey(EncodeHintType.DISABLE_ECI) && hints[EncodeHintType.DISABLE_ECI] != null)
                 {

@@ -37,18 +37,6 @@ using System.Runtime.InteropServices;
 #if NET6_0
 [assembly: AssemblyTitle("zxing.net for .net 6.0")]
 #endif
-#if WINDOWS_PHONE70
-[assembly: AssemblyTitle("zxing.net for windows phone 7.0")]
-#endif
-#if WINDOWS_PHONE71
-[assembly: AssemblyTitle("zxing.net for windows phone 7.1")]
-#endif
-#if WINDOWS_PHONE80
-[assembly: AssemblyTitle("zxing.net for windows phone 8.0")]
-#endif
-#if WINDOWS_PHONE81
-[assembly: AssemblyTitle("zxing.net for windows phone 8.1")]
-#endif
 #if MONOANDROID
 [assembly: AssemblyTitle("zxing.net for mono android")]
 #endif

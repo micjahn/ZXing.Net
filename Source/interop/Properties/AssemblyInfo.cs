@@ -28,17 +28,14 @@ using System.Runtime.InteropServices;
 #if NET47
 [assembly: AssemblyTitle("zxing.net for .net 4.7")]
 #endif
-#if WINDOWS_PHONE70
-[assembly: AssemblyTitle("zxing.net for windows phone 7.0")]
+#if NET48
+[assembly: AssemblyTitle("zxing.net for .net 4.8")]
 #endif
-#if WINDOWS_PHONE71
-[assembly: AssemblyTitle("zxing.net for windows phone 7.1")]
+#if NET5_0
+[assembly: AssemblyTitle("zxing.net for .net 5.0")]
 #endif
-#if WINDOWS_PHONE80
-[assembly: AssemblyTitle("zxing.net for windows phone 8.0")]
-#endif
-#if WINDOWS_PHONE81
-[assembly: AssemblyTitle("zxing.net for windows phone 8.1")]
+#if NET6_0
+[assembly: AssemblyTitle("zxing.net for .net 6.0")]
 #endif
 #if MONOANDROID
 [assembly: AssemblyTitle("zxing.net for mono android")]
@@ -58,7 +55,7 @@ using System.Runtime.InteropServices;
 #if INTEROP
 [assembly: AssemblyTitle("zxing.net for com interop")]
 #endif
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 29.07.2019 21:30:35)")]
+[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 08.12.2021 16:11:04)")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyProduct("ZXing.Net")]
 [assembly: AssemblyCopyright("Copyright © 2012")]

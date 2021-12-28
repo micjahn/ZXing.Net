@@ -158,7 +158,7 @@ namespace ZXing.Common
             {
                 encoding = System.Text.Encoding.GetEncoding(encodingName);
             }
-#if (WINDOWS_PHONE70 || WINDOWS_PHONE71 || NETFX_CORE || NETSTANDARD || MONOANDROID || MONOTOUCH)
+#if (NETFX_CORE || NETSTANDARD || MONOANDROID || MONOTOUCH)
             catch (ArgumentException)
             {
                 try
