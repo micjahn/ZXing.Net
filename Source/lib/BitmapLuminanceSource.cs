@@ -59,11 +59,7 @@ namespace ZXing
 
             // In order to measure pure decoding speed, we convert the entire image to a greyscale array
             // The underlying raster of image consists of bytes with the luminance values
-#if WindowsCE
-            var data = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
-#else
             var data = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
-#endif
             try
             {
                 var stride = Math.Abs(data.Stride);
@@ -76,7 +72,6 @@ namespace ZXing
                 }
                 else
                 {
-#if !WindowsCE
                     if (bitmap.PixelFormat == PixelFormat.Format32bppArgb ||
                         bitmap.PixelFormat == PixelFormat.Format32bppPArgb)
                     {
@@ -87,11 +82,9 @@ namespace ZXing
                     {
                         pixelWidth = 41;
                     }
-#endif
 
                     switch (pixelWidth)
                     {
-#if !WindowsCE
                         case 0:
                             if (bitmap.PixelFormat == PixelFormat.Format4bppIndexed)
                                 CalculateLuminanceValuesForIndexed4Bit(bitmap, data, luminances);
@@ -101,7 +94,6 @@ namespace ZXing
                         case 1:
                             CalculateLuminanceValuesForIndexed8Bit(bitmap, data, luminances);
                             break;
-#endif
                         case 2:
                             // should be RGB565 or RGB555, assume RGB565
                             CalculateLuminanceValues565(bitmap, data, luminances);
@@ -150,7 +142,6 @@ namespace ZXing
             }
         }
 
-#if !WindowsCE
         /// <summary>
         /// calculates the luminance values for 1-bit indexed bitmaps
         /// </summary>
@@ -313,7 +304,6 @@ namespace ZXing
                 }
             }
         }
-#endif
 
         /// <summary>
         /// calculates the luminance values for 565 encoded bitmaps
@@ -332,11 +322,7 @@ namespace ZXing
             var ptrInBitmap = data.Scan0;
 
             if (pixelWidth != 2)
-#if !WindowsCE
                 throw new InvalidOperationException("Unsupported pixel format: " + bitmap.PixelFormat);
-#else
-                throw new InvalidOperationException("Unsupported pixel format");
-#endif
 
             for (int y = 0; y < height; y++)
             {
@@ -384,11 +370,7 @@ namespace ZXing
             var ptrInBitmap = data.Scan0;
 
             if (pixelWidth != 3)
-#if !WindowsCE
                 throw new InvalidOperationException("Unsupported pixel format: " + bitmap.PixelFormat);
-#else
-                throw new InvalidOperationException("Unsupported pixel format");
-#endif
 
             for (int y = 0; y < height; y++)
             {
@@ -430,11 +412,7 @@ namespace ZXing
             var maxIndex = 4 * width;
 
             if (pixelWidth != 4)
-#if !WindowsCE
                 throw new InvalidOperationException("Unsupported pixel format: " + bitmap.PixelFormat);
-#else
-                throw new InvalidOperationException("Unsupported pixel format");
-#endif
 
             for (int y = 0; y < height; y++)
             {
@@ -472,11 +450,7 @@ namespace ZXing
             var maxIndex = 4 * width;
 
             if (pixelWidth != 4)
-#if !WindowsCE
                 throw new InvalidOperationException("Unsupported pixel format: " + bitmap.PixelFormat);
-#else
-                throw new InvalidOperationException("Unsupported pixel format");
-#endif
 
             for (int y = 0; y < height; y++)
             {
@@ -521,11 +495,7 @@ namespace ZXing
             var maxIndex = 4 * width;
 
             if (pixelWidth != 4)
-#if !WindowsCE
                 throw new InvalidOperationException("Unsupported pixel format: " + bitmap.PixelFormat);
-#else
-                throw new InvalidOperationException("Unsupported pixel format");
-#endif
 
             for (int y = 0; y < height; y++)
             {

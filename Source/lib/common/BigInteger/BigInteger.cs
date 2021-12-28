@@ -1,8 +1,8 @@
 ﻿using System;
-#if !(WindowsCE || PORTABLE || NETSTANDARD1_0)
+#if !(PORTABLE || NETSTANDARD1_0)
 using System.Runtime.Serialization;
 #endif
-#if !(WINDOWS_PHONE || WindowsCE || PORTABLE || NETSTANDARD1_0)
+#if !(WINDOWS_PHONE || PORTABLE || NETSTANDARD1_0)
 using System.Runtime.Serialization.Formatters;
 #endif
 #if !(PORTABLE || NETSTANDARD1_0)
@@ -18,10 +18,7 @@ namespace BigIntegerLibrary
     /// .NET 2.0 class for handling of very large integers, up to 10240 binary digits or
     /// approximately (safe to use) 3000 decimal digits.
     /// </summary>
-#if WindowsCE
-    [Serializable]
-    internal sealed class BigInteger :
-#elif !(WINDOWS_PHONE || MONOTOUCH || MONOANDROID || PORTABLE || NETSTANDARD1_0)
+#if !(WINDOWS_PHONE || MONOTOUCH || MONOANDROID || PORTABLE || NETSTANDARD1_0)
     [Serializable]
     internal sealed class BigInteger : ISerializable, 
 #else
@@ -205,7 +202,7 @@ namespace BigIntegerLibrary
             }
         }
 
-#if !(WINDOWS_PHONE || WindowsCE || PORTABLE || NETSTANDARD1_0)
+#if !(WINDOWS_PHONE || PORTABLE || NETSTANDARD1_0)
         /// <summary>
         /// Constructor deserializing a BigInteger.
         /// </summary>
@@ -233,7 +230,7 @@ namespace BigIntegerLibrary
 
         #region Public Methods
 
-#if !(WINDOWS_PHONE || WindowsCE || MONOTOUCH || MONOANDROID || PORTABLE || NETSTANDARD1_0)
+#if !(WINDOWS_PHONE || MONOTOUCH || MONOANDROID || PORTABLE || NETSTANDARD1_0)
         /// <summary>
         /// BigInteger serializing method, which should not be called manually.
         /// </summary>

@@ -35,20 +35,11 @@ namespace ZXing.Aztec
 
         static AztecWriter()
         {
-#if !(WindowsCE || NETFX_CORE || PORTABLE)
+#if !(NETFX_CORE || PORTABLE)
             DEFAULT_CHARSET = Encoding.GetEncoding(StringUtils.ISO88591);
-#elif WindowsCE
-         try
-         {
-            DEFAULT_CHARSET = Encoding.GetEncoding(StringUtils.ISO88591);
-         }
-         catch (PlatformNotSupportedException)
-         {
-            DEFAULT_CHARSET = Encoding.GetEncoding(1252);
-         }
 #else
-         // not fully correct but what else
-         DEFAULT_CHARSET = Encoding.GetEncoding(StringUtils.UTF8);
+            // not fully correct but what else
+            DEFAULT_CHARSET = Encoding.GetEncoding(StringUtils.UTF8);
 #endif
         }
 

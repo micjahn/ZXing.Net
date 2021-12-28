@@ -27,8 +27,6 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 
 [assembly: AssemblyVersion("0.16.7.0")]
-#if !WindowsCE
 [assembly: AssemblyFileVersion("0.16.7.0")]
-#endif
 
 [assembly: CLSCompliant(true)]

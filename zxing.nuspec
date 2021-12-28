@@ -36,8 +36,6 @@
       <group targetFramework="windows8-managed" />
       <group targetFramework="windows8" />
       <group targetFramework="native" />
-      <group targetFramework="net20-cf" />
-      <group targetFramework="net35-cf" />
       <group targetFramework="portable-win+net40+sl4+sl5+wp7+wp71+wp8" />
       <group targetFramework="uap10" />
       <group targetFramework="netstandard1.0">
@@ -123,12 +121,6 @@
     <file src="Build\Release\winmd\ZXing.pdb" target="lib\native\zxing.pdb" />
     <file src="Build\Release\winmd\ZXing.XML" target="lib\native\zxing.XML" />
     <file src="Build\Release\winmd\ZXing.pri" target="lib\native\zxing.pri" />
-    <file src="Build\Release\ce2.0\zxing.ce2.0.dll" target="lib\net20-cf\zxing.ce2.0.dll" />
-    <file src="Build\Release\ce2.0\zxing.ce2.0.pdb" target="lib\net20-cf\zxing.ce2.0.pdb" />
-    <file src="Build\Release\ce2.0\zxing.ce2.0.xml" target="lib\net20-cf\zxing.ce2.0.xml" />
-    <file src="Build\Release\ce3.5\zxing.ce3.5.dll" target="lib\net35-cf\zxing.ce3.5.dll" />
-    <file src="Build\Release\ce3.5\zxing.ce3.5.pdb" target="lib\net35-cf\zxing.ce3.5.pdb" />
-    <file src="Build\Release\ce3.5\zxing.ce3.5.xml" target="lib\net35-cf\zxing.ce3.5.xml" />
     <file src="Build\Release\portable\zxing.portable.dll" target="lib\portable-win+net40+sl4+sl5+wp7+wp71+wp8\zxing.portable.dll" />
     <file src="Build\Release\portable\zxing.portable.pdb" target="lib\portable-win+net40+sl4+sl5+wp7+wp71+wp8\zxing.portable.pdb" />
     <file src="Build\Release\portable\zxing.portable.XML" target="lib\portable-win+net40+sl4+sl5+wp7+wp71+wp8\zxing.portable.XML" />

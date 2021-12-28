@@ -329,11 +329,7 @@ namespace ZXing.Client.Result
                 String fragment;
                 if (charset == null)
                 {
-#if WindowsCE
-               fragment = Encoding.Default.GetString(fragmentBytes, 0, fragmentBytes.Length);
-#else
                     fragment = Encoding.UTF8.GetString(fragmentBytes, 0, fragmentBytes.Length);
-#endif
                 }
                 else
                 {
@@ -343,21 +339,7 @@ namespace ZXing.Client.Result
                     }
                     catch (Exception)
                     {
-#if WindowsCE
-                  // WindowsCE doesn't support all encodings. But it is device depended.
-                  // So we try here the some different ones
-                  if (charset == "ISO-8859-1")
-                  {
-                     fragment = Encoding.GetEncoding(1252).GetString(fragmentBytes, 0, fragmentBytes.Length);
-                  }
-                  else
-                  {
-                     fragment = Encoding.Default.GetString(fragmentBytes, 0, fragmentBytes.Length);
-                  }
-                  fragment = Encoding.Default.GetString(fragmentBytes, 0, fragmentBytes.Length);
-#else
                         fragment = Encoding.UTF8.GetString(fragmentBytes, 0, fragmentBytes.Length);
-#endif
                     }
                 }
                 fragmentBuffer.Seek(0, SeekOrigin.Begin);

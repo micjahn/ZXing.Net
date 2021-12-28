@@ -810,26 +810,6 @@ namespace ZXing.PDF417.Internal
                     for (var index = 0; index < metadata.FileId.Length && isEncodedAsCodewords; index += 3)
                     {
                         int fileIdInt;
-#if WindowsCE
-                        try
-                        {
-                            fileIdInt = Int32.Parse(this.metadata.FileId.Substring(index, 3));
-                            if (fileIdInt >= 0 && fileIdInt <= 899)
-                            {
-                                macroCodewords.Append((char)fileIdInt);
-                                sourceCodeWords += 1;
-                                codewordCount++;
-                            }
-                            else
-                            {
-                                isEncodedAsCodewords = false;
-                            }
-                        }
-                        catch 
-                        {
-                            isEncodedAsCodewords = false;
-                        }
-#else
                         if (Int32.TryParse(this.metadata.FileId.Substring(index, 3), out fileIdInt) && fileIdInt >= 0 && fileIdInt <= 899)
                         {
                             macroCodewords.Append((char)fileIdInt);
@@ -840,7 +820,6 @@ namespace ZXing.PDF417.Internal
                         {
                             isEncodedAsCodewords = false;
                         }
-#endif
                     }
                     if (!isEncodedAsCodewords)
                     {
@@ -1108,20 +1087,7 @@ namespace ZXing.PDF417.Internal
         /// <param name="encodingname">sets character encoding to use</param>
         internal void setEncoding(String encodingname)
         {
-#if WindowsCE
-         try
-         {
             this.encoding = Encoding.GetEncoding(encodingname);
-         }
-         catch (PlatformNotSupportedException)
-         {
-            // WindowsCE doesn't support all encodings. But it is device depended.
-            // So we try here the some different ones
-            this.encoding = Encoding.GetEncoding(1252);
-         }
-#else
-            this.encoding = Encoding.GetEncoding(encodingname);
-#endif
         }
 
         /// <summary>

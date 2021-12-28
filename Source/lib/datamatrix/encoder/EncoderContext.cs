@@ -34,20 +34,11 @@ namespace ZXing.Datamatrix.Encoder
 
         static EncoderContext()
         {
-#if !(WindowsCE || NETFX_CORE || PORTABLE)
+#if !(NETFX_CORE || PORTABLE)
             encoding = Encoding.GetEncoding("ISO-8859-1");
-#elif WindowsCE
-         try
-         {
-            encoding = Encoding.GetEncoding("ISO-8859-1");
-         }
-         catch (PlatformNotSupportedException)
-         {
-            encoding = Encoding.GetEncoding(1252);
-         }
 #else
-         // not fully correct but what else
-         encoding = Encoding.GetEncoding("UTF-8");
+            // not fully correct but what else
+            encoding = Encoding.GetEncoding("UTF-8");
 #endif
         }
 

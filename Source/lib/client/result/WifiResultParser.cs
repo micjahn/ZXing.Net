@@ -63,11 +63,7 @@ namespace ZXing.Client.Result
                 // If PH2 was specified separately, or if the value is clearly boolean, interpret it as 'hidden'
                 if (phase2Method != null || String.Compare("true", hValue, StringComparison.OrdinalIgnoreCase) == 0 || String.Compare("false", hValue, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-#if WindowsCE
-                    try { hidden = Boolean.Parse(hValue); } catch { }
-#else
                     Boolean.TryParse(hValue, out hidden);
-#endif
                 }
                 else
                 {

@@ -171,27 +171,6 @@ namespace ZXing.Common
                 }
             }
 #endif
-#if WindowsCE
-            catch (PlatformNotSupportedException)
-            {
-                try
-                {
-                    // WindowsCE doesn't support all encodings. But it is device depended.
-                    // So we try here the some different ones
-                    if (encodingName == StringUtils.ISO88591)
-                    {
-                        encoding = System.Text.Encoding.GetEncoding(1252);
-                    }
-                    else
-                    {
-                        encoding = System.Text.Encoding.GetEncoding(StringUtils.UTF8);
-                    }
-                }
-                catch (Exception)
-                {
-                }
-            }
-#endif
             catch (Exception)
             {
                 return null;

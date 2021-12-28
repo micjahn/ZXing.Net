@@ -16,7 +16,6 @@
 
 namespace ZXing
 {
-#if !WindowsCE
     /// <summary>
     /// for compatibility with .net 4.0
     /// </summary>
@@ -57,46 +56,4 @@ namespace ZXing
     /// <param name="param3">The param3.</param>
     /// <param name="param4">The param4.</param>
     public delegate void Action<in T1, in T2, in T3, in T4>(T1 param1, T2 param2, T3 param3, T4 param4);
-#else
-   /// <summary>
-   /// for compatibility with .net 4.0
-   /// </summary>
-   public delegate void Action();
-   /// <summary>
-   /// for compatibility with .net 4.0
-   /// </summary>
-   /// <typeparam name="T1">The type of the 1.</typeparam>
-   /// <param name="param1">The param1.</param>
-   public delegate void Action<T1>(T1 param1);
-   /// <summary>
-   /// for compatibility with .net 4.0
-   /// </summary>
-   /// <typeparam name="T1">The type of the 1.</typeparam>
-   /// <typeparam name="T2">The type of the 2.</typeparam>
-   /// <param name="param1">The param1.</param>
-   /// <param name="param2">The param2.</param>
-   public delegate void Action<T1, T2>(T1 param1, T2 param2);
-   /// <summary>
-   /// for compatibility with .net 4.0
-   /// </summary>
-   /// <typeparam name="T1">The type of the 1.</typeparam>
-   /// <typeparam name="T2">The type of the 2.</typeparam>
-   /// <typeparam name="T3">The type of the 3.</typeparam>
-   /// <param name="param1">The param1.</param>
-   /// <param name="param2">The param2.</param>
-   /// <param name="param3">The param3.</param>
-   public delegate void Action<T1, T2, T3>(T1 param1, T2 param2, T3 param3);
-   /// <summary>
-   /// for compatibility with .net 4.0
-   /// </summary>
-   /// <typeparam name="T1">The type of the 1.</typeparam>
-   /// <typeparam name="T2">The type of the 2.</typeparam>
-   /// <typeparam name="T3">The type of the 3.</typeparam>
-   /// <typeparam name="T4">The type of the 4.</typeparam>
-   /// <param name="param1">The param1.</param>
-   /// <param name="param2">The param2.</param>
-   /// <param name="param3">The param3.</param>
-   /// <param name="param4">The param4.</param>
-   public delegate void Action<T1, T2, T3, T4>(T1 param1, T2 param2, T3 param3, T4 param4);
-#endif
 }

@@ -79,17 +79,10 @@ namespace ZXing.Client.Result
                 {
                     return null;
                 }
-#if WindowsCE
-            try { latitude = Double.Parse(geoString.Substring(0, semicolon), NumberStyles.Float, CultureInfo.InvariantCulture); }
-            catch { return null; }
-            try { longitude = Double.Parse(geoString.Substring(semicolon + 1), NumberStyles.Float, CultureInfo.InvariantCulture); }
-            catch { return null; }
-#else
                 if (!Double.TryParse(geoString.Substring(0, semicolon), NumberStyles.Float, CultureInfo.InvariantCulture, out latitude))
                     return null;
                 if (!Double.TryParse(geoString.Substring(semicolon + 1), NumberStyles.Float, CultureInfo.InvariantCulture, out longitude))
                     return null;
-#endif
             }
 
             try

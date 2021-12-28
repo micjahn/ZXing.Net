@@ -689,12 +689,8 @@ namespace ZXing.Datamatrix.Internal
             byteSegments.Add(bytes);
             try
             {
-#if (WINDOWS_PHONE || NETFX_CORE || WindowsCE || PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
-#if WindowsCE
-                result.Append(Encoding.GetEncoding(1252).GetString(bytes, 0, bytes.Length));
-#else
+#if (WINDOWS_PHONE || NETFX_CORE || PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
                 result.Append(Encoding.GetEncoding(StringUtils.ISO88591).GetString(bytes, 0, bytes.Length));
-#endif
 #else
                 result.Append(Encoding.GetEncoding(StringUtils.ISO88591).GetString(bytes));
 #endif

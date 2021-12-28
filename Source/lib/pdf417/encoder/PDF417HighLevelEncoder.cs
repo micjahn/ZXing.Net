@@ -287,22 +287,8 @@ namespace ZXing.PDF417.Internal
                     // Fallbacks
                     try
                     {
-#if WindowsCE
-                  try
-                  {
-                     encoding = Encoding.GetEncoding(1252);
-                  }
-                  catch (PlatformNotSupportedException)
-                  {
-                     // WindowsCE doesn't support all encodings. But it is device depended.
-                     // So we try here some different ones
-                     encoding = Encoding.GetEncoding("CP437");
-                  }
-#else
                         // these .NET profiles support only UTF-8 and UTF-16 out-of-the-box
-                        encoding = Encoding.GetEncoding("UTF-8");
-#endif
-
+                        encoding = Encoding.GetEncoding(StringUtils.UTF8);
                     }
                     catch (Exception uce)
                     {

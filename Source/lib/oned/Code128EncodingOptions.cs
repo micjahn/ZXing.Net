@@ -30,7 +30,7 @@ namespace ZXing.OneD
         /// <summary>
         /// if true, don't switch to codeset C for numbers
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !PORTABLE && !UNITY
+#if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY
         [Category("Standard"), Description("If true, don't switch to codeset C for numbers.")]
 #endif
         public bool ForceCodesetB
@@ -51,7 +51,7 @@ namespace ZXing.OneD
         /// <summary>
         /// Forces which encoding will be used. Currently only used for Code-128 code sets (Type <see cref="System.String" />). Valid values are "A", "B", "C".
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !PORTABLE && !UNITY
+#if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY
         [Category("Standard"), Description("Forces which encoding will be used. Valid values are \"A\", \"B\", \"C\".")]
 #endif
         public Codesets ForceCodeset

@@ -631,11 +631,7 @@ namespace ZXing.Common
         /// </returns>
         public override String ToString()
         {
-#if WindowsCE
-         return ToString("X ", "  ", "\r\n");
-#else
             return ToString("X ", "  ", Environment.NewLine);
-#endif
         }
 
         /// <summary>
@@ -648,11 +644,7 @@ namespace ZXing.Common
         /// </returns>
         public String ToString(String setString, String unsetString)
         {
-#if WindowsCE
-         return buildToString(setString, unsetString, "\r\n");
-#else
             return buildToString(setString, unsetString, Environment.NewLine);
-#endif
         }
 
         /// <summary>

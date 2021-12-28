@@ -16,7 +16,6 @@
 
 namespace ZXing
 {
-#if !WindowsCE
     /// <summary>
     /// for compatibility with .net 4.0
     /// </summary>
@@ -67,56 +66,4 @@ namespace ZXing
     /// <param name="param4">The param4.</param>
     /// <returns></returns>
     public delegate TResult Func<in T1, in T2, in T3, in T4, out TResult>(T1 param1, T2 param2, T3 param3, T4 param4);
-#else
-   /// <summary>
-   /// for compatibility with .net 4.0
-   /// </summary>
-   /// <typeparam name="TResult">The type of the result.</typeparam>
-   /// <returns></returns>
-   public delegate TResult Func<TResult>();
-   /// <summary>
-   /// for compatibility with .net 4.0
-   /// </summary>
-   /// <typeparam name="T1">The type of the 1.</typeparam>
-   /// <typeparam name="TResult">The type of the result.</typeparam>
-   /// <param name="param1">The param1.</param>
-   /// <returns></returns>
-   public delegate TResult Func<T1, TResult>(T1 param1);
-   /// <summary>
-   /// for compatibility with .net 4.0
-   /// </summary>
-   /// <typeparam name="T1">The type of the 1.</typeparam>
-   /// <typeparam name="T2">The type of the 2.</typeparam>
-   /// <typeparam name="TResult">The type of the result.</typeparam>
-   /// <param name="param1">The param1.</param>
-   /// <param name="param2">The param2.</param>
-   /// <returns></returns>
-   public delegate TResult Func<T1, T2, TResult>(T1 param1, T2 param2);
-   /// <summary>
-   /// for compatibility with .net 4.0
-   /// </summary>
-   /// <typeparam name="T1">The type of the 1.</typeparam>
-   /// <typeparam name="T2">The type of the 2.</typeparam>
-   /// <typeparam name="T3">The type of the 3.</typeparam>
-   /// <typeparam name="TResult">The type of the result.</typeparam>
-   /// <param name="param1">The param1.</param>
-   /// <param name="param2">The param2.</param>
-   /// <param name="param3">The param3.</param>
-   /// <returns></returns>
-   public delegate TResult Func<T1, T2, T3, TResult>(T1 param1, T2 param2, T3 param3);
-   /// <summary>
-   /// for compatibility with .net 4.0
-   /// </summary>
-   /// <typeparam name="T1">The type of the 1.</typeparam>
-   /// <typeparam name="T2">The type of the 2.</typeparam>
-   /// <typeparam name="T3">The type of the 3.</typeparam>
-   /// <typeparam name="T4">The type of the 4.</typeparam>
-   /// <typeparam name="TResult">The type of the result.</typeparam>
-   /// <param name="param1">The param1.</param>
-   /// <param name="param2">The param2.</param>
-   /// <param name="param3">The param3.</param>
-   /// <param name="param4">The param4.</param>
-   /// <returns></returns>
-   public delegate TResult Func<T1, T2, T3, T4, TResult>(T1 param1, T2 param2, T3 param3, T4 param4);
-#endif
 }

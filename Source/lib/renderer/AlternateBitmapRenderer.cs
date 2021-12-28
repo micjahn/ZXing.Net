@@ -121,9 +121,7 @@ namespace ZXing.Rendering
             catch (Exception exc)
             {
                 // have to ignore, no better idea
-#if !WindowsCE
                 System.Diagnostics.Trace.TraceError("default text font (Courier New, 14, regular) couldn't be loaded: {0}", exc.Message);
-#endif
             }
         }
 
@@ -184,11 +182,7 @@ namespace ZXing.Rendering
                 var gg = Graphics.FromImage(bmp);
 
                 gg.Clear(Background);
-#if WindowsCE
-                SizeF sizeF = gg.MeasureString("8", font);
-#else
                 SizeF sizeF = gg.MeasureString("8", font, 100);
-#endif
                 int textHeight = (int)Math.Ceiling(sizeF.Height);
                 int textTop = height - textHeight;
 
@@ -262,13 +256,8 @@ namespace ZXing.Rendering
             int         textLeft, textWidth;
             int         pixPerUnit;
             SizeF       sizeF;
-#if WindowsCE
-            Rectangle   rectF;
-            Font fontS = new Font(font.Name, 0.8f * font.Size, FontStyle.Regular);
-#else
             RectangleF  rectF;
             Font        fontS = new Font(font.FontFamily, 0.8f * font.Size);
-#endif
 
             Brush       backgroundBrush = new SolidBrush(Background);
             Brush       foregroundBrush = new SolidBrush(Foreground);
@@ -293,11 +282,7 @@ namespace ZXing.Rendering
                     useFont = fontS;
                     sFmt.LineAlignment = StringAlignment.Near;
                 }
-#if WindowsCE
-                sizeF = canvas.MeasureString(blocks[index], useFont);
-#else
                 sizeF = canvas.MeasureString(blocks[index], useFont, 10000);
-#endif
                 if (info.PrintIndex[index] == -1)
                 {
                     textWidth = (int)Math.Ceiling(sizeF.Width);
@@ -313,13 +298,9 @@ namespace ZXing.Rendering
                     textLeft  = start + info.PrintIndex[index] * pixPerUnit;
                     if (textWidth < sizeF.Width) throw new ArgumentException(ERR_SMALL);
                 }
-#if WindowsCE
-                rectF = new Rectangle(textLeft, top, textWidth, height);
-                canvas.FillRectangle(backgroundBrush, rectF);
-#else
                 rectF = new RectangleF(textLeft, top, textWidth, height);
                 canvas.FillRectangle(backgroundBrush, rectF);
-#endif
+                canvas.DrawString(blocks[index], useFont, foregroundBrush, rectF, sFmt);
                 canvas.DrawString(blocks[index], useFont, foregroundBrush, rectF, sFmt);
             }
             return true;

@@ -60,37 +60,28 @@ namespace ZXing.Client.Result
             double latitude;
             double longitude;
             double altitude = 0.0;
-#if WindowsCE
-         try { latitude = Double.Parse(matcher.Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture); }
-         catch { return null; }
-#else
+
             if (!Double.TryParse(matcher.Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out latitude))
                 return null;
-#endif
+
             if (latitude > 90.0 || latitude < -90.0)
             {
                 return null;
             }
-#if WindowsCE
-         try { longitude = Double.Parse(matcher.Groups[2].Value, NumberStyles.Float, CultureInfo.InvariantCulture); }
-         catch { return null; }
-#else
+
             if (!Double.TryParse(matcher.Groups[2].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out longitude))
                 return null;
-#endif
+
             if (longitude > 180.0 || longitude < -180.0)
             {
                 return null;
             }
             if (!String.IsNullOrEmpty(matcher.Groups[3].Value))
             {
-#if WindowsCE
-            try { altitude = Double.Parse(matcher.Groups[3].Value, NumberStyles.Float, CultureInfo.InvariantCulture); }
-            catch { return null; }
-#else
+
                 if (!Double.TryParse(matcher.Groups[3].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out altitude))
                     return null;
-#endif
+
                 if (altitude < 0.0)
                 {
                     return null;

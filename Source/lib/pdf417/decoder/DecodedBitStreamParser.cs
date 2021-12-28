@@ -280,56 +280,36 @@ namespace ZXing.PDF417.Internal
                                 {
                                     var segmentCount = new StringBuilder();
                                     codeIndex = numericCompaction(codewords, codeIndex + 1, segmentCount);
-#if WindowsCE
-                           try { resultMetadata.SegmentCount = Int32.Parse(segmentCount.ToString()); }
-                           catch { }
-#else
                                     int intResult;
                                     if (Int32.TryParse(segmentCount.ToString(), out intResult))
                                         resultMetadata.SegmentCount = intResult;
-#endif
                                 }
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP:
                                 {
                                     var timestamp = new StringBuilder();
                                     codeIndex = numericCompaction(codewords, codeIndex + 1, timestamp);
-#if WindowsCE
-                           try { resultMetadata.Timestamp = Int64.Parse(timestamp.ToString()); }
-                           catch { }
-#else
                                     long longResult;
                                     if (Int64.TryParse(timestamp.ToString(), out longResult))
                                         resultMetadata.Timestamp = longResult;
-#endif
                                 }
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM:
                                 {
                                     var checksum = new StringBuilder();
                                     codeIndex = numericCompaction(codewords, codeIndex + 1, checksum);
-#if WindowsCE
-                           try { resultMetadata.Checksum = Int32.Parse(checksum.ToString()); }
-                           catch { }
-#else
                                     int intResult;
                                     if (Int32.TryParse(checksum.ToString(), out intResult))
                                         resultMetadata.Checksum = intResult;
-#endif
                                 }
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE:
                                 {
                                     var fileSize = new StringBuilder();
                                     codeIndex = numericCompaction(codewords, codeIndex + 1, fileSize);
-#if WindowsCE
-                           try { resultMetadata.FileSize = Int64.Parse(fileSize.ToString()); }
-                           catch { }
-#else
                                     long longResult;
                                     if (Int64.TryParse(fileSize.ToString(), out longResult))
                                         resultMetadata.FileSize = longResult;
-#endif
                                 }
                                 break;
                             default:
