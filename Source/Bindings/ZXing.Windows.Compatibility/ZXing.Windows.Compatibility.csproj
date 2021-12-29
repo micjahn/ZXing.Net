@@ -1,8 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup Condition="'$(VisualStudioVersion)' == '16.0'">
+    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.0;netcoreapp3.1;net5.0-windows;</TargetFrameworks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(VisualStudioVersion)' == '17.0'"> 
+    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.0;netcoreapp3.1;net5.0-windows;net6.0-windows</TargetFrameworks>
+  </PropertyGroup>
+
   <PropertyGroup>
     <VersionPrefix>0.16.10</VersionPrefix>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.0;netcoreapp3.1;net5.0-windows;net6.0-windows</TargetFrameworks>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <PackageId>ZXing.Net.Bindings.Windows.Compatibility</PackageId>
     <PlatformTarget>AnyCPU</PlatformTarget>
