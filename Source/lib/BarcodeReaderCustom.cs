@@ -26,7 +26,7 @@ namespace ZXing
         private readonly Func<T, LuminanceSource> createLuminanceSource;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+        /// Initializes a new instance of the <see cref="BarcodeReader{T}"/> class.
         /// </summary>
         public BarcodeReader(Func<T, LuminanceSource> createLuminanceSource)
            : this(null, createLuminanceSource, null)
@@ -34,7 +34,7 @@ namespace ZXing
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+        /// Initializes a new instance of the <see cref="BarcodeReader{T}"/> class.
         /// </summary>
         /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
         /// If null then MultiFormatReader is used</param>
@@ -51,7 +51,7 @@ namespace ZXing
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
+        /// Initializes a new instance of the <see cref="BarcodeReader{T}"/> class.
         /// </summary>
         /// <param name="reader">Sets the reader which should be used to find and decode the barcode.
         /// If null then MultiFormatReader is used</param>
