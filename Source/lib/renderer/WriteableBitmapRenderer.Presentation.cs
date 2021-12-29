@@ -21,7 +21,13 @@ using System.Windows.Media.Imaging;
 
 using ZXing.Common;
 
+#if WINDOWS_COMPATIBILITY
+using ZXing.Rendering;
+
+namespace ZXing.Windows.Compatibility
+#else
 namespace ZXing.Rendering
+#endif
 {
     /// <summary>
     /// Renders a <see cref="BitMatrix" /> to a <see cref="WriteableBitmap" />

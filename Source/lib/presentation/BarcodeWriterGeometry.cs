@@ -18,7 +18,11 @@ using System.Windows.Media;
 
 using ZXing.Rendering;
 
+#if WINDOWS_COMPATIBILITY
+namespace ZXing.Windows.Compatibility
+#else
 namespace ZXing.Presentation
+#endif
 {
     /// <summary>
     /// A smart class to encode some content to a barcode image into a geometry

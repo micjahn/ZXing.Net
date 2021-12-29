@@ -18,7 +18,11 @@ namespace ZXing
 {
     using System.Windows.Media;
 
+#if WINDOWS_COMPATIBILITY
+    using ZXing.Windows.Compatibility;
+#else
     using Rendering;
+#endif
 
     /// <summary>
     /// extensions methods which are working directly on any BarcodeWriterGeneric implementation
@@ -26,7 +30,7 @@ namespace ZXing
     public static class BarcodeWriterGeometryExtensions
     {
         /// <summary>
-        /// uses the BarcodeWriterGeneric implementation and the <see cref="WriteableBitmapRenderer"/> class for decoding
+        /// uses the BarcodeWriterGeneric implementation and the <see cref="GeometryRenderer"/> class for decoding
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="content"></param>

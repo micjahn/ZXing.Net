@@ -17,11 +17,18 @@
 namespace ZXing
 {
     using System.Windows.Media.Imaging;
+#if WINDOWS_COMPATIBILITY
+    using ZXing.Windows.Compatibility;
+#endif
 
     /// <summary>
     /// extensions methods which are working directly on any IBarcodeReaderGeneric implementation
     /// </summary>
+#if WINDOWS_COMPATIBILITY
+    public static class BarcodeReaderBitmapSourceExtensions
+#else
     public static class BarcodeReaderExtensions
+#endif
     {
         /// <summary>
         /// uses the IBarcodeReaderGeneric implementation and the <see cref="BitmapSourceLuminanceSource"/> class for decoding
