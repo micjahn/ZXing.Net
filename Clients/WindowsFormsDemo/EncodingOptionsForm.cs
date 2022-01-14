@@ -48,6 +48,7 @@ namespace WindowsFormsDemo
 
             cmbRenderer.Items.Add(typeof(BitmapRenderer));
             cmbRenderer.Items.Add(typeof(CustomBitmapRenderer));
+            cmbRenderer.Items.Add(typeof(AlternateBitmapRenderer));
             cmbRenderer.SelectedItem = typeof(BitmapRenderer);
         }
     }

@@ -139,7 +139,7 @@ namespace ZXing.Eto.Forms
             {
                 var textAreaHeight = (int)font.LineHeight;
 
-                emptyArea = height + 10 > textAreaHeight ? textAreaHeight : 0;
+                emptyArea = height > textAreaHeight ? textAreaHeight : 0;
             }
 
             // output content text below the barcode

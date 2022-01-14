@@ -145,7 +145,7 @@ namespace ZXing.SkiaSharp.Rendering
                 var backcolor = (uint) Background;
                 var textAreaHeight = (int) (TextSize < 1 ? 10 : TextSize);
 
-                emptyArea = outputContent && height + 10 > textAreaHeight ? textAreaHeight : 0;
+                emptyArea = outputContent && height > textAreaHeight ? textAreaHeight : 0;
 
                 for (int y = 0; y < matrix.Height - emptyArea; y++)
                 {
