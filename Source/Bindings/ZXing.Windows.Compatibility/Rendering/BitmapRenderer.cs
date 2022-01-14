@@ -209,7 +209,7 @@ namespace ZXing.Windows.Compatibility
                     {
                         var textAreaHeight = font.Height;
 
-                        emptyArea = height + 10 > textAreaHeight ? textAreaHeight : 0;
+                        emptyArea = height > textAreaHeight ? textAreaHeight : 0;
 
                         if (emptyArea > 0)
                         {
