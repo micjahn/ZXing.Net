@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.9</version>
+    <version>0.16.10</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <license type="expression">Apache-2.0</license>
@@ -60,11 +60,11 @@
     <file src="bin\Release\netcoreapp3.1\ZXing.Windows.Compatibility.dll" target="lib\netcoreapp3.1\ZXing.Windows.Compatibility.dll" />
     <file src="bin\Release\netcoreapp3.1\ZXing.Windows.Compatibility.pdb" target="lib\netcoreapp3.1\ZXing.Windows.Compatibility.pdb" />
     <file src="bin\Release\netcoreapp3.1\ZXing.Windows.Compatibility.xml" target="lib\netcoreapp3.1\ZXing.Windows.Compatibility.xml" />
-    <file src="bin\Release\net5.0\ZXing.Windows.Compatibility.dll" target="lib\net5.0\ZXing.Windows.Compatibility.dll" />
-    <file src="bin\Release\net5.0\ZXing.Windows.Compatibility.pdb" target="lib\net5.0\ZXing.Windows.Compatibility.pdb" />
-    <file src="bin\Release\net5.0\ZXing.Windows.Compatibility.xml" target="lib\net5.0\ZXing.Windows.Compatibility.xml" />
-    <file src="bin\Release\net6.0\ZXing.Windows.Compatibility.dll" target="lib\net6.0\ZXing.Windows.Compatibility.dll" />
-    <file src="bin\Release\net6.0\ZXing.Windows.Compatibility.pdb" target="lib\net6.0\ZXing.Windows.Compatibility.pdb" />
-    <file src="bin\Release\net6.0\ZXing.Windows.Compatibility.xml" target="lib\net6.0\ZXing.Windows.Compatibility.xml" />
+    <file src="bin\Release\net5.0-windows\ZXing.Windows.Compatibility.dll" target="lib\net5.0\ZXing.Windows.Compatibility.dll" />
+    <file src="bin\Release\net5.0-windows\ZXing.Windows.Compatibility.pdb" target="lib\net5.0\ZXing.Windows.Compatibility.pdb" />
+    <file src="bin\Release\net5.0-windows\ZXing.Windows.Compatibility.xml" target="lib\net5.0\ZXing.Windows.Compatibility.xml" />
+    <file src="bin\Release\net6.0-windows\ZXing.Windows.Compatibility.dll" target="lib\net6.0\ZXing.Windows.Compatibility.dll" />
+    <file src="bin\Release\net6.0-windows\ZXing.Windows.Compatibility.pdb" target="lib\net6.0\ZXing.Windows.Compatibility.pdb" />
+    <file src="bin\Release\net6.0-windows\ZXing.Windows.Compatibility.xml" target="lib\net6.0\ZXing.Windows.Compatibility.xml" />
   </files>
 </package>

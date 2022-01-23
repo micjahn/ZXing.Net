@@ -20,7 +20,11 @@ using System.Drawing;
 using ZXing.Common;
 using ZXing.OneD;
 
+#if WINDOWS_COMPATIBILITY
+namespace ZXing.Windows.Compatibility
+#else
 namespace ZXing.Rendering
+#endif
 {
     /// <summary>
     /// An alternative <see cref="BitmapRenderer" /> that gives a better looking result for

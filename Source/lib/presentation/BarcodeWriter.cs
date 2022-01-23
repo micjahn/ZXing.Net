@@ -14,21 +14,37 @@
 * limitations under the License.
 */
 
-using System.Windows.Media.Imaging;
-
-using ZXing.Rendering;
-
+#if WINDOWS_COMPATIBILITY
+namespace ZXing.Windows.Compatibility
+#else
 namespace ZXing.Presentation
+#endif
 {
+    using System.Windows.Media.Imaging;
+
+#if WINDOWS_COMPATIBILITY
+    using ZXing.Windows.Compatibility;
+#else
+    using ZXing.Rendering;
+#endif
+
     /// <summary>
     /// A smart class to encode some content to a barcode image
     /// </summary>
+#if WINDOWS_COMPATIBILITY
+    public class BarcodeWriterWriteableBitmap : BarcodeWriter<WriteableBitmap>
+#else
     public class BarcodeWriter : BarcodeWriter<WriteableBitmap>
+#endif
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BarcodeWriter"/> class.
         /// </summary>
+#if WINDOWS_COMPATIBILITY
+        public BarcodeWriterWriteableBitmap()
+#else
         public BarcodeWriter()
+#endif
         {
             Renderer = new WriteableBitmapRenderer();
         }

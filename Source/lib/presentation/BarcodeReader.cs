@@ -17,12 +17,20 @@
 using System;
 using System.Windows.Media.Imaging;
 
+#if WINDOWS_COMPATIBILITY
+namespace ZXing.Windows.Compatibility
+#else
 namespace ZXing.Presentation
+#endif
 {
     /// <summary>
     /// A smart class to decode the barcode inside a bitmap object which is derived from BitmapSource
     /// </summary>
+#if WINDOWS_COMPATIBILITY
+    public class BarcodeReaderBitmapSource : BarcodeReader<BitmapSource>
+#else
     public class BarcodeReader : BarcodeReader<BitmapSource>
+#endif
     {
         private static readonly Func<BitmapSource, LuminanceSource> defaultCreateLuminanceSource =
            bitmap => new BitmapSourceLuminanceSource(bitmap);
@@ -30,7 +38,11 @@ namespace ZXing.Presentation
         /// <summary>
         /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
         /// </summary>
+#if WINDOWS_COMPATIBILITY
+        public BarcodeReaderBitmapSource()
+#else
         public BarcodeReader()
+#endif
            : this(null, defaultCreateLuminanceSource, null)
         {
         }
@@ -44,7 +56,12 @@ namespace ZXing.Presentation
         /// If null, default is used</param>
         /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
         /// If null then HybridBinarizer is used</param>
-        public BarcodeReader(Reader reader,
+#if WINDOWS_COMPATIBILITY
+        public BarcodeReaderBitmapSource
+#else
+        public BarcodeReader
+#endif
+          (Reader reader,
            Func<BitmapSource, LuminanceSource> createLuminanceSource,
            Func<LuminanceSource, Binarizer> createBinarizer
            )
@@ -62,7 +79,12 @@ namespace ZXing.Presentation
         /// <param name="createBinarizer">Sets the function to create a binarizer object for a luminance source.
         /// If null then HybridBinarizer is used</param>
         /// <param name="createRGBLuminanceSource">The create RGB luminance source.</param>
-        public BarcodeReader(Reader reader,
+#if WINDOWS_COMPATIBILITY
+        public BarcodeReaderBitmapSource
+#else
+        public BarcodeReader
+#endif
+          (Reader reader,
            Func<BitmapSource, LuminanceSource> createLuminanceSource,
            Func<LuminanceSource, Binarizer> createBinarizer,
            Func<byte[], int, int, RGBLuminanceSource.BitmapFormat, LuminanceSource> createRGBLuminanceSource

@@ -22,7 +22,13 @@ using System.Windows.Media;
 
 using ZXing.Common;
 
+#if WINDOWS_COMPATIBILITY
+using ZXing.Rendering;
+
+namespace ZXing.Windows.Compatibility
+#else
 namespace ZXing.Rendering
+#endif
 {
     /// <summary>
     /// Renders a barcode into a geometry
