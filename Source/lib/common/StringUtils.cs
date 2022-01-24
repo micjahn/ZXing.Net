@@ -27,7 +27,6 @@ namespace ZXing.Common
     /// <author>Alex Dupre</author>
     public static class StringUtils
     {
-#if (WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || NETSTANDARD)
         /// <summary>
         /// default encoding of the current platform (name)
         /// </summary>
@@ -78,7 +77,7 @@ namespace ZXing.Common
 
         static StringUtils()
         {
-#if (NETFX_CORE || PORTABLE || NETSTANDARD)
+#if (WINDOWS_PHONE || SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || NETSTANDARD)
             PLATFORM_DEFAULT_ENCODING = UTF8;
             PLATFORM_DEFAULT_ENCODING_T = Encoding.UTF8;
 #else
