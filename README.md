@@ -1,4 +1,9 @@
 # ZXing.Net 
+
+[![N|NuGet](https://img.shields.io/nuget/v/ZXing.Net.svg)](https://www.nuget.org/packages/ZXing.Net/)
+[![Build status](https://ci.appveyor.com/api/projects/status/49uvsxpw3ak9jtmm?svg=true)](https://ci.appveyor.com/project/MichaelJahn/zxing-net)
+[![Donate](https://img.shields.io/badge/%F0%9F%92%99-Donate%20%2F%20Support%20Us-blue.svg)](#donate)
+
 ![ZXing.Net.Mobile Logo](https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg)
 
 ## Project Description
@@ -30,10 +35,6 @@ UPC-A, EAN-8, EAN-13, Code 39, Code 128, ITF, Codabar, Plessey, MSI, QR Code, PD
 * Silverlight 4 and 5
 
 The library is available in the [release section](https://github.com/micjahn/ZXing.Net/releases) and as [NuGet package](https://www.nuget.org/packages/ZXing.Net/), too.
-
-[![N|NuGet](https://img.shields.io/nuget/v/ZXing.Net.svg)](https://www.nuget.org/packages/ZXing.Net/)
-[![Build status](https://ci.appveyor.com/api/projects/status/49uvsxpw3ak9jtmm?svg=true)](https://ci.appveyor.com/project/MichaelJahn/zxing-net)
-[![Donate](https://img.shields.io/badge/%F0%9F%92%99-Donate%20%2F%20Support%20Us-blue.svg)](#donate)
 
 #### Additional platform support without pre-built binaries
 The library can be built for Xamarin.iOS (formerly MonoTouch). The project file and solution are available in the source code repository.
@@ -107,8 +108,7 @@ Beside a donation patches, bug reports, feedback and other useful help are alway
 Support us with a monthly donation and help us continue our activities. 
 Become a sponsor and get your logo on our README on Github with a link to your site. 
 * [[Become a Github Sponsor](https://github.com/sponsors/micjahn)]
-* [[Become a Opencollective backer](https://opencollective.com/zxingnet)]
-* [[Become a Opencollective sponsor](https://opencollective.com/zxingnet)]
+* [[Become a Opencollective backer/sponsor](https://opencollective.com/zxingnet)]
 
 ## Donation WITHOUT money
 It would be really, really great if you could support one of my social projects. You can support it WITHOUT paying money.
