@@ -85,7 +85,7 @@ namespace ZXing.Datamatrix.Internal
         internal static DecoderResult decode(byte[] bytes)
         {
             BitSource bits = new BitSource(bytes);
-            StringBuilder result = new StringBuilder(100);
+            ECIStringBuilder result = new ECIStringBuilder(100);
             StringBuilder resultTrailer = new StringBuilder(0);
             List<byte[]> byteSegments = new List<byte[]>(1);
             Mode mode = Mode.ASCII_ENCODE;
@@ -124,6 +124,7 @@ namespace ZXing.Datamatrix.Internal
                                 return null;
                             break;
                         case Mode.ECI_ENCODE:
+                            decodeECISegment(bits, result);
                             isECIencoded = true; // ECI detection only, atm continue decoding as ASCII
                             break;
                         default:
@@ -175,7 +176,7 @@ namespace ZXing.Datamatrix.Internal
         /// See ISO 16022:2006, 5.2.3 and Annex C, Table C.2
         /// </summary>
         private static bool decodeAsciiSegment(BitSource bits,
-                                               StringBuilder result,
+                                               ECIStringBuilder result,
                                                StringBuilder resultTrailer,
                                                List<int> fnc1positions,
                                                out Mode mode)
@@ -278,7 +279,7 @@ namespace ZXing.Datamatrix.Internal
         /// <summary>
         /// See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
         /// </summary>
-        private static bool decodeC40Segment(BitSource bits, StringBuilder result, List<int> fnc1positions)
+        private static bool decodeC40Segment(BitSource bits, ECIStringBuilder result, List<int> fnc1positions)
         {
             // Three C40 values are encoded in a 16-bit value as
             // (1600 * C1) + (40 * C2) + C3 + 1
@@ -399,7 +400,7 @@ namespace ZXing.Datamatrix.Internal
         /// <summary>
         /// See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
         /// </summary>
-        private static bool decodeTextSegment(BitSource bits, StringBuilder result, List<int> fnc1positions)
+        private static bool decodeTextSegment(BitSource bits, ECIStringBuilder result, List<int> fnc1positions)
         {
             // Three Text values are encoded in a 16-bit value as
             // (1600 * C1) + (40 * C2) + C3 + 1
@@ -529,7 +530,7 @@ namespace ZXing.Datamatrix.Internal
         /// See ISO 16022:2006, 5.2.7
         /// </summary>
         private static bool decodeAnsiX12Segment(BitSource bits,
-                                                 StringBuilder result)
+                                                 ECIStringBuilder result)
         {
             // Three ANSI X12 values are encoded in a 16-bit value as
             // (1600 * C1) + (40 * C2) + C3 + 1
@@ -605,7 +606,7 @@ namespace ZXing.Datamatrix.Internal
         /// <summary>
         /// See ISO 16022:2006, 5.2.8 and Annex C Table C.3
         /// </summary>
-        private static bool decodeEdifactSegment(BitSource bits, StringBuilder result)
+        private static bool decodeEdifactSegment(BitSource bits, ECIStringBuilder result)
         {
             do
             {
@@ -648,7 +649,7 @@ namespace ZXing.Datamatrix.Internal
         /// See ISO 16022:2006, 5.2.9 and Annex B, B.2
         /// </summary>
         private static bool decodeBase256Segment(BitSource bits,
-                                                 StringBuilder result,
+                                                 ECIStringBuilder result,
                                                  IList<byte[]> byteSegments)
         {
             // Figure out how long the Base 256 Segment is.
@@ -703,6 +704,37 @@ namespace ZXing.Datamatrix.Internal
             return true;
         }
 
+        /**
+         * See ISO 16022:2007, 5.4.1
+         */
+        private static bool decodeECISegment(BitSource bits, ECIStringBuilder result)
+        {
+            if (bits.available() < 8)
+            {
+                return false;
+            }
+            int c1 = bits.readBits(8);
+            if (c1 <= 127)
+            {
+                return result.AppendECI(c1 - 1);
+            }
+            return true;
+            //currently we only support character set ECIs
+            /*} else {
+              if (bits.available() < 8) {
+                throw FormatException.getFormatInstance();
+              }
+              int c2 = bits.readBits(8);
+              if (c1 >= 128 && c1 <= 191) {
+              } else {
+                if (bits.available() < 8) {
+                  throw FormatException.getFormatInstance();
+                }
+                int c3 = bits.readBits(8);
+              }
+            }*/
+        }
+
         /// <summary>
         /// See ISO 16022:2006, Annex B, B.2
         /// </summary>
@@ -714,5 +746,93 @@ namespace ZXing.Datamatrix.Internal
             return tempVariable >= 0 ? tempVariable : tempVariable + 256;
         }
 
+        private sealed class ECIStringBuilder
+        {
+            private StringBuilder currentBytes;
+            private StringBuilder currentChars;
+            private Encoding currentCharset = StringUtils.ISO88591_ENCODING ?? StringUtils.PLATFORM_DEFAULT_ENCODING_T;
+            private String result = null;
+            private bool hadECI = false;
+
+            public ECIStringBuilder(int initialCapacity)
+            {
+                currentBytes = new StringBuilder(initialCapacity);
+            }
+
+            public void Append(char value)
+            {
+                currentBytes.Append(value);
+            }
+
+            public void Append(String value)
+            {
+                currentBytes.Append(value);
+            }
+
+            public void Append(int value)
+            {
+                currentBytes.Append(value);
+            }
+
+            public bool AppendECI(int value)
+            {
+                encodeCurrentBytesIfAny();
+                CharacterSetECI characterSetECI = CharacterSetECI.getCharacterSetECIByValue(value);
+                if (characterSetECI == null)
+                {
+                    return false;
+                    //throw FormatException.getFormatInstance(new RuntimeException("Unsupported ECI value " + value));
+                }
+                currentCharset = CharacterSetECI.getEncoding(characterSetECI);
+                return true;
+            }
+
+            public void encodeCurrentBytesIfAny()
+            {
+                if (!hadECI)
+                {
+                    currentChars = currentBytes;
+                    currentBytes = new StringBuilder();
+                    hadECI = true;
+                }
+                else if (currentBytes.Length > 0)
+                {
+                    var bytes = new byte[currentBytes.Length];
+                    for (int i = 0; i < bytes.Length; i++)
+                    {
+                        bytes[i] = (byte)(currentBytes[i] & 0xff);
+                    }
+                    var encodedString = currentCharset.GetString(bytes, 0, bytes.Length);
+                    currentChars.Append(encodedString);
+                    currentBytes.Length = 0;
+                }
+            }
+
+            public void Append(StringBuilder value)
+            {
+                encodeCurrentBytesIfAny();
+                currentChars.Append(value);
+            }
+
+            /// <summary>
+            /// returns the length of ToString();
+            /// </summary>
+            /// <returns></returns>
+            public int Length
+            {
+                get
+                {
+                    return ToString().Length;
+                }
+            }
+
+            override public String ToString()
+            {
+                encodeCurrentBytesIfAny();
+                result = result == null ? currentChars.ToString() : result + currentChars.ToString();
+                currentChars.Length = 0;
+                return result;
+            }
+        }
     }
 }
