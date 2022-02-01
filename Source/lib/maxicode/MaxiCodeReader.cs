@@ -116,12 +116,12 @@ namespace ZXing.Maxicode
             BitMatrix bits = new BitMatrix(MATRIX_WIDTH, MATRIX_HEIGHT);
             for (int y = 0; y < MATRIX_HEIGHT; y++)
             {
-                int iy = System.Math.Min(top + (y * height + height / 2) / MATRIX_HEIGHT, height - 1);
+                int iy = System.Math.Min(top + (y * height + height / 2) / MATRIX_HEIGHT, height);
                 for (int x = 0; x < MATRIX_WIDTH; x++)
                 {
                     // srowen: I don't quite understand why the formula below is necessary, but it
                     // can walk off the image if left + width = the right boundary. So cap it.
-                    int ix = left + System.Math.Min((x * width + width / 2 + (y & 0x01) * width / 2) / MATRIX_WIDTH, width - 1);
+                    int ix = left + System.Math.Min((x * width + width / 2 + (y & 0x01) * width / 2) / MATRIX_WIDTH, width);
                     if (image[ix, iy])
                     {
                         bits[x, y] = true;
