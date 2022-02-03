@@ -1745,7 +1745,6 @@ Global
 		{4782824C-DD85-427B-8102-70A87C1A7DE0}.Release with Documentation|x86.ActiveCfg = Release with Documentation|Any CPU
 		{4782824C-DD85-427B-8102-70A87C1A7DE0}.Release with Documentation|x86.Build.0 = Release with Documentation|Any CPU
 		{4782824C-DD85-427B-8102-70A87C1A7DE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4782824C-DD85-427B-8102-70A87C1A7DE0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4782824C-DD85-427B-8102-70A87C1A7DE0}.Release|ARM.ActiveCfg = Release|Any CPU
 		{4782824C-DD85-427B-8102-70A87C1A7DE0}.Release|ARM.Build.0 = Release|Any CPU
 		{4782824C-DD85-427B-8102-70A87C1A7DE0}.Release|x64.ActiveCfg = Release|Any CPU
@@ -1777,7 +1776,6 @@ Global
 		{2C6DE13F-8129-453A-9BB5-997077EAE269}.Release with Documentation|x86.ActiveCfg = Release with Documentation|Any CPU
 		{2C6DE13F-8129-453A-9BB5-997077EAE269}.Release with Documentation|x86.Build.0 = Release with Documentation|Any CPU
 		{2C6DE13F-8129-453A-9BB5-997077EAE269}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2C6DE13F-8129-453A-9BB5-997077EAE269}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2C6DE13F-8129-453A-9BB5-997077EAE269}.Release|ARM.ActiveCfg = Release|Any CPU
 		{2C6DE13F-8129-453A-9BB5-997077EAE269}.Release|ARM.Build.0 = Release|Any CPU
 		{2C6DE13F-8129-453A-9BB5-997077EAE269}.Release|x64.ActiveCfg = Release|Any CPU

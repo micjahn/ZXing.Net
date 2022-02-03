@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.7</version>
+    <version>0.16.8</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <license type="expression">Apache-2.0</license>
@@ -18,7 +18,7 @@
       It is compatible with .Net 2.0, .Net 3.5, .Net 4.x, .Net 5.x, .Net 6.x, Windows RT Class Library and Components, UWP, .Net Standard 1.x and 2.0x, .Net Core App 3.x, Silverlight 4, Silverlight 5, Windows Phone 7.x and Windows Phone 8.x and Xamarin.Android</description>
     <summary>ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.</summary>
     <releaseNotes>* changes of the java version are reflected until 2021/12/08
-* many small bug fixes and improvements</releaseNotes>
+* small bug fixes and improvements</releaseNotes>
     <tags>ZXing barcode scanning 1D 2D UPC-A UPC-E EAN-8 EAN-13 QR ITF Codabar RSS-14 Data Matrix PDF 417 PDF417 Aztec</tags>
     <dependencies>
       <group targetFramework="net20" />
