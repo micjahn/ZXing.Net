@@ -114,7 +114,7 @@ namespace ZXing.ImageSharp.Rendering
                     for (var x = pixelsize * matrix.Width; x < width; x++)
                     {
                         var pixel = new TPixel();
-                        pixel.FromRgba32(foreColor);
+                        pixel.FromRgba32(backColor);
                         result[x, rowOffset] = pixel;
                     }
                 }
