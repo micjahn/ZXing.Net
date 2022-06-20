@@ -34,13 +34,21 @@ namespace ZXing.EmguCV
            : base(image.Size.Width, image.Size.Height)
         {
             var bytes = image.Bytes;
-            for (int indexB = 0, indexL = 0; indexB < bytes.Length; indexB += 3, indexL++)
+            var width = image.Width;
+            var lineLength = image.MIplImage.WidthStep;
+            var indexL = 0;
+            var bLength = bytes.Length;
+            for (int indexB = 0; indexB < bLength; indexB += 3)
             {
                 var b = bytes[indexB];
                 var g = bytes[indexB + 1];
                 var r = bytes[indexB + 2];
                 // Calculate luminance cheaply, favoring green.
-                luminances[indexL] = (byte)((r + g + g + b) >> 2);
+                luminances[indexL++] = (byte)((r + g + g + b) >> 2);
+                if (indexL % width == 0)
+                {
+                    indexB += lineLength - (indexB % lineLength) - 3;
+                }
             }
         }
 

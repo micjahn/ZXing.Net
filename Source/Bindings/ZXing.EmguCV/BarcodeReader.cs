@@ -25,7 +25,7 @@ namespace ZXing.EmguCV
     /// <summary>
     /// A barcode reader which accepts an Image instance from EmguCV
     /// </summary>
-    internal class BarcodeReader : BarcodeReader<Image<Emgu.CV.Structure.Bgr, byte>>, IBarcodeReader
+    public class BarcodeReader : BarcodeReader<Image<Emgu.CV.Structure.Bgr, byte>>, IBarcodeReader
     {
         private static readonly Func<Image<Emgu.CV.Structure.Bgr, byte>, LuminanceSource> defaultCreateLuminanceSource =
            (image) => new ImageLuminanceSource(image);
