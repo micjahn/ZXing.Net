@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using ImageMagick;
 using ZXing.Magick.Rendering;
 
 namespace ZXing
@@ -24,15 +25,17 @@ namespace ZXing
     public static class BarcodeWriterExtensions
     {
         /// <summary>
-        /// uses the BarcodeWriterGeneric implementation and the <see cref="MagickImageRenderer"/> class for decoding
+        /// uses the BarcodeWriterGeneric implementation and the <see cref="MagickImageRenderer{TQuantumType}"/> class for decoding
         /// </summary>
         /// <param name="writer"></param>
+        /// <param name="magickImageFactory"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        public static ImageMagick.IMagickImage<byte> WriteAsMagickImage(this IBarcodeWriterGeneric writer, string content)
+        public static IMagickImage<TQuantumType> WriteAsMagickImage<TQuantumType>(this IBarcodeWriterGeneric writer, IMagickImageFactory<TQuantumType> magickImageFactory, string content)
+            where TQuantumType : struct
         {
             var bitmatrix = writer.Encode(content);
-            var renderer = new MagickImageRenderer();
+            var renderer = new MagickImageRenderer<TQuantumType>(magickImageFactory);
             return renderer.Render(bitmatrix, writer.Format, content, writer.Options);
         }
     }

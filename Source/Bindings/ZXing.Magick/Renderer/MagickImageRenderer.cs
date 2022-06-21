@@ -22,53 +22,43 @@ using ImageMagick;
 namespace ZXing.Magick.Rendering
 {
     /// <summary>
-    /// renderer class which generates a IMagickImage from a BitMatrix
+    /// renderer class which generates a <see cref="IMagickImage{TQuantumType}"/> from a BitMatrix
     /// </summary>
-    public class MagickImageRenderer : IBarcodeRenderer<IMagickImage<byte>>
+    public class MagickImageRenderer<TQuantumType> : IBarcodeRenderer<IMagickImage<TQuantumType>>
+        where TQuantumType : struct
     {
-        private readonly MagickFactory magickFactory;
+        private readonly IMagickImageFactory<TQuantumType> magickImageFactory;
 
         /// <summary>
-        /// default constructor
+        /// constructor, which can be used with a special implementation of <see cref="IMagickImageFactory{TQuantumType}"/>.
         /// </summary>
-        public MagickImageRenderer()
-            : this(null)
+        /// <param name="magickImageFactory"></param>
+        public MagickImageRenderer(IMagickImageFactory<TQuantumType> magickImageFactory)
         {
-
+            this.magickImageFactory = magickImageFactory;
         }
 
         /// <summary>
-        /// constructor, which can be used if a special implementation of IMagickFactory is need.
-        /// TODO: at the moment the instance of magickFactory has to be a subtype of MagickFactory because ImagickFactory doesn't provide the property Image
-        /// </summary>
-        /// <param name="magickFactory"></param>
-        public MagickImageRenderer(IMagickFactory magickFactory)
-        {
-            // TODO: current version of Magick doesn't have all necessary properties defined for IMagickFactory
-            this.magickFactory = magickFactory as MagickFactory ?? new MagickFactory();
-        }
-
-        /// <summary>
-        /// renders the BitMatrix as MagickImage
+        /// renders the BitMatrix as <see cref="IMagickImage{TQuantumType}"/>
         /// </summary>
         /// <param name="matrix"></param>
         /// <param name="format"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        public IMagickImage<byte> Render(BitMatrix matrix, BarcodeFormat format, string content)
+        public IMagickImage<TQuantumType> Render(BitMatrix matrix, BarcodeFormat format, string content)
         {
             return Render(matrix, format, content, new EncodingOptions());
         }
 
         /// <summary>
-        /// renders the BitMatrix as MagickImage
+        /// renders the BitMatrix as <see cref="IMagickImage{TQuantumType}"/>
         /// </summary>
         /// <param name="matrix"></param>
         /// <param name="format"></param>
         /// <param name="content"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public IMagickImage<byte> Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+        public IMagickImage<TQuantumType> Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
         {
             byte[] header = System.Text.Encoding.UTF8.GetBytes($"P4\n{matrix.Width} {matrix.Height}\n");
 
@@ -106,7 +96,7 @@ namespace ZXing.Magick.Rendering
                 }
             }
 
-            return this.magickFactory.Image.Create(totalBuffer);
+            return this.magickImageFactory.Create(totalBuffer);
         }
     }
 }
