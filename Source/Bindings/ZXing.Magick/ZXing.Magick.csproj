@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <VersionPrefix>0.16.9</VersionPrefix>
-    <TargetFrameworks>net20;net40;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net20;netstandard2.0;netstandard2.1</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>anycpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -34,23 +34,12 @@
     <Reference Include="System" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net20' ">
     <DefineConstants>$(DefineConstants);NET20</DefineConstants>
     <DebugType>full</DebugType>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net40' ">
-    <DefineConstants>$(DefineConstants);NET40</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
-    <DebugType>portable</DebugType>
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
     <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
   </PropertyGroup>
 
