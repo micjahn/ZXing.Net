@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <VersionPrefix>0.16.9</VersionPrefix>
-    <TargetFrameworks>net20;net40;netstandard1.3;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net20;net40;netstandard2.0</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>anycpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -12,7 +12,7 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-	<EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+    <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <ItemGroup>
