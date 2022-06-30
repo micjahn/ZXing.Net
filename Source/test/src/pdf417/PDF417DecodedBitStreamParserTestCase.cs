@@ -28,7 +28,7 @@ namespace ZXing.PDF417.Test
                                     0x46, 0x5a, 0x09, 0x63, 0x27, 0x82, 0xff, 0x09, 0x6d, 0x15, 0x41, 0xc9, 0x09, 0xa0, 0x23, 0x46
                                  };
          var expectedResult = Encoding.UTF7.GetString(expectedResultBytes);
-         var result = DecodedBitStreamParser.decode(codewords, "L");
+         var result = DecodedBitStreamParser.decode(codewords, "L", System.Text.Encoding.GetEncoding(PDF417HighLevelEncoder.DEFAULT_ENCODING_NAME));
          Assert.AreEqual(expectedResult, result.Text);
       }
    }

@@ -33,6 +33,7 @@ namespace ZXing.Interop.Decoding
     public class BarcodeReader : IBarcodeReader
     {
         private readonly ZXing.BarcodeReader wrappedReader;
+        private DecodingOptions decodingOptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BarcodeReader"/> class.
@@ -40,12 +41,13 @@ namespace ZXing.Interop.Decoding
         public BarcodeReader()
         {
             wrappedReader = new ZXing.BarcodeReader();
+            decodingOptions = new DecodingOptions(wrappedReader.Options);
         }
 
         public DecodingOptions Options
         {
-            get { return new DecodingOptions(wrappedReader.Options); }
-            set { wrappedReader.Options = value.wrappedDecodingOptions; }
+            get { return decodingOptions; }
+            set { decodingOptions = value; wrappedReader.Options = value.wrappedDecodingOptions; }
         }
 
         public Result DecodeImageBytes([In, MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UI1)]ref byte[] rawRGB,
