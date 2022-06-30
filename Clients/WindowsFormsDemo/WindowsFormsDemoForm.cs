@@ -264,6 +264,7 @@ namespace WindowsFormsDemo
             if (bitmap == null)
                 return;
             var reader = new BarcodeReader();
+            reader.Options = barcodeReader.Options;
             var result = reader.Decode(bitmap);
             if (result != null)
             {
