@@ -94,7 +94,7 @@ namespace ZXing.PDF417.Internal.Test
             Assert.IsNull(resultMetadata.OptionalData);
 
             // Check that symbol containing no data except Macro is accepted (see note in Annex H.2)
-            DecoderResult decoderResult = DecodedBitStreamParser.decode(sampleCodes, "0");
+            DecoderResult decoderResult = DecodedBitStreamParser.decode(sampleCodes, "0", System.Text.Encoding.GetEncoding(PDF417HighLevelEncoder.DEFAULT_ENCODING_NAME));
             Assert.AreEqual("", decoderResult.Text);
             Assert.IsNotNull(decoderResult.Other);
         }
@@ -179,7 +179,7 @@ namespace ZXing.PDF417.Internal.Test
             int[]
             sampleCodes = { 3, 899, 899, 0 };
 
-            Assert.IsNull(DecodedBitStreamParser.decode(sampleCodes, "0"));
+            Assert.IsNull(DecodedBitStreamParser.decode(sampleCodes, "0", System.Text.Encoding.GetEncoding(PDF417HighLevelEncoder.DEFAULT_ENCODING_NAME)));
         }
     }
 }

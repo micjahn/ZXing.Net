@@ -111,10 +111,20 @@ namespace ZXing.PDF417
             var detectorResult = Detector.detect(image, hints, multiple);
             if (detectorResult != null)
             {
+                System.Text.Encoding encoding = null;
+                if (hints != null && hints.ContainsKey(DecodeHintType.CHARACTER_SET))
+                {
+                    var characterSet = hints[DecodeHintType.CHARACTER_SET] as String;
+                    if (characterSet != null)
+                    {
+                        encoding = CharacterSetECI.getEncoding(characterSet);
+                    }
+                }
+
                 foreach (var points in detectorResult.Points)
                 {
                     var decoderResult = PDF417ScanningDecoder.decode(detectorResult.Bits, points[4], points[5],
-                                                                     points[6], points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points));
+                                                                     points[6], points[7], getMinCodewordWidth(points), getMaxCodewordWidth(points), encoding);
                     if (decoderResult == null)
                     {
                         continue;

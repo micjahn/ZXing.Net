@@ -32,7 +32,7 @@ namespace ZXing.PDF417.Test
 #else
          var expectedResult = Encoding.GetEncoding("UTF-7").GetString(expectedResultBytes, 0, expectedResultBytes.Length);
 #endif
-         var result = DecodedBitStreamParser.decode(codewords, "L");
+         var result = DecodedBitStreamParser.decode(codewords, "L", System.Text.Encoding.GetEncoding(PDF417HighLevelEncoder.DEFAULT_ENCODING_NAME));
          Assert.AreEqual(expectedResult, result.Text);
       }
    }

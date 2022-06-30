@@ -114,14 +114,14 @@ namespace ZXing.PDF417.Internal
 #endif
         private const int NUMBER_OF_SEQUENCE_CODEWORDS = 2;
 
-        internal static DecoderResult decode(int[] codewords, String ecLevel)
+        internal static DecoderResult decode(int[] codewords, String ecLevel, Encoding startWithEncoding)
         {
             var result = new StringBuilder(codewords.Length * 2);
             // Get compaction mode
             int codeIndex = 1;
             int code = codewords[codeIndex++];
             var resultMetadata = new PDF417ResultMetadata();
-            Encoding encoding = null;
+            Encoding encoding = startWithEncoding;
 
             while (codeIndex <= codewords[0])
             {
