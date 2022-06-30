@@ -24,6 +24,7 @@ namespace ZXing.Interop.Encoding
     public class PDF417EncodingOptions : EncodingOptions
     {
         internal readonly PDF417.PDF417EncodingOptions wrappedPDF417EncodingOptions;
+        internal Dimensions dimensions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PDF417EncodingOptions"/> class.
@@ -37,6 +38,10 @@ namespace ZXing.Interop.Encoding
            : base(other)
         {
             wrappedPDF417EncodingOptions = other;
+            if (other.Dimensions != null)
+            {
+                dimensions = other.Dimensions.ToInterop(this);
+            }
         }
 
         /// <summary>
@@ -64,8 +69,23 @@ namespace ZXing.Interop.Encoding
         /// </summary>
         public Dimensions Dimensions
         {
-            get { return wrappedPDF417EncodingOptions.Dimensions.ToInterop(); }
-            set { wrappedPDF417EncodingOptions.Dimensions = value.ToZXing(); }
+            get
+            {
+                if (dimensions == null)
+                {
+                    if (wrappedPDF417EncodingOptions.Dimensions == null)
+                    {
+                        wrappedPDF417EncodingOptions.Dimensions = new PDF417.Internal.Dimensions(2, 30, 3, 90);
+                        dimensions = wrappedPDF417EncodingOptions.Dimensions.ToInterop(this);
+                    }
+                }
+                return dimensions;
+            }
+            set
+            {
+                dimensions = value;
+                wrappedPDF417EncodingOptions.Dimensions = dimensions.ToZXing();
+            }
         }
 
         /// <summary>
@@ -185,25 +205,75 @@ namespace ZXing.Interop.Encoding
     [ClassInterface(ClassInterfaceType.AutoDual)]
     public sealed class Dimensions
     {
+        private PDF417EncodingOptions encodingOptions;
+        private int minCols;
+        private int maxCols;
+        private int minRows;
+        private int maxRows;
+
         /// <summary>
         /// Gets the min cols.
         /// </summary>
-        public int MinCols { get; private set; }
+        public int MinCols
+        {
+            get => minCols;
+            set
+            {
+                minCols = value;
+                if (encodingOptions != null)
+                {
+                    encodingOptions.Dimensions = this;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the max cols.
         /// </summary>
-        public int MaxCols { get; private set; }
+        public int MaxCols
+        {
+            get => maxCols;
+            set
+            {
+                maxCols = value;
+                if (encodingOptions != null)
+                {
+                    encodingOptions.Dimensions = this;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the min rows.
         /// </summary>
-        public int MinRows { get; private set; }
+        public int MinRows
+        {
+            get => minRows;
+            set
+            {
+                minRows = value;
+                if (encodingOptions != null)
+                {
+                    encodingOptions.Dimensions = this;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the max rows.
         /// </summary>
-        public int MaxRows { get; private set; }
+        public int MaxRows
+        {
+            get => maxRows;
+            set
+            {
+                maxRows = value;
+                if (encodingOptions != null)
+                {
+                    encodingOptions.Dimensions = this;
+                }
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Dimensions"/> class.
@@ -219,15 +289,21 @@ namespace ZXing.Interop.Encoding
             MinRows = minRows;
             MaxRows = maxRows;
         }
+
+        internal Dimensions(int minCols, int maxCols, int minRows, int maxRows, PDF417EncodingOptions encodingOptions)
+            : this(minCols, maxCols, minRows, maxRows)
+        {
+            this.encodingOptions = encodingOptions ?? throw new System.ArgumentNullException(nameof(encodingOptions));
+        }
     }
 
     internal static class DimensionsExtensions
     {
-        public static Dimensions ToInterop(this PDF417.Internal.Dimensions other)
+        public static Dimensions ToInterop(this PDF417.Internal.Dimensions other, PDF417EncodingOptions encodingOptions)
         {
             if (other == null)
                 return null;
-            return new Dimensions(other.MinCols, other.MaxCols, other.MinRows, other.MaxRows);
+            return new Dimensions(other.MinCols, other.MaxCols, other.MinRows, other.MaxRows, encodingOptions);
         }
         public static PDF417.Internal.Dimensions ToZXing(this Dimensions other)
         {
