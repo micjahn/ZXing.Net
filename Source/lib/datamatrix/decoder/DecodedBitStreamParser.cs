@@ -86,6 +86,7 @@ namespace ZXing.Datamatrix.Internal
         {
             BitSource bits = new BitSource(bytes);
             ECIStringBuilder result = new ECIStringBuilder(100);
+            byte[] encodedResult = new byte[100];
             StringBuilder resultTrailer = new StringBuilder(0);
             List<byte[]> byteSegments = new List<byte[]>(1);
             Mode mode = Mode.ASCII_ENCODE;
@@ -120,7 +121,7 @@ namespace ZXing.Datamatrix.Internal
                                 return null;
                             break;
                         case Mode.BASE256_ENCODE:
-                            if (!decodeBase256Segment(bits, result, byteSegments))
+                            if (!decodeBase256Segment(bits, out encodedResult, result, byteSegments))
                                 return null;
                             break;
                         case Mode.ECI_ENCODE:
@@ -169,7 +170,7 @@ namespace ZXing.Datamatrix.Internal
                     symbologyModifier = 1;
                 }
             }
-            return new DecoderResult(bytes, result.ToString(), byteSegments.Count == 0 ? null : byteSegments, null, symbologyModifier);
+            return new DecoderResult(bytes, encodedResult, result.ToString(), byteSegments.Count == 0 ? null : byteSegments, null, symbologyModifier);
         }
 
         /// <summary>
@@ -649,9 +650,11 @@ namespace ZXing.Datamatrix.Internal
         /// See ISO 16022:2006, 5.2.9 and Annex B, B.2
         /// </summary>
         private static bool decodeBase256Segment(BitSource bits,
+                                                 out byte[] encodedResult,
                                                  ECIStringBuilder result,
                                                  IList<byte[]> byteSegments)
         {
+            encodedResult = null;
             // Figure out how long the Base 256 Segment is.
             int codewordPosition = 1 + bits.ByteOffset; // position is 1-indexed
             int d1 = unrandomize255State(bits.readBits(8), codewordPosition++);
@@ -688,6 +691,7 @@ namespace ZXing.Datamatrix.Internal
                 bytes[i] = (byte)unrandomize255State(bits.readBits(8), codewordPosition++);
             }
             byteSegments.Add(bytes);
+
             try
             {
 #if (NETFX_CORE || PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
@@ -700,6 +704,9 @@ namespace ZXing.Datamatrix.Internal
             {
                 throw new InvalidOperationException("Platform does not support required encoding: " + uee);
             }
+
+            encodedResult = new byte[bytes.Length];
+            Array.Copy(bytes, encodedResult, bytes.Length);
 
             return true;
         }

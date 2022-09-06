@@ -71,7 +71,7 @@ namespace ZXing.Datamatrix
             if (decoderResult == null)
                 return null;
 
-            Result result = new Result(decoderResult.Text, decoderResult.RawBytes, points,
+            Result result = new Result(decoderResult.Text, decoderResult.Data, decoderResult.RawBytes, points,
                 BarcodeFormat.DATA_MATRIX);
             IList<byte[]> byteSegments = decoderResult.ByteSegments;
             if (byteSegments != null)

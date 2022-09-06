@@ -43,6 +43,7 @@ namespace ZXing.QrCode.Internal
         {
             var bits = new BitSource(bytes);
             var result = new StringBuilder(50);
+            var encodedResult = new byte[50];
             var byteSegments = new List<byte[]>(1);
             var symbolSequence = -1;
             var parityData = -1;
@@ -133,7 +134,7 @@ namespace ZXing.QrCode.Internal
                                         return null;
                                     break;
                                 case Mode.Names.BYTE:
-                                    if (!decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments, hints))
+                                    if (!decodeByteSegment(bits, result, out encodedResult, count, currentCharacterSetECI, byteSegments, hints))
                                         return null;
                                     break;
                                 case Mode.Names.KANJI:
@@ -184,7 +185,7 @@ namespace ZXing.QrCode.Internal
                 return null;
             }
 
-            return new DecoderResult(bytes,
+            return new DecoderResult(bytes, encodedResult,
                                      result.ToString(),
                                      byteSegments.Count == 0 ? null : byteSegments,
                                      ecLevel == null ? null : ecLevel.ToString(),
@@ -288,11 +289,13 @@ namespace ZXing.QrCode.Internal
 
         private static bool decodeByteSegment(BitSource bits,
                                               StringBuilder result,
+                                              out byte[] encodedResult,
                                               int count,
                                               CharacterSetECI currentCharacterSetECI,
                                               IList<byte[]> byteSegments,
                                               IDictionary<DecodeHintType, object> hints)
         {
+            encodedResult = null;
             // Don't crash trying to read more bits than we have available.
             if (count << 3 > bits.available())
             {
@@ -323,6 +326,9 @@ namespace ZXing.QrCode.Internal
                 encoding = StringUtils.PLATFORM_DEFAULT_ENCODING_T;
             }
             result.Append(encoding.GetString(readBytes, 0, readBytes.Length));
+
+            encodedResult = new byte[readBytes.Length];
+            Array.Copy(readBytes, encodedResult, readBytes.Length);
 
             byteSegments.Add(readBytes);
 
