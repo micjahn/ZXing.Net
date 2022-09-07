@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using ZXing.Common;
 
@@ -86,7 +87,7 @@ namespace ZXing.Datamatrix.Internal
         {
             BitSource bits = new BitSource(bytes);
             ECIStringBuilder result = new ECIStringBuilder(100);
-            byte[] encodedResult = new byte[100];
+            MemoryStream encodedResult = new MemoryStream();
             StringBuilder resultTrailer = new StringBuilder(0);
             List<byte[]> byteSegments = new List<byte[]>(1);
             Mode mode = Mode.ASCII_ENCODE;
@@ -97,7 +98,7 @@ namespace ZXing.Datamatrix.Internal
             {
                 if (mode == Mode.ASCII_ENCODE)
                 {
-                    if (!decodeAsciiSegment(bits, result, resultTrailer, fnc1Positions, out mode))
+                    if (!decodeAsciiSegment(bits, encodedResult, result, resultTrailer, fnc1Positions, out mode))
                         return null;
                 }
                 else
@@ -105,23 +106,23 @@ namespace ZXing.Datamatrix.Internal
                     switch (mode)
                     {
                         case Mode.C40_ENCODE:
-                            if (!decodeC40Segment(bits, result, fnc1Positions))
+                            if (!decodeC40Segment(bits, encodedResult, result, fnc1Positions))
                                 return null;
                             break;
                         case Mode.TEXT_ENCODE:
-                            if (!decodeTextSegment(bits, result, fnc1Positions))
+                            if (!decodeTextSegment(bits, encodedResult, result, fnc1Positions))
                                 return null;
                             break;
                         case Mode.ANSIX12_ENCODE:
-                            if (!decodeAnsiX12Segment(bits, result))
+                            if (!decodeAnsiX12Segment(bits, encodedResult, result))
                                 return null;
                             break;
                         case Mode.EDIFACT_ENCODE:
-                            if (!decodeEdifactSegment(bits, result))
+                            if (!decodeEdifactSegment(bits, encodedResult, result))
                                 return null;
                             break;
                         case Mode.BASE256_ENCODE:
-                            if (!decodeBase256Segment(bits, out encodedResult, result, byteSegments))
+                            if (!decodeBase256Segment(bits, encodedResult, result, byteSegments))
                                 return null;
                             break;
                         case Mode.ECI_ENCODE:
@@ -137,6 +138,8 @@ namespace ZXing.Datamatrix.Internal
             if (resultTrailer.Length > 0)
             {
                 result.Append(resultTrailer.ToString());
+                var resultTrailerBytes = Encoding.UTF8.GetBytes(resultTrailer.ToString());
+                encodedResult.Write(resultTrailerBytes, 0, resultTrailerBytes.Length);
             }
             if (isECIencoded)
             {
@@ -170,13 +173,14 @@ namespace ZXing.Datamatrix.Internal
                     symbologyModifier = 1;
                 }
             }
-            return new DecoderResult(bytes, encodedResult, result.ToString(), byteSegments.Count == 0 ? null : byteSegments, null, symbologyModifier);
+            return new DecoderResult(bytes, encodedResult.ToArray(), result.ToString(), byteSegments.Count == 0 ? null : byteSegments, null, symbologyModifier);
         }
 
         /// <summary>
         /// See ISO 16022:2006, 5.2.3 and Annex C, Table C.2
         /// </summary>
         private static bool decodeAsciiSegment(BitSource bits,
+                                               MemoryStream encodedResult,
                                                ECIStringBuilder result,
                                                StringBuilder resultTrailer,
                                                List<int> fnc1positions,
@@ -199,6 +203,7 @@ namespace ZXing.Datamatrix.Internal
                         oneByte += 128;
                         //upperShift = false;
                     }
+                    encodedResult.WriteByte((byte) (oneByte - 1));
                     result.Append((char)(oneByte - 1));
                     mode = Mode.ASCII_ENCODE;
                     return true;
@@ -216,8 +221,10 @@ namespace ZXing.Datamatrix.Internal
                     if (value < 10)
                     {
                         // pad with '0' for single digit values
+                        encodedResult.WriteByte((byte)48); // ASCII representation of byte 48 is the caracter '0'
                         result.Append('0');
                     }
+                    encodedResult.WriteByte((byte)value);
                     result.Append(value);
                 }
                 else
@@ -233,6 +240,7 @@ namespace ZXing.Datamatrix.Internal
                         case 232: // FNC1
                             fnc1positions.Add(result.Length);
                             result.Append((char)29); // translate as ASCII 29
+                            encodedResult.WriteByte((byte)29);
                             break;
                         case 233: // Structured Append
                         case 234: // Reader Programming
@@ -244,10 +252,14 @@ namespace ZXing.Datamatrix.Internal
                             break;
                         case 236: // 05 Macro
                             result.Append("[)>\u001E05\u001D");
+                            byte[] macro05 = Encoding.UTF8.GetBytes("[)>\u001E05\u001D");
+                            encodedResult.Write(macro05, 0, macro05.Length);
                             resultTrailer.Insert(0, "\u001E\u0004");
                             break;
                         case 237: // 06 Macro
                             result.Append("[)>\u001E06\u001D");
+                            byte[] macro06 = Encoding.UTF8.GetBytes("[)>\u001E06\u001D");
+                            encodedResult.Write(macro06, 0, macro06.Length);
                             resultTrailer.Insert(0, "\u001E\u0004");
                             break;
                         case 238: // Latch to ANSI X12 encodation
@@ -280,7 +292,7 @@ namespace ZXing.Datamatrix.Internal
         /// <summary>
         /// See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
         /// </summary>
-        private static bool decodeC40Segment(BitSource bits, ECIStringBuilder result, List<int> fnc1positions)
+        private static bool decodeC40Segment(BitSource bits, MemoryStream encodedResult, ECIStringBuilder result, List<int> fnc1positions)
         {
             // Three C40 values are encoded in a 16-bit value as
             // (1600 * C1) + (40 * C2) + C3 + 1
@@ -322,11 +334,13 @@ namespace ZXing.Datamatrix.Internal
                                 if (upperShift)
                                 {
                                     result.Append((char)(c40char + 128));
+                                    encodedResult.WriteByte((byte)(c40char + 128));
                                     upperShift = false;
                                 }
                                 else
                                 {
                                     result.Append(c40char);
+                                    encodedResult.WriteByte((byte)c40char);
                                 }
                             }
                             else
@@ -338,11 +352,13 @@ namespace ZXing.Datamatrix.Internal
                             if (upperShift)
                             {
                                 result.Append((char)(cValue + 128));
+                                encodedResult.WriteByte((byte)(cValue + 128));
                                 upperShift = false;
                             }
                             else
                             {
                                 result.Append((char)cValue);
+                                encodedResult.WriteByte((byte)cValue);
                             }
                             shift = 0;
                             break;
@@ -353,11 +369,13 @@ namespace ZXing.Datamatrix.Internal
                                 if (upperShift)
                                 {
                                     result.Append((char)(c40char + 128));
+                                    encodedResult.WriteByte((byte)(c40char + 128));
                                     upperShift = false;
                                 }
                                 else
                                 {
                                     result.Append(c40char);
+                                    encodedResult.WriteByte((byte)c40char);
                                 }
                             }
                             else
@@ -367,6 +385,7 @@ namespace ZXing.Datamatrix.Internal
                                     case 27: // FNC1
                                         fnc1positions.Add(result.Length);
                                         result.Append((char)29); // translate as ASCII 29
+                                        encodedResult.WriteByte((byte)29);
                                         break;
                                     case 30: // Upper Shift
                                         upperShift = true;
@@ -381,11 +400,13 @@ namespace ZXing.Datamatrix.Internal
                             if (upperShift)
                             {
                                 result.Append((char)(cValue + 224));
+                                encodedResult.WriteByte((byte)(cValue + 224));
                                 upperShift = false;
                             }
                             else
                             {
                                 result.Append((char)(cValue + 96));
+                                encodedResult.WriteByte((byte)(cValue + 96));
                             }
                             shift = 0;
                             break;
@@ -401,7 +422,7 @@ namespace ZXing.Datamatrix.Internal
         /// <summary>
         /// See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
         /// </summary>
-        private static bool decodeTextSegment(BitSource bits, ECIStringBuilder result, List<int> fnc1positions)
+        private static bool decodeTextSegment(BitSource bits, MemoryStream encodedResult, ECIStringBuilder result, List<int> fnc1positions)
         {
             // Three Text values are encoded in a 16-bit value as
             // (1600 * C1) + (40 * C2) + C3 + 1
@@ -442,11 +463,13 @@ namespace ZXing.Datamatrix.Internal
                                 if (upperShift)
                                 {
                                     result.Append((char)(textChar + 128));
+                                    encodedResult.WriteByte((byte)(textChar + 128));
                                     upperShift = false;
                                 }
                                 else
                                 {
                                     result.Append(textChar);
+                                    encodedResult.WriteByte((byte)textChar);
                                 }
                             }
                             else
@@ -458,11 +481,13 @@ namespace ZXing.Datamatrix.Internal
                             if (upperShift)
                             {
                                 result.Append((char)(cValue + 128));
+                                encodedResult.WriteByte((byte)(cValue + 128));
                                 upperShift = false;
                             }
                             else
                             {
                                 result.Append((char)cValue);
+                                encodedResult.WriteByte((byte)cValue);
                             }
                             shift = 0;
                             break;
@@ -474,11 +499,13 @@ namespace ZXing.Datamatrix.Internal
                                 if (upperShift)
                                 {
                                     result.Append((char)(textChar + 128));
+                                    encodedResult.WriteByte((byte)(textChar + 128));
                                     upperShift = false;
                                 }
                                 else
                                 {
                                     result.Append(textChar);
+                                    encodedResult.WriteByte((byte)textChar);
                                 }
                             }
                             else
@@ -488,6 +515,7 @@ namespace ZXing.Datamatrix.Internal
                                     case 27: // FNC1
                                         fnc1positions.Add(result.Length);
                                         result.Append((char)29); // translate as ASCII 29
+                                        encodedResult.WriteByte((byte)29);
                                         break;
                                     case 30: // Upper Shift
                                         upperShift = true;
@@ -505,11 +533,13 @@ namespace ZXing.Datamatrix.Internal
                                 if (upperShift)
                                 {
                                     result.Append((char)(textChar + 128));
+                                    encodedResult.WriteByte((byte)(textChar + 128));
                                     upperShift = false;
                                 }
                                 else
                                 {
                                     result.Append(textChar);
+                                    encodedResult.WriteByte((byte)textChar);
                                 }
                                 shift = 0;
                             }
@@ -531,6 +561,7 @@ namespace ZXing.Datamatrix.Internal
         /// See ISO 16022:2006, 5.2.7
         /// </summary>
         private static bool decodeAnsiX12Segment(BitSource bits,
+                                                 MemoryStream encodedResult,
                                                  ECIStringBuilder result)
         {
             // Three ANSI X12 values are encoded in a 16-bit value as
@@ -560,26 +591,32 @@ namespace ZXing.Datamatrix.Internal
                     {
                         case 0: // X12 segment terminator <CR>
                             result.Append('\r');
+                            encodedResult.WriteByte((byte)'\r');
                             break;
                         case 1: // X12 segment separator *
                             result.Append('*');
+                            encodedResult.WriteByte((byte)'*');
                             break;
                         case 2: // X12 sub-element separator >
                             result.Append('>');
+                            encodedResult.WriteByte((byte)'>');
                             break;
                         case 3: // space
                             result.Append(' ');
+                            encodedResult.WriteByte((byte)' ');
                             break;
                         default:
                             if (cValue < 14)
                             {
                                 // 0 - 9
                                 result.Append((char)(cValue + 44));
+                                encodedResult.WriteByte((byte)(cValue + 44));
                             }
                             else if (cValue < 40)
                             {
                                 // A - Z
                                 result.Append((char)(cValue + 51));
+                                encodedResult.WriteByte((byte)(cValue + 51));
                             }
                             else
                             {
@@ -607,7 +644,7 @@ namespace ZXing.Datamatrix.Internal
         /// <summary>
         /// See ISO 16022:2006, 5.2.8 and Annex C Table C.3
         /// </summary>
-        private static bool decodeEdifactSegment(BitSource bits, ECIStringBuilder result)
+        private static bool decodeEdifactSegment(BitSource bits, MemoryStream encodedResult, ECIStringBuilder result)
         {
             do
             {
@@ -640,6 +677,7 @@ namespace ZXing.Datamatrix.Internal
                         edifactValue |= 0x40; // Add a leading 01 to the 6 bit binary value
                     }
                     result.Append((char)edifactValue);
+                    encodedResult.WriteByte((byte)edifactValue);
                 }
             } while (bits.available() > 0);
 
@@ -650,11 +688,10 @@ namespace ZXing.Datamatrix.Internal
         /// See ISO 16022:2006, 5.2.9 and Annex B, B.2
         /// </summary>
         private static bool decodeBase256Segment(BitSource bits,
-                                                 out byte[] encodedResult,
+                                                 MemoryStream encodedResult,
                                                  ECIStringBuilder result,
                                                  IList<byte[]> byteSegments)
         {
-            encodedResult = null;
             // Figure out how long the Base 256 Segment is.
             int codewordPosition = 1 + bits.ByteOffset; // position is 1-indexed
             int d1 = unrandomize255State(bits.readBits(8), codewordPosition++);
@@ -705,8 +742,7 @@ namespace ZXing.Datamatrix.Internal
                 throw new InvalidOperationException("Platform does not support required encoding: " + uee);
             }
 
-            encodedResult = new byte[bytes.Length];
-            Array.Copy(bytes, encodedResult, bytes.Length);
+            encodedResult.Write(bytes, 0, bytes.Length);
 
             return true;
         }
