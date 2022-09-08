@@ -106,7 +106,7 @@ namespace ZXing.Common
         public DecoderResult(byte[] rawBytes, String text, List<byte[]> byteSegments, String ecLevel)
             : this(rawBytes, text, byteSegments, ecLevel, -1, -1, 0)
         {
-            
+
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace ZXing.Common
                      int saParity)
              : this(rawBytes, text, byteSegments, ecLevel, saSequence, saParity, 0)
         {
-            
+
         }
 
         /// <summary>
@@ -215,6 +215,22 @@ namespace ZXing.Common
            : this(rawBytes, numBits, text, byteSegments, ecLevel, -1, -1, 0)
         {
         }
+
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="rawBytes"></param>
+        /// <param name="numBits"></param>
+        /// <param name="data"></param>
+        /// <param name="text"></param>
+        /// <param name="byteSegments"></param>
+        /// <param name="ecLevel"></param>
+        public DecoderResult(byte[] rawBytes, int numBits, byte[] data, String text, IList<byte[]> byteSegments, String ecLevel)
+            : this(rawBytes, numBits, text, byteSegments, ecLevel)
+        {
+            this.Data = data;
+        }
+
 
         /// <summary>
         /// initializing constructor

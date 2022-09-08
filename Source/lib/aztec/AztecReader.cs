@@ -92,7 +92,7 @@ namespace ZXing.Aztec
                 }
             }
 
-            var result = new Result(decoderResult.Text, decoderResult.RawBytes, decoderResult.NumBits, points, BarcodeFormat.AZTEC);
+            var result = new Result(decoderResult.Text, decoderResult.Data, decoderResult.RawBytes, decoderResult.NumBits, points, BarcodeFormat.AZTEC);
 
             IList<byte[]> byteSegments = decoderResult.ByteSegments;
             if (byteSegments != null)

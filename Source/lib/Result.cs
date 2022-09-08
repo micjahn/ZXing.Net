@@ -109,6 +109,26 @@ namespace ZXing
         /// <summary>
         /// Initializes a new instance of the <see cref="Result"/> class.
         /// </summary>
+        /// <param name="text"></param>
+        /// <param name="data"></param>
+        /// <param name="rawBytes"></param>
+        /// <param name="numBits"></param>
+        /// <param name="resultPoints"></param>
+        /// <param name="format"></param>
+        public Result(String text,
+                      byte[] data,
+                      byte[] rawBytes,
+                      int numBits,
+                      ResultPoint[] resultPoints,
+                      BarcodeFormat format)
+            : this(text,rawBytes, numBits, resultPoints, format)
+        {
+            this.Data = data;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Result"/> class.
+        /// </summary>
         /// <param name="text">The text.</param>
         /// <param name="rawBytes">The raw bytes.</param>
         /// <param name="resultPoints">The result points.</param>
