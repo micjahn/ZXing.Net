@@ -66,7 +66,7 @@ namespace ZXing.Maxicode
             if (decoderResult == null)
                 return null;
 
-            var result = new Result(decoderResult.Text, decoderResult.RawBytes, NO_POINTS, BarcodeFormat.MAXICODE);
+            var result = new Result(decoderResult.Text, decoderResult.Data, decoderResult.RawBytes, NO_POINTS, BarcodeFormat.MAXICODE);
 
             var ecLevel = decoderResult.ECLevel;
             if (ecLevel != null)
