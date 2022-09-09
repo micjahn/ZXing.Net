@@ -54,8 +54,9 @@ namespace ZXing.Aztec.Test
 
         private static void testHighLevelDecodeString(String expectedString, String b)
         {
+            byte[] encodedResult;
             BitArray bits = EncoderTest.toBitArray(EncoderTest.stripSpace(b));
-            Assert.AreEqual(expectedString, Decoder.highLevelDecode(EncoderTest.toBooleanArray(bits)), "highLevelDecode() failed for input bits: " + b);
+            Assert.AreEqual(expectedString, Decoder.highLevelDecode(EncoderTest.toBooleanArray(bits), out encodedResult), "highLevelDecode() failed for input bits: " + b);
         }
 
         [Test]
