@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 
 [assembly: AssemblyTitle("zxing.net for mono android")]
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 29.07.2019 21:30:35)")]
+[assembly: AssemblyDescription("ZXing.Net Bindings to Mono Android")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
-[assembly: AssemblyProduct("ZXing.Net")]
+[assembly: AssemblyProduct("ZXing.Android")]
 [assembly: AssemblyCopyright("Copyright © 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -26,7 +26,7 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("0.16.7.0")]
-[assembly: AssemblyFileVersion("0.16.7.0")]
+[assembly: AssemblyVersion("0.16.8.0")]
+[assembly: AssemblyFileVersion("0.16.8.0")]
 
 [assembly: CLSCompliant(true)]

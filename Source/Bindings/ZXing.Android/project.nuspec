@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
-    <version>0.16.7</version>
+    <version>0.16.8</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <license type="expression">Apache-2.0</license>
@@ -18,14 +18,14 @@
     <repository type="git" url="https://github.com/micjahn/ZXing.Net/" />
     <dependencies>
       <group targetFramework="MonoAndroid">
-        <dependency id="ZXing.Net" version="0.16.7" exclude="Build,Analyzers" />
+        <dependency id="ZXing.Net" version="0.16.8" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>
   <files>
     <file src="..\..\..\Icons\logo.jpg" target="." />
-    <file src="..\..\..\Build\Release\Bindings\Android\zxing.monoandroid.dll" target="MonoAndroid\zxing.monoandroid.dll" />
-    <file src="..\..\..\Build\Release\Bindings\Android\zxing.monoandroid.pdb" target="MonoAndroid\zxing.monoandroid.pdb" />
-    <file src="..\..\..\Build\Release\Bindings\Android\zxing.monoandroid.xml" target="MonoAndroid\zxing.monoandroid.xml" />		 
+    <file src="..\..\..\Build\Release\Bindings\Android\zxing.monoandroid.dll" target="lib\MonoAndroid\zxing.monoandroid.dll" />
+    <file src="..\..\..\Build\Release\Bindings\Android\zxing.monoandroid.pdb" target="lib\MonoAndroid\zxing.monoandroid.pdb" />
+    <file src="..\..\..\Build\Release\Bindings\Android\zxing.monoandroid.xml" target="lib\MonoAndroid\zxing.monoandroid.xml" />		 
   </files>
 </package>
