@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
 	<metadata>
-		<version>0.16.9</version>
+		<version>0.16.12</version>
 		<authors>Michael Jahn</authors>
 		<owners>Michael Jahn</owners>
 		<license type="expression">Apache-2.0</license>
@@ -16,31 +16,24 @@
 		<releaseNotes></releaseNotes>
 		<tags>ZXing Magick</tags>
 		<dependencies>
-			<group targetFramework="net20">
-				<dependency id="ZXing.Net" version="0.16.7.0" exclude="Build,Analyzers" />
-				<dependency id="Magick.NET.Core" Version="11.2.0" exclude="Build,Analyzers" />
-			</group>
 			<group targetFramework="netstandard2.0">
-				<dependency id="ZXing.Net" version="0.16.7.0" exclude="Build,Analyzers" />
-				<dependency id="Magick.NET.Core" Version="11.2.0" exclude="Build,Analyzers" />
+				<dependency id="ZXing.Net" version="0.16.8.0" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET.Core" version="12.1.0" exclude="Build,Analyzers" />
 				<dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="netstandard2.1">
-				<dependency id="ZXing.Net" version="0.16.7.0" exclude="Build,Analyzers" />
-				<dependency id="Magick.NET.Core" Version="11.2.0" exclude="Build,Analyzers" />
+				<dependency id="ZXing.Net" version="0.16.8.0" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET.Core" version="12.1.0" exclude="Build,Analyzers" />
 			</group>
 		</dependencies>
 	</metadata>
 	<files>
     	<file src="..\..\..\Icons\logo.jpg" target="." />
-		<file src="bin\Release\net20\ZXing.Magick.dll" target="lib\net20\ZXing.Magick.dll" />
-		<file src="bin\Release\net20\ZXing.Magick.pdb" target="lib\net20\ZXing.Magick.pdb" />
-		<file src="bin\Release\net20\ZXing.Magick.xml" target="lib\net20\ZXing.Magick.xml" />
 		<file src="bin\Release\netstandard2.0\ZXing.Magick.dll" target="lib\netstandard2.0\ZXing.Magick.dll" />
 		<file src="bin\Release\netstandard2.0\ZXing.Magick.pdb" target="lib\netstandard2.0\ZXing.Magick.pdb" />
 		<file src="bin\Release\netstandard2.0\ZXing.Magick.xml" target="lib\netstandard2.0\ZXing.Magick.xml" />
-		<file src="bin\Release\netstandard2.1\ZXing.Magick.dll" target="lib\netstandard2.0\ZXing.Magick.dll" />
-		<file src="bin\Release\netstandard2.1\ZXing.Magick.pdb" target="lib\netstandard2.0\ZXing.Magick.pdb" />
-		<file src="bin\Release\netstandard2.1\ZXing.Magick.xml" target="lib\netstandard2.0\ZXing.Magick.xml" />
+		<file src="bin\Release\netstandard2.1\ZXing.Magick.dll" target="lib\netstandard2.1\ZXing.Magick.dll" />
+		<file src="bin\Release\netstandard2.1\ZXing.Magick.pdb" target="lib\netstandard2.1\ZXing.Magick.pdb" />
+		<file src="bin\Release\netstandard2.1\ZXing.Magick.xml" target="lib\netstandard2.1\ZXing.Magick.xml" />
 	</files>
 </package>

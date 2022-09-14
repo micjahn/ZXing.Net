@@ -25,7 +25,7 @@ namespace ZXing.Magick.Rendering
     /// renderer class which generates a <see cref="IMagickImage{TQuantumType}"/> from a BitMatrix
     /// </summary>
     public class MagickImageRenderer<TQuantumType> : IBarcodeRenderer<IMagickImage<TQuantumType>>
-        where TQuantumType : struct
+        where TQuantumType : struct, System.IConvertible
     {
         private readonly IMagickImageFactory<TQuantumType> magickImageFactory;
 

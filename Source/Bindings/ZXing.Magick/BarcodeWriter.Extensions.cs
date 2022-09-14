@@ -32,7 +32,7 @@ namespace ZXing
         /// <param name="content"></param>
         /// <returns></returns>
         public static IMagickImage<TQuantumType> WriteAsMagickImage<TQuantumType>(this IBarcodeWriterGeneric writer, IMagickImageFactory<TQuantumType> magickImageFactory, string content)
-            where TQuantumType : struct
+            where TQuantumType : struct, System.IConvertible
         {
             var bitmatrix = writer.Encode(content);
             var renderer = new MagickImageRenderer<TQuantumType>(magickImageFactory);
