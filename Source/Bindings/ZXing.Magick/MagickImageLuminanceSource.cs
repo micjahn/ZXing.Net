@@ -62,8 +62,8 @@ namespace ZXing.Magick
         {
             if (src == null)
                 throw new ArgumentNullException(nameof(src));
-            if (src.BitDepth() < 8)
-                src.BitDepth(8);
+            if (src.DetermineBitDepth() < 8)
+                src.SetBitDepth(8);
             return src.ToByteArray(MagickFormat.Gray);
         }
     }

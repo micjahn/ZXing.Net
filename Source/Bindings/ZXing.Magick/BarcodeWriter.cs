@@ -24,7 +24,7 @@ namespace ZXing.Magick
     /// barcode writer which creates Magick.NET Image instances
     /// </summary>
     public class BarcodeWriter<TQuantumType> : ZXing.BarcodeWriter<IMagickImage<TQuantumType>>
-        where TQuantumType : struct
+        where TQuantumType : struct, System.IConvertible
     {
         /// <summary>
         /// contructor

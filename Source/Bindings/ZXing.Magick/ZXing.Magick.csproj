@@ -1,10 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.16.9</VersionPrefix>
-    <TargetFrameworks>net20;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <VersionPrefix>0.16.12</VersionPrefix>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>anycpu</PlatformTarget>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../../../Key/private.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>ZXing.Magick</AssemblyName>
     <PackageId>ZXing.Net.Bindings.Magick</PackageId>
@@ -26,18 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Magick.NET.Core" Version="11.2.0" />
-    <PackageReference Include="ZXing.Net" Version="0.16.7" />
+    <PackageReference Include="Magick.NET.Core" Version="12.1.0" />
+    <PackageReference Include="ZXing.Net" Version="0.16.8" />
   </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net20' ">
-    <Reference Include="System" />
-  </ItemGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net20' ">
-    <DefineConstants>$(DefineConstants);NET20</DefineConstants>
-    <DebugType>full</DebugType>
-  </PropertyGroup>
 
   <PropertyGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
     <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
