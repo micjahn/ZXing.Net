@@ -70,7 +70,7 @@ Obsolete examples are available for the following platforms in separate branches
 // create a barcode reader instance
 IBarcodeReader reader = new BarcodeReader();
 // load a bitmap
-var barcodeBitmap = (Bitmap)Image.LoadFrom("C:\\sample-barcode-image.png");
+var barcodeBitmap = (Bitmap)Image.FromFile("C:\\sample-barcode-image.png");
 // detect and decode the barcode inside the bitmap
 var result = reader.Decode(barcodeBitmap);
 // do something with the result
