@@ -138,9 +138,10 @@ namespace ZXing.Aztec
         /// </returns>
         private BitMatrix encode(byte[] contents, BarcodeFormat format, int width, int height, Encoding charset, IDictionary<EncodeHintType, object> hints)
         {
-            int eccPercent = Internal.Encoder.DEFAULT_EC_PERCENT;
-            int layers = Internal.Encoder.DEFAULT_AZTEC_LAYERS;
-            bool disableEci = false;
+            var eccPercent = Internal.Encoder.DEFAULT_EC_PERCENT;
+            var layers = Internal.Encoder.DEFAULT_AZTEC_LAYERS;
+            var disableEci = false;
+            var margin = 0;
             if (hints != null)
             {
                 if (hints.ContainsKey(EncodeHintType.ERROR_CORRECTION))
@@ -163,6 +164,14 @@ namespace ZXing.Aztec
                 {
                     disableEci = (hints[EncodeHintType.DISABLE_ECI] != null && Convert.ToBoolean(hints[EncodeHintType.DISABLE_ECI].ToString()));
                 }
+                if (hints.ContainsKey(EncodeHintType.MARGIN))
+                {
+                    var marginInt = hints[EncodeHintType.MARGIN];
+                    if (marginInt != null)
+                    {
+                        margin = Convert.ToInt32(marginInt.ToString());
+                    }
+                }
             }
 
             return encode(contents,
@@ -172,10 +181,11 @@ namespace ZXing.Aztec
                           charset,
                           eccPercent,
                           layers,
-                          disableEci);
+                          disableEci,
+                          margin);
         }
 
-        private static BitMatrix encode(byte[] contents, BarcodeFormat format, int width, int height, Encoding charset, int eccPercent, int layers, bool disableEci)
+        private static BitMatrix encode(byte[] contents, BarcodeFormat format, int width, int height, Encoding charset, int eccPercent, int layers, bool disableEci, int margin)
         {
             // charset stays here for later use in ECI segment
 
@@ -183,11 +193,12 @@ namespace ZXing.Aztec
             {
                 throw new ArgumentException("Can only encode AZTEC code, but got " + format);
             }
+
             var aztec = Internal.Encoder.encode(contents, eccPercent, layers, charset, disableEci);
-            return renderResult(aztec, width, height);
+            return renderResult(aztec, width, height, margin);
         }
 
-        private static BitMatrix renderResult(AztecCode code, int width, int height)
+        private static BitMatrix renderResult(AztecCode code, int width, int height, int margin)
         {
             var input = code.Matrix;
             if (input == null)
@@ -197,10 +208,12 @@ namespace ZXing.Aztec
 
             int inputWidth = input.Width;
             int inputHeight = input.Height;
-            int outputWidth = Math.Max(width, inputWidth);
-            int outputHeight = Math.Max(height, inputHeight);
+            int aztecWidth = inputWidth + (margin << 1);
+            int aztecHeight = inputHeight + (margin << 1);
+            int outputWidth = Math.Max(width, aztecWidth);
+            int outputHeight = Math.Max(height, aztecHeight);
 
-            int multiple = Math.Min(outputWidth / inputWidth, outputHeight / inputHeight);
+            int multiple = Math.Min(outputWidth / aztecWidth, outputHeight / aztecHeight);
             int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
             int topPadding = (outputHeight - (inputHeight * multiple)) / 2;
 

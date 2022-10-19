@@ -74,6 +74,7 @@ namespace ZXing.Datamatrix
             var defaultEncodation = Encodation.ASCII;
             Dimension minSize = null;
             Dimension maxSize = null;
+            var margin = 0;
             if (hints != null)
             {
                 if (hints.ContainsKey(EncodeHintType.DATA_MATRIX_SHAPE))
@@ -109,6 +110,14 @@ namespace ZXing.Datamatrix
                         defaultEncodation = Convert.ToInt32(requestedDefaultEncodation.ToString());
                     }
                 }
+                if (hints.ContainsKey(EncodeHintType.MARGIN))
+                {
+                    var marginInt = hints[EncodeHintType.MARGIN];
+                    if (marginInt != null)
+                    {
+                        margin = Convert.ToInt32(marginInt.ToString());
+                    }
+                }
             }
 
 
@@ -125,7 +134,7 @@ namespace ZXing.Datamatrix
             placement.place();
 
             //4. step: low-level encoding
-            return encodeLowLevel(placement, symbolInfo, width, height);
+            return encodeLowLevel(placement, symbolInfo, width, height, margin);
         }
 
         /// <summary>
@@ -135,8 +144,9 @@ namespace ZXing.Datamatrix
         /// <param name="symbolInfo">The symbol info to encode.</param>
         /// <param name="width"></param>
         /// <param name="height"></param>
+        /// <param name="margin"></param>
         /// <returns>The bit matrix generated.</returns>
-        private static BitMatrix encodeLowLevel(DefaultPlacement placement, SymbolInfo symbolInfo, int width, int height)
+        private static BitMatrix encodeLowLevel(DefaultPlacement placement, SymbolInfo symbolInfo, int width, int height, int margin)
         {
             int symbolWidth = symbolInfo.getSymbolDataWidth();
             int symbolHeight = symbolInfo.getSymbolDataHeight();
@@ -191,7 +201,7 @@ namespace ZXing.Datamatrix
                 }
             }
 
-            return convertByteMatrixToBitMatrix(matrix, width, height);
+            return convertByteMatrixToBitMatrix(matrix, width, height, margin);
         }
 
         /// <summary>
@@ -200,34 +210,23 @@ namespace ZXing.Datamatrix
         /// <param name="matrix">The input matrix.</param>
         /// <param name="reqWidth">The requested width of the image (in pixels) with the Datamatrix code</param>
         /// <param name="reqHeight">The requested height of the image (in pixels) with the Datamatrix code</param>
+        /// <param name="margin"></param>
         /// <returns>The output matrix.</returns>
-        private static BitMatrix convertByteMatrixToBitMatrix(ByteMatrix matrix, int reqWidth, int reqHeight)
+        private static BitMatrix convertByteMatrixToBitMatrix(ByteMatrix matrix, int reqWidth, int reqHeight, int margin)
         {
             var matrixWidth = matrix.Width;
             var matrixHeight = matrix.Height;
-            var outputWidth = Math.Max(reqWidth, matrixWidth);
-            var outputHeight = Math.Max(reqHeight, matrixHeight);
+            int datamatrixWidth = matrixWidth + (margin << 1);
+            int datamatrixHeight = matrixHeight + (margin << 1);
+            var outputWidth = Math.Max(reqWidth, datamatrixWidth);
+            var outputHeight = Math.Max(reqHeight, datamatrixHeight);
 
-            int multiple = Math.Min(outputWidth / matrixWidth, outputHeight / matrixHeight);
-
+            int multiple = Math.Min(outputWidth / datamatrixWidth, outputHeight / datamatrixHeight);
             int leftPadding = (outputWidth - (matrixWidth * multiple)) / 2;
             int topPadding = (outputHeight - (matrixHeight * multiple)) / 2;
 
-            BitMatrix output;
+            var output = new BitMatrix(outputWidth, outputHeight);
 
-            // remove padding if requested width and height are too small
-            if (reqHeight < matrixHeight || reqWidth < matrixWidth)
-            {
-                leftPadding = 0;
-                topPadding = 0;
-                output = new BitMatrix(matrixWidth, matrixHeight);
-            }
-            else
-            {
-                output = new BitMatrix(reqWidth, reqHeight);
-            }
-
-            output.clear();
             for (int inputY = 0, outputY = topPadding; inputY < matrixHeight; inputY++, outputY += multiple)
             {
                 // Write the contents of this row of the bytematrix
