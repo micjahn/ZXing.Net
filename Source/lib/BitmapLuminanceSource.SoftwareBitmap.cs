@@ -45,11 +45,15 @@ namespace ZXing
         {
             if (softwareBitmap.BitmapPixelFormat != BitmapPixelFormat.Gray8)
             {
-                softwareBitmap = SoftwareBitmap.Convert(softwareBitmap, BitmapPixelFormat.Gray8);
+                using (SoftwareBitmap convertedSoftwareBitmap = SoftwareBitmap.Convert(softwareBitmap, BitmapPixelFormat.Gray8))
+                {
+                    convertedSoftwareBitmap.CopyToBuffer(luminances.AsBuffer());
+                }
             }
-
-            var buffer = luminances.AsBuffer();
-            softwareBitmap.CopyToBuffer(buffer);
+            else
+            {
+                softwareBitmap.CopyToBuffer(luminances.AsBuffer());
+            }
         }
 
         /// <summary>
