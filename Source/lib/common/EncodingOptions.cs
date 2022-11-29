@@ -151,7 +151,7 @@ namespace ZXing.Common
         }
 
         /// <summary>
-        /// Don't put the content string into the output image.
+        /// Don't add a white area around the generated barcode if the requested size is larger than then barcode.
         /// </summary>
 #if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY
         [CategoryAttribute("Output options"), DescriptionAttribute("Don't add a white area around the generated barcode if the requested size is larger than then barcode.")]
