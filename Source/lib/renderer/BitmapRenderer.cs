@@ -127,7 +127,7 @@ namespace ZXing.Rendering
                                  format == BarcodeFormat.MSI ||
                                  format == BarcodeFormat.PLESSEY);
 
-            if (options != null)
+            if (options != null && !options.NoPadding)
             {
                 if (options.Width > width)
                 {
@@ -281,7 +281,7 @@ namespace ZXing.Rendering
                     g.DrawString(content, font, brush, pixelsizeWidth * matrix.Width / 2, height - emptyArea, drawFormat);
                 }
             }
-
+            var bmp1bpp = bmp.Clone(new Rectangle(0, 0, bmp.Width, bmp.Height), PixelFormat.Format1bppIndexed);
             return bmp;
         }
     }

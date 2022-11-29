@@ -75,6 +75,7 @@ namespace ZXing.Datamatrix
             Dimension minSize = null;
             Dimension maxSize = null;
             var margin = 0;
+            var noPadding = false;
             if (hints != null)
             {
                 if (hints.ContainsKey(EncodeHintType.DATA_MATRIX_SHAPE))
@@ -118,6 +119,14 @@ namespace ZXing.Datamatrix
                         margin = Convert.ToInt32(marginInt.ToString());
                     }
                 }
+                if (hints.ContainsKey(EncodeHintType.NO_PADDING))
+                {
+                    var noPaddingObj = hints[EncodeHintType.NO_PADDING];
+                    if (noPaddingObj != null)
+                    {
+                        bool.TryParse(noPaddingObj.ToString(), out noPadding);
+                    }
+                }
             }
 
 
@@ -134,7 +143,7 @@ namespace ZXing.Datamatrix
             placement.place();
 
             //4. step: low-level encoding
-            return encodeLowLevel(placement, symbolInfo, width, height, margin);
+            return encodeLowLevel(placement, symbolInfo, width, height, margin, noPadding);
         }
 
         /// <summary>
@@ -146,7 +155,7 @@ namespace ZXing.Datamatrix
         /// <param name="height"></param>
         /// <param name="margin"></param>
         /// <returns>The bit matrix generated.</returns>
-        private static BitMatrix encodeLowLevel(DefaultPlacement placement, SymbolInfo symbolInfo, int width, int height, int margin)
+        private static BitMatrix encodeLowLevel(DefaultPlacement placement, SymbolInfo symbolInfo, int width, int height, int margin, bool noPadding)
         {
             int symbolWidth = symbolInfo.getSymbolDataWidth();
             int symbolHeight = symbolInfo.getSymbolDataHeight();
@@ -201,7 +210,7 @@ namespace ZXing.Datamatrix
                 }
             }
 
-            return convertByteMatrixToBitMatrix(matrix, width, height, margin);
+            return convertByteMatrixToBitMatrix(matrix, width, height, margin, noPadding);
         }
 
         /// <summary>
@@ -211,8 +220,9 @@ namespace ZXing.Datamatrix
         /// <param name="reqWidth">The requested width of the image (in pixels) with the Datamatrix code</param>
         /// <param name="reqHeight">The requested height of the image (in pixels) with the Datamatrix code</param>
         /// <param name="margin"></param>
+        /// <param name="noPadding"></param>
         /// <returns>The output matrix.</returns>
-        private static BitMatrix convertByteMatrixToBitMatrix(ByteMatrix matrix, int reqWidth, int reqHeight, int margin)
+        private static BitMatrix convertByteMatrixToBitMatrix(ByteMatrix matrix, int reqWidth, int reqHeight, int margin, bool noPadding)
         {
             var matrixWidth = matrix.Width;
             var matrixHeight = matrix.Height;
@@ -224,6 +234,14 @@ namespace ZXing.Datamatrix
             int multiple = Math.Min(outputWidth / datamatrixWidth, outputHeight / datamatrixHeight);
             int leftPadding = (outputWidth - (matrixWidth * multiple)) / 2;
             int topPadding = (outputHeight - (matrixHeight * multiple)) / 2;
+
+            if (noPadding)
+            {
+                outputHeight -= (topPadding - margin) * 2;
+                outputWidth -= (leftPadding - margin) * 2;
+                leftPadding = margin;
+                topPadding = margin;
+            }
 
             var output = new BitMatrix(outputWidth, outputHeight);
 

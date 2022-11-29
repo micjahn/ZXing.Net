@@ -79,6 +79,7 @@ namespace ZXing.QrCode
 
             var errorCorrectionLevel = ErrorCorrectionLevel.L;
             int quietZone = QUIET_ZONE_SIZE;
+            var noPadding = false;
             if (hints != null)
             {
                 if (hints.ContainsKey(EncodeHintType.ERROR_CORRECTION))
@@ -118,15 +119,23 @@ namespace ZXing.QrCode
                         quietZone = Convert.ToInt32(quietZoneInt.ToString());
                     }
                 }
+                if (hints.ContainsKey(EncodeHintType.NO_PADDING))
+                {
+                    var noPaddingObj = hints[EncodeHintType.NO_PADDING];
+                    if (noPaddingObj != null)
+                    {
+                        bool.TryParse(noPaddingObj.ToString(), out noPadding);
+                    }
+                }
             }
 
             var code = Encoder.encode(contents, errorCorrectionLevel, hints);
-            return renderResult(code, width, height, quietZone);
+            return renderResult(code, width, height, quietZone, noPadding);
         }
 
         // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
         // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
-        private static BitMatrix renderResult(QRCode code, int width, int height, int quietZone)
+        private static BitMatrix renderResult(QRCode code, int width, int height, int quietZone, bool noPadding)
         {
             var input = code.Matrix;
             if (input == null)
@@ -147,6 +156,14 @@ namespace ZXing.QrCode
             // handle all the padding from 100x100 (the actual QR) up to 200x160.
             int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
             int topPadding = (outputHeight - (inputHeight * multiple)) / 2;
+
+            if (noPadding)
+            {
+                outputHeight -= (topPadding - quietZone) * 2;
+                outputWidth -= (leftPadding - quietZone) * 2;
+                leftPadding = quietZone;
+                topPadding = quietZone;
+            }
 
             var output = new BitMatrix(outputWidth, outputHeight);
 

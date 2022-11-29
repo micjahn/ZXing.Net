@@ -185,5 +185,11 @@ namespace ZXing
         /// be forced to UTF-8 by means of the <see cref="CHARACTER_SET"/> encoding hint.
         /// </summary>
         QR_COMPACT,
+
+        /// <summary>
+        /// if set to true, barcode writer uses WIDTH and HEIGHT as maximum values and in combination with MARGIN=0
+        /// there is no white border added. The resulting image would be smaller than the requested size.
+        /// </summary>
+        NO_PADDING,
     }
 }

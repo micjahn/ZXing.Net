@@ -105,6 +105,7 @@ namespace ZXing.OneD
             }
 
             int sidesMargin = DefaultMargin;
+            var noPadding = false;
             if (hints != null)
             {
                 var sidesMarginInt = hints.ContainsKey(EncodeHintType.MARGIN) ? hints[EncodeHintType.MARGIN] : null;
@@ -112,16 +113,21 @@ namespace ZXing.OneD
                 {
                     sidesMargin = Convert.ToInt32(sidesMarginInt);
                 }
+                var noPaddingObj = hints.ContainsKey(EncodeHintType.NO_PADDING) ? hints[EncodeHintType.NO_PADDING] : null;
+                if (noPaddingObj != null)
+                {
+                    bool.TryParse(noPaddingObj.ToString(), out noPadding);
+                }
             }
 
             var code = encode(contents, hints);
-            return renderResult(code, width, height, sidesMargin);
+            return renderResult(code, width, height, sidesMargin, noPadding);
         }
 
         /// <summary>
         /// </summary>
         /// <returns>a byte array of horizontal pixels (0 = white, 1 = black)</returns>
-        private static BitMatrix renderResult(bool[] code, int width, int height, int sidesMargin)
+        private static BitMatrix renderResult(bool[] code, int width, int height, int sidesMargin, bool noPadding)
         {
             int inputWidth = code.Length;
             // Add quiet zone on both sides.
@@ -131,6 +137,13 @@ namespace ZXing.OneD
 
             int multiple = outputWidth / fullWidth;
             int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
+
+
+            if (noPadding)
+            {
+                outputWidth -= (leftPadding - sidesMargin) * 2;
+                leftPadding = sidesMargin;
+            }
 
             BitMatrix output = new BitMatrix(outputWidth, outputHeight);
             for (int inputX = 0, outputX = leftPadding; inputX < inputWidth; inputX++, outputX += multiple)
