@@ -82,5 +82,13 @@ namespace ZXing.Interop.Encoding
             get { return wrappedEncodingOptions.GS1Format; }
             set { wrappedEncodingOptions.GS1Format = value; }
         }
+        /// <summary>
+        /// Don't add a white area around the generated barcode if the requested size is larger than then barcode.
+        /// </summary>
+        public bool NoPadding
+        {
+            get { return wrappedEncodingOptions.NoPadding; }
+            set { wrappedEncodingOptions.NoPadding = value; }
+        }
     }
 }
