@@ -76,7 +76,7 @@ namespace ZXing.ImageSharp.Rendering
 
             var pixelsize = 1;
 
-            if (options != null)
+            if (options != null && !options.NoPadding)
             {
                 if (options.Width > width)
                 {

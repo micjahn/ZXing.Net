@@ -125,7 +125,7 @@ namespace ZXing.CoreCompat.Rendering
                                  format == BarcodeFormat.MSI ||
                                  format == BarcodeFormat.PLESSEY);
 
-            if (options != null)
+            if (options != null && !options.NoPadding)
             {
                 if (options.Width > width)
                 {
