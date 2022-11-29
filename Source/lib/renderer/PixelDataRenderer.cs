@@ -159,7 +159,7 @@ namespace ZXing.Rendering
             int emptyArea = outputContent ? 16 : 0;
             int pixelsize = 1;
 
-            if (options != null)
+            if (options != null && !options.NoPadding)
             {
                 if (options.Width > width)
                 {

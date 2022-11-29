@@ -172,7 +172,7 @@ namespace ZXing.Rendering
                 bool outputContent = font != null &&
                                             (options == null || !options.PureBarcode) &&
                                             !String.IsNullOrEmpty(content);
-                if (options != null)
+                if (options != null && !options.NoPadding)
                 {
                     if (options.Width > width)
                     {
