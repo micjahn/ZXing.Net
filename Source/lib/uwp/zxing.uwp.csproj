@@ -944,6 +944,9 @@
     <Compile Include="..\renderer\SoftwareBitmapRenderer.cs">
       <Link>renderer\SoftwareBitmapRenderer.cs</Link>
     </Compile>
+    <Compile Include="..\renderer\StringRenderer.cs">
+      <Link>renderer\StringRenderer.cs</Link>
+    </Compile>
     <Compile Include="..\renderer\SVGRenderer.cs">
       <Link>renderer\SVGRenderer.cs</Link>
     </Compile>
