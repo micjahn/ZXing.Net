@@ -68,7 +68,7 @@ namespace WindowsFormsDemo
             bool moreDevices;
             short index = 0;
 
-            // Load name of all avialable devices into the lstDevices .
+            // Load name of all available devices into the lstDevices .
             do
             {
                 // Get Driver name and version
