@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Runtime.InteropServices;
 using Windows.Graphics.Imaging;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
@@ -23,6 +24,14 @@ using ZXing.Common;
 
 namespace ZXing.Rendering
 {
+    [ComImport]
+    [Guid("5B0D3235-4DBA-4D44-865E-8F1D0E4FD04D")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    unsafe interface IMemoryBufferByteAccess
+    {
+        void GetBuffer(out byte* buffer, out uint capacity);
+    }
+
     /// <summary>
     /// Renders a <see cref="BitMatrix" /> to a <see cref="SoftwareBitmap" />
     /// </summary>
