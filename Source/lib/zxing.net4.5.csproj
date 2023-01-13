@@ -334,6 +334,7 @@
     <Compile Include="renderer\PixelData.Bitmap.cs" />
     <Compile Include="renderer\PixelData.cs" />
     <Compile Include="renderer\PixelDataRenderer.cs" />
+    <Compile Include="renderer\StringRenderer.cs" />
     <Compile Include="renderer\SvgRenderer.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="ResultMetadataType.cs" />
