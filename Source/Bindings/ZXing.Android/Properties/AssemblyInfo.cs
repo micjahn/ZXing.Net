@@ -28,6 +28,5 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyVersion("0.16.8.0")]
 [assembly: AssemblyFileVersion("0.16.8.0")]
-#endif
 
 [assembly: CLSCompliant(true)]
