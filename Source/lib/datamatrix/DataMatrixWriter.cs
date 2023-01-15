@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections.Generic;
-
-using ZXing.Common;
-using ZXing.Datamatrix.Encoder;
-using ZXing.QrCode.Internal;
-
 namespace ZXing.Datamatrix
 {
+    using System;
+    using System.Collections.Generic;
+
+    using ZXing.Common;
+    using ZXing.Datamatrix.Encoder;
+
     /// <summary>
     /// This object renders a Data Matrix code as a BitMatrix 2D array of greyscale values.
     /// </summary>
@@ -129,9 +128,21 @@ namespace ZXing.Datamatrix
                 }
             }
 
-
             //1. step: Data encodation
-            String encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize, defaultEncodation);
+            String encoded;
+
+            if (IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.DATA_MATRIX_COMPACT))
+            {
+                var hasGS1FormatHint = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.GS1_FORMAT);
+
+                var charset = IDictionaryExtensions.GetEncoding(hints);
+
+                encoded = MinimalEncoder.encodeHighLevel(contents, charset, hasGS1FormatHint ? 0x1D : -1, shape);
+            }
+            else
+            {
+                encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize, defaultEncodation);
+            }
 
             SymbolInfo symbolInfo = SymbolInfo.lookup(encoded.Length, shape, minSize, maxSize, true);
 
@@ -160,7 +171,7 @@ namespace ZXing.Datamatrix
             int symbolWidth = symbolInfo.getSymbolDataWidth();
             int symbolHeight = symbolInfo.getSymbolDataHeight();
 
-            var matrix = new ByteMatrix(symbolInfo.getSymbolWidth(), symbolInfo.getSymbolHeight());
+            var matrix = new QrCode.Internal.ByteMatrix(symbolInfo.getSymbolWidth(), symbolInfo.getSymbolHeight());
 
             int matrixY = 0;
 
@@ -222,7 +233,7 @@ namespace ZXing.Datamatrix
         /// <param name="margin"></param>
         /// <param name="noPadding"></param>
         /// <returns>The output matrix.</returns>
-        private static BitMatrix convertByteMatrixToBitMatrix(ByteMatrix matrix, int reqWidth, int reqHeight, int margin, bool noPadding)
+        private static BitMatrix convertByteMatrixToBitMatrix(QrCode.Internal.ByteMatrix matrix, int reqWidth, int reqHeight, int margin, bool noPadding)
         {
             var matrixWidth = matrix.Width;
             var matrixHeight = matrix.Height;

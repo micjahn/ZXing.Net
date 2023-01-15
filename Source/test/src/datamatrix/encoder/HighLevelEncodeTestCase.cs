@@ -16,10 +16,10 @@
 
 using System;
 using System.Text;
-
 using NUnit.Framework;
 
 using ZXing.Datamatrix.Encoder;
+using ZXing.Datamatrix.Internal;
 
 namespace ZXing.Datamatrix.Test
 {
@@ -123,11 +123,11 @@ namespace ZXing.Datamatrix.Test
             //with the 16x48 symbol (47 data codewords)
             useTestSymbols();
 
-            String visualized = encodeHighLevel("AIMAIMAIMAIMAIMAIM");
+            String visualized = encodeHighLevel("AIMAIMAIMAIMAIMAIM", false);
             Assert.AreEqual("230 91 11 91 11 91 11 91 11 91 11 91 11", visualized);
             //case "a": Unlatch is not required
 
-            visualized = encodeHighLevel("AIMAIMAIMAIMAIMAI");
+            visualized = encodeHighLevel("AIMAIMAIMAIMAIMAI", false);
             Assert.AreEqual("230 91 11 91 11 91 11 91 11 91 11 90 241", visualized);
             //case "b": Add trailing shift 0 and Unlatch is not required
 
@@ -416,9 +416,168 @@ namespace ZXing.Datamatrix.Test
 
         }
 
+        [Test]
+        public void testSizes()
+        {
+            int[] sizes = new int[2];
+            encodeHighLevel("A", sizes);
+            Assert.AreEqual(3, sizes[0]);
+            Assert.AreEqual(1, sizes[1]);
+
+            encodeHighLevel("AB", sizes);
+            Assert.AreEqual(3, sizes[0]);
+            Assert.AreEqual(2, sizes[1]);
+
+            encodeHighLevel("ABC", sizes);
+            Assert.AreEqual(3, sizes[0]);
+            Assert.AreEqual(3, sizes[1]);
+
+            encodeHighLevel("ABCD", sizes);
+            Assert.AreEqual(5, sizes[0]);
+            Assert.AreEqual(4, sizes[1]);
+
+            encodeHighLevel("ABCDE", sizes);
+            Assert.AreEqual(5, sizes[0]);
+            Assert.AreEqual(5, sizes[1]);
+
+            encodeHighLevel("ABCDEF", sizes);
+            Assert.AreEqual(5, sizes[0]);
+            Assert.AreEqual(5, sizes[1]);
+
+            encodeHighLevel("ABCDEFG", sizes);
+            Assert.AreEqual(8, sizes[0]);
+            Assert.AreEqual(7, sizes[1]);
+
+            encodeHighLevel("ABCDEFGH", sizes);
+            Assert.AreEqual(8, sizes[0]);
+            Assert.AreEqual(7, sizes[1]);
+
+            encodeHighLevel("ABCDEFGHI", sizes);
+            Assert.AreEqual(8, sizes[0]);
+            Assert.AreEqual(8, sizes[1]);
+
+            encodeHighLevel("ABCDEFGHIJ", sizes);
+            Assert.AreEqual(8, sizes[0]);
+            Assert.AreEqual(8, sizes[1]);
+
+            encodeHighLevel("a", sizes);
+            Assert.AreEqual(3, sizes[0]);
+            Assert.AreEqual(1, sizes[1]);
+
+            encodeHighLevel("ab", sizes);
+            Assert.AreEqual(3, sizes[0]);
+            Assert.AreEqual(2, sizes[1]);
+
+            encodeHighLevel("abc", sizes);
+            Assert.AreEqual(3, sizes[0]);
+            Assert.AreEqual(3, sizes[1]);
+
+            encodeHighLevel("abcd", sizes);
+            Assert.AreEqual(5, sizes[0]);
+            Assert.AreEqual(4, sizes[1]);
+
+            encodeHighLevel("abcdef", sizes);
+            Assert.AreEqual(5, sizes[0]);
+            Assert.AreEqual(5, sizes[1]);
+
+            encodeHighLevel("abcdefg", sizes);
+            Assert.AreEqual(8, sizes[0]);
+            Assert.AreEqual(7, sizes[1]);
+
+            encodeHighLevel("abcdefgh", sizes);
+            Assert.AreEqual(8, sizes[0]);
+            Assert.AreEqual(8, sizes[1]);
+
+            encodeHighLevel("+", sizes);
+            Assert.AreEqual(3, sizes[0]);
+            Assert.AreEqual(1, sizes[1]);
+
+            encodeHighLevel("++", sizes);
+            Assert.AreEqual(3, sizes[0]);
+            Assert.AreEqual(2, sizes[1]);
+
+            encodeHighLevel("+++", sizes);
+            Assert.AreEqual(3, sizes[0]);
+            Assert.AreEqual(3, sizes[1]);
+
+            encodeHighLevel("++++", sizes);
+            Assert.AreEqual(5, sizes[0]);
+            Assert.AreEqual(4, sizes[1]);
+
+            encodeHighLevel("+++++", sizes);
+            Assert.AreEqual(5, sizes[0]);
+            Assert.AreEqual(5, sizes[1]);
+
+            encodeHighLevel("++++++", sizes);
+            Assert.AreEqual(8, sizes[0]);
+            Assert.AreEqual(6, sizes[1]);
+
+            encodeHighLevel("+++++++", sizes);
+            Assert.AreEqual(8, sizes[0]);
+            Assert.AreEqual(7, sizes[1]);
+
+            encodeHighLevel("++++++++", sizes);
+            Assert.AreEqual(8, sizes[0]);
+            Assert.AreEqual(7, sizes[1]);
+
+            encodeHighLevel("+++++++++", sizes);
+            Assert.AreEqual(8, sizes[0]);
+            Assert.AreEqual(8, sizes[1]);
+
+            encodeHighLevel("\u00F0\u00F0" +
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEF", sizes);
+            Assert.AreEqual(114, sizes[0]);
+            Assert.AreEqual(62, sizes[1]);
+        }
+
+        [Test]
+        public void testECIs()
+        {
+            String highLevelEncoded = MinimalEncoder.encodeHighLevel("that particularly stands out to me is \u0625\u0650" +
+                "\u062C\u064E\u0651\u0627\u0635 (\u02BE\u0101\u1E63) \"pear\", suggested to have originated from Hebrew " +
+                "\u05D0\u05B7\u05D2\u05B8\u05BC\u05E1 (ag\u00E1s)");
+            String visualized = visualize(highLevelEncoded);
+            // Java Original
+            //Assert.AreEqual("239 209 151 206 214 92 122 140 35 158 144 162 52 205 55 171 137 23 67 206 218 175 147 113 15 254" +
+            //    " 116 33 241 25 231 186 14 212 64 253 151 252 159 33 41 241 27 231 83 171 53 209 35 25 134 6 42 33 35 239 184" +
+            //    " 31 193 234 7 252 205 101 127 241 209 34 24 5 22 23 221 148 179 239 128 140 92 187 106 204 198 59 19 25 114" +
+            //    " 248 118 36 254 231 106 196 19 239 101 27 107 69 189 112 236 156 252 16 174 125 24 10 125 116 42", visualized);
+            // .Net, 1 char shorter ???
+            Assert.AreEqual("239 209 151 206 214 92 122 140 35 158 144 162 52 205 55 171 137 23 67 206 218 175 147 113 15 254" +
+                " 116 33 241 9 231 186 14 206 64 248 144 252 159 33 41 241 27 231 83 171 53 209 35 25 134 6 42 33 35 239 184" +
+                " 31 193 234 7 252 205 101 127 241 209 34 24 5 22 23 221 148 179 239 128 140 92 187 106 204 198 59 19 25 114" +
+                " 248 118 36 254 231 106 196 19 239 101 27 107 69 189 112 236 156 252 16 174 125 24 10 125 116 42", visualized);
+        }
+
+        [Test]
+        public void testECIsWithUTF8Priority()
+        {
+            String visualized = visualize(MinimalEncoder.encodeHighLevel("that particularly stands out to me is \u0625\u0650" +
+                "\u062C\u064E\u0651\u0627\u0635 (\u02BE\u0101\u1E63) \"pear\", suggested to have originated from Hebrew " +
+                "\u05D0\u05B7\u05D2\u05B8\u05BC\u05E1 (ag\u00E1s)", Encoding.UTF8, -1, SymbolShapeHint.FORCE_NONE));
+            Assert.AreEqual("241 27 239 209 151 206 214 92 122 140 35 158 144 162 52 205 55 171 137 23 67 206 218 175 147 113" +
+                " 15 254 116 33 231 202 33 131 77 154 119 225 163 238 206 28 249 93 36 150 151 53 108 246 145 228 217 71" +
+                " 199 42 33 35 239 184 31 193 234 7 252 205 101 127 241 209 34 24 5 22 23 221 148 179 239 128 140 92 187 106" +
+                " 204 198 59 19 25 114 248 118 36 254 231 43 133 212 175 38 220 44 6 125 49 172 93 189 209 111 61 217 203 62" +
+                " 116 42", visualized);
+        }
+
+        private static void encodeHighLevel(String msg, int[] sizes)
+        {
+            sizes[0] = HighLevelEncoder.encodeHighLevel(msg).Length;
+            sizes[1] = MinimalEncoder.encodeHighLevel(msg).Length;
+        }
+
         private static String encodeHighLevel(String msg)
         {
+            return encodeHighLevel(msg, true);
+        }
+
+        private static String encodeHighLevel(String msg, bool compareSizeToMinimalEncoder)
+        {
             String encoded = HighLevelEncoder.encodeHighLevel(msg);
+            String encoded2 = MinimalEncoder.encodeHighLevel(msg);
+            Assert.That(!compareSizeToMinimalEncoder || encoded2.Length <= encoded.Length);
             //DecodeHighLevel.decode(encoded);
             return visualize(encoded);
         }

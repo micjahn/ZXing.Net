@@ -231,6 +231,7 @@
     <Compile Include="datamatrix\encoder\DefaultPlacement.cs" />
     <Compile Include="datamatrix\encoder\EdifactEncoder.cs" />
     <Compile Include="datamatrix\encoder\Encodation.cs" />
+    <Compile Include="datamatrix\encoder\MinimalEncoder.cs" />
     <Compile Include="datamatrix\encoder\Encoder.cs" />
     <Compile Include="datamatrix\encoder\EncoderContext.cs" />
     <Compile Include="datamatrix\encoder\ErrorCorrection.cs" />
@@ -444,6 +445,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="common\StringUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="common\ECIEncoderSet.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup Condition="!Exists('$(MSBuildProjectDirectory)\..\..\Key\private.snk')">

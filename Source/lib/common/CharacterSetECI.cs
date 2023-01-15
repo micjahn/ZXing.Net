@@ -152,6 +152,9 @@ namespace ZXing.Common
         /// <returns></returns>
         public static System.Text.Encoding getEncoding(string encodingName)
         {
+            if (string.IsNullOrEmpty(encodingName))
+                return null;
+
             System.Text.Encoding encoding = null;
 
             try

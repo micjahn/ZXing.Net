@@ -14,6 +14,11 @@
 * limitations under the License.
 */
 
+using System;
+using System.Collections.Generic;
+using System.Text;
+using ZXing.Common;
+
 namespace ZXing
 {
     /// <summary>
@@ -191,5 +196,55 @@ namespace ZXing
         /// there is no white border added. The resulting image would be smaller than the requested size.
         /// </summary>
         NO_PADDING,
+
+        /// <summary>
+        /// Specifies whether to use compact mode for Data Matrix (type {@link Boolean}, or "true" or "false"
+        /// The compact encoding mode also supports the encoding of characters that are not in the ISO-8859-1
+        /// character set via ECIs.
+        /// Please note that in that case, the most compact character encoding is chosen for characters in
+        /// the input that are not in the ISO-8859-1 character set. Based on experience, some scanners do not
+        /// support encodings like cp-1256 (Arabic). In such cases the encoding can be forced to UTF-8 by
+        /// means of the {@link #CHARACTER_SET} encoding hint.
+        /// Compact encoding also provides GS1-FNC1 support when {@link #GS1_FORMAT} is selected. In this case
+        /// group-separator character (ASCII 29 decimal) can be used to encode the positions of FNC1 codewords
+        /// for the purpose of delimiting AIs.
+        /// </summary>
+        DATA_MATRIX_COMPACT,
+    }
+
+    internal static class IDictionaryExtensions
+    {
+        public static bool IsBooleanFlagSet(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType, bool defaultIfNotContained = false)
+        {
+            if (hints != null && hints.ContainsKey(encodeHintType))
+            {
+                var boolObj = hints[encodeHintType];
+                if (boolObj != null)
+                {
+                    return Convert.ToBoolean(boolObj.ToString());
+                }
+            }
+            return defaultIfNotContained;
+        }
+
+        public static Encoding GetEncoding(IDictionary<EncodeHintType, object> hints, Encoding defaultIfNotContained)
+        {
+            return GetEncoding(hints, EncodeHintType.CHARACTER_SET, defaultIfNotContained);
+        }
+
+        public static Encoding GetEncoding(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType = EncodeHintType.CHARACTER_SET, Encoding defaultIfNotContained = null)
+        {
+            Encoding encoding = defaultIfNotContained;
+            if (hints != null && hints.ContainsKey(encodeHintType))
+            {
+                object charsetname = hints[encodeHintType];
+                if (charsetname != null)
+                {
+                    encoding = CharacterSetECI.getEncoding(charsetname.ToString()) ?? encoding;
+                }
+            }
+
+            return encoding;
+        }
     }
 }

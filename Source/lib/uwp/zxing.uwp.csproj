@@ -353,6 +353,9 @@
     <Compile Include="..\common\ECI.cs">
       <Link>common\ECI.cs</Link>
     </Compile>
+    <Compile Include="..\common\ECIEncoderSet.cs">
+      <Link>common\ECIEncoderSet.cs</Link>
+    </Compile>
     <Compile Include="..\common\EncodingOptions.cs">
       <Link>common\EncodingOptions.cs</Link>
     </Compile>
@@ -442,6 +445,9 @@
     </Compile>
     <Compile Include="..\datamatrix\encoder\HighLevelEncoder.cs">
       <Link>datamatrix\encoder\HighLevelEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\datamatrix\encoder\MinimalEncoder.cs">
+      <Link>datamatrix\encoder\MinimalEncoder.cs</Link>
     </Compile>
     <Compile Include="..\datamatrix\encoder\SymbolInfo.cs">
       <Link>datamatrix\encoder\SymbolInfo.cs</Link>
