@@ -84,15 +84,13 @@ namespace ZXing.QrCode.Internal
             BitArray headerAndDataBits;
             Mode mode;
 
-            var hasGS1FormatHint = hints != null && hints.ContainsKey(EncodeHintType.GS1_FORMAT)
-                && hints[EncodeHintType.GS1_FORMAT] != null && Convert.ToBoolean(hints[EncodeHintType.GS1_FORMAT].ToString());
-            var hasCompactionHint = hints != null && hints.ContainsKey(EncodeHintType.QR_COMPACT)
-                && hints[EncodeHintType.QR_COMPACT] != null && Convert.ToBoolean(hints[EncodeHintType.QR_COMPACT].ToString());
+            var hasGS1FormatHint = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.GS1_FORMAT);
+            var hasCompactionHint = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.QR_COMPACT);
 
             // Determine what character encoding has been specified by the caller, if any
+            var encoding = IDictionaryExtensions.GetEncoding(hints, StringUtils.PLATFORM_DEFAULT_ENCODING_T);
             bool hasEncodingHint = hints != null && hints.ContainsKey(EncodeHintType.CHARACTER_SET);
 
-            var encoding = StringUtils.PLATFORM_DEFAULT_ENCODING_T;
             // caller of the method can only control if the ECI segment should be written
             // character set is fixed to UTF-8; but some scanners doesn't like the ECI segment
             var generateECI = hasEncodingHint;

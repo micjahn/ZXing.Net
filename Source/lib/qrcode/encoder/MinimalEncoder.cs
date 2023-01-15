@@ -58,112 +58,10 @@ namespace ZXing.QrCode.Internal
             LARGE
         }
 
-        // List of encoders that potentially encode characters not in ISO-8859-1 in one byte.
-        private static List<Encoding> ENCODERS = new List<Encoding>();
-        static MinimalEncoder()
-        {
-            var names = new[]
-            {
-                "ISO-8859-2",
-                "ISO-8859-3",
-                "ISO-8859-4",
-                "ISO-8859-5",
-                "ISO-8859-6",
-                "ISO-8859-7",
-                "ISO-8859-8",
-                "ISO-8859-9",
-                "ISO-8859-10",
-                "ISO-8859-11",
-                "ISO-8859-13",
-                "ISO-8859-14",
-                "ISO-8859-15",
-                "ISO-8859-16",
-                "windows-1250",
-                "windows-1251",
-                "windows-1252",
-                "windows-1253",
-                "windows-1254",
-                "windows-1255",
-                "windows-1256",
-                "windows-1257",
-                "windows-1258",
-                "Shift_JIS"
-            };
-            foreach (String name in names)
-            {
-                if (CharacterSetECI.getCharacterSetECIByName(name) != null)
-                {
-                    try
-                    {
-                        ENCODERS.Add(Clone(Encoding.GetEncoding(name)));
-                    }
-                    catch (Exception )
-                    {
-                        // continue
-                    }
-                }
-            }
-        }
-
         private String stringToEncode;
         private bool isGS1;
-        private Encoding[] encoders;
-        private int priorityEncoderIndex;
+        private ECIEncoderSet encoders;
         private ErrorCorrectionLevel ecLevel;
-
-#if NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_3 || WINDOWS_UWP || PORTABLE || NETFX_CORE
-        private static bool canEncode(Encoding encoding, char c)
-        {
-            // very limited support on old platforms; not sure, if it would work; and not sure, if somebody need the old platform support
-            try
-            {
-                var result = encoding.GetByteCount(new char[] { c });
-                return result > 0;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-#else
-        private static bool canEncode(Encoding encoding, char c)
-        {
-            try
-            {
-                var prevFallback = encoding.EncoderFallback;
-                try
-                {
-                    encoding.EncoderFallback = EncoderFallback.ExceptionFallback;
-                    var result = encoding.GetByteCount(new char[] { c });
-                    return result > 0;
-                }
-                catch
-                {
-                    return false;
-                }
-                finally
-                {
-                    encoding.EncoderFallback = prevFallback;
-                }
-            }
-            catch
-            {
-                return false;
-            }
-        }
-#endif
-
-        private static Encoding Clone(Encoding encoding)
-        {
-            // encodings have to be cloned to change the EncoderFallback property later
-
-#if !NETSTANDARD1_0 && !NETSTANDARD1_1 && !PORTABLE && !NETFX_CORE
-            // Clone isn't supported by .net standard 1.0, 1.1 and portable
-            return (Encoding)encoding.Clone();
-#else
-            return encoding;
-#endif
-        }
 
         /// <summary>
         /// Creates a MinimalEncoder
@@ -179,73 +77,8 @@ namespace ZXing.QrCode.Internal
         {
             this.stringToEncode = stringToEncode;
             this.isGS1 = isGS1;
+            this.encoders = new ECIEncoderSet(stringToEncode, priorityCharset, -1);
             this.ecLevel = ecLevel;
-
-            var neededEncoders = new List<Encoding>();
-            neededEncoders.Add(Clone(StringUtils.ISO88591_ENCODING));
-            var needUnicodeEncoder = priorityCharset != null && priorityCharset.WebName.StartsWith("UTF", StringComparison.OrdinalIgnoreCase);
-
-            for (int i = 0; i < stringToEncode.Length; i++)
-            {
-                bool canEnc = false;
-                foreach (var encoder in neededEncoders)
-                {
-                    if (canEncode(encoder, stringToEncode[i]))
-                    {
-                        canEnc = true;
-                        break;
-                    }
-                }
-
-                if (!canEnc)
-                {
-                    foreach (var encoder in ENCODERS)
-                    {
-                        if (canEncode(encoder, stringToEncode[i]))
-                        {
-                            neededEncoders.Add(encoder);
-                            canEnc = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (!canEnc)
-                {
-                    needUnicodeEncoder = true;
-                }
-            }
-
-            if (neededEncoders.Count == 1 && !needUnicodeEncoder)
-            {
-                encoders = new Encoding[] { neededEncoders[0] };
-            }
-            else
-            {
-                encoders = new Encoding[neededEncoders.Count + 2];
-                int index = 0;
-                foreach (var encoder in neededEncoders)
-                {
-                    encoders[index++] = encoder;
-                }
-
-                encoders[index] = Clone(Encoding.UTF8);
-                encoders[index + 1] = Clone(Encoding.BigEndianUnicode);
-            }
-
-            int priorityEncoderIndexValue = -1;
-            if (priorityCharset != null)
-            {
-                for (int i = 0; i < encoders.Length; i++)
-                {
-                    if (encoders[i] != null && priorityCharset.WebName.Equals(encoders[i].WebName))
-                    {
-                        priorityEncoderIndexValue = i;
-                        break;
-                    }
-                }
-            }
-            priorityEncoderIndex = priorityEncoderIndexValue;
         }
 
         /// <summary>
@@ -404,7 +237,8 @@ namespace ZXing.QrCode.Internal
         {
             int start = 0;
             int end = encoders.Length;
-            if (priorityEncoderIndex >= 0 && canEncode(encoders[priorityEncoderIndex], stringToEncode[from]))
+            int priorityEncoderIndex = encoders.getPriorityEncoderIndex();
+            if (priorityEncoderIndex >= 0 && encoders.canEncode(stringToEncode[from], priorityEncoderIndex))
             {
                 start = priorityEncoderIndex;
                 end = priorityEncoderIndex + 1;
@@ -412,7 +246,7 @@ namespace ZXing.QrCode.Internal
 
             for (int i = start; i < end; i++)
             {
-                if (canEncode(encoders[i], stringToEncode[from]))
+                if (encoders.canEncode(stringToEncode[from], i))
                 {
                     addEdge(edges, from, new Edge(Mode.BYTE, from, i, 1, previous, version, this));
                 }
@@ -649,7 +483,7 @@ namespace ZXing.QrCode.Internal
                         size += characterLength == 1 ? 4 : characterLength == 2 ? 7 : 10;
                         break;
                     case Mode.Names.BYTE:
-                        size += 8 * encoder.encoders[charsetEncoderIndex].GetBytes(encoder.stringToEncode.Substring(fromPosition, characterLength)).Length;
+                        size += 8 * encoder.encoders.encode(encoder.stringToEncode.Substring(fromPosition, characterLength), charsetEncoderIndex).Length;
                         if (needECI)
                         {
                             size += 4 + 8; // the ECI assignment numbers for ISO-8859-x, UTF-8 and UTF-16 are all 8 bit long
@@ -866,7 +700,9 @@ namespace ZXing.QrCode.Internal
                 {
                     get
                     {
-                        return mode == Mode.BYTE ? encoder.encoders[charsetEncoderIndex].GetBytes(encoder.stringToEncode.Substring(fromPosition, characterLength)).Length : characterLength;
+                        return mode == Mode.BYTE ?
+                            encoder.encoders.encode(encoder.stringToEncode.Substring(fromPosition, characterLength),
+                            charsetEncoderIndex).Length : characterLength;
                     }
                 }
 
@@ -884,13 +720,13 @@ namespace ZXing.QrCode.Internal
                     }
                     if (mode == Mode.ECI)
                     {
-                        bits.appendBits(CharacterSetECI.getCharacterSetECI(encoder.encoders[charsetEncoderIndex]).Value, 8);
+                        bits.appendBits(encoder.encoders.getECIValue(charsetEncoderIndex), 8);
                     }
                     else if (characterLength > 0)
                     {
                         // append data
                         Encoder.appendBytes(encoder.stringToEncode.Substring(fromPosition, characterLength), mode, bits,
-                            encoder.encoders[charsetEncoderIndex]);
+                            encoder.encoders.getCharset(charsetEncoderIndex));
                     }
                 }
 
@@ -900,7 +736,7 @@ namespace ZXing.QrCode.Internal
                     result.Append(mode).Append('(');
                     if (mode == Mode.ECI)
                     {
-                        result.Append(encoder.encoders[charsetEncoderIndex].WebName.ToUpper());
+                        result.Append(encoder.encoders.getCharsetName(charsetEncoderIndex));
                     }
                     else
                     {

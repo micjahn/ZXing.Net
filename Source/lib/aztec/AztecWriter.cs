@@ -70,20 +70,9 @@ namespace ZXing.Aztec
         /// </returns>
         public BitMatrix encode(String contents, BarcodeFormat format, int width, int height, IDictionary<EncodeHintType, object> hints)
         {
-            Encoding charset = null;
-            if (hints != null)
-            {
-                if (hints.ContainsKey(EncodeHintType.CHARACTER_SET))
-                {
-                    object charsetname = hints[EncodeHintType.CHARACTER_SET];
-                    if (charsetname != null)
-                    {
-                        charset = Encoding.GetEncoding(charsetname.ToString());
-                    }
-                }
-            }
+            var charset = IDictionaryExtensions.GetEncoding(hints, DEFAULT_CHARSET);
 
-            var byteContent = (charset ?? DEFAULT_CHARSET).GetBytes(contents);
+            var byteContent = charset.GetBytes(contents);
             return encode(byteContent, format, width, height, hints);
         }
 
@@ -99,19 +88,7 @@ namespace ZXing.Aztec
         /// </returns>
         public BitMatrix encode(byte[] contents, BarcodeFormat format, int width, int height, IDictionary<EncodeHintType, object> hints)
         {
-            Encoding charset = null;
-
-            if (hints != null)
-            {
-                if (hints.ContainsKey(EncodeHintType.CHARACTER_SET))
-                {
-                    object charsetname = hints[EncodeHintType.CHARACTER_SET];
-                    if (charsetname != null)
-                    {
-                        charset = Encoding.GetEncoding(charsetname.ToString());
-                    }
-                }
-            }
+            var charset = IDictionaryExtensions.GetEncoding(hints);
 
             return encode(contents, format, width, height, charset, hints);
         }
