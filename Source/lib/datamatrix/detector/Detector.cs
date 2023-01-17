@@ -345,7 +345,7 @@ namespace ZXing.Datamatrix.Internal
 
         private bool isValid(ResultPoint p)
         {
-            return p.X >= 0 && p.X < image.Width && p.Y > 0 && p.Y < image.Height;
+            return p.X >= 0 && p.X <= image.Width - 1 && p.Y > 0 && p.Y <= image.Height - 1;
         }
 
         private static BitMatrix sampleGrid(BitMatrix image,
