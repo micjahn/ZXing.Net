@@ -39,15 +39,26 @@ namespace ZXing.OneD
             {
                 if (Hints.ContainsKey(EncodeHintType.CODE128_FORCE_CODESET_B))
                 {
-                    return (bool)Hints[EncodeHintType.CODE128_FORCE_CODESET_B];
+                    var boolObj = Hints[EncodeHintType.CODE128_FORCE_CODESET_B];
+                    if (boolObj != null)
+                        return (bool)boolObj;
                 }
                 return false;
             }
             set
             {
-                Hints[EncodeHintType.CODE128_FORCE_CODESET_B] = value;
+                if (value)
+                {
+                    Hints[EncodeHintType.CODE128_FORCE_CODESET_B] = value;
+                }
+                else
+                {
+                    if (Hints.ContainsKey(EncodeHintType.CODE128_FORCE_CODESET_B))
+                        Hints.Remove(EncodeHintType.CODE128_FORCE_CODESET_B);
+                }
             }
         }
+
         /// <summary>
         /// Forces which encoding will be used. Currently only used for Code-128 code sets (Type <see cref="System.String" />). Valid values are "A", "B", "C".
         /// </summary>
@@ -67,6 +78,42 @@ namespace ZXing.OneD
             set
             {
                 Hints[EncodeHintType.FORCE_CODE_SET] = value;
+            }
+        }
+
+        /// <summary>
+        /// Specifies whether to use compact mode for Code-128 code (type {@link Boolean}, or "true" or "false"
+        /// This can yield slightly smaller bar codes. This option and {@link #FORCE_CODE_SET} are mutually
+        /// exclusive options.
+        /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY
+        [Category("Standard"), Description("Specifies whether to use compact mode for Code-128 code" +
+            "This can yield slightly smaller bar codes. This option and ForceCodeset are mutually" +
+            "exclusive options.")]
+#endif
+        public bool CompactEncoding
+        {
+            get
+            {
+                if (Hints.ContainsKey(EncodeHintType.CODE128_COMPACT))
+                {
+                    var boolObj = Hints[EncodeHintType.CODE128_COMPACT];
+                    if (boolObj != null)
+                        return (bool)boolObj;
+                }
+                return false;
+            }
+            set
+            {
+                if (value)
+                {
+                    Hints[EncodeHintType.CODE128_COMPACT] = value;
+                }
+                else
+                {
+                    if (Hints.ContainsKey(EncodeHintType.CODE128_COMPACT))
+                        Hints.Remove(EncodeHintType.CODE128_COMPACT);
+                }
             }
         }
 

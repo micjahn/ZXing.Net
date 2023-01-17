@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections.Generic;
-using ZXing.Common;
-
 namespace ZXing.OneD
 {
+    using System;
+    using System.Collections.Generic;
+    using ZXing.Common;
+
     /// <summary>
     /// This object renders a CODE128 code as a <see cref="BitMatrix" />.
     /// 
@@ -27,25 +27,25 @@ namespace ZXing.OneD
     /// </summary>
     public sealed class Code128Writer : OneDimensionalCodeWriter
     {
-        private const int CODE_START_A = 103;
-        private const int CODE_START_B = 104;
-        private const int CODE_START_C = 105;
-        private const int CODE_CODE_A = 101;
-        private const int CODE_CODE_B = 100;
-        private const int CODE_CODE_C = 99;
-        private const int CODE_STOP = 106;
+        internal const int CODE_START_A = 103;
+        internal const int CODE_START_B = 104;
+        internal const int CODE_START_C = 105;
+        internal const int CODE_CODE_A = 101;
+        internal const int CODE_CODE_B = 100;
+        internal const int CODE_CODE_C = 99;
+        internal const int CODE_STOP = 106;
 
         // Dummy characters used to specify control characters in input
-        private const char ESCAPE_FNC_1 = '\u00f1';
-        private const char ESCAPE_FNC_2 = '\u00f2';
-        private const char ESCAPE_FNC_3 = '\u00f3';
-        private const char ESCAPE_FNC_4 = '\u00f4';
+        internal const char ESCAPE_FNC_1 = '\u00f1';
+        internal const char ESCAPE_FNC_2 = '\u00f2';
+        internal const char ESCAPE_FNC_3 = '\u00f3';
+        internal const char ESCAPE_FNC_4 = '\u00f4';
 
-        private const int CODE_FNC_1 = 102; // Code A, Code B, Code C
-        private const int CODE_FNC_2 = 97; // Code A, Code B
-        private const int CODE_FNC_3 = 96; // Code A, Code B
-        private const int CODE_FNC_4_A = 101; // Code A
-        private const int CODE_FNC_4_B = 100; // Code B
+        internal const int CODE_FNC_1 = 102; // Code A, Code B, Code C
+        internal const int CODE_FNC_2 = 97; // Code A, Code B
+        internal const int CODE_FNC_3 = 96; // Code A, Code B
+        internal const int CODE_FNC_4_A = 101; // Code A
+        internal const int CODE_FNC_4_B = 100; // Code B
 
         // Results of minimal lookahead for code C
         private enum CType
@@ -84,13 +84,19 @@ namespace ZXing.OneD
         /// <returns></returns>
         protected override bool[] encode(String contents, IDictionary<EncodeHintType, object> hints)
         {
+            int forcedCodeSet = check(contents, hints);
+            bool hasCompactionHint = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.CODE128_COMPACT);
+
+            return hasCompactionHint ? new MinimalEncoder().encode(contents) : encodeFast(contents, hints, forcedCodeSet);
+        }
+
+        private int check(String contents, IDictionary<EncodeHintType, object> hints)
+        {
             int forcedCodeSet = -1;
 
             if (hints != null)
             {
-                forceCodesetB = (hints.ContainsKey(EncodeHintType.CODE128_FORCE_CODESET_B) &&
-                                 hints[EncodeHintType.CODE128_FORCE_CODESET_B] != null &&
-                                 Convert.ToBoolean(hints[EncodeHintType.CODE128_FORCE_CODESET_B].ToString()));
+                forceCodesetB = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.CODE128_FORCE_CODESET_B);
 
                 // Check for forced code set hint.
                 if (hints != null && hints.ContainsKey(EncodeHintType.FORCE_CODE_SET))
@@ -116,10 +122,7 @@ namespace ZXing.OneD
                     }
                 }
 
-                if (hints != null &&
-                    hints.ContainsKey(EncodeHintType.GS1_FORMAT) &&
-                    hints[EncodeHintType.GS1_FORMAT] != null &&
-                    Convert.ToBoolean(hints[EncodeHintType.GS1_FORMAT].ToString()))
+                if (IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.GS1_FORMAT))
                 {
                     // append the FNC1 character at the first position if not already present
                     if (!string.IsNullOrEmpty(contents) && contents[0] != ESCAPE_FNC_1)
@@ -175,7 +178,12 @@ namespace ZXing.OneD
                 }
 
             }
+            return forcedCodeSet;
+        }
 
+        private bool[] encodeFast(String contents, IDictionary<EncodeHintType, object> hints, int forcedCodeSet)
+        {
+            int length = contents.Length;
             var patterns = new List<int[]>(); // temporary storage for patterns
             int checkSum = 0;
             int checkWeight = 1;
@@ -286,7 +294,11 @@ namespace ZXing.OneD
                     checkWeight++;
                 }
             }
+            return produceResult(patterns, checkSum);
+        }
 
+        internal static bool[] produceResult(List<int[]> patterns, int checkSum)
+        {
             // Compute and append checksum
             checkSum %= 103;
             patterns.Add(Code128Reader.CODE_PATTERNS[checkSum]);
@@ -429,6 +441,255 @@ namespace ZXing.OneD
                 return forceCodesetB ? CODE_CODE_B : CODE_CODE_C;
             }
             return CODE_CODE_B;
+        }
+    }
+
+
+    /** 
+     * Encodes minimally using Divide-And-Conquer with Memoization
+     **/
+    internal class MinimalEncoder
+    {
+        private enum Charset { A, B, C, NONE };
+        private enum Latch { A, B, C, SHIFT, NONE };
+
+        static String A = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\u0000\u0001\u0002" +
+                            "\u0003\u0004\u0005\u0006\u0007\u0008\u0009\n\u000B\u000C\r\u000E\u000F\u0010\u0011" +
+                            "\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F" +
+                            "\u00FF";
+        static String B = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqr" +
+                                "stuvwxyz{|}~\u007F\u00FF";
+
+        private static int CODE_SHIFT = 98;
+
+        private int[][] memoizedCost;
+        private Latch[][] minPath;
+
+        public bool[] encode(String contents)
+        {
+            memoizedCost = new int[4][];
+            for (var x = 0; x < memoizedCost.Length; x++)
+                memoizedCost[x] = new int[contents.Length];
+            minPath = new Latch[4][];
+            for (var x = 0; x < minPath.Length; x++)
+                minPath[x] = new Latch[contents.Length];
+
+            encode(contents, Charset.NONE, 0);
+
+            var patterns = new List<int[]>();
+            var checkSum = new int[] { 0 };
+            var checkWeight = new int[] { 1 };
+            int length = contents.Length;
+            Charset charset = Charset.NONE;
+            for (int i = 0; i < length; i++)
+            {
+                Latch latch = minPath[(int)charset][i];
+                switch (latch)
+                {
+                    case Latch.A:
+                        charset = Charset.A;
+                        addPattern(patterns, i == 0 ? Code128Writer.CODE_START_A : Code128Writer.CODE_CODE_A, checkSum, checkWeight, i);
+                        break;
+                    case Latch.B:
+                        charset = Charset.B;
+                        addPattern(patterns, i == 0 ? Code128Writer.CODE_START_B : Code128Writer.CODE_CODE_B, checkSum, checkWeight, i);
+                        break;
+                    case Latch.C:
+                        charset = Charset.C;
+                        addPattern(patterns, i == 0 ? Code128Writer.CODE_START_C : Code128Writer.CODE_CODE_C, checkSum, checkWeight, i);
+                        break;
+                    case Latch.SHIFT:
+                        addPattern(patterns, CODE_SHIFT, checkSum, checkWeight, i);
+                        break;
+                }
+                if (charset == Charset.C)
+                {
+                    if (contents[i] == Code128Writer.ESCAPE_FNC_1)
+                    {
+                        addPattern(patterns, Code128Writer.CODE_FNC_1, checkSum, checkWeight, i);
+                    }
+                    else
+                    {
+                        addPattern(patterns, Int32.Parse(contents.Substring(i, 2)), checkSum, checkWeight, i);
+                        //assert i +1 < length; //the algorithm never leads to a single trailing digit in character set C
+                        if (i + 1 < length)
+                        {
+                            i++;
+                        }
+                    }
+                }
+                else
+                { // charset A or B
+                    int patternIndex;
+                    switch (contents[i])
+                    {
+                        case Code128Writer.ESCAPE_FNC_1:
+                            patternIndex = Code128Writer.CODE_FNC_1;
+                            break;
+                        case Code128Writer.ESCAPE_FNC_2:
+                            patternIndex = Code128Writer.CODE_FNC_2;
+                            break;
+                        case Code128Writer.ESCAPE_FNC_3:
+                            patternIndex = Code128Writer.CODE_FNC_3;
+                            break;
+                        case Code128Writer.ESCAPE_FNC_4:
+                            if ((charset == Charset.A && latch != Latch.SHIFT) ||
+                                (charset == Charset.B && latch == Latch.SHIFT))
+                            {
+                                patternIndex = Code128Writer.CODE_FNC_4_A;
+                            }
+                            else
+                            {
+                                patternIndex = Code128Writer.CODE_FNC_4_B;
+                            }
+                            break;
+                        default:
+                            patternIndex = contents[i] - ' ';
+                            break;
+                    }
+                    if ((charset == Charset.A && latch != Latch.SHIFT) ||
+                        (charset == Charset.B && latch == Latch.SHIFT))
+                    {
+                        if (patternIndex < 0)
+                        {
+                            patternIndex += '`';
+                        }
+                    }
+                    addPattern(patterns, patternIndex, checkSum, checkWeight, i);
+                }
+            }
+            memoizedCost = null;
+            minPath = null;
+            return Code128Writer.produceResult(patterns, checkSum[0]);
+        }
+
+        private static void addPattern(List<int[]> patterns,
+                                      int patternIndex,
+                                      int[] checkSum,
+                                      int[] checkWeight,
+                                      int position)
+        {
+            patterns.Add(Code128Reader.CODE_PATTERNS[patternIndex]);
+            if (position != 0)
+            {
+                checkWeight[0]++;
+            }
+            checkSum[0] += patternIndex * checkWeight[0];
+        }
+
+        private static bool isDigit(char c)
+        {
+            return c >= '0' && c <= '9';
+        }
+
+        private bool canEncode(String contents, Charset charset, int position)
+        {
+            char c = contents[position];
+            switch (charset)
+            {
+                case Charset.A:
+                    return c == Code128Writer.ESCAPE_FNC_1 ||
+                               c == Code128Writer.ESCAPE_FNC_2 ||
+                               c == Code128Writer.ESCAPE_FNC_3 ||
+                               c == Code128Writer.ESCAPE_FNC_4 ||
+                               A.IndexOf(c) >= 0;
+                case Charset.B:
+                    return c == Code128Writer.ESCAPE_FNC_1 ||
+                               c == Code128Writer.ESCAPE_FNC_2 ||
+                               c == Code128Writer.ESCAPE_FNC_3 ||
+                               c == Code128Writer.ESCAPE_FNC_4 ||
+                               B.IndexOf(c) >= 0;
+                case Charset.C:
+                    return c == Code128Writer.ESCAPE_FNC_1 ||
+                               (position + 1 < contents.Length &&
+                                isDigit(c) &&
+                                isDigit(contents[position + 1]));
+                default:
+                    return false;
+            }
+        }
+
+        /**
+         * Encode the string starting at position position starting with the character set charset
+         **/
+        private int encode(String contents, Charset charset, int position)
+        {
+            // assert position<contents.Length;
+            int mCost = memoizedCost[(int)charset][position];
+            if (mCost > 0)
+            {
+                return mCost;
+            }
+
+            int minCost = Int32.MaxValue;
+            Latch minLatch = Latch.NONE;
+            bool atEnd = position + 1 >= contents.Length;
+
+            var sets = new Charset[] { Charset.A, Charset.B };
+            for (int i = 0; i <= 1; i++)
+            {
+                if (canEncode(contents, sets[i], position))
+                {
+                    int cost = 1;
+                    Latch latch = Latch.NONE;
+                    if (charset != sets[i])
+                    {
+                        cost++;
+                        latch = (Latch)Enum.Parse(typeof(Latch), sets[i].ToString());
+                    }
+                    if (!atEnd)
+                    {
+                        cost += encode(contents, sets[i], position + 1);
+                    }
+                    if (cost < minCost)
+                    {
+                        minCost = cost;
+                        minLatch = latch;
+                    }
+                    cost = 1;
+                    if (charset == sets[(i + 1) % 2])
+                    {
+                        cost++;
+                        latch = Latch.SHIFT;
+                        if (!atEnd)
+                        {
+                            cost += encode(contents, charset, position + 1);
+                        }
+                        if (cost < minCost)
+                        {
+                            minCost = cost;
+                            minLatch = latch;
+                        }
+                    }
+                }
+            }
+            if (canEncode(contents, Charset.C, position))
+            {
+                int cost = 1;
+                Latch latch = Latch.NONE;
+                if (charset != Charset.C)
+                {
+                    cost++;
+                    latch = Latch.C;
+                }
+                int advance = contents[position] == Code128Writer.ESCAPE_FNC_1 ? 1 : 2;
+                if (position + advance < contents.Length)
+                {
+                    cost += encode(contents, Charset.C, position + advance);
+                }
+                if (cost < minCost)
+                {
+                    minCost = cost;
+                    minLatch = latch;
+                }
+            }
+            if (minCost == Int32.MaxValue)
+            {
+                throw new ArgumentOutOfRangeException("Bad character in input: ASCII value=" + (int)contents[position]);
+            }
+            memoizedCost[(int)charset][position] = minCost;
+            minPath[(int)charset][position] = minLatch;
+            return minCost;
         }
     }
 }
