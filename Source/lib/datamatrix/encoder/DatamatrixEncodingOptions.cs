@@ -153,6 +153,54 @@ namespace ZXing.Datamatrix
                 }
             }
         }
+
+        /// <summary>
+        /// Specifies whether to use compact mode for Data Matrix (type {@link Boolean}, or "true" or "false"
+        /// The compact encoding mode also supports the encoding of characters that are not in the ISO-8859-1
+        /// character set via ECIs.
+        /// Please note that in that case, the most compact character encoding is chosen for characters in
+        /// the input that are not in the ISO-8859-1 character set. Based on experience, some scanners do not
+        /// support encodings like cp-1256 (Arabic). In such cases the encoding can be forced to UTF-8 by
+        /// means of the {@link #CHARACTER_SET} encoding hint.
+        /// Compact encoding also provides GS1-FNC1 support when {@link #GS1_FORMAT} is selected. In this case
+        /// group-separator character (ASCII 29 decimal) can be used to encode the positions of FNC1 codewords
+        /// for the purpose of delimiting AIs.
+        /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies whether to use compact mode for Data Matrix."+
+            " The compact encoding mode also supports the encoding of characters that are not in the ISO-8859-1" +
+            " character set via ECIs." +
+            " Please note that in that case, the most compact character encoding is chosen for characters in" +
+            " the input that are not in the ISO-8859-1 character set. Based on experience, some scanners do not" +
+            " support encodings like cp-1256 (Arabic). In such cases the encoding can be forced to UTF-8 by" +
+            " means of the {@link #CHARACTER_SET} encoding hint." +
+            " Compact encoding also provides GS1-FNC1 support when {@link #GS1_FORMAT} is selected. In this case" +
+            " group-separator character (ASCII 29 decimal) can be used to encode the positions of FNC1 codewords" +
+            " for the purpose of delimiting AIs.")]
+#endif
+        public bool? CompactEncoding
+        {
+            get
+            {
+                if (Hints.ContainsKey(EncodeHintType.DATA_MATRIX_COMPACT))
+                {
+                    return (bool?)Hints[EncodeHintType.DATA_MATRIX_COMPACT];
+                }
+                return null;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    if (Hints.ContainsKey(EncodeHintType.DATA_MATRIX_COMPACT))
+                        Hints.Remove(EncodeHintType.DATA_MATRIX_COMPACT);
+                }
+                else
+                {
+                    Hints[EncodeHintType.DATA_MATRIX_COMPACT] = value;
+                }
+            }
+        }
     }
 
 #if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY
