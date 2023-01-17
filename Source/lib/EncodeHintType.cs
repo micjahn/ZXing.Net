@@ -210,6 +210,13 @@ namespace ZXing
         /// for the purpose of delimiting AIs.
         /// </summary>
         DATA_MATRIX_COMPACT,
+
+        /// <summary>
+        /// Specifies whether to use compact mode for Code-128 code (type {@link Boolean}, or "true" or "false"
+        /// This can yield slightly smaller bar codes. This option and {@link #FORCE_CODE_SET} are mutually
+        /// exclusive options.
+        /// </summary>
+        CODE128_COMPACT,
     }
 
     internal static class IDictionaryExtensions

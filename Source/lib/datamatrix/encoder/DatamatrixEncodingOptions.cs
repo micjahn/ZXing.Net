@@ -178,26 +178,28 @@ namespace ZXing.Datamatrix
             " group-separator character (ASCII 29 decimal) can be used to encode the positions of FNC1 codewords" +
             " for the purpose of delimiting AIs.")]
 #endif
-        public bool? CompactEncoding
+        public bool CompactEncoding
         {
             get
             {
                 if (Hints.ContainsKey(EncodeHintType.DATA_MATRIX_COMPACT))
                 {
-                    return (bool?)Hints[EncodeHintType.DATA_MATRIX_COMPACT];
+                    var boolObj = Hints[EncodeHintType.DATA_MATRIX_COMPACT];
+                    if (boolObj != null)
+                        return (bool)boolObj;
                 }
-                return null;
+                return false;
             }
             set
             {
-                if (value == null)
+                if (value)
                 {
-                    if (Hints.ContainsKey(EncodeHintType.DATA_MATRIX_COMPACT))
-                        Hints.Remove(EncodeHintType.DATA_MATRIX_COMPACT);
+                    Hints[EncodeHintType.DATA_MATRIX_COMPACT] = value;
                 }
                 else
                 {
-                    Hints[EncodeHintType.DATA_MATRIX_COMPACT] = value;
+                    if (Hints.ContainsKey(EncodeHintType.DATA_MATRIX_COMPACT))
+                        Hints.Remove(EncodeHintType.DATA_MATRIX_COMPACT);
                 }
             }
         }
