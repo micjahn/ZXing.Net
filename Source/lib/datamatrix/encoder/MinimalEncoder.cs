@@ -78,24 +78,19 @@ namespace ZXing.Datamatrix.Encoder
 
         private static bool isInC40Shift1Set(char ch)
         {
-            return ch >= 0 && ch <= 31;
+            return ch <= 31;
         }
 
         private static bool isInC40Shift2Set(char ch, int fnc1)
         {
-            for (int i = 0; i < C40_SHIFT2_CHARS.Length; i++)
+            foreach (var c40Shift2Char in C40_SHIFT2_CHARS)
             {
-                if (C40_SHIFT2_CHARS[i] == ch)
+                if (c40Shift2Char == ch)
                 {
                     return true;
                 }
             }
             return ch == fnc1;
-        }
-
-        private static bool isInC40Shift3Set(char ch)
-        {
-            return ch >= 96 && ch <= 127;
         }
 
         private static bool isInTextShift1Set(char ch)
@@ -106,11 +101,6 @@ namespace ZXing.Datamatrix.Encoder
         private static bool isInTextShift2Set(char ch, int fnc1)
         {
             return isInC40Shift2Set(ch, fnc1);
-        }
-
-        private static bool isInTextShift3Set(char ch)
-        {
-            return ch == 96 || (ch >= 'A' && ch <= 'Z') || (ch >= 123 && ch <= 127);
         }
 
         /**
@@ -260,12 +250,12 @@ namespace ZXing.Datamatrix.Encoder
                 }
 
                 Mode[] modes = { Mode.C40, Mode.TEXT };
-                for (int m = 0; m < modes.Length; m++)
+                foreach (Mode mode in modes)
                 {
                     int[] characterLength = new int[1];
-                    if (getNumberOfC40Words(input, from, modes[m] == Mode.C40, characterLength) > 0)
+                    if (getNumberOfC40Words(input, from, mode == Mode.C40, characterLength) > 0)
                     {
-                        addEdge(edges, new Edge(input, modes[m], from, characterLength[0], previous));
+                        addEdge(edges, new Edge(input, mode, from, characterLength[0], previous));
                     }
                 }
 
@@ -590,12 +580,7 @@ namespace ZXing.Datamatrix.Encoder
                             previousMode == Mode.TEXT ||
                             previousMode == Mode.X12)
                         {
-                            size++; //unatch 254 to ASCII
-                        }
-                        else if (previousMode == Mode.EDF)
-                        {
-                            //assert false; // can't happen because we never add any other outgoing edges other than EDF edges to an EDF
-                            // vertex
+                            size++; //unlatch 254 to ASCII
                         }
                         break;
                     case Mode.B256:
@@ -617,11 +602,6 @@ namespace ZXing.Datamatrix.Encoder
                                    previousMode == Mode.X12)
                         {
                             size += 2; //unlatch to ASCII, latch to B256
-                        }
-                        else if (previousMode == Mode.EDF)
-                        {
-                            //assert false; // can't happen because we never add any other outgoing edges other than EDF edges to an EDF
-                            // vertex
                         }
                         break;
                     case Mode.C40:
@@ -647,11 +627,6 @@ namespace ZXing.Datamatrix.Encoder
                         {
                             size += 2; //unlatch 254 to ASCII followed by latch to this mode
                         }
-                        else if (previousMode == Mode.EDF)
-                        {
-                            //assert false; // can't happen because we never add any other outgoing edges other than EDF edges to an EDF
-                            // vertex
-                        }
                         break;
                     case Mode.EDF:
                         size += 3;
@@ -670,7 +645,7 @@ namespace ZXing.Datamatrix.Encoder
                 cachedTotalSize = size;
             }
 
-            /** does not count beyond 250*/
+            // does not count beyond 250
             int getB256Size()
             {
                 int cnt = 0;
@@ -803,29 +778,29 @@ namespace ZXing.Datamatrix.Encoder
                 switch (input.getShapeHint())
                 {
                     case SymbolShapeHint.FORCE_SQUARE:
-                        for (int i = 0; i < squareCodewordCapacities.Length; i++)
+                        foreach (int capacity in squareCodewordCapacities)
                         {
-                            if (squareCodewordCapacities[i] >= minimum)
+                            if (capacity >= minimum)
                             {
-                                return squareCodewordCapacities[i];
+                                return capacity;
                             }
                         }
                         break;
                     case SymbolShapeHint.FORCE_RECTANGLE:
-                        for (int i = 0; i < rectangularCodewordCapacities.Length; i++)
+                        foreach (int capacity in rectangularCodewordCapacities)
                         {
-                            if (rectangularCodewordCapacities[i] >= minimum)
+                            if (capacity >= minimum)
                             {
-                                return rectangularCodewordCapacities[i];
+                                return capacity;
                             }
                         }
                         break;
                 }
-                for (int i = 0; i < allCodewordCapacities.Length; i++)
+                foreach (int capacity in allCodewordCapacities)
                 {
-                    if (allCodewordCapacities[i] >= minimum)
+                    if (capacity >= minimum)
                     {
-                        return allCodewordCapacities[i];
+                        return capacity;
                     }
                 }
                 return allCodewordCapacities[allCodewordCapacities.Length - 1];
@@ -837,11 +812,6 @@ namespace ZXing.Datamatrix.Encoder
             int getCodewordsRemaining(int minimum)
             {
                 return getMinSymbolSize(minimum) - minimum;
-            }
-
-            int getSize()
-            {
-                return previous == null ? cachedTotalSize : cachedTotalSize - previous.cachedTotalSize;
             }
 
             internal static byte[] getBytes(int c)
@@ -856,17 +826,6 @@ namespace ZXing.Datamatrix.Encoder
                 byte[] result = new byte[2];
                 result[0] = (byte)c1;
                 result[1] = (byte)c2;
-                return result;
-            }
-
-            static byte[] getBytes(int c1, byte[] bytes)
-            {
-                byte[] result = new byte[1 + bytes.Length];
-                result[0] = (byte)c1;
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    result[i + 1] = bytes[i];
-                }
                 return result;
             }
 
@@ -917,20 +876,20 @@ namespace ZXing.Datamatrix.Encoder
                 }
                 if (c40)
                 {
-                    return c >= 0 && c <= 31 ? c :
+                    return c <= 31 ? c :
                            c == 32 ? 3 :
-                           c >= 33 && c <= 47 ? c - 33 :
-                           c >= 48 && c <= 57 ? c - 44 :
-                           c >= 58 && c <= 64 ? c - 43 :
-                           c >= 65 && c <= 90 ? c - 51 :
-                           c >= 91 && c <= 95 ? c - 69 :
-                           c >= 96 && c <= 127 ? c - 96 : c;
+                           c <= 47 ? c - 33 :
+                           c <= 57 ? c - 44 :
+                           c <= 64 ? c - 43 :
+                           c <= 90 ? c - 51 :
+                           c <= 95 ? c - 69 :
+                           c <= 127 ? c - 96 : c;
                 }
                 else
                 {
                     return c == 0 ? 0 :
-                           setIndex == 0 && c >= 1 && c <= 3 ? c - 1 : //is this a bug in the spec?
-                           setIndex == 1 && c >= 1 && c <= 31 ? c :
+                           setIndex == 0 && c <= 3 ? c - 1 : //is this a bug in the spec?
+                           setIndex == 1 && c <= 31 ? c :
                            c == 32 ? 3 :
                            c >= 33 && c <= 47 ? c - 33 :
                            c >= 48 && c <= 57 ? c - 44 :
@@ -963,8 +922,8 @@ namespace ZXing.Datamatrix.Encoder
                     {
                         char asciiValue = (char)((ci & 0xff) - 128);
                         //assert asciiValue >= 0;
-                        if (c40 && HighLevelEncoder.isNativeC40((char)asciiValue) ||
-                            !c40 && HighLevelEncoder.isNativeText((char)asciiValue))
+                        if (c40 && HighLevelEncoder.isNativeC40(asciiValue) ||
+                            !c40 && HighLevelEncoder.isNativeText(asciiValue))
                         {
                             c40Values.Add((byte)1); //Shift 2
                             c40Values.Add((byte)30); //Upper Shift
@@ -975,7 +934,7 @@ namespace ZXing.Datamatrix.Encoder
                             c40Values.Add((byte)1); //Shift 2
                             c40Values.Add((byte)30); //Upper Shift
                             int shiftValue = getShiftValue(asciiValue, c40, fnc1);
-                            c40Values.Add((byte)shiftValue); // Shift[123]   
+                            c40Values.Add((byte)shiftValue); // Shift[123]
                             c40Values.Add((byte)getC40Value(c40, shiftValue, asciiValue, fnc1));
                         }
                     }
@@ -991,9 +950,7 @@ namespace ZXing.Datamatrix.Encoder
                 int byteIndex = 0;
                 for (int i = 0; i < c40Values.Count; i += 3)
                 {
-                    setC40Word(result, byteIndex, c40Values[i] & 0xff,
-                                                c40Values[i + 1] & 0xff,
-                                                c40Values[i + 2] & 0xff);
+                    setC40Word(result, byteIndex, c40Values[i] & 0xff, c40Values[i + 1] & 0xff, c40Values[i + 2] & 0xff);
                     byteIndex += 2;
                 }
                 return result;
@@ -1032,7 +989,6 @@ namespace ZXing.Datamatrix.Encoder
 
             internal byte[] getLatchBytes()
             {
-                byte[] result;
                 switch (getPreviousMode())
                 {
                     case Mode.ASCII:
@@ -1083,7 +1039,6 @@ namespace ZXing.Datamatrix.Encoder
             // Important: The function does not return the length bytes (one or two) in case of B256 encoding
             internal byte[] getDataBytes()
             {
-                byte[] result;
                 switch (mode)
                 {
                     case Mode.ASCII:
@@ -1130,8 +1085,7 @@ namespace ZXing.Datamatrix.Encoder
 
             public Result(Edge solution)
             {
-                this.input = solution.input;
-                int length = 0;
+                input = solution.input;
                 int size = 0;
                 var bytesAL = new List<byte>();
                 var randomizePostfixLength = new List<int>();
@@ -1146,7 +1100,6 @@ namespace ZXing.Datamatrix.Encoder
                 Edge current = solution;
                 while (current != null)
                 {
-                    length += current.characterLength;
                     size += prepend(current.getDataBytes(), bytesAL);
 
                     if (current.previous == null || current.getPreviousStartMode() != current.Mode)
@@ -1167,8 +1120,7 @@ namespace ZXing.Datamatrix.Encoder
                             randomizePostfixLength.Add(bytesAL.Count);
                             randomizeLengths.Add(size);
                         }
-                        size += prepend(current.getLatchBytes(), bytesAL);
-                        length = 0;
+                        prepend(current.getLatchBytes(), bytesAL);
                         size = 0;
                     }
 
@@ -1256,7 +1208,7 @@ namespace ZXing.Datamatrix.Encoder
 
         internal class Input
         {
-            private static int COST_PER_ECI = 3; //aproximated (latch to ASCII + 2 codewords)
+            private static int COST_PER_ECI = 3; // approximated (latch to ASCII + 2 codewords)
             private int[] bytes;
             private int fnc1;
             private SymbolShapeHint shape;
@@ -1296,16 +1248,6 @@ namespace ZXing.Datamatrix.Encoder
             internal SymbolShapeHint getShapeHint()
             {
                 return shape;
-            }
-
-            String encode(int startPos, int length, Encoding charset)
-            {
-                var bs = new byte[length];
-                for (int i = 0; i < length; i++)
-                {
-                    bs[i] = (byte)charAt(startPos + i);
-                }
-                return charset.GetString(bs, 0, bs.Length);
             }
 
             internal int Length
@@ -1447,10 +1389,9 @@ namespace ZXing.Datamatrix.Encoder
                     else
                     {
                         byte[] bytes = encoderSet.encode(current.c, current.encoderIndex);
-                        int infoValue = bytes.Length * 10 + bytes.Length;
                         for (int i = bytes.Length - 1; i >= 0; i--)
                         {
-                            intsAL.Insert(0, (int)(bytes[i] & 0xff));
+                            intsAL.Insert(0, (bytes[i] & 0xff));
                         }
                     }
                     int previousEncoderIndex = current.previous == null ? 0 : current.previous.encoderIndex;
@@ -1499,34 +1440,6 @@ namespace ZXing.Datamatrix.Encoder
                         return cIsFnc1;
                     }
                 }
-
-                private int getFromPosition()
-                {
-                    int cnt = 0;
-                    InputEdge current = previous;
-                    while (current != null)
-                    {
-                        cnt++;
-                        current = current.previous;
-                    }
-                    return cnt;
-                }
-
-                private String getPreviousEncoding(ECIEncoderSet encoderSet)
-                {
-                    return previous == null ? "ISO-8859-1" : previous.getEncoding(encoderSet);
-                }
-
-                private String getEncoding(ECIEncoderSet encoderSet)
-                {
-                    return encoderSet.getCharsetName(encoderIndex);
-                }
-
-                bool changesEncoding()
-                {
-                    return previous == null && encoderIndex != 0 || previous != null && previous.encoderIndex != encoderIndex;
-                }
-
             }
         }
     }

@@ -127,7 +127,7 @@ namespace ZXing.OneD.Test
         {
             //test longest possible input
             var toEncode = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-            var result = encode(toEncode, true, toEncode);
+            encode(toEncode, true, toEncode);
         }
 
         [Test]
@@ -291,7 +291,7 @@ namespace ZXing.OneD.Test
 
             int width = result.Width;
             result = encode(toEncode, true, toEncode);
-            Assert.That(result.Width <= width);
+            Assert.True(result.Width <= width);
         }
 
 
@@ -304,7 +304,7 @@ namespace ZXing.OneD.Test
 
             var options = new Code128EncodingOptions();
             options.ForceCodeset = Code128EncodingOptions.Codesets.A;
-            BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+            writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
         }
 
         [Test]
@@ -316,7 +316,7 @@ namespace ZXing.OneD.Test
 
             var options = new Code128EncodingOptions();
             options.ForceCodeset = Code128EncodingOptions.Codesets.B;
-            BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+            writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
         }
 
         [Test]
@@ -328,7 +328,7 @@ namespace ZXing.OneD.Test
 
             var options = new Code128EncodingOptions();
             options.ForceCodeset = Code128EncodingOptions.Codesets.C;
-            BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+            writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
         }
 
         [Test]
@@ -340,7 +340,7 @@ namespace ZXing.OneD.Test
 
             var options = new Code128EncodingOptions();
             options.ForceCodeset = Code128EncodingOptions.Codesets.C;
-            BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+            writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
         }
 
         [Test]
@@ -352,7 +352,7 @@ namespace ZXing.OneD.Test
 
             var options = new Code128EncodingOptions();
             options.ForceCodeset = Code128EncodingOptions.Codesets.C;
-            BitMatrix result = writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+            writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
         }
 
         [Test]
