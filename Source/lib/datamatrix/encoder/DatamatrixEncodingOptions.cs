@@ -203,6 +203,40 @@ namespace ZXing.Datamatrix
                 }
             }
         }
+
+        /// <summary>
+        /// Forces C40 encoding for data-matrix (type {@link Boolean}, or "true" or "false") {@link String } value). This 
+        /// option and {@link #DATA_MATRIX_COMPACT} are mutually exclusive.
+        /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("Forces C40 encoding for data-matrix. This " +
+            " option and CompactEncoding are mutually exclusive.")]
+#endif
+        public bool ForceC40
+        {
+            get
+            {
+                if (Hints.ContainsKey(EncodeHintType.FORCE_C40))
+                {
+                    var boolObj = Hints[EncodeHintType.FORCE_C40];
+                    if (boolObj != null)
+                        return (bool)boolObj;
+                }
+                return false;
+            }
+            set
+            {
+                if (value)
+                {
+                    Hints[EncodeHintType.FORCE_C40] = value;
+                }
+                else
+                {
+                    if (Hints.ContainsKey(EncodeHintType.FORCE_C40))
+                        Hints.Remove(EncodeHintType.FORCE_C40);
+                }
+            }
+        }
     }
 
 #if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY

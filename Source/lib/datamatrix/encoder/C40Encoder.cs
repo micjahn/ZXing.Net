@@ -26,6 +26,46 @@ namespace ZXing.Datamatrix.Encoder
             get { return Encodation.C40; }
         }
 
+        public void encodeMaximal(EncoderContext context)
+        {
+            var buffer = new StringBuilder();
+            var lastCharSize = 0;
+            var backtrackStartPosition = context.Pos;
+            var backtrackBufferLength = 0;
+            while (context.HasMoreCharacters)
+            {
+                char c = context.CurrentChar;
+                context.Pos++;
+                lastCharSize = encodeChar(c, buffer);
+                if (buffer.Length % 3 == 0)
+                {
+                    backtrackStartPosition = context.Pos;
+                    backtrackBufferLength = buffer.Length;
+                }
+            }
+            if (backtrackBufferLength != buffer.Length)
+            {
+                var unwritten = (buffer.Length / 3) * 2;
+
+                var curCodewordCount = context.CodewordCount + unwritten + 1; // +1 for the latch to C40
+                context.updateSymbolInfo(curCodewordCount);
+                var available = context.SymbolInfo.dataCapacity - curCodewordCount;
+                var rest = buffer.Length % 3;
+                if ((rest == 2 && available != 2) ||
+                    (rest == 1 && (lastCharSize > 3 || available != 1)))
+                {
+                    buffer.Capacity = backtrackBufferLength;
+                    context.Pos = backtrackStartPosition;
+                }
+            }
+            if (buffer.Length > 0)
+            {
+                context.writeCodeword(HighLevelEncoder.LATCH_TO_C40);
+            }
+
+            handleEOD(context, buffer);
+        }
+
         public virtual void encode(EncoderContext context)
         {
             //step C
