@@ -36,7 +36,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="ZKWeb.System.Drawing" Version="4.0.1" />
-		<PackageReference Include="ZXing.Net" Version="0.16.7" />
+		<PackageReference Include="ZXing.Net" Version="0.16.8" />
 	</ItemGroup>
 
 	<PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">

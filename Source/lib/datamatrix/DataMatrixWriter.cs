@@ -141,7 +141,8 @@ namespace ZXing.Datamatrix
             }
             else
             {
-                encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize, defaultEncodation);
+                var hasForceC40Hint = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.FORCE_C40);
+                encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize, defaultEncodation, hasForceC40Hint);
             }
 
             SymbolInfo symbolInfo = SymbolInfo.lookup(encoded.Length, shape, minSize, maxSize, true);

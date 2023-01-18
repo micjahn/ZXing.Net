@@ -177,8 +177,10 @@ namespace ZXing
         QR_MASK_PATTERN,
 
         /// <summary>
-        /// Forces which encoding will be used. Currently only used for Code-128 code sets (Type <see cref="System.String" />). Valid values are "A", "B", "C".
+        /// Forces which encoding will be used. Currently only used for Code-128 code sets (Type <see cref="System.String" />).
+        /// Valid values are "A", "B", "C".
         /// see also CODE128_FORCE_CODESET_B
+        /// This option and {@link #CODE128_COMPACT} are mutually exclusive.
         /// </summary>
         FORCE_CODE_SET,
 
@@ -208,6 +210,7 @@ namespace ZXing
         /// Compact encoding also provides GS1-FNC1 support when {@link #GS1_FORMAT} is selected. In this case
         /// group-separator character (ASCII 29 decimal) can be used to encode the positions of FNC1 codewords
         /// for the purpose of delimiting AIs.
+        /// This option and {@link #FORCE_C40} are mutually exclusive.
         /// </summary>
         DATA_MATRIX_COMPACT,
 
@@ -217,6 +220,12 @@ namespace ZXing
         /// exclusive options.
         /// </summary>
         CODE128_COMPACT,
+
+        /// <summary>
+        /// Forces C40 encoding for data-matrix (type {@link Boolean}, or "true" or "false") {@link String } value). This 
+        /// option and {@link #DATA_MATRIX_COMPACT} are mutually exclusive.
+        /// </summary>
+        FORCE_C40,
     }
 
     internal static class IDictionaryExtensions
