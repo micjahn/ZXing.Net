@@ -798,7 +798,7 @@ namespace ZXing.Datamatrix.Encoder
             /** Returns the capacity in codewords of the smallest symbol that has enough capacity to fit the given minimal
              * number of codewords.
              **/
-            int getMinSymbolSize(int minimum)
+            internal int getMinSymbolSize(int minimum)
             {
                 switch (input.getShapeHint())
                 {
@@ -1192,6 +1192,16 @@ namespace ZXing.Datamatrix.Encoder
                     applyRandomPattern(bytesAL, bytesAL.Count - randomizePostfixLength[i],
                         randomizeLengths[i]);
                 }
+                //add padding
+                int capacity = solution.getMinSymbolSize(bytesAL.Count);
+                if (bytesAL.Count < capacity)
+                {
+                    bytesAL.Add((byte)129);
+                }
+                while (bytesAL.Count < capacity)
+                {
+                    bytesAL.Add((byte)randomize253State(bytesAL.Count + 1));
+                }
                 bytes = bytesAL.ToArray();
             }
 
@@ -1202,6 +1212,13 @@ namespace ZXing.Datamatrix.Encoder
                     into.Insert(0, bytes[i]);
                 }
                 return bytes.Length;
+            }
+
+            private static int randomize253State(int codewordPosition)
+            {
+                int pseudoRandom = ((149 * codewordPosition) % 253) + 1;
+                int tempVariable = 129 + pseudoRandom;
+                return tempVariable <= 254 ? tempVariable : tempVariable - 254;
             }
 
             static void applyRandomPattern(List<Byte> bytesAL, int startPosition, int length)
