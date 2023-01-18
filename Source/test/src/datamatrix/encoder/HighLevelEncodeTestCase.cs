@@ -588,8 +588,7 @@ namespace ZXing.Datamatrix.Test
         {
             String encoded = HighLevelEncoder.encodeHighLevel(msg);
             String encoded2 = MinimalEncoder.encodeHighLevel(msg);
-            Assert.That(!compareSizeToMinimalEncoder || encoded2.Length <= encoded.Length);
-            //DecodeHighLevel.decode(encoded);
+            Assert.True(!compareSizeToMinimalEncoder || encoded2.Length <= encoded.Length);
             return visualize(encoded);
         }
 

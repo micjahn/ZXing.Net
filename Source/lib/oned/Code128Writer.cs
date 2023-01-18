@@ -87,7 +87,7 @@ namespace ZXing.OneD
             int forcedCodeSet = check(contents, hints);
             bool hasCompactionHint = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.CODE128_COMPACT);
 
-            return hasCompactionHint ? new MinimalEncoder().encode(contents) : encodeFast(contents, hints, forcedCodeSet);
+            return hasCompactionHint ? new MinimalEncoder().encode(contents) : encodeFast(contents, forcedCodeSet);
         }
 
         private int check(String contents, IDictionary<EncodeHintType, object> hints)
@@ -181,7 +181,7 @@ namespace ZXing.OneD
             return forcedCodeSet;
         }
 
-        private bool[] encodeFast(String contents, IDictionary<EncodeHintType, object> hints, int forcedCodeSet)
+        private bool[] encodeFast(String contents, int forcedCodeSet)
         {
             int length = contents.Length;
             var patterns = new List<int[]>(); // temporary storage for patterns
@@ -448,7 +448,7 @@ namespace ZXing.OneD
     /** 
      * Encodes minimally using Divide-And-Conquer with Memoization
      **/
-    internal class MinimalEncoder
+    internal sealed class MinimalEncoder
     {
         private enum Charset { A, B, C, NONE };
         private enum Latch { A, B, C, SHIFT, NONE };
