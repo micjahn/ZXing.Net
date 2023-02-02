@@ -24,6 +24,9 @@ namespace ZXing.Common
     /// <author>Sean Owen</author>
     public sealed class BitArray
     {
+        private static int[] EMPTY_BITS = { };
+        private static float LOAD_FACTOR = 0.75f;
+
         private int[] bits;
         private int size;
 
@@ -73,7 +76,7 @@ namespace ZXing.Common
         public BitArray()
         {
             this.size = 0;
-            this.bits = new int[1];
+            this.bits = EMPTY_BITS;
         }
 
         /// <summary>
@@ -97,11 +100,11 @@ namespace ZXing.Common
             this.size = size;
         }
 
-        private void ensureCapacity(int size)
+        private void ensureCapacity(int newSize)
         {
             if (size > bits.Length << 5)
             {
-                int[] newBits = makeArray(size);
+                int[] newBits = makeArray((int)Math.Ceiling(newSize / LOAD_FACTOR));
                 System.Array.Copy(bits, 0, newBits, 0, bits.Length);
                 bits = newBits;
             }
