@@ -133,6 +133,7 @@ namespace ZXing.PDF417.Internal
         private static readonly sbyte[] PUNCTUATION = new sbyte[128];
 
         internal static string DEFAULT_ENCODING_NAME = "ISO-8859-1";
+        private static Encoding DEFAULT_ENCODING; // initialize with first call to getEncoder
 
         static PDF417HighLevelEncoder()
         {
@@ -245,7 +246,7 @@ namespace ZXing.PDF417.Internal
                                 if (b == 1 && byteCount == 1 && encodingMode == TEXT_COMPACTION)
                                 {
                                     //Switch for one byte (instead of latch)
-                                    encodeBinary(bytes, 0, 1, TEXT_COMPACTION, sb);
+                                    encodeBinary(toBytes(msg.Substring(p, b), encoding), 0, 1, TEXT_COMPACTION, sb);
                                 }
                                 else
                                 {
@@ -268,7 +269,7 @@ namespace ZXing.PDF417.Internal
             return sb.ToString();
         }
 
-        private static Encoding getEncoder(Encoding encoding)
+        internal static Encoding getEncoder(Encoding encoding)
         {
             // Defer instantiating default Charset until needed, since it may be for an unsupported
             // encoding.
@@ -276,7 +277,7 @@ namespace ZXing.PDF417.Internal
             {
                 try
                 {
-                    encoding = Encoding.GetEncoding(DEFAULT_ENCODING_NAME);
+                    encoding = DEFAULT_ENCODING ?? (DEFAULT_ENCODING = Encoding.GetEncoding(DEFAULT_ENCODING_NAME));
                 }
                 catch (Exception)
                 {
@@ -288,7 +289,7 @@ namespace ZXing.PDF417.Internal
                     try
                     {
                         // these .NET profiles support only UTF-8 and UTF-16 out-of-the-box
-                        encoding = Encoding.GetEncoding(StringUtils.UTF8);
+                        encoding = DEFAULT_ENCODING ?? (DEFAULT_ENCODING = Encoding.GetEncoding(StringUtils.UTF8));
                     }
                     catch (Exception uce)
                     {

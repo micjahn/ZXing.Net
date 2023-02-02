@@ -15,9 +15,12 @@
  */
 
 using NUnit.Framework;
+using System.Text;
+using System;
 
 namespace ZXing.PDF417.Internal.Test
 {
+    using System.Runtime.InteropServices;
     using ZXing.Common;
 
     [TestFixture]
@@ -181,5 +184,220 @@ namespace ZXing.PDF417.Internal.Test
 
             Assert.IsNull(DecodedBitStreamParser.decode(sampleCodes, "0", System.Text.Encoding.GetEncoding(PDF417HighLevelEncoder.DEFAULT_ENCODING_NAME)));
         }
+
+        [Test]
+        public void testUppercase()
+        {
+            //encodeDecode("", 0);
+            performEncodeTest('A', new int[] { 3, 4, 5, 6, 4, 4, 5, 5 });
+        }
+
+        [Test]
+        public void testNumeric()
+        {
+            performEncodeTest('1', new int[] { 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10 });
+        }
+
+        [Test]
+        public void testByte()
+        {
+            performEncodeTest('\u00c4', new int[] { 3, 4, 5, 6, 7, 7, 8 });
+        }
+
+        [Test]
+        public void testUppercaseLowercaseMix1()
+        {
+            encodeDecode("aA", 4);
+            encodeDecode("aAa", 5);
+            encodeDecode("Aa", 4);
+            encodeDecode("Aaa", 5);
+            encodeDecode("AaA", 5);
+            encodeDecode("AaaA", 6);
+            encodeDecode("Aaaa", 6);
+            encodeDecode("AaAaA", 5);
+            encodeDecode("AaaAaaA", 6);
+            encodeDecode("AaaAAaaA", 7);
+        }
+
+        [Test]
+        public void testPunctuation()
+        {
+            performEncodeTest(';', new int[] { 3, 4, 5, 6, 6, 7, 8 });
+            encodeDecode(";;;;;;;;;;;;;;;;", 17);
+        }
+
+        [Test]
+        public void testUppercaseLowercaseMix2()
+        {
+            performPermutationTest(new char[] { 'A', 'a' }, 10, 8972);
+        }
+
+        [Test]
+        public void testUppercaseNumericMix()
+        {
+            performPermutationTest(new char[] { 'A', '1' }, 14, 192510);
+        }
+
+        [Test]
+        public void testUppercaseMixedMix()
+        {
+            performPermutationTest(new char[] { 'A', '1', ' ', ';' }, 7, 106060);
+        }
+
+        [Test]
+        public void testUppercasePunctuationMix()
+        {
+            performPermutationTest(new char[] { 'A', ';' }, 10, 8967);
+        }
+
+        [Test]
+        public void testUppercaseByteMix()
+        {
+            performPermutationTest(new char[] { 'A', '\u00c4' }, 10, 11222);
+        }
+
+        [Test]
+        public void testLowercaseByteMix()
+        {
+            performPermutationTest(new char[] { 'a', '\u00c4' }, 10, 11233);
+        }
+
+        public void testUppercaseLowercaseNumericMix()
+        {
+            performPermutationTest(new char[] { 'A', 'a', '1' }, 7, 15491);
+        }
+
+        [Test]
+        public void testUppercaseLowercasePunctuationMix()
+        {
+            performPermutationTest(new char[] { 'A', 'a', ';' }, 7, 15491);
+        }
+
+        [Test]
+        public void testUppercaseLowercaseByteMix()
+        {
+            performPermutationTest(new char[] { 'A', 'a', '\u00c4' }, 7, 17288);
+        }
+
+        [Test]
+        public void testLowercasePunctuationByteMix()
+        {
+            performPermutationTest(new char[] { 'a', ';', '\u00c4' }, 7, 17427);
+        }
+
+        [Test]
+        public void testUppercaseLowercaseNumericPunctuationMix()
+        {
+            performPermutationTest(new char[] { 'A', 'a', '1', ';' }, 7, 120479);
+        }
+
+        [Test]
+        public void testBinaryData()
+        {
+            var bytes = new byte[500];
+            var random = new Random(0);
+            int total = 0;
+            for (int i = 0; i < 10000; i++)
+            {
+                random.NextBytes(bytes);
+                total += encodeDecode(Encoding.GetEncoding(PDF417HighLevelEncoder.DEFAULT_ENCODING_NAME).GetString(bytes));
+            }
+            Assert.AreEqual(4190032, total); // in java 4190044 (?)
+        }
+
+        private static void encodeDecode(String input, int expectedLength) {
+            Assert.AreEqual(expectedLength, encodeDecode(input));
+        }
+
+        private static int encodeDecode(String input)
+        {
+            var s = PDF417HighLevelEncoder.encodeHighLevel(input, Compaction.AUTO, null, true);
+            var codewords = new int[s.Length + 1];
+            codewords[0] = codewords.Length;
+            for (int i = 1; i < codewords.Length; i++)
+            {
+                codewords[i] = s[i - 1];
+            }
+            var result = DecodedBitStreamParser.decode(codewords, "0", null);
+
+            Assert.AreEqual(input, result.Text);
+            return codewords.Length;
+        }
+
+        private static int getEndIndex(int length, char[] chars)
+        {
+            double decimalLength = Math.Log10(chars.Length);
+            return (int)Math.Ceiling(Math.Pow(10, decimalLength * length));
+        }
+
+        private static String generatePermutation(int index, int length, char[] chars)
+        {
+            int N = chars.Length;
+            var baseNNumber = DecimalToArbitrarySystem(index, N);
+            while (baseNNumber.Length < length)
+            {
+                baseNNumber = "0" + baseNNumber;
+            }
+            var prefix = string.Empty;
+            for (int i = 0; i < baseNNumber.Length; i++)
+            {
+                prefix += chars[baseNNumber[i] - '0'];
+            }
+            return prefix;
+        }
+
+        public static string DecimalToArbitrarySystem(long decimalNumber, int radix)
+        {
+            const int BitsInLong = 64;
+            const string Digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+            if (radix < 2 || radix > Digits.Length)
+                throw new ArgumentException("The radix must be >= 2 and <= " + Digits.Length.ToString());
+
+            if (decimalNumber == 0)
+                return "0";
+
+            int index = BitsInLong - 1;
+            long currentNumber = Math.Abs(decimalNumber);
+            char[] charArray = new char[BitsInLong];
+
+            while (currentNumber != 0)
+            {
+                int remainder = (int)(currentNumber % radix);
+                charArray[index--] = Digits[remainder];
+                currentNumber = currentNumber / radix;
+            }
+
+            string result = new String(charArray, index + 1, BitsInLong - index - 1);
+            if (decimalNumber < 0)
+            {
+                result = "-" + result;
+            }
+
+            return result;
+        }
+
+        private static void performPermutationTest(char[] chars, int length, int expectedTotal)
+        {
+            int endIndex = getEndIndex(length, chars);
+            int total = 0;
+            for (int i = 0; i < endIndex; i++)
+            {
+                total += encodeDecode(generatePermutation(i, length, chars));
+            }
+            Assert.AreEqual(expectedTotal, total);
+        }
+
+        private static void performEncodeTest(char c, int[] expectedLengths) {
+            for (int i = 0; i < expectedLengths.Length; i++) {
+                var sb = new StringBuilder();
+                for (int j = 0; j <= i; j++)
+                {
+                    sb.Append(c);
+                }
+                encodeDecode(sb.ToString(), expectedLengths[i]);
+            }
+        }
+
     }
 }
