@@ -117,14 +117,13 @@ namespace ZXing.PDF417.Internal
         internal static DecoderResult decode(int[] codewords, String ecLevel, Encoding startWithEncoding)
         {
             var result = new StringBuilder(codewords.Length * 2);
-            // Get compaction mode
-            int codeIndex = 1;
-            int code = codewords[codeIndex++];
             var resultMetadata = new PDF417ResultMetadata();
-            Encoding encoding = startWithEncoding;
+            var encoding = startWithEncoding;
+            int codeIndex = textCompaction(codewords, 1, result);
 
-            while (codeIndex <= codewords[0])
+            while (codeIndex < codewords[0])
             {
+                int code = codewords[codeIndex++];
                 switch (code)
                 {
                     case TEXT_COMPACTION_MODE_LATCH:
@@ -135,8 +134,7 @@ namespace ZXing.PDF417.Internal
                         codeIndex = byteCompaction(code, codewords, encoding ?? (encoding = CharacterSetECI.getEncoding(PDF417HighLevelEncoder.DEFAULT_ENCODING_NAME)), codeIndex, result);
                         break;
                     case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                        if (encoding == null)
-                            encoding = CharacterSetECI.getEncoding(PDF417HighLevelEncoder.DEFAULT_ENCODING_NAME);
+                        encoding = PDF417HighLevelEncoder.getEncoder(encoding);
                         result.Append(encoding.GetString(new []{(byte)codewords[codeIndex++]}, 0, 1));
                         break;
                     case NUMERIC_COMPACTION_MODE_LATCH:
@@ -176,14 +174,6 @@ namespace ZXing.PDF417.Internal
                 }
                 if (codeIndex < 0)
                     return null;
-                if (codeIndex < codewords.Length)
-                {
-                    code = codewords[codeIndex++];
-                }
-                else
-                {
-                    return null;
-                }
             }
 
             if (result.Length == 0 && resultMetadata.FileId == null)
@@ -378,6 +368,12 @@ namespace ZXing.PDF417.Internal
                 }
                 else
                 {
+                    if (code == ECI_CHARSET)
+                    {
+                        codeIndex--;
+                        break;
+                    }
+
                     switch (code)
                     {
                         case TEXT_COMPACTION_MODE_LATCH:
