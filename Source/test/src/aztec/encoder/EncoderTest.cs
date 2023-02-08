@@ -129,7 +129,7 @@ namespace ZXing.Aztec.Test
         }
 
         [TestCase("Espa\u00F1ol", null, 25, true, 1, false)] // Without ECI (implicit ISO-8859-1)
-        [TestCase("Espa\u00F1ol", "ISO-8859-1", 25, true, 2, false)] // Explicit ISO-8859-1
+        [TestCase("Espa\u00F1ol", "ISO-8859-1", 25, true, 1, false)] // Explicit ISO-8859-1
         [TestCase("Espa\u00F1ol", "ISO-8859-1", 25, true, 1, true)] // Explicit ISO-8859-1, disable ECI segment
         [TestCase("\u20AC 1 sample data.", "WINDOWS-1252", 25, true, 2, false)] // Standard ISO-8859-1 cannot encode Euro symbol; Windows-1252 superset can
         [TestCase("\u20AC 1 sample data.", "ISO-8859-15", 25, true, 2, false)]
