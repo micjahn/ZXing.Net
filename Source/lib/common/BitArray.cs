@@ -102,7 +102,7 @@ namespace ZXing.Common
 
         private void ensureCapacity(int newSize)
         {
-            if (size > bits.Length << 5)
+            if (newSize > bits.Length << 5)
             {
                 int[] newBits = makeArray((int)Math.Ceiling(newSize / LOAD_FACTOR));
                 System.Array.Copy(bits, 0, newBits, 0, bits.Length);
