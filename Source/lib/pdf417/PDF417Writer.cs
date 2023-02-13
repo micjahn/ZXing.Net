@@ -67,105 +67,39 @@ namespace ZXing.PDF417
             var margin = WHITE_SPACE;
             var errorCorrectionLevel = DEFAULT_ERROR_CORRECTION_LEVEL;
             var aspectRatio = DEFAULT_ASPECT_RATIO;
+            var autoECI = false;
 
             if (hints != null)
             {
-                if (hints.ContainsKey(EncodeHintType.PDF417_COMPACT) && hints[EncodeHintType.PDF417_COMPACT] != null)
+                var dimensions = IDictionaryExtensions.GetValue<Dimensions>(hints, EncodeHintType.PDF417_DIMENSIONS);
+                if (dimensions != null)
                 {
-                    encoder.setCompact(Convert.ToBoolean(hints[EncodeHintType.PDF417_COMPACT].ToString()));
-                }
-                if (hints.ContainsKey(EncodeHintType.PDF417_COMPACTION) && hints[EncodeHintType.PDF417_COMPACTION] != null)
-                {
-                    if (Enum.IsDefined(typeof(Compaction), hints[EncodeHintType.PDF417_COMPACTION].ToString()))
-                    {
-                        var compactionEnum = (Compaction)Enum.Parse(typeof(Compaction), hints[EncodeHintType.PDF417_COMPACTION].ToString(), true);
-                        encoder.setCompaction(compactionEnum);
-                    }
-                }
-                if (hints.ContainsKey(EncodeHintType.PDF417_DIMENSIONS))
-                {
-                    var dimensions = (Dimensions)hints[EncodeHintType.PDF417_DIMENSIONS];
                     encoder.setDimensions(dimensions.MaxCols,
                                           dimensions.MinCols,
                                           dimensions.MaxRows,
                                           dimensions.MinRows);
+
                 }
-                if (hints.ContainsKey(EncodeHintType.MARGIN) && hints[EncodeHintType.MARGIN] != null)
-                {
-                    margin = Convert.ToInt32(hints[EncodeHintType.MARGIN].ToString());
-                }
-                if (hints.ContainsKey(EncodeHintType.PDF417_ASPECT_RATIO) && hints[EncodeHintType.PDF417_ASPECT_RATIO] != null)
-                {
-                    var value = hints[EncodeHintType.PDF417_ASPECT_RATIO];
-                    if (value is PDF417AspectRatio ||
-                        value is int)
-                    {
-                        aspectRatio = (int)value;
-                    }
-                    else
-                    {
-                        if (Enum.IsDefined(typeof(PDF417AspectRatio), value.ToString()))
-                        {
-                            var aspectRatioEnum = (PDF417AspectRatio)Enum.Parse(typeof(PDF417AspectRatio), value.ToString(), true);
-                            aspectRatio = (int)aspectRatioEnum;
-                        }
-                    }
-                }
-                if (hints.ContainsKey(EncodeHintType.PDF417_IMAGE_ASPECT_RATIO) && hints[EncodeHintType.PDF417_IMAGE_ASPECT_RATIO] != null)
-                {
-                    var value = hints[EncodeHintType.PDF417_IMAGE_ASPECT_RATIO];
-                    try
-                    {
-                        encoder.setDesiredAspectRatio(Convert.ToSingle(value));
-                    }
-                    catch
-                    {
-                        // User passed in something that wasn't convertible to single.
-                    }
-                }
-                if (hints.ContainsKey(EncodeHintType.ERROR_CORRECTION) && hints[EncodeHintType.ERROR_CORRECTION] != null)
-                {
-                    var value = hints[EncodeHintType.ERROR_CORRECTION];
-                    if (value is PDF417ErrorCorrectionLevel ||
-                        value is int)
-                    {
-                        errorCorrectionLevel = (int)value;
-                    }
-                    else
-                    {
-                        if (Enum.IsDefined(typeof(PDF417ErrorCorrectionLevel), value.ToString()))
-                        {
-                            var errorCorrectionLevelEnum = (PDF417ErrorCorrectionLevel)Enum.Parse(typeof(PDF417ErrorCorrectionLevel), value.ToString(), true);
-                            errorCorrectionLevel = (int)errorCorrectionLevelEnum;
-                        }
-                    }
-                }
-                if (hints.ContainsKey(EncodeHintType.CHARACTER_SET))
-                {
-#if !SILVERLIGHT || WINDOWS_PHONE
-                    var encoding = (String)hints[EncodeHintType.CHARACTER_SET];
-                    if (encoding != null)
-                    {
-                        encoder.setEncoding(encoding);
-                    }
-#else
-               // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
-               encoder.setEncoding("UTF-8");
-#endif
-                }
-                if (hints.ContainsKey(EncodeHintType.DISABLE_ECI) && hints[EncodeHintType.DISABLE_ECI] != null)
-                {
-                    encoder.setDisableEci(Convert.ToBoolean(hints[EncodeHintType.DISABLE_ECI].ToString()));
-                }
+                encoder.setCompact(IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.PDF417_COMPACT, false));
+                encoder.setCompaction(IDictionaryExtensions.GetEnumValue(hints, EncodeHintType.PDF417_COMPACTION, Compaction.AUTO));
+                encoder.setDesiredAspectRatio(IDictionaryExtensions.GetFloatValue(hints, EncodeHintType.PDF417_IMAGE_ASPECT_RATIO, Internal.PDF417.DEFAULT_PREFERRED_RATIO));
+                encoder.setEncoding(IDictionaryExtensions.GetEncoding(hints, null));
+                encoder.setDisableEci(IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.DISABLE_ECI, false));
+
+                margin = IDictionaryExtensions.GetIntValue(hints, EncodeHintType.MARGIN, margin);
+                aspectRatio = IDictionaryExtensions.GetEnumValue(hints, EncodeHintType.PDF417_ASPECT_RATIO, typeof(PDF417AspectRatio), aspectRatio);
+                errorCorrectionLevel = IDictionaryExtensions.GetEnumValue(hints, EncodeHintType.ERROR_CORRECTION, typeof(PDF417ErrorCorrectionLevel), errorCorrectionLevel);
+                autoECI = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.PDF417_AUTO_ECI, false);
 
                 // Check for PDF417 Macro options
-                if (hints.ContainsKey(EncodeHintType.PDF417_MACRO_META_DATA))
+                var metaData = IDictionaryExtensions.GetValue<PDF417MacroMetadata>(hints, EncodeHintType.PDF417_MACRO_META_DATA);
+                if (metaData != null)
                 {
-                    encoder.setMetaData((PDF417MacroMetadata)hints[EncodeHintType.PDF417_MACRO_META_DATA]);
+                    encoder.setMetaData(metaData);
                 }
             }
 
-            return bitMatrixFromEncoder(encoder, contents, errorCorrectionLevel, width, height, margin, aspectRatio);
+            return bitMatrixFromEncoder(encoder, contents, errorCorrectionLevel, width, height, margin, aspectRatio, autoECI);
         }
 
         /// <summary>
@@ -195,12 +129,13 @@ namespace ZXing.PDF417
                                                       int width,
                                                       int height,
                                                       int margin,
-                                                      int aspectRatio)
+                                                      int aspectRatio,
+                                                      bool autoECI)
         {
             if (width >= height)
-                encoder.generateBarcodeLogic(contents, errorCorrectionLevel, width, height, ref aspectRatio);
+                encoder.generateBarcodeLogic(contents, errorCorrectionLevel, width, height, ref aspectRatio, autoECI);
             else
-                encoder.generateBarcodeLogic(contents, errorCorrectionLevel, height, width, ref aspectRatio);
+                encoder.generateBarcodeLogic(contents, errorCorrectionLevel, height, width, ref aspectRatio, autoECI);
 
             sbyte[][] originalScale = encoder.BarcodeMatrix.getScaledMatrix(1, aspectRatio);
             bool rotated = false;

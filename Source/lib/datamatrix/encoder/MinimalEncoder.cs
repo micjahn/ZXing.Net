@@ -1206,38 +1206,16 @@ namespace ZXing.Datamatrix.Encoder
             }
         }
 
-        internal class Input
+        internal class Input : MinimalECIInput
         {
-            private static int COST_PER_ECI = 3; // approximated (latch to ASCII + 2 codewords)
-            private int[] bytes;
-            private int fnc1;
             private SymbolShapeHint shape;
             private int macroId;
 
             public Input(String stringToEncode, Encoding priorityCharset, int fnc1, SymbolShapeHint shape, int macroId)
+                : base(stringToEncode, priorityCharset, fnc1)
             {
-                this.fnc1 = fnc1;
                 this.shape = shape;
                 this.macroId = macroId;
-                ECIEncoderSet encoderSet = new ECIEncoderSet(stringToEncode, priorityCharset, fnc1);
-                if (encoderSet.Length == 1)
-                { //optimization for the case when all can be encoded without ECI in ISO-8859-1
-                    bytes = new int[stringToEncode.Length];
-                    for (int i = 0; i < bytes.Length; i++)
-                    {
-                        char c = stringToEncode[i];
-                        bytes[i] = c == fnc1 ? 1000 : (int)c;
-                    }
-                }
-                else
-                {
-                    bytes = encodeMinimally(stringToEncode, encoderSet, fnc1);
-                }
-            }
-
-            internal int getFNC1Character()
-            {
-                return fnc1;
             }
 
             internal int getMacroId()
@@ -1248,198 +1226,6 @@ namespace ZXing.Datamatrix.Encoder
             internal SymbolShapeHint getShapeHint()
             {
                 return shape;
-            }
-
-            internal int Length
-            {
-                get
-                {
-                    return bytes.Length;
-                }
-            }
-
-            internal bool haveNCharacters(int index, int n)
-            {
-                if (index + n - 1 >= bytes.Length)
-                {
-                    return false;
-                }
-                for (int i = 0; i < n; i++)
-                {
-                    if (isECI(index + i))
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-
-            internal char charAt(int index)
-            {
-                //assert!isECI(index);
-                return isFNC1(index) ? (char)fnc1 : (char)bytes[index];
-            }
-
-            internal bool isECI(int index)
-            {
-                return bytes[index] > 255 && bytes[index] <= 999;
-            }
-
-            internal bool isFNC1(int index)
-            {
-                return bytes[index] == 1000;
-            }
-
-            internal int getECIValue(int index)
-            {
-                //assert isECI(index);
-                return bytes[index] - 256;
-            }
-
-            static void addEdge(InputEdge[][] edges, int to, InputEdge edge)
-            {
-                if (edges[to][edge.encoderIndex] == null ||
-                    edges[to][edge.encoderIndex].cachedTotalSize > edge.cachedTotalSize)
-                {
-                    edges[to][edge.encoderIndex] = edge;
-                }
-            }
-
-            static void addEdges(String stringToEncode,
-                                 ECIEncoderSet encoderSet,
-                                 InputEdge[][] edges,
-                                 int from,
-                                 InputEdge previous,
-                                 int fnc1)
-            {
-
-                char ch = stringToEncode[from];
-
-                int start = 0;
-                int end = encoderSet.Length;
-                if (encoderSet.getPriorityEncoderIndex() >= 0 && (ch == fnc1 || encoderSet.canEncode(ch,
-                    encoderSet.getPriorityEncoderIndex())))
-                {
-                    start = encoderSet.getPriorityEncoderIndex();
-                    end = start + 1;
-                }
-
-                for (int i = start; i < end; i++)
-                {
-                    if (ch == fnc1 || encoderSet.canEncode(ch, i))
-                    {
-                        addEdge(edges, from + 1, new InputEdge(ch, encoderSet, i, previous, fnc1));
-                    }
-                }
-            }
-
-            static int[] encodeMinimally(String stringToEncode, ECIEncoderSet encoderSet, int fnc1)
-            {
-                int inputLength = stringToEncode.Length;
-
-                // Array that represents vertices. There is a vertex for every character and encoding.
-                var edges = new InputEdge[inputLength + 1][];
-                for (var x = 0; x < edges.Length; x++)
-                {
-                    edges[x] = new InputEdge[encoderSet.Length];
-                }
-                addEdges(stringToEncode, encoderSet, edges, 0, null, fnc1);
-
-                for (int i = 1; i <= inputLength; i++)
-                {
-                    for (int j = 0; j < encoderSet.Length; j++)
-                    {
-                        if (edges[i][j] != null && i < inputLength)
-                        {
-                            addEdges(stringToEncode, encoderSet, edges, i, edges[i][j], fnc1);
-                        }
-                    }
-                    //optimize memory by removing edges that have been passed.
-                    for (int j = 0; j < encoderSet.Length; j++)
-                    {
-                        edges[i - 1][j] = null;
-                    }
-                }
-                int minimalJ = -1;
-                int minimalSize = Int32.MaxValue;
-                for (int j = 0; j < encoderSet.Length; j++)
-                {
-                    if (edges[inputLength][j] != null)
-                    {
-                        InputEdge edge = edges[inputLength][j];
-                        if (edge.cachedTotalSize < minimalSize)
-                        {
-                            minimalSize = edge.cachedTotalSize;
-                            minimalJ = j;
-                        }
-                    }
-                }
-                if (minimalJ < 0)
-                {
-                    throw new InvalidOperationException("Internal error: failed to encode \"" + stringToEncode + "\"");
-                }
-                var intsAL = new List<int>();
-                InputEdge current = edges[inputLength][minimalJ];
-                while (current != null)
-                {
-                    if (current.isFNC1)
-                    {
-                        intsAL.Insert(0, 1000);
-                    }
-                    else
-                    {
-                        byte[] bytes = encoderSet.encode(current.c, current.encoderIndex);
-                        for (int i = bytes.Length - 1; i >= 0; i--)
-                        {
-                            intsAL.Insert(0, (bytes[i] & 0xff));
-                        }
-                    }
-                    int previousEncoderIndex = current.previous == null ? 0 : current.previous.encoderIndex;
-                    if (previousEncoderIndex != current.encoderIndex)
-                    {
-                        intsAL.Insert(0, 256 + encoderSet.getECIValue(current.encoderIndex));
-                    }
-                    current = current.previous;
-                }
-                var ints = intsAL.ToArray();
-                return ints;
-            }
-
-            internal class InputEdge
-            {
-                internal char c;
-                private bool cIsFnc1;
-                internal int encoderIndex; //the encoding of this edge
-                internal InputEdge previous;
-                internal int cachedTotalSize;
-
-                internal InputEdge(char c, ECIEncoderSet encoderSet, int encoderIndex, InputEdge previous, int fnc1)
-                {
-                    this.c = c;
-                    this.cIsFnc1 = (int)c == fnc1;
-                    this.encoderIndex = encoderIndex;
-                    this.previous = previous;
-
-                    int size = cIsFnc1 ? 1 : encoderSet.encode(c, encoderIndex).Length;
-                    int previousEncoderIndex = previous == null ? 0 : previous.encoderIndex;
-                    if (previousEncoderIndex != encoderIndex)
-                    {
-                        size += COST_PER_ECI;
-                    }
-                    if (previous != null)
-                    {
-                        size += previous.cachedTotalSize;
-                    }
-                    this.cachedTotalSize = size;
-                }
-
-                internal bool isFNC1
-                {
-                    get
-                    {
-                        return cIsFnc1;
-                    }
-                }
             }
         }
     }

@@ -170,22 +170,39 @@ namespace ZXing.PDF417.Internal
         /// <param name="encoding">character encoding used to encode in default or byte compaction
         /// or null for default / not applicable</param>
         /// <param name="disableEci">if true, don't add an ECI segment for different encodings than default</param>
+        /// <param name="autoECI">encode input minimally using multiple ECIs if needed
+        /// If autoECI encoding is specified and additionally {@code encoding} is specified, then the encoder
+        /// will use the specified {@link Charset}
+        /// for any character that can be encoded by it, regardless
+        /// if a different encoding would lead to a more compact encoding. When no {@code encoding} is specified
+        /// then charsets will be chosen so that the byte representation is minimal.</param>
         /// <returns>the encoded message (the char values range from 0 to 928)</returns>
-        internal static String encodeHighLevel(String msg, Compaction compaction, Encoding encoding, bool disableEci)
+        internal static String encodeHighLevel(String msg, Compaction compaction, Encoding encoding, bool disableEci, bool autoECI)
         {
+            encoding = ECIEncoderSet.Clone(encoding); // needed because of ECIEncoderSet.canEncode
+
             //the codewords 0..928 are encoded as Unicode characters
             var sb = new StringBuilder(msg.Length);
 
+            ECIInput input;
+            if (autoECI)
+            {
+                input = new MinimalECIInput(msg, encoding, -1);
+            }
+            else
+            {
+                input = new NoECIInput(msg);
             if (encoding != null && !disableEci && String.Compare(DEFAULT_ENCODING_NAME, encoding.WebName.ToUpper(), StringComparison.Ordinal) != 0)
             {
-                CharacterSetECI eci = CharacterSetECI.getCharacterSetECI(encoding);
+                    var eci = CharacterSetECI.getCharacterSetECI(encoding);
                 if (eci != null)
                 {
                     encodingECI(eci.Value, sb);
                 }
             }
+            }
 
-            int len = msg.Length;
+            int len = input.Length;
             int p = 0;
             int textSubMode = SUBMODE_ALPHA;
 
@@ -193,33 +210,48 @@ namespace ZXing.PDF417.Internal
             switch (compaction)
             {
                 case Compaction.TEXT:
-                    encodeText(msg, p, len, sb, textSubMode);
+                    encodeText(input, p, len, sb, textSubMode);
                     break;
                 case Compaction.BYTE:
+                    if (autoECI)
+                    {
+                        encodeMultiECIBinary(input, 0, input.Length, TEXT_COMPACTION, sb);
+                    }
+                    else
+                    {
                     var msgBytes = toBytes(msg, encoding);
                     encodeBinary(msgBytes, p, msgBytes.Length, BYTE_COMPACTION, sb);
+                    }
                     break;
                 case Compaction.NUMERIC:
                     sb.Append((char)LATCH_TO_NUMERIC);
-                    encodeNumeric(msg, p, len, sb);
+                    encodeNumeric(input, p, len, sb);
                     break;
                 default:
                     int encodingMode = TEXT_COMPACTION; //Default mode, see 4.4.2.1
-                    byte[] bytes = null;
                     while (p < len)
                     {
-                        int n = determineConsecutiveDigitCount(msg, p);
+                        while (p < len && input.isECI(p))
+                        {
+                            encodingECI(input.getECIValue(p), sb);
+                            p++;
+                        }
+                        if (p >= len)
+                        {
+                            break;
+                        }
+                        int n = determineConsecutiveDigitCount(input, p);
                         if (n >= 13)
                         {
                             sb.Append((char)LATCH_TO_NUMERIC);
                             encodingMode = NUMERIC_COMPACTION;
                             textSubMode = SUBMODE_ALPHA; //Reset after latch
-                            encodeNumeric(msg, p, n, sb);
+                            encodeNumeric(input, p, n, sb);
                             p += n;
                         }
                         else
                         {
-                            int t = determineConsecutiveTextCount(msg, p);
+                            int t = determineConsecutiveTextCount(input, p);
                             if (t >= 5 || n == len)
                             {
                                 if (encodingMode != TEXT_COMPACTION)
@@ -228,34 +260,41 @@ namespace ZXing.PDF417.Internal
                                     encodingMode = TEXT_COMPACTION;
                                     textSubMode = SUBMODE_ALPHA; //start with submode alpha after latch
                                 }
-                                textSubMode = encodeText(msg, p, t, sb, textSubMode);
+                                textSubMode = encodeText(input, p, t, sb, textSubMode);
                                 p += t;
                             }
                             else
                             {
-                                if (bytes == null)
-                                {
-                                    bytes = toBytes(msg, encoding);
-                                }
-                                int byteCount;
-                                int b = determineConsecutiveBinaryCount(msg, bytes, p, encoding, out byteCount);
+                                int b = determineConsecutiveBinaryCount(input, p, autoECI ? null : encoding);
                                 if (b == 0)
                                 {
                                     b = 1;
                                 }
-                                if (b == 1 && byteCount == 1 && encodingMode == TEXT_COMPACTION)
+                                var bytes = autoECI ? null : toBytes(input.subSequence(p, p + b), encoding);
+                                if (((bytes == null && b == 1) || (bytes != null && bytes.Length == 1))
+                                    && encodingMode == TEXT_COMPACTION)
                                 {
                                     //Switch for one byte (instead of latch)
-                                    encodeBinary(toBytes(msg.Substring(p, b), encoding), 0, 1, TEXT_COMPACTION, sb);
+                                    if (autoECI)
+                                    {
+                                        encodeMultiECIBinary(input, p, 1, TEXT_COMPACTION, sb);
+                                }
+                                else
+                                {
+                                        encodeBinary(toBytes(input.subSequence(p, p + b), encoding), 0, 1, TEXT_COMPACTION, sb);
+                                    }
                                 }
                                 else
                                 {
                                     //Mode latch performed by encodeBinary()
-                                    encodeBinary(bytes,
-                                       toBytes(msg.Substring(0, p), encoding).Length,
-                                       toBytes(msg.Substring(p, b), encoding).Length,
-                                       encodingMode,
-                                       sb);
+                                    if (autoECI)
+                                    {
+                                        encodeMultiECIBinary(input, p, p + b, encodingMode, sb);
+                                    }
+                                    else
+                                    {
+                                        encodeBinary(bytes, 0, bytes.Length, encodingMode, sb);
+                                    }
                                     encodingMode = BYTE_COMPACTION;
                                     textSubMode = SUBMODE_ALPHA; //Reset after latch
                                 }
@@ -329,25 +368,32 @@ namespace ZXing.PDF417.Internal
         /// Encode parts of the message using Text Compaction as described in ISO/IEC 15438:2001(E),
         /// chapter 4.4.2.
         ///
-        /// <param name="msg">the message</param>
+        /// <param name="input">the input</param>
         /// <param name="startpos">the start position within the message</param>
         /// <param name="count">the number of characters to encode</param>
         /// <param name="sb">receives the encoded codewords</param>
         /// <param name="initialSubmode">should normally be SUBMODE_ALPHA</param>
         /// <returns>the text submode in which this method ends</returns>
         /// </summary>
-        private static int encodeText(String msg,
+        private static int encodeText(ECIInput input,
                                       int startpos,
                                       int count,
                                       StringBuilder sb,
                                       int initialSubmode)
         {
-            StringBuilder tmp = new StringBuilder(count);
-            int submode = initialSubmode;
-            int idx = 0;
+            var tmp = new StringBuilder(count);
+            var submode = initialSubmode;
+            var idx = 0;
             while (true)
             {
-                char ch = msg[startpos + idx];
+                if (input.isECI(startpos + idx))
+                {
+                    encodingECI(input.getECIValue(startpos + idx), sb);
+                    idx++;
+                }
+                else
+                {
+                    char ch = input.charAt(startpos + idx);
                 switch (submode)
                 {
                     case SUBMODE_ALPHA:
@@ -442,8 +488,7 @@ namespace ZXing.PDF417.Internal
                             {
                                 if (startpos + idx + 1 < count)
                                 {
-                                    char next = msg[startpos + idx + 1];
-                                    if (isPunctuation(next))
+                                        if (!input.isECI(startpos + idx + 1) && isPunctuation(input.charAt(startpos + idx + 1)))
                                     {
                                         submode = SUBMODE_PUNCTUATION;
                                         tmp.Append((char)25); //pl
@@ -474,6 +519,7 @@ namespace ZXing.PDF417.Internal
                     break;
                 }
             }
+            }
             char h = (char)0;
             int len = tmp.Length;
             for (int i = 0; i < len; i++)
@@ -494,6 +540,64 @@ namespace ZXing.PDF417.Internal
                 sb.Append((char)((h * 30) + 29)); //ps
             }
             return submode;
+        }
+
+        /// <summary>
+        /// Encode all of the message using Byte Compaction as described in ISO/IEC 15438:2001(E)
+        /// </summary>
+        /// <param name="input">the input</param>
+        /// <param name="startpos">the start position within the message</param>
+        /// <param name="count">the number of bytes to encode</param>
+        /// <param name="startmode">the mode from which this method starts</param>
+        /// <param name="sb">receives the encoded codewords</param>
+        private static void encodeMultiECIBinary(ECIInput input,
+                                          int startpos,
+                                          int count,
+                                          int startmode,
+                                          StringBuilder sb)
+        {
+            int end = Math.Min(startpos + count, input.Length);
+            int localStart = startpos;
+            while (true)
+            {
+                //encode all leading ECIs and advance localStart
+                while (localStart < end && input.isECI(localStart))
+                {
+                    encodingECI(input.getECIValue(localStart), sb);
+                    localStart++;
+                }
+                int localEnd = localStart;
+                //advance end until before the next ECI
+                while (localEnd < end && !input.isECI(localEnd))
+                {
+                    localEnd++;
+                }
+
+                int localCount = localEnd - localStart;
+                if (localCount <= 0)
+                {
+                    //done
+                    break;
+                }
+                else
+                {
+                    //encode the segment
+                    encodeBinary(subBytes(input, localStart, localEnd),
+                        0, localCount, localStart == startpos ? startmode : BYTE_COMPACTION, sb);
+                    localStart = localEnd + 1;
+                }
+            }
+        }
+
+        static byte[] subBytes(ECIInput input, int start, int end)
+        {
+            int count = end - start;
+            byte[] result = new byte[count];
+            for (int i = start; i < end; i++)
+            {
+                result[i - start] = (byte)(input.charAt(i) & 0xff);
+            }
+            return result;
         }
 
         /// <summary>
@@ -562,18 +666,18 @@ namespace ZXing.PDF417.Internal
             }
         }
 
-        private static void encodeNumeric(String msg, int startpos, int count, StringBuilder sb)
+        private static void encodeNumeric(ECIInput input, int startpos, int count, StringBuilder sb)
         {
 #if (SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NET46 || NET47 || NET48 || NETFX_CORE || NETSTANDARD) && !NETSTANDARD1_0
          int idx = 0;
-         StringBuilder tmp = new StringBuilder(count/3 + 1);
+            StringBuilder tmp = new StringBuilder(count / 3 + 1);
          BigInteger num900 = new BigInteger(900);
          BigInteger num0 = new BigInteger(0);
          while (idx < count)
          {
             tmp.Length = 0;
             int len = Math.Min(44, count - idx);
-            String part = '1' + msg.Substring(startpos + idx, len);
+                var part = "1" + input.subSequence(startpos + idx, startpos + idx + len);
 #if SILVERLIGHT4 || SILVERLIGHT5
             BigInteger bigint = BigIntegerExtensions.Parse(part);
 #else
@@ -581,8 +685,8 @@ namespace ZXing.PDF417.Internal
 #endif
             do
             {
-               BigInteger c = bigint%num900;
-               tmp.Append((char) c);
+                    BigInteger c = bigint % num900;
+                    tmp.Append((char)c);
                bigint = BigInteger.Divide(bigint, num900);
             } while (!bigint.Equals(num0));
 
@@ -602,8 +706,8 @@ namespace ZXing.PDF417.Internal
             {
                 tmp.Length = 0;
                 int len = Math.Min(44, count - idx);
-                String part = '1' + msg.Substring(startpos + idx, len);
-                BigInteger bigint = BigInteger.Parse(part);
+                var part = "1" + input.subSequence(startpos + idx, startpos + idx + len);
+                var bigint = BigInteger.Parse(part);
                 do
                 {
                     BigInteger c = BigInteger.Modulo(bigint, num900);
@@ -655,55 +759,45 @@ namespace ZXing.PDF417.Internal
         /// <summary>
         /// Determines the number of consecutive characters that are encodable using numeric compaction.
         ///
-        /// <param name="msg">the message</param>
+        /// <param name="input">the input</param>
         /// <param name="startpos">the start position within the message</param>
         /// <returns>the requested character count</returns>
         /// </summary>
-        private static int determineConsecutiveDigitCount(String msg, int startpos)
+        private static int determineConsecutiveDigitCount(ECIInput input, int startpos)
         {
             int count = 0;
-            int len = msg.Length;
+            int len = input.Length;
             int idx = startpos;
             if (idx < len)
             {
-                char ch = msg[idx];
-                while (isDigit(ch) && idx < len)
+                while (idx < len && !input.isECI(idx) && isDigit(input.charAt(idx)))
                 {
                     count++;
                     idx++;
-                    if (idx < len)
-                    {
-                        ch = msg[idx];
                     }
                 }
-            }
             return count;
         }
 
         /// <summary>
         /// Determines the number of consecutive characters that are encodable using text compaction.
         ///
-        /// <param name="msg">the message</param>
+        /// <param name="input">the input</param>
         /// <param name="startpos">the start position within the message</param>
         /// <returns>the requested character count</returns>
         /// </summary>
-        private static int determineConsecutiveTextCount(String msg, int startpos)
+        private static int determineConsecutiveTextCount(ECIInput input, int startpos)
         {
-            int len = msg.Length;
+            int len = input.Length;
             int idx = startpos;
             while (idx < len)
             {
-                char ch = msg[idx];
                 int numericCount = 0;
-                while (numericCount < 13 && isDigit(ch) && idx < len)
+                while (numericCount < 13 && idx < len && !input.isECI(idx) && isDigit(input.charAt(idx)))
                 {
                     numericCount++;
                     idx++;
-                    if (idx < len)
-                    {
-                        ch = msg[idx];
                     }
-                }
                 if (numericCount >= 13)
                 {
                     return idx - startpos - numericCount;
@@ -713,10 +807,9 @@ namespace ZXing.PDF417.Internal
                     //Heuristic: All text-encodable chars or digits are binary encodable
                     continue;
                 }
-                ch = msg[idx];
 
                 //Check if character is encodable
-                if (!isText(ch))
+                if (input.isECI(idx) || !isText(input.charAt(idx)))
                 {
                     break;
                 }
@@ -728,49 +821,48 @@ namespace ZXing.PDF417.Internal
         /// <summary>
         /// Determines the number of consecutive characters that are encodable using binary compaction.
         /// </summary>
-        /// <param name="msg">the message</param>
-        /// <param name="bytes">the message converted to a byte array</param>
+        /// <param name="input">the input</param>
         /// <param name="startpos">the start position within the message</param>
         /// <param name="encoding"></param>
-        /// <param name="byteCount"></param>
         /// <returns>the requested character count</returns>
-        private static int determineConsecutiveBinaryCount(String msg, byte[] bytes, int startpos, Encoding encoding, out int byteCount)
+        private static int determineConsecutiveBinaryCount(ECIInput input, int startpos, Encoding encoding)
         {
-            int len = msg.Length;
+            int len = input.Length;
             int idx = startpos;
-            int idxb = idx;  // bytes index (may differ from idx for utf-8 and other unicode encodings)
-            byteCount = 0;
-            encoding = getEncoder(encoding);
             while (idx < len)
             {
-                char ch = msg[idx];
                 int numericCount = 0;
 
-                while (numericCount < 13 && isDigit(ch))
+                int i = idx;
+                while (numericCount < 13 && !input.isECI(i) && isDigit(input.charAt(i)))
                 {
                     numericCount++;
                     //textCount++;
-                    int i = idx + numericCount;
+                    i = idx + numericCount;
                     if (i >= len)
                     {
                         break;
                     }
-                    ch = msg[i];
                 }
                 if (numericCount >= 13)
                 {
                     return idx - startpos;
                 }
-                ch = msg[idx];
-                // .Net fallback strategie: REPLACEMENT_CHARACTER 0x3F
-                if (bytes[idxb] == 63 && ch != '?')
+                if (encoding != null)
                 {
+                    var ch = input.charAt(idx);
+                    if (!ECIEncoderSet.canEncode(encoding, ch))
+                    {
+                        // assert input instanceof NoECIInput;
                     throw new WriterException("Non-encodable character detected: " + ch + " (Unicode: " + (int)ch + ')');
+                        // .Net fallback strategie: REPLACEMENT_CHARACTER 0x3F
+                        //if (bytes[idxb] == 63 && ch != '?')
+                        //{
+                        //    throw new WriterException("Non-encodable character detected: " + ch + " (Unicode: " + (int)ch + ')');
+                        //}
+                }
                 }
                 idx++;
-                var charAsBytes = toBytes(ch, encoding);
-                idxb += charAsBytes.Length; // for non-ascii symbols
-                byteCount += charAsBytes.Length;
             }
             return idx - startpos;
         }
@@ -796,6 +888,54 @@ namespace ZXing.PDF417.Internal
             else
             {
                 throw new WriterException("ECI number not in valid range from 0..811799, but was " + eci);
+            }
+        }
+
+        private class NoECIInput : ECIInput
+        {
+            String input;
+
+            public NoECIInput(String input)
+            {
+                this.input = input;
+    }
+
+            public int Length
+            {
+                get
+                {
+                    return input.Length;
+                }
+            }
+
+            public char charAt(int index)
+            {
+                return input[index];
+            }
+
+            public bool isECI(int index)
+            {
+                return false;
+            }
+
+            public int getECIValue(int index)
+            {
+                return -1;
+            }
+
+            public bool haveNCharacters(int index, int n)
+            {
+                return index + n <= input.Length;
+            }
+
+            public String subSequence(int start, int end)
+            {
+                return input.Substring(start, end - start);
+            }
+
+            public String toString()
+            {
+                return input;
             }
         }
     }

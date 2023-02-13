@@ -305,23 +305,88 @@ namespace ZXing.PDF417.Internal.Test
             Assert.AreEqual(4190032, total); // in java 4190044 (?)
         }
 
-        private static void encodeDecode(String input, int expectedLength) {
+        [Test]
+        public void testECIEnglishHiragana()
+        {
+            //multi ECI UTF-8, UTF-16 and ISO-8859-1
+            performECITest(new char[] { 'a', '1', '\u3040' }, new double[] { 20f, 1f, 10f }, 101992, 111542); // Java: 102583, 110914);
+        }
+
+        [Test]
+        public void testECIEnglishKatakana()
+        {
+            //multi ECI UTF-8, UTF-16 and ISO-8859-1
+            performECITest(new char[] { 'a', '1', '\u30a0' }, new double[] { 20f, 1f, 10f }, 104648, 111542); // Java: 104691, 110914);
+        }
+
+        [Test]
+        public void testECIEnglishHalfWidthKatakana()
+        {
+            //single ECI
+            performECITest(new char[] { 'a', '1', '\uff80' }, new double[] { 20f, 1f, 10f }, 79431, 111542); // Java: 80463, 110914);
+        }
+
+        [Test]
+        public void testECIEnglishChinese()
+        {
+            //single ECI
+            performECITest(new char[] { 'a', '1', '\u4e00' }, new double[] { 20f, 1f, 10f }, 95446, 111542); // Java: 95643, 110914);
+        }
+
+        [Test]
+        public void testECIGermanCyrillic()
+        {
+            //single ECI since the German Umlaut is in ISO-8859-1
+            performECITest(new char[] { 'a', '1', '\u00c4', '\u042f' }, new double[] { 20f, 1f, 1f, 10f }, 79488, 95266); // Java: 80529, 96007);
+        }
+
+        [Test]
+        public void testECIEnglishCzechCyrillic1()
+        {
+            //multi ECI between ISO-8859-2 and ISO-8859-5
+            performECITest(new char[] { 'a', '1', '\u010c', '\u042f' }, new double[] { 10f, 1f, 10f, 10f }, 91726, 126382); // Java: 91482, 124525);
+        }
+
+        [Test]
+        public void testECIEnglishCzechCyrillic2()
+        {
+            //multi ECI between ISO-8859-2 and ISO-8859-5
+            performECITest(new char[] { 'a', '1', '\u010c', '\u042f' }, new double[] { 40f, 1f, 10f, 10f }, 78298, 87520); // Java: 79331, 88236);
+        }
+
+        [Test]
+        public void testECIEnglishArabicCyrillic()
+        {
+            //multi ECI between UTF-8 (ISO-8859-6 is excluded in CharacterSetECI) and ISO-8859-5
+            performECITest(new char[] { 'a', '1', '\u0620', '\u042f' }, new double[] { 10f, 1f, 10f, 10f }, 112928, 126382); // Java: 111508, 124525);
+        }
+
+        private static void encodeDecode(String input, int expectedLength)
+        {
             Assert.AreEqual(expectedLength, encodeDecode(input));
         }
 
         private static int encodeDecode(String input)
         {
-            var s = PDF417HighLevelEncoder.encodeHighLevel(input, Compaction.AUTO, null, true);
-            var codewords = new int[s.Length + 1];
-            codewords[0] = codewords.Length;
-            for (int i = 1; i < codewords.Length; i++)
-            {
-                codewords[i] = s[i - 1];
-            }
-            var result = DecodedBitStreamParser.decode(codewords, "0", null);
+            return encodeDecode(input, null, false, true);
+        }
 
-            Assert.AreEqual(input, result.Text);
-            return codewords.Length;
+        private static int encodeDecode(String input, Encoding charset, bool autoECI, bool decode)
+      {
+            var s = PDF417HighLevelEncoder.encodeHighLevel(input, Compaction.AUTO, charset, false, autoECI);
+            if (decode)
+            {
+                var codewords = new int[s.Length + 1];
+                codewords[0] = codewords.Length;
+                for (int i = 1; i < codewords.Length; i++)
+                {
+                    codewords[i] = s[i - 1];
+                }
+                var result = DecodedBitStreamParser.decode(codewords, "0", null);
+
+                Assert.AreEqual(input, result.Text);
+            }
+            return s.Length + 1;
         }
 
         private static int getEndIndex(int length, char[] chars)
@@ -398,6 +463,75 @@ namespace ZXing.PDF417.Internal.Test
                 encodeDecode(sb.ToString(), expectedLengths[i]);
             }
         }
+        private static void performECITest(char[] chars,
+                                     double[] weights,
+                                     int expectedMinLength,
+                                     int expectedUTFLength)
+        {
+            var random = new Random(0);
+            int minLength = 0;
+            int utfLength = 0;
+            for (int i = 0; i < 1000; i++)
+            {
+                String s = generateText(random, 100, chars, weights);
+                minLength += encodeDecode(s, null, true, false);
+                // TODO: Use this instead when the decoder supports multi ECI input
+                //minLength += encodeDecode(s, null, true, true);
+                utfLength += encodeDecode(s, Encoding.UTF8, false, true);
+            }
+            Assert.AreEqual(expectedMinLength, minLength);
+            Assert.AreEqual(expectedUTFLength, utfLength);
+        }
 
+        private static String generateText(Random random, int maxWidth, char[] chars, double[] weights)
+        {
+            StringBuilder result = new StringBuilder();
+            int maxWordWidth = 7;
+            double total = 0;
+            for (int i = 0; i < weights.Length; i++)
+            {
+                total += weights[i];
+            }
+            for (int i = 0; i < weights.Length; i++)
+            {
+                weights[i] /= total;
+            }
+            int cnt = 0;
+            do
+            {
+                double maxValue = 0;
+                int maxIndex = 0;
+                for (int j = 0; j < weights.Length; j++)
+                {
+                    double value = random.NextDouble() * weights[j];
+                    if (value > maxValue)
+                    {
+                        maxValue = value;
+                        maxIndex = j;
+                    }
+                }
+                double wordLength = maxWordWidth * random.NextDouble();
+                if (wordLength > 0 && result.Length > 0)
+                {
+                    result.Append(' ');
+                }
+                for (int j = 0; j < wordLength; j++)
+                {
+                    char c = chars[maxIndex];
+                    if (j == 0 && c >= 'a' && c <= 'z' && (random.Next() % 1) == 1)
+                    {
+                        c = (char)(c - 'a' + 'A');
+                    }
+                    result.Append(c);
+                }
+                if (cnt % 2 != 0 && (random.Next() % 1) == 1)
+                {
+                    result.Append('.');
+                }
+                cnt++;
+            }
+            while (result.Length < maxWidth - maxWordWidth);
+            return result.ToString();
+        }
     }
 }

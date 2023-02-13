@@ -26,7 +26,7 @@ namespace ZXing.PDF417.Internal.Test
       public void testEncodeAuto()
       {
          var encoded = PDF417HighLevelEncoder.encodeHighLevel(
-            "ABCD", Compaction.AUTO, Encoding.UTF8, false);
+            "ABCD", Compaction.AUTO, Encoding.UTF8, false, false);
          Assert.AreEqual("\u039f\u001A\u0385ABCD", encoded);
       }
 
@@ -35,21 +35,21 @@ namespace ZXing.PDF417.Internal.Test
       {
          //Just check if this does not throw an exception
          PDF417HighLevelEncoder.encodeHighLevel(
-            "1%§s ?aG$", Compaction.AUTO, Encoding.UTF8, false);
+            "1%§s ?aG$", Compaction.AUTO, Encoding.UTF8, false, false);
       }
  
       [Test]
       public void testEncodeIso88591WithSpecialChars()
       {
 	      // Just check if this does not throw an exception
-         PDF417HighLevelEncoder.encodeHighLevel("asdfg§asd", Compaction.AUTO, Encoding.GetEncoding("ISO8859-1"), false);
+         PDF417HighLevelEncoder.encodeHighLevel("asdfg§asd", Compaction.AUTO, Encoding.GetEncoding("ISO8859-1"), false, false);
       }
 
       [Test]
       public void testEncodeText()
       {
          var encoded = PDF417HighLevelEncoder.encodeHighLevel(
-            "ABCD", Compaction.TEXT, Encoding.UTF8, false);
+            "ABCD", Compaction.TEXT, Encoding.UTF8, false, false);
          Assert.AreEqual("Ο\u001A\u0001?", encoded);
       }
 
@@ -57,7 +57,7 @@ namespace ZXing.PDF417.Internal.Test
       public void testEncodeNumeric()
       {
          var encoded = PDF417HighLevelEncoder.encodeHighLevel(
-            "1234", Compaction.NUMERIC, Encoding.UTF8, false);
+            "1234", Compaction.NUMERIC, Encoding.UTF8, false, false);
          Assert.AreEqual("\u039f\u001A\u0386\f\u01b2", encoded);
       }
 
@@ -65,7 +65,7 @@ namespace ZXing.PDF417.Internal.Test
       public void testEncodeByte()
       {
          var encoded = PDF417HighLevelEncoder.encodeHighLevel(
-            "abcd", Compaction.BYTE, Encoding.UTF8, false);
+            "abcd", Compaction.BYTE, Encoding.UTF8, false, false);
          Assert.AreEqual("\u039f\u001A\u0385abcd", encoded);
       }
    }

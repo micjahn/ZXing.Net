@@ -185,7 +185,7 @@ namespace ZXing.Common
             }
         }
 #else
-		private static bool canEncode(Encoding encoding, char c)
+		public static bool canEncode(Encoding encoding, char c)
 		{
 			try
 			{
@@ -273,8 +273,11 @@ namespace ZXing.Common
             return encoder.GetBytes(s);
         }
 
-		private static Encoding Clone(Encoding encoding)
+		public static Encoding Clone(Encoding encoding)
 		{
+            if (encoding == null)
+                return null;
+
 			// encodings have to be cloned to change the EncoderFallback property later
 
 #if !NETSTANDARD1_0 && !NETSTANDARD1_1 && !PORTABLE && !NETFX_CORE
