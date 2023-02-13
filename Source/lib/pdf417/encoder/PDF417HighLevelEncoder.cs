@@ -584,7 +584,7 @@ namespace ZXing.PDF417.Internal
                     //encode the segment
                     encodeBinary(subBytes(input, localStart, localEnd),
                         0, localCount, localStart == startpos ? startmode : BYTE_COMPACTION, sb);
-                    localStart = localEnd + 1;
+                    localStart = localEnd;
                 }
             }
         }

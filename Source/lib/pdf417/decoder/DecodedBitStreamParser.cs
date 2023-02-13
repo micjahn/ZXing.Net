@@ -16,6 +16,7 @@
 
 using System;
 using System.Text;
+using System.IO;
 
 #if (SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NET46 || NET47 || NET48 || NETFX_CORE || NETSTANDARD) && !NETSTANDARD1_0
 using System.Numerics;
@@ -116,16 +117,9 @@ namespace ZXing.PDF417.Internal
 
         internal static DecoderResult decode(int[] codewords, String ecLevel, Encoding startWithEncoding)
         {
-            var result = new StringBuilder(codewords.Length * 2);
+            var result = new ECIOutput(codewords.Length * 2, startWithEncoding);
+            var codeIndex = textCompaction(codewords, 1, result);
             var resultMetadata = new PDF417ResultMetadata();
-            var encoding = startWithEncoding;
-            int codeIndex = 1;
-            if (codewords[0] > 1 && codewords[codeIndex] == ECI_CHARSET)
-            {
-                encoding = getECICharset(codewords[++codeIndex]);
-                codeIndex++;
-            }
-            codeIndex = textCompaction(codewords, codeIndex, result, encoding);
 
             while (codeIndex < codewords[0])
             {
@@ -133,21 +127,20 @@ namespace ZXing.PDF417.Internal
                 switch (code)
                 {
                     case TEXT_COMPACTION_MODE_LATCH:
-                        codeIndex = textCompaction(codewords, codeIndex, result, encoding);
+                        codeIndex = textCompaction(codewords, codeIndex, result);
                         break;
                     case BYTE_COMPACTION_MODE_LATCH:
                     case BYTE_COMPACTION_MODE_LATCH_6:
-                        codeIndex = byteCompaction(code, codewords, encoding ?? (encoding = CharacterSetECI.getEncoding(PDF417HighLevelEncoder.DEFAULT_ENCODING_NAME)), codeIndex, result);
+                        codeIndex = byteCompaction(code, codewords, codeIndex, result);
                         break;
                     case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                        encoding = PDF417HighLevelEncoder.getEncoder(encoding);
-                        result.Append(encoding.GetString(new []{(byte)codewords[codeIndex++]}, 0, 1));
+                        result.Append((byte)codewords[codeIndex++]);
                         break;
                     case NUMERIC_COMPACTION_MODE_LATCH:
                         codeIndex = numericCompaction(codewords, codeIndex, result);
                         break;
                     case ECI_CHARSET:
-                        encoding = getECICharset(codewords[codeIndex++]);
+                        result.appendECI(codewords[codeIndex++]);
                         break;
                     case ECI_GENERAL_PURPOSE:
                         // Can't do anything with generic ECI; skip its 2 characters
@@ -169,14 +162,14 @@ namespace ZXing.PDF417.Internal
                         // appeared to be missing the starting mode. In these cases defaulting
                         // to text compaction seems to work.
                         codeIndex--;
-                        codeIndex = textCompaction(codewords, codeIndex, result, encoding);
+                        codeIndex = textCompaction(codewords, codeIndex, result);
                         break;
                 }
                 if (codeIndex < 0)
                     return null;
             }
 
-            if (result.Length == 0 && resultMetadata.FileId == null)
+            if (result.isEmpty && resultMetadata.FileId == null)
             {
                 return null;
             }
@@ -184,17 +177,6 @@ namespace ZXing.PDF417.Internal
             var decoderResult = new DecoderResult(null, result.ToString(), null, ecLevel);
             decoderResult.Other = resultMetadata;
             return decoderResult;
-        }
-
-        private static Encoding getECICharset(int eciValue)
-        {
-            var charsetECI = CharacterSetECI.getCharacterSetECIByValue(eciValue);
-            var encoding = CharacterSetECI.getEncoding(charsetECI);
-            if (encoding == null)
-            {
-                throw new FormatException("Encoding for ECI " + eciValue + " can't be resolved");
-            }
-            return encoding;
         }
 
         internal static int decodeMacroBlock(int[] codewords, int codeIndex, PDF417ResultMetadata resultMetadata)
@@ -263,23 +245,23 @@ namespace ZXing.PDF417.Internal
                         switch (codewords[codeIndex])
                         {
                             case MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME:
-                                var fileName = new StringBuilder();
-                                codeIndex = textCompaction(codewords, codeIndex + 1, fileName, null);
+                                var fileName = new ECIOutput();
+                                codeIndex = textCompaction(codewords, codeIndex + 1, fileName);
                                 resultMetadata.FileName = fileName.ToString();
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_SENDER:
-                                var sender = new StringBuilder();
-                                codeIndex = textCompaction(codewords, codeIndex + 1, sender, null);
+                                var sender = new ECIOutput();
+                                codeIndex = textCompaction(codewords, codeIndex + 1, sender);
                                 resultMetadata.Sender = sender.ToString();
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_ADDRESSEE:
-                                var addressee = new StringBuilder();
-                                codeIndex = textCompaction(codewords, codeIndex + 1, addressee, null);
+                                var addressee = new ECIOutput();
+                                codeIndex = textCompaction(codewords, codeIndex + 1, addressee);
                                 resultMetadata.Addressee = addressee.ToString();
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_SEGMENT_COUNT:
                                 {
-                                    var segmentCount = new StringBuilder();
+                                    var segmentCount = new ECIOutput();
                                     codeIndex = numericCompaction(codewords, codeIndex + 1, segmentCount);
 #if WindowsCE
                            try { resultMetadata.SegmentCount = Int32.Parse(segmentCount.ToString()); }
@@ -293,7 +275,7 @@ namespace ZXing.PDF417.Internal
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP:
                                 {
-                                    var timestamp = new StringBuilder();
+                                    var timestamp = new ECIOutput();
                                     codeIndex = numericCompaction(codewords, codeIndex + 1, timestamp);
 #if WindowsCE
                            try { resultMetadata.Timestamp = Int64.Parse(timestamp.ToString()); }
@@ -307,7 +289,7 @@ namespace ZXing.PDF417.Internal
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM:
                                 {
-                                    var checksum = new StringBuilder();
+                                    var checksum = new ECIOutput();
                                     codeIndex = numericCompaction(codewords, codeIndex + 1, checksum);
 #if WindowsCE
                            try { resultMetadata.Checksum = Int32.Parse(checksum.ToString()); }
@@ -321,7 +303,7 @@ namespace ZXing.PDF417.Internal
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE:
                                 {
-                                    var fileSize = new StringBuilder();
+                                    var fileSize = new ECIOutput();
                                     codeIndex = numericCompaction(codewords, codeIndex + 1, fileSize);
 #if WindowsCE
                            try { resultMetadata.FileSize = Int64.Parse(fileSize.ToString()); }
@@ -357,18 +339,18 @@ namespace ZXing.PDF417.Internal
         /// <param name="codewords">The array of codewords (data + error)</param>
         /// <param name="codeIndex">The current index into the codeword array.</param>
         /// <param name="result">The decoded data is appended to the result.</param>
-        /// <param name="encoding"/>
         /// <returns>The next index into the codeword array.</returns>
         /// </summary>
-        private static int textCompaction(int[] codewords, int codeIndex, StringBuilder result, Encoding encoding)
+        private static int textCompaction(int[] codewords, int codeIndex, ECIOutput result)
         {
             // 2 character per codeword
-            int[] textCompactionData = new int[(codewords[0] - codeIndex) << 1];
+            var textCompactionData = new int[(codewords[0] - codeIndex) << 1];
             // Used to hold the byte compaction value if there is a mode shift
-            byte[] byteCompactionData = new byte[(codewords[0] - codeIndex) << 1];
+            var byteCompactionData = new byte[(codewords[0] - codeIndex) << 1];
 
-            int index = 0;
-            bool end = false;
+            var index = 0;
+            var end = false;
+            var subMode = Mode.ALPHA;
             while ((codeIndex < codewords[0]) && !end)
             {
                 int code = codewords[codeIndex++];
@@ -413,10 +395,17 @@ namespace ZXing.PDF417.Internal
                             byteCompactionData[index] = (byte)code;
                             index++;
                             break;
+                        case ECI_CHARSET:
+                            subMode = decodeTextCompaction(textCompactionData, byteCompactionData, index, result, subMode);
+                            result.appendECI(codewords[codeIndex++]);
+                            textCompactionData = new int[(codewords[0] - codeIndex) * 2];
+                            byteCompactionData = new byte[(codewords[0] - codeIndex) * 2];
+                            index = 0;
+                            break;
                     }
                 }
             }
-            decodeTextCompaction(textCompactionData, byteCompactionData, index, result, encoding);
+            decodeTextCompaction(textCompactionData, byteCompactionData, index, result, subMode);
             return codeIndex;
         }
 
@@ -429,26 +418,26 @@ namespace ZXing.PDF417.Internal
         /// Compaction mode encodes up to 2 characters per codeword. The compaction rules
         /// for converting data into PDF417 codewords are defined in 5.4.2.2. The sub-mode
         /// switches are defined in 5.4.2.3.
-        ///
+        /// </summary>
         /// <param name="textCompactionData">The text compaction data.</param>
-        /// <param name="byteCompactionData">The byte compaction data if there</param>
-        ///                           was a mode shift.
+        /// <param name="byteCompactionData">The byte compaction data if there was a mode shift.</param>
         /// <param name="length">The size of the text compaction and byte compaction data.</param>
         /// <param name="result">The decoded data is appended to the result.</param>
-        /// <param name="encoding"/>
-        /// </summary>
-        private static void decodeTextCompaction(int[] textCompactionData,
+        /// <param name="startMode">The mode in which decoding starts</param>
+        /// <returns>The mode in which decoding ended</returns>
+        private static Mode decodeTextCompaction(int[] textCompactionData,
                                                  byte[] byteCompactionData,
                                                  int length,
-                                                 StringBuilder result,
-                                                 Encoding encoding)
+                                                 ECIOutput result,
+                                                 Mode startMode)
         {
-            // Beginning from an initial state of the Alpha sub-mode
+            // Beginning from an initial state
             // The default compaction mode for PDF417 in effect at the start of each symbol shall always be Text
             // Compaction mode Alpha sub-mode (uppercase alphabetic). A latch codeword from another mode to the Text
             // Compaction mode shall always switch to the Text Compaction Alpha sub-mode.
-            var subMode = Mode.ALPHA;
-            var priorToShiftMode = Mode.ALPHA;
+            var subMode = startMode;
+            var priorToShiftMode = startMode;
+            var latchedMode = startMode;
             int i = 0;
             while (i < length)
             {
@@ -472,9 +461,11 @@ namespace ZXing.PDF417.Internal
                                     break;
                                 case LL:
                                     subMode = Mode.LOWER;
+                                    latchedMode = subMode;
                                     break;
                                 case ML:
                                     subMode = Mode.MIXED;
+                                    latchedMode = subMode;
                                     break;
                                 case PS:
                                     // Shift to punctuation
@@ -482,14 +473,11 @@ namespace ZXing.PDF417.Internal
                                     subMode = Mode.PUNCT_SHIFT;
                                     break;
                                 case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                                    if (encoding != null)
-                                        result.Append(encoding.GetString(byteCompactionData, i, 1));
-                                    else
-                                        // TODO Does this need to use the current character encoding? See other occurrences below
-                                        result.Append((char)byteCompactionData[i]);
+                                    result.Append(byteCompactionData[i]);
                                     break;
                                 case TEXT_COMPACTION_MODE_LATCH:
                                     subMode = Mode.ALPHA;
+                                    latchedMode = subMode;
                                     break;
                             }
                         }
@@ -515,6 +503,7 @@ namespace ZXing.PDF417.Internal
                                     break;
                                 case ML:
                                     subMode = Mode.MIXED;
+                                    latchedMode = subMode;
                                     break;
                                 case PS:
                                     // Shift to punctuation
@@ -522,14 +511,11 @@ namespace ZXing.PDF417.Internal
                                     subMode = Mode.PUNCT_SHIFT;
                                     break;
                                 case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                                    if (encoding != null)
-                                        result.Append(encoding.GetString(byteCompactionData, i, 1));
-                                    else
-                                        // TODO Does this need to use the current character encoding? See other occurrences below
-                                        result.Append((char)byteCompactionData[i]);
+                                    result.Append(byteCompactionData[i]);
                                     break;
                                 case TEXT_COMPACTION_MODE_LATCH:
                                     subMode = Mode.ALPHA;
+                                    latchedMode = subMode;
                                     break;
                             }
                         }
@@ -547,15 +533,19 @@ namespace ZXing.PDF417.Internal
                             {
                                 case PL:
                                     subMode = Mode.PUNCT;
+                                    latchedMode = subMode;
                                     break;
                                 case 26:
                                     ch = ' ';
                                     break;
                                 case LL:
                                     subMode = Mode.LOWER;
+                                    latchedMode = subMode;
                                     break;
                                 case AL:
+                                case TEXT_COMPACTION_MODE_LATCH:
                                     subMode = Mode.ALPHA;
+                                    latchedMode = subMode;
                                     break;
                                 case PS:
                                     // Shift to punctuation
@@ -563,13 +553,7 @@ namespace ZXing.PDF417.Internal
                                     subMode = Mode.PUNCT_SHIFT;
                                     break;
                                 case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                                    if (encoding != null)
-                                        result.Append(encoding.GetString(byteCompactionData, i, 1));
-                                    else
-                                        result.Append((char)byteCompactionData[i]);
-                                    break;
-                                case TEXT_COMPACTION_MODE_LATCH:
-                                    subMode = Mode.ALPHA;
+                                    result.Append(byteCompactionData[i]);
                                     break;
                             }
                         }
@@ -586,16 +570,12 @@ namespace ZXing.PDF417.Internal
                             switch (subModeCh)
                             {
                                 case PAL:
-                                    subMode = Mode.ALPHA;
-                                    break;
-                                case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                                    if (encoding != null)
-                                        result.Append(encoding.GetString(byteCompactionData, i, 1));
-                                    else
-                                        result.Append((char)byteCompactionData[i]);
-                                    break;
                                 case TEXT_COMPACTION_MODE_LATCH:
                                     subMode = Mode.ALPHA;
+                                    latchedMode = subMode;
+                                    break;
+                                case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
+                                    result.Append(byteCompactionData[i]);
                                     break;
                             }
                         }
@@ -634,18 +614,13 @@ namespace ZXing.PDF417.Internal
                             switch (subModeCh)
                             {
                                 case PAL:
+                                case TEXT_COMPACTION_MODE_LATCH:
                                     subMode = Mode.ALPHA;
                                     break;
                                 case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
                                     // PS before Shift-to-Byte is used as a padding character,
                                     // see 5.4.2.4 of the specification
-                                    if (encoding != null)
-                                        result.Append(encoding.GetString(byteCompactionData, i, 1));
-                                    else
-                                        result.Append((char)byteCompactionData[i]);
-                                    break;
-                                case TEXT_COMPACTION_MODE_LATCH:
-                                    subMode = Mode.ALPHA;
+                                    result.Append(byteCompactionData[i]);
                                     break;
                             }
                         }
@@ -658,6 +633,8 @@ namespace ZXing.PDF417.Internal
                 }
                 i++;
             }
+
+            return latchedMode;
         }
 
         /// <summary>
@@ -667,124 +644,72 @@ namespace ZXing.PDF417.Internal
         ///
         /// <param name="mode">The byte compaction mode i.e. 901 or 924</param>
         /// <param name="codewords">The array of codewords (data + error)</param>
-        /// <param name="encoding">Currently active character encoding</param>
         /// <param name="codeIndex">The current index into the codeword array.</param>
         /// <param name="result">The decoded data is appended to the result.</param>
         /// <returns>The next index into the codeword array.</returns>
         /// </summary>
-        private static int byteCompaction(int mode, int[] codewords, Encoding encoding, int codeIndex, StringBuilder result)
+        private static int byteCompaction(int mode, int[] codewords, int codeIndex, ECIOutput result)
         {
-            var count = 0;
-            var value = 0L;
-            var end = false;
+            bool end = false;
 
-            using (var decodedBytes = new System.IO.MemoryStream())
+            while (codeIndex < codewords[0] && !end)
             {
-                switch (mode)
+                //handle leading ECIs
+                while (codeIndex < codewords[0] && codewords[codeIndex] == ECI_CHARSET)
                 {
-                    case BYTE_COMPACTION_MODE_LATCH:
-                        // Total number of Byte Compaction characters to be encoded
-                        // is not a multiple of 6
+                    result.appendECI(codewords[++codeIndex]);
+                    codeIndex++;
+                }
 
-                        int[] byteCompactedCodewords = new int[6];
-                        int nextCode = codewords[codeIndex++];
+                if (codeIndex >= codewords[0] || codewords[codeIndex] >= TEXT_COMPACTION_MODE_LATCH)
+                {
+                    end = true;
+                }
+                else
+                {
+                    //decode one block of 5 codewords to 6 bytes
+                    var value = 0L;
+                    var count = 0;
+                    do
+                    {
+                        value = 900 * value + codewords[codeIndex++];
+                        count++;
+                    } while (count < 5 &&
+                             codeIndex < codewords[0] &&
+                             codewords[codeIndex] < TEXT_COMPACTION_MODE_LATCH);
+                    if (count == 5 && (mode == BYTE_COMPACTION_MODE_LATCH_6 ||
+                                       codeIndex < codewords[0] &&
+                                       codewords[codeIndex] < TEXT_COMPACTION_MODE_LATCH))
+                    {
+                        for (int i = 0; i < 6; i++)
+                        {
+                            result.Append((byte)(value >> (8 * (5 - i))));
+                        }
+                    }
+                    else
+                    {
+                        codeIndex -= count;
                         while ((codeIndex < codewords[0]) && !end)
-                        {
-                            byteCompactedCodewords[count++] = nextCode;
-                            // Base 900
-                            value = 900 * value + nextCode;
-                            nextCode = codewords[codeIndex++];
-                            // perhaps it should be ok to check only nextCode >= TEXT_COMPACTION_MODE_LATCH
-                            switch (nextCode)
-                            {
-                                case TEXT_COMPACTION_MODE_LATCH:
-                                case BYTE_COMPACTION_MODE_LATCH:
-                                case NUMERIC_COMPACTION_MODE_LATCH:
-                                case BYTE_COMPACTION_MODE_LATCH_6:
-                                case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
-                                case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
-                                case MACRO_PDF417_TERMINATOR:
-                                    codeIndex--;
-                                    end = true;
-                                    break;
-                                default:
-                                    if ((count % 5 == 0) && (count > 0))
-                                    {
-                                        // Decode every 5 codewords
-                                        // Convert to Base 256
-                                        for (int j = 0; j < 6; ++j)
-                                        {
-                                            decodedBytes.WriteByte((byte)(value >> (8 * (5 - j))));
-                                        }
-                                        value = 0;
-                                        count = 0;
-                                    }
-                                    break;
-                            }
-                        }
-
-                        // if the end of all codewords is reached the last codeword needs to be added
-                        if (codeIndex == codewords[0] && nextCode < TEXT_COMPACTION_MODE_LATCH)
-                        {
-                            byteCompactedCodewords[count++] = nextCode;
-                        }
-
-                        // If Byte Compaction mode is invoked with codeword 901,
-                        // the last group of codewords is interpreted directly
-                        // as one byte per codeword, without compaction.
-                        for (int i = 0; i < count; i++)
-                        {
-                            decodedBytes.WriteByte((byte)byteCompactedCodewords[i]);
-                        }
-
-                        break;
-
-                    case BYTE_COMPACTION_MODE_LATCH_6:
-                        // Total number of Byte Compaction characters to be encoded
-                        // is an integer multiple of 6
-                        while (codeIndex < codewords[0] && !end)
                         {
                             int code = codewords[codeIndex++];
                             if (code < TEXT_COMPACTION_MODE_LATCH)
                             {
-                                count++;
-                                // Base 900
-                                value = 900 * value + code;
+                                result.Append((byte)code);
+                            }
+                            else if (code == ECI_CHARSET)
+                            {
+                                result.appendECI(codewords[codeIndex++]);
                             }
                             else
                             {
-                                switch (code)
-                                {
-                                    case TEXT_COMPACTION_MODE_LATCH:
-                                    case BYTE_COMPACTION_MODE_LATCH:
-                                    case NUMERIC_COMPACTION_MODE_LATCH:
-                                    case BYTE_COMPACTION_MODE_LATCH_6:
-                                    case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
-                                    case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
-                                    case MACRO_PDF417_TERMINATOR:
-                                        codeIndex--;
-                                        end = true;
-                                        break;
-                                }
-                            }
-                            if ((count % 5 == 0) && (count > 0))
-                            {
-                                // Decode every 5 codewords
-                                // Convert to Base 256
-                                for (int j = 0; j < 6; ++j)
-                                {
-                                    decodedBytes.WriteByte((byte)(value >> (8 * (5 - j))));
-                                }
-                                value = 0;
-                                count = 0;
+                                codeIndex--;
+                                end = true;
                             }
                         }
-                        break;
+                    }
                 }
-
-                var bytes = decodedBytes.ToArray();
-                result.Append(encoding.GetString(bytes, 0, bytes.Length));
             }
+
             return codeIndex;
         }
 
@@ -796,7 +721,7 @@ namespace ZXing.PDF417.Internal
         /// <param name="result">The decoded data is appended to the result.</param>
         /// <returns>The next index into the codeword array.</returns>
         /// </summary>
-        private static int numericCompaction(int[] codewords, int codeIndex, StringBuilder result)
+        private static int numericCompaction(int[] codewords, int codeIndex, ECIOutput result)
         {
             int count = 0;
             bool end = false;
@@ -825,6 +750,7 @@ namespace ZXing.PDF417.Internal
                         case BEGIN_MACRO_PDF417_CONTROL_BLOCK:
                         case BEGIN_MACRO_PDF417_OPTIONAL_FIELD:
                         case MACRO_PDF417_TERMINATOR:
+                        case ECI_CHARSET:
                             codeIndex--;
                             end = true;
                             break;
@@ -916,6 +842,79 @@ namespace ZXing.PDF417.Internal
             }
             return resultString.Substring(1);
 #endif
+        }
+    }
+
+    internal class ECIOutput
+    {
+        private bool needFlush = false;
+        private Encoding encoding = null;
+        private MemoryStream bytes = new MemoryStream();
+        private StringBuilder result;
+
+        public ECIOutput()
+        {
+            result = new StringBuilder();
+        }
+
+        public ECIOutput(int size, Encoding startWithEncoding)
+        {
+            result = new StringBuilder(size);
+            encoding = startWithEncoding;
+        }
+
+        public void Append(byte value)
+        {
+            bytes.WriteByte(value);
+            needFlush = true;
+        }
+
+        public void Append(char value)
+        {
+            bytes.WriteByte((byte)(value & 0xff));
+            needFlush = true;
+        }
+
+        public void Append(String s)
+        {
+            for (int i = 0; i < s.Length; i++)
+            {
+                Append(s[i]);
+            }
+        }
+
+        public void appendECI(int value)
+        {
+            flush();
+            var charsetECI = CharacterSetECI.getCharacterSetECIByValue(value);
+            encoding = CharacterSetECI.getEncoding(charsetECI);
+            if (encoding == null)
+            {
+                throw new FormatException("Encoding for ECI " + value + " can't be resolved");
+            }
+        }
+
+        private void flush()
+        {
+            if (needFlush)
+            {
+                needFlush = false;
+                encoding = PDF417HighLevelEncoder.getEncoder(encoding);
+                var byteArray = bytes.ToArray();
+                result.Append(encoding.GetString(byteArray, 0, (int)bytes.Length));
+                bytes.SetLength(0);
+            }
+        }
+
+        public bool isEmpty
+        {
+            get { return !needFlush && result.Length == 0; }
+        }
+
+        public override String ToString()
+        {
+            flush();
+            return result.ToString();
         }
     }
 }

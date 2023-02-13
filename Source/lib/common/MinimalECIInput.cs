@@ -237,6 +237,35 @@ namespace ZXing.Common
             return bytes[index] - 256;
         }
 
+        public override String ToString()
+        {
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < Length; i++)
+            {
+                if (i > 0)
+                {
+                    result.Append(", ");
+                }
+                if (isECI(i))
+                {
+                    result.Append("ECI(");
+                    result.Append(getECIValue(i));
+                    result.Append(')');
+                }
+                else if (charAt(i) < 128)
+                {
+                    result.Append('\'');
+                    result.Append(charAt(i));
+                    result.Append('\'');
+                }
+                else
+                {
+                    result.Append((int)charAt(i));
+                }
+            }
+            return result.ToString();
+        }
+
         static void addEdge(InputEdge[][] edges, int to, InputEdge edge)
         {
             if (edges[to][edge.encoderIndex] == null ||

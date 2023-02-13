@@ -309,56 +309,70 @@ namespace ZXing.PDF417.Internal.Test
         public void testECIEnglishHiragana()
         {
             //multi ECI UTF-8, UTF-16 and ISO-8859-1
-            performECITest(new char[] { 'a', '1', '\u3040' }, new double[] { 20f, 1f, 10f }, 101992, 111542); // Java: 102583, 110914);
+            performECITest(new char[] { 'a', '1', '\u3040' }, new double[] { 20f, 1f, 10f }, 101992, 111542); // Java: 105825, 110914);
         }
 
         [Test]
         public void testECIEnglishKatakana()
         {
             //multi ECI UTF-8, UTF-16 and ISO-8859-1
-            performECITest(new char[] { 'a', '1', '\u30a0' }, new double[] { 20f, 1f, 10f }, 104648, 111542); // Java: 104691, 110914);
+            performECITest(new char[] { 'a', '1', '\u30a0' }, new double[] { 20f, 1f, 10f }, 104648, 111542); // Java: 109177, 110914);
         }
 
         [Test]
         public void testECIEnglishHalfWidthKatakana()
         {
             //single ECI
-            performECITest(new char[] { 'a', '1', '\uff80' }, new double[] { 20f, 1f, 10f }, 79431, 111542); // Java: 80463, 110914);
+            performECITest(new char[] { 'a', '1', '\uff80' }, new double[] { 20f, 1f, 10f }, 79431, 111542); // Java: 80617, 110914);
         }
 
         [Test]
         public void testECIEnglishChinese()
         {
             //single ECI
-            performECITest(new char[] { 'a', '1', '\u4e00' }, new double[] { 20f, 1f, 10f }, 95446, 111542); // Java: 95643, 110914);
+            performECITest(new char[] { 'a', '1', '\u4e00' }, new double[] { 20f, 1f, 10f }, 95446, 111542); // Java: 95797, 110914);
         }
 
         [Test]
         public void testECIGermanCyrillic()
         {
             //single ECI since the German Umlaut is in ISO-8859-1
-            performECITest(new char[] { 'a', '1', '\u00c4', '\u042f' }, new double[] { 20f, 1f, 1f, 10f }, 79488, 95266); // Java: 80529, 96007);
+            performECITest(new char[] { 'a', '1', '\u00c4', '\u042f' }, new double[] { 20f, 1f, 1f, 10f }, 79488, 95266); // Java: 80755, 96007);
         }
 
         [Test]
         public void testECIEnglishCzechCyrillic1()
         {
             //multi ECI between ISO-8859-2 and ISO-8859-5
-            performECITest(new char[] { 'a', '1', '\u010c', '\u042f' }, new double[] { 10f, 1f, 10f, 10f }, 91726, 126382); // Java: 91482, 124525);
+            performECITest(new char[] { 'a', '1', '\u010c', '\u042f' }, new double[] { 10f, 1f, 10f, 10f }, 91726, 126382); // Java: 102824, 124525);
         }
 
         [Test]
         public void testECIEnglishCzechCyrillic2()
         {
             //multi ECI between ISO-8859-2 and ISO-8859-5
-            performECITest(new char[] { 'a', '1', '\u010c', '\u042f' }, new double[] { 40f, 1f, 10f, 10f }, 78298, 87520); // Java: 79331, 88236);
+            performECITest(new char[] { 'a', '1', '\u010c', '\u042f' }, new double[] { 40f, 1f, 10f, 10f }, 78298, 87520); // Java: 81321, 88236);
         }
 
         [Test]
         public void testECIEnglishArabicCyrillic()
         {
             //multi ECI between UTF-8 (ISO-8859-6 is excluded in CharacterSetECI) and ISO-8859-5
-            performECITest(new char[] { 'a', '1', '\u0620', '\u042f' }, new double[] { 10f, 1f, 10f, 10f }, 112928, 126382); // Java: 111508, 124525);
+            performECITest(new char[] { 'a', '1', '\u0620', '\u042f' }, new double[] { 10f, 1f, 10f, 10f }, 112928, 126382); // Java: 118510, 124525);
+        }
+
+        [Test]
+        public void testBinaryMultiECI()
+        {
+            //Test the cases described in 5.5.5.3 "ECI and Byte Compaction mode using latch 924 and 901"
+            performDecodeTest(new int[] { 5, 927, 4, 913, 200 }, "\u010c");
+            performDecodeTest(new int[] { 9, 927, 4, 913, 200, 927, 7, 913, 207 }, "\u010c\u042f");
+            performDecodeTest(new int[] { 9, 927, 4, 901, 200, 927, 7, 901, 207 }, "\u010c\u042f");
+            performDecodeTest(new int[] { 8, 927, 4, 901, 200, 927, 7, 207 }, "\u010c\u042f");
+            performDecodeTest(new int[] { 14, 927, 4, 901, 200, 927, 7, 207, 927, 4, 200, 927, 7, 207 },
+                 "\u010c\u042f\u010c\u042f");
+            performDecodeTest(new int[] { 16, 927, 4, 924, 336, 432, 197, 51, 300, 927, 7, 348, 231, 311, 858, 567 },
+                "\u010c\u010c\u010c\u010c\u010c\u010c\u042f\u042f\u042f\u042f\u042f\u042f");
         }
 
         private static void encodeDecode(String input, int expectedLength)
@@ -382,9 +396,7 @@ namespace ZXing.PDF417.Internal.Test
                 {
                     codewords[i] = s[i - 1];
                 }
-                var result = DecodedBitStreamParser.decode(codewords, "0", null);
-
-                Assert.AreEqual(input, result.Text);
+                performDecodeTest(codewords, input);
             }
             return s.Length + 1;
         }
@@ -463,6 +475,13 @@ namespace ZXing.PDF417.Internal.Test
                 encodeDecode(sb.ToString(), expectedLengths[i]);
             }
         }
+
+        private static void performDecodeTest(int[] codewords, String expectedResult)
+        {
+            var result = DecodedBitStreamParser.decode(codewords, "0", null);
+            Assert.AreEqual(expectedResult, result.Text);
+        }
+
         private static void performECITest(char[] chars,
                                      double[] weights,
                                      int expectedMinLength,
@@ -474,9 +493,7 @@ namespace ZXing.PDF417.Internal.Test
             for (int i = 0; i < 1000; i++)
             {
                 String s = generateText(random, 100, chars, weights);
-                minLength += encodeDecode(s, null, true, false);
-                // TODO: Use this instead when the decoder supports multi ECI input
-                //minLength += encodeDecode(s, null, true, true);
+                minLength += encodeDecode(s, null, true, true);
                 utfLength += encodeDecode(s, Encoding.UTF8, false, true);
             }
             Assert.AreEqual(expectedMinLength, minLength);
