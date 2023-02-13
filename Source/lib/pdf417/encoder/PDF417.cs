@@ -696,14 +696,27 @@ namespace ZXing.PDF417.Internal
         /// <param name="aspectRatio"></param>
         internal void generateBarcodeLogic(String msg, int errorCorrectionLevel, int longDimension, int shortDimension, ref int aspectRatio)
         {
+            generateBarcodeLogic(msg, errorCorrectionLevel, longDimension, shortDimension, ref aspectRatio, false);
+        }
 
+        /// <summary>
+        /// Generates the barcode logic.
+        /// </summary>
+        /// <param name="msg">the message to encode</param>
+        /// <param name="errorCorrectionLevel">PDF417 error correction level to use</param>
+        /// <param name="longDimension"></param>
+        /// <param name="shortDimension"></param>
+        /// <param name="aspectRatio"></param>
+        /// <param name="autoECI">automatically insert ECIs if needed</param>
+        internal void generateBarcodeLogic(String msg, int errorCorrectionLevel, int longDimension, int shortDimension, ref int aspectRatio, bool autoECI)
+        {
             //1. step: High-level encoding
-            String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, compaction, encoding, disableEci);
+            String highLevel = PDF417HighLevelEncoder.encodeHighLevel(msg, compaction, encoding, disableEci, autoECI);
             int sourceCodeWords = highLevel.Length;
 
             string macroCodeWords = getMacroBlock(ref sourceCodeWords);
 
-                errorCorrectionLevel = PDF417ErrorCorrection.getErrorCorrectionLevel(errorCorrectionLevel, sourceCodeWords);
+            errorCorrectionLevel = PDF417ErrorCorrection.getErrorCorrectionLevel(errorCorrectionLevel, sourceCodeWords);
             int errorCorrectionCodeWords = PDF417ErrorCorrection.getErrorCorrectionCodewordCount(errorCorrectionLevel);
 
             int[] dimension = determineDimensions(sourceCodeWords, errorCorrectionCodeWords, longDimension, shortDimension, ref aspectRatio);
@@ -792,7 +805,7 @@ namespace ZXing.PDF417.Internal
             sourceCodeWords++;
 
             // Segment index
-            string segmentIndex = PDF417HighLevelEncoder.encodeHighLevel(this.metadata.SegmentIndex.ToString("00000"), Compaction.NUMERIC, encoding, disableEci);
+            string segmentIndex = PDF417HighLevelEncoder.encodeHighLevel(this.metadata.SegmentIndex.ToString("00000"), Compaction.NUMERIC, encoding, disableEci, false);
 
             // Remove the latch to numeric prefix.
             segmentIndex = segmentIndex.Replace(((char)0x386).ToString(), "");
@@ -830,7 +843,7 @@ namespace ZXing.PDF417.Internal
                 if (!isEncodedAsCodewords)
                 {
                     // wrong encodation, but for compatibility
-                    string fileId = PDF417HighLevelEncoder.encodeHighLevel(this.metadata.FileId, Compaction.TEXT, encoding, disableEci);
+                    string fileId = PDF417HighLevelEncoder.encodeHighLevel(this.metadata.FileId, Compaction.TEXT, encoding, disableEci, false);
                     macroCodewords.Append(fileId);
                     sourceCodeWords += fileId.Length;
                 }
@@ -846,7 +859,7 @@ namespace ZXing.PDF417.Internal
                 macroCodewords.Append((char)0x0);
                 sourceCodeWords++;
 
-                string fileName = PDF417HighLevelEncoder.encodeHighLevel(this.metadata.FileName, Compaction.TEXT, encoding, disableEci);
+                string fileName = PDF417HighLevelEncoder.encodeHighLevel(this.metadata.FileName, Compaction.TEXT, encoding, disableEci, false);
                 // Remove the latch to text prefix.
                 fileName = fileName.Replace(((char)0x384).ToString(), "");
 
@@ -916,7 +929,7 @@ namespace ZXing.PDF417.Internal
                 case PDF417OptionalMacroFields.TimeStamp:
                 case PDF417OptionalMacroFields.FileSize:
                 case PDF417OptionalMacroFields.Checksum:
-                    encodedValue = PDF417HighLevelEncoder.encodeHighLevel(value, Compaction.NUMERIC, encoding, disableEci);
+                    encodedValue = PDF417HighLevelEncoder.encodeHighLevel(value, Compaction.NUMERIC, encoding, disableEci, false);
                     // Remove the latch to numeric prefix.
                     encodedValue = encodedValue.Replace(((char)0x386).ToString(), "");
                     break;
@@ -924,7 +937,7 @@ namespace ZXing.PDF417.Internal
                 case PDF417OptionalMacroFields.FileName:
                 case PDF417OptionalMacroFields.Sender:
                 case PDF417OptionalMacroFields.Addressee:
-                    encodedValue = PDF417HighLevelEncoder.encodeHighLevel(value, Compaction.TEXT, encoding, disableEci);
+                    encodedValue = PDF417HighLevelEncoder.encodeHighLevel(value, Compaction.TEXT, encoding, disableEci, false);
                     // Remove the latch to text prefix.
                     encodedValue = encodedValue.Replace(((char)0x384).ToString(), "");
                     break;
@@ -1084,10 +1097,10 @@ namespace ZXing.PDF417.Internal
         /// <summary>
         /// Sets output encoding.
         /// </summary>
-        /// <param name="encodingname">sets character encoding to use</param>
-        internal void setEncoding(String encodingname)
+        /// <param name="encoding">sets character encoding to use</param>
+        internal void setEncoding(Encoding encoding)
         {
-            this.encoding = Encoding.GetEncoding(encodingname);
+            this.encoding = encoding;
         }
 
         /// <summary>

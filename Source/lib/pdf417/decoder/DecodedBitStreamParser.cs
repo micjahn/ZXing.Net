@@ -119,7 +119,13 @@ namespace ZXing.PDF417.Internal
             var result = new StringBuilder(codewords.Length * 2);
             var resultMetadata = new PDF417ResultMetadata();
             var encoding = startWithEncoding;
-            int codeIndex = textCompaction(codewords, 1, result);
+            int codeIndex = 1;
+            if (codewords[0] > 1 && codewords[codeIndex] == ECI_CHARSET)
+            {
+                encoding = getECICharset(codewords[++codeIndex]);
+                codeIndex++;
+            }
+            codeIndex = textCompaction(codewords, codeIndex, result, encoding);
 
             while (codeIndex < codewords[0])
             {
@@ -127,7 +133,7 @@ namespace ZXing.PDF417.Internal
                 switch (code)
                 {
                     case TEXT_COMPACTION_MODE_LATCH:
-                        codeIndex = textCompaction(codewords, codeIndex, result);
+                        codeIndex = textCompaction(codewords, codeIndex, result, encoding);
                         break;
                     case BYTE_COMPACTION_MODE_LATCH:
                     case BYTE_COMPACTION_MODE_LATCH_6:
@@ -141,13 +147,7 @@ namespace ZXing.PDF417.Internal
                         codeIndex = numericCompaction(codewords, codeIndex, result);
                         break;
                     case ECI_CHARSET:
-                        var eci = codewords[codeIndex++];
-                        var charsetECI = CharacterSetECI.getCharacterSetECIByValue(eci);
-                        encoding = CharacterSetECI.getEncoding(charsetECI);
-                        if (encoding == null)
-                        {
-                            throw new FormatException("Encoding for ECI " + eci + " can't be resolved");
-                        }
+                        encoding = getECICharset(codewords[codeIndex++]);
                         break;
                     case ECI_GENERAL_PURPOSE:
                         // Can't do anything with generic ECI; skip its 2 characters
@@ -169,7 +169,7 @@ namespace ZXing.PDF417.Internal
                         // appeared to be missing the starting mode. In these cases defaulting
                         // to text compaction seems to work.
                         codeIndex--;
-                        codeIndex = textCompaction(codewords, codeIndex, result);
+                        codeIndex = textCompaction(codewords, codeIndex, result, encoding);
                         break;
                 }
                 if (codeIndex < 0)
@@ -184,6 +184,17 @@ namespace ZXing.PDF417.Internal
             var decoderResult = new DecoderResult(null, result.ToString(), null, ecLevel);
             decoderResult.Other = resultMetadata;
             return decoderResult;
+        }
+
+        private static Encoding getECICharset(int eciValue)
+        {
+            var charsetECI = CharacterSetECI.getCharacterSetECIByValue(eciValue);
+            var encoding = CharacterSetECI.getEncoding(charsetECI);
+            if (encoding == null)
+            {
+                throw new FormatException("Encoding for ECI " + eciValue + " can't be resolved");
+            }
+            return encoding;
         }
 
         internal static int decodeMacroBlock(int[] codewords, int codeIndex, PDF417ResultMetadata resultMetadata)
@@ -253,17 +264,17 @@ namespace ZXing.PDF417.Internal
                         {
                             case MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME:
                                 var fileName = new StringBuilder();
-                                codeIndex = textCompaction(codewords, codeIndex + 1, fileName);
+                                codeIndex = textCompaction(codewords, codeIndex + 1, fileName, null);
                                 resultMetadata.FileName = fileName.ToString();
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_SENDER:
                                 var sender = new StringBuilder();
-                                codeIndex = textCompaction(codewords, codeIndex + 1, sender);
+                                codeIndex = textCompaction(codewords, codeIndex + 1, sender, null);
                                 resultMetadata.Sender = sender.ToString();
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_ADDRESSEE:
                                 var addressee = new StringBuilder();
-                                codeIndex = textCompaction(codewords, codeIndex + 1, addressee);
+                                codeIndex = textCompaction(codewords, codeIndex + 1, addressee, null);
                                 resultMetadata.Addressee = addressee.ToString();
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_SEGMENT_COUNT:
@@ -326,14 +337,15 @@ namespace ZXing.PDF417.Internal
         /// <param name="codewords">The array of codewords (data + error)</param>
         /// <param name="codeIndex">The current index into the codeword array.</param>
         /// <param name="result">The decoded data is appended to the result.</param>
+        /// <param name="encoding"/>
         /// <returns>The next index into the codeword array.</returns>
         /// </summary>
-        private static int textCompaction(int[] codewords, int codeIndex, StringBuilder result)
+        private static int textCompaction(int[] codewords, int codeIndex, StringBuilder result, Encoding encoding)
         {
             // 2 character per codeword
             int[] textCompactionData = new int[(codewords[0] - codeIndex) << 1];
             // Used to hold the byte compaction value if there is a mode shift
-            int[] byteCompactionData = new int[(codewords[0] - codeIndex) << 1];
+            byte[] byteCompactionData = new byte[(codewords[0] - codeIndex) << 1];
 
             int index = 0;
             bool end = false;
@@ -378,13 +390,13 @@ namespace ZXing.PDF417.Internal
                             // in Text Compaction mode; its use is described in 5.4.2.4.
                             textCompactionData[index] = MODE_SHIFT_TO_BYTE_COMPACTION_MODE;
                             code = codewords[codeIndex++];
-                            byteCompactionData[index] = code;
+                            byteCompactionData[index] = (byte)code;
                             index++;
                             break;
                     }
                 }
             }
-            decodeTextCompaction(textCompactionData, byteCompactionData, index, result);
+            decodeTextCompaction(textCompactionData, byteCompactionData, index, result, encoding);
             return codeIndex;
         }
 
@@ -403,18 +415,20 @@ namespace ZXing.PDF417.Internal
         ///                           was a mode shift.
         /// <param name="length">The size of the text compaction and byte compaction data.</param>
         /// <param name="result">The decoded data is appended to the result.</param>
+        /// <param name="encoding"/>
         /// </summary>
         private static void decodeTextCompaction(int[] textCompactionData,
-                                                 int[] byteCompactionData,
+                                                 byte[] byteCompactionData,
                                                  int length,
-                                                 StringBuilder result)
+                                                 StringBuilder result,
+                                                 Encoding encoding)
         {
             // Beginning from an initial state of the Alpha sub-mode
             // The default compaction mode for PDF417 in effect at the start of each symbol shall always be Text
             // Compaction mode Alpha sub-mode (uppercase alphabetic). A latch codeword from another mode to the Text
             // Compaction mode shall always switch to the Text Compaction Alpha sub-mode.
-            Mode subMode = Mode.ALPHA;
-            Mode priorToShiftMode = Mode.ALPHA;
+            var subMode = Mode.ALPHA;
+            var priorToShiftMode = Mode.ALPHA;
             int i = 0;
             while (i < length)
             {
@@ -448,8 +462,11 @@ namespace ZXing.PDF417.Internal
                                     subMode = Mode.PUNCT_SHIFT;
                                     break;
                                 case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                                    // TODO Does this need to use the current character encoding? See other occurrences below
-                                    result.Append((char)byteCompactionData[i]);
+                                    if (encoding != null)
+                                        result.Append(encoding.GetString(byteCompactionData, i, 1));
+                                    else
+                                        // TODO Does this need to use the current character encoding? See other occurrences below
+                                        result.Append((char)byteCompactionData[i]);
                                     break;
                                 case TEXT_COMPACTION_MODE_LATCH:
                                     subMode = Mode.ALPHA;
@@ -485,8 +502,11 @@ namespace ZXing.PDF417.Internal
                                     subMode = Mode.PUNCT_SHIFT;
                                     break;
                                 case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                                    // TODO Does this need to use the current character encoding? See other occurrences below
-                                    result.Append((char)byteCompactionData[i]);
+                                    if (encoding != null)
+                                        result.Append(encoding.GetString(byteCompactionData, i, 1));
+                                    else
+                                        // TODO Does this need to use the current character encoding? See other occurrences below
+                                        result.Append((char)byteCompactionData[i]);
                                     break;
                                 case TEXT_COMPACTION_MODE_LATCH:
                                     subMode = Mode.ALPHA;
@@ -523,7 +543,10 @@ namespace ZXing.PDF417.Internal
                                     subMode = Mode.PUNCT_SHIFT;
                                     break;
                                 case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                                    result.Append((char)byteCompactionData[i]);
+                                    if (encoding != null)
+                                        result.Append(encoding.GetString(byteCompactionData, i, 1));
+                                    else
+                                        result.Append((char)byteCompactionData[i]);
                                     break;
                                 case TEXT_COMPACTION_MODE_LATCH:
                                     subMode = Mode.ALPHA;
@@ -546,7 +569,10 @@ namespace ZXing.PDF417.Internal
                                     subMode = Mode.ALPHA;
                                     break;
                                 case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                                    result.Append((char)byteCompactionData[i]);
+                                    if (encoding != null)
+                                        result.Append(encoding.GetString(byteCompactionData, i, 1));
+                                    else
+                                        result.Append((char)byteCompactionData[i]);
                                     break;
                                 case TEXT_COMPACTION_MODE_LATCH:
                                     subMode = Mode.ALPHA;
@@ -593,7 +619,10 @@ namespace ZXing.PDF417.Internal
                                 case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
                                     // PS before Shift-to-Byte is used as a padding character,
                                     // see 5.4.2.4 of the specification
-                                    result.Append((char)byteCompactionData[i]);
+                                    if (encoding != null)
+                                        result.Append(encoding.GetString(byteCompactionData, i, 1));
+                                    else
+                                        result.Append((char)byteCompactionData[i]);
                                     break;
                                 case TEXT_COMPACTION_MODE_LATCH:
                                     subMode = Mode.ALPHA;
