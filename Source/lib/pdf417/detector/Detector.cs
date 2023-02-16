@@ -67,6 +67,8 @@ namespace ZXing.PDF417.Internal
 
         private const int BARCODE_MIN_HEIGHT = 10;
 
+        private static int[] ROTATIONS = { 0, 180, 270, 90 };
+
         /// <summary>
         ///   <p>Detects a PDF417 Code in an image. Checks 0, 90, 180, and 270 degree rotations.</p>
         /// </summary>
@@ -82,30 +84,65 @@ namespace ZXing.PDF417.Internal
             // different binarizers (SF: or different Skipped Row Counts/Steps?)
             //boolean tryHarder = hints != null && hints.containsKey(DecodeHintType.TRY_HARDER);
 
-            BitMatrix bitMatrix = image.BlackMatrix;
-            if (bitMatrix == null)
+            BitMatrix originalMatrix = image.BlackMatrix;
+            if (originalMatrix == null)
                 return null;
 
-            List<ResultPoint[]> barcodeCoordinates = detect(multiple, bitMatrix);
-            // Try 180, 270, 90 degree rotations, in that order
-            if (barcodeCoordinates.Count == 0)
+            var barcodeCoordinates = detect(multiple, originalMatrix);
+            if (barcodeCoordinates.Count > 0)
             {
-                bitMatrix = (BitMatrix)bitMatrix.Clone();
-                for (int rotate = 0; barcodeCoordinates.Count == 0 && rotate < 3; rotate++)
-                {
-                    if (rotate != 1)
-                    {
-                        bitMatrix.rotate180();
-                    }
-                    else
-                    {
-                        bitMatrix.rotate90();
-                    }
-                    barcodeCoordinates = detect(multiple, bitMatrix);
-                }
+                return new PDF417DetectorResult(originalMatrix, barcodeCoordinates, 0);
+            }
+            var bitMatrix = (BitMatrix)originalMatrix.Clone();
+            bitMatrix.rotate180();
+            barcodeCoordinates = detect(multiple, bitMatrix);
+            if (barcodeCoordinates.Count > 0)
+            {
+                return new PDF417DetectorResult(bitMatrix, barcodeCoordinates, 180);
+            }
+            bitMatrix.rotate90();
+            barcodeCoordinates = detect(multiple, bitMatrix);
+            if (barcodeCoordinates.Count > 0)
+            {
+                return new PDF417DetectorResult(bitMatrix, barcodeCoordinates, 270);
+            }
+            bitMatrix.rotate180();
+            barcodeCoordinates = detect(multiple, bitMatrix);
+            if (barcodeCoordinates.Count > 0)
+            {
+                return new PDF417DetectorResult(bitMatrix, barcodeCoordinates, 90);
             }
 
-            return new PDF417DetectorResult(bitMatrix, barcodeCoordinates);
+            // java original:
+            // but I think the unrolled loop above is more memory efficent (less cloning, less rotating (BitMatrix.rotate(270) uses to rotate calls))
+            //foreach (int rotation in ROTATIONS)
+            //{
+            //    var bitMatrix = applyRotation(originalMatrix, rotation);
+            //    var barcodeCoordinates = detect(multiple, bitMatrix);
+            //    if (barcodeCoordinates.Count > 0)
+            //    {
+            //        return new PDF417DetectorResult(bitMatrix, barcodeCoordinates, rotation);
+            //    }
+            //}
+            return new PDF417DetectorResult(originalMatrix, new List<ResultPoint[]>(), 0);
+        }
+
+        /// <summary>
+        /// Applies a rotation to the supplied BitMatrix.
+        /// </summary>
+        /// <param name="matrix">bit matrix to apply rotation to</param>
+        /// <param name="rotation">the degrees of rotation to apply</param>
+        /// <returns>BitMatrix with applied rotation</returns>
+        private static BitMatrix applyRotation(BitMatrix matrix, int rotation)
+        {
+            if (rotation % 360 == 0)
+            {
+                return matrix;
+            }
+
+            var newMatrix = (BitMatrix)matrix.Clone();
+            newMatrix.rotate(rotation);
+            return newMatrix;
         }
 
         /// <summary>
@@ -116,10 +153,10 @@ namespace ZXing.PDF417.Internal
         /// <returns>List of ResultPoint arrays containing the coordinates of found barcodes</returns>
         private static List<ResultPoint[]> detect(bool multiple, BitMatrix bitMatrix)
         {
-            List<ResultPoint[]> barcodeCoordinates = new List<ResultPoint[]>();
-            int row = 0;
-            int column = 0;
-            bool foundBarcodeInRow = false;
+            var barcodeCoordinates = new List<ResultPoint[]>();
+            var row = 0;
+            var column = 0;
+            var foundBarcodeInRow = false;
             while (row < bitMatrix.Height)
             {
                 ResultPoint[] vertices = findVertices(bitMatrix, row, column);
