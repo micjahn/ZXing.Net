@@ -635,7 +635,7 @@ namespace ZXing.OneD
                     if (charset != sets[i])
                     {
                         cost++;
-                        latch = (Latch)Enum.Parse(typeof(Latch), sets[i].ToString());
+                        latch = (Latch)Enum.Parse(typeof(Latch), sets[i].ToString(), true);
                     }
                     if (!atEnd)
                     {

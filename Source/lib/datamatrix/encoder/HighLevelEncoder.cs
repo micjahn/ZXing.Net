@@ -115,7 +115,7 @@ namespace ZXing.Datamatrix.Encoder
         /// <returns>the encoded message (the char values range from 0 to 255)</returns>
         public static String encodeHighLevel(String msg)
         {
-            return encodeHighLevel(msg, SymbolShapeHint.FORCE_NONE, null, null, Encodation.ASCII, false);
+            return encodeHighLevel(msg, SymbolShapeHint.FORCE_NONE, null, null, Encodation.ASCII, false, null, false);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace ZXing.Datamatrix.Encoder
                                              Dimension maxSize,
                                              int defaultEncodation)
         {
-            return encodeHighLevel(msg, shape, minSize, maxSize, defaultEncodation, false);
+            return encodeHighLevel(msg, shape, minSize, maxSize, defaultEncodation, false, null, false);
         }
 
         /// <summary>
@@ -153,7 +153,9 @@ namespace ZXing.Datamatrix.Encoder
                                              Dimension minSize,
                                              Dimension maxSize,
                                              int defaultEncodation,
-                                             bool forceC40)
+                                             bool forceC40,
+                                             Encoding encoding,
+                                             bool disableEci)
         {
             //the codewords 0..255 are encoded as Unicode characters
             C40Encoder c40Encoder = new C40Encoder();
@@ -163,7 +165,7 @@ namespace ZXing.Datamatrix.Encoder
                new X12Encoder(), new EdifactEncoder(), new Base256Encoder()
             };
 
-            var context = new EncoderContext(msg);
+            var context = new EncoderContext(msg, encoding, disableEci);
             context.setSymbolShape(shape);
             context.setSizeConstraints(minSize, maxSize);
 
