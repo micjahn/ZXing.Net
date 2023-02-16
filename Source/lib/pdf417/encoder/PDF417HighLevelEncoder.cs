@@ -179,6 +179,11 @@ namespace ZXing.PDF417.Internal
         /// <returns>the encoded message (the char values range from 0 to 928)</returns>
         internal static String encodeHighLevel(String msg, Compaction compaction, Encoding encoding, bool disableEci, bool autoECI)
         {
+            if (string.IsNullOrEmpty(msg))
+            {
+                throw new ArgumentException("Empty message not allowed");
+            }
+
             if (encoding == null && !autoECI)
             {
                 for (int i = 0; i < msg.Length; i++)
