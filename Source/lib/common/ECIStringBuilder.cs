@@ -31,22 +31,39 @@ namespace ZXing.Common
         private Encoding currentCharset;
         private Encoding standardEncoding;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public ECIStringBuilder()
             : this(null)
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="standardEncoding"></param>
         public ECIStringBuilder(Encoding standardEncoding)
         {
             currentBytes = new StringBuilder();
             this.standardEncoding = currentCharset = (standardEncoding ?? (StringUtils.ISO88591_ENCODING ?? StringUtils.PLATFORM_DEFAULT_ENCODING_T));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="initialCapacity"></param>
         public ECIStringBuilder(int initialCapacity)
             : this(initialCapacity, null, null)
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="initialCapacity"></param>
+        /// <param name="standardEncoding"></param>
+        /// <param name="startWithEncoding"></param>
         public ECIStringBuilder(int initialCapacity, Encoding standardEncoding, Encoding startWithEncoding)
         {
             currentBytes = new StringBuilder(initialCapacity);
@@ -57,16 +74,16 @@ namespace ZXing.Common
         /// <summary>
         /// Appends {@code value} as a byte value
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">character whose lowest byte is to be appended</param>
         public void Append(char value)
         {
             currentBytes.Append((char)(value & 0xff));
         }
 
         /// <summary>
-        /// Appends {@code value} as a byte value (not its string representation)
+        /// Appends {@code value} as a byte value
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">byte to append</param>
         public void Append(byte value)
         {
             currentBytes.Append((char)(value & 0xff));
@@ -75,7 +92,7 @@ namespace ZXing.Common
         /// <summary>
         /// Appends the characters in {@code value} as bytes values
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">string to append</param>
         public void Append(String value)
         {
             currentBytes.Append(value);
@@ -84,12 +101,17 @@ namespace ZXing.Common
         /// <summary>
         /// Append the string repesentation of {@code value} (short for {@code append(String.valueOf(value))})
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">int to append as a string</param>
         public void Append(int value)
         {
             Append(value.ToString());
         }
 
+        /// <summary>
+        /// Appends ECI value to output.
+        /// </summary>
+        /// <param name="value">ECI value to append, as an int</param>
+        /// <returns></returns>
         public bool AppendECI(int value)
         {
             encodeCurrentBytesIfAny();
@@ -141,7 +163,7 @@ namespace ZXing.Common
         /// <summary>
         /// Appends the characters from {@code value} (unlike all other append methods of this class who append bytes)
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">characters to append</param>
         public void AppendCharacters(StringBuilder value)
         {
             encodeCurrentBytesIfAny();
@@ -151,17 +173,24 @@ namespace ZXing.Common
         /// <summary>
         /// Short for {@code toString().length()} (if possible, use {@link #isEmpty()} instead)
         /// </summary>
-        /// <returns></returns>
+        /// <returns>length of string representation in characters</returns>
         public int Length
         {
             get { return ToString().Length; }
         }
-    
+
+        /// <summary>
+        /// true if nothing has been appended
+        /// </summary>
         public bool isEmpty
         {
             get { return currentBytes.Length == 0 && (result == null || result.Length == 0); }
         }
-    
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override String ToString()
         {
             encodeCurrentBytesIfAny();
