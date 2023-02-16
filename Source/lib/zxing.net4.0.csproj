@@ -206,6 +206,7 @@
     <Compile Include="common\detector\MonochromeRectangleDetector.cs" />
     <Compile Include="common\detector\WhiteRectangleDetector.cs" />
     <Compile Include="common\ECI.cs" />
+    <Compile Include="common\ECIStringBuilder.cs" />
     <Compile Include="common\ECIInput.cs" />
     <Compile Include="common\EncodingOptions.cs" />
     <Compile Include="common\GlobalHistogramBinarizer.cs" />

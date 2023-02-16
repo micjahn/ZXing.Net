@@ -171,7 +171,7 @@ namespace ZXing.Common
         }
 
 #if NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_3 || WINDOWS_UWP || PORTABLE || NETFX_CORE
-        private static bool canEncode(Encoding encoding, char c)
+        public static bool canEncode(Encoding encoding, char c)
         {
             // very limited support on old platforms; not sure, if it would work; and not sure, if somebody need the old platform support
             try

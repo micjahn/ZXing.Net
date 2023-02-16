@@ -717,6 +717,5 @@ namespace ZXing.Datamatrix.Internal
             int tempVariable = randomizedBase256Codeword - pseudoRandomNumber;
             return tempVariable >= 0 ? tempVariable : tempVariable + 256;
         }
-
     }
 }

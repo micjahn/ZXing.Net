@@ -138,6 +138,7 @@
     <Compile Include="common\ECI.cs" />
     <Compile Include="common\ECIEncoderSet.cs" />
     <Compile Include="common\ECIInput.cs" />
+    <Compile Include="common\ECIStringBuilder.cs" />
     <Compile Include="common\EncodingOptions.cs" />
     <Compile Include="common\GlobalHistogramBinarizer.cs" />
     <Compile Include="common\GridSampler.cs" />
