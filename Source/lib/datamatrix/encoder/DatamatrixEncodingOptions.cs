@@ -237,6 +237,37 @@ namespace ZXing.Datamatrix
                 }
             }
         }
+
+        /// <summary>
+        /// Specifies what character encoding to use where applicable (type {@link String})
+        /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies what character encoding to " +
+            "use where applicable.")]
+#endif
+        public string CharacterSet
+        {
+            get
+            {
+                if (Hints.ContainsKey(EncodeHintType.CHARACTER_SET))
+                {
+                    return (string)Hints[EncodeHintType.CHARACTER_SET];
+                }
+                return null;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    if (Hints.ContainsKey(EncodeHintType.CHARACTER_SET))
+                        Hints.Remove(EncodeHintType.CHARACTER_SET);
+                }
+                else
+                {
+                    Hints[EncodeHintType.CHARACTER_SET] = value;
+                }
+            }
+        }
     }
 
 #if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY

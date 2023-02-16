@@ -16,6 +16,7 @@
 
 using System;
 using System.Text;
+using ZXing.Common;
 
 namespace ZXing.Datamatrix.Encoder
 {
@@ -42,10 +43,12 @@ namespace ZXing.Datamatrix.Encoder
 #endif
         }
 
-        public EncoderContext(String msg)
+        public EncoderContext(String msg, Encoding customEncoding, bool disableEci)
         {
             //From this point on Strings are not Unicode anymore!
-            var msgBinary = encoding.GetBytes(msg);
+            if (customEncoding == null)
+                customEncoding = encoding;
+            var msgBinary = customEncoding.GetBytes(msg);
             var sb = new StringBuilder(msgBinary.Length);
             var c = msgBinary.Length;
             for (int i = 0; i < c; i++)
@@ -54,7 +57,7 @@ namespace ZXing.Datamatrix.Encoder
                 var ch = (char)(msgBinary[i] & 0xff);
                 if (ch == '?' && msg[i] != '?')
                 {
-                    throw new ArgumentException("Message contains characters outside " + encoding.WebName + " encoding.");
+                    throw new ArgumentException("Message contains characters outside " + customEncoding.WebName + " encoding.");
                 }
                 sb.Append(ch);
             }
@@ -62,6 +65,12 @@ namespace ZXing.Datamatrix.Encoder
             shape = SymbolShapeHint.FORCE_NONE;
             this.codewords = new StringBuilder(msg.Length);
             newEncoding = -1;
+
+            if (!disableEci && encoding != customEncoding)
+            {
+                writeCodeword(HighLevelEncoder.ECI);
+                writeCodeword((char)(CharacterSetECI.getCharacterSetECI(customEncoding).Value + 1));
+            }
         }
 
         public void setSymbolShape(SymbolShapeHint shape)

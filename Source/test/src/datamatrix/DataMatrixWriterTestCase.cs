@@ -228,5 +228,147 @@ Four score and seven our forefathers brought forth", SymbolShapeHint.FORCE_SQUAR
                 Assert.That(resData[i], Is.EqualTo(data[i]), i.ToString());
             }
         }
+
+        [TestCase("UTF-8")]
+        [TestCase("ISO-8859-15")]
+        [TestCase("ISO-8859-1")]
+        public void test0To256AsBytesRoundTrip(string encodingStr)
+        {
+            var encoding = System.Text.Encoding.GetEncoding(encodingStr);
+            var writer = new BarcodeWriter
+            {
+                Format = BarcodeFormat.DATA_MATRIX,
+                Options = new DatamatrixEncodingOptions
+                {
+                    Width = 1,
+                    Height = 1,
+                    CharacterSet = encodingStr
+                }
+            };
+            var reader = new BarcodeReader
+            {
+                Options =
+                {
+                    PureBarcode = true,
+                    PossibleFormats = new List<BarcodeFormat> {BarcodeFormat.DATA_MATRIX}
+                }
+            };
+            var errors = new Dictionary<string, Exception>();
+            for (int i = 0; i < 256; i++)
+            {
+                var content = encoding.GetString(new[] { (byte)i });
+                try
+                {
+                    var bitmap = writer.Write(content);
+                    //bitmap.Save(String.Format("D:\\test-{0}.png", encodingStr), System.Drawing.Imaging.ImageFormat.Png);
+                    var result = reader.Decode(bitmap);
+                    if (result == null)
+                        throw new InvalidOperationException("cant be decoded");
+                    Assert.That(result.Text, Is.EqualTo(content));
+                }
+                catch (Exception e)
+                {
+                    errors[content] = e;
+                }
+            }
+
+            foreach (var error in errors)
+            {
+                var bytes = encoding.GetBytes(error.Key);
+                Console.WriteLine(String.Format("Content: {0} ({1}); Error: {2}", error.Key, bytes[0], error.Value.Message));
+            }
+
+            if (errors.Count > 0)
+                throw new AssertionException("not every content could be encoded and decoded");
+        }
+
+        [TestCase("UTF-8")]
+        [TestCase("ISO-8859-15")]
+        [TestCase("ISO-8859-1")]
+        public void test0To256AsOneStringRoundTrip(string encodingStr)
+        {
+            var encoding = System.Text.Encoding.GetEncoding(encodingStr);
+            var writer = new BarcodeWriter
+            {
+                Format = BarcodeFormat.DATA_MATRIX,
+                Options = new DatamatrixEncodingOptions
+                {
+                    Width = 1,
+                    Height = 1,
+                    CharacterSet = encodingStr
+                }
+            };
+            var reader = new BarcodeReader
+            {
+                Options =
+                {
+                    PureBarcode = true,
+                    PossibleFormats = new List<BarcodeFormat> {BarcodeFormat.DATA_MATRIX}
+                }
+            };
+            var content = new System.Text.StringBuilder();
+            for (int i = 0; i < 256; i++)
+            {
+                content.Append(encoding.GetString(new[] { (byte)i }));
+            }
+            Console.WriteLine(content.ToString());
+            var bitmap = writer.Write(content.ToString());
+            //bitmap.Save(String.Format("D:\\test-{0}.png", encodingStr), ImageFormat.Png);
+            var result = reader.Decode(bitmap);
+            if (result == null)
+                throw new InvalidOperationException("cant be decoded");
+            Assert.That(result.Text, Is.EqualTo(content.ToString()));
+        }
+
+        [TestCase('1')]
+        [TestCase('a')]
+        [TestCase('A')]
+        [TestCase('€')]
+        public void testCharactersForLengthUntil256RoundTrip(char character)
+        {
+            var writer = new BarcodeWriter
+            {
+                Format = BarcodeFormat.DATA_MATRIX,
+                Options = new DatamatrixEncodingOptions
+                {
+                    Width = 1,
+                    Height = 1,
+                    CharacterSet = "UTF-8"
+                }
+            };
+            var reader = new BarcodeReader();
+            reader.Options.PureBarcode = true;
+            reader.Options.PossibleFormats = new List<BarcodeFormat>
+            {
+                BarcodeFormat.DATA_MATRIX
+            };
+            var errors = new Dictionary<string, Exception>();
+            var content = new System.Text.StringBuilder();
+            for (int i = 0; i < 256; i++)
+            {
+                content.Append(character);
+                try
+                {
+                    var bitmap = writer.Write(content.ToString());
+                    //bitmap.Save(String.Format("D:\\test-{0}-{1}.png", "UTF-8", character), System.Drawing.Imaging.ImageFormat.Png);
+                    var result = reader.Decode(bitmap);
+                    if (result == null)
+                        throw new InvalidOperationException("cant be decoded");
+                    Assert.That(result.Text, Is.EqualTo(content.ToString()));
+                }
+                catch (Exception e)
+                {
+                    errors[content.ToString()] = e;
+                }
+            }
+
+            foreach (var error in errors)
+            {
+                Console.WriteLine(String.Format("Content: {0}; Error: {1}", error.Key, error.Value.Message));
+            }
+
+            if (errors.Count > 0)
+                throw new AssertionException("not every content could be encoded and decoded");
+        }
     }
 }

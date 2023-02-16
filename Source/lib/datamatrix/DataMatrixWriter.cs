@@ -75,6 +75,8 @@ namespace ZXing.Datamatrix
             Dimension maxSize = null;
             var margin = 0;
             var noPadding = false;
+            System.Text.Encoding encoding = null;
+            var disableEci = false;
             if (hints != null)
             {
                 if (hints.ContainsKey(EncodeHintType.DATA_MATRIX_SHAPE))
@@ -126,6 +128,8 @@ namespace ZXing.Datamatrix
                         bool.TryParse(noPaddingObj.ToString(), out noPadding);
                     }
                 }
+                encoding = IDictionaryExtensions.GetEncoding(hints, null);
+                disableEci = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.DISABLE_ECI, disableEci);
             }
 
             //1. step: Data encodation
@@ -135,14 +139,12 @@ namespace ZXing.Datamatrix
             {
                 var hasGS1FormatHint = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.GS1_FORMAT);
 
-                var charset = IDictionaryExtensions.GetEncoding(hints);
-
-                encoded = MinimalEncoder.encodeHighLevel(contents, charset, hasGS1FormatHint ? 0x1D : -1, shape);
+                encoded = MinimalEncoder.encodeHighLevel(contents, encoding, hasGS1FormatHint ? 0x1D : -1, shape);
             }
             else
             {
                 var hasForceC40Hint = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.FORCE_C40);
-                encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize, defaultEncodation, hasForceC40Hint);
+                encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize, defaultEncodation, hasForceC40Hint, encoding, disableEci);
             }
 
             SymbolInfo symbolInfo = SymbolInfo.lookup(encoded.Length, shape, minSize, maxSize, true);
