@@ -37,14 +37,31 @@ namespace ZXing.PDF417.Internal
         public List<ResultPoint[]> Points { get; private set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public int Rotation { get; private set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ZXing.PDF417.Internal.PDF417DetectorResult"/> class.
+        /// </summary>
+        /// <param name="bits">Bits.</param>
+        /// <param name="points">Points.</param>
+        /// <param name="rotation">Rotation.</param>
+        public PDF417DetectorResult(BitMatrix bits, List<ResultPoint[]> points, int rotation)
+        {
+            Bits = bits;
+            Points = points;
+            Rotation = rotation;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ZXing.PDF417.Internal.PDF417DetectorResult"/> class.
         /// </summary>
         /// <param name="bits">Bits.</param>
         /// <param name="points">Points.</param>
         public PDF417DetectorResult(BitMatrix bits, List<ResultPoint[]> points)
+            : this(bits, points, 0)
         {
-            Bits = bits;
-            Points = points;
         }
     }
 }

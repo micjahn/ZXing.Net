@@ -407,6 +407,31 @@ namespace ZXing.Common
         }
 
         /// <summary>
+        /// Modifies this {@code BitMatrix} to represent the same but rotated the given degrees (multiple of 0, 90, 180, 270)
+        /// </summary>
+        /// <param name="degrees"></param>
+        /// <exception cref="ArgumentException"></exception>
+        public void rotate(int degrees)
+        {
+            switch (degrees % 360)
+            {
+                case 0:
+                    return;
+                case 90:
+                    rotate90();
+                    return;
+                case 180:
+                    rotate180();
+                    return;
+                case 270:
+                    rotate90();
+                    rotate180();
+                    return;
+            }
+            throw new ArgumentException("degrees must be a multiple of 0, 90, 180, or 270");
+        }
+
+        /// <summary>
         /// Modifies this {@code BitMatrix} to represent the same but rotated 180 degrees
         /// </summary>
         public void rotate180()
