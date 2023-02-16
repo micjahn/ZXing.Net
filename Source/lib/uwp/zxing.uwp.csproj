@@ -359,6 +359,9 @@
     <Compile Include="..\common\ECIInput.cs">
       <Link>common\ECIInput.cs</Link>
     </Compile>
+    <Compile Include="..\common\ECIStringBuilder.cs">
+      <Link>common\ECIStringBuilder.cs</Link>
+    </Compile>
     <Compile Include="..\common\EncodingOptions.cs">
       <Link>common\EncodingOptions.cs</Link>
     </Compile>

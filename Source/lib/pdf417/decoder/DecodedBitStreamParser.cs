@@ -117,7 +117,7 @@ namespace ZXing.PDF417.Internal
 
         internal static DecoderResult decode(int[] codewords, String ecLevel, Encoding startWithEncoding)
         {
-            var result = new ECIOutput(codewords.Length * 2, startWithEncoding);
+            var result = new ECIStringBuilder(codewords.Length * 2, PDF417HighLevelEncoder.getEncoder(null), startWithEncoding);
             var codeIndex = textCompaction(codewords, 1, result);
             var resultMetadata = new PDF417ResultMetadata();
 
@@ -134,13 +134,13 @@ namespace ZXing.PDF417.Internal
                         codeIndex = byteCompaction(code, codewords, codeIndex, result);
                         break;
                     case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                        result.Append((byte)codewords[codeIndex++]);
+                        result.Append((char)codewords[codeIndex++]);
                         break;
                     case NUMERIC_COMPACTION_MODE_LATCH:
                         codeIndex = numericCompaction(codewords, codeIndex, result);
                         break;
                     case ECI_CHARSET:
-                        result.appendECI(codewords[codeIndex++]);
+                        result.AppendECI(codewords[codeIndex++]);
                         break;
                     case ECI_GENERAL_PURPOSE:
                         // Can't do anything with generic ECI; skip its 2 characters
@@ -245,23 +245,23 @@ namespace ZXing.PDF417.Internal
                         switch (codewords[codeIndex])
                         {
                             case MACRO_PDF417_OPTIONAL_FIELD_FILE_NAME:
-                                var fileName = new ECIOutput();
+                                var fileName = new ECIStringBuilder();
                                 codeIndex = textCompaction(codewords, codeIndex + 1, fileName);
                                 resultMetadata.FileName = fileName.ToString();
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_SENDER:
-                                var sender = new ECIOutput();
+                                var sender = new ECIStringBuilder();
                                 codeIndex = textCompaction(codewords, codeIndex + 1, sender);
                                 resultMetadata.Sender = sender.ToString();
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_ADDRESSEE:
-                                var addressee = new ECIOutput();
+                                var addressee = new ECIStringBuilder();
                                 codeIndex = textCompaction(codewords, codeIndex + 1, addressee);
                                 resultMetadata.Addressee = addressee.ToString();
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_SEGMENT_COUNT:
                                 {
-                                    var segmentCount = new ECIOutput();
+                                    var segmentCount = new ECIStringBuilder();
                                     codeIndex = numericCompaction(codewords, codeIndex + 1, segmentCount);
                                     int intResult;
                                     if (Int32.TryParse(segmentCount.ToString(), out intResult))
@@ -270,7 +270,7 @@ namespace ZXing.PDF417.Internal
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_TIME_STAMP:
                                 {
-                                    var timestamp = new ECIOutput();
+                                    var timestamp = new ECIStringBuilder();
                                     codeIndex = numericCompaction(codewords, codeIndex + 1, timestamp);
                                     long longResult;
                                     if (Int64.TryParse(timestamp.ToString(), out longResult))
@@ -279,7 +279,7 @@ namespace ZXing.PDF417.Internal
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_CHECKSUM:
                                 {
-                                    var checksum = new ECIOutput();
+                                    var checksum = new ECIStringBuilder();
                                     codeIndex = numericCompaction(codewords, codeIndex + 1, checksum);
                                     int intResult;
                                     if (Int32.TryParse(checksum.ToString(), out intResult))
@@ -288,7 +288,7 @@ namespace ZXing.PDF417.Internal
                                 break;
                             case MACRO_PDF417_OPTIONAL_FIELD_FILE_SIZE:
                                 {
-                                    var fileSize = new ECIOutput();
+                                    var fileSize = new ECIStringBuilder();
                                     codeIndex = numericCompaction(codewords, codeIndex + 1, fileSize);
                                     long longResult;
                                     if (Int64.TryParse(fileSize.ToString(), out longResult))
@@ -321,12 +321,12 @@ namespace ZXing.PDF417.Internal
         /// <param name="result">The decoded data is appended to the result.</param>
         /// <returns>The next index into the codeword array.</returns>
         /// </summary>
-        private static int textCompaction(int[] codewords, int codeIndex, ECIOutput result)
+        private static int textCompaction(int[] codewords, int codeIndex, ECIStringBuilder result)
         {
             // 2 character per codeword
             var textCompactionData = new int[(codewords[0] - codeIndex) << 1];
             // Used to hold the byte compaction value if there is a mode shift
-            var byteCompactionData = new byte[(codewords[0] - codeIndex) << 1];
+            var byteCompactionData = new int[(codewords[0] - codeIndex) << 1];
 
             var index = 0;
             var end = false;
@@ -342,12 +342,6 @@ namespace ZXing.PDF417.Internal
                 }
                 else
                 {
-                    if (code == ECI_CHARSET)
-                    {
-                        codeIndex--;
-                        break;
-                    }
-
                     switch (code)
                     {
                         case TEXT_COMPACTION_MODE_LATCH:
@@ -377,9 +371,9 @@ namespace ZXing.PDF417.Internal
                             break;
                         case ECI_CHARSET:
                             subMode = decodeTextCompaction(textCompactionData, byteCompactionData, index, result, subMode);
-                            result.appendECI(codewords[codeIndex++]);
+                            result.AppendECI(codewords[codeIndex++]);
                             textCompactionData = new int[(codewords[0] - codeIndex) * 2];
-                            byteCompactionData = new byte[(codewords[0] - codeIndex) * 2];
+                            byteCompactionData = new int[(codewords[0] - codeIndex) * 2];
                             index = 0;
                             break;
                     }
@@ -406,9 +400,9 @@ namespace ZXing.PDF417.Internal
         /// <param name="startMode">The mode in which decoding starts</param>
         /// <returns>The mode in which decoding ended</returns>
         private static Mode decodeTextCompaction(int[] textCompactionData,
-                                                 byte[] byteCompactionData,
+                                                 int[] byteCompactionData,
                                                  int length,
-                                                 ECIOutput result,
+                                                 ECIStringBuilder result,
                                                  Mode startMode)
         {
             // Beginning from an initial state
@@ -453,7 +447,7 @@ namespace ZXing.PDF417.Internal
                                     subMode = Mode.PUNCT_SHIFT;
                                     break;
                                 case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                                    result.Append(byteCompactionData[i]);
+                                    result.Append((char)byteCompactionData[i]);
                                     break;
                                 case TEXT_COMPACTION_MODE_LATCH:
                                     subMode = Mode.ALPHA;
@@ -491,7 +485,7 @@ namespace ZXing.PDF417.Internal
                                     subMode = Mode.PUNCT_SHIFT;
                                     break;
                                 case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                                    result.Append(byteCompactionData[i]);
+                                    result.Append((char)byteCompactionData[i]);
                                     break;
                                 case TEXT_COMPACTION_MODE_LATCH:
                                     subMode = Mode.ALPHA;
@@ -533,7 +527,7 @@ namespace ZXing.PDF417.Internal
                                     subMode = Mode.PUNCT_SHIFT;
                                     break;
                                 case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                                    result.Append(byteCompactionData[i]);
+                                    result.Append((char)byteCompactionData[i]);
                                     break;
                             }
                         }
@@ -555,7 +549,7 @@ namespace ZXing.PDF417.Internal
                                     latchedMode = subMode;
                                     break;
                                 case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
-                                    result.Append(byteCompactionData[i]);
+                                    result.Append((char)byteCompactionData[i]);
                                     break;
                             }
                         }
@@ -600,7 +594,7 @@ namespace ZXing.PDF417.Internal
                                 case MODE_SHIFT_TO_BYTE_COMPACTION_MODE:
                                     // PS before Shift-to-Byte is used as a padding character,
                                     // see 5.4.2.4 of the specification
-                                    result.Append(byteCompactionData[i]);
+                                    result.Append((char)byteCompactionData[i]);
                                     break;
                             }
                         }
@@ -628,7 +622,7 @@ namespace ZXing.PDF417.Internal
         /// <param name="result">The decoded data is appended to the result.</param>
         /// <returns>The next index into the codeword array.</returns>
         /// </summary>
-        private static int byteCompaction(int mode, int[] codewords, int codeIndex, ECIOutput result)
+        private static int byteCompaction(int mode, int[] codewords, int codeIndex, ECIStringBuilder result)
         {
             bool end = false;
 
@@ -637,7 +631,7 @@ namespace ZXing.PDF417.Internal
                 //handle leading ECIs
                 while (codeIndex < codewords[0] && codewords[codeIndex] == ECI_CHARSET)
                 {
-                    result.appendECI(codewords[++codeIndex]);
+                    result.AppendECI(codewords[++codeIndex]);
                     codeIndex++;
                 }
 
@@ -678,7 +672,7 @@ namespace ZXing.PDF417.Internal
                             }
                             else if (code == ECI_CHARSET)
                             {
-                                result.appendECI(codewords[codeIndex++]);
+                                result.AppendECI(codewords[codeIndex++]);
                             }
                             else
                             {
@@ -701,7 +695,7 @@ namespace ZXing.PDF417.Internal
         /// <param name="result">The decoded data is appended to the result.</param>
         /// <returns>The next index into the codeword array.</returns>
         /// </summary>
-        private static int numericCompaction(int[] codewords, int codeIndex, ECIOutput result)
+        private static int numericCompaction(int[] codewords, int codeIndex, ECIStringBuilder result)
         {
             int count = 0;
             bool end = false;
@@ -822,79 +816,6 @@ namespace ZXing.PDF417.Internal
             }
             return resultString.Substring(1);
 #endif
-        }
-    }
-
-    internal class ECIOutput
-    {
-        private bool needFlush = false;
-        private Encoding encoding = null;
-        private MemoryStream bytes = new MemoryStream();
-        private StringBuilder result;
-
-        public ECIOutput()
-        {
-            result = new StringBuilder();
-        }
-
-        public ECIOutput(int size, Encoding startWithEncoding)
-        {
-            result = new StringBuilder(size);
-            encoding = startWithEncoding;
-        }
-
-        public void Append(byte value)
-        {
-            bytes.WriteByte(value);
-            needFlush = true;
-        }
-
-        public void Append(char value)
-        {
-            bytes.WriteByte((byte)(value & 0xff));
-            needFlush = true;
-        }
-
-        public void Append(String s)
-        {
-            for (int i = 0; i < s.Length; i++)
-            {
-                Append(s[i]);
-            }
-        }
-
-        public void appendECI(int value)
-        {
-            flush();
-            var charsetECI = CharacterSetECI.getCharacterSetECIByValue(value);
-            encoding = CharacterSetECI.getEncoding(charsetECI);
-            if (encoding == null)
-            {
-                throw new FormatException("Encoding for ECI " + value + " can't be resolved");
-            }
-        }
-
-        private void flush()
-        {
-            if (needFlush)
-            {
-                needFlush = false;
-                encoding = PDF417HighLevelEncoder.getEncoder(encoding);
-                var byteArray = bytes.ToArray();
-                result.Append(encoding.GetString(byteArray, 0, (int)bytes.Length));
-                bytes.SetLength(0);
-            }
-        }
-
-        public bool isEmpty
-        {
-            get { return !needFlush && result.Length == 0; }
-        }
-
-        public override String ToString()
-        {
-            flush();
-            return result.ToString();
         }
     }
 }

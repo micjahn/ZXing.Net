@@ -309,56 +309,56 @@ namespace ZXing.PDF417.Internal.Test
         public void testECIEnglishHiragana()
         {
             //multi ECI UTF-8, UTF-16 and ISO-8859-1
-            performECITest(new char[] { 'a', '1', '\u3040' }, new double[] { 20f, 1f, 10f }, 101992, 111542); // Java: 105825, 110914);
+            performECITest(new char[] { 'a', '1', '\u3040' }, new double[] { 20f, 1f, 10f }, 105640, 111542); // Java: 105825, 110914);
         }
 
         [Test]
         public void testECIEnglishKatakana()
         {
             //multi ECI UTF-8, UTF-16 and ISO-8859-1
-            performECITest(new char[] { 'a', '1', '\u30a0' }, new double[] { 20f, 1f, 10f }, 104648, 111542); // Java: 109177, 110914);
+            performECITest(new char[] { 'a', '1', '\u30a0' }, new double[] { 20f, 1f, 10f }, 109526, 111542); // Java: 109177, 110914);
         }
 
         [Test]
         public void testECIEnglishHalfWidthKatakana()
         {
             //single ECI
-            performECITest(new char[] { 'a', '1', '\uff80' }, new double[] { 20f, 1f, 10f }, 79431, 111542); // Java: 80617, 110914);
+            performECITest(new char[] { 'a', '1', '\uff80' }, new double[] { 20f, 1f, 10f }, 79589, 111542); // Java: 80617, 110914);
         }
 
         [Test]
         public void testECIEnglishChinese()
         {
             //single ECI
-            performECITest(new char[] { 'a', '1', '\u4e00' }, new double[] { 20f, 1f, 10f }, 95446, 111542); // Java: 95797, 110914);
+            performECITest(new char[] { 'a', '1', '\u4e00' }, new double[] { 20f, 1f, 10f }, 95604, 111542); // Java: 95797, 110914);
         }
 
         [Test]
         public void testECIGermanCyrillic()
         {
             //single ECI since the German Umlaut is in ISO-8859-1
-            performECITest(new char[] { 'a', '1', '\u00c4', '\u042f' }, new double[] { 20f, 1f, 1f, 10f }, 79488, 95266); // Java: 80755, 96007);
+            performECITest(new char[] { 'a', '1', '\u00c4', '\u042f' }, new double[] { 20f, 1f, 1f, 10f }, 79744, 95266); // Java: 80755, 96007);
         }
 
         [Test]
         public void testECIEnglishCzechCyrillic1()
         {
             //multi ECI between ISO-8859-2 and ISO-8859-5
-            performECITest(new char[] { 'a', '1', '\u010c', '\u042f' }, new double[] { 10f, 1f, 10f, 10f }, 91726, 126382); // Java: 102824, 124525);
+            performECITest(new char[] { 'a', '1', '\u010c', '\u042f' }, new double[] { 10f, 1f, 10f, 10f }, 103640, 126382); // Java: 102824, 124525);
         }
 
         [Test]
         public void testECIEnglishCzechCyrillic2()
         {
             //multi ECI between ISO-8859-2 and ISO-8859-5
-            performECITest(new char[] { 'a', '1', '\u010c', '\u042f' }, new double[] { 40f, 1f, 10f, 10f }, 78298, 87520); // Java: 81321, 88236);
+            performECITest(new char[] { 'a', '1', '\u010c', '\u042f' }, new double[] { 40f, 1f, 10f, 10f }, 80622, 87520); // Java: 81321, 88236);
         }
 
         [Test]
         public void testECIEnglishArabicCyrillic()
         {
             //multi ECI between UTF-8 (ISO-8859-6 is excluded in CharacterSetECI) and ISO-8859-5
-            performECITest(new char[] { 'a', '1', '\u0620', '\u042f' }, new double[] { 10f, 1f, 10f, 10f }, 112928, 126382); // Java: 118510, 124525);
+            performECITest(new char[] { 'a', '1', '\u0620', '\u042f' }, new double[] { 10f, 1f, 10f, 10f }, 120162, 126382); // Java: 118510, 124525);
         }
 
         [Test]
