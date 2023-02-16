@@ -179,6 +179,18 @@ namespace ZXing.PDF417.Internal
         /// <returns>the encoded message (the char values range from 0 to 928)</returns>
         internal static String encodeHighLevel(String msg, Compaction compaction, Encoding encoding, bool disableEci, bool autoECI)
         {
+            if (encoding == null && !autoECI)
+            {
+                for (int i = 0; i < msg.Length; i++)
+                {
+                    if (msg[i] > 255)
+                    {
+                        throw new WriterException("Non-encodable character detected: " + msg[i] + " (Unicode: " +
+                            (int)msg[i] +
+                            "). Consider specifying EncodeHintType.PDF417_AUTO_ECI and/or EncodeTypeHint.CHARACTER_SET.");
+                    }
+                }
+            }
             encoding = ECIEncoderSet.Clone(encoding); // needed because of ECIEncoderSet.canEncode
 
             //the codewords 0..928 are encoded as Unicode characters
