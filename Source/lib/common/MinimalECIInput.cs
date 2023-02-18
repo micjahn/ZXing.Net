@@ -214,7 +214,7 @@ namespace ZXing.Common
          *
          * @param   index the index of the {@code int} value to be returned
          *
-         * @return  the specified {@code int} ECI value. 
+         * @return  the specified {@code int} ECI value.
          *          The ECI specified the encoding of all bytes with a higher index until the
          *          next ECI or until the end of the input if no other ECI follows.
          *
@@ -347,7 +347,7 @@ namespace ZXing.Common
             }
             if (minimalJ < 0)
             {
-                throw new InvalidOperationException("Internal error: failed to encode \"" + stringToEncode + "\"");
+                throw new InvalidOperationException("Failed to encode \"" + stringToEncode + "\"");
             }
             var intsAL = new List<int>();
             InputEdge current = edges[inputLength][minimalJ];

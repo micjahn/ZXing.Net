@@ -444,8 +444,7 @@ namespace ZXing.OneD
         }
     }
 
-
-    /** 
+    /**
      * Encodes minimally using Divide-And-Conquer with Memoization
      **/
     internal sealed class MinimalEncoder

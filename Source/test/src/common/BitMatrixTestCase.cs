@@ -255,6 +255,29 @@ namespace ZXing.Common.Test
         }
 
         [Test]
+        public void testParseBoolean()
+        {
+            var emptyMatrix = new BitMatrix(3, 3);
+            var fullMatrix = new BitMatrix(3, 3);
+            fullMatrix.setRegion(0, 0, 3, 3);
+            var centerMatrix = new BitMatrix(3, 3);
+            centerMatrix.setRegion(1, 1, 1, 1);
+
+            var matrix = new bool[3][];
+            matrix[0] = new bool[3];
+            matrix[1] = new bool[3];
+            matrix[2] = new bool[3];
+            Assert.AreEqual(emptyMatrix, BitMatrix.parse(matrix));
+            matrix[1][1] = true;
+            Assert.AreEqual(centerMatrix, BitMatrix.parse(matrix));
+            foreach (var arr in matrix)
+            {
+                SupportClass.Fill(arr, true);
+            }
+            Assert.AreEqual(fullMatrix, BitMatrix.parse(matrix));
+        }
+
+        [Test]
         public void testUnset()
         {
             var emptyMatrix = new BitMatrix(3, 3);

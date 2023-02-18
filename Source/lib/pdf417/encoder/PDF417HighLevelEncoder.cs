@@ -489,14 +489,13 @@ namespace ZXing.PDF417.Internal
                                 }
                                 else
                                 {
-                                    if (startpos + idx + 1 < count)
+                                    if (startpos + idx + 1 < count &&
+                                        !input.isECI(startpos + idx + 1) &&
+                                        isPunctuation(input.charAt(startpos + idx + 1)))
                                     {
-                                        if (!input.isECI(startpos + idx + 1) && isPunctuation(input.charAt(startpos + idx + 1)))
-                                        {
-                                            submode = SUBMODE_PUNCTUATION;
-                                            tmp.Append((char)25); //pl
-                                            continue;
-                                        }
+                                        submode = SUBMODE_PUNCTUATION;
+                                        tmp.Append((char)25); //pl
+                                        continue;
                                     }
                                     tmp.Append((char)29); //ps
                                     tmp.Append((char)PUNCTUATION[ch]);
