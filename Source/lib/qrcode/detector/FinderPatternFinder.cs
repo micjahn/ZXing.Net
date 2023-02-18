@@ -765,6 +765,22 @@ namespace ZXing.QrCode.Internal
                 return null;
             }
 
+            for (var i = 0; i < possibleCenters.Count; i++)
+            {
+                if (possibleCenters[i].Count < CENTER_QUORUM)
+                {
+                    possibleCenters.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            startSize = possibleCenters.Count;
+            if (startSize < 3)
+            {
+                // Couldn't find enough finder patterns
+                return null;
+            }
+
             possibleCenters.Sort(moduleComparator);
 
             double distortion = Double.MaxValue;
