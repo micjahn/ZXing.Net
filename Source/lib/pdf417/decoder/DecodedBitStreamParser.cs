@@ -328,6 +328,24 @@ namespace ZXing.PDF417.Internal
                 }
             }
 
+            // copy optional fields to additional options
+            if (optionalFieldsStart != -1)
+            {
+                int optionalFieldsLength = codeIndex - optionalFieldsStart;
+                if (resultMetadata.IsLastSegment)
+                {
+                    // do not include terminator
+                    optionalFieldsLength--;
+                }
+                if (optionalFieldsLength > 0)
+                {
+                    var newOptionalData = new int[optionalFieldsLength];
+                    for (var i = 0; i < optionalFieldsLength; i++)
+                        newOptionalData[i] = codewords[optionalFieldsStart + i];
+                    resultMetadata.OptionalData = newOptionalData;
+                }
+            }
+
             return codeIndex;
         }
 
