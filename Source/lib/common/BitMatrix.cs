@@ -407,9 +407,9 @@ namespace ZXing.Common
         }
 
         /// <summary>
-        /// Modifies this {@code BitMatrix} to represent the same but rotated the given degrees (multiple of 0, 90, 180, 270)
+        /// Modifies this {@code BitMatrix} to represent the same but rotated the given degrees(0, 90, 180, 270)
         /// </summary>
-        /// <param name="degrees"></param>
+        /// <param name="degrees">number of degrees to rotate through counter-clockwise(0, 90, 180, 270)</param>
         /// <exception cref="ArgumentException"></exception>
         public void rotate(int degrees)
         {
