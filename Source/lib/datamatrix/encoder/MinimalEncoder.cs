@@ -178,7 +178,7 @@ namespace ZXing.Datamatrix.Encoder
          *  The number of characters encoded is returned in characterLength.
          *  The number of characters encoded is also minimal in the sense that the algorithm stops as soon
          *  as a character encoding fills a C40 word competely (three C40 values). An exception is at the
-         *  end of the string where two C40 values are allowed (according to the spec the third c40 value 
+         *  end of the string where two C40 values are allowed (according to the spec the third c40 value
          *  is filled  with 0 (Shift 1) in this case).
          */
         static int getNumberOfC40Words(Input input, int from, bool c40, int[] characterLength)
@@ -226,7 +226,6 @@ namespace ZXing.Datamatrix.Encoder
 
         static void addEdges(Input input, Edge[][] edges, int from, Edge previous)
         {
-
             if (input.isECI(from))
             {
                 addEdge(edges, new Edge(input, Mode.ASCII, from, 1, previous));
@@ -298,7 +297,7 @@ namespace ZXing.Datamatrix.Encoder
            * Likewise the end vertices are located after the last character at position input.length().
            * For any position there might be up to six vertices, one for each of the encoding types ASCII, C40, TEXT, X12,
            * EDF and B256.
-           * 
+           *
            * As an example consider the input string "ABC123" then at position 0 there is only one vertex with the default
            * ASCII encodation. At position 3 there might be vertices for the types ASCII, C40, X12, EDF and B256.
            *
@@ -307,7 +306,7 @@ namespace ZXing.Datamatrix.Encoder
            * all edges leading to a particular vertex encode the same characters (the length of the suffix can vary) using the same 
            * encoding mode.
            * As an example consider the input string "ABC123" and the vertex (4,EDF). Possible edges leading to this vertex
-           * are: 
+           * are:
            *   (0,ASCII)  --EDF(ABC1)--> (4,EDF)
            *   (1,ASCII)  --EDF(BC1)-->  (4,EDF)
            *   (1,B256)   --EDF(BC1)-->  (4,EDF)
@@ -427,11 +426,11 @@ namespace ZXing.Datamatrix.Encoder
            * (0,ASCII) B256(A) (3) --> (1,B256) B256(B) (3) --> (2,B256) EDF(CDE) (6) --> (5,EDF)
            * (0,ASCII) B256(A) (3) --> (1,B256) B256(B) (3) --> (2,B256) EDF(CDEF) (6) --> (6,EDF)
            *
-           * Edge "(2,ASCII) ASCII(C) (3) --> (3,ASCII)" is minimal for the vertex (3,ASCII) so that edges "(2,EDF) ASCII(C) (5) --> (3,ASCII)" 
+           * Edge "(2,ASCII) ASCII(C) (3) --> (3,ASCII)" is minimal for the vertex (3,ASCII) so that edges "(2,EDF) ASCII(C) (5) --> (3,ASCII)"
            * and "(2,B256) ASCII(C) (4) --> (3,ASCII)" can be removed.
-           * Edge "(0,ASCII) EDF(ABC) (4) --> (3,EDF)" is minimal for the vertex (3,EDF) so that edges "(1,ASCII) EDF(BC) (5) --> (3,EDF)" 
+           * Edge "(0,ASCII) EDF(ABC) (4) --> (3,EDF)" is minimal for the vertex (3,EDF) so that edges "(1,ASCII) EDF(BC) (5) --> (3,EDF)"
            * and "(1,B256) EDF(BC) (6) --> (3,EDF)" can be removed.
-           * Edge "(2,B256) B256(C) (4) --> (3,B256)" is minimal for the vertex (3,B256) so that edges "(2,ASCII) B256(C) (5) --> (3,B256)" 
+           * Edge "(2,B256) B256(C) (4) --> (3,B256)" is minimal for the vertex (3,B256) so that edges "(2,ASCII) B256(C) (5) --> (3,B256)"
            * and "(2,EDF) B256(C) (6) --> (3,B256)" can be removed.
            *
            * This continues for vertices 3 thru 7
@@ -522,7 +521,7 @@ namespace ZXing.Datamatrix.Encoder
 
             if (minimalJ < 0)
             {
-                throw new InvalidOperationException("Internal error: failed to encode \"" + input + "\"");
+                throw new InvalidOperationException("Failed to encode \"" + input + "\"");
             }
             return new Result(edges[inputLength][minimalJ]);
         }
@@ -564,7 +563,7 @@ namespace ZXing.Datamatrix.Encoder
                  * C40 -> ASCII: word(c1,c2,c3), 254
                  * TEXT -> ASCII: word(c1,c2,c3), 254
                  * X12 -> ASCII: word(c1,c2,c3), 254
-                 * EDIFACT -> ASCII: Unlatch character,0,0,0 or c1,Unlatch character,0,0 or c1,c2,Unlatch character,0 or 
+                 * EDIFACT -> ASCII: Unlatch character,0,0,0 or c1,Unlatch character,0,0 or c1,c2,Unlatch character,0 or
                  * c1,c2,c3,Unlatch character
                  * B256 -> ASCII: without latch after n bytes
                  */
@@ -716,7 +715,7 @@ namespace ZXing.Datamatrix.Encoder
             }
 
             /** Peeks ahead and returns 1 if the postfix consists of exactly two digits, 2 if the postfix consists of exactly
-             *  two consecutive digits and a non extended character or of 4 digits. 
+             *  two consecutive digits and a non extended character or of 4 digits.
              *  Returns 0 in any other case
              **/
             int getLastASCII()

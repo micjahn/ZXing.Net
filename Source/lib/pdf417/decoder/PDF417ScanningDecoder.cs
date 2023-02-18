@@ -325,13 +325,12 @@ namespace ZXing.PDF417.Internal
                 }
                 barcodeMatrix01.setValue(calculatedNumberOfCodewords);
             }
-            else if (numberOfCodewords[0] != calculatedNumberOfCodewords)
+            else if (numberOfCodewords[0] != calculatedNumberOfCodewords &&
+                calculatedNumberOfCodewords >= 1 &&
+                calculatedNumberOfCodewords <= PDF417Common.MAX_CODEWORDS_IN_BARCODE)
             {
-                if (calculatedNumberOfCodewords >= 1 && calculatedNumberOfCodewords <= PDF417Common.MAX_CODEWORDS_IN_BARCODE)
-                {
-                    // The calculated one is more reliable as it is derived from the row indicator columns
-                    barcodeMatrix01.setValue(calculatedNumberOfCodewords);
-                }
+                // The calculated one is more reliable as it is derived from the row indicator columns
+                barcodeMatrix01.setValue(calculatedNumberOfCodewords);
             }
 
             return true;
