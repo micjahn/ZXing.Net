@@ -390,6 +390,10 @@ namespace ZXing.PDF417.Internal
                         case ECI_CHARSET:
                             subMode = decodeTextCompaction(textCompactionData, byteCompactionData, index, result, subMode);
                             result.AppendECI(codewords[codeIndex++]);
+                            if (codeIndex >= codewords[0])
+                            {
+                                return codeIndex;
+                            }
                             textCompactionData = new int[(codewords[0] - codeIndex) * 2];
                             byteCompactionData = new int[(codewords[0] - codeIndex) * 2];
                             index = 0;
