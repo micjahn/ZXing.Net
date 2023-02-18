@@ -292,37 +292,41 @@ namespace ZXing.Datamatrix.Encoder
                 charCounts[currentMode] = 0;
             }
 
-            int charsProcessed = 0;
+            var charsProcessed = 0;
+            var mins = new byte[6];
+            var intCharCounts = new int[6];
             while (true)
             {
                 //step K
                 if ((startpos + charsProcessed) == msg.Length)
                 {
-                    var min = Int32.MaxValue;
-                    var mins = new byte[6];
-                    var intCharCounts = new int[6];
-                    min = findMinimums(charCounts, intCharCounts, min, mins);
+                    SupportClass.Fill(mins, (byte)0);
+                    SupportClass.Fill(intCharCounts, 0);
+                    var min = findMinimums(charCounts, intCharCounts, Int32.MaxValue, mins);
                     var minCount = getMinimumCount(mins);
 
                     if (intCharCounts[Encodation.ASCII] == min)
                     {
                         return Encodation.ASCII;
                     }
-                    if (minCount == 1 && mins[Encodation.BASE256] > 0)
+                    if (minCount == 1)
                     {
-                        return Encodation.BASE256;
-                    }
-                    if (minCount == 1 && mins[Encodation.EDIFACT] > 0)
-                    {
-                        return Encodation.EDIFACT;
-                    }
-                    if (minCount == 1 && mins[Encodation.TEXT] > 0)
-                    {
-                        return Encodation.TEXT;
-                    }
-                    if (minCount == 1 && mins[Encodation.X12] > 0)
-                    {
-                        return Encodation.X12;
+                        if (mins[Encodation.BASE256] > 0)
+                        {
+                            return Encodation.BASE256;
+                        }
+                        if (mins[Encodation.EDIFACT] > 0)
+                        {
+                            return Encodation.EDIFACT;
+                        }
+                        if (mins[Encodation.TEXT] > 0)
+                        {
+                            return Encodation.TEXT;
+                        }
+                        if (mins[Encodation.X12] > 0)
+                        {
+                            return Encodation.X12;
+                        }
                     }
                     return Encodation.C40;
                 }
@@ -415,8 +419,8 @@ namespace ZXing.Datamatrix.Encoder
                 //step R
                 if (charsProcessed >= 4)
                 {
-                    var intCharCounts = new int[6];
-                    var mins = new byte[6];
+                    SupportClass.Fill(mins, (byte)0);
+                    SupportClass.Fill(intCharCounts, 0);
                     findMinimums(charCounts, intCharCounts, Int32.MaxValue, mins);
 
                     if (intCharCounts[Encodation.ASCII] < min(intCharCounts[Encodation.BASE256],
@@ -491,11 +495,9 @@ namespace ZXing.Datamatrix.Encoder
 
         private static int findMinimums(float[] charCounts, int[] intCharCounts, int min, byte[] mins)
         {
-            SupportClass.Fill(mins, (byte)0);
             for (int i = 0; i < 6; i++)
             {
-                intCharCounts[i] = (int)Math.Ceiling(charCounts[i]);
-                int current = intCharCounts[i];
+                int current = (intCharCounts[i] = (int)Math.Ceiling(charCounts[i]));
                 if (min > current)
                 {
                     min = current;
@@ -504,7 +506,6 @@ namespace ZXing.Datamatrix.Encoder
                 if (min == current)
                 {
                     mins[i]++;
-
                 }
             }
             return min;
