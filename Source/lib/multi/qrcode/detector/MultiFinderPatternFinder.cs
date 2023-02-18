@@ -94,7 +94,14 @@ namespace ZXing.Multi.QrCode.Internal
         /// </returns>
         private FinderPattern[][] selectMultipleBestPatterns()
         {
-            List<FinderPattern> possibleCenters = PossibleCenters;
+            var possibleCenters = new List<FinderPattern>();
+            foreach (var fp in PossibleCenters)
+            {
+                if (fp.Count >= 2)
+                {
+                    possibleCenters.Add(fp);
+                }
+            }
             int size = possibleCenters.Count;
 
             if (size < 3)
