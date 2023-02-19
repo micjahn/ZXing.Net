@@ -479,7 +479,7 @@ namespace ZXing.IMB
                 topRow = currentBitmap.getBlackRow(rowNumberTop, topRow);
                 if (topRow == null)
                     continue;
-                if (getNumberBars(topRow, pixelStartOffset, pixelStopOffset, pixelBarLength) >= NUM_BARS_IMB)
+                if (getNumberBars(topRow, pixelStartOffset, pixelStopOffset, pixelBarLength) < NUM_BARS_IMB)
                     break;
             } while (true);
             do
@@ -490,7 +490,7 @@ namespace ZXing.IMB
                 botRow = currentBitmap.getBlackRow(rowNumberBot, botRow);
                 if (botRow == null)
                     continue;
-                if (getNumberBars(botRow, pixelStartOffset, pixelStopOffset, pixelBarLength) >= NUM_BARS_IMB)
+                if (getNumberBars(botRow, pixelStartOffset, pixelStopOffset, pixelBarLength) < NUM_BARS_IMB)
                     break;
             } while (true);
 
