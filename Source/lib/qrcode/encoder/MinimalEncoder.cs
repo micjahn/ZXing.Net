@@ -63,60 +63,6 @@ namespace ZXing.QrCode.Internal
         private ECIEncoderSet encoders;
         private ErrorCorrectionLevel ecLevel;
 
-#if NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_3 || WINDOWS_UWP || PORTABLE || WINDOWS_PHONE || NETFX_CORE || WindowsCE || SILVERLIGHT
-        private static bool canEncode(Encoding encoding, char c)
-        {
-            // very limited support on old platforms; not sure, if it would work; and not sure, if somebody need the old platform support
-            try
-            {
-                var result = encoding.GetByteCount(new char[] { c });
-                return result > 0;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-#else
-        private static bool canEncode(Encoding encoding, char c)
-        {
-            try
-            {
-                var prevFallback = encoding.EncoderFallback;
-                try
-                {
-                    encoding.EncoderFallback = EncoderFallback.ExceptionFallback;
-                    var result = encoding.GetByteCount(new char[] { c });
-                    return result > 0;
-                }
-                catch
-                {
-                    return false;
-                }
-                finally
-                {
-                    encoding.EncoderFallback = prevFallback;
-                }
-            }
-            catch
-            {
-                return false;
-            }
-        }
-#endif
-
-        private static Encoding Clone(Encoding encoding)
-        {
-            // encodings have to be cloned to change the EncoderFallback property later
-
-#if !NETSTANDARD1_0 && !NETSTANDARD1_1 && !PORTABLE && !WINDOWS_PHONE && !NETFX_CORE
-            // Clone isn't supported by .net standard 1.0, 1.1 and portable
-            return (Encoding)encoding.Clone();
-#else
-            return encoding;
-#endif
-        }
-
         /// <summary>
         /// Creates a MinimalEncoder
         /// </summary>

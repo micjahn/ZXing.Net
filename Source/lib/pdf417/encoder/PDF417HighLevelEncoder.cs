@@ -345,19 +345,19 @@ namespace ZXing.PDF417.Internal
                     try
                     {
 #if WindowsCE
-                  try
-                  {
-                     encoding = Encoding.GetEncoding(1252);
-                  }
-                  catch (PlatformNotSupportedException)
-                  {
-                     // WindowsCE doesn't support all encodings. But it is device depended.
-                     // So we try here some different ones
-                     encoding = Encoding.GetEncoding("CP437");
-                  }
+                        try
+                        {
+                            encoding = Encoding.GetEncoding(1252);
+                        }
+                        catch (PlatformNotSupportedException)
+                        {
+                            // WindowsCE doesn't support all encodings. But it is device depended.
+                            // So we try here some different ones
+                            encoding = Encoding.GetEncoding("CP437");
+                        }
 #else
-                        // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
-                        encoding = Encoding.GetEncoding("UTF-8");
+                        // these .NET profiles support only UTF-8 and UTF-16 out-of-the-box
+                        encoding = DEFAULT_ENCODING ?? (DEFAULT_ENCODING = Encoding.GetEncoding(StringUtils.UTF8));
 #endif
 
                     }
@@ -914,7 +914,7 @@ namespace ZXing.PDF417.Internal
             public NoECIInput(String input)
             {
                 this.input = input;
-    }
+            }
 
             public int Length
             {
