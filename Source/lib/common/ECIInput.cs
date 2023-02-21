@@ -78,6 +78,12 @@ namespace ZXing.Common
         /// <exception cref="ArgumentException"></exception>
         int getECIValue(int index);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="n"></param>
+        /// <returns></returns>
         bool haveNCharacters(int index, int n);
     }
 }

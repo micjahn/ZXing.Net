@@ -20,31 +20,27 @@ namespace ZXing.Common
     using System.Collections.Generic;
     using System.Text;
 
-    /**
-     * Class that converts a character string into a sequence of ECIs and bytes
-     *
-     * The implementation uses the Dijkstra algorithm to produce minimal encodings
-     *
-     * @author Alex Geller
-     */
+    /// <summary>
+    /// Class that converts a character string into a sequence of ECIs and bytes
+    /// The implementation uses the Dijkstra algorithm to produce minimal encodings
+    /// @author Alex Geller
+    /// </summary>
     public class MinimalECIInput : ECIInput
     {
-
         private static int COST_PER_ECI = 3; // approximated (latch + 2 codewords)
         private int[] bytes;
         private int fnc1;
 
-        /**
-         * Constructs a minimal input
-         *
-         * @param stringToEncode the character string to encode
-         * @param priorityCharset The preferred {@link Charset}. When the value of the argument is null, the algorithm
-         *   chooses charsets that leads to a minimal representation. Otherwise the algorithm will use the priority
-         *   charset to encode any character in the input that can be encoded by it if the charset is among the
-         *   supported charsets.
-         * @param fnc1 denotes the character in the input that represents the FNC1 character or -1 if this is not GS1
-         *   input.
-         */
+        /// <summary>
+        /// Constructs a minimal input
+        /// </summary>
+        /// <param name="stringToEncode">the character string to encode</param>
+        /// <param name="priorityCharset">The preferred {@link Charset}. When the value of the argument is null, the algorithm
+        /// chooses charsets that leads to a minimal representation. Otherwise the algorithm will use the priority
+        /// charset to encode any character in the input that can be encoded by it if the charset is among the
+        /// supported charsets.</param>
+        /// <param name="fnc1">denotes the character in the input that represents the FNC1 character or -1 if this is not GS1
+        /// input.</param>
         public MinimalECIInput(String stringToEncode, Encoding priorityCharset, int fnc1)
         {
             this.fnc1 = fnc1;
@@ -64,17 +60,19 @@ namespace ZXing.Common
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public int getFNC1Character()
         {
             return fnc1;
         }
 
-        /**
-         * Returns the length of this input.  The length is the number
-         * of {@code byte}s, FNC1 characters or ECIs in the sequence.
-         *
-         * @return  the number of {@code char}s in this sequence
-         */
+        /// <summary>
+        /// Returns the length of this input.  The length is the number
+        /// of {@code byte}s, FNC1 characters or ECIs in the sequence.
+        /// </summary>
         public int Length
         {
             get
@@ -83,6 +81,12 @@ namespace ZXing.Common
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="n"></param>
+        /// <returns></returns>
         public bool haveNCharacters(int index, int n)
         {
             if (index + n - 1 >= bytes.Length)
@@ -99,22 +103,17 @@ namespace ZXing.Common
             return true;
         }
 
-        /**
-         * Returns the {@code byte} value at the specified index.  An index ranges from zero
-         * to {@code length() - 1}.  The first {@code byte} value of the sequence is at
-         * index zero, the next at index one, and so on, as for array
-         * indexing.
-         *
-         * @param   index the index of the {@code byte} value to be returned
-         *
-         * @return  the specified {@code byte} value as character or the FNC1 character
-         *
-         * @throws  IndexOutOfBoundsException
-         *          if the {@code index} argument is negative or not less than
-         *          {@code length()}
-         * @throws  IllegalArgumentException
-         *          if the value at the {@code index} argument is an ECI (@see #isECI)
-         */
+        /// <summary>
+        /// Returns the {@code byte} value at the specified index.  An index ranges from zero
+        /// to {@code length() - 1}.  The first {@code byte} value of the sequence is at
+        /// index zero, the next at index one, and so on, as for array
+        /// indexing.
+        /// </summary>
+        /// <param name="index">the index of the {@code byte} value to be returned</param>
+        /// <returns>the specified {@code byte} value as character or the FNC1 character</returns>
+        /// <exception cref="IndexOutOfRangeException">if the {@code index} argument is negative or not less than
+        /// {@code length()}</exception>
+        /// <exception cref="ArgumentException">if the value at the {@code index} argument is an ECI (@see #isECI)</exception>
         public char charAt(int index)
         {
             if (index < 0 || index >= Length)
@@ -128,26 +127,21 @@ namespace ZXing.Common
             return isFNC1(index) ? (char)fnc1 : (char)bytes[index];
         }
 
-        /**
-         * Returns a {@code CharSequence} that is a subsequence of this sequence.
-         * The subsequence starts with the {@code char} value at the specified index and
-         * ends with the {@code char} value at index {@code end - 1}.  The length
-         * (in {@code char}s) of the
-         * returned sequence is {@code end - start}, so if {@code start == end}
-         * then an empty sequence is returned.
-         *
-         * @param   start   the start index, inclusive
-         * @param   end     the end index, exclusive
-         *
-         * @return  the specified subsequence
-         *
-         * @throws  IndexOutOfBoundsException
-         *          if {@code start} or {@code end} are negative,
-         *          if {@code end} is greater than {@code length()},
-         *          or if {@code start} is greater than {@code end}
-         * @throws  IllegalArgumentException
-         *          if a value in the range {@code start}-{@code end} is an ECI (@see #isECI)
-         */
+        /// <summary>
+        /// Returns a {@code CharSequence} that is a subsequence of this sequence.
+        /// The subsequence starts with the {@code char} value at the specified index and
+        /// ends with the {@code char} value at index {@code end - 1}.  The length
+        /// (in {@code char}s) of the
+        /// returned sequence is {@code end - start}, so if {@code start == end}
+        /// then an empty sequence is returned.
+        /// </summary>
+        /// <param name="start">the start index, inclusive</param>
+        /// <param name="end">the end index, exclusive</param>
+        /// <returns>the specified subsequence</returns>
+        /// <exception cref="IndexOutOfRangeException">if {@code start} or {@code end} are negative,
+        /// if {@code end} is greater than {@code length()},
+        /// or if {@code start} is greater than {@code end}</exception>
+        /// <exception cref="ArgumentException">if a value in the range {@code start}-{@code end} is an ECI (@see #isECI)</exception>
         public String subSequence(int start, int end)
         {
             if (start < 0 || start > end || end > Length)
@@ -166,17 +160,13 @@ namespace ZXing.Common
             return result.ToString();
         }
 
-        /**
-         * Determines if a value is an ECI
-         *
-         * @param   index the index of the value
-         *
-         * @return  true if the value at position {@code index} is an ECI
-         *
-         * @throws  IndexOutOfBoundsException
-         *          if the {@code index} argument is negative or not less than
-         *          {@code length()}
-         */
+        /// <summary>
+        /// Determines if a value is an ECI
+        /// </summary>
+        /// <param name="index">the index of the value</param>
+        /// <returns>true if the value at position {@code index} is an ECI</returns>
+        /// <exception cref="IndexOutOfRangeException">if the {@code index} argument is negative or not less than
+        /// {@code length()}</exception>
         public bool isECI(int index)
         {
             if (index < 0 || index >= Length)
@@ -186,17 +176,13 @@ namespace ZXing.Common
             return bytes[index] > 255 && bytes[index] <= 999;
         }
 
-        /**
-         * Determines if a value is the FNC1 character
-         *
-         * @param   index the index of the value
-         *
-         * @return  true if the value at position {@code index} is the FNC1 character
-         *
-         * @throws  IndexOutOfBoundsException
-         *          if the {@code index} argument is negative or not less than
-         *          {@code length()}
-         */
+        /// <summary>
+        /// Determines if a value is the FNC1 character
+        /// </summary>
+        /// <param name="index">the index of the value</param>
+        /// <returns>true if the value at position {@code index} is the FNC1 character</returns>
+        /// <exception cref="IndexOutOfRangeException">if the {@code index} argument is negative or not less than
+        /// {@code length()}</exception>
         public bool isFNC1(int index)
         {
             if (index < 0 || index >= Length)
@@ -206,24 +192,19 @@ namespace ZXing.Common
             return bytes[index] == 1000;
         }
 
-        /**
-         * Returns the {@code int} ECI value at the specified index.  An index ranges from zero
-         * to {@code length() - 1}.  The first {@code byte} value of the sequence is at
-         * index zero, the next at index one, and so on, as for array
-         * indexing.
-         *
-         * @param   index the index of the {@code int} value to be returned
-         *
-         * @return  the specified {@code int} ECI value.
-         *          The ECI specified the encoding of all bytes with a higher index until the
-         *          next ECI or until the end of the input if no other ECI follows.
-         *
-         * @throws  IndexOutOfBoundsException
-         *          if the {@code index} argument is negative or not less than
-         *          {@code length()}
-         * @throws  IllegalArgumentException
-         *          if the value at the {@code index} argument is not an ECI (@see #isECI)
-         */
+        /// <summary>
+        /// Returns the {@code int} ECI value at the specified index.  An index ranges from zero
+        /// to {@code length() - 1}.  The first {@code byte} value of the sequence is at
+        /// index zero, the next at index one, and so on, as for array
+        /// indexing.
+        /// </summary>
+        /// <param name="index">the index of the {@code int} value to be returned</param>
+        /// <returns>the specified {@code int} ECI value.
+        /// The ECI specified the encoding of all bytes with a higher index until the
+        /// next ECI or until the end of the input if no other ECI follows.</returns>
+        /// <exception cref="IndexOutOfRangeException">if the {@code index} argument is negative or not less than
+        /// {@code length()}</exception>
+        /// <exception cref="ArgumentException">if the value at the {@code index} argument is not an ECI (@see #isECI)</exception>
         public int getECIValue(int index)
         {
             if (index < 0 || index >= Length)
@@ -237,6 +218,10 @@ namespace ZXing.Common
             return bytes[index] - 256;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override String ToString()
         {
             StringBuilder result = new StringBuilder();

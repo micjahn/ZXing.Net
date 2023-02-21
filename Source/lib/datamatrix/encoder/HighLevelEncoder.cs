@@ -147,6 +147,8 @@ namespace ZXing.Datamatrix.Encoder
         /// <param name="maxSize">the maximum symbol size constraint or null for no constraint</param>
         /// <param name="defaultEncodation">encoding mode to start with</param>
         /// <param name="forceC40">enforce C40 encoding</param>
+        /// <param name="encoding"></param>
+        /// <param name="disableEci"></param>
         /// <returns>the encoded message (the char values range from 0 to 255)</returns>
         public static String encodeHighLevel(String msg,
                                              SymbolShapeHint shape,

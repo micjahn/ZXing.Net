@@ -24,6 +24,9 @@ namespace ZXing.OneD
     /// </summary>
     public abstract class UPCEANWriter : OneDimensionalCodeWriter
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public UPCEANWriter()
         {
             // Use a different default more appropriate for UPC/EAN
