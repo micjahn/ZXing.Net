@@ -85,7 +85,7 @@ namespace ZXing.Datamatrix.Internal
         internal static DecoderResult decode(byte[] bytes)
         {
             BitSource bits = new BitSource(bytes);
-            StringBuilder result = new StringBuilder(100);
+            ECIStringBuilder result = new ECIStringBuilder(100);
             StringBuilder resultTrailer = new StringBuilder(0);
             List<byte[]> byteSegments = new List<byte[]>(1);
             Mode mode = Mode.ASCII_ENCODE;
@@ -124,6 +124,7 @@ namespace ZXing.Datamatrix.Internal
                                 return null;
                             break;
                         case Mode.ECI_ENCODE:
+                            decodeECISegment(bits, result);
                             isECIencoded = true; // ECI detection only, atm continue decoding as ASCII
                             break;
                         default:
@@ -175,7 +176,7 @@ namespace ZXing.Datamatrix.Internal
         /// See ISO 16022:2006, 5.2.3 and Annex C, Table C.2
         /// </summary>
         private static bool decodeAsciiSegment(BitSource bits,
-                                               StringBuilder result,
+                                               ECIStringBuilder result,
                                                StringBuilder resultTrailer,
                                                List<int> fnc1positions,
                                                out Mode mode)
@@ -278,7 +279,7 @@ namespace ZXing.Datamatrix.Internal
         /// <summary>
         /// See ISO 16022:2006, 5.2.5 and Annex C, Table C.1
         /// </summary>
-        private static bool decodeC40Segment(BitSource bits, StringBuilder result, List<int> fnc1positions)
+        private static bool decodeC40Segment(BitSource bits, ECIStringBuilder result, List<int> fnc1positions)
         {
             // Three C40 values are encoded in a 16-bit value as
             // (1600 * C1) + (40 * C2) + C3 + 1
@@ -399,7 +400,7 @@ namespace ZXing.Datamatrix.Internal
         /// <summary>
         /// See ISO 16022:2006, 5.2.6 and Annex C, Table C.2
         /// </summary>
-        private static bool decodeTextSegment(BitSource bits, StringBuilder result, List<int> fnc1positions)
+        private static bool decodeTextSegment(BitSource bits, ECIStringBuilder result, List<int> fnc1positions)
         {
             // Three Text values are encoded in a 16-bit value as
             // (1600 * C1) + (40 * C2) + C3 + 1
@@ -529,7 +530,7 @@ namespace ZXing.Datamatrix.Internal
         /// See ISO 16022:2006, 5.2.7
         /// </summary>
         private static bool decodeAnsiX12Segment(BitSource bits,
-                                                 StringBuilder result)
+                                                 ECIStringBuilder result)
         {
             // Three ANSI X12 values are encoded in a 16-bit value as
             // (1600 * C1) + (40 * C2) + C3 + 1
@@ -605,7 +606,7 @@ namespace ZXing.Datamatrix.Internal
         /// <summary>
         /// See ISO 16022:2006, 5.2.8 and Annex C Table C.3
         /// </summary>
-        private static bool decodeEdifactSegment(BitSource bits, StringBuilder result)
+        private static bool decodeEdifactSegment(BitSource bits, ECIStringBuilder result)
         {
             do
             {
@@ -648,7 +649,7 @@ namespace ZXing.Datamatrix.Internal
         /// See ISO 16022:2006, 5.2.9 and Annex B, B.2
         /// </summary>
         private static bool decodeBase256Segment(BitSource bits,
-                                                 StringBuilder result,
+                                                 ECIStringBuilder result,
                                                  IList<byte[]> byteSegments)
         {
             // Figure out how long the Base 256 Segment is.
@@ -705,6 +706,37 @@ namespace ZXing.Datamatrix.Internal
             }
 
             return true;
+        }
+
+        /**
+         * See ISO 16022:2007, 5.4.1
+         */
+        private static bool decodeECISegment(BitSource bits, ECIStringBuilder result)
+        {
+            if (bits.available() < 8)
+            {
+                return false;
+            }
+            int c1 = bits.readBits(8);
+            if (c1 <= 127)
+            {
+                return result.AppendECI(c1 - 1);
+            }
+            return true;
+            //currently we only support character set ECIs
+            /*} else {
+              if (bits.available() < 8) {
+                throw FormatException.getFormatInstance();
+              }
+              int c2 = bits.readBits(8);
+              if (c1 >= 128 && c1 <= 191) {
+              } else {
+                if (bits.available() < 8) {
+                  throw FormatException.getFormatInstance();
+                }
+                int c3 = bits.readBits(8);
+              }
+            }*/
         }
 
         /// <summary>
