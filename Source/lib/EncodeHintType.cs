@@ -379,7 +379,7 @@ namespace ZXing
             {
                 var valueObj = hints[encodeHintType];
                 if (valueObj != null
-#if !NETSTANDARD1_0 && !NETSTANDARD1_1 && !NETSTANDARD1_3 && !WINDOWS_UWP
+#if !NETSTANDARD1_0 && !NETSTANDARD1_1 && !NETSTANDARD1_3 && !WINDOWS_UWP && !NETFX_CORE
                     && typeof(T).IsAssignableFrom(valueObj.GetType())
 #endif
                     )
