@@ -30,7 +30,7 @@ namespace ZXing.OneD.Test
       [TestCase("12345678901", "00001010011001001001101111010100011011000101011110101010001001001000111010011100101100110110110010100000", TestName = "UPCAtestAddChecksumAndEncode")]
       public void testEncode(string content, string encoding)
       {
-         var result = new UPCAWriter().encode(content, BarcodeFormat.UPC_A, encoding.Length, 0);
+         var result = new UPCAWriter() { DefaultMargin = 4 }.encode(content, BarcodeFormat.UPC_A, encoding.Length, 0);
          Assert.AreEqual(encoding, BitMatrixTestCase.matrixToString(result));
       }
    }

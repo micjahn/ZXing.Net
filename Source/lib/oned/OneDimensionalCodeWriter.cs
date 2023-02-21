@@ -192,16 +192,23 @@ namespace ZXing.OneD
             return numAdded;
         }
 
+        private int defaultMargin = 10;
+
         /// <summary>
         /// Gets the default margin.
         /// </summary>
-        virtual public int DefaultMargin
+        public int DefaultMargin
         {
             get
             {
                 // CodaBar spec requires a side margin to be more than ten times wider than narrow space.
                 // This seems like a decent idea for a default for all formats.
-                return 10;
+                return defaultMargin;
+            }
+            internal set
+            {
+                // mainly for test cases
+                defaultMargin = value;
             }
         }
 

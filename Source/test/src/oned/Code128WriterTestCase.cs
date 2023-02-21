@@ -45,7 +45,7 @@ namespace ZXing.OneD.Test
         [SetUp]
         public void setUp()
         {
-            writer = new Code128Writer();
+            writer = new Code128Writer() { DefaultMargin = 5 };
             reader = new Code128Reader();
         }
 

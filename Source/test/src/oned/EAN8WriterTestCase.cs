@@ -31,7 +31,7 @@ namespace ZXing.OneD.Test
         [TestCase("9638507", "0000001010001011010111101111010110111010101001110111001010001001011100101000000", TestName = "EAN8testAddChecksumAndEncode")]
         public void testEncode(string content, string encoding)
         {
-            var result = new EAN8Writer().encode(content, BarcodeFormat.EAN_8, encoding.Length, 0);
+            var result = new EAN8Writer() { DefaultMargin = 5 }.encode(content, BarcodeFormat.EAN_8, encoding.Length, 0);
             Assert.AreEqual(encoding, BitMatrixTestCase.matrixToString(result));
         }
 
@@ -39,7 +39,7 @@ namespace ZXing.OneD.Test
         [ExpectedException(typeof(ArgumentException))]
         public void testEncodeIllegalCharacters()
         {
-            new EAN8Writer().encode("96385abc", BarcodeFormat.EAN_8, 0, 0);
+            new EAN8Writer() { DefaultMargin = 5 }.encode("96385abc", BarcodeFormat.EAN_8, 0, 0);
         }
     }
 }

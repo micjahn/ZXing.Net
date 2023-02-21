@@ -29,6 +29,24 @@ namespace ZXing.OneD
         private readonly EAN13Writer subWriter = new EAN13Writer();
 
         /// <summary>
+        /// Gets the default margin.
+        /// </summary>
+        public int DefaultMargin
+        {
+            get
+            {
+                // CodaBar spec requires a side margin to be more than ten times wider than narrow space.
+                // This seems like a decent idea for a default for all formats.
+                return subWriter.DefaultMargin;
+            }
+            internal set
+            {
+                // mainly for test cases
+                subWriter.DefaultMargin = value;
+            }
+        }
+
+        /// <summary>
         /// Encode a barcode using the default settings.
         /// </summary>
         /// <param name="contents">The contents to encode in the barcode</param>

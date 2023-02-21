@@ -62,7 +62,7 @@ namespace ZXing.OneD.Test
 
         private static void doTest(String input, String expected)
         {
-            var result = new Code93Writer().encode(input, BarcodeFormat.CODE_93, 0, 0);
+            var result = new Code93Writer() { DefaultMargin = 5 }.encode(input, BarcodeFormat.CODE_93, 0, 0);
             Assert.AreEqual(expected, BitMatrixTestCase.matrixToString(result));
         }
     }
