@@ -150,6 +150,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZXing.Android", "Source\Bin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZXing.EmguCV.Test", "Source\Bindings\Tests\ZXing.EmguCV\ZXing.EmguCV.Test.csproj", "{3E1FFA98-B3E1-47F6-AB50-3EC4FB7E710C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZXing.ImageSharp.V2", "Source\Bindings\ZXing.ImageSharp.V2\ZXing.ImageSharp.V2.csproj", "{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug - Reduced|Any CPU = Debug - Reduced|Any CPU
@@ -1666,6 +1668,38 @@ Global
 		{3E1FFA98-B3E1-47F6-AB50-3EC4FB7E710C}.Release|x64.Build.0 = Release|Any CPU
 		{3E1FFA98-B3E1-47F6-AB50-3EC4FB7E710C}.Release|x86.ActiveCfg = Release|Any CPU
 		{3E1FFA98-B3E1-47F6-AB50-3EC4FB7E710C}.Release|x86.Build.0 = Release|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Debug - Reduced|Any CPU.ActiveCfg = Debug|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Debug - Reduced|Any CPU.Build.0 = Debug|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Debug - Reduced|ARM.ActiveCfg = Debug|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Debug - Reduced|ARM.Build.0 = Debug|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Debug - Reduced|x64.ActiveCfg = Debug|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Debug - Reduced|x64.Build.0 = Debug|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Debug - Reduced|x86.ActiveCfg = Debug|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Debug - Reduced|x86.Build.0 = Debug|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Debug|ARM.Build.0 = Debug|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Debug|x64.Build.0 = Debug|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Debug|x86.Build.0 = Debug|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Release with Documentation|Any CPU.ActiveCfg = Release|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Release with Documentation|Any CPU.Build.0 = Release|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Release with Documentation|ARM.ActiveCfg = Release|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Release with Documentation|ARM.Build.0 = Release|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Release with Documentation|x64.ActiveCfg = Release|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Release with Documentation|x64.Build.0 = Release|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Release with Documentation|x86.ActiveCfg = Release|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Release with Documentation|x86.Build.0 = Release|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Release|ARM.ActiveCfg = Release|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Release|ARM.Build.0 = Release|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Release|x64.ActiveCfg = Release|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Release|x64.Build.0 = Release|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Release|x86.ActiveCfg = Release|Any CPU
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1709,6 +1743,7 @@ Global
 		{2C6DE13F-8129-453A-9BB5-997077EAE269} = {7D5D173D-0A00-4F57-9F02-0739E4C70555}
 		{8080C792-EB9B-4CE8-B52E-740ABB68AE50} = {E3647B3A-B903-402A-B7F7-711A4A1512B9}
 		{3E1FFA98-B3E1-47F6-AB50-3EC4FB7E710C} = {369FB285-4E6C-428A-9CC3-45FC75ECDFC1}
+		{CED0DDBB-E431-476A-BFED-F6AFF0D2CC8A} = {E3647B3A-B903-402A-B7F7-711A4A1512B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {73A9B453-AE71-4A98-B68A-2389573CD311}

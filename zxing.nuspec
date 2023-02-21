@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.7</version>
+    <version>0.17.0</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <license type="expression">Apache-2.0</license>
@@ -15,9 +15,9 @@
       ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.
       It has been ported by hand with a lot of optimizations and improvements.
 
-      It is compatible with .Net 2.0, .Net 3.5, .Net 4.x, .Net 5.x, .Net 6.x, Windows RT Class Library and Components, UWP, .Net Standard 1.x and 2.0x, .Net Core App 3.x, Silverlight 4 (only up to 0.16.x), Silverlight 5 (only up to 0.16.x), Windows Phone 7.x (only up to 0.16.x) and Windows Phone 8.x (only up to 0.16.x) and Xamarin.Android</description>
+      It is compatible with .Net 2.0, .Net 3.5, .Net 4.x, .Net 5.x, .Net 6.x, .Net 7.x, Windows RT Class Library and Components, UWP, .Net Standard 1.x and 2.0x, .Net Core App 3.x, Silverlight 4 (only up to 0.16.x), Silverlight 5 (only up to 0.16.x), Windows Phone 7.x (only up to 0.16.x) and Windows Phone 8.x (only up to 0.16.x) and Xamarin.Android</description>
     <summary>ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.</summary>
-    <releaseNotes>* changes of the java version are reflected until 2021/12/08
+    <releaseNotes>* changes of the java version are reflected until 2023/02/21
 * many small bug fixes and improvements</releaseNotes>
     <tags>ZXing barcode scanning 1D 2D UPC-A UPC-E EAN-8 EAN-13 QR ITF Codabar RSS-14 Data Matrix PDF 417 PDF417 Aztec</tags>
     <dependencies>
@@ -30,6 +30,7 @@
       <group targetFramework="net48" />
       <group targetFramework="net50" />
       <group targetFramework="net60" />
+      <group targetFramework="net70" />
       <group targetFramework="windows8-managed" />
       <group targetFramework="windows8" />
       <group targetFramework="native" />
@@ -98,6 +99,9 @@
     <file src="Build\Release\net6.0\zxing.dll" target="lib\net6.0\zxing.dll" />
     <file src="Build\Release\net6.0\zxing.pdb" target="lib\net6.0\zxing.pdb" />
     <file src="Build\Release\net6.0\zxing.XML" target="lib\net6.0\zxing.XML" />
+    <file src="Build\Release\net7.0\zxing.dll" target="lib\net7.0\zxing.dll" />
+    <file src="Build\Release\net7.0\zxing.pdb" target="lib\net7.0\zxing.pdb" />
+    <file src="Build\Release\net7.0\zxing.XML" target="lib\net7.0\zxing.XML" />
     <file src="Build\Release\winrt\zxing.winrt.dll" target="lib\windows8-managed\zxing.winrt.dll" />
     <file src="Build\Release\winrt\zxing.winrt.pdb" target="lib\windows8-managed\zxing.winrt.pdb" />
     <file src="Build\Release\winrt\zxing.winrt.XML" target="lib\windows8-managed\zxing.winrt.XML" />
