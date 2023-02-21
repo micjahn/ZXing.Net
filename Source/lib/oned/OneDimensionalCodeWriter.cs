@@ -131,18 +131,17 @@ namespace ZXing.OneD
         {
             int inputWidth = code.Length;
             // Add quiet zone on both sides.
-            int fullWidth = inputWidth + sidesMargin;
+            int fullWidth = inputWidth + sidesMargin * 2;
             int outputWidth = Math.Max(width, fullWidth);
             int outputHeight = Math.Max(1, height);
 
             int multiple = outputWidth / fullWidth;
             int leftPadding = (outputWidth - (inputWidth * multiple)) / 2;
 
-
             if (noPadding)
             {
-                outputWidth -= (leftPadding - sidesMargin) * 2;
-                leftPadding = sidesMargin;
+                outputWidth = fullWidth * multiple;
+                leftPadding = sidesMargin * multiple;
             }
 
             BitMatrix output = new BitMatrix(outputWidth, outputHeight);
