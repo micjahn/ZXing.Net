@@ -28,6 +28,18 @@ using System.Runtime.InteropServices;
 #if NET47
 [assembly: AssemblyTitle("zxing.net for .net 4.7")]
 #endif
+#if NET48
+[assembly: AssemblyTitle("zxing.net for .net 4.8")]
+#endif
+#if NET5_0
+[assembly: AssemblyTitle("zxing.net for .net 5.0")]
+#endif
+#if NET6_0
+[assembly: AssemblyTitle("zxing.net for .net 6.0")]
+#endif
+#if NET7_0
+[assembly: AssemblyTitle("zxing.net for .net 7.0")]
+#endif
 #if SILVERLIGHT4
 [assembly: AssemblyTitle("zxing.net for silverlight 4")]
 #endif
@@ -55,7 +67,7 @@ using System.Runtime.InteropServices;
 #if WINDOWS_UWP
 [assembly: AssemblyTitle("zxing.net for windows uwp")]
 #endif
-#if NETSTANDARD
+#if NETSTANDARD && !NET5_0 && !NET6_0 && !NET7_0
 [assembly: AssemblyTitle("zxing.net for .net core standard")]
 #endif
 #if NETFX_CORE && !WINDOWS_UWP
@@ -64,7 +76,7 @@ using System.Runtime.InteropServices;
 #if INTEROP
 [assembly: AssemblyTitle("zxing.net for com interop")]
 #endif
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 29.07.2019 21:30:35)")]
+[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 01.11.2022 20:43:07)")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyProduct("ZXing.Net")]
 [assembly: AssemblyCopyright("Copyright © 2012")]
@@ -84,9 +96,9 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("0.16.8.0")]
+[assembly: AssemblyVersion("0.16.9.0")]
 #if !WindowsCE
-[assembly: AssemblyFileVersion("0.16.8.0")]
+[assembly: AssemblyFileVersion("0.16.9.0")]
 #endif
 
 [assembly: CLSCompliant(true)]
