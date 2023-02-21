@@ -27,7 +27,7 @@ namespace ZXing.OneD.Test
         [TestCase("0509689", "0000000000010101110010100111000101101011110110111001011101010100000000000", TestName = "UPCEtestAddChecksumAndEncode")]
         public void testEncode(String content, String encoding)
         {
-            var result = new UPCEWriter().encode(content, BarcodeFormat.UPC_E, encoding.Length, 0);
+            var result = new UPCEWriter() { DefaultMargin = 5 }.encode(content, BarcodeFormat.UPC_E, encoding.Length, 0);
             Assert.AreEqual(encoding, BitMatrixTestCase.matrixToString(result));
         }
 
@@ -35,7 +35,7 @@ namespace ZXing.OneD.Test
         [ExpectedException(typeof(ArgumentException))]
         public void testEncodeIllegalCharacters()
         {
-            new UPCEWriter().encode("05096abc", BarcodeFormat.UPC_E, 0, 0);
+            new UPCEWriter() { DefaultMargin = 5 }.encode("05096abc", BarcodeFormat.UPC_E, 0, 0);
         }
     }
 }
