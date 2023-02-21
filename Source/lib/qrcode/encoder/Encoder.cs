@@ -88,12 +88,8 @@ namespace ZXing.QrCode.Internal
             var hasCompactionHint = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.QR_COMPACT);
 
             // Determine what character encoding has been specified by the caller, if any
-            var encoding = IDictionaryExtensions.GetEncoding(hints, StringUtils.PLATFORM_DEFAULT_ENCODING_T);
-            bool hasEncodingHint = hints != null && hints.ContainsKey(EncodeHintType.CHARACTER_SET);
-
-            // caller of the method can only control if the ECI segment should be written
-            // character set is fixed to UTF-8; but some scanners doesn't like the ECI segment
-            var generateECI = hasEncodingHint;
+            var encoding = IDictionaryExtensions.GetEncoding(hints, DEFAULT_BYTE_MODE_ENCODING);
+            bool generateECI = hints != null && hints.ContainsKey(EncodeHintType.CHARACTER_SET);
 
             if (hasCompactionHint)
             {
@@ -122,7 +118,7 @@ namespace ZXing.QrCode.Internal
                     var eci = CharacterSetECI.getCharacterSetECI(encoding);
                     if (eci != null)
                     {
-                        var eciIsExplicitDisabled = (hints != null && hints.ContainsKey(EncodeHintType.DISABLE_ECI) && hints[EncodeHintType.DISABLE_ECI] != null && Convert.ToBoolean(hints[EncodeHintType.DISABLE_ECI].ToString()));
+                        var eciIsExplicitDisabled = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.DISABLE_ECI);
                         if (!eciIsExplicitDisabled)
                         {
                             appendECI(eci, headerBits);
