@@ -86,7 +86,7 @@ namespace ZXing.OneD
         /// This can yield slightly smaller bar codes. This option and {@link #FORCE_CODE_SET} are mutually
         /// exclusive options.
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
         [Category("Standard"), Description("Specifies whether to use compact mode for Code-128 code" +
             "This can yield slightly smaller bar codes. This option and ForceCodeset are mutually" +
             "exclusive options.")]

@@ -79,21 +79,7 @@ namespace ZXing.Datamatrix
             var disableEci = false;
             if (hints != null)
             {
-                if (hints.ContainsKey(EncodeHintType.DATA_MATRIX_SHAPE))
-                {
-                    var requestedShape = hints[EncodeHintType.DATA_MATRIX_SHAPE];
-                    if (requestedShape is SymbolShapeHint)
-                    {
-                        shape = (SymbolShapeHint)requestedShape;
-                    }
-                    else
-                    {
-                        if (Enum.IsDefined(typeof(SymbolShapeHint), requestedShape.ToString()))
-                        {
-                            shape = (SymbolShapeHint)Enum.Parse(typeof(SymbolShapeHint), requestedShape.ToString(), true);
-                        }
-                    }
-                }
+                shape = IDictionaryExtensions.GetEnumValue<SymbolShapeHint>(hints, EncodeHintType.DATA_MATRIX_SHAPE, shape);
                 var requestedMinSize = hints.ContainsKey(EncodeHintType.MIN_SIZE) ? hints[EncodeHintType.MIN_SIZE] as Dimension : null;
                 if (requestedMinSize != null)
                 {
@@ -112,22 +98,8 @@ namespace ZXing.Datamatrix
                         defaultEncodation = Convert.ToInt32(requestedDefaultEncodation.ToString());
                     }
                 }
-                if (hints.ContainsKey(EncodeHintType.MARGIN))
-                {
-                    var marginInt = hints[EncodeHintType.MARGIN];
-                    if (marginInt != null)
-                    {
-                        margin = Convert.ToInt32(marginInt.ToString());
-                    }
-                }
-                if (hints.ContainsKey(EncodeHintType.NO_PADDING))
-                {
-                    var noPaddingObj = hints[EncodeHintType.NO_PADDING];
-                    if (noPaddingObj != null)
-                    {
-                        bool.TryParse(noPaddingObj.ToString(), out noPadding);
-                    }
-                }
+                margin = IDictionaryExtensions.GetIntValue(hints, EncodeHintType.MARGIN, margin);
+                noPadding = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.NO_PADDING, false);
                 encoding = IDictionaryExtensions.GetEncoding(hints, null);
                 disableEci = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.DISABLE_ECI, disableEci);
             }
@@ -168,6 +140,7 @@ namespace ZXing.Datamatrix
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <param name="margin"></param>
+        /// <param name="noPadding"></param>
         /// <returns>The bit matrix generated.</returns>
         private static BitMatrix encodeLowLevel(DefaultPlacement placement, SymbolInfo symbolInfo, int width, int height, int margin, bool noPadding)
         {

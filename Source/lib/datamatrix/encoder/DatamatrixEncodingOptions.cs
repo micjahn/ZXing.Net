@@ -166,7 +166,7 @@ namespace ZXing.Datamatrix
         /// group-separator character (ASCII 29 decimal) can be used to encode the positions of FNC1 codewords
         /// for the purpose of delimiting AIs.
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
         [CategoryAttribute("Standard"), DescriptionAttribute("Specifies whether to use compact mode for Data Matrix."+
             " The compact encoding mode also supports the encoding of characters that are not in the ISO-8859-1" +
             " character set via ECIs." +
@@ -208,7 +208,7 @@ namespace ZXing.Datamatrix
         /// Forces C40 encoding for data-matrix (type {@link Boolean}, or "true" or "false") {@link String } value). This 
         /// option and {@link #DATA_MATRIX_COMPACT} are mutually exclusive.
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
         [CategoryAttribute("Standard"), DescriptionAttribute("Forces C40 encoding for data-matrix. This " +
             " option and CompactEncoding are mutually exclusive.")]
 #endif
@@ -241,7 +241,7 @@ namespace ZXing.Datamatrix
         /// <summary>
         /// Specifies what character encoding to use where applicable (type {@link String})
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
         [CategoryAttribute("Standard"), DescriptionAttribute("Specifies what character encoding to " +
             "use where applicable.")]
 #endif

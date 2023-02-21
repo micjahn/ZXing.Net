@@ -240,7 +240,12 @@ namespace ZXing
 
     internal static class IDictionaryExtensions
     {
-        public static bool IsBooleanFlagSet(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType, bool defaultIfNotContained = false)
+        public static bool IsBooleanFlagSet(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType)
+        {
+            return IsBooleanFlagSet(hints, encodeHintType, false);
+        }
+
+        public static bool IsBooleanFlagSet(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType, bool defaultIfNotContained)
         {
             if (hints != null && hints.ContainsKey(encodeHintType))
             {
@@ -260,7 +265,12 @@ namespace ZXing
             return defaultIfNotContained;
         }
 
-        public static int GetIntValue(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType, int defaultIfNotContained = 0)
+        public static int GetIntValue(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType)
+        {
+            return GetIntValue(hints, encodeHintType, 0);
+        }
+
+        public static int GetIntValue(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType, int defaultIfNotContained)
         {
             if (hints != null && hints.ContainsKey(encodeHintType))
             {
@@ -280,7 +290,12 @@ namespace ZXing
             return defaultIfNotContained;
         }
 
-        public static float GetFloatValue(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType, float defaultIfNotContained = 0)
+        public static float GetFloatValue(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType)
+        {
+            return GetFloatValue(hints, encodeHintType, 0);
+        }
+
+        public static float GetFloatValue(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType, float defaultIfNotContained)
         {
             if (hints != null && hints.ContainsKey(encodeHintType))
             {
@@ -300,7 +315,12 @@ namespace ZXing
             return defaultIfNotContained;
         }
 
-        public static int GetEnumValue(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType, Type enumType, int defaultIfNotContained = 0)
+        public static int GetEnumValue(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType, Type enumType)
+        {
+            return GetEnumValue(hints, encodeHintType, 0);
+        }
+
+        public static int GetEnumValue(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType, Type enumType, int defaultIfNotContained)
         {
             if (hints != null && hints.ContainsKey(encodeHintType))
             {
@@ -348,7 +368,12 @@ namespace ZXing
             return defaultIfNotContained;
         }
 
-        public static T GetValue<T>(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType, T defaultIfNotContained = null) where T : class
+        public static T GetValue<T>(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType) where T : class
+        {
+            return GetValue<T>(hints, encodeHintType, null);
+        }
+
+        public static T GetValue<T>(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType, T defaultIfNotContained) where T : class
         {
             if (hints != null && hints.ContainsKey(encodeHintType))
             {
@@ -365,12 +390,17 @@ namespace ZXing
             return defaultIfNotContained;
         }
 
+        public static Encoding GetEncoding(IDictionary<EncodeHintType, object> hints)
+        {
+            return GetEncoding(hints, EncodeHintType.CHARACTER_SET, null);
+        }
+
         public static Encoding GetEncoding(IDictionary<EncodeHintType, object> hints, Encoding defaultIfNotContained)
         {
             return GetEncoding(hints, EncodeHintType.CHARACTER_SET, defaultIfNotContained);
         }
 
-        public static Encoding GetEncoding(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType = EncodeHintType.CHARACTER_SET, Encoding defaultIfNotContained = null)
+        public static Encoding GetEncoding(IDictionary<EncodeHintType, object> hints, EncodeHintType encodeHintType, Encoding defaultIfNotContained)
         {
             Encoding encoding = defaultIfNotContained;
 #if !SILVERLIGHT || WINDOWS_PHONE

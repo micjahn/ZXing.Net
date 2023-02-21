@@ -145,10 +145,14 @@
     <Compile Include="common\detector\MonochromeRectangleDetector.cs" />
     <Compile Include="common\detector\WhiteRectangleDetector.cs" />
     <Compile Include="common\ECI.cs" />
+    <Compile Include="common\ECIEncoderSet.cs" />
+    <Compile Include="common\ECIInput.cs" />
+    <Compile Include="common\ECIStringBuilder.cs" />
     <Compile Include="common\EncodingOptions.cs" />
     <Compile Include="common\GlobalHistogramBinarizer.cs" />
     <Compile Include="common\GridSampler.cs" />
     <Compile Include="common\HybridBinarizer.cs" />
+    <Compile Include="common\MinimalECIInput.cs" />
     <Compile Include="common\PerspectiveTransform.cs" />
     <Compile Include="common\reedsolomon\GenericGF.cs" />
     <Compile Include="common\reedsolomon\GenericGFPoly.cs" />
@@ -175,6 +179,7 @@
     <Compile Include="datamatrix\encoder\EncoderContext.cs" />
     <Compile Include="datamatrix\encoder\ErrorCorrection.cs" />
     <Compile Include="datamatrix\encoder\HighLevelEncoder.cs" />
+    <Compile Include="datamatrix\encoder\MinimalEncoder.cs" />
     <Compile Include="datamatrix\encoder\SymbolInfo.cs" />
     <Compile Include="datamatrix\encoder\SymbolShapeHint.cs" />
     <Compile Include="datamatrix\encoder\TextEncoder.cs" />

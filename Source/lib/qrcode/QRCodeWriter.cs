@@ -111,22 +111,8 @@ namespace ZXing.QrCode
                         }
                     }
                 }
-                if (hints.ContainsKey(EncodeHintType.MARGIN))
-                {
-                    var quietZoneInt = hints[EncodeHintType.MARGIN];
-                    if (quietZoneInt != null)
-                    {
-                        quietZone = Convert.ToInt32(quietZoneInt.ToString());
-                    }
-                }
-                if (hints.ContainsKey(EncodeHintType.NO_PADDING))
-                {
-                    var noPaddingObj = hints[EncodeHintType.NO_PADDING];
-                    if (noPaddingObj != null)
-                    {
-                        bool.TryParse(noPaddingObj.ToString(), out noPadding);
-                    }
-                }
+                quietZone = IDictionaryExtensions.GetIntValue(hints, EncodeHintType.MARGIN, quietZone);
+                noPadding = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.NO_PADDING, false);
             }
 
             var code = Encoder.encode(contents, errorCorrectionLevel, hints);

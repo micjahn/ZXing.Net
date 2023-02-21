@@ -108,16 +108,8 @@ namespace ZXing.OneD
             var noPadding = false;
             if (hints != null)
             {
-                var sidesMarginInt = hints.ContainsKey(EncodeHintType.MARGIN) ? hints[EncodeHintType.MARGIN] : null;
-                if (sidesMarginInt != null)
-                {
-                    sidesMargin = Convert.ToInt32(sidesMarginInt);
-                }
-                var noPaddingObj = hints.ContainsKey(EncodeHintType.NO_PADDING) ? hints[EncodeHintType.NO_PADDING] : null;
-                if (noPaddingObj != null)
-                {
-                    bool.TryParse(noPaddingObj.ToString(), out noPadding);
-                }
+                sidesMargin = IDictionaryExtensions.GetIntValue(hints, EncodeHintType.MARGIN, sidesMargin);
+                noPadding = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.NO_PADDING, false);
             }
 
             var code = encode(contents, hints);
