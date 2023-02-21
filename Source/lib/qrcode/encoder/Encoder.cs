@@ -88,28 +88,13 @@ namespace ZXing.QrCode.Internal
             var hasCompactionHint = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.QR_COMPACT);
 
             // Determine what character encoding has been specified by the caller, if any
-            var encoding = IDictionaryExtensions.GetEncoding(hints, StringUtils.PLATFORM_DEFAULT_ENCODING_T);
-            bool hasEncodingHint = hints != null && hints.ContainsKey(EncodeHintType.CHARACTER_SET);
+            bool generateECI = hints != null && hints.ContainsKey(EncodeHintType.CHARACTER_SET);
 
 #if !SILVERLIGHT || WINDOWS_PHONE
-            var encoding = DEFAULT_BYTE_MODE_ENCODING;
-            var encodingName = hasEncodingHint ? (String)hints[EncodeHintType.CHARACTER_SET] : null;
-            if (encodingName != null)
-            {
-                var eci = CharacterSetECI.getCharacterSetECIByName(encodingName);
-                if (eci == null)
-                    throw new WriterException(string.Format("Encoding {0} isn't supported", encodingName));
-                encoding = CharacterSetECI.getEncoding(eci);
-                if (encoding == null)
-                    throw new WriterException(string.Format("Encoding {0} isn't supported", encodingName));
-            }
-            var generateECI = hasEncodingHint || !DEFAULT_BYTE_MODE_ENCODING.Equals(encoding);
+            var encoding = IDictionaryExtensions.GetEncoding(hints, DEFAULT_BYTE_MODE_ENCODING);
 #else
             // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
-            var encoding = StringUtils.PLATFORM_DEFAULT_ENCODING_T;
-            // caller of the method can only control if the ECI segment should be written
-            // character set is fixed to UTF-8; but some scanners doesn't like the ECI segment
-            var generateECI = hasEncodingHint;
+            var encoding = IDictionaryExtensions.GetEncoding(hints, StringUtils.PLATFORM_DEFAULT_ENCODING_T);
 #endif
 
             if (hasCompactionHint)
@@ -139,7 +124,7 @@ namespace ZXing.QrCode.Internal
                     var eci = CharacterSetECI.getCharacterSetECI(encoding);
                     if (eci != null)
                     {
-                        var eciIsExplicitDisabled = (hints != null && hints.ContainsKey(EncodeHintType.DISABLE_ECI) && hints[EncodeHintType.DISABLE_ECI] != null && Convert.ToBoolean(hints[EncodeHintType.DISABLE_ECI].ToString()));
+                        var eciIsExplicitDisabled = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.DISABLE_ECI);
                         if (!eciIsExplicitDisabled)
                         {
                             appendECI(eci, headerBits);
