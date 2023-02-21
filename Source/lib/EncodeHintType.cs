@@ -413,8 +413,11 @@ namespace ZXing
                 }
             }
 #else
-            // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
-            encoder.setEncoding(StringUtils.UTF8);
+            if (hints != null && hints.ContainsKey(encodeHintType))
+            {
+                // Silverlight supports only UTF-8 and UTF-16 out-of-the-box
+                encoding = CharacterSetECI.getEncoding(StringUtils.UTF8);
+            }
 #endif
 
             return encoding;

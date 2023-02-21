@@ -164,6 +164,7 @@ Four score and seven our forefathers brought forth", SymbolShapeHint.FORCE_SQUAR
             Assert.That(res.Text, Is.EqualTo(data));
         }
 
+#if !SILVERLIGHT
         [Test]
         public void TestEncodeDecodeISO88591AllChars()
         {
@@ -319,6 +320,7 @@ Four score and seven our forefathers brought forth", SymbolShapeHint.FORCE_SQUAR
                 throw new InvalidOperationException("cant be decoded");
             Assert.That(result.Text, Is.EqualTo(content.ToString()));
         }
+#endif
 
         [TestCase('1')]
         [TestCase('a')]
