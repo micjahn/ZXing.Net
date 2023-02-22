@@ -99,6 +99,12 @@ namespace ZXing.QrCode
             }
 
             var result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.QR_CODE);
+
+            if (data != null)
+            {
+                result.putMetadata(ResultMetadataType.QR_MASK_PATTERN, data.DataMask);
+            }
+
             var byteSegments = decoderResult.ByteSegments;
             if (byteSegments != null)
             {
