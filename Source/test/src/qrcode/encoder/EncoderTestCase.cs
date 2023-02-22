@@ -145,11 +145,10 @@ namespace ZXing.QrCode.Internal.Test
         }
 
         [Test]
-        [ExpectedException(typeof(WriterException))]
         public void testEncodeWithVersionTooSmall()
         {
             var hints = new QrCodeEncodingOptions { QrVersion = 3 };
-            Encoder.encode("THISMESSAGEISTOOLONGFORAQRCODEVERSION3", ErrorCorrectionLevel.H, hints.Hints);
+            Assert.Throws<WriterException>(() => Encoder.encode("THISMESSAGEISTOOLONGFORAQRCODEVERSION3", ErrorCorrectionLevel.H, hints.Hints));
         }
 
         [Test]

@@ -296,7 +296,6 @@ namespace ZXing.OneD.Test
 
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void testEncodeWithForcedCodeSetFailureCodeSetABadCharacter()
         {
             // Lower case characters should not be accepted when the code set is forced to A.
@@ -304,11 +303,10 @@ namespace ZXing.OneD.Test
 
             var options = new Code128EncodingOptions();
             options.ForceCodeset = Code128EncodingOptions.Codesets.A;
-            writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+            Assert.Throws<ArgumentException>(() => writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void testEncodeWithForcedCodeSetFailureCodeSetBBadCharacter()
         {
             String toEncode = "ASdf\00123"; // \0 (ascii value 0)
@@ -316,11 +314,10 @@ namespace ZXing.OneD.Test
 
             var options = new Code128EncodingOptions();
             options.ForceCodeset = Code128EncodingOptions.Codesets.B;
-            writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+            Assert.Throws<ArgumentException>(() => writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void testEncodeWithForcedCodeSetFailureCodeSetCBadCharactersNonNum()
         {
             String toEncode = "123a5678";
@@ -328,11 +325,10 @@ namespace ZXing.OneD.Test
 
             var options = new Code128EncodingOptions();
             options.ForceCodeset = Code128EncodingOptions.Codesets.C;
-            writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+            Assert.Throws<ArgumentException>(() => writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void testEncodeWithForcedCodeSetFailureCodeSetCBadCharactersFncCode()
         {
             String toEncode = "123\u00f2a678";
@@ -340,11 +336,10 @@ namespace ZXing.OneD.Test
 
             var options = new Code128EncodingOptions();
             options.ForceCodeset = Code128EncodingOptions.Codesets.C;
-            writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+            Assert.Throws<ArgumentException>(() => writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void testEncodeWithForcedCodeSetFailureCodeSetCWrongAmountOfDigits()
         {
             String toEncode = "123456789";
@@ -352,7 +347,7 @@ namespace ZXing.OneD.Test
 
             var options = new Code128EncodingOptions();
             options.ForceCodeset = Code128EncodingOptions.Codesets.C;
-            writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints);
+            Assert.Throws<ArgumentException>(() => writer.encode(toEncode, BarcodeFormat.CODE_128, 0, 0, options.Hints));
         }
 
         [Test]

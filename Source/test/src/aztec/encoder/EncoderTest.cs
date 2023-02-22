@@ -465,7 +465,6 @@ namespace ZXing.Aztec.Test
 
         [TestCase(33)]
         [TestCase(-1)]
-        [ExpectedException(typeof(ArgumentException))]
         public void doTestUserSpecifiedLayers(int userSpecifiedLayers)
         {
             var alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -477,11 +476,10 @@ namespace ZXing.Aztec.Test
             Assert.AreEqual(32, aztec.Layers);
             Assert.IsFalse(aztec.isCompact);
 
-            Internal.Encoder.encode(alphabet, 25, userSpecifiedLayers);
+            Assert.Throws<ArgumentException>(() => Internal.Encoder.encode(alphabet, 25, userSpecifiedLayers));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void testBorderCompact4CaseFailed()
         {
             // Compact(4) con hold 608 bits of information, but at most 504 can be data.  Rest must
@@ -489,7 +487,7 @@ namespace ZXing.Aztec.Test
             String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             // encodes as 26 * 5 * 4 = 520 bits of data
             String alphabet4 = alphabet + alphabet + alphabet + alphabet;
-            Internal.Encoder.encode(alphabet4, 0, -4);
+            Assert.Throws<ArgumentException>(() => Internal.Encoder.encode(alphabet4, 0, -4));
         }
 
         [Test]

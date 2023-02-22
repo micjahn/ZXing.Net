@@ -27,10 +27,9 @@ namespace ZXing.QrCode.Internal.Test
     public sealed class VersionTestCase
     {
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void testBadVersion()
         {
-            Version.getVersionForNumber(0);
+            Assert.Throws<ArgumentException>(() => Version.getVersionForNumber(0));
         }
 
         [Test]

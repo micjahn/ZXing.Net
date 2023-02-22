@@ -32,10 +32,9 @@ namespace ZXing.OneD.Test
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void testEncodeIllegalCharacters()
         {
-            new ITFWriter() { DefaultMargin = 5 }.encode("00123456789abc", BarcodeFormat.ITF, 0, 0);
+            Assert.Throws<ArgumentException>(() => new ITFWriter() { DefaultMargin = 5 }.encode("00123456789abc", BarcodeFormat.ITF, 0, 0));
         }
     }
 }

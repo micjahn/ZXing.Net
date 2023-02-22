@@ -36,10 +36,9 @@ namespace ZXing.OneD.Test
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void testEncodeIllegalCharacters()
         {
-            new EAN8Writer() { DefaultMargin = 5 }.encode("96385abc", BarcodeFormat.EAN_8, 0, 0);
+            Assert.Throws<ArgumentException>(() => new EAN8Writer() { DefaultMargin = 5 }.encode("96385abc", BarcodeFormat.EAN_8, 0, 0));
         }
     }
 }
