@@ -59,11 +59,17 @@ namespace ZXing.Multi.QrCode
                 var points = detectorResult.Points;
                 // If the code was mirrored: swap the bottom-left and the top-right points.
                 var data = decoderResult.Other as QRCodeDecoderMetaData;
-                if (data != null)
+                if (data != null && data.IsMirrored)
                 {
                     data.applyMirroredCorrection(points);
                 }
                 var result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.QR_CODE);
+
+                if (data != null)
+                {
+                    result.putMetadata(ResultMetadataType.QR_MASK_PATTERN, data.DataMask);
+                }
+
                 var byteSegments = decoderResult.ByteSegments;
                 if (byteSegments != null)
                 {
