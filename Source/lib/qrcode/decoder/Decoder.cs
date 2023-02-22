@@ -70,7 +70,13 @@ namespace ZXing.QrCode.Internal
                 return null;
 
             var result = decode(parser, hints);
-            if (result == null)
+
+            if (result != null)
+            {
+                result.Other = new QRCodeDecoderMetaData(false, parser.readFormatInformation().DataMask);
+                return result;
+            }
+            else
             {
                 // Revert the bit matrix
                 parser.remask();
@@ -101,12 +107,11 @@ namespace ZXing.QrCode.Internal
 
                 if (result != null)
                 {
-                    // Success! Notify the caller that the code was mirrored.
-                    result.Other = new QRCodeDecoderMetaData(true);
+                    // Success! Notify the caller that the QRCode was mirrored
+                    result.Other = new QRCodeDecoderMetaData(true, formatinfo.DataMask);
                 }
+                return result;
             }
-
-            return result;
         }
 
         private DecoderResult decode(BitMatrixParser parser, IDictionary<DecodeHintType, object> hints)

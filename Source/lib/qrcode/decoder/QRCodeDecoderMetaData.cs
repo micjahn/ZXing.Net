@@ -23,14 +23,17 @@ namespace ZXing.QrCode.Internal
     public sealed class QRCodeDecoderMetaData
     {
         private readonly bool mirrored;
+        private readonly int dataMask;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QRCodeDecoderMetaData"/> class.
         /// </summary>
         /// <param name="mirrored">if set to <c>true</c> [mirrored].</param>
-        public QRCodeDecoderMetaData(bool mirrored)
+        /// <param name="dataMask">The mask applied to the bit matrix</param>
+        public QRCodeDecoderMetaData(bool mirrored, int dataMask)
         {
             this.mirrored = mirrored;
+            this.dataMask = dataMask;
         }
 
         /// <summary>
@@ -39,6 +42,15 @@ namespace ZXing.QrCode.Internal
         public bool IsMirrored
         {
             get { return mirrored; }
+        }
+
+
+        /// <summary>
+        /// The mask applied to the QR code
+        /// </summary>
+        public int DataMask
+        {
+            get { return dataMask; }
         }
 
         /// <summary>
