@@ -16,6 +16,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+#if !NET20
+using System.Linq;
+#endif
 using System.Text;
 
 using ZXing.Common;
@@ -43,6 +47,7 @@ namespace ZXing.QrCode.Internal
         {
             var bits = new BitSource(bytes);
             var result = new StringBuilder(50);
+            var encodedResult = new MemoryStream();
             var byteSegments = new List<byte[]>(1);
             var symbolSequence = -1;
             var parityData = -1;
@@ -114,7 +119,7 @@ namespace ZXing.QrCode.Internal
                             int countHanzi = bits.readBits(mode.getCharacterCountBits(version));
                             if (subset == GB2312_SUBSET)
                             {
-                                if (!decodeHanziSegment(bits, result, countHanzi))
+                                if (!decodeHanziSegment(bits, encodedResult, result, countHanzi))
                                     return null;
                             }
                             break;
@@ -125,19 +130,19 @@ namespace ZXing.QrCode.Internal
                             switch (mode.Name)
                             {
                                 case Mode.Names.NUMERIC:
-                                    if (!decodeNumericSegment(bits, result, count))
+                                    if (!decodeNumericSegment(bits, encodedResult, result, count))
                                         return null;
                                     break;
                                 case Mode.Names.ALPHANUMERIC:
-                                    if (!decodeAlphanumericSegment(bits, result, count, fc1InEffect))
+                                    if (!decodeAlphanumericSegment(bits, encodedResult, result, count, fc1InEffect))
                                         return null;
                                     break;
                                 case Mode.Names.BYTE:
-                                    if (!decodeByteSegment(bits, result, count, currentCharacterSetECI, byteSegments, hints))
+                                    if (!decodeByteSegment(bits, encodedResult, result, count, currentCharacterSetECI, byteSegments, hints))
                                         return null;
                                     break;
                                 case Mode.Names.KANJI:
-                                    if (!decodeKanjiSegment(bits, result, count))
+                                    if (!decodeKanjiSegment(bits, encodedResult, result, count))
                                         return null;
                                     break;
                                 default:
@@ -184,7 +189,7 @@ namespace ZXing.QrCode.Internal
                 return null;
             }
 
-            return new DecoderResult(bytes,
+            return new DecoderResult(bytes, encodedResult.ToArray(),
                                      result.ToString(),
                                      byteSegments.Count == 0 ? null : byteSegments,
                                      ecLevel == null ? null : ecLevel.ToString(),
@@ -199,6 +204,7 @@ namespace ZXing.QrCode.Internal
         /// <param name="count">The count.</param>
         /// <returns></returns>
         private static bool decodeHanziSegment(BitSource bits,
+                                               MemoryStream encodedResult,
                                                StringBuilder result,
                                                int count)
         {
@@ -238,11 +244,13 @@ namespace ZXing.QrCode.Internal
                 encoding = StringUtils.PLATFORM_DEFAULT_ENCODING_T;
 
             result.Append(encoding.GetString(buffer, 0, buffer.Length));
+            encodedResult.Write(buffer, 0, buffer.Length);
 
             return true;
         }
 
         private static bool decodeKanjiSegment(BitSource bits,
+                                               MemoryStream encodedResult,
                                                StringBuilder result,
                                                int count)
         {
@@ -282,11 +290,13 @@ namespace ZXing.QrCode.Internal
                 encoding = StringUtils.PLATFORM_DEFAULT_ENCODING_T;
 
             result.Append(encoding.GetString(buffer, 0, buffer.Length));
+            encodedResult.Write(buffer, 0, buffer.Length);
             
             return true;
         }
 
         private static bool decodeByteSegment(BitSource bits,
+                                              MemoryStream encodedResult,
                                               StringBuilder result,
                                               int count,
                                               CharacterSetECI currentCharacterSetECI,
@@ -323,6 +333,7 @@ namespace ZXing.QrCode.Internal
                 encoding = StringUtils.PLATFORM_DEFAULT_ENCODING_T;
             }
             result.Append(encoding.GetString(readBytes, 0, readBytes.Length));
+            encodedResult.Write(readBytes, 0, readBytes.Length);
 
             byteSegments.Add(readBytes);
 
@@ -339,6 +350,7 @@ namespace ZXing.QrCode.Internal
         }
 
         private static bool decodeAlphanumericSegment(BitSource bits,
+                                                      MemoryStream encodedResult,
                                                       StringBuilder result,
                                                       int count,
                                                       bool fc1InEffect)
@@ -353,7 +365,11 @@ namespace ZXing.QrCode.Internal
                 }
                 int nextTwoCharsBits = bits.readBits(11);
                 result.Append(toAlphaNumericChar(nextTwoCharsBits / 45));
+                encodedResult.WriteByte((byte)(nextTwoCharsBits / 45));
+
                 result.Append(toAlphaNumericChar(nextTwoCharsBits % 45));
+                encodedResult.WriteByte((byte)(nextTwoCharsBits % 45));
+
                 count -= 2;
             }
             if (count == 1)
@@ -364,8 +380,14 @@ namespace ZXing.QrCode.Internal
                     return false;
                 }
                 result.Append(toAlphaNumericChar(bits.readBits(6)));
+                encodedResult.WriteByte((byte)(bits.readBits(6)));
             }
 
+#if NET20
+            var encodedResultList = new List<byte>(encodedResult.ToArray());
+#else
+            var encodedResultList = encodedResult.ToArray().ToList();
+#endif
             // See section 6.4.8.1, 6.4.8.2
             if (fc1InEffect)
             {
@@ -378,21 +400,27 @@ namespace ZXing.QrCode.Internal
                         {
                             // %% is rendered as %
                             result.Remove(i + 1, 1);
+                            encodedResultList.RemoveAt(i + 1);
                         }
                         else
                         {
                             // In alpha mode, % should be converted to FNC1 separator 0x1D
                             result.Remove(i, 1);
+                            encodedResultList.RemoveAt(i);
+
                             result.Insert(i, new[] { (char)0x1D });
+                            encodedResultList.Insert(i, (byte)0x1D );
                         }
                     }
                 }
+                encodedResult = new MemoryStream(encodedResultList.ToArray());
             }
 
             return true;
         }
 
         private static bool decodeNumericSegment(BitSource bits,
+                                                 MemoryStream encodedResult,
                                                  StringBuilder result,
                                                  int count)
         {
@@ -410,8 +438,13 @@ namespace ZXing.QrCode.Internal
                     return false;
                 }
                 result.Append(toAlphaNumericChar(threeDigitsBits / 100));
+                encodedResult.WriteByte((byte)(threeDigitsBits / 100));
+
                 result.Append(toAlphaNumericChar((threeDigitsBits / 10) % 10));
+                encodedResult.WriteByte((byte)((threeDigitsBits / 10) % 10));
+
                 result.Append(toAlphaNumericChar(threeDigitsBits % 10));
+                encodedResult.WriteByte((byte)(threeDigitsBits % 10));
 
                 count -= 3;
             }
@@ -428,7 +461,10 @@ namespace ZXing.QrCode.Internal
                     return false;
                 }
                 result.Append(toAlphaNumericChar(twoDigitsBits / 10));
+                encodedResult.WriteByte((byte)(twoDigitsBits / 10));
+
                 result.Append(toAlphaNumericChar(twoDigitsBits % 10));
+                encodedResult.WriteByte((byte)(twoDigitsBits % 10));
             }
             else if (count == 1)
             {
@@ -443,6 +479,7 @@ namespace ZXing.QrCode.Internal
                     return false;
                 }
                 result.Append(toAlphaNumericChar(digitBits));
+                encodedResult.WriteByte((byte)digitBits);
             }
 
             return true;

@@ -100,6 +100,8 @@ namespace ZXing.Maxicode.Internal
                     }
                     String country = getCountry(bytes).ToString(THREE_DIGITS);
                     String service = getServiceClass(bytes).ToString(THREE_DIGITS);
+
+                    var msg = getMessage(bytes, 10, 84);
                     result.Append(getMessage(bytes, 10, 84));
                     if (result.ToString().StartsWith("[)>" + RS + "01" + GS))
                     {
@@ -118,7 +120,7 @@ namespace ZXing.Maxicode.Internal
                     break;
             }
 
-            return new DecoderResult(bytes, result.ToString(), null, mode.ToString());
+            return new DecoderResult(bytes, Encoding.UTF8.GetBytes(result.ToString()), result.ToString(), null, mode.ToString());
         }
 
         private static int getBit(int bit, byte[] bytes)

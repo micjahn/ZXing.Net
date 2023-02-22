@@ -98,7 +98,7 @@ namespace ZXing.QrCode
                 data.applyMirroredCorrection(points);
             }
 
-            var result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.QR_CODE);
+            var result = new Result(decoderResult.Text, decoderResult.Data, decoderResult.RawBytes, points, BarcodeFormat.QR_CODE);
             var byteSegments = decoderResult.ByteSegments;
             if (byteSegments != null)
             {

@@ -16,8 +16,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
-
 using ZXing.Common;
 using ZXing.Common.ReedSolomon;
 
@@ -111,13 +111,14 @@ namespace ZXing.Aztec.Internal
             if (correctedBits == null)
                 return null;
 
-            var result = getEncodedData(correctedBits.correctBits);
+            byte[] encodedResult;
+            var result = getEncodedData(correctedBits.correctBits, out encodedResult);
             if (result == null)
                 return null;
 
             var rawBytes = convertBoolArrayToByteArray(correctedBits.correctBits);
 
-            var decoderResult = new DecoderResult(rawBytes, correctedBits.correctBits.Length, result, null, String.Format("{0}", correctedBits.ecLevel));
+            var decoderResult = new DecoderResult(rawBytes, correctedBits.correctBits.Length, encodedResult, result, null, String.Format("{0}", correctedBits.ecLevel));
             return decoderResult;
         }
 
@@ -126,9 +127,9 @@ namespace ZXing.Aztec.Internal
         /// </summary>
         /// <param name="correctedBits"></param>
         /// <returns></returns>
-        public static String highLevelDecode(bool[] correctedBits)
+        public static String highLevelDecode(bool[] correctedBits, out byte[] encodedResult)
         {
-            return getEncodedData(correctedBits);
+            return getEncodedData(correctedBits, out encodedResult);
         }
 
         /// <summary>
@@ -136,7 +137,7 @@ namespace ZXing.Aztec.Internal
         /// </summary>
         /// <param name="correctedBits">The corrected bits.</param>
         /// <returns>the decoded string</returns>
-        private static String getEncodedData(bool[] correctedBits)
+        private static String getEncodedData(bool[] correctedBits, out byte[] encodedResult)
         {
             var endIndex = correctedBits.Length;
             var latchTable = Table.UPPER; // table most recently latched to
@@ -148,6 +149,7 @@ namespace ZXing.Aztec.Internal
             // Final decoded string result
             // (correctedBits-5) / 4 is an upper bound on the size (all-digit result)
             var result = new StringBuilder((correctedBits.Length - 5) / 4);
+            var encodedResultStream = new MemoryStream();
 
             // Intermediary buffer of decoded bytes, which is decoded into a string and flushed
             // when character encoding changes (ECI) or input ends.
@@ -212,12 +214,14 @@ namespace ZXing.Aztec.Internal
                             {
                                 var byteArray = decodedBytes.ToArray();
                                 result.Append(encoding.GetString(byteArray, 0, byteArray.Length));
+                                encodedResultStream.Write(byteArray, 0, byteArray.Length);
                                 decodedBytes.SetLength(0);
                             }
                             switch (n)
                             {
                                 case 0:
                                     result.Append((char)29);  // translate FNC1 as ASCII 29
+                                    encodedResultStream.WriteByte((byte)29);
                                     break;
                                 case 7:
                                     throw new FormatException("FLG(7) is reserved and illegal");
@@ -270,7 +274,6 @@ namespace ZXing.Aztec.Internal
 #if (PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETFX_CORE)
                             var b = StringUtils.PLATFORM_DEFAULT_ENCODING_T.GetBytes(str);
 #else
-
                             var b = Encoding.ASCII.GetBytes(str);
 #endif
                             decodedBytes.Write(b, 0, b.Length);
@@ -285,7 +288,9 @@ namespace ZXing.Aztec.Internal
                 {
                     var byteArray = decodedBytes.ToArray();
                     result.Append(encoding.GetString(byteArray, 0, byteArray.Length));
+                    encodedResultStream.Write(byteArray, 0, byteArray.Length);
                 }
+                encodedResult = encodedResultStream.ToArray();
             }
             return result.ToString();
         }

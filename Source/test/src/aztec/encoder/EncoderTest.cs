@@ -625,18 +625,20 @@ namespace ZXing.Aztec.Test
 
         private static void testHighLevelEncodeString(String s, String expectedBits)
         {
+            byte[] encodedResult;
             BitArray bits = new HighLevelEncoder(ISO_8859_1.GetBytes(s)).encode();
             String receivedBits = stripSpace(bits.ToString());
             Assert.AreEqual(stripSpace(expectedBits), receivedBits, "highLevelEncode() failed for input string: " + s);
-            Assert.AreEqual(s, Internal.Decoder.highLevelDecode(toBooleanArray(bits)));
+            Assert.AreEqual(s, Internal.Decoder.highLevelDecode(toBooleanArray(bits), out encodedResult));
         }
 
         private static void testHighLevelEncodeString(String s, int expectedReceivedBits)
         {
+            byte[] encodedResult;
             BitArray bits = new HighLevelEncoder(ISO_8859_1.GetBytes(s)).encode();
             int receivedBitCount = stripSpace(bits.ToString()).Length;
             Assert.AreEqual(expectedReceivedBits, receivedBitCount, "highLevelEncode() failed for input string: " + s);
-            Assert.AreEqual(s, Internal.Decoder.highLevelDecode(toBooleanArray(bits)));
+            Assert.AreEqual(s, Internal.Decoder.highLevelDecode(toBooleanArray(bits), out encodedResult));
         }
 
         public static String stripSpace(String s)

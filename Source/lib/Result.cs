@@ -27,6 +27,9 @@ namespace ZXing
         /// <returns>raw text encoded by the barcode, if applicable, otherwise <code>null</code></returns>
         public String Text { get; private set; }
 
+        /// <returns>raw text binary representation, if applicable, otherwise <code>null</code></returns>
+        public byte[] Data { get; private set; }
+
         /// <returns>raw bytes encoded by the barcode, if applicable, otherwise <code>null</code></returns>
         public byte[] RawBytes { get; private set; }
 
@@ -73,6 +76,20 @@ namespace ZXing
         }
 
         /// <summary>
+        /// Initizalizes a new instance of the <see cref="Result"/> class.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="data"></param>
+        /// <param name="rawBytes"></param>
+        /// <param name="resultPoints"></param>
+        /// <param name="format"></param>
+        public Result(String text, byte[] data, byte[] rawBytes, ResultPoint[] resultPoints, BarcodeFormat format)
+            : this(text, rawBytes, resultPoints, format)
+        {
+            Data = data;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Result"/> class.
         /// </summary>
         /// <param name="text">The text.</param>
@@ -87,6 +104,26 @@ namespace ZXing
                       BarcodeFormat format)
            : this(text, rawBytes, numBits, resultPoints, format, DateTime.Now.Ticks)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Result"/> class.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="data"></param>
+        /// <param name="rawBytes"></param>
+        /// <param name="numBits"></param>
+        /// <param name="resultPoints"></param>
+        /// <param name="format"></param>
+        public Result(String text,
+                      byte[] data,
+                      byte[] rawBytes,
+                      int numBits,
+                      ResultPoint[] resultPoints,
+                      BarcodeFormat format)
+            : this(text,rawBytes, numBits, resultPoints, format)
+        {
+            this.Data = data;
         }
 
         /// <summary>
@@ -112,12 +149,18 @@ namespace ZXing
         /// <param name="format">The format.</param>
         /// <param name="timestamp">The timestamp.</param>
         public Result(String text, byte[] rawBytes, int numBits, ResultPoint[] resultPoints, BarcodeFormat format, long timestamp)
+            : this(text, null, rawBytes, numBits, resultPoints, format, timestamp)
+        {
+        }
+
+        public Result(String text, byte[] data, byte[] rawBytes, int numBits, ResultPoint[] resultPoints, BarcodeFormat format, long timestamp)
         {
             if (text == null && rawBytes == null)
             {
                 throw new ArgumentException("Text and bytes are null");
             }
             Text = text;
+            Data = data;
             RawBytes = rawBytes;
             NumBits = numBits;
             ResultPoints = resultPoints;

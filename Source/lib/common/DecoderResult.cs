@@ -43,6 +43,11 @@ namespace ZXing.Common
         public String Text { get; private set; }
 
         /// <summary>
+        /// bytes representing the encoded text field
+        /// </summary>
+        public byte[] Data { get; private set; }
+
+        /// <summary>
         /// list of byte segments in the result, or null if not applicable
         /// </summary>
         public IList<byte[]> ByteSegments { get; private set; }
@@ -101,7 +106,21 @@ namespace ZXing.Common
         public DecoderResult(byte[] rawBytes, String text, List<byte[]> byteSegments, String ecLevel)
             : this(rawBytes, text, byteSegments, ecLevel, -1, -1, 0)
         {
-            
+
+        }
+
+        /// <summary>
+        /// initilizing constructor 
+        /// </summary>
+        /// <param name="rawBytes"></param>
+        /// <param name="data"></param>
+        /// <param name="text"></param>
+        /// <param name="byteSegments"></param>
+        /// <param name="ecLevel"></param>
+        public DecoderResult(byte[] rawBytes, byte[] data, String text, List<byte[]> byteSegments, String ecLevel)
+            : this(rawBytes, text, byteSegments, ecLevel)
+        {
+            Data = data;
         }
 
         /// <summary>
@@ -116,6 +135,22 @@ namespace ZXing.Common
            : this(rawBytes, text, byteSegments, ecLevel, -1, -1, symbologyModifier)
         {
         }
+
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="rawBytes"></param>
+        /// <param name="data"></param>
+        /// <param name="text"></param>
+        /// <param name="byteSegments"></param>
+        /// <param name="ecLevel"></param>
+        /// <param name="symbologyModifier"></param>
+        public DecoderResult(byte[] rawBytes, byte[] data, String text, IList<byte[]> byteSegments, String ecLevel, int symbologyModifier)
+           : this(rawBytes, text, byteSegments, ecLevel, -1, -1, symbologyModifier)
+        {
+            this.Data = data;
+        }
+
         /// <summary>
         /// initializing constructor
         /// </summary>
@@ -133,7 +168,7 @@ namespace ZXing.Common
                      int saParity)
              : this(rawBytes, text, byteSegments, ecLevel, saSequence, saParity, 0)
         {
-            
+
         }
 
         /// <summary>
@@ -155,6 +190,23 @@ namespace ZXing.Common
         /// initializing constructor
         /// </summary>
         /// <param name="rawBytes"></param>
+        /// <param name="data"></param>
+        /// <param name="text"></param>
+        /// <param name="byteSegments"></param>
+        /// <param name="ecLevel"></param>
+        /// <param name="saSequence"></param>
+        /// <param name="saParity"></param>
+        /// <param name="symbologyModifier"></param>
+        public DecoderResult(byte[] rawBytes, byte[] data, String text, IList<byte[]> byteSegments, String ecLevel, int saSequence, int saParity, int symbologyModifier)
+            : this(rawBytes, text, byteSegments, ecLevel, saSequence, saParity, symbologyModifier)
+        {
+            Data = data;
+        }
+
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="rawBytes"></param>
         /// <param name="numBits"></param>
         /// <param name="text"></param>
         /// <param name="byteSegments"></param>
@@ -169,6 +221,22 @@ namespace ZXing.Common
         /// </summary>
         /// <param name="rawBytes"></param>
         /// <param name="numBits"></param>
+        /// <param name="data"></param>
+        /// <param name="text"></param>
+        /// <param name="byteSegments"></param>
+        /// <param name="ecLevel"></param>
+        public DecoderResult(byte[] rawBytes, int numBits, byte[] data, String text, IList<byte[]> byteSegments, String ecLevel)
+            : this(rawBytes, numBits, text, byteSegments, ecLevel)
+        {
+            this.Data = data;
+        }
+
+
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="rawBytes"></param>
+        /// <param name="numBits"></param>
         /// <param name="text"></param>
         /// <param name="byteSegments"></param>
         /// <param name="ecLevel"></param>
@@ -176,12 +244,29 @@ namespace ZXing.Common
         /// <param name="saParity"></param>
         /// <param name="symbologyModifier"></param>
         public DecoderResult(byte[] rawBytes, int numBits, String text, IList<byte[]> byteSegments, String ecLevel, int saSequence, int saParity, int symbologyModifier)
+            : this(rawBytes, null, numBits, text, byteSegments, ecLevel, saSequence, saParity, symbologyModifier)
+        {
+        }
+
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="rawBytes"></param>
+        /// <param name="numBits"></param>
+        /// <param name="text"></param>
+        /// <param name="byteSegments"></param>
+        /// <param name="ecLevel"></param>
+        /// <param name="saSequence"></param>
+        /// <param name="saParity"></param>
+        /// <param name="symbologyModifier"></param>
+        public DecoderResult(byte[] rawBytes, byte[] data, int numBits, String text, IList<byte[]> byteSegments, String ecLevel, int saSequence, int saParity, int symbologyModifier)
         {
             if (rawBytes == null && text == null)
             {
                 throw new ArgumentException();
             }
             RawBytes = rawBytes;
+            Data = data;
             NumBits = numBits;
             Text = text;
             ByteSegments = byteSegments;
