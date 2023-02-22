@@ -71,10 +71,9 @@ namespace ZXing.PDF417.Internal.Test
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void testEncodeEmptyString()
         {
-            PDF417HighLevelEncoder.encodeHighLevel("", Compaction.AUTO, null, false, false);
+            Assert.Throws<ArgumentException>(() => PDF417HighLevelEncoder.encodeHighLevel("", Compaction.AUTO, null, false, false));
         }
     }
 }
