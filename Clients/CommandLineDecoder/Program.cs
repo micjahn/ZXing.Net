@@ -47,6 +47,10 @@ namespace CommandLineDecoder
                 {
                     config.TryHarder = true;
                 }
+                else if ("--try_inverted".Equals(arg))
+                {
+                    config.TryInverted = true;
+                }
                 else if ("--pure_barcode".Equals(arg))
                 {
                     config.PureBarcode = true;
@@ -235,6 +239,10 @@ namespace CommandLineDecoder
             {
                 hints[DecodeHintType.TRY_HARDER] = true;
             }
+            if (config.TryInverted)
+            {
+                hints[DecodeHintType.ALSO_INVERTED] = true;
+            }
             if (config.PureBarcode)
             {
                 hints[DecodeHintType.PURE_BARCODE] = true;
@@ -247,6 +255,7 @@ namespace CommandLineDecoder
             Console.Out.WriteLine("Decode barcode images using the ZXing library\n");
             Console.Out.WriteLine("usage: CommandLineRunner { file | dir | url } [ options ]");
             Console.Out.WriteLine("  --try_harder: Use the TRY_HARDER hint, default is normal (mobile) mode");
+            Console.Out.WriteLine("  --try_inverted: Decode the image inverted if normal mode fails");
             Console.Out.WriteLine("  --pure_barcode: Input image is a pure monochrome barcode image, not a photo");
             Console.Out.WriteLine("  --products_only: Only decode the UPC and EAN families of barcodes");
             Console.Out.WriteLine("  --dump_results: Write the decoded contents to input.txt");
