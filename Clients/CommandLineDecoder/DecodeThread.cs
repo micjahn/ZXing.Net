@@ -205,6 +205,16 @@ namespace CommandLineDecoder
             foreach (var entry in hints)
                 reader.Options.Hints.Add(entry.Key, entry.Value);
             Result result = reader.Decode(source);
+
+            if (result == null)
+            {
+                // Explicitly use the GlobalHistogramBinarizer if nothing is found with the HybridBinarizer
+                reader = new BarcodeReader(null, null, s => new GlobalHistogramBinarizer(s));
+                foreach (var entry in hints)
+                    reader.Options.Hints.Add(entry.Key, entry.Value);
+                result = reader.Decode(source);
+            }
+
             if (result != null)
             {
                 if (config.Brief)
@@ -270,6 +280,16 @@ namespace CommandLineDecoder
                 foreach (var entry in hints)
                     reader.Options.Hints.Add(entry.Key, entry.Value);
                 Result[] results = reader.DecodeMultiple(source);
+
+                if (results == null || results.Length == 0)
+                {
+                    // Explicitly use the GlobalHistogramBinarizer if nothing is found with the HybridBinarizer
+                    reader = new BarcodeReader(null, null, s => new GlobalHistogramBinarizer(s));
+                    foreach (var entry in hints)
+                        reader.Options.Hints.Add(entry.Key, entry.Value);
+                    results = reader.DecodeMultiple(source);
+                }
+
                 if (results != null && results.Length > 0)
                 {
                     if (config.Brief)
