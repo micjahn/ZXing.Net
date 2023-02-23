@@ -25,6 +25,7 @@ namespace CommandLineDecoder
     {
         public IDictionary<DecodeHintType, object> Hints { get; set; }
         public bool TryHarder { get; set; }
+        public bool TryInverted { get; set; }
         public bool PureBarcode { get; set; }
         public bool ProductsOnly { get; set; }
         public bool DumpResults { get; set; }
