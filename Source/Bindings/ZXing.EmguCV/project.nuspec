@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.3</version>
+    <version>0.16.4</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <license type="expression">Apache-2.0</license>
@@ -18,8 +18,8 @@
     <repository type="git" url="https://github.com/micjahn/ZXing.Net/" />
     <dependencies>
       <group targetFramework="netstandard2.0">
-        <dependency id="ZXing.Net" version="0.16.8.0" exclude="Build,Analyzers" />
-        <dependency id="Emgu.CV" version="4.5.5.4823" exclude="Build,Analyzers" />
+        <dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
+        <dependency id="Emgu.CV" version="4.6.0.5131" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
