@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.16.3</VersionPrefix>
-    <TargetFrameworks>netstandard1.0;netstandard2.0</TargetFrameworks>
+    <VersionPrefix>0.16.4</VersionPrefix>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageId>ZXing.Net.Bindings.Eto.Forms</PackageId>
     <PlatformTarget>anycpu</PlatformTarget>
     <SignAssembly>false</SignAssembly>
@@ -37,8 +37,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.5.11" />
-    <PackageReference Include="ZXing.Net" Version="0.16.7" />
+    <PackageReference Include="Eto.Forms" Version="2.7.3" />
+    <PackageReference Include="ZXing.Net" Version="0.16.9" />
   </ItemGroup>
 
 </Project>
