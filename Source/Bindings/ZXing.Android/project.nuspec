@@ -12,6 +12,7 @@
     <title>ZXing.Net.Bindings.Android</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ZXing.Net Bindings for Android targets</description>
+    <readme>readme.md</readme>
     <summary>ZXing.Net Bindings for Android targets</summary>
     <releaseNotes></releaseNotes>
     <tags>ZXing Android</tags>
@@ -24,6 +25,7 @@
   </metadata>
   <files>
     <file src="..\..\..\Icons\logo.jpg" target="." />
+    <file src="readme.md" target="." />
     <file src="..\..\..\Build\Release\Bindings\Android\zxing.monoandroid.dll" target="lib\MonoAndroid\zxing.monoandroid.dll" />
     <file src="..\..\..\Build\Release\Bindings\Android\zxing.monoandroid.pdb" target="lib\MonoAndroid\zxing.monoandroid.pdb" />
     <file src="..\..\..\Build\Release\Bindings\Android\zxing.monoandroid.xml" target="lib\MonoAndroid\zxing.monoandroid.xml" />		 

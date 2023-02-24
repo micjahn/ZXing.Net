@@ -12,6 +12,7 @@
     <title>ZXing.Net.Bindings.EmguCV</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ZXing.Net Bindings for EmguCV - use EmguCV with ZXing.Net for barcode reading</description>
+    <readme>readme.md</readme>
     <summary>ZXing.Net Bindings for EmguCV</summary>
     <releaseNotes></releaseNotes>
     <tags>ZXing EmguCV</tags>
@@ -26,6 +27,7 @@
   </metadata>
   <files>
     <file src="..\..\..\Icons\logo.jpg" target="." />
+    <file src="readme.md" target="." />
     <file src="bin\Release\netstandard2.0\ZXing.EmguCV.dll" target="lib\netstandard2.0\ZXing.EmguCV.dll" />
     <file src="bin\Release\netstandard2.0\ZXing.EmguCV.pdb" target="lib\netstandard2.0\ZXing.EmguCV.pdb" />
     <file src="bin\Release\netstandard2.0\ZXing.EmguCV.xml" target="lib\netstandard2.0\ZXing.EmguCV.xml" />

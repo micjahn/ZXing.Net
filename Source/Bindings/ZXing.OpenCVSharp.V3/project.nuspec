@@ -12,6 +12,7 @@
 	 <title>ZXing.Net.Bindings.OpenCVSharp.V3</title>
 	 <requireLicenseAcceptance>false</requireLicenseAcceptance>
 	 <description>ZXing.Net Bindings for OpenCVSharp 3.x - use OpenCV with ZXing.Net for barcode reading</description>
+     <readme>readme.md</readme>
 	 <summary>ZXing.Net Bindings for OpenCVSharp 3.x</summary>
 	 <releaseNotes></releaseNotes>
 	 <tags>ZXing OpenCV</tags>
@@ -37,6 +38,7 @@
   </metadata>
   <files>
      <file src="..\..\..\Icons\logo.jpg" target="." />
+     <file src="readme.md" target="." />
 	 <file src="bin\Release\net20\ZXing.OpenCv.dll" target="lib\net20\ZXing.OpenCv.dll" />
 	 <file src="bin\Release\net20\ZXing.OpenCv.pdb" target="lib\net20\ZXing.OpenCv.pdb" />
 	 <file src="bin\Release\net20\ZXing.OpenCv.xml" target="lib\net20\ZXing.OpenCv.xml" />

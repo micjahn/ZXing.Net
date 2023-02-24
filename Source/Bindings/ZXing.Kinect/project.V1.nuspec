@@ -12,6 +12,7 @@
     <title>ZXing.Net.Bindings.Kinect.V1</title>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>ZXing.Net Bindings for Kinect V1 - use Kinect with ZXing.Net for barcode reading</description>
+    <readme>readme.md</readme>
     <summary>ZXing.Net Bindings for Kinect V1</summary>
     <releaseNotes></releaseNotes>
     <tags>ZXing Kinect</tags>
@@ -23,6 +24,7 @@
   </metadata>
   <files>
     <file src="..\..\..\Icons\logo.jpg" target="." />
+    <file src="readme.md" target="." />
     <file src="..\..\..\Build\Release\Bindings\kinect\V1\zxing.kinect.dll" target="lib\net40\zxing.kinect.dll" />
     <file src="..\..\..\Build\Release\Bindings\kinect\V1\zxing.kinect.pdb" target="lib\net40\zxing.kinect.pdb" />
     <file src="..\..\..\Build\Release\Bindings\kinect\V1\zxing.kinect.xml" target="lib\net40\zxing.kinect.xml" />
