@@ -13,6 +13,7 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>ZXing.Net Bindings for SkiaSharp - use SkiaSharp with ZXing.Net for barcode reading</description>
 		<summary>ZXing.Net Bindings for SkiaSharp</summary>
+		<readme>readme.md</readme>
 		<releaseNotes></releaseNotes>
 		<tags>ZXing SkiaSharp</tags>
 		<repository type="git" url="https://github.com/micjahn/ZXing.Net/" />
@@ -53,6 +54,7 @@
 	</metadata>
 	<files>
 		<file src="..\..\..\Icons\logo.jpg" target="." />
+        <file src="readme.md" target="." />
 		<file src="bin\Release\net462\ZXing.SkiaSharp.dll" target="lib\net462\ZXing.SkiaSharp.dll" />
 		<file src="bin\Release\net462\ZXing.SkiaSharp.pdb" target="lib\net462\ZXing.SkiaSharp.pdb" />
 		<file src="bin\Release\net462\ZXing.SkiaSharp.xml" target="lib\net462\ZXing.SkiaSharp.xml" />

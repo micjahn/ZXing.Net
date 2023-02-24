@@ -12,6 +12,7 @@
 		<title>ZXing.Net.Bindings.Magick</title>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>ZXing.Net Bindings for ImageMagick - use ImageMagick with ZXing.Net for barcode reading</description>
+		<readme>readme.md</readme>
 		<summary>ZXing.Net Bindings for ImageMagick</summary>
 		<releaseNotes></releaseNotes>
 		<tags>ZXing Magick</tags>
@@ -29,6 +30,7 @@
 	</metadata>
 	<files>
     	<file src="..\..\..\Icons\logo.jpg" target="." />
+		<file src="readme.md" target="." />
 		<file src="bin\Release\netstandard2.0\ZXing.Magick.dll" target="lib\netstandard2.0\ZXing.Magick.dll" />
 		<file src="bin\Release\netstandard2.0\ZXing.Magick.pdb" target="lib\netstandard2.0\ZXing.Magick.pdb" />
 		<file src="bin\Release\netstandard2.0\ZXing.Magick.xml" target="lib\netstandard2.0\ZXing.Magick.xml" />
