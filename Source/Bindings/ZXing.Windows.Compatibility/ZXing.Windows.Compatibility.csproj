@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>0.16.11</VersionPrefix>
+    <VersionPrefix>0.16.12</VersionPrefix>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <PackageId>ZXing.Net.Bindings.Windows.Compatibility</PackageId>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -63,7 +63,7 @@
     <Compile Include="Properties/AssemblyInfo.cs" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0-windows' OR '$(TargetFramework)' == 'net6.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows' OR '$(TargetFramework)' == 'net7.0-windows'">
     <Compile Include="..\..\lib\renderer\GeometryRenderer.cs" Link="Rendering\GeometryRenderer.cs" />
     <Compile Include="..\..\lib\renderer\WriteableBitmapRenderer.Presentation.cs" Link="Rendering\WriteableBitmapRenderer.Presentation.cs" />
     <Compile Include="..\..\lib\presentation\BarcodeReader.cs" Link="BarcodeReaderWriteableBitmap.cs" />
