@@ -20,13 +20,13 @@ UPC-A, EAN-8, EAN-13, Code 39, Code 128, ITF, Codabar, Plessey, MSI, QR Code, PD
 
 #### Assemblies are available for the following platforms:
 
-* .Net 2.0, 3.5, 4.0, 4.5, 4.6 and 4.7
+* .Net 2.0, 3.5, 4.x, 5.0, 6.0, 7.0
 * Windows RT Class Library and Runtime Components (winmd)
 * .NET Standard / .NET Core / UWP
 * Portable Class Library
 * Unity3D (.Net 2.0 built without System.Drawing reference)
 * Xamarin.Android (formerly Mono for Android)
-* bindings to CoreCompat.System.Drawing, ImageSharp, SkiaSharp, OpenCVSharp, Magick, Kinect V1 and V2
+* bindings to Windows.Compatibility, CoreCompat.System.Drawing, ImageSharp, SkiaSharp, OpenCVSharp, Magick, Kinect V1 and V2, EmguCV, Eto.Forms, ZKWeb.System.Drawing
 * support COM interop, can be used with VBA
 
 #### obsolete Assemblies are available for the following platforms up to release 0.16:
@@ -80,6 +80,11 @@ if (result != null)
    txtDecoderContent.Text = result.Text;
 }
 ```
+#### important notice for .Net Standard and .Net 5.0 and above target platforms
+If you want to try the sample code above within a project which target .Net Standard or .Net 5.0 or higher then you have to add one of the
+additional nuget package for a specific image library: https://www.nuget.org/packages?q=ZXing.Bindings
+The main package of ZXing.Net for such platforms only contains the core classes which are not dependent on a specific assembly for image formats.
+
 ## Help wanted
 All help is welcome!
 ## Feedback
