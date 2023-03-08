@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>0.16.15</version>
+    <authors>Michael Jahn</authors>
+    <owners>Michael Jahn</owners>
+    <license type="expression">Apache-2.0</license>
+    <licenseUrl>https://licenses.nuget.org/Apache-2.0</licenseUrl>
+    <projectUrl>https://github.com/micjahn/ZXing.Net/</projectUrl>
+    <icon>logo.jpg</icon>
+    <id>ZXing.Net.Bindings.ImageSharp.V3</id>
+    <title>ZXing.Net.Bindings.ImageSharp.V3</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>ZXing.Net Bindings for ImageSharp - use ImageSharp 3.0 with ZXing.Net for barcode reading</description>
+    <readme>readme.md</readme>
+    <summary>ZXing.Net Bindings for SixLabors.ImageSharp</summary>
+    <releaseNotes></releaseNotes>
+    <tags>ZXing ImageSharp</tags>
+    <repository type="git" url="https://github.com/micjahn/ZXing.Net/" />
+    <dependencies>
+      <group targetFramework="net6.0">
+        <dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
+        <dependency id="SixLabors.ImageSharp" version="3.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\..\..\Icons\logo.jpg" target="." />
+    <file src="readme.md" target="." />
+    <file src="bin\Release\net6.0\ZXing.ImageSharp.V3.dll" target="lib\net6.0\ZXing.ImageSharp.V3.dll" />
+    <file src="bin\Release\net6.0\ZXing.ImageSharp.V3.pdb" target="lib\net6.0\ZXing.ImageSharp.V3.pdb" />
+    <file src="bin\Release\net6.0\ZXing.ImageSharp.V3.xml" target="lib\net6.0\ZXing.ImageSharp.V3.xml" />
+  </files>
+</package>
