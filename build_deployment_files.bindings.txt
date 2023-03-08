@@ -14,6 +14,7 @@
 %CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp.V2\bin\Release\netcoreapp3.1\zxing.imagesharp.V2.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp.V2\bin\Release\netstandard2.0\zxing.imagesharp.V2.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp.V2\bin\Release\netstandard2.1\zxing.imagesharp.V2.dll
+%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp.V3\bin\Release\net6.0\zxing.imagesharp.V3.dll
 %BINARY_DIR%\Bindings\kinect\V1\zxing.kinect.dll
 %BINARY_DIR%\Bindings\kinect\V2\zxing.kinect.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\netstandard2.0\zxing.magick.dll
