@@ -54,7 +54,7 @@ namespace ZXing.Datamatrix.Encoder
                 if ((rest == 2 && available != 2) ||
                     (rest == 1 && (lastCharSize > 3 || available != 1)))
                 {
-                    buffer.Capacity = backtrackBufferLength;
+                    buffer.Length = backtrackBufferLength;
                     context.Pos = backtrackStartPosition;
                 }
             }
