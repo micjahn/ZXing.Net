@@ -153,7 +153,6 @@ namespace ZXing.QrCode
             }
         }
 
-
         /// <summary>
         /// Specifies whether to use compact mode for QR code (type <see cref="System.Boolean" />, or "true" or "false"
         /// Please note that when compaction is performed, the most compact character encoding is chosen
@@ -178,6 +177,38 @@ namespace ZXing.QrCode
             set
             {
                 Hints[EncodeHintType.QR_COMPACT] = value;
+            }
+        }
+
+        /// <summary>
+        /// Specifies the QR code mask pattern to be used. Allowed values are
+        /// 0..QRCode.NUM_MASK_PATTERNS-1. By default the code will automatically select
+        /// the optimal mask pattern.
+        /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies the QR code mask pattern to be used. Allowed " +
+            "values are 0..QRCode.NUM_MASK_PATTERNS-1.")]
+#endif
+        public int? QrMaskPattern
+        {
+            get
+            {
+                if (Hints.ContainsKey(EncodeHintType.QR_MASK_PATTERN))
+                {
+                    return (int)Hints[EncodeHintType.QR_MASK_PATTERN];
+                }
+                return null;
+            }
+            set {
+                if (value == null)
+                {
+                    if(Hints.ContainsKey(EncodeHintType.QR_MASK_PATTERN))
+                        Hints.Remove(EncodeHintType.QR_MASK_PATTERN);
+                }
+                else
+                {
+                    Hints[EncodeHintType.QR_MASK_PATTERN] = value.Value;
+                }
             }
         }
     }
