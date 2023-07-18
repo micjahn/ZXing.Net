@@ -82,7 +82,7 @@ namespace ZXing.OneD
         /// <param name="contents"></param>
         /// <param name="hints"></param>
         /// <returns></returns>
-        protected override bool[] encode(String contents, IDictionary<EncodeHintType, object> hints)
+        public override bool[] encode(String contents, IDictionary<EncodeHintType, object> hints)
         {
             if (IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.GS1_FORMAT))
             {
@@ -163,7 +163,7 @@ namespace ZXing.OneD
                         break;
                     case CODE_CODE_B:
                         // allows no ascii below 32 (terminal symbols)
-                        if (c <= 32)
+                        if (c < 32)
                         {
                             throw new ArgumentException("Bad character in input for forced code set B: ASCII value=" + (int)c);
                         }
