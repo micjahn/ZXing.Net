@@ -48,7 +48,7 @@ namespace ZXing.OneD
         /// <param name="contents">barcode contents to encode</param>
         /// <param name="hints">encoding hints</param>
         /// <returns>a <c>bool[]</c> of horizontal pixels (false = white, true = black)</returns>
-        protected virtual bool[] encode(String contents, IDictionary<EncodeHintType, object> hints)
+        public virtual bool[] encode(String contents, IDictionary<EncodeHintType, object> hints)
         {
             return encode(contents);
         }
