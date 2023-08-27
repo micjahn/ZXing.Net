@@ -38,6 +38,7 @@ namespace ZXing
     {
         private IDictionary<DecodeHintType, object> hints;
         private IList<Reader> readers;
+        private int startWithReaderAt;
 
         /// <summary> This version of decode honors the intent of Reader.decode(BinaryBitmap) in that it
         /// passes null as a hint to the decoders. However, that makes it inefficient to call repeatedly.
@@ -224,19 +225,39 @@ namespace ZXing
 
         private Result decodeInternal(BinaryBitmap image, ResultPointCallback rpCallback)
         {
-            for (var index = 0; index < readers.Count; index++)
+            var localstartWithReaderAt = startWithReaderAt;
+            var localreaders = readers;
+            var localhints = hints;
+
+            for (var index = localstartWithReaderAt; index < localreaders.Count; index++)
             {
-                var reader = readers[index];
+                var reader = localreaders[index];
                 reader.reset();
-                var result = reader.decode(image, hints);
+                var result = reader.decode(image, localhints);
                 if (result != null)
                 {
                     // found a barcode, pushing the successful reader up front
                     // I assume that the same type of barcode is read multiple times
                     // so the reordering of the readers list should speed up the next reading
                     // a little bit
-                    readers.RemoveAt(index);
-                    readers.Insert(0, reader);
+                    startWithReaderAt = index;
+                    return result;
+                }
+                if (rpCallback != null)
+                    rpCallback(null);
+            }
+            for (var index = 0; index < localstartWithReaderAt; index++)
+            {
+                var reader = localreaders[index];
+                reader.reset();
+                var result = reader.decode(image, localhints);
+                if (result != null)
+                {
+                    // found a barcode, pushing the successful reader up front
+                    // I assume that the same type of barcode is read multiple times
+                    // so the reordering of the readers list should speed up the next reading
+                    // a little bit
+                    startWithReaderAt = index;
                     return result;
                 }
                 if (rpCallback != null)
