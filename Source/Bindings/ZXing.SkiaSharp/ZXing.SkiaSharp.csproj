@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup Condition="'$(VisualStudioVersion)' == '16.0'">
     <TargetFrameworks>net462;netstandard1.3;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SkiaSharp" Version="2.88.3" />
+    <PackageReference Include="SkiaSharp" Version="2.88.6" />
     <PackageReference Include="ZXing.Net" Version="0.16.9" />
   </ItemGroup>
 
