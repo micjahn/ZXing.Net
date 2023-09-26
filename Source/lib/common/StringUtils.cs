@@ -84,13 +84,13 @@ namespace ZXing.Common
             PLATFORM_DEFAULT_ENCODING = Encoding.Default.WebName.ToUpper();
             PLATFORM_DEFAULT_ENCODING_T = Encoding.Default;
 #endif
-            SHIFT_JIS_ENCODING = CharacterSetECI.getEncoding(SHIFT_JIS);
-            GB2312_ENCODING = CharacterSetECI.getEncoding(GB2312);
-            EUC_JP_ENCODING = CharacterSetECI.getEncoding(EUC_JP);
-            ISO88591_ENCODING = CharacterSetECI.getEncoding(ISO88591);
+            SHIFT_JIS_ENCODING = CharacterSetECI.getEncoding(SHIFT_JIS) ?? PLATFORM_DEFAULT_ENCODING_T;
+            GB2312_ENCODING = CharacterSetECI.getEncoding(GB2312) ?? PLATFORM_DEFAULT_ENCODING_T;
+            EUC_JP_ENCODING = CharacterSetECI.getEncoding(EUC_JP) ?? PLATFORM_DEFAULT_ENCODING_T;
+            ISO88591_ENCODING = CharacterSetECI.getEncoding(ISO88591) ?? PLATFORM_DEFAULT_ENCODING_T;
             ASSUME_SHIFT_JIS =
-                PLATFORM_DEFAULT_ENCODING_T.Equals(SHIFT_JIS_ENCODING) ||
-                PLATFORM_DEFAULT_ENCODING_T.Equals(EUC_JP_ENCODING);
+                (PLATFORM_DEFAULT_ENCODING_T.WebName.Equals(SHIFT_JIS_ENCODING.WebName) && !Encoding.UTF8.WebName.Equals(SHIFT_JIS_ENCODING.WebName)) ||
+                (PLATFORM_DEFAULT_ENCODING_T.WebName.Equals(EUC_JP_ENCODING.WebName) && !Encoding.UTF8.WebName.Equals(EUC_JP_ENCODING.WebName));
         }
 
         /// <summary>
