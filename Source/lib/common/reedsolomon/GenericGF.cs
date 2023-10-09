@@ -22,8 +22,10 @@ namespace ZXing.Common.ReedSolomon
     ///   <p>This class contains utility methods for performing mathematical operations over
     /// the Galois Fields. Operations use a given primitive polynomial in calculations.</p>
     ///   <p>Throughout this package, elements of the GF are represented as an {@code int}
-    /// for convenience and speed (but at the cost of memory).
-    ///   </p>
+    /// for convenience and speed (but at the cost of memory).</p>
+    /// 
+    /// <p>The size of the GF is assumed to be a power of two.</p>
+    /// 
     /// </summary>
     /// <author>Sean Owen</author>
     public sealed class GenericGF
@@ -31,27 +33,27 @@ namespace ZXing.Common.ReedSolomon
         /// <summary>
         /// Aztec data 12
         /// </summary>
-        public static GenericGF AZTEC_DATA_12 = new GenericGF(0x1069, 4096, 1); // x^12 + x^6 + x^5 + x^3 + 1
+        public static GenericGF AZTEC_DATA_12 = new GenericGF(0b1000001101001, 4096, 1); // x^12 + x^6 + x^5 + x^3 + 1
         /// <summary>
         /// Aztec data 10
         /// </summary>
-        public static GenericGF AZTEC_DATA_10 = new GenericGF(0x409, 1024, 1); // x^10 + x^3 + 1
+        public static GenericGF AZTEC_DATA_10 = new GenericGF(0b10000001001, 1024, 1); // x^10 + x^3 + 1
         /// <summary>
         /// Aztec data 6
         /// </summary>
-        public static GenericGF AZTEC_DATA_6 = new GenericGF(0x43, 64, 1); // x^6 + x + 1
+        public static GenericGF AZTEC_DATA_6 = new GenericGF(0b1000011, 64, 1); // x^6 + x + 1
         /// <summary>
         /// Aztec param
         /// </summary>
-        public static GenericGF AZTEC_PARAM = new GenericGF(0x13, 16, 1); // x^4 + x + 1
+        public static GenericGF AZTEC_PARAM = new GenericGF(0b10011, 16, 1); // x^4 + x + 1
         /// <summary>
         /// QR Code
         /// </summary>
-        public static GenericGF QR_CODE_FIELD_256 = new GenericGF(0x011D, 256, 0); // x^8 + x^4 + x^3 + x^2 + 1
+        public static GenericGF QR_CODE_FIELD_256 = new GenericGF(0b100011101, 256, 0); // x^8 + x^4 + x^3 + x^2 + 1
         /// <summary>
         /// Data Matrix
         /// </summary>
-        public static GenericGF DATA_MATRIX_FIELD_256 = new GenericGF(0x012D, 256, 1); // x^8 + x^5 + x^3 + x^2 + 1
+        public static GenericGF DATA_MATRIX_FIELD_256 = new GenericGF(0b100101101, 256, 1); // x^8 + x^5 + x^3 + x^2 + 1
         /// <summary>
         /// Aztec data 8
         /// </summary>
@@ -91,7 +93,7 @@ namespace ZXing.Common.ReedSolomon
             for (int i = 0; i < size; i++)
             {
                 expTable[i] = x;
-                x <<= 1; // x = x * 2; we're assuming the generator alpha is 2
+                x <<= 1; // x *= 2; 2 (the polynomial x) is a primitive element
                 if (x >= size)
                 {
                     x ^= primitive;
