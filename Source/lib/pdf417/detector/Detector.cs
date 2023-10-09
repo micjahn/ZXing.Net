@@ -36,7 +36,8 @@ namespace ZXing.PDF417.Internal
         private const int INTEGER_MATH_SHIFT = 8;
         private const int PATTERN_MATCH_RESULT_SCALE_FACTOR = 1 << INTEGER_MATH_SHIFT;
         private const int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.42f);
-        private const int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
+        private const int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.8f);
+        private const int MAX_STOP_PATTERN_HEIGHT_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.5f);
 
 
         /// <summary>
@@ -230,15 +231,22 @@ namespace ZXing.PDF417.Internal
             int width = matrix.Width;
 
             ResultPoint[] result = new ResultPoint[8];
-            copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, START_PATTERN),
+            int minHeight = BARCODE_MIN_HEIGHT;
+            copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, minHeight, START_PATTERN),
                          INDEXES_START_PATTERN);
 
             if (result[4] != null)
             {
                 startColumn = (int)result[4].X;
                 startRow = (int)result[4].Y;
+                if (result[5] != null)
+                {
+                    int endRow = (int)result[5].Y;
+                    int startPatternHeight = endRow - startRow;
+                    minHeight = (int)Math.Max((startPatternHeight * MAX_STOP_PATTERN_HEIGHT_VARIANCE) >> INTEGER_MATH_SHIFT, BARCODE_MIN_HEIGHT);
+                }
             }
-            copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, STOP_PATTERN),
+            copyToResult(result, findRowsWithPattern(matrix, height, width, startRow, startColumn, minHeight, STOP_PATTERN),
                          INDEXES_STOP_PATTERN);
             return result;
         }
@@ -273,6 +281,7 @@ namespace ZXing.PDF417.Internal
            int width,
            int startRow,
            int startColumn,
+           int minHeight,
            int[] pattern)
         {
             ResultPoint[] result = new ResultPoint[4];
@@ -338,7 +347,7 @@ namespace ZXing.PDF417.Internal
                 result[2] = new ResultPoint(previousRowLoc[0], stopRow);
                 result[3] = new ResultPoint(previousRowLoc[1], stopRow);
             }
-            if (stopRow - startRow < BARCODE_MIN_HEIGHT)
+            if (stopRow - startRow < minHeight)
             {
                 for (int i = 0; i < result.Length; i++)
                 {
