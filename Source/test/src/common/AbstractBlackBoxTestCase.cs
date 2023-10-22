@@ -190,11 +190,13 @@ namespace ZXing.Common.Test
                 }
 
                 String expectedMetadataFile = Path.Combine(Path.GetDirectoryName(absPath), Path.GetFileNameWithoutExtension(absPath) + ".metadata.txt");
-                var expectedMetadata = new Dictionary<string, string>();
+                var expectedMetadata = new Dictionary<string, object>();
                 if (File.Exists(expectedMetadataFile))
                 {
                     foreach (var row in File.ReadLines(expectedMetadataFile))
                         expectedMetadata.Add(row.Split('=')[0], string.Join("=", row.Split('=').Skip(1).ToArray()));
+                    correctInteger(expectedMetadata, ResultMetadataType.ERRORS_CORRECTED);
+                    correctInteger(expectedMetadata, ResultMetadataType.ERASURES_CORRECTED);
                 }
 
                 for (int x = 0; x < testCount; x++)
@@ -303,11 +305,21 @@ namespace ZXing.Common.Test
             }
         }
 
+        private static void correctInteger(Dictionary<string, object> metadata, ResultMetadataType key)
+        {
+            var skey = key.ToString();
+            if (metadata.ContainsKey(skey))
+            {
+                var sval = metadata[skey].ToString();
+                var ival = Int32.Parse(sval);
+                metadata[skey] = ival;
+            }
+        }
 
         private bool decode(BinaryBitmap source,
                                float rotation,
                                String expectedText,
-                               IDictionary<string, string> expectedMetadata,
+                               IDictionary<string, object> expectedMetadata,
                                bool tryHarder)
         {
 
@@ -417,8 +429,8 @@ namespace ZXing.Common.Test
                 {
                     ResultMetadataType key;
                     ResultMetadataType.TryParse(metadatum.Key, out key);
-                    Object expectedValue = metadatum.Value;
-                    Object actualValue = resultMetadata == null ? null : resultMetadata[key];
+                    var expectedValue = metadatum.Value;
+                    var actualValue = resultMetadata == null ? null : resultMetadata[key];
                     if (!expectedValue.Equals(actualValue))
                     {
                         Log.InfoFormat("Metadata mismatch for key '{0}': expected '{1}' but got '{2}'",

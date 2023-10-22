@@ -63,27 +63,33 @@ namespace ZXing.Maxicode.Internal
             BitMatrixParser parser = new BitMatrixParser(bits);
             byte[] codewords = parser.readCodewords();
 
-            if (!correctErrors(codewords, 0, 10, 10, ALL))
+            int errorsCorrected = 0;
+            if (!correctErrors(codewords, 0, 10, 10, ALL, out errorsCorrected))
                 return null;
 
             int mode = codewords[0] & 0x0F;
             byte[] datawords;
+            int errorsCorrectedLastRun = 0;
             switch (mode)
             {
                 case 2:
                 case 3:
                 case 4:
-                    if (!correctErrors(codewords, 20, 84, 40, EVEN))
+                    if (!correctErrors(codewords, 20, 84, 40, EVEN, out errorsCorrectedLastRun))
                         return null;
-                    if (!correctErrors(codewords, 20, 84, 40, ODD))
+                    errorsCorrected += errorsCorrectedLastRun;
+                    if (!correctErrors(codewords, 20, 84, 40, ODD, out errorsCorrectedLastRun))
                         return null;
+                    errorsCorrected += errorsCorrectedLastRun;
                     datawords = new byte[94];
                     break;
                 case 5:
-                    if (!correctErrors(codewords, 20, 68, 56, EVEN))
+                    if (!correctErrors(codewords, 20, 68, 56, EVEN, out errorsCorrectedLastRun))
                         return null;
-                    if (!correctErrors(codewords, 20, 68, 56, ODD))
+                    errorsCorrected += errorsCorrectedLastRun;
+                    if (!correctErrors(codewords, 20, 68, 56, ODD, out errorsCorrectedLastRun))
                         return null;
+                    errorsCorrected += errorsCorrectedLastRun;
                     datawords = new byte[78];
                     break;
                 default:
@@ -93,14 +99,17 @@ namespace ZXing.Maxicode.Internal
             Array.Copy(codewords, 0, datawords, 0, 10);
             Array.Copy(codewords, 20, datawords, 10, datawords.Length - 10);
 
-            return DecodedBitStreamParser.decode(datawords, mode);
+            var result = DecodedBitStreamParser.decode(datawords, mode);
+            result.ErrorsCorrected = errorsCorrected;
+            return result;
         }
 
         private bool correctErrors(byte[] codewordBytes,
                                    int start,
                                    int dataCodewords,
                                    int ecCodewords,
-                                   int mode)
+                                   int mode,
+                                   out int errorsCorrected)
         {
             int codewords = dataCodewords + ecCodewords;
 
@@ -117,7 +126,7 @@ namespace ZXing.Maxicode.Internal
                 }
             }
 
-            if (!rsDecoder.decode(codewordsInts, ecCodewords / divisor))
+            if (!rsDecoder.decodeWithECCount(codewordsInts, ecCodewords / divisor, out errorsCorrected))
                 return false;
 
             // Copy back into array of bytes -- only need to worry about the bytes that were data

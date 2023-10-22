@@ -78,15 +78,18 @@ namespace ZXing.Datamatrix.Internal
             }
             byte[] resultBytes = new byte[totalBytes];
 
-            // Error-correct and copy data blocks together into a stream of bytes
+            int errorsCorrected = 0;
             int dataBlocksCount = dataBlocks.Length;
+            // Error-correct and copy data blocks together into a stream of bytes
             for (int j = 0; j < dataBlocksCount; j++)
             {
                 DataBlock dataBlock = dataBlocks[j];
                 byte[] codewordBytes = dataBlock.Codewords;
                 int numDataCodewords = dataBlock.NumDataCodewords;
-                if (!correctErrors(codewordBytes, numDataCodewords))
+                var errorsCorrectedLastRun = 0;
+                if (!correctErrors(codewordBytes, numDataCodewords, out errorsCorrectedLastRun))
                     return null;
+                errorsCorrected += errorsCorrectedLastRun;
                 for (int i = 0; i < numDataCodewords; i++)
                 {
                     // De-interlace data blocks.
@@ -95,17 +98,19 @@ namespace ZXing.Datamatrix.Internal
             }
 
             // Decode the contents of that stream of bytes
-            return DecodedBitStreamParser.decode(resultBytes);
+            var result = DecodedBitStreamParser.decode(resultBytes);
+            result.ErrorsCorrected = errorsCorrected;
+            return result;
         }
 
         /// <summary>
-        /// <p>Given data and error-correction codewords received, possibly corrupted by errors, attempts to
-        /// correct the errors in-place using Reed-Solomon error correction.</p>
-        ///
+        /// Given data and error-correction codewords received, possibly corrupted by errors, attempts to
+        /// correct the errors in-place using Reed-Solomon error correction.
         /// <param name="codewordBytes">data and error correction codewords</param>
         /// <param name="numDataCodewords">number of codewords that are data bytes</param>
+        /// <param name="errorsCorrected">the number of errors corrected</param>
         /// </summary>
-        private bool correctErrors(byte[] codewordBytes, int numDataCodewords)
+        private bool correctErrors(byte[] codewordBytes, int numDataCodewords, out int errorsCorrected)
         {
             int numCodewords = codewordBytes.Length;
             // First read into an array of ints
@@ -115,7 +120,7 @@ namespace ZXing.Datamatrix.Internal
                 codewordsInts[i] = codewordBytes[i] & 0xFF;
             }
             int numECCodewords = codewordBytes.Length - numDataCodewords;
-            if (!rsDecoder.decode(codewordsInts, numECCodewords))
+            if (!rsDecoder.decodeWithECCount(codewordsInts, numECCodewords, out errorsCorrected))
                 return false;
 
             // Copy back into array of bytes -- only need to worry about the bytes that were data

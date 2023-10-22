@@ -99,7 +99,7 @@ namespace ZXing.Common
         /// <param name="byteSegments"></param>
         /// <param name="ecLevel"></param>
         public DecoderResult(byte[] rawBytes, String text, List<byte[]> byteSegments, String ecLevel)
-            : this(rawBytes, text, byteSegments, ecLevel, -1, -1, 0)
+            : this(rawBytes, null, text, byteSegments, ecLevel, null, null, null, null)
         {
             
         }
@@ -113,7 +113,7 @@ namespace ZXing.Common
         /// <param name="ecLevel"></param>
         /// <param name="symbologyModifier"></param>
         public DecoderResult(byte[] rawBytes, String text, IList<byte[]> byteSegments, String ecLevel, int symbologyModifier)
-           : this(rawBytes, text, byteSegments, ecLevel, -1, -1, symbologyModifier)
+           : this(rawBytes, null, text, byteSegments, ecLevel, null, null, symbologyModifier, null)
         {
         }
         /// <summary>
@@ -131,7 +131,7 @@ namespace ZXing.Common
                      String ecLevel,
                      int saSequence,
                      int saParity)
-             : this(rawBytes, text, byteSegments, ecLevel, saSequence, saParity, 0)
+             : this(rawBytes, null, text, byteSegments, ecLevel, saSequence, saParity, null, null)
         {
             
         }
@@ -147,7 +147,7 @@ namespace ZXing.Common
         /// <param name="saParity"></param>
         /// <param name="symbologyModifier"></param>
         public DecoderResult(byte[] rawBytes, String text, IList<byte[]> byteSegments, String ecLevel, int saSequence, int saParity, int symbologyModifier)
-           : this(rawBytes, rawBytes == null ? 0 : 8 * rawBytes.Length, text, byteSegments, ecLevel, saSequence, saParity, symbologyModifier)
+           : this(rawBytes, null, text, byteSegments, ecLevel, saSequence, saParity, symbologyModifier, null)
         {
         }
 
@@ -160,7 +160,7 @@ namespace ZXing.Common
         /// <param name="byteSegments"></param>
         /// <param name="ecLevel"></param>
         public DecoderResult(byte[] rawBytes, int numBits, String text, IList<byte[]> byteSegments, String ecLevel)
-           : this(rawBytes, numBits, text, byteSegments, ecLevel, -1, -1, 0)
+           : this(rawBytes, numBits, text, byteSegments, ecLevel, null, null, null, null)
         {
         }
 
@@ -176,19 +176,37 @@ namespace ZXing.Common
         /// <param name="saParity"></param>
         /// <param name="symbologyModifier"></param>
         public DecoderResult(byte[] rawBytes, int numBits, String text, IList<byte[]> byteSegments, String ecLevel, int saSequence, int saParity, int symbologyModifier)
+            : this(rawBytes, numBits, text, byteSegments, ecLevel, saSequence, saParity, symbologyModifier, null)
+        {
+        }
+
+        /// <summary>
+        /// initializing constructor
+        /// </summary>
+        /// <param name="rawBytes"></param>
+        /// <param name="numBits"></param>
+        /// <param name="text"></param>
+        /// <param name="byteSegments"></param>
+        /// <param name="ecLevel"></param>
+        /// <param name="saSequence"></param>
+        /// <param name="saParity"></param>
+        /// <param name="symbologyModifier"></param>
+        /// <param name="errorsCorrected"></param>
+        public DecoderResult(byte[] rawBytes, int? numBits, String text, IList<byte[]> byteSegments, String ecLevel, int? saSequence, int? saParity, int? symbologyModifier, int? errorsCorrected)
         {
             if (rawBytes == null && text == null)
             {
                 throw new ArgumentException();
             }
             RawBytes = rawBytes;
-            NumBits = numBits;
+            NumBits = numBits ?? (rawBytes == null ? 0 : 8 * rawBytes.Length);
             Text = text;
             ByteSegments = byteSegments;
             ECLevel = ecLevel;
-            StructuredAppendParity = saParity;
-            StructuredAppendSequenceNumber = saSequence;
-            SymbologyModifier = symbologyModifier;
+            StructuredAppendParity = saParity ?? -1;
+            StructuredAppendSequenceNumber = saSequence ?? -1;
+            SymbologyModifier = symbologyModifier ?? 0;
+            ErrorsCorrected = errorsCorrected ?? 0;
         }
     }
 }
