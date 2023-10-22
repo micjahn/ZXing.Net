@@ -91,7 +91,8 @@ namespace ZXing.Aztec.Internal
             }
 
             // 3. Get the size of the matrix and other parameters from the bull's eye
-            if (!extractParameters(bullsEyeCorners))
+            var errorsCorrected = 0;
+            if (!extractParameters(bullsEyeCorners, out errorsCorrected))
             {
                 return null;
             }
@@ -121,9 +122,11 @@ namespace ZXing.Aztec.Internal
         /// Extracts the number of data layers and data blocks from the layer around the bull's eye 
         /// </summary>
         /// <param name="bullsEyeCorners">bullEyeCornerPoints the array of bull's eye corners</param>
+        /// <param name="errorsCorrected">the number of errors corrected during parameter extraction</param>
         /// <returns></returns>
-        private bool extractParameters(ResultPoint[] bullsEyeCorners)
+        private bool extractParameters(ResultPoint[] bullsEyeCorners, out int errorsCorrected)
         {
+            errorsCorrected = 0;
             if (!isValid(bullsEyeCorners[0]) || !isValid(bullsEyeCorners[1]) ||
                 !isValid(bullsEyeCorners[2]) || !isValid(bullsEyeCorners[3]))
             {
@@ -171,9 +174,10 @@ namespace ZXing.Aztec.Internal
 
             // Corrects parameter data using RS.  Returns just the data portion
             // without the error correction.
-            int correctedData = getCorrectedParameterData(parameterData, compact);
-            if (correctedData < 0)
+            var correctedParam = getCorrectedParameterData(parameterData, compact);
+            if (correctedParam == null)
                 return false;
+            var correctedData = correctedParam.Data;
 
             if (compact)
             {
@@ -188,6 +192,7 @@ namespace ZXing.Aztec.Internal
                 nbDataBlocks = (correctedData & 0x7FF) + 1;
             }
 
+            errorsCorrected = correctedParam.ErrorsCorrected;
             return true;
         }
 
@@ -231,8 +236,8 @@ namespace ZXing.Aztec.Internal
         /// </summary>
         /// <param name="parameterData">paremeter bits</param>
         /// <param name="compact">compact true if this is a compact Aztec code</param>
-        /// <returns></returns>
-        private static int getCorrectedParameterData(long parameterData, bool compact)
+        /// <returns>the corrected parameter</returns>
+        private static CorrectedParameter getCorrectedParameterData(long parameterData, bool compact)
         {
             int numCodewords;
             int numDataCodewords;
@@ -257,9 +262,10 @@ namespace ZXing.Aztec.Internal
                 parameterData >>= 4;
             }
 
+            var errorsCorrected = 0;
             var rsDecoder = new ReedSolomonDecoder(GenericGF.AZTEC_PARAM);
-            if (!rsDecoder.decode(parameterWords, numECCodewords))
-                return -1;
+            if (!rsDecoder.decodeWithECCount(parameterWords, numECCodewords, out errorsCorrected))
+                return null;
 
             // Toss the error correction.  Just return the data as an integer
             int result = 0;
@@ -267,7 +273,7 @@ namespace ZXing.Aztec.Internal
             {
                 result = (result << 4) + parameterWords[i];
             }
-            return result;
+            return new CorrectedParameter(result, errorsCorrected);
         }
 
         /// <summary>
@@ -688,6 +694,17 @@ namespace ZXing.Aztec.Internal
             {
                 return "<" + X + ' ' + Y + '>';
             }
+        }
+    }
+    internal sealed class CorrectedParameter
+    {
+        public int Data { get; private set; }
+        public int ErrorsCorrected { get; private set; }
+
+        public CorrectedParameter(int data, int errorsCorrected)
+        {
+            Data = data;
+            ErrorsCorrected = errorsCorrected;
         }
     }
 }

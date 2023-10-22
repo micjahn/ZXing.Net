@@ -59,11 +59,13 @@ namespace ZXing.Aztec
             Detector detector = new Detector(blackmatrix);
             ResultPoint[] points = null;
             DecoderResult decoderResult = null;
+            int errorsCorrected = 0;
 
             var detectorResult = detector.detect(false);
             if (detectorResult != null)
             {
                 points = detectorResult.Points;
+                errorsCorrected = detectorResult.ErrorsCorrected;
 
                 decoderResult = new Decoder().decode(detectorResult);
             }
@@ -74,6 +76,8 @@ namespace ZXing.Aztec
                     return null;
 
                 points = detectorResult.Points;
+                errorsCorrected = detectorResult.ErrorsCorrected;
+
                 decoderResult = new Decoder().decode(detectorResult);
                 if (decoderResult == null)
                     return null;
@@ -104,6 +108,8 @@ namespace ZXing.Aztec
             {
                 result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, ecLevel);
             }
+            errorsCorrected += decoderResult.ErrorsCorrected;
+            result.putMetadata(ResultMetadataType.ERRORS_CORRECTED, errorsCorrected);
 
             result.putMetadata(ResultMetadataType.AZTEC_EXTRA_METADATA,
                                new AztecResultMetadata(detectorResult.Compact, detectorResult.NbDatablocks, detectorResult.NbLayers));

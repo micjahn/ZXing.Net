@@ -24,7 +24,7 @@ namespace ZXing
     public enum ResultMetadataType
     {
         /// <summary>
-        /// Unspecified, application-specific metadata. Maps to an unspecified {@link Object}.
+        /// Unspecified, application-specific metadata. Maps to an unspecified <see cref="System.Object"/>.
         /// </summary>
         OTHER,
 
@@ -32,17 +32,17 @@ namespace ZXing
         /// Denotes the likely approximate orientation of the barcode in the image. This value
         /// is given as degrees rotated clockwise from the normal, upright orientation.
         /// For example a 1D barcode which was found by reading top-to-bottom would be
-        /// said to have orientation "90". This key maps to an {@link Integer} whose
+        /// said to have orientation "90". This key maps to an <see cref="System.Int32"/> whose
         /// value is in the range [0,360).
         /// </summary>
         ORIENTATION,
 
         /// <summary>
         /// <p>2D barcode formats typically encode text, but allow for a sort of 'byte mode'
-        /// which is sometimes used to encode binary data. While {@link Result} makes available
+        /// which is sometimes used to encode binary data. While <see cref="ZXing.Result"/> makes available
         /// the complete raw bytes in the barcode for these formats, it does not offer the bytes
         /// from the byte segments alone.</p>
-        /// <p>This maps to a {@link java.util.List} of byte arrays corresponding to the
+        /// <p>This maps to a <see cref="System.Collections.IList"/> of byte arrays corresponding to the
         /// raw bytes in the byte segments in the barcode, in order.</p>
         /// </summary>
         BYTE_SEGMENTS,
@@ -54,24 +54,36 @@ namespace ZXing
         ERROR_CORRECTION_LEVEL,
 
         /// <summary>
-        /// For some periodicals, indicates the issue number as an {@link Integer}.
+        /// The number of errors corrected. If applicable, maps to an <see cref="System.Int32"/> of value
+        ///  greater than or equal to zero.
+        /// </summary>
+        ERRORS_CORRECTED,
+
+        /// <summary>
+        /// The number of erasures corrected. If applicable, maps to an <see cref="System.Int32"/> of value
+        /// greater than or equal to zero.
+        /// </summary>
+        ERASURES_CORRECTED,
+
+        /// <summary>
+        /// For some periodicals, indicates the issue number as an <see cref="System.Int32"/>.
         /// </summary>
         ISSUE_NUMBER,
 
         /// <summary>
         /// For some products, indicates the suggested retail price in the barcode as a
-        /// formatted {@link String}.
+        /// formatted <see cref="System.String"/>.
         /// </summary>
         SUGGESTED_PRICE,
 
         /// <summary>
-        /// For some products, the possible country of manufacture as a {@link String} denoting the
+        /// For some products, the possible country of manufacture as a <see cref="System.String"/> denoting the
         /// ISO country code. Some map to multiple possible countries, like "US/CA".
         /// </summary>
         POSSIBLE_COUNTRY,
 
         /// <summary>
-        /// For some products, the extension text
+        /// For some products, the extension text.
         /// </summary>
         UPC_EAN_EXTENSION,
 
@@ -90,7 +102,7 @@ namespace ZXing
         STRUCTURED_APPEND_PARITY,
 
         /// <summary>
-        /// PDF417-specific metadata
+        /// PDF417-specific metadata.
         /// </summary>
         PDF417_EXTRA_METADATA,
 

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using System;
 using ZXing.Common;
 
 namespace ZXing.Aztec.Internal
@@ -39,6 +40,10 @@ namespace ZXing.Aztec.Internal
         /// Gets the nb layers.
         /// </summary>
         public int NbLayers { get; private set; }
+        /// <summary>
+        /// Gets the number of corrected errors.
+        /// </summary>
+        public int ErrorsCorrected { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AztecDetectorResult"/> class.
@@ -53,11 +58,22 @@ namespace ZXing.Aztec.Internal
                                    bool compact,
                                    int nbDatablocks,
                                    int nbLayers)
-           : base(bits, points)
+           : this(bits, points, compact, nbDatablocks, nbLayers, 0)
+        {
+        }
+
+        public AztecDetectorResult(BitMatrix bits,
+                                   ResultPoint[] points,
+                                   bool compact,
+                                   int nbDatablocks,
+                                   int nbLayers,
+                                   int errorsCorrected)
+            : base(bits, points)
         {
             Compact = compact;
             NbDatablocks = nbDatablocks;
             NbLayers = nbLayers;
+            ErrorsCorrected = errorsCorrected;
         }
     }
 }

@@ -529,7 +529,7 @@ namespace ZXing.Aztec.Test
             Assert.AreEqual(layers, aztec.Layers, "Unexpected nr. of layers");
             BitMatrix matrix = aztec.Matrix;
             AztecDetectorResult r =
-                new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers);
+                new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers, 0);
             DecoderResult res = new Internal.Decoder().decode(r);
             Assert.AreEqual(data, res.Text);
             // Check error correction by introducing a few minor errors
@@ -538,7 +538,7 @@ namespace ZXing.Aztec.Test
             matrix.flip(random.Next(matrix.Width), matrix.Height - 2 + random.Next(2));
             matrix.flip(random.Next(2), random.Next(matrix.Height));
             matrix.flip(matrix.Width - 2 + random.Next(2), random.Next(matrix.Height));
-            r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers);
+            r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers, 0);
             res = new Internal.Decoder().decode(r);
             Assert.AreEqual(data, res.Text);
         }
@@ -566,7 +566,7 @@ namespace ZXing.Aztec.Test
             Assert.AreEqual(layers, aztec.Layers, "Unexpected nr. of layers");
             var matrix2 = aztec.Matrix;
             Assert.AreEqual(matrix, matrix2);
-            var r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers);
+            var r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers, 0);
             var res = new Internal.Decoder().decode(r);
             Assert.AreEqual(data, res.Text);
             // Check error correction by introducing up to eccPercent/2 errors
@@ -583,7 +583,7 @@ namespace ZXing.Aztec.Test
                     : matrix.Height - 1 - random.Next(aztec.Layers * 2);
                 matrix.flip(x, y);
             }
-            r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers);
+            r = new AztecDetectorResult(matrix, NO_POINTS, aztec.isCompact, aztec.CodeWords, aztec.Layers, 0);
             res = new Internal.Decoder().decode(r);
             Assert.AreEqual(data, res.Text);
         }

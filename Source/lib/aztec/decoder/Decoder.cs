@@ -117,7 +117,7 @@ namespace ZXing.Aztec.Internal
 
             var rawBytes = convertBoolArrayToByteArray(correctedBits.correctBits);
 
-            var decoderResult = new DecoderResult(rawBytes, correctedBits.correctBits.Length, result, null, String.Format("{0}", correctedBits.ecLevel));
+            var decoderResult = new DecoderResult(rawBytes, correctedBits.correctBits.Length, result, null, String.Format("{0}", correctedBits.ecLevel), null, null, null, correctedBits.errorsCorrected);
             return decoderResult;
         }
 
@@ -316,11 +316,13 @@ namespace ZXing.Aztec.Internal
         internal sealed class CorrectedBitsResult
         {
             public bool[] correctBits;
+            public int errorsCorrected;
             public int ecLevel;
 
-            public CorrectedBitsResult(bool[] correctBits, int ecLevel)
+            public CorrectedBitsResult(bool[] correctBits, int errorsCorrected, int ecLevel)
             {
                 this.correctBits = correctBits;
+                this.errorsCorrected = errorsCorrected;
                 this.ecLevel = ecLevel;
             }
         }
@@ -370,8 +372,9 @@ namespace ZXing.Aztec.Internal
                 dataWords[i] = readCode(rawbits, offset, codewordSize);
             }
 
+            var errorsCorrected = 0;
             var rsDecoder = new ReedSolomonDecoder(gf);
-            if (!rsDecoder.decode(dataWords, numECCodewords))
+            if (!rsDecoder.decodeWithECCount(dataWords, numECCodewords, out errorsCorrected))
                 return null;
 
             // Now perform the unstuffing operation.
@@ -414,7 +417,8 @@ namespace ZXing.Aztec.Internal
             if (index != correctedBits.Length)
                 return null;
 
-            return new CorrectedBitsResult(correctedBits, 100 * (numCodewords - numDataCodewords) / numCodewords);
+            var ecLevel = 100 * (numCodewords - numDataCodewords) / numCodewords;
+            return new CorrectedBitsResult(correctedBits, errorsCorrected, ecLevel);
         }
 
         /// <summary>
