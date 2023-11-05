@@ -26,7 +26,7 @@ namespace ZXing.Maxicode.Test
       public Maxicode1TestCase()
          : base("test/data/blackbox/maxicode-1", new MultiFormatReader(), BarcodeFormat.MAXICODE)
       {
-         addTest(8, 8, 0.0f);
+         addTest(9, 9, 0.0f);
       }
    }
 }
