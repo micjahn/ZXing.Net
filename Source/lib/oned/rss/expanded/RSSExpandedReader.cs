@@ -42,6 +42,7 @@ namespace ZXing.OneD.RSS.Expanded
         private static readonly int[] EVEN_TOTAL_SUBSET = {4, 20, 52, 104, 204};
         private static readonly int[] GSUM = {0, 348, 1388, 2948, 3988};
 
+        /** Finder pattern element widths, from section 7.2.7 of ISO/IEC 24724:2006. */
         private static readonly int[][] FINDER_PATTERNS =
         {
             new[] {1, 8, 4, 1}, // A
@@ -49,9 +50,10 @@ namespace ZXing.OneD.RSS.Expanded
             new[] {3, 4, 6, 1}, // C
             new[] {3, 2, 8, 1}, // D
             new[] {2, 6, 5, 1}, // E
-            new[] {2, 2, 9, 1} // F
+            new[] {2, 2, 9, 1}  // F
         };
 
+        /** The element weights used in the checksum calculation, from section 7.2.6 of ISO/IEC 24724:2006. */
         private static readonly int[][] WEIGHTS =
         {
             new[] {1, 3, 9, 27, 81, 32, 96, 77},
@@ -86,6 +88,7 @@ namespace ZXing.OneD.RSS.Expanded
         private const int FINDER_PAT_E = 4;
         private const int FINDER_PAT_F = 5;
 
+        /** The possible finder pattern sequences, from section 7.2.7 of ISO/IEC 24724:2006. */
         private static readonly int[][] FINDER_PATTERN_SEQUENCES =
         {
             new[] {FINDER_PAT_A, FINDER_PAT_A},
@@ -257,8 +260,11 @@ namespace ZXing.OneD.RSS.Expanded
             return null;
         }
 
-        // Whether the pairs form a valid find pattern sequence,
-        // either complete or a prefix
+        /// <summary>
+        /// Whether the pairs form a valid finder pattern sequence, either complete or a prefix
+        /// </summary>
+        /// <param name="pairs"></param>
+        /// <returns></returns>
         private static bool isValidSequence(List<ExpandedPair> pairs)
         {
             foreach (int[] sequence in FINDER_PATTERN_SEQUENCES)
@@ -284,6 +290,55 @@ namespace ZXing.OneD.RSS.Expanded
                 }
             }
 
+            return false;
+        }
+
+        /// <summary>
+        /// Whether the pairs, plus another pair of the specified type, would together
+        /// form a valid finder pattern sequence, either complete or partial
+        /// </summary>
+        /// <param name="pairs"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static bool mayFollow(List<ExpandedPair> pairs, int value)
+        {
+            if (pairs.Count < 1)
+            {
+                return true;
+            }
+
+            foreach (int[] sequence in FINDER_PATTERN_SEQUENCES)
+            {
+                if (pairs.Count + 1 <= sequence.Length)
+                {
+                    // the proposed sequence (i.e. pairs + value) would fit in this allowed sequence
+                    for (int i = pairs.Count; i < sequence.Length; i++)
+                    {
+                        if (sequence[i] == value)
+                        {
+                            // we found our value in this allowed sequence, check to see if the elements preceding it match our existing
+                            // pairs; note our existing pairs may not be a full sequence (e.g. if processing a row in a stacked symbol)
+                            bool matched = true;
+                            for (int j = 0; j < pairs.Count; j++)
+                            {
+                                int allowed = sequence[i - j - 1];
+                                int actual = pairs[pairs.Count - j - 1].FinderPattern.Value;
+                                if (allowed != actual)
+                                {
+                                    matched = false;
+                                    break;
+                                }
+                            }
+                            if (matched)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // the proposed finder pattern sequence is illegal
             return false;
         }
 
@@ -477,7 +532,7 @@ namespace ZXing.OneD.RSS.Expanded
             {
                 if (!findNextPair(row, previousPairs, forcedOffset))
                     return null;
-                pattern = parseFoundFinderPattern(row, rowNumber, isOddPattern);
+                pattern = parseFoundFinderPattern(row, rowNumber, isOddPattern, previousPairs);
                 if (pattern == null)
                 {
                     forcedOffset = getNextSecondBar(row, startEnd[0]);
@@ -607,7 +662,7 @@ namespace ZXing.OneD.RSS.Expanded
             }
         }
 
-        private FinderPattern parseFoundFinderPattern(BitArray row, int rowNumber, bool oddPattern)
+        private FinderPattern parseFoundFinderPattern(BitArray row, int rowNumber, bool oddPattern, List<ExpandedPair> previousPairs)
         {
             // Actually we found elements 2-5.
             int firstCounter;
@@ -647,6 +702,12 @@ namespace ZXing.OneD.RSS.Expanded
             int value;
             if (!parseFinderValue(counters, FINDER_PATTERNS, out value))
                 return null;
+
+            // Check that the pattern type that we *think* we found can exist as part of a valid sequence of finder patterns.
+            if (!mayFollow(previousPairs, value))
+            {
+                return null;
+            }
 
             return new FinderPattern(value, new int[] {start, end}, start, end, rowNumber);
         }
