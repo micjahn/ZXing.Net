@@ -26,7 +26,9 @@ namespace ZXing.OneD.RSS
         private static readonly int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.2f);
         private static readonly int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.45f);
 
+        /** Minimum ratio 10:12 (minus 0.5 for variance), from section 7.2.7 of ISO/IEC 24724:2006. */
         private const float MIN_FINDER_PATTERN_RATIO = 9.5f / 12.0f;
+        /** Maximum ratio 12:14 (plus 0.5 for variance), from section 7.2.7 of ISO/IEC 24724:2006. */
         private const float MAX_FINDER_PATTERN_RATIO = 12.5f / 14.0f;
 
         private readonly int[] decodeFinderCounters;
