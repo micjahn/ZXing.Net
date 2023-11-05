@@ -170,8 +170,7 @@ namespace ZXing.OneD.RSS.Expanded
                 return false;
             }
 
-            // TODO: verify sequence of finder patterns as in checkPairSequence()
-            if (checkChecksum())
+            if (checkChecksum() && isValidSequence(this.pairs, true))
             {
                 return true;
             }
@@ -239,7 +238,7 @@ namespace ZXing.OneD.RSS.Expanded
                 }
                 pairs.AddRange(row.Pairs);
 
-                if (!isValidSequence(pairs))
+                if (!isValidSequence(pairs, false))
                 {
                     continue;
                 }
@@ -266,12 +265,14 @@ namespace ZXing.OneD.RSS.Expanded
         /// Whether the pairs form a valid finder pattern sequence, either complete or a prefix
         /// </summary>
         /// <param name="pairs"></param>
+        /// <param name="complete"></param>
         /// <returns></returns>
-        private static bool isValidSequence(List<ExpandedPair> pairs)
+        private static bool isValidSequence(List<ExpandedPair> pairs, bool complete)
         {
             foreach (int[] sequence in FINDER_PATTERN_SEQUENCES)
             {
-                if (pairs.Count > sequence.Length)
+                bool sizeOk = (complete ? pairs.Count == sequence.Length : pairs.Count <= sequence.Length);
+                if (!sizeOk)
                 {
                     continue;
                 }
