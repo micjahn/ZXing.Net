@@ -33,8 +33,8 @@ namespace ZXing.OneD.RSS.Expanded.Test
       public RSSExpandedBlackBox1TestCase()
          : base("test/data/blackbox/rssexpanded-1", new MultiFormatReader(), BarcodeFormat.RSS_EXPANDED)
       {
-         addTest(33, 33, 0.0f);
-         addTest(33, 33, 180.0f);
+         addTest(35, 35, 0.0f);
+         addTest(35, 35, 180.0f);
       }
    }
 }
