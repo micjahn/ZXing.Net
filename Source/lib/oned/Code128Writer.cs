@@ -301,6 +301,10 @@ namespace ZXing.OneD
         {
             // Compute and append checksum
             checkSum %= 103;
+            if (checkSum < 0)
+            {
+                throw new InvalidOperationException("Unable to compute a valid input checksum");
+            }
             patterns.Add(Code128Reader.CODE_PATTERNS[checkSum]);
 
             // Append stop code
