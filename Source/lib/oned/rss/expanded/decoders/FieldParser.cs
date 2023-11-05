@@ -50,7 +50,7 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
             TWO_DIGIT_DATA_LENGTH = new Dictionary<string, DataLength>
                                     {
                                        {"00", DataLength.fixedLength(18)},
-                                       {"01", DataLength.fixedLength(18)},
+                                       {"01", DataLength.fixedLength(14)},
                                        {"02", DataLength.fixedLength(14)},
                                        {"10", DataLength.variableLength(20)},
                                        {"11", DataLength.fixedLength(6)},
