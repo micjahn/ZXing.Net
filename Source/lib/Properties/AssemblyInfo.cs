@@ -79,6 +79,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 23.05.2023 06:23:48)")]
 [assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 29.05.2023 02:10:32)")]
 [assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 26.06.2023 00:30:21)")]
+[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 30.07.2023 19:58:44)")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyProduct("ZXing.Net")]
 [assembly: AssemblyCopyright("Copyright © 2012")]
