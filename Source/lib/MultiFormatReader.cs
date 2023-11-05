@@ -229,6 +229,10 @@ namespace ZXing
             var localreaders = readers;
             var localhints = hints;
 
+            if (localstartWithReaderAt >= localreaders.Count)
+                // the selection of readers was changed
+                localstartWithReaderAt = 0;
+
             for (var index = localstartWithReaderAt; index < localreaders.Count; index++)
             {
                 var reader = localreaders[index];
