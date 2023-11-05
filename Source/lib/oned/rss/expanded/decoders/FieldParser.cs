@@ -57,10 +57,11 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
                                        {"12", DataLength.fixedLength(6)},
                                        {"13", DataLength.fixedLength(6)},
                                        {"15", DataLength.fixedLength(6)},
+                                       {"16", DataLength.fixedLength(6)},
                                        {"17", DataLength.fixedLength(6)},
                                        {"20", DataLength.fixedLength(2)},
                                        {"21", DataLength.variableLength(20)},
-                                       {"22", DataLength.variableLength(29)},
+                                       {"22", DataLength.variableLength(29)}, // limited to 20 in latest versions of spec
                                        {"30", DataLength.variableLength(8)},
                                        {"37", DataLength.variableLength(8)},
                                        //internal company codes
@@ -78,14 +79,16 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
             THREE_DIGIT_DATA_LENGTH = new Dictionary<string, DataLength>
                                       {
                                          // Same format as above
-
+                                         {"235", DataLength.variableLength(28)},
                                          {"240", DataLength.variableLength(30)},
                                          {"241", DataLength.variableLength(30)},
                                          {"242", DataLength.variableLength(6)},
+                                         {"243", DataLength.variableLength(20)},
                                          {"250", DataLength.variableLength(30)},
                                          {"251", DataLength.variableLength(30)},
-                                         {"253", DataLength.variableLength(17)},
+                                         {"253", DataLength.variableLength(30)},
                                          {"254", DataLength.variableLength(20)},
+                                         {"255", DataLength.variableLength(25)},
 
                                          {"400", DataLength.variableLength(30)},
                                          {"401", DataLength.variableLength(30)},
@@ -96,14 +99,26 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
                                          {"412", DataLength.fixedLength(13)},
                                          {"413", DataLength.fixedLength(13)},
                                          {"414", DataLength.fixedLength(13)},
+                                         {"415", DataLength.fixedLength(13)},
+                                         {"416", DataLength.fixedLength(13)},
+                                         {"417", DataLength.fixedLength(13)},
                                          {"420", DataLength.variableLength(20)},
-                                         {"421", DataLength.variableLength(15)},
+                                         {"421", DataLength.variableLength(15)}, // limited to 12 in latest versions of spec
                                          {"422", DataLength.fixedLength(3)},
                                          {"423", DataLength.variableLength(15)},
                                          {"424", DataLength.fixedLength(3)},
-                                         {"425", DataLength.fixedLength(3)},
+                                         {"425", DataLength.variableLength(15)},
                                          {"426", DataLength.fixedLength(3)},
+                                         {"427", DataLength.variableLength(3)},
+
+                                         {"710", DataLength.variableLength(20)},
+                                         {"711", DataLength.variableLength(20)},
+                                         {"712", DataLength.variableLength(20)},
+                                         {"713", DataLength.variableLength(20)},
+                                         {"714", DataLength.variableLength(20)},
+                                         {"715", DataLength.variableLength(20)},
                                       };
+
             THREE_DIGIT_PLUS_DIGIT_DATA_LENGTH = new Dictionary<string, DataLength>
                                                  {
                                                     {"310", DataLength.fixedLength(6)},
@@ -130,6 +145,7 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
                                                     {"334", DataLength.fixedLength(6)},
                                                     {"335", DataLength.fixedLength(6)},
                                                     {"336", DataLength.fixedLength(6)},
+                                                    {"337", DataLength.fixedLength(6)},
                                                     {"340", DataLength.fixedLength(6)},
                                                     {"341", DataLength.fixedLength(6)},
                                                     {"342", DataLength.fixedLength(6)},
@@ -162,14 +178,59 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
                                                     {"391", DataLength.variableLength(18)},
                                                     {"392", DataLength.variableLength(15)},
                                                     {"393", DataLength.variableLength(18)},
-                                                    {"703", DataLength.variableLength(30)}
-
+                                                    {"394", DataLength.fixedLength(4)},
+                                                    {"395", DataLength.fixedLength(6)},
+                                                    {"703", DataLength.variableLength(30)},
+                                                    {"723", DataLength.variableLength(30)}
                                                  };
+
             FOUR_DIGIT_DATA_LENGTH = new Dictionary<string, DataLength>
                                      {
+                                        {"4300", DataLength.variableLength(35)},
+                                        {"4301", DataLength.variableLength(35)},
+                                        {"4302", DataLength.variableLength(70)},
+                                        {"4303", DataLength.variableLength(70)},
+                                        {"4304", DataLength.variableLength(70)},
+                                        {"4305", DataLength.variableLength(70)},
+                                        {"4306", DataLength.variableLength(70)},
+                                        {"4307", DataLength.fixedLength(2)},
+                                        {"4308", DataLength.variableLength(30)},
+                                        {"4309", DataLength.fixedLength(20)},
+                                        {"4310", DataLength.variableLength(35)},
+                                        {"4311", DataLength.variableLength(35)},
+                                        {"4312", DataLength.variableLength(70)},
+                                        {"4313", DataLength.variableLength(70)},
+                                        {"4314", DataLength.variableLength(70)},
+                                        {"4315", DataLength.variableLength(70)},
+                                        {"4316", DataLength.variableLength(70)},
+                                        {"4317", DataLength.fixedLength(2)},
+                                        {"4318", DataLength.variableLength(20)},
+                                        {"4319", DataLength.variableLength(30)},
+                                        {"4320", DataLength.variableLength(35)},
+                                        {"4321", DataLength.fixedLength(1)},
+                                        {"4322", DataLength.fixedLength(1)},
+                                        {"4323", DataLength.fixedLength(1)},
+                                        {"4324", DataLength.fixedLength(10)},
+                                        {"4325", DataLength.fixedLength(10)},
+
                                         {"7001", DataLength.fixedLength(13)},
                                         {"7002", DataLength.variableLength(30)},
                                         {"7003", DataLength.fixedLength(10)},
+                                        {"7004", DataLength.variableLength(4)},
+                                        {"7005", DataLength.variableLength(12)},
+                                        {"7006", DataLength.fixedLength(6)},
+                                        {"7007", DataLength.variableLength(12)},
+                                        {"7008", DataLength.variableLength(3)},
+                                        {"7009", DataLength.variableLength(10)},
+                                        {"7010", DataLength.variableLength(2)},
+                                        {"7011", DataLength.variableLength(10)},
+                                        {"7020", DataLength.variableLength(20)},
+                                        {"7021", DataLength.variableLength(20)},
+                                        {"7022", DataLength.variableLength(20)},
+                                        {"7023", DataLength.variableLength(30)},
+                                        {"7040", DataLength.fixedLength(4)},
+                                        {"7240", DataLength.variableLength(20)},
+
 
                                         {"8001", DataLength.fixedLength(14)},
                                         {"8002", DataLength.variableLength(20)},
@@ -177,14 +238,24 @@ namespace ZXing.OneD.RSS.Expanded.Decoders
                                         {"8004", DataLength.variableLength(30)},
                                         {"8005", DataLength.fixedLength(6)},
                                         {"8006", DataLength.fixedLength(18)},
-                                        {"8007", DataLength.variableLength(30)},
+                                        {"8007", DataLength.variableLength(34)},
                                         {"8008", DataLength.variableLength(12)},
+                                        {"8009", DataLength.variableLength(50)},
+                                        {"8010", DataLength.variableLength(30)},
+                                        {"8011", DataLength.variableLength(12)},
+                                        {"8012", DataLength.variableLength(20)},
+                                        {"8013", DataLength.variableLength(25)},
+                                        {"8017", DataLength.fixedLength(18)},
                                         {"8018", DataLength.fixedLength(18)},
+                                        {"8019", DataLength.variableLength(10)},
                                         {"8020", DataLength.variableLength(25)},
-                                        {"8100", DataLength.fixedLength(6)},
-                                        {"8101", DataLength.fixedLength(10)},
-                                        {"8102", DataLength.fixedLength(2)},
+                                        {"8026", DataLength.fixedLength(18)},
+                                        {"8100", DataLength.fixedLength(6)},  // removed from latest versions of spec
+                                        {"8101", DataLength.fixedLength(10)}, // removed from latest versions of spec
+                                        {"8102", DataLength.fixedLength(2)},  // removed from latest versions of spec
                                         {"8110", DataLength.variableLength(70)},
+                                        {"8111", DataLength.fixedLength(4)},
+                                        {"8112", DataLength.variableLength(70)},
                                         {"8200", DataLength.variableLength(70)},
                                      };
         }
