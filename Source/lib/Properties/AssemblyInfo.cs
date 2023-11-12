@@ -76,14 +76,6 @@ using System.Runtime.InteropServices;
 #if INTEROP
 [assembly: AssemblyTitle("zxing.net for com interop")]
 #endif
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 23.05.2023 06:23:48)")]
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 29.05.2023 02:10:32)")]
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 26.06.2023 00:30:21)")]
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 30.07.2023 19:58:44)")]
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 17.08.2023 22:28:32)")]
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 03.09.2023 23:16:39)")]
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 04.09.2023 16:00:50)")]
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 15.09.2023 17:55:54)")]
 [assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 16.09.2023 15:15:21)")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyProduct("ZXing.Net")]
