@@ -145,6 +145,16 @@ namespace ZXing.QrCode.Internal.Test
       }
 
       [Test]
+      public void testXORWithDifferentArrayLengthsForTheSameSize()
+      {
+         BitArray a = new BitArray(128); // a.bits.Length == 4
+         a.appendBit(true);              // a.bits.Length == 6
+         BitArray b = new BitArray(129); // b.bits.Length == 5
+         b[128] = true;
+         a.xor(b);
+      }
+
+      [Test]
       public void testXOR2()
       {
          var v1 = new BitArray();
