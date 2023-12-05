@@ -353,7 +353,12 @@ namespace ZXing.Common
             {
                 throw new ArgumentException("Sizes don't match");
             }
-            for (int i = 0; i < bits.Length; i++)
+
+            var numberOfInts = bits.Length;
+            if (other.bits.Length < numberOfInts)
+                numberOfInts = other.bits.Length;
+
+            for (int i = 0; i < numberOfInts; i++)
             {
                 // The last int could be incomplete (i.e. not have 32 bits in
                 // it) but there is no problem since 0 XOR 0 == 0.
