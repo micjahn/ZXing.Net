@@ -1,4 +1,9 @@
 # ZXing.Net 
+
+[![N|NuGet](https://img.shields.io/nuget/v/ZXing.Net.svg)](https://www.nuget.org/packages/ZXing.Net/)
+[![Build status](https://ci.appveyor.com/api/projects/status/49uvsxpw3ak9jtmm?svg=true)](https://ci.appveyor.com/project/MichaelJahn/zxing-net)
+[![Donate](https://img.shields.io/badge/%F0%9F%92%99-Donate%20%2F%20Support%20Us-blue.svg)](#donate)
+
 ![ZXing.Net.Mobile Logo](https://raw.githubusercontent.com/micjahn/ZXing.Net/master/Icons/logo.jpg)
 
 ## Project Description
@@ -15,7 +20,7 @@ UPC-A, EAN-8, EAN-13, Code 39, Code 128, ITF, Codabar, Plessey, MSI, QR Code, PD
 
 #### Assemblies are available for the following platforms:
 
-* .Net 2.0, 3.5, 4.0, 4.5, 4.6 and 4.7
+* .Net 2.0, 3.5, 4.x, 5.0, 6.0, 7.0
 * Silverlight 4 and 5
 * Windows Phone 7.0, 7.1 and 8.0
 * Windows CE
@@ -24,15 +29,11 @@ UPC-A, EAN-8, EAN-13, Code 39, Code 128, ITF, Codabar, Plessey, MSI, QR Code, PD
 * Portable Class Library
 * Unity3D (.Net 2.0 built without System.Drawing reference)
 * Xamarin.Android (formerly Mono for Android)
-* bindings to CoreCompat.System.Drawing, ImageSharp, SkiaSharp, OpenCVSharp, Magick, Kinect V1 and V2
+* bindings to Windows.Compatibility, CoreCompat.System.Drawing, ImageSharp, SkiaSharp, OpenCVSharp, Magick, Kinect V1 and V2, EmguCV, Eto.Forms, ZKWeb.System.Drawing
 * support COM interop, can be used with VBA
 
 The library is available in the [release section](https://github.com/micjahn/ZXing.Net/releases) and as [NuGet package](https://www.nuget.org/packages/ZXing.Net/), too.
 
-[![N|NuGet](https://img.shields.io/nuget/v/ZXing.Net.svg)](https://www.nuget.org/packages/ZXing.Net/)
-[![Build status](https://ci.appveyor.com/api/projects/status/49uvsxpw3ak9jtmm?svg=true)](https://ci.appveyor.com/project/MichaelJahn/zxing-net)
-[![OpenCollective](https://opencollective.com/zxingnet/backer/badge.svg)](#backers)
-[![OpenCollective](https://opencollective.com/zxingnet/sponsors/badge.svg)](#sponsors)
 
 #### Additional platform support without pre-built binaries
 The library can be built for Xamarin.iOS (formerly MonoTouch). The project file and solution are available in the source code repository.
@@ -76,6 +77,11 @@ if (result != null)
    txtDecoderContent.Text = result.Text;
 }
 ```
+#### important notice for .Net Standard and .Net 5.0 and above target platforms
+If you want to try the sample code above within a project which target .Net Standard or .Net 5.0 or higher then you have to add one of the
+additional nuget package for a specific image library: https://www.nuget.org/packages?q=ZXing.Bindings
+The main package of ZXing.Net for such platforms only contains the core classes which are not dependent on a specific assembly for image formats.
+
 ## Help wanted
 All help is welcome!
 ## Feedback
@@ -99,13 +105,12 @@ If you find the project useful and you wish to support the future development fe
 
 Beside a donation patches, bug reports, feedback and other useful help are always welcome!
 
-## Backers
-
-Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/zxingnet)]
-
 ## Sponsors
 
-Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/zxingnet)]
+Support us with a monthly donation and help us continue our activities. 
+Become a sponsor and get your logo on our README on Github with a link to your site. 
+* [[Become a Github Sponsor](https://github.com/sponsors/micjahn)]
+* [[Become a Opencollective backer/sponsor](https://opencollective.com/zxingnet)]
 
 ## Donation WITHOUT money
 It would be really, really great if you could support one of my social projects. You can support it WITHOUT paying money.
