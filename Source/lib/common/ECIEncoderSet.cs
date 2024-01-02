@@ -171,6 +171,12 @@ namespace ZXing.Common
         }
 
 #if NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_3 || WINDOWS_UWP || PORTABLE || NETFX_CORE
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="encoding"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
         public static bool canEncode(Encoding encoding, char c)
         {
             // very limited support on old platforms; not sure, if it would work; and not sure, if somebody need the old platform support
@@ -185,6 +191,12 @@ namespace ZXing.Common
             }
         }
 #else
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="encoding"></param>
+        /// <param name="c"></param>
+        /// <returns></returns>
 		public static bool canEncode(Encoding encoding, char c)
 		{
 			try
@@ -212,6 +224,9 @@ namespace ZXing.Common
 		}
 #endif
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public int Length
         {
             get
@@ -220,6 +235,9 @@ namespace ZXing.Common
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public String getCharsetName(int index)
         {
             if (index >= Length)
@@ -227,6 +245,9 @@ namespace ZXing.Common
             return encoders[index].WebName.ToUpper();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Encoding getCharset(int index)
         {
             if (index >= Length)
@@ -234,6 +255,9 @@ namespace ZXing.Common
             return encoders[index];
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public int getECIValue(int encoderIndex)
         {
             return CharacterSetECI.getCharacterSetECI(encoders[encoderIndex]).Value;
@@ -248,6 +272,9 @@ namespace ZXing.Common
             return priorityEncoderIndex;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool canEncode(char c, int encoderIndex)
         {
             if (encoderIndex >= Length)
@@ -256,6 +283,9 @@ namespace ZXing.Common
             return canEncode(encoder, c);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public byte[] encode(char c, int encoderIndex)
         {
             if (encoderIndex >= Length)
@@ -265,6 +295,9 @@ namespace ZXing.Common
             return encoder.GetBytes("" + c);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public byte[] encode(String s, int encoderIndex)
         {
             if (encoderIndex >= Length)
@@ -273,7 +306,10 @@ namespace ZXing.Common
             return encoder.GetBytes(s);
         }
 
-		public static Encoding Clone(Encoding encoding)
+        /// <summary>
+        /// 
+        /// </summary>
+        public static Encoding Clone(Encoding encoding)
 		{
             if (encoding == null)
                 return null;
