@@ -165,7 +165,8 @@ namespace ZXing.Common
         {
             if (charsetECI == null)
                 return null;
-            return charsetECI.Encoding ?? (charsetECI.Encoding = getEncoding(charsetECI.EncodingName));
+            // don't use property here because of StackOverflow
+            return charsetECI.encoding ?? (charsetECI.encoding = getEncoding(charsetECI.EncodingName));
         }
 
         /// <summary>
