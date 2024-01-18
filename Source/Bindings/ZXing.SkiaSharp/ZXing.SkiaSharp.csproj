@@ -4,11 +4,11 @@
     <TargetFrameworks>net462;netstandard1.3;netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(VisualStudioVersion)' == '17.0'"> 
-    <TargetFrameworks>net462;netstandard1.3;netstandard2.0;netstandard2.1;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net462;netstandard1.3;netstandard2.0;netstandard2.1;netcoreapp3.1;net6.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>0.16.13</VersionPrefix>
+    <VersionPrefix>0.16.14</VersionPrefix>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>anycpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SkiaSharp" Version="2.88.6" />
+    <PackageReference Include="SkiaSharp" Version="2.88.7" />
     <PackageReference Include="ZXing.Net" Version="0.16.9" />
   </ItemGroup>
 
