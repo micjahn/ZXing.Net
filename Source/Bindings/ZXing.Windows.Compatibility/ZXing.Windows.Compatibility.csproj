@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0;netcoreapp3.0;netcoreapp3.1;</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(VisualStudioVersion)' == '17.0'"> 
-    <TargetFrameworks>netstandard2.0;netcoreapp3.0;netcoreapp3.1;net6.0-windows;net7.0-windows</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.0;netcoreapp3.1;net6.0-windows;net7.0-windows;net8.0-windows</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -47,7 +47,7 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='net6.0-windows' OR '$(TargetFramework)'=='net7.0-windows'">
+  <PropertyGroup Condition="'$(TargetFramework)'=='net6.0-windows' OR '$(TargetFramework)'=='net7.0-windows' OR '$(TargetFramework)'=='net8.0-windows'">
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
@@ -63,7 +63,7 @@
     <Compile Include="Properties/AssemblyInfo.cs" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows' OR '$(TargetFramework)' == 'net7.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows' OR '$(TargetFramework)' == 'net7.0-windows' OR '$(TargetFramework)' == 'net8.0-windows'">
     <Compile Include="..\..\lib\renderer\GeometryRenderer.cs" Link="Rendering\GeometryRenderer.cs" />
     <Compile Include="..\..\lib\renderer\WriteableBitmapRenderer.Presentation.cs" Link="Rendering\WriteableBitmapRenderer.Presentation.cs" />
     <Compile Include="..\..\lib\presentation\BarcodeReader.cs" Link="BarcodeReaderWriteableBitmap.cs" />
