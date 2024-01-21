@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup Condition="'$(VisualStudioVersion)' == '16.0'">
     <TargetFrameworks>netstandard1.0;netstandard1.1;netstandard1.3;netstandard2.0;netstandard2.1;netcoreapp3.0;netcoreapp3.1;net5.0</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(VisualStudioVersion)' == '17.0'"> 
-    <TargetFrameworks>netstandard1.0;netstandard1.1;netstandard1.3;netstandard2.0;netstandard2.1;netcoreapp3.0;netcoreapp3.1;net5.0;net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>netstandard1.0;netstandard1.1;netstandard1.3;netstandard2.0;netstandard2.1;netcoreapp3.0;netcoreapp3.1;net5.0;net6.0;net7.0;net8.0</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup>
     <VersionPrefix>0.17.0</VersionPrefix>
@@ -81,6 +81,10 @@
     <DefineConstants>$(DefineConstants);NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0'">
+    <DefineConstants>$(DefineConstants);NETSTANDARD2_0</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\Properties\AssemblyInfo.cs;..\renderer\IBarcodeRenderer.cs;..\renderer\PixelData.cs;..\renderer\PixelDataRenderer.cs;..\renderer\SVGRenderer.cs;..\renderer\StringRenderer.cs;..\BarcodeFormat.cs;..\BarcodeReader.ByteArray.cs;..\BarcodeReaderCustom.cs;..\BarcodeReaderGeneric.cs;..\BarcodeWriter.PixelData.cs;..\BarcodeWriter.SvgImage.cs;..\BarcodeWriterCustom.cs;..\BarcodeWriterGeneric.cs;..\BaseLuminanceSource.cs;..\Binarizer.cs;..\BinaryBitmap.cs;..\DecodeHintType.cs;..\Dimension.cs;..\EncodeHintType.cs;..\FormatException.cs;..\IBarcodeReader.cs;..\IBarcodeReader.Multiple.cs;..\IBarcodeReaderCustom.cs;..\IBarcodeReaderCustom.Multiple.cs;..\IBarcodeReaderGeneric.cs;..\IBarcodeReaderGeneric.Multiple.cs;..\IBarcodeWriter.cs;..\IBarcodeWriter.PixelData.cs;..\IBarcodeWriter.SvgImage.cs;..\IBarcodeWriterCustom.cs;..\IBarcodeWriterGeneric.cs;..\InvertedLuminanceSource.cs;..\LuminanceSource.cs;..\MultiFormatReader.cs;..\MultiFormatWriter.cs;..\PlanarYUVLuminanceSource.cs;..\Reader.cs;..\ReaderException.cs;..\Result.cs;..\ResultMetadataType.cs;..\ResultPoint.cs;..\ResultPointCallback.cs;..\RGBLuminanceSource.cs;..\SupportClass.cs;..\Writer.cs;..\WriterException.cs" />
     <Compile Include="..\aztec\**;..\client\**;..\common\**;..\datamatrix\**;..\imb\**;..\maxicode\**;..\multi\**;..\oned\**;..\pdf417\**;..\qrcode\**" Exclude="..\client\result\optional\**\*;..\common\BigInteger\**\*;bin\**;obj\**;**\*.xproj;packages\**;..\common\BitMatrix.Drawing.cs;..\common\BitMatrix.Silverlight.cs;" />
@@ -130,6 +134,10 @@
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net7.0' ">
+    <Compile Remove="..\common\BitMatrix.Silverlight.cs;..\common\advanced\rowedge\**;..\BarcodeReader.ByteArray.cs;" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
     <Compile Remove="..\common\BitMatrix.Silverlight.cs;..\common\advanced\rowedge\**;..\BarcodeReader.ByteArray.cs;" />
   </ItemGroup>
 
