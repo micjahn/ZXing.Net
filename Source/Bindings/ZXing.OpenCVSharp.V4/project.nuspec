@@ -19,25 +19,21 @@
 		<dependencies>
 			<group targetFramework="net48">
 				<dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-				<dependency id="OpenCvSharp4" version="4.7.0.20230115" exclude="Build,Analyzers" />
+				<dependency id="OpenCvSharp4" version="4.9.0.20240103" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="netstandard2.0">
 				<dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-				<dependency id="OpenCvSharp4" version="4.7.0.20230115" exclude="Build,Analyzers" />
+				<dependency id="OpenCvSharp4" version="4.9.0.20240103" exclude="Build,Analyzers" />
 				<dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="netstandard2.1">
 				<dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-				<dependency id="OpenCvSharp4" version="4.7.0.20230115" exclude="Build,Analyzers" />
+				<dependency id="OpenCvSharp4" version="4.9.0.20240103" exclude="Build,Analyzers" />
 				<dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
-			</group>
-			<group targetFramework="netcoreapp3.1">
-				<dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-				<dependency id="OpenCvSharp4" version="4.7.0.20230115" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="net6.0">
 				<dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-				<dependency id="OpenCvSharp4" version="4.7.0.20230115" exclude="Build,Analyzers" />
+				<dependency id="OpenCvSharp4" version="4.9.0.20240103" exclude="Build,Analyzers" />
 			</group>
 		</dependencies>
 	</metadata>
@@ -53,9 +49,6 @@
 		<file src="bin\Release\netstandard2.1\ZXing.OpenCv.dll" target="lib\netstandard2.1\ZXing.OpenCv.dll" />
 		<file src="bin\Release\netstandard2.1\ZXing.OpenCv.pdb" target="lib\netstandard2.1\ZXing.OpenCv.pdb" />
 		<file src="bin\Release\netstandard2.1\ZXing.OpenCv.xml" target="lib\netstandard2.1\ZXing.OpenCv.xml" />
-		<file src="bin\Release\netcoreapp3.1\ZXing.OpenCv.dll" target="lib\netcoreapp3.1\ZXing.OpenCv.dll" />
-		<file src="bin\Release\netcoreapp3.1\ZXing.OpenCv.pdb" target="lib\netcoreapp3.1\ZXing.OpenCv.pdb" />
-		<file src="bin\Release\netcoreapp3.1\ZXing.OpenCv.xml" target="lib\netcoreapp3.1\ZXing.OpenCv.xml" />
 		<file src="bin\Release\net6.0\ZXing.OpenCv.dll" target="lib\net6.0\ZXing.OpenCv.dll" />
 		<file src="bin\Release\net6.0\ZXing.OpenCv.pdb" target="lib\net6.0\ZXing.OpenCv.pdb" />
 		<file src="bin\Release\net6.0\ZXing.OpenCv.xml" target="lib\net6.0\ZXing.OpenCv.xml" />

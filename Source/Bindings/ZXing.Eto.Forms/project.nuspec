@@ -19,8 +19,12 @@
     <dependencies>
       <group targetFramework="netstandard2.0">
         <dependency id="ZXing.Net" version="0.16.9" exclude="Build,Analyzers" />
-        <dependency id="Eto.Forms" version="2.7.3" exclude="Build,Analyzers" />
+        <dependency id="Eto.Forms" version="2.8.3" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net6.0">
+        <dependency id="ZXing.Net" version="0.16.9" exclude="Build,Analyzers" />
+        <dependency id="Eto.Forms" version="2.8.3" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>
@@ -30,5 +34,8 @@
     <file src="bin\Release\netstandard2.0\ZXing.Eto.Forms.dll" target="lib\netstandard2.0\ZXing.Eto.Forms.dll" />
     <file src="bin\Release\netstandard2.0\ZXing.Eto.Forms.pdb" target="lib\netstandard2.0\ZXing.Eto.Forms.pdb" />
     <file src="bin\Release\netstandard2.0\ZXing.Eto.Forms.xml" target="lib\netstandard2.0\ZXing.Eto.Forms.xml" />
+    <file src="bin\Release\net6.0\ZXing.Eto.Forms.dll" target="lib\net6.0\ZXing.Eto.Forms.dll" />
+    <file src="bin\Release\net6.0\ZXing.Eto.Forms.pdb" target="lib\net6.0\ZXing.Eto.Forms.pdb" />
+    <file src="bin\Release\net6.0\ZXing.Eto.Forms.xml" target="lib\net6.0\ZXing.Eto.Forms.xml" />
   </files>
 </package>

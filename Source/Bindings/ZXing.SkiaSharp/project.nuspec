@@ -20,31 +20,31 @@
 		<dependencies>
 			<group targetFramework="net462">
 				<dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-				<dependency id="SkiaSharp" version="2.88.7" exclude="Build,Analyzers" />
+				<dependency id="SkiaSharp" version="2.88.8" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="netstandard1.3">
 				<dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-				<dependency id="SkiaSharp" version="2.88.7" exclude="Build,Analyzers" />
+				<dependency id="SkiaSharp" version="2.88.8" exclude="Build,Analyzers" />
 				<dependency id="NETStandard.Library" version="1.6.0" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="netstandard2.0">
 				<dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-				<dependency id="SkiaSharp" version="2.88.7" exclude="Build,Analyzers" />
+				<dependency id="SkiaSharp" version="2.88.8" exclude="Build,Analyzers" />
 				<dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="netstandard2.1">
 				<dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-				<dependency id="SkiaSharp" version="2.88.7" exclude="Build,Analyzers" />
+				<dependency id="SkiaSharp" version="2.88.8" exclude="Build,Analyzers" />
 				<dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="netcoreapp3.1">
 				<dependency id="ZXing.Net" version="0.16.9" exclude="Build,Analyzers" />
-				<dependency id="SkiaSharp" version="2.88.7" exclude="Build,Analyzers" />
+				<dependency id="SkiaSharp" version="2.88.8" exclude="Build,Analyzers" />
 				<dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="net6.0">
 				<dependency id="ZXing.Net" version="0.16.9" exclude="Build,Analyzers" />
-				<dependency id="SkiaSharp" version="2.88.7" exclude="Build,Analyzers" />
+				<dependency id="SkiaSharp" version="2.88.8" exclude="Build,Analyzers" />
 			</group>
 		</dependencies>
 	</metadata>

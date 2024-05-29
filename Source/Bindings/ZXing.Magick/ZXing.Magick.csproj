@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Magick.NET.Core" Version="12.3.0" />
+    <PackageReference Include="Magick.NET.Core" Version="13.8.0" />
     <PackageReference Include="ZXing.Net" Version="0.16.9" />
   </ItemGroup>
 
