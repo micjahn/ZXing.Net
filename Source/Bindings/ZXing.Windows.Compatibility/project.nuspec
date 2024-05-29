@@ -29,16 +29,20 @@
       </group>
       <group targetFramework="netstandard2.0">
         <dependency id="ZXing.Net" version="0.16.9" exclude="Build,Analyzers" />
-        <dependency id="System.Drawing.Common" version="7.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="8.0.6" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net6.0">
         <dependency id="ZXing.Net" version="0.16.9" exclude="Build,Analyzers" />
-        <dependency id="System.Drawing.Common" version="7.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="8.0.6" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net7.0">
         <dependency id="ZXing.Net" version="0.16.9" exclude="Build,Analyzers" />
-        <dependency id="System.Drawing.Common" version="7.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="8.0.6" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net8.0">
+        <dependency id="ZXing.Net" version="0.16.9" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="8.0.6" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>
@@ -60,5 +64,8 @@
     <file src="bin\Release\net7.0-windows\ZXing.Windows.Compatibility.dll" target="lib\net7.0\ZXing.Windows.Compatibility.dll" />
     <file src="bin\Release\net7.0-windows\ZXing.Windows.Compatibility.pdb" target="lib\net7.0\ZXing.Windows.Compatibility.pdb" />
     <file src="bin\Release\net7.0-windows\ZXing.Windows.Compatibility.xml" target="lib\net7.0\ZXing.Windows.Compatibility.xml" />
+    <file src="bin\Release\net8.0-windows\ZXing.Windows.Compatibility.dll" target="lib\net8.0\ZXing.Windows.Compatibility.dll" />
+    <file src="bin\Release\net8.0-windows\ZXing.Windows.Compatibility.pdb" target="lib\net8.0\ZXing.Windows.Compatibility.pdb" />
+    <file src="bin\Release\net8.0-windows\ZXing.Windows.Compatibility.xml" target="lib\net8.0\ZXing.Windows.Compatibility.xml" />
   </files>
 </package>

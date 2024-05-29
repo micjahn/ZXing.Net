@@ -20,28 +20,28 @@
     <dependencies>
       <group targetFramework=".NETFramework4.7.2">
         <dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-        <dependency id="SixLabors.ImageSharp" version="2.1.7" exclude="Build,Analyzers" />
+        <dependency id="SixLabors.ImageSharp" version="2.1.8" exclude="Build,Analyzers" />
         <dependency id="System.Memory" version="4.5.5" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="netstandard2.0">
         <dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-        <dependency id="SixLabors.ImageSharp" version="2.1.7" exclude="Build,Analyzers" />
+        <dependency id="SixLabors.ImageSharp" version="2.1.8" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
         <dependency id="System.Memory" version="4.5.5" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="netstandard2.1">
         <dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-        <dependency id="SixLabors.ImageSharp" version="2.1.7" exclude="Build,Analyzers" />
+        <dependency id="SixLabors.ImageSharp" version="2.1.8" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
         <dependency id="System.Memory" version="4.5.5" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="netcoreapp2.1">
         <dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-        <dependency id="SixLabors.ImageSharp" version="2.1.7" exclude="Build,Analyzers" />
+        <dependency id="SixLabors.ImageSharp" version="2.1.8" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="netcoreapp3.1">
         <dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-        <dependency id="SixLabors.ImageSharp" version="2.1.7" exclude="Build,Analyzers" />
+        <dependency id="SixLabors.ImageSharp" version="2.1.8" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>

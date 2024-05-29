@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <VersionPrefix>0.16.4</VersionPrefix>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
     <PackageId>ZXing.Net.Bindings.Eto.Forms</PackageId>
     <PlatformTarget>anycpu</PlatformTarget>
     <SignAssembly>false</SignAssembly>
@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.7.3" />
+    <PackageReference Include="Eto.Forms" Version="2.8.3" />
     <PackageReference Include="ZXing.Net" Version="0.16.9" />
   </ItemGroup>
 
