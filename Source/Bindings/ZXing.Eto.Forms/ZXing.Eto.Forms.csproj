@@ -1,8 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup Condition="'$(VisualStudioVersion)' == '16.0'">
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(VisualStudioVersion)' == '17.0'"> 
+    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
+  </PropertyGroup>
+
   <PropertyGroup>
     <VersionPrefix>0.16.4</VersionPrefix>
-    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
     <PackageId>ZXing.Net.Bindings.Eto.Forms</PackageId>
     <PlatformTarget>anycpu</PlatformTarget>
     <SignAssembly>false</SignAssembly>
