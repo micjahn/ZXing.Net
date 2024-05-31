@@ -1143,7 +1143,6 @@ Global
 		{861AD178-2F4D-4E95-B37B-ACCF768C82D9}.Debug - Reduced|x64.ActiveCfg = Debug|Any CPU
 		{861AD178-2F4D-4E95-B37B-ACCF768C82D9}.Debug - Reduced|x86.ActiveCfg = Debug|Any CPU
 		{861AD178-2F4D-4E95-B37B-ACCF768C82D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{861AD178-2F4D-4E95-B37B-ACCF768C82D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{861AD178-2F4D-4E95-B37B-ACCF768C82D9}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{861AD178-2F4D-4E95-B37B-ACCF768C82D9}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{861AD178-2F4D-4E95-B37B-ACCF768C82D9}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -1153,7 +1152,6 @@ Global
 		{861AD178-2F4D-4E95-B37B-ACCF768C82D9}.Release with Documentation|x64.ActiveCfg = Release|Any CPU
 		{861AD178-2F4D-4E95-B37B-ACCF768C82D9}.Release with Documentation|x86.ActiveCfg = Release|Any CPU
 		{861AD178-2F4D-4E95-B37B-ACCF768C82D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{861AD178-2F4D-4E95-B37B-ACCF768C82D9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{861AD178-2F4D-4E95-B37B-ACCF768C82D9}.Release|ARM.ActiveCfg = Release|Any CPU
 		{861AD178-2F4D-4E95-B37B-ACCF768C82D9}.Release|x64.ActiveCfg = Release|Any CPU
 		{861AD178-2F4D-4E95-B37B-ACCF768C82D9}.Release|x86.ActiveCfg = Release|Any CPU
@@ -1196,7 +1194,6 @@ Global
 		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Debug - Reduced|x64.ActiveCfg = Debug|Any CPU
 		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Debug - Reduced|x86.ActiveCfg = Debug|Any CPU
 		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -1206,7 +1203,6 @@ Global
 		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Release with Documentation|x64.ActiveCfg = Release|Any CPU
 		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Release with Documentation|x86.ActiveCfg = Release|Any CPU
 		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Release|ARM.ActiveCfg = Release|Any CPU
 		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Release|x64.ActiveCfg = Release|Any CPU
 		{8080C792-EB9B-4CE8-B52E-740ABB68AE50}.Release|x86.ActiveCfg = Release|Any CPU
