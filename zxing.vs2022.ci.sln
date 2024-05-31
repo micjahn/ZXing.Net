@@ -1048,7 +1048,6 @@ Global
 		{92327639-AD1C-4671-9AE9-7B39820526F1}.Debug - Reduced|x64.ActiveCfg = Debug|Any CPU
 		{92327639-AD1C-4671-9AE9-7B39820526F1}.Debug - Reduced|x86.ActiveCfg = Debug|Any CPU
 		{92327639-AD1C-4671-9AE9-7B39820526F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{92327639-AD1C-4671-9AE9-7B39820526F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92327639-AD1C-4671-9AE9-7B39820526F1}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{92327639-AD1C-4671-9AE9-7B39820526F1}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{92327639-AD1C-4671-9AE9-7B39820526F1}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -1058,7 +1057,6 @@ Global
 		{92327639-AD1C-4671-9AE9-7B39820526F1}.Release with Documentation|x64.ActiveCfg = Release|Any CPU
 		{92327639-AD1C-4671-9AE9-7B39820526F1}.Release with Documentation|x86.ActiveCfg = Release|Any CPU
 		{92327639-AD1C-4671-9AE9-7B39820526F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{92327639-AD1C-4671-9AE9-7B39820526F1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{92327639-AD1C-4671-9AE9-7B39820526F1}.Release|ARM.ActiveCfg = Release|Any CPU
 		{92327639-AD1C-4671-9AE9-7B39820526F1}.Release|x64.ActiveCfg = Release|Any CPU
 		{92327639-AD1C-4671-9AE9-7B39820526F1}.Release|x86.ActiveCfg = Release|Any CPU
