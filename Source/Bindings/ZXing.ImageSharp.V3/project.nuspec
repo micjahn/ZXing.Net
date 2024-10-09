@@ -20,7 +20,7 @@
     <dependencies>
       <group targetFramework="net6.0">
         <dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-        <dependency id="SixLabors.ImageSharp" version="3.1.4" exclude="Build,Analyzers" />
+        <dependency id="SixLabors.ImageSharp" version="3.1.5" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>
