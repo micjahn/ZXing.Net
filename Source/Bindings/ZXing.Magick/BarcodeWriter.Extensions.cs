@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-using ImageMagick;
-using ZXing.Magick.Rendering;
-
 namespace ZXing
 {
+    using ImageMagick;
+    using ImageMagick.Factories;
+    using ZXing.Magick.Rendering;
+
     /// <summary>
     /// extensions methods which are working directly on any BarcodeWriterGeneric implementation
     /// </summary>
