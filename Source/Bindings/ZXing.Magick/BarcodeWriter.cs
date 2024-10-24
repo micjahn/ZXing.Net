@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-using ImageMagick;
-
-using ZXing.Magick.Rendering;
-
 namespace ZXing.Magick
 {
+    using ImageMagick;
+    using ImageMagick.Factories;
+
+    using ZXing.Magick.Rendering;
+
     /// <summary>
     /// barcode writer which creates Magick.NET Image instances
     /// </summary>
