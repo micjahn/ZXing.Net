@@ -227,19 +227,15 @@ namespace ZXing.OneD.RSS.Expanded
         // Recursion is used to implement backtracking
         private List<ExpandedPair> checkRows(List<ExpandedRow> collectedRows, int currentRow)
         {
-            for (int i = currentRow; i < rows.Count; i++)
+            for (var i = currentRow; i < rows.Count; i++)
             {
-                ExpandedRow row = rows[i];
-                pairs.Clear();
-                int size = collectedRows.Count;
-                for (int j = 0; j < size; j++)
-                {
-                    pairs.AddRange(collectedRows[j].Pairs);
-                }
+                var row = rows[i];
                 pairs.AddRange(row.Pairs);
 
                 if (!isValidSequence(pairs, false))
                 {
+                    for (var cnt = row.Pairs.Count; cnt > 0; cnt--)
+                        pairs.RemoveAt(pairs.Count - 1);
                     continue;
                 }
 
@@ -248,13 +244,17 @@ namespace ZXing.OneD.RSS.Expanded
                     return this.pairs;
                 }
 
-                var rs = new List<ExpandedRow>(collectedRows);
-                rs.Add(row);
+                collectedRows.Add(row);
                 // Recursion: try to add more rows
-                var result = checkRows(rs, i + 1);
+                var result = checkRows(collectedRows, i + 1);
                 if (result == null)
+                {
                     // We failed, try the next candidate
+                    collectedRows.RemoveAt(collectedRows.Count - 1);
+                    for (var cnt = row.Pairs.Count; cnt > 0; cnt--)
+                        pairs.RemoveAt(pairs.Count - 1);
                     continue;
+                }
                 return result;
             }
 
