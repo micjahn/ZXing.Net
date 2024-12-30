@@ -85,6 +85,9 @@ namespace ZXing.Multi.QrCode
                     result.putMetadata(ResultMetadataType.STRUCTURED_APPEND_SEQUENCE, decoderResult.StructuredAppendSequenceNumber);
                     result.putMetadata(ResultMetadataType.STRUCTURED_APPEND_PARITY, decoderResult.StructuredAppendParity);
                 }
+                // Fix SYMBOLOGY_IDENTIFIER loss in QRCodeMultiReader
+                result.putMetadata(ResultMetadataType.SYMBOLOGY_IDENTIFIER, "]Q" + decoderResult.SymbologyModifier);
+
                 results.Add(result);
             }
             if (results.Count == 0)
