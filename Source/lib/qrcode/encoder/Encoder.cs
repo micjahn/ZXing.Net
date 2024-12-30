@@ -265,7 +265,9 @@ namespace ZXing.QrCode.Internal
         /// <returns></returns>
         private static Mode chooseMode(String content, Encoding encoding)
         {
-            if (StringUtils.SHIFT_JIS_ENCODING != null && StringUtils.SHIFT_JIS_ENCODING.Equals(encoding) && isOnlyDoubleByteKanji(content))
+            if (StringUtils.JIS_IS_SUPPORTED &&
+                StringUtils.SHIFT_JIS_ENCODING.WebName.Equals(encoding?.WebName) &&
+                isOnlyDoubleByteKanji(content))
             {
                 // Choose Kanji mode if all input are double-byte characters
                 return Mode.KANJI;
