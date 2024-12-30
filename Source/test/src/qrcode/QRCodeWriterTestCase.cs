@@ -228,7 +228,7 @@ namespace ZXing.QrCode.Test
                     Options = new DecodingOptions
                        {
                           PureBarcode = true,
-                          PossibleFormats = new List<BarcodeFormat> {BarcodeFormat.QR_CODE}
+                        PossibleFormats = new List<BarcodeFormat> { BarcodeFormat.QR_CODE }
                        }
                  };
               var decodedResult = reader.Decode(bmp);
@@ -238,5 +238,62 @@ namespace ZXing.QrCode.Test
            }
        }
 #endif
+        [Test]
+        public void renderResultScalesNothing()
+        {
+            const int expectedSize = 33;        // Original Size (25) + quietZone
+            BitMatrix result;
+            ByteMatrix matrix;
+            QRCode code;
+
+            matrix = new ByteMatrix(25, 25);    // QR Version 2! It's all white 
+                                                // but it doesn't matter here
+
+            code = new QRCode();
+            code.Matrix = matrix;
+
+            // Test:
+            result = QRCodeWriter.renderResult(code, -1, -1, 4, false);
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Height, Is.EqualTo(expectedSize));
+            Assert.That(result.Width, Is.EqualTo(expectedSize));
    }
+
+        [Test]
+        public void renderResultScalesWhenRequired()
+        {
+            const int expectedSize = 66;
+            BitMatrix result;
+            ByteMatrix matrix;
+            QRCode code;
+
+            matrix = new ByteMatrix(25, 25);    // QR Version 2! It's all white 
+                                                // but it doesn't matter here
+
+            code = new QRCode();
+            code.Matrix = matrix;
+
+            // Test:
+            result = QRCodeWriter.renderResult(code, 66, 66, 4, false);
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Height, Is.EqualTo(expectedSize));
+            Assert.That(result.Width, Is.EqualTo(expectedSize));
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void renderResultThrowsExIfCcodeIsNull()
+        {
+            QRCodeWriter.renderResult(null, 0, 0, 0, false);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void renderResultThrowsExIfCodeIsIncomplete()
+        {
+            QRCodeWriter.renderResult(new QRCode(), 0, 0, 0, false);
+        }
+    }
 }
