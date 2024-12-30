@@ -21,6 +21,7 @@
 using System;
 #if (SILVERLIGHT4 || SILVERLIGHT5 || NET40 || NET45 || NET46 || NET47 || NET48 || NETFX_CORE || NETSTANDARD) && !NETSTANDARD1_0
 using System.Numerics;
+
 #else
 using BigIntegerLibrary;
 #endif
@@ -184,18 +185,16 @@ namespace ZXing.PDF417.Internal
                 throw new ArgumentException("Empty message not allowed");
             }
 
+            if (Compaction.TEXT == compaction)
+            {
+                checkCharset(msg, 127, "Consider specifying Compaction.AUTO instead of Compaction.TEXT");
+            }
+
             if (encoding == null && !autoECI)
             {
-                for (int i = 0; i < msg.Length; i++)
-                {
-                    if (msg[i] > 255)
-                    {
-                        throw new WriterException("Non-encodable character detected: " + msg[i] + " (Unicode: " +
-                            (int)msg[i] +
-                            "). Consider specifying EncodeHintType.PDF417_AUTO_ECI and/or EncodeTypeHint.CHARACTER_SET.");
-                    }
-                }
+                checkCharset(msg, 255, "Consider specifying EncodeHintType.PDF417_AUTO_ECI and/or EncodeTypeHint.CHARACTER_SET");
             }
+
             encoding = ECIEncoderSet.Clone(encoding); // needed because of ECIEncoderSet.canEncode
 
             //the codewords 0..928 are encoded as Unicode characters
@@ -379,6 +378,25 @@ namespace ZXing.PDF417.Internal
         private static byte[] toBytes(char msg, Encoding encoding)
         {
             return getEncoder(encoding).GetBytes(new[] { msg });
+        }
+
+        /// <summary>
+        /// Check if input is only made of characters between 0 and the upper limit 
+        /// </summary>
+        /// <param name="input">the input</param>
+        /// <param name="max">the upper limit for charset</param>
+        /// <param name="errorMessage">the message to explain the error</param>
+        /// <exception cref="WriterException">exception highlighting the offending character and a suggestion to avoid the error</exception>
+        internal static void checkCharset(String input, int max, String errorMessage)
+        {
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i] > max)
+                {
+                    throw new WriterException("Non-encodable character detected: " + input[i] + " (Unicode: " +
+                    (int)input[i] + ") at position #" + i + " - " + errorMessage);
+                }
+            }
         }
 
         /// <summary>
