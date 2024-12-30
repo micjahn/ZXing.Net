@@ -133,15 +133,31 @@ namespace ZXing.QrCode
             return renderResult(code, width, height, quietZone, noPadding);
         }
 
-        // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
-        // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
-        private static BitMatrix renderResult(QRCode code, int width, int height, int quietZone, bool noPadding)
+        /// <summary>
+        /// Renders the given <see cref="QRCode"/> as a <see cref="BitMatrix"/>, scaling the
+        /// same to be compliant with the provided dimensions.
+        ///
+        /// <p>If no scaling is required, both {@code width} and {@code height}
+        /// arguments should be non-positive numbers.
+        /// </summary>
+        /// <param name="code">{@code QRCode} to be adapted as a {@code BitMatrix}</param>
+        /// <param name="width">desired width for the {@code QRCode} (in pixel units)</param>
+        /// <param name="height">desired height for the {@code QRCode} (in pixel units)</param>
+        /// <param name="quietZone">the size of the QR quiet zone (in pixel units)</param>
+        /// <param name="noPadding"></param>
+        /// <returns>{@code BitMatrix} instance</returns>
+        /// <exception cref="ArgumentNullException">if code is null</exception>
+        /// <exception cref="InvalidOperationException">if code.Matrix is null</exception>
+        public static BitMatrix renderResult(QRCode code, int width, int height, int quietZone, bool noPadding)
         {
+            // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
+            // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
+            if (code == null)
+                throw new ArgumentNullException(nameof(code));
             var input = code.Matrix;
             if (input == null)
-            {
                 throw new InvalidOperationException();
-            }
+
             int inputWidth = input.Width;
             int inputHeight = input.Height;
             int qrWidth = inputWidth + (quietZone << 1);
