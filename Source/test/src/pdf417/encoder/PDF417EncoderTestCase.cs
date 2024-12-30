@@ -19,6 +19,7 @@ using System.Text;
 
 using NUnit.Framework;
 using ZXing.Common;
+using static ZXing.Datamatrix.Encoder.MinimalEncoder;
 
 namespace ZXing.PDF417.Internal.Test
 {
@@ -169,6 +170,52 @@ namespace ZXing.PDF417.Internal.Test
         public void testEncodeEmptyString()
         {
             Assert.Throws<ArgumentException>(() => PDF417HighLevelEncoder.encodeHighLevel("", Compaction.AUTO, null, false, false));
+        }
+
+
+        [Test]
+        public void testDimensions()
+        {
+            // test https://github.com/zxing/zxing/issues/1831
+            String input = "0000000001000000022200000003330444400888888881010101010";
+            testDimensions(input, new Dimensions(1, 30, 7, 10));
+            testDimensions(input, new Dimensions(1, 40, 1, 7));
+            testDimensions(input, new Dimensions(10, 30, 1, 5));
+            testDimensions(input, new Dimensions(1, 3, 1, 15));
+            testDimensions(input, new Dimensions(5, 30, 7, 7));
+            testDimensions(input, new Dimensions(12, 12, 1, 17));
+            testDimensions(input, new Dimensions(1, 30, 7, 8));
+        }
+
+        public static void testDimensions(String input, Dimensions dimensions)
+        {
+            var sourceCodeWords = 20;
+            var errorCorrectionCodeWords = 8;
+
+            //var calculated = PDF417.determineDimensions(dimensions.MinCols, dimensions.MaxCols,
+            //      dimensions.MinRows, dimensions.MaxRows, sourceCodeWords, errorCorrectionCodeWords);
+            var aspectRatio = 4;
+            var pdf417 = new PDF417();
+            pdf417.setDimensions(dimensions.MaxCols, dimensions.MinCols, dimensions.MaxRows, dimensions.MinRows);
+            var calculated = pdf417.determineDimensions(sourceCodeWords, errorCorrectionCodeWords, 0, 0, ref aspectRatio);
+
+            Assert.That(calculated, Is.Not.Null);
+            Assert.That(calculated.Length, Is.EqualTo(2));
+            Assert.That(dimensions.MinCols <= calculated[0], Is.True);
+            Assert.That(dimensions.MaxCols >= calculated[0], Is.True);
+            Assert.That(dimensions.MinRows <= calculated[1], Is.True);
+            Assert.That(dimensions.MaxRows >= calculated[1], Is.True);
+            Assert.That(generatePDF417BitMatrix(input, 371, null, dimensions), Is.Not.Null);
+        }
+
+        public static BitMatrix generatePDF417BitMatrix(String barcodeText, int width, int? heightRequested, Dimensions dimensions)
+        {
+            var barcodeWriter = new PDF417Writer();
+            var height = heightRequested == null ? width / 4 : heightRequested.Value;
+            var hints = new System.Collections.Generic.Dictionary<EncodeHintType, object>();
+            hints[EncodeHintType.MARGIN] = 0;
+            hints[EncodeHintType.PDF417_DIMENSIONS] = dimensions;
+            return barcodeWriter.encode(barcodeText, BarcodeFormat.PDF_417, width, height, hints);
         }
     }
 }

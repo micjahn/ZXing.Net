@@ -970,7 +970,7 @@ namespace ZXing.PDF417.Internal
         /// <param name="shortDimension">The short dimension of the barcode, used for rows</param>
         /// <param name="aspectRatio">The height of a row, will alter this parameter if aspectRatio>4 (aspectRatio==AUTO)</param>
         /// <returns>dimension object containing cols as width and rows as height</returns>
-        private int[] determineDimensions(int sourceCodeWords, int errorCorrectionCodeWords, int longDimension, int shortDimension, ref int aspectRatio)
+        internal int[] determineDimensions(int sourceCodeWords, int errorCorrectionCodeWords, int longDimension, int shortDimension, ref int aspectRatio)
         {
             int startWidth = BarcodeMatrix.COLUMN_WIDTH * 2;
             int endWidth = (compact ? 0 : 2) * BarcodeMatrix.COLUMN_WIDTH + 1;
