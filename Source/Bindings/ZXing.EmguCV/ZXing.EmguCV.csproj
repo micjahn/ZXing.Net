@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Emgu.CV" Version="4.9.0.5494" />
+    <PackageReference Include="Emgu.CV" Version="4.10.0.5680" />
     <PackageReference Include="ZXing.Net" Version="0.16.9" />
   </ItemGroup>
   
