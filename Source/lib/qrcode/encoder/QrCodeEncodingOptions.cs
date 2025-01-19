@@ -33,9 +33,11 @@ namespace ZXing.QrCode
         /// Type depends on the encoder. For example for QR codes it's type
         /// <see cref="ErrorCorrectionLevel"/>.
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !PORTABLE && !UNITY
+#if !SILVERLIGHT
         [TypeConverter(typeof(ErrorLevelConverter))]
-        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies what degree of error correction to use.")]
+#endif
+        [Category("Standard"), Description("Specifies what degree of error correction to use.")]
 #endif
         public ErrorCorrectionLevel ErrorCorrection
         {
@@ -64,9 +66,8 @@ namespace ZXing.QrCode
         /// <summary>
         /// Specifies what character encoding to use where applicable (type <see cref="String"/>)
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
-        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies what character encoding to " +
-            "use where applicable.")]
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !PORTABLE && !UNITY
+        [Category("Standard"), Description("Specifies what character encoding to use where applicable.")]
 #endif
         public string CharacterSet
         {
@@ -100,9 +101,8 @@ namespace ZXing.QrCode
         /// If you set the property to true you can use UTF-8 encoding
         /// and the ECI segment is omitted.
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
-        [CategoryAttribute("Standard"), DescriptionAttribute("Explicitly disables ECI segment when generating QR Code." +
-            "That is against the specification but some readers have problems otherwise when switching charset to UTF-8.")]
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !PORTABLE && !UNITY
+        [Category("Standard"), Description("Explicitly disables ECI segment when generating QR Code. That is against the specification but some readers have problems otherwise when switching charset to UTF-8.")]
 #endif
         public bool DisableECI
         {
@@ -124,10 +124,8 @@ namespace ZXing.QrCode
         /// Specifies the exact version of QR code to be encoded. An integer, range 1 to 40. If the data specified
         /// cannot fit within the required version, a WriterException will be thrown.
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
-        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies the exact version of QR code to be encoded. " +
-            "An integer, range 1 to 40. If the data specified cannot fit within the required version, " +
-            "a WriterException will be thrown.")]
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !PORTABLE && !UNITY
+        [Category("Standard"), Description("Specifies the exact version of QR code to be encoded. An integer, range 1 to 40. If the data specified cannot fit within the required version, a WriterException will be thrown.")]
 #endif
         public int? QrVersion
         {
@@ -160,9 +158,8 @@ namespace ZXing.QrCode
         /// some scanners do not support encodings like cp-1256 (Arabic). In such cases the encoding can
         /// be forced to UTF-8 by means of the <see cref="CharacterSet"/> encoding hint.
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !SILVERLIGHT && !PORTABLE && !UNITY
-        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies whether to use compact mode for QR code" +
-            "When compaction is performed the value for CharacterSet is ignored.")]
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !PORTABLE && !UNITY
+        [Category("Standard"), Description("Specifies whether to use compact mode for QR code. When compaction is performed the value for CharacterSet is ignored.")]
 #endif
         public bool QrCompact
         {
@@ -185,9 +182,8 @@ namespace ZXing.QrCode
         /// 0..QRCode.NUM_MASK_PATTERNS-1. By default the code will automatically select
         /// the optimal mask pattern.
         /// </summary>
-#if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY
-        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies the QR code mask pattern to be used. Allowed " +
-            "values are 0..QRCode.NUM_MASK_PATTERNS-1.")]
+#if !NETSTANDARD && !NETFX_CORE && !WindowsCE && !PORTABLE && !UNITY
+        [Category("Standard"), Description("Specifies the QR code mask pattern to be used. Allowed values are 0..7.")]
 #endif
         public int? QrMaskPattern
         {
