@@ -10,6 +10,9 @@
 %CURRENT_DIR%\Source\Bindings\ZXing.Eto.Forms\bin\Release\netstandard2.0\ZXing.Eto.Forms.dll %BINARY_DIR%\Bindings\ZXing.Eto.Forms\netstandard2.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.Eto.Forms\bin\Release\netstandard2.0\ZXing.Eto.Forms.pdb %BINARY_DIR%\Bindings\ZXing.Eto.Forms\netstandard2.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.Eto.Forms\bin\Release\netstandard2.0\ZXing.Eto.Forms.xml %BINARY_DIR%\Bindings\ZXing.Eto.Forms\netstandard2.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.Eto.Forms\bin\Release\net6.0\ZXing.Eto.Forms.dll %BINARY_DIR%\Bindings\ZXing.Eto.Forms\net6.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.Eto.Forms\bin\Release\net6.0\ZXing.Eto.Forms.pdb %BINARY_DIR%\Bindings\ZXing.Eto.Forms\net6.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.Eto.Forms\bin\Release\net6.0\ZXing.Eto.Forms.xml %BINARY_DIR%\Bindings\ZXing.Eto.Forms\net6.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\net472\zxing.imagesharp.dll %BINARY_DIR%\Bindings\ImageSharp\net472\
 %CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\net472\zxing.imagesharp.pdb %BINARY_DIR%\Bindings\ImageSharp\net472\
 %CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\net472\zxing.imagesharp.xml %BINARY_DIR%\Bindings\ImageSharp\net472\

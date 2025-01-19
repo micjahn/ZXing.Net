@@ -3,6 +3,7 @@
 %CURRENT_DIR%\Source\Bindings\ZXing.CoreCompat.System.Drawing.V2\bin\Release\netstandard2.0\zxing.corecompat.system.drawing.V2.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.EmguCV\bin\Release\netstandard2.0\ZXing.EmguCV.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.Eto.Forms\bin\Release\netstandard2.0\ZXing.Eto.Forms.dll
+%CURRENT_DIR%\Source\Bindings\ZXing.Eto.Forms\bin\Release\net6.0\ZXing.Eto.Forms.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\net472\zxing.imagesharp.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netcoreapp2.1\zxing.imagesharp.dll
 %CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp\bin\Release\netcoreapp3.1\zxing.imagesharp.dll
