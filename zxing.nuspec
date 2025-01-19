@@ -15,7 +15,7 @@
       ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.
       It has been ported by hand with a lot of optimizations and improvements.
 
-      It is compatible with .Net 2.0, .Net 3.5, .Net 4.x, .Net 5.x, .Net 6.x, .Net 7.x, Windows RT Class Library and Components, UWP, .Net Standard 1.x and 2.0x, .Net Core App 3.x, Silverlight 4 (only up to 0.16.x), Silverlight 5 (only up to 0.16.x), Windows Phone 7.x (only up to 0.16.x) and Windows Phone 8.x (only up to 0.16.x) and Xamarin.Android</description>
+      It is compatible with .Net 2.0/3.5/4.x/5.x/6.x/7.x/8.x, Windows RT Class Library and Components, UWP, .Net Standard 1.x and 2.0x, .Net Core App 3.x, Silverlight 4, Silverlight 5, Windows Phone 7.x and Windows Phone 8.x and Xamarin.Android</description>
     <summary>ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.</summary>
     <releaseNotes>* changes of the java version are reflected until 2023/02/21
 * many small bug fixes and improvements</releaseNotes>
