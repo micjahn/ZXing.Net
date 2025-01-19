@@ -148,12 +148,11 @@ namespace ZXing.Common.Test
          }
       }
 
-
       [Test]
       public void testSetBulk()
       {
          BitArray array = new BitArray(64);
-         array.setBulk(32, -65536);
+         array.setBulk(1, -65536);
          for (int i = 0; i < 48; i++)
          {
             Assert.IsFalse(array[i]);
