@@ -21,8 +21,8 @@ using UnityEngine;
 using Color = UnityEngine.Color32;
 #elif MONOANDROID
 using Android.Graphics;
-#elif (PORTABLE || NETSTANDARD)
-#elif (NET48 || NET47 || NET46 || NET45 || NET40 || NET35 || NET20)
+#elif (PORTABLE || NETSTANDARD) && !NETSTANDARD2_0_OR_GREATER
+#elif (NET48 || NET47 || NET46 || NET45 || NET40 || NET35 || NET20 || NETSTANDARD2_0_OR_GREATER || WindowsCE)
 using System.Drawing;
 #elif NETFX_CORE
 using Windows.UI;
@@ -44,7 +44,7 @@ namespace ZXing.Rendering
     /// </summary>
     public sealed class PixelDataRenderer : IBarcodeRenderer<PixelData>
     {
-#if (PORTABLE || NETSTANDARD)
+#if (PORTABLE || NETSTANDARD) && !NETSTANDARD2_0_OR_GREATER
         /// <summary>
         /// represents a color defined as ARGB byte data
         /// </summary>

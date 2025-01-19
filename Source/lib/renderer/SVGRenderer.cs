@@ -23,7 +23,7 @@ using System.IO;
 using Windows.UI;
 #elif UNITY
 using UnityEngine;
-#elif !(PORTABLE || NETSTANDARD)
+#elif !(PORTABLE || NETSTANDARD) || NETSTANDARD2_0_OR_GREATER
 using System.Drawing;
 #endif
 
@@ -47,7 +47,7 @@ namespace ZXing.Rendering
         public const int DefaultFontSize = 10;
 
 #if !UNITY
-#if (PORTABLE || NETSTANDARD)
+#if (PORTABLE || NETSTANDARD) && !NETSTANDARD2_0_OR_GREATER
         /// <summary>
         /// represents a color value
         /// </summary>
