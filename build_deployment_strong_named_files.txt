@@ -30,3 +30,5 @@
 %CURRENT_DIR%\Source\lib\netstandard\bin\Release\net5.0\zxing.dll
 %CURRENT_DIR%\Source\lib\netstandard\bin\Release\net6.0\zxing.dll
 %CURRENT_DIR%\Source\lib\netstandard\bin\Release\net7.0\zxing.dll
+%CURRENT_DIR%\Source\lib\netstandard\bin\Release\net8.0\zxing.dll
+%CURRENT_DIR%\Source\lib\netstandard\bin\Release\net9.0\zxing.dll

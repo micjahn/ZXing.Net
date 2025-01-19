@@ -28,3 +28,9 @@
 %CURRENT_DIR%\Source\lib\netstandard\bin\Release\net7.0\zxing.dll %BINARY_DIR%\net7.0\
 %CURRENT_DIR%\Source\lib\netstandard\bin\Release\net7.0\zxing.pdb %BINARY_DIR%\net7.0\
 %CURRENT_DIR%\Source\lib\netstandard\bin\Release\net7.0\zxing.xml %BINARY_DIR%\net7.0\
+%CURRENT_DIR%\Source\lib\netstandard\bin\Release\net8.0\zxing.dll %BINARY_DIR%\net8.0\
+%CURRENT_DIR%\Source\lib\netstandard\bin\Release\net8.0\zxing.pdb %BINARY_DIR%\net8.0\
+%CURRENT_DIR%\Source\lib\netstandard\bin\Release\net8.0\zxing.xml %BINARY_DIR%\net8.0\
+%CURRENT_DIR%\Source\lib\netstandard\bin\Release\net9.0\zxing.dll %BINARY_DIR%\net9.0\
+%CURRENT_DIR%\Source\lib\netstandard\bin\Release\net9.0\zxing.pdb %BINARY_DIR%\net9.0\
+%CURRENT_DIR%\Source\lib\netstandard\bin\Release\net9.0\zxing.xml %BINARY_DIR%\net9.0\
