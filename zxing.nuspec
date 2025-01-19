@@ -15,7 +15,7 @@
       ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.
       It has been ported by hand with a lot of optimizations and improvements.
 
-      It is compatible with .Net 2.0/3.5/4.x/5.x/6.x/7.x/8.x, Windows RT Class Library and Components, UWP, .Net Standard 1.x and 2.0x, .Net Core App 3.x, Silverlight 4, Silverlight 5, Windows Phone 7.x and Windows Phone 8.x and Xamarin.Android</description>
+      It is compatible with .Net 2.0/3.5/4.x/5.x/6.x/7.x/8.x/9.x, Windows RT Class Library and Components, UWP, .Net Standard 1.x and 2.0x, .Net Core App 3.x, Silverlight 4, Silverlight 5, Windows Phone 7.x and Windows Phone 8.x and Xamarin.Android</description>
     <summary>ZXing.Net is a port of ZXing, an open-source, multi-format 1D/2D barcode image processing library originally implemented in Java.</summary>
     <releaseNotes>* changes of the java version are reflected until 2023/02/21
 * many small bug fixes and improvements</releaseNotes>
@@ -31,6 +31,8 @@
       <group targetFramework="net50" />
       <group targetFramework="net60" />
       <group targetFramework="net70" />
+      <group targetFramework="net80" />
+      <group targetFramework="net90" />
       <group targetFramework="windows8-managed" />
       <group targetFramework="windows8" />
       <group targetFramework="native" />
@@ -102,6 +104,12 @@
     <file src="Build\Release\net7.0\zxing.dll" target="lib\net7.0\zxing.dll" />
     <file src="Build\Release\net7.0\zxing.pdb" target="lib\net7.0\zxing.pdb" />
     <file src="Build\Release\net7.0\zxing.XML" target="lib\net7.0\zxing.XML" />
+    <file src="Build\Release\net8.0\zxing.dll" target="lib\net8.0\zxing.dll" />
+    <file src="Build\Release\net8.0\zxing.pdb" target="lib\net8.0\zxing.pdb" />
+    <file src="Build\Release\net8.0\zxing.XML" target="lib\net8.0\zxing.XML" />
+    <file src="Build\Release\net9.0\zxing.dll" target="lib\net9.0\zxing.dll" />
+    <file src="Build\Release\net9.0\zxing.pdb" target="lib\net9.0\zxing.pdb" />
+    <file src="Build\Release\net9.0\zxing.XML" target="lib\net9.0\zxing.XML" />
     <file src="Build\Release\winrt\zxing.winrt.dll" target="lib\windows8-managed\zxing.winrt.dll" />
     <file src="Build\Release\winrt\zxing.winrt.pdb" target="lib\windows8-managed\zxing.winrt.pdb" />
     <file src="Build\Release\winrt\zxing.winrt.XML" target="lib\windows8-managed\zxing.winrt.XML" />
