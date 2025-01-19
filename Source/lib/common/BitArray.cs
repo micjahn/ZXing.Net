@@ -189,17 +189,12 @@ namespace ZXing.Common
             return result > size ? size : result;
         }
 
-        /// <summary> Sets a block of 32 bits, starting at bit i.
-        /// 
-        /// </summary>
-        /// <param name="i">first bit to set
-        /// </param>
-        /// <param name="newBits">the new value of the next 32 bits. Note again that the least-significant bit
-        /// corresponds to bit i, the next-least-significant to i+1, and so on.
-        /// </param>
-        public void setBulk(int i, int newBits)
+        /// <summary> Sets a block of 32 bits, starting at bit i.</summary>
+        /// <param name="blockIndex">index position of the new 32 bit block</param>
+        /// <param name="newBits">the new value of the next 32 bits.</param>
+        public void setBulk(int blockIndex, int newBits)
         {
-            bits[i >> 5] = newBits;
+            bits[blockIndex] = newBits;
         }
 
         /// <summary>
