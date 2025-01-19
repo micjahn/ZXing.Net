@@ -79,7 +79,7 @@ namespace ZXing.Common
 
         static StringUtils()
         {
-#if (NETFX_CORE || PORTABLE || NETSTANDARD)
+#if (NETFX_CORE || PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_3)
             PLATFORM_DEFAULT_ENCODING = UTF8;
             PLATFORM_DEFAULT_ENCODING_T = Encoding.UTF8;
 #else
