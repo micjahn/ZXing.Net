@@ -20,7 +20,7 @@
     <dependencies>
       <group targetFramework="netstandard2.0">
         <dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-        <dependency id="Emgu.CV" version="4.9.0.5494" exclude="Build,Analyzers" />
+        <dependency id="Emgu.CV" version="4.10.0.5680" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
