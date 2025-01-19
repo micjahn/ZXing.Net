@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-using ZXing.Common;
-using ZXing.Rendering;
-
-using ImageMagick;
-
 namespace ZXing.Magick.Rendering
 {
+    using ZXing.Common;
+    using ZXing.Rendering;
+
+    using ImageMagick;
+    using ImageMagick.Factories;
+
     /// <summary>
     /// renderer class which generates a <see cref="IMagickImage{TQuantumType}"/> from a BitMatrix
     /// </summary>

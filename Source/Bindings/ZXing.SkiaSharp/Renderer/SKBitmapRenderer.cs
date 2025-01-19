@@ -15,7 +15,7 @@
  */
 
 using System;
-
+using System.Net.NetworkInformation;
 using SkiaSharp;
 
 using ZXing.Common;
@@ -202,11 +202,12 @@ namespace ZXing.SkiaSharp.Rendering
                 //using (var surface = SKSurface.Create(width, height, SKImageInfo.PlatformColorType, SKAlphaType.Premul))
                 using (SKCanvas myCanvas = new SKCanvas(bitmap))
                 using (var paint = new SKPaint())
+                using (var fontForPaint = new SKFont())
                 {
                     paint.IsAntialias = true;
                     paint.Color = Foreground;
-                    paint.Typeface = font;
-                    paint.TextSize = TextSize < 1 ? 10 : TextSize;
+                    fontForPaint.Typeface = font;
+                    fontForPaint.Size = TextSize < 1 ? 10 : TextSize;
 
                     // output content text below the barcode
                     if (emptyArea > 0)
@@ -239,11 +240,15 @@ namespace ZXing.SkiaSharp.Rendering
                                     content = content.Insert(1, "   ");
                                 break;
                         }
+#if SKIASHARP_V2
                         var textWidth = paint.MeasureText(content);
+#else
+                        var textWidth = fontForPaint.MeasureText(content, paint);
+#endif
                         var x = (pixelsizeWidth * matrix.Width - textWidth) / 2;
                         var y = height - 1;
                         x = x < 0 ? 0 : x;
-                        myCanvas.DrawText(content, x, y, paint);
+                        myCanvas.DrawText(content, x, y, fontForPaint, paint);
                     }
                     myCanvas.Flush();
                 }

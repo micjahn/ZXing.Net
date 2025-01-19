@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
 	<metadata>
-		<version>0.16.14</version>
+		<version>0.16.20</version>
 		<authors>Michael Jahn</authors>
 		<owners>Michael Jahn</owners>
 		<license type="expression">Apache-2.0</license>
@@ -20,31 +20,25 @@
 		<dependencies>
 			<group targetFramework="net462">
 				<dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-				<dependency id="SkiaSharp" version="2.88.7" exclude="Build,Analyzers" />
-			</group>
-			<group targetFramework="netstandard1.3">
-				<dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-				<dependency id="SkiaSharp" version="2.88.7" exclude="Build,Analyzers" />
-				<dependency id="NETStandard.Library" version="1.6.0" exclude="Build,Analyzers" />
+				<dependency id="SkiaSharp" version="3.116.1" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="netstandard2.0">
 				<dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-				<dependency id="SkiaSharp" version="2.88.7" exclude="Build,Analyzers" />
+				<dependency id="SkiaSharp" version="3.116.1" exclude="Build,Analyzers" />
 				<dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="netstandard2.1">
 				<dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
-				<dependency id="SkiaSharp" version="2.88.7" exclude="Build,Analyzers" />
-				<dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
-			</group>
-			<group targetFramework="netcoreapp3.1">
-				<dependency id="ZXing.Net" version="0.16.9" exclude="Build,Analyzers" />
-				<dependency id="SkiaSharp" version="2.88.7" exclude="Build,Analyzers" />
+				<dependency id="SkiaSharp" version="3.116.1" exclude="Build,Analyzers" />
 				<dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="net6.0">
 				<dependency id="ZXing.Net" version="0.16.9" exclude="Build,Analyzers" />
-				<dependency id="SkiaSharp" version="2.88.7" exclude="Build,Analyzers" />
+				<dependency id="SkiaSharp" version="3.116.1" exclude="Build,Analyzers" />
+			</group>
+			<group targetFramework="net8.0">
+				<dependency id="ZXing.Net" version="0.16.9" exclude="Build,Analyzers" />
+				<dependency id="SkiaSharp" version="3.116.1" exclude="Build,Analyzers" />
 			</group>
 		</dependencies>
 	</metadata>
@@ -54,20 +48,17 @@
 		<file src="bin\Release\net462\ZXing.SkiaSharp.dll" target="lib\net462\ZXing.SkiaSharp.dll" />
 		<file src="bin\Release\net462\ZXing.SkiaSharp.pdb" target="lib\net462\ZXing.SkiaSharp.pdb" />
 		<file src="bin\Release\net462\ZXing.SkiaSharp.xml" target="lib\net462\ZXing.SkiaSharp.xml" />
-		<file src="bin\Release\netstandard1.3\ZXing.SkiaSharp.dll" target="lib\netstandard1.3\ZXing.SkiaSharp.dll" />
-		<file src="bin\Release\netstandard1.3\ZXing.SkiaSharp.pdb" target="lib\netstandard1.3\ZXing.SkiaSharp.pdb" />
-		<file src="bin\Release\netstandard1.3\ZXing.SkiaSharp.xml" target="lib\netstandard1.3\ZXing.SkiaSharp.xml" />
 		<file src="bin\Release\netstandard2.0\ZXing.SkiaSharp.dll" target="lib\netstandard2.0\ZXing.SkiaSharp.dll" />
 		<file src="bin\Release\netstandard2.0\ZXing.SkiaSharp.pdb" target="lib\netstandard2.0\ZXing.SkiaSharp.pdb" />
 		<file src="bin\Release\netstandard2.0\ZXing.SkiaSharp.xml" target="lib\netstandard2.0\ZXing.SkiaSharp.xml" />
 		<file src="bin\Release\netstandard2.1\ZXing.SkiaSharp.dll" target="lib\netstandard2.1\ZXing.SkiaSharp.dll" />
 		<file src="bin\Release\netstandard2.1\ZXing.SkiaSharp.pdb" target="lib\netstandard2.1\ZXing.SkiaSharp.pdb" />
 		<file src="bin\Release\netstandard2.1\ZXing.SkiaSharp.xml" target="lib\netstandard2.1\ZXing.SkiaSharp.xml" />
-		<file src="bin\Release\netcoreapp3.1\ZXing.SkiaSharp.dll" target="lib\netcoreapp3.1\ZXing.SkiaSharp.dll" />
-		<file src="bin\Release\netcoreapp3.1\ZXing.SkiaSharp.pdb" target="lib\netcoreapp3.1\ZXing.SkiaSharp.pdb" />
-		<file src="bin\Release\netcoreapp3.1\ZXing.SkiaSharp.xml" target="lib\netcoreapp3.1\ZXing.SkiaSharp.xml" />
 		<file src="bin\Release\net6.0\ZXing.SkiaSharp.dll" target="lib\net6.0\ZXing.SkiaSharp.dll" />
 		<file src="bin\Release\net6.0\ZXing.SkiaSharp.pdb" target="lib\net6.0\ZXing.SkiaSharp.pdb" />
 		<file src="bin\Release\net6.0\ZXing.SkiaSharp.xml" target="lib\net6.0\ZXing.SkiaSharp.xml" />
+		<file src="bin\Release\net8.0\ZXing.SkiaSharp.dll" target="lib\net8.0\ZXing.SkiaSharp.dll" />
+		<file src="bin\Release\net8.0\ZXing.SkiaSharp.pdb" target="lib\net8.0\ZXing.SkiaSharp.pdb" />
+		<file src="bin\Release\net8.0\ZXing.SkiaSharp.xml" target="lib\net8.0\ZXing.SkiaSharp.xml" />
 	</files>
 </package>

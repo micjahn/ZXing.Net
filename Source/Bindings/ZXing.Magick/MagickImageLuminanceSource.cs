@@ -30,7 +30,7 @@ namespace ZXing.Magick
         /// </summary>
         /// <param name="image"></param>
         public MagickImageLuminanceSource(IMagickImage image)
-           : base(CalculateLuminance(image), image.Width, image.Height)
+           : base(CalculateLuminance(image), (int)image.Width, (int)image.Height)
         {
         }
 

@@ -52,6 +52,8 @@ namespace ZXing.Common
         /// </summary>
         public static readonly Encoding ISO88591_ENCODING;
         private static readonly bool ASSUME_SHIFT_JIS;
+        public static readonly bool JIS_IS_SUPPORTED;
+        public static readonly bool EUC_JP_IS_SUPPORTED;
 
         // Retained for ABI compatibility with earlier versions
         /// <summary>
@@ -84,13 +86,23 @@ namespace ZXing.Common
             PLATFORM_DEFAULT_ENCODING = Encoding.Default.WebName.ToUpper();
             PLATFORM_DEFAULT_ENCODING_T = Encoding.Default;
 #endif
-            SHIFT_JIS_ENCODING = CharacterSetECI.getEncoding(SHIFT_JIS) ?? PLATFORM_DEFAULT_ENCODING_T;
+            SHIFT_JIS_ENCODING = CharacterSetECI.getEncoding(SHIFT_JIS);
             GB2312_ENCODING = CharacterSetECI.getEncoding(GB2312) ?? PLATFORM_DEFAULT_ENCODING_T;
             EUC_JP_ENCODING = CharacterSetECI.getEncoding(EUC_JP) ?? PLATFORM_DEFAULT_ENCODING_T;
             ISO88591_ENCODING = CharacterSetECI.getEncoding(ISO88591) ?? PLATFORM_DEFAULT_ENCODING_T;
-            ASSUME_SHIFT_JIS =
-                (PLATFORM_DEFAULT_ENCODING_T.WebName.Equals(SHIFT_JIS_ENCODING.WebName) && !Encoding.UTF8.WebName.Equals(SHIFT_JIS_ENCODING.WebName)) ||
-                (PLATFORM_DEFAULT_ENCODING_T.WebName.Equals(EUC_JP_ENCODING.WebName) && !Encoding.UTF8.WebName.Equals(EUC_JP_ENCODING.WebName));
+            JIS_IS_SUPPORTED = true;
+            if (SHIFT_JIS_ENCODING == null)
+            {
+                SHIFT_JIS_ENCODING = PLATFORM_DEFAULT_ENCODING_T;
+                JIS_IS_SUPPORTED = false;
+            }
+            EUC_JP_IS_SUPPORTED = true;
+            if (EUC_JP_ENCODING == null)
+            {
+                EUC_JP_ENCODING = PLATFORM_DEFAULT_ENCODING_T;
+                EUC_JP_IS_SUPPORTED = false;
+            }
+            ASSUME_SHIFT_JIS = JIS_IS_SUPPORTED || EUC_JP_IS_SUPPORTED;
         }
 
         /// <summary>
@@ -144,7 +156,7 @@ namespace ZXing.Common
             // which should be by far the most common encodings.
             int length = bytes.Length;
             bool canBeISO88591 = true;
-            bool canBeShiftJIS = true;
+            bool canBeShiftJIS = JIS_IS_SUPPORTED;
             bool canBeUTF8 = true;
             int utf8BytesLeft = 0;
             int utf2BytesChars = 0;

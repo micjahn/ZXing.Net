@@ -27,7 +27,9 @@ namespace ZXing.Client.Result
     /// <author>Sean Owen</author>
     internal sealed class EmailDoCoMoResultParser : AbstractDoCoMoResultParser
     {
-        private static readonly Regex ATEXT_ALPHANUMERIC = new Regex(@"\A(?:" + "[a-zA-Z0-9@.!#$%&'*+\\-/=?^_`{|}~]+" + @")\z"
+        private static readonly String EMAIL_LOCAL = "[^:]+";
+        private static readonly String EMAIL_DOMAIN = "([0-9a-zA-Z]+[0-9a-zA-Z\\-]+[0-9a-zA-Z]+\\.)+[a-zA-Z]{2,}";
+        private static readonly Regex EMAIL = new Regex("^" + EMAIL_LOCAL + "@" + EMAIL_DOMAIN + "$"
 #if !(SILVERLIGHT4 || SILVERLIGHT5 || NETFX_CORE || PORTABLE || UNITY || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2)
                                                                    , RegexOptions.Compiled);
 #else
@@ -72,7 +74,7 @@ namespace ZXing.Client.Result
         /// </returns>
         internal static bool isBasicallyValidEmailAddress(String email)
         {
-            return email != null && ATEXT_ALPHANUMERIC.Match(email).Success && email.IndexOf('@') >= 0;
+            return email != null && EMAIL.Match(email).Success;
         }
     }
 }
