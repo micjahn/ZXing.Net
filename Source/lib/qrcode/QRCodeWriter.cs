@@ -138,7 +138,7 @@ namespace ZXing.QrCode
         /// same to be compliant with the provided dimensions.
         ///
         /// <p>If no scaling is required, both {@code width} and {@code height}
-        /// arguments should be non-positive numbers.
+        /// arguments should be non-positive numbers.</p>
         /// </summary>
         /// <param name="code">{@code QRCode} to be adapted as a {@code BitMatrix}</param>
         /// <param name="width">desired width for the {@code QRCode} (in pixel units)</param>
