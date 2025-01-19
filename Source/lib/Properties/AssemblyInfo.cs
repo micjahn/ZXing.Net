@@ -37,6 +37,12 @@ using System.Runtime.InteropServices;
 #if NET6_0
 [assembly: AssemblyTitle("zxing.net for .net 6.0")]
 #endif
+#if NET7_0
+[assembly: AssemblyTitle("zxing.net for .net 7.0")]
+#endif
+#if NET8_0
+[assembly: AssemblyTitle("zxing.net for .net 8.0")]
+#endif
 #if MONOANDROID
 [assembly: AssemblyTitle("zxing.net for mono android")]
 #endif
@@ -46,7 +52,7 @@ using System.Runtime.InteropServices;
 #if WINDOWS_UWP
 [assembly: AssemblyTitle("zxing.net for windows uwp")]
 #endif
-#if NETSTANDARD && !NET5_0 && !NET6_0
+#if NETSTANDARD && !NET5_0 && !NET6_0 && !NET7_0 && !NET8_0
 [assembly: AssemblyTitle("zxing.net for .net core standard")]
 #endif
 #if NETFX_CORE && !WINDOWS_UWP
