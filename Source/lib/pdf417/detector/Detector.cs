@@ -274,6 +274,7 @@ namespace ZXing.PDF417.Internal
         /// <param name="width">Width.</param>
         /// <param name="startRow">Start row.</param>
         /// <param name="startColumn">Start column.</param>
+        /// <param name="minHeight"></param>
         /// <param name="pattern">Pattern.</param>
         private static ResultPoint[] findRowsWithPattern(
            BitMatrix matrix,
