@@ -235,17 +235,21 @@ namespace ZXing.QrCode.Test
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void renderResultThrowsExIfCcodeIsNull()
         {
-            QRCodeWriter.renderResult(null, 0, 0, 0, false);
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                QRCodeWriter.renderResult(null, 0, 0, 0, false);
+            });
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void renderResultThrowsExIfCodeIsIncomplete()
         {
-            QRCodeWriter.renderResult(new QRCode(), 0, 0, 0, false);
+            Assert.Throws<InvalidOperationException>(() =>
+            {
+                QRCodeWriter.renderResult(new QRCode(), 0, 0, 0, false);
+            });
         }
     }
 }
