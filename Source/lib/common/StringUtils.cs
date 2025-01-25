@@ -108,7 +108,8 @@ namespace ZXing.Common
                 EUC_JP_ENCODING = PLATFORM_DEFAULT_ENCODING_T;
                 EUC_JP_IS_SUPPORTED = false;
             }
-            ASSUME_SHIFT_JIS = JIS_IS_SUPPORTED || EUC_JP_IS_SUPPORTED;
+            ASSUME_SHIFT_JIS = (JIS_IS_SUPPORTED && PLATFORM_DEFAULT_ENCODING_T.WebName.Equals(SHIFT_JIS_ENCODING.WebName))
+                || (EUC_JP_IS_SUPPORTED && PLATFORM_DEFAULT_ENCODING_T.WebName.Equals(EUC_JP_ENCODING.WebName));
         }
 
         /// <summary>
