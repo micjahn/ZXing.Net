@@ -48,6 +48,7 @@ namespace ZXing.QrCode.Internal
         private readonly List<FinderPattern> possibleCenters;
         private bool hasSkipped;
         private readonly int[] crossCheckStateCount;
+        private readonly int[] stateCount = new int[5];
         private readonly ResultPointCallback resultPointCallback;
 
         /// <summary>
@@ -107,15 +108,16 @@ namespace ZXing.QrCode.Internal
             }
 
             bool done = false;
-            int[] stateCount = new int[5];
+            BitArray row = null;
             for (int i = iSkip - 1; i < maxI && !done; i += iSkip)
             {
                 // Get a row of black/white values
                 doClearCounts(stateCount);
                 int currentState = 0;
+                row = image.getRow(i, row);
                 for (int j = 0; j < maxJ; j++)
                 {
-                    if (image[j, i])
+                    if (row[j])
                     {
                         // Black pixel
                         if ((currentState & 1) == 1)
@@ -292,42 +294,17 @@ namespace ZXing.QrCode.Internal
                 Math.Abs(moduleSize - stateCount[4]) < maxVariance;
         }
 
-        private int[] CrossCheckStateCount
-        {
-            get
-            {
-                doClearCounts(crossCheckStateCount);
-                return crossCheckStateCount;
-            }
-        }
-
         /// <summary>
         /// sets everything to 0
         /// </summary>
         /// <param name="counts"></param>
-        [Obsolete]
-        protected void clearCounts(int[] counts)
+        protected static void doClearCounts(int[] stateCount)
         {
-            doClearCounts(counts);
-        }
-
-        /// <summary>
-        /// shifts left by 2 index
-        /// </summary>
-        /// <param name="stateCount"></param>
-        [Obsolete]
-        protected void shiftCounts2(int[] stateCount)
-        {
-            doShiftCounts2(stateCount);
-        }
-
-        /// <summary>
-        /// sets everything to 0
-        /// </summary>
-        /// <param name="counts"></param>
-        protected static void doClearCounts(int[] counts)
-        {
-            SupportClass.Fill(counts, 0);
+            stateCount[0] = 0;
+            stateCount[1] = 0;
+            stateCount[2] = 0;
+            stateCount[3] = 0;
+            stateCount[4] = 0;
         }
 
         /// <summary>
@@ -353,16 +330,16 @@ namespace ZXing.QrCode.Internal
         /// <returns>true if proportions are withing expected limits</returns>
         private bool crossCheckDiagonal(int centerI, int centerJ)
         {
-            int[] stateCount = CrossCheckStateCount;
+            doClearCounts(crossCheckStateCount);
 
             // Start counting up, left from center finding black center mass
             int i = 0;
             while (centerI >= i && centerJ >= i && image[centerJ - i, centerI - i])
             {
-                stateCount[2]++;
+                crossCheckStateCount[2]++;
                 i++;
             }
-            if (stateCount[2] == 0)
+            if (crossCheckStateCount[2] == 0)
             {
                 return false;
             }
@@ -370,10 +347,10 @@ namespace ZXing.QrCode.Internal
             // Continue up, left finding white space
             while (centerI >= i && centerJ >= i && !image[centerJ - i, centerI - i])
             {
-                stateCount[1]++;
+                crossCheckStateCount[1]++;
                 i++;
             }
-            if (stateCount[1] == 0)
+            if (crossCheckStateCount[1] == 0)
             {
                 return false;
             }
@@ -381,10 +358,10 @@ namespace ZXing.QrCode.Internal
             // Continue up, left finding black border
             while (centerI >= i && centerJ >= i && image[centerJ - i, centerI - i])
             {
-                stateCount[0]++;
+                crossCheckStateCount[0]++;
                 i++;
             }
-            if (stateCount[0] == 0)
+            if (crossCheckStateCount[0] == 0)
             {
                 return false;
             }
@@ -396,31 +373,31 @@ namespace ZXing.QrCode.Internal
             i = 1;
             while (centerI + i < maxI && centerJ + i < maxJ && image[centerJ + i, centerI + i])
             {
-                stateCount[2]++;
+                crossCheckStateCount[2]++;
                 i++;
             }
 
             while (centerI + i < maxI && centerJ + i < maxJ && !image[centerJ + i, centerI + i])
             {
-                stateCount[3]++;
+                crossCheckStateCount[3]++;
                 i++;
             }
-            if (stateCount[3] == 0)
+            if (crossCheckStateCount[3] == 0)
             {
                 return false;
             }
 
             while (centerI + i < maxI && centerJ + i < maxJ && image[centerJ + i, centerI + i])
             {
-                stateCount[4]++;
+                crossCheckStateCount[4]++;
                 i++;
             }
-            if (stateCount[4] == 0)
+            if (crossCheckStateCount[4] == 0)
             {
                 return false;
             }
 
-            return foundPatternDiagonal(stateCount);
+            return foundPatternDiagonal(crossCheckStateCount);
         }
 
         /// <summary>
@@ -439,35 +416,35 @@ namespace ZXing.QrCode.Internal
         private float? crossCheckVertical(int startI, int centerJ, int maxCount, int originalStateCountTotal)
         {
             int maxI = image.Height;
-            int[] stateCount = CrossCheckStateCount;
+            doClearCounts(crossCheckStateCount);
 
             // Start counting up from center
             int i = startI;
             while (i >= 0 && image[centerJ, i])
             {
-                stateCount[2]++;
+                crossCheckStateCount[2]++;
                 i--;
             }
             if (i < 0)
             {
                 return null;
             }
-            while (i >= 0 && !image[centerJ, i] && stateCount[1] <= maxCount)
+            while (i >= 0 && !image[centerJ, i] && crossCheckStateCount[1] <= maxCount)
             {
-                stateCount[1]++;
+                crossCheckStateCount[1]++;
                 i--;
             }
             // If already too many modules in this state or ran off the edge:
-            if (i < 0 || stateCount[1] > maxCount)
+            if (i < 0 || crossCheckStateCount[1] > maxCount)
             {
                 return null;
             }
-            while (i >= 0 && image[centerJ, i] && stateCount[0] <= maxCount)
+            while (i >= 0 && image[centerJ, i] && crossCheckStateCount[0] <= maxCount)
             {
-                stateCount[0]++;
+                crossCheckStateCount[0]++;
                 i--;
             }
-            if (stateCount[0] > maxCount)
+            if (crossCheckStateCount[0] > maxCount)
             {
                 return null;
             }
@@ -476,41 +453,41 @@ namespace ZXing.QrCode.Internal
             i = startI + 1;
             while (i < maxI && image[centerJ, i])
             {
-                stateCount[2]++;
+                crossCheckStateCount[2]++;
                 i++;
             }
             if (i == maxI)
             {
                 return null;
             }
-            while (i < maxI && !image[centerJ, i] && stateCount[3] < maxCount)
+            while (i < maxI && !image[centerJ, i] && crossCheckStateCount[3] < maxCount)
             {
-                stateCount[3]++;
+                crossCheckStateCount[3]++;
                 i++;
             }
-            if (i == maxI || stateCount[3] >= maxCount)
+            if (i == maxI || crossCheckStateCount[3] >= maxCount)
             {
                 return null;
             }
-            while (i < maxI && image[centerJ, i] && stateCount[4] < maxCount)
+            while (i < maxI && image[centerJ, i] && crossCheckStateCount[4] < maxCount)
             {
-                stateCount[4]++;
+                crossCheckStateCount[4]++;
                 i++;
             }
-            if (stateCount[4] >= maxCount)
+            if (crossCheckStateCount[4] >= maxCount)
             {
                 return null;
             }
 
             // If we found a finder-pattern-like section, but its size is more than 40% different than
             // the original, assume it's a false positive
-            int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
+            int stateCountTotal = crossCheckStateCount[0] + crossCheckStateCount[1] + crossCheckStateCount[2] + crossCheckStateCount[3] + crossCheckStateCount[4];
             if (5 * Math.Abs(stateCountTotal - originalStateCountTotal) >= 2 * originalStateCountTotal)
             {
                 return null;
             }
 
-            return foundPatternCross(stateCount) ? centerFromEnd(stateCount, i) : null;
+            return foundPatternCross(crossCheckStateCount) ? centerFromEnd(crossCheckStateCount, i) : null;
         }
 
         /// <summary> <p>Like {@link #crossCheckVertical(int, int, int, int)}, and in fact is basically identical,
@@ -520,33 +497,33 @@ namespace ZXing.QrCode.Internal
         private float? crossCheckHorizontal(int startJ, int centerI, int maxCount, int originalStateCountTotal)
         {
             int maxJ = image.Width;
-            int[] stateCount = CrossCheckStateCount;
+            doClearCounts(crossCheckStateCount);
 
             int j = startJ;
             while (j >= 0 && image[j, centerI])
             {
-                stateCount[2]++;
+                crossCheckStateCount[2]++;
                 j--;
             }
             if (j < 0)
             {
                 return null;
             }
-            while (j >= 0 && !image[j, centerI] && stateCount[1] <= maxCount)
+            while (j >= 0 && !image[j, centerI] && crossCheckStateCount[1] <= maxCount)
             {
-                stateCount[1]++;
+                crossCheckStateCount[1]++;
                 j--;
             }
-            if (j < 0 || stateCount[1] > maxCount)
+            if (j < 0 || crossCheckStateCount[1] > maxCount)
             {
                 return null;
             }
-            while (j >= 0 && image[j, centerI] && stateCount[0] <= maxCount)
+            while (j >= 0 && image[j, centerI] && crossCheckStateCount[0] <= maxCount)
             {
-                stateCount[0]++;
+                crossCheckStateCount[0]++;
                 j--;
             }
-            if (stateCount[0] > maxCount)
+            if (crossCheckStateCount[0] > maxCount)
             {
                 return null;
             }
@@ -554,41 +531,41 @@ namespace ZXing.QrCode.Internal
             j = startJ + 1;
             while (j < maxJ && image[j, centerI])
             {
-                stateCount[2]++;
+                crossCheckStateCount[2]++;
                 j++;
             }
             if (j == maxJ)
             {
                 return null;
             }
-            while (j < maxJ && !image[j, centerI] && stateCount[3] < maxCount)
+            while (j < maxJ && !image[j, centerI] && crossCheckStateCount[3] < maxCount)
             {
-                stateCount[3]++;
+                crossCheckStateCount[3]++;
                 j++;
             }
-            if (j == maxJ || stateCount[3] >= maxCount)
+            if (j == maxJ || crossCheckStateCount[3] >= maxCount)
             {
                 return null;
             }
-            while (j < maxJ && image[j, centerI] && stateCount[4] < maxCount)
+            while (j < maxJ && image[j, centerI] && crossCheckStateCount[4] < maxCount)
             {
-                stateCount[4]++;
+                crossCheckStateCount[4]++;
                 j++;
             }
-            if (stateCount[4] >= maxCount)
+            if (crossCheckStateCount[4] >= maxCount)
             {
                 return null;
             }
 
             // If we found a finder-pattern-like section, but its size is significantly different than
             // the original, assume it's a false positive
-            int stateCountTotal = stateCount[0] + stateCount[1] + stateCount[2] + stateCount[3] + stateCount[4];
+            int stateCountTotal = crossCheckStateCount[0] + crossCheckStateCount[1] + crossCheckStateCount[2] + crossCheckStateCount[3] + crossCheckStateCount[4];
             if (5 * Math.Abs(stateCountTotal - originalStateCountTotal) >= originalStateCountTotal)
             {
                 return null;
             }
 
-            return foundPatternCross(stateCount) ? centerFromEnd(stateCount, j) : null;
+            return foundPatternCross(crossCheckStateCount) ? centerFromEnd(crossCheckStateCount, j) : null;
         }
 
         /// <summary>
