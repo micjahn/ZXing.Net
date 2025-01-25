@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenCvSharp4" Version="4.9.0.20240103" />
+    <PackageReference Include="OpenCvSharp4" Version="4.10.0.20241108" />
     <PackageReference Include="ZXing.Net" Version="0.16.9" />
   </ItemGroup>
 

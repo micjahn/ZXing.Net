@@ -17,6 +17,7 @@
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../../Key/private.snk</AssemblyOriginatorKeyFile>
+    <NoWarn>NU1902;NU1903;NETSDK1215</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

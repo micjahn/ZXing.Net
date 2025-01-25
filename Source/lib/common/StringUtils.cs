@@ -52,7 +52,13 @@ namespace ZXing.Common
         /// </summary>
         public static readonly Encoding ISO88591_ENCODING;
         private static readonly bool ASSUME_SHIFT_JIS;
+        /// <summary>
+        /// JIS_IS is supported or not
+        /// </summary>
         public static readonly bool JIS_IS_SUPPORTED;
+        /// <summary>
+        /// EUC_JP is supported or not
+        /// </summary>
         public static readonly bool EUC_JP_IS_SUPPORTED;
 
         // Retained for ABI compatibility with earlier versions

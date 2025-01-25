@@ -62,6 +62,15 @@ namespace ZXing.Aztec.Internal
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AztecDetectorResult"/> class.
+        /// </summary>
+        /// <param name="bits">The bits.</param>
+        /// <param name="points">The points.</param>
+        /// <param name="compact">if set to <c>true</c> [compact].</param>
+        /// <param name="nbDatablocks">The nb datablocks.</param>
+        /// <param name="nbLayers">The nb layers.</param>
+        /// <param name="errorsCorrected"></param>
         public AztecDetectorResult(BitMatrix bits,
                                    ResultPoint[] points,
                                    bool compact,

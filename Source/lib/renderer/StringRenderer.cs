@@ -30,9 +30,24 @@ namespace ZXing.Rendering
         /// <summary> Background/blank Char. </summary>
         public Char Background { get; set; } = ' ';
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="format"></param>
+        /// <param name="content"></param>
+        /// <returns></returns>
         [System.CLSCompliant(false)]
         public string Render(BitMatrix matrix, BarcodeFormat format, string content) => Render(matrix, format, content, null);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="format"></param>
+        /// <param name="content"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         [System.CLSCompliant(false)]
         public string Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
         {
@@ -54,6 +69,9 @@ namespace ZXing.Rendering
             return new string(matrixTxt);
         }
 
+        /// <summary>
+        /// get or set the string which should be used for line breaks
+        /// </summary>
         public string LineFeed { get; set; } = "\n";
     }
 }
