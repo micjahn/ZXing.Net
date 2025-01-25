@@ -139,7 +139,7 @@ namespace ZXing.QrCode
             // Note that the input matrix uses 0 == white, 1 == black, while the output matrix uses
             // 0 == black, 255 == white (i.e. an 8 bit greyscale bitmap).
             if (code == null)
-                throw new ArgumentNullException(nameof(code));
+                throw new ArgumentNullException("code");
             var input = code.Matrix;
             if (input == null)
                 throw new InvalidOperationException();

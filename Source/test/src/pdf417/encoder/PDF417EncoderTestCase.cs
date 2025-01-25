@@ -19,7 +19,7 @@ using System.Text;
 
 using NUnit.Framework;
 using ZXing.Common;
-using static ZXing.Datamatrix.Encoder.MinimalEncoder;
+using ZXing.Datamatrix.Encoder;
 
 namespace ZXing.PDF417.Internal.Test
 {
@@ -49,7 +49,7 @@ namespace ZXing.PDF417.Internal.Test
             var cp437 = CharacterSetECI.getEncoding("IBM437");
             Assert.That(cp437, Is.Not.Null);
             byte[] cp437Array = { (byte)224, (byte)225, (byte)226, (byte)227, (byte)228 }; //αßΓπΣ
-            var greek = cp437.GetString(cp437Array);
+            var greek = cp437.GetString(cp437Array, 0, cp437Array.Length);
             Assert.That("αßΓπΣ", Is.EqualTo(greek));
             checkEncodeAutoWithSpecialChars(greek, Compaction.AUTO);
             checkEncodeAutoWithSpecialChars(greek, Compaction.BYTE);

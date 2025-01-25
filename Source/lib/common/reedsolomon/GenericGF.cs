@@ -33,27 +33,27 @@ namespace ZXing.Common.ReedSolomon
         /// <summary>
         /// Aztec data 12
         /// </summary>
-        public static GenericGF AZTEC_DATA_12 = new GenericGF(0b1000001101001, 4096, 1); // x^12 + x^6 + x^5 + x^3 + 1
+        public static GenericGF AZTEC_DATA_12 = new GenericGF(0x1069 /* 0b1000001101001 */, 4096, 1); // x^12 + x^6 + x^5 + x^3 + 1
         /// <summary>
         /// Aztec data 10
         /// </summary>
-        public static GenericGF AZTEC_DATA_10 = new GenericGF(0b10000001001, 1024, 1); // x^10 + x^3 + 1
+        public static GenericGF AZTEC_DATA_10 = new GenericGF(0x409 /* 0b10000001001 */, 1024, 1); // x^10 + x^3 + 1
         /// <summary>
         /// Aztec data 6
         /// </summary>
-        public static GenericGF AZTEC_DATA_6 = new GenericGF(0b1000011, 64, 1); // x^6 + x + 1
+        public static GenericGF AZTEC_DATA_6 = new GenericGF(0x43 /* 0b1000011 */, 64, 1); // x^6 + x + 1
         /// <summary>
         /// Aztec param
         /// </summary>
-        public static GenericGF AZTEC_PARAM = new GenericGF(0b10011, 16, 1); // x^4 + x + 1
+        public static GenericGF AZTEC_PARAM = new GenericGF(0x13 /* 0b10011 */, 16, 1); // x^4 + x + 1
         /// <summary>
         /// QR Code
         /// </summary>
-        public static GenericGF QR_CODE_FIELD_256 = new GenericGF(0b100011101, 256, 0); // x^8 + x^4 + x^3 + x^2 + 1
+        public static GenericGF QR_CODE_FIELD_256 = new GenericGF(0x11D /* 0b100011101 */, 256, 0); // x^8 + x^4 + x^3 + x^2 + 1
         /// <summary>
         /// Data Matrix
         /// </summary>
-        public static GenericGF DATA_MATRIX_FIELD_256 = new GenericGF(0b100101101, 256, 1); // x^8 + x^5 + x^3 + x^2 + 1
+        public static GenericGF DATA_MATRIX_FIELD_256 = new GenericGF(0x12D /* 0b100101101 */, 256, 1); // x^8 + x^5 + x^3 + x^2 + 1
         /// <summary>
         /// Aztec data 8
         /// </summary>
