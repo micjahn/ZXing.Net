@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.14</version>
+    <version>0.16.15</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <license type="expression">Apache-2.0</license>
@@ -19,23 +19,23 @@
     <repository type="git" url="https://github.com/micjahn/ZXing.Net/" />
     <dependencies>
       <group targetFramework=".NETFramework4.7.2">
-        <dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
+        <dependency id="ZXing.Net" version="0.16.10.0" exclude="Build,Analyzers" />
         <dependency id="SixLabors.ImageSharp" version="1.0.4" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="netstandard1.3">
-        <dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
+        <dependency id="ZXing.Net" version="0.16.10.0" exclude="Build,Analyzers" />
         <dependency id="SixLabors.ImageSharp" version="1.0.4" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
+        <dependency id="ZXing.Net" version="0.16.10.0" exclude="Build,Analyzers" />
         <dependency id="SixLabors.ImageSharp" version="1.0.4" exclude="Build,Analyzers" />
-        <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
+        <dependency id="NETStandard.Library" version="2.0.3" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="netstandard2.1">
-        <dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
+        <dependency id="ZXing.Net" version="0.16.10.0" exclude="Build,Analyzers" />
         <dependency id="SixLabors.ImageSharp" version="1.0.4" exclude="Build,Analyzers" />
-        <dependency id="NETStandard.Library" version="2.0.0" exclude="Build,Analyzers" />
+        <dependency id="NETStandard.Library" version="2.0.3" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="netcoreapp2.1" />
       <group targetFramework="netcoreapp3.1" />

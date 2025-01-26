@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>0.16.12</VersionPrefix>
+    <VersionPrefix>0.16.13</VersionPrefix>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <PackageId>ZXing.Net.Bindings.Windows.Compatibility</PackageId>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,7 +31,7 @@
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
     <DelaySign>false</DelaySign>
-    <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
+    <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
     <DefineConstants>$(DefineConstants);NETSTANDARD2_0;WPF;WINDOWS_COMPATIBILITY</DefineConstants>
   </PropertyGroup>
 
@@ -76,7 +76,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ZXing.Net" Version="0.16.9" />
+    <PackageReference Include="ZXing.Net" Version="0.16.10" />
   </ItemGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net6.0-windows' OR '$(TargetFramework)' == 'net7.0-windows' OR '$(TargetFramework)' == 'net8.0-windows'">
