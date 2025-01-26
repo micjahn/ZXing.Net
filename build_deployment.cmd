@@ -2,7 +2,7 @@
 
 SETLOCAL EnableDelayedExpansion EnableExtensions
 
-SET VERSION=0.16.9.0
+SET VERSION=0.16.10.0
 
 SET CURRENT_DIR=%CD%
 SET BUILD_DIR=%CD%\Build
@@ -173,32 +173,33 @@ REM
 REM build source archive
 REM ***************************************************************************************
 
-echo Build source code archive...
-echo.
-
-RMDIR /S /Q "%SOURCE_EXPORT_DIR%" >NUL: 2>&1
-
-FOR /F "tokens=1,2 delims= " %%b IN (build_deployment_source_export.txt) DO (
- SET f=%%b
-
- SET d=%%c
- SET d=!d:%%BINARY_DIR%%=%BINARY_DIR%!
- SET d=!d:%%CURRENT_DIR%%=%CURRENT_DIR%!
- 
- ECHO Export !f! to !d! >> %LOGFILE% 2>&1
- 
- MKDIR "%SOURCE_EXPORT_DIR%\!d!" >> %LOGFILE% 2>&1
-  
- echo "%SVN_TOOL%" export --force "!f!" "%SOURCE_EXPORT_DIR%\!d!" >> %LOGFILE% 2>&1
- "%SVN_TOOL%" export --force "!f!" "%SOURCE_EXPORT_DIR%\!d!" >> %LOGFILE% 2>&1
- if ERRORLEVEL 1 GOTO ERROR_OPERATION
-)
-
-CD "%SOURCE_EXPORT_DIR%"
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Base\Source\lib\*.* Base\Source\Bindings\*.* Base\Source\interop\*.* Base\Source\test\src\*.* Base\Clients\*.* Base\3rdparty\*.* Base\Key\*.* Base\zxing.sln Base\zxing.ce.sln Base\zxing.vs2012.sln Base\zxing.vs2015.sln Base\zxing.vs2017.sln Base\zxing.vs2019.sln Base\zxing.vs2022.sln Base\zxing.monoandroid.sln Base\zxing.monotouch.sln Base\zxing.nunit Base\THANKS Base\COPYING WinMD\Source\lib\*.* WinMD\Clients\*.* WinMD\Key\*.* WinMD\zxing.vs2012.sln -xr^^!..svnbridge >> %LOGFILE% 2>&1
-CD "%CURRENT_DIR%"
-
-RMDIR /S /Q "%SOURCE_EXPORT_DIR%" >NUL: 2>&1
+REM github creates a source code archive automatically
+REM echo Build source code archive...
+REM echo.
+REM 
+REM RMDIR /S /Q "%SOURCE_EXPORT_DIR%" >NUL: 2>&1
+REM 
+REM FOR /F "tokens=1,2 delims= " %%b IN (build_deployment_source_export.txt) DO (
+REM  SET f=%%b
+REM 
+REM  SET d=%%c
+REM  SET d=!d:%%BINARY_DIR%%=%BINARY_DIR%!
+REM  SET d=!d:%%CURRENT_DIR%%=%CURRENT_DIR%!
+REM  
+REM  ECHO Export !f! to !d! >> %LOGFILE% 2>&1
+REM  
+REM  MKDIR "%SOURCE_EXPORT_DIR%\!d!" >> %LOGFILE% 2>&1
+REM   
+REM  echo "%SVN_TOOL%" export --force "!f!" "%SOURCE_EXPORT_DIR%\!d!" >> %LOGFILE% 2>&1
+REM  "%SVN_TOOL%" export --force "!f!" "%SOURCE_EXPORT_DIR%\!d!" >> %LOGFILE% 2>&1
+REM  if ERRORLEVEL 1 GOTO ERROR_OPERATION
+REM )
+REM 
+REM CD "%SOURCE_EXPORT_DIR%"
+REM "%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_SOURCE%" Base\Source\lib\*.* Base\Source\Bindings\*.* Base\Source\interop\*.* Base\Source\test\src\*.* Base\Clients\*.* Base\3rdparty\*.* Base\Key\*.* Base\zxing.sln Base\zxing.ce.sln Base\zxing.vs2012.sln Base\zxing.vs2015.sln Base\zxing.vs2017.sln Base\zxing.vs2019.sln Base\zxing.vs2022.sln Base\zxing.monoandroid.sln Base\zxing.monotouch.sln Base\zxing.nunit Base\THANKS Base\COPYING WinMD\Source\lib\*.* WinMD\Clients\*.* WinMD\Key\*.* WinMD\zxing.vs2012.sln -xr^^!..svnbridge >> %LOGFILE% 2>&1
+REM CD "%CURRENT_DIR%"
+REM 
+REM RMDIR /S /Q "%SOURCE_EXPORT_DIR%" >NUL: 2>&1
 
 
 GOTO END

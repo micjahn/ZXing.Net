@@ -297,7 +297,7 @@ namespace ZXing.QrCode.Internal
         /// <summary>
         /// sets everything to 0
         /// </summary>
-        /// <param name="counts"></param>
+        /// <param name="stateCount"></param>
         protected static void doClearCounts(int[] stateCount)
         {
             stateCount[0] = 0;
