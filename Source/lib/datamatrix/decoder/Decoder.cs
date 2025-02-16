@@ -99,6 +99,8 @@ namespace ZXing.Datamatrix.Internal
 
             // Decode the contents of that stream of bytes
             var result = DecodedBitStreamParser.decode(resultBytes);
+            if (result == null)
+                return null;
             result.ErrorsCorrected = errorsCorrected;
             return result;
         }
