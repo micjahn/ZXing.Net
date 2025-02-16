@@ -81,6 +81,11 @@ namespace ZXing.OneD
             {
                 throw new ArgumentException("Can only encode UPC-A, but got " + format);
             }
+            int length = contents.Length;
+            if (length != 11 && length != 12)
+            {
+                throw new ArgumentException("Requested contents should be 11 (without checksum digit) or 12 digits long, but got " + length);
+            }
             // Transform a UPC-A code into the equivalent EAN-13 code and write it that way
             return subWriter.encode('0' + contents, BarcodeFormat.EAN_13, width, height, hints);
         }
