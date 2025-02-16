@@ -63,6 +63,8 @@ Many thanks to the team of the [zxing project](https://github.com/zxing/zxing) f
 The source code repository includes small examples for Windows Forms, Silverlight, Windows Phone and other project types.
 
 #### small example decoding a barcode inside a bitmap (.Net 2.0/3.5/4.x)
+The following example works with the classic .Net framework until version 4.8.1:
+
 ```csharp
 // create a barcode reader instance
 IBarcodeReader reader = new BarcodeReader();
@@ -82,6 +84,28 @@ If you want to try the sample code above within a project which target .Net Stan
 additional nuget package for a specific image library: https://www.nuget.org/packages?q=ZXing.Bindings
 The main package of ZXing.Net for such platforms only contains the core classes which are not dependent on a specific assembly for image formats.
 
+```csharp
+// example shows a simple decoding snippet as a .Net 8.0 console appliation which uses the ZXing.Windows.Compatibility package
+using System.Drawing;
+using ZXing.Windows.Compatibility;
+
+// create a barcode reader instance
+var reader = new BarcodeReader();
+// load a bitmap
+var barcodeBitmap = (Bitmap)Image.FromFile("C:\\sample-barcode-image.png");
+// detect and decode the barcode inside the bitmap
+var result = reader.Decode(barcodeBitmap);
+// do something with the result
+if (result != null)
+{
+    Console.WriteLine(result.BarcodeFormat.ToString());
+    Console.WriteLine(result.Text);
+}
+else
+{
+    Console.WriteLine("No barcode found");
+}
+```
 ## Help wanted
 All help is welcome!
 ## Feedback
