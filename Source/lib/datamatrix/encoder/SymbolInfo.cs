@@ -34,17 +34,35 @@ namespace ZXing.Datamatrix.Encoder
                                                          /*rect*/new SymbolInfo(true, 16, 14, 24, 10, 1),
 
                                                          new SymbolInfo(false, 18, 14, 16, 16, 1),
+                                                         /*rect*/new SymbolInfo(true, 18, 15, 22, 6, 2, true), // DMRE 8x48 (18)
                                                          new SymbolInfo(false, 22, 18, 18, 18, 1),
                                                          /*rect*/new SymbolInfo(true, 22, 18, 16, 10, 2),
+                                                         /*rect*/new SymbolInfo(true, 24, 18, 14, 6, 4, true), // DMRE 8x64 (24)
                                                          new SymbolInfo(false, 30, 20, 20, 20, 1),
                                                          /*rect*/new SymbolInfo(true, 32, 24, 16, 14, 2),
+                                                         /*rect*/new SymbolInfo(true, 32, 22, 18, 6, 4, true), // DMRE 8x80 (32)
                                                          new SymbolInfo(false, 36, 24, 22, 22, 1),
+                                                         /*rect*/new SymbolInfo(true, 38, 28, 22, 6, 4, true), // DMRE 8x96 (38)
+                                                         /*rect*/new SymbolInfo(true, 43, 27, 14, 10, 4, true), // DMRE 12x64 (43)
                                                          new SymbolInfo(false, 44, 28, 24, 24, 1),
+                                                         /*rect*/new SymbolInfo(true, 44, 28, 16, 18, 2, true), // DMRE 20x36 (44)
                                                          /*rect*/new SymbolInfo(true, 49, 28, 22, 14, 2),
+                                                         /*rect*/new SymbolInfo(true, 49, 32, 18, 6, 6, true), // DMRE 8x120 (49)
+                                                         /*rect*/new SymbolInfo(true, 56, 34, 20, 18, 2, true), // DMRE 20x44 (56)
 
                                                          new SymbolInfo(false, 62, 36, 14, 14, 4),
+                                                         /*rect*/new SymbolInfo(true, 62, 36, 14, 14, 4, true), // DMRE 16x64 (62)
+                                                         /*rect*/new SymbolInfo(true, 63, 36, 22, 6, 6, true), // DMRE 8x144 (63)
+                                                         /*rect*/new SymbolInfo(true, 64, 36, 20, 10, 4, true), // DMRE 12x88 (64)
+                                                         /*rect*/new SymbolInfo(true, 70, 38, 18, 24, 2, true), // DMRE 26x40 (70)
+                                                         /*rect*/new SymbolInfo(true, 72, 38, 22, 20, 2, true), // DMRE 22x48 (72)
+                                                         /*rect*/new SymbolInfo(true, 80, 41, 22, 22, 2, true), // DMRE 24x48 (80)
+                                                         /*rect*/new SymbolInfo(true, 84, 42, 14, 18, 4, true), // DMRE 20x64 (84)
                                                          new SymbolInfo(false, 86, 42, 16, 16, 4),
+                                                         /*rect*/new SymbolInfo(true, 90, 42, 22, 24, 2, true), // DMRE 26x48 (90)
+                                                         /*rect*/new SymbolInfo(true, 108, 46, 14, 22, 4, true), // DMRE 24x64 (108)
                                                          new SymbolInfo(false, 114, 48, 18, 18, 4),
+                                                         /*rect*/new SymbolInfo(true, 118, 50, 14, 24, 4, true), // DMRE 26x64 (118)
                                                          new SymbolInfo(false, 144, 56, 20, 20, 4),
                                                          new SymbolInfo(false, 174, 68, 22, 22, 4),
 
@@ -76,6 +94,7 @@ namespace ZXing.Datamatrix.Encoder
         private readonly int dataRegions;
         private readonly int rsBlockData;
         private readonly int rsBlockError;
+        private readonly bool dmre;
 
         /**
          * Overrides the symbol info set used by this class. Used for testing purposes.
@@ -101,10 +120,16 @@ namespace ZXing.Datamatrix.Encoder
                 dataCapacity, errorCodewords)
         {
         }
+        public SymbolInfo(bool rectangular, int dataCapacity, int errorCodewords,
+                          int matrixWidth, int matrixHeight, int dataRegions, bool dmre = false)
+           : this(rectangular, dataCapacity, errorCodewords, matrixWidth, matrixHeight, dataRegions,
+                dataCapacity, errorCodewords, dmre)
+        {
+        }
 
         internal SymbolInfo(bool rectangular, int dataCapacity, int errorCodewords,
                            int matrixWidth, int matrixHeight, int dataRegions,
-                           int rsBlockData, int rsBlockError)
+                           int rsBlockData, int rsBlockError, bool dmre = false)
         {
             this.rectangular = rectangular;
             this.dataCapacity = dataCapacity;
@@ -114,7 +139,9 @@ namespace ZXing.Datamatrix.Encoder
             this.dataRegions = dataRegions;
             this.rsBlockData = rsBlockData;
             this.rsBlockError = rsBlockError;
+            this.dmre = dmre;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -205,6 +232,11 @@ namespace ZXing.Datamatrix.Encoder
 
         private int getHorizontalDataRegions()
         {
+            if (dmre)
+            {
+                return dataRegions;
+            }
+
             switch (dataRegions)
             {
                 case 1:
@@ -223,6 +255,11 @@ namespace ZXing.Datamatrix.Encoder
 
         private int getVerticalDataRegions()
         {
+            if (dmre)
+            {
+                return 1;
+            }
+
             switch (dataRegions)
             {
                 case 1:
