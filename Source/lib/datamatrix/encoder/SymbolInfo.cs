@@ -94,7 +94,7 @@ namespace ZXing.Datamatrix.Encoder
         private readonly int dataRegions;
         private readonly int rsBlockData;
         private readonly int rsBlockError;
-        private readonly bool drme;
+        private readonly bool dmre;
 
         /**
          * Overrides the symbol info set used by this class. Used for testing purposes.
@@ -121,15 +121,15 @@ namespace ZXing.Datamatrix.Encoder
         {
         }
         public SymbolInfo(bool rectangular, int dataCapacity, int errorCodewords,
-                          int matrixWidth, int matrixHeight, int dataRegions, bool drme = false)
+                          int matrixWidth, int matrixHeight, int dataRegions, bool dmre = false)
            : this(rectangular, dataCapacity, errorCodewords, matrixWidth, matrixHeight, dataRegions,
-                dataCapacity, errorCodewords, drme)
+                dataCapacity, errorCodewords, dmre)
         {
         }
 
         internal SymbolInfo(bool rectangular, int dataCapacity, int errorCodewords,
                            int matrixWidth, int matrixHeight, int dataRegions,
-                           int rsBlockData, int rsBlockError, bool drme = false)
+                           int rsBlockData, int rsBlockError, bool dmre = false)
         {
             this.rectangular = rectangular;
             this.dataCapacity = dataCapacity;
@@ -139,7 +139,7 @@ namespace ZXing.Datamatrix.Encoder
             this.dataRegions = dataRegions;
             this.rsBlockData = rsBlockData;
             this.rsBlockError = rsBlockError;
-            this.drme = drme;
+            this.dmre = dmre;
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace ZXing.Datamatrix.Encoder
 
         private int getHorizontalDataRegions()
         {
-            if (drme)
+            if (dmre)
             {
                 return dataRegions;
             }
@@ -255,7 +255,7 @@ namespace ZXing.Datamatrix.Encoder
 
         private int getVerticalDataRegions()
         {
-            if (drme)
+            if (dmre)
             {
                 return 1;
             }
