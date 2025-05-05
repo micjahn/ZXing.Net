@@ -98,7 +98,7 @@ namespace ZXing.SkiaSharp.Rendering
         /// <param name="content">The content.</param>
         /// <param name="options">The options.</param>
         /// <returns></returns>
-        public SKBitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+        virtual public SKBitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
         {
             var width = matrix.Width;
             var height = matrix.Height;
