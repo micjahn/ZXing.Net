@@ -19,12 +19,12 @@
     <dependencies>
       <group targetFramework="netstandard2.0">
         <dependency id="ZXing.Net" version="0.16.10" exclude="Build,Analyzers" />
-        <dependency id="Eto.Forms" version="2.8.3" exclude="Build,Analyzers" />
+        <dependency id="Eto.Forms" version="2.9.0" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="2.0.3" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net6.0">
         <dependency id="ZXing.Net" version="0.16.10" exclude="Build,Analyzers" />
-        <dependency id="Eto.Forms" version="2.8.3" exclude="Build,Analyzers" />
+        <dependency id="Eto.Forms" version="2.9.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>

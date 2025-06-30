@@ -19,12 +19,12 @@
 		<dependencies>
 			<group targetFramework="netstandard2.0">
 				<dependency id="ZXing.Net" version="0.16.10.0" exclude="Build,Analyzers" />
-				<dependency id="Magick.NET.Core" version="14.4.0" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET.Core" version="14.6.0" exclude="Build,Analyzers" />
 				<dependency id="NETStandard.Library" version="2.0.3" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="net8.0">
 				<dependency id="ZXing.Net" version="0.16.10.0" exclude="Build,Analyzers" />
-				<dependency id="Magick.NET.Core" version="14.4.0" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET.Core" version="14.6.0" exclude="Build,Analyzers" />
 			</group>
 		</dependencies>
 	</metadata>
