@@ -138,6 +138,117 @@ namespace ZXing.OneD
                                                 new[] {2, 3, 3, 1, 1, 1, 2}
                                              };
 
+        internal static int[][] EDGE_DIFFERENCES_PATTERNS = {
+                                                new[] {3, 3, 4, 4, 6},  // 0
+                                                new[] {4, 4, 3, 3, 6},
+                                                new[] {4, 4, 4, 4, 6},
+                                                new[] {3, 3, 3, 4, 4},
+                                                new[] {3, 3, 4, 5, 4},
+                                                new[] {4, 4, 3, 4, 4},  // 5
+                                                new[] {3, 4, 4, 3, 4},
+                                                new[] {3, 4, 5, 4, 4},
+                                                new[] {4, 5, 4, 3, 4},
+                                                new[] {4, 3, 3, 3, 4},
+                                                new[] {4, 3, 4, 4, 4},  // 10
+                                                new[] {5, 4, 3, 3, 4},
+                                                new[] {2, 3, 4, 5, 6},
+                                                new[] {3, 4, 3, 4, 6},
+                                                new[] {3, 4, 4, 5, 6},
+                                                new[] {2, 4, 5, 4, 6},  // 15
+                                                new[] {3, 5, 4, 3, 6},
+                                                new[] {3, 5, 5, 4, 6},
+                                                new[] {4, 5, 5, 3, 6},
+                                                new[] {4, 3, 2, 4, 6},
+                                                new[] {4, 3, 3, 5, 6},  // 20
+                                                new[] {3, 4, 5, 3, 6},
+                                                new[] {4, 5, 4, 2, 6},
+                                                new[] {4, 3, 3, 4, 8},
+                                                new[] {4, 2, 3, 4, 6},
+                                                new[] {5, 3, 2, 3, 6},  // 25
+                                                new[] {5, 3, 3, 4, 6},
+                                                new[] {4, 3, 4, 3, 6},
+                                                new[] {5, 4, 3, 2, 6},
+                                                new[] {5, 4, 4, 3, 6},
+                                                new[] {3, 3, 3, 3, 6},  // 30
+                                                new[] {3, 3, 5, 5, 6},
+                                                new[] {5, 5, 3, 3, 6},
+                                                new[] {2, 2, 4, 5, 4},
+                                                new[] {4, 4, 2, 3, 4},
+                                                new[] {4, 4, 4, 5, 4},  // 35
+                                                new[] {2, 3, 5, 4, 4},
+                                                new[] {4, 5, 3, 2, 4},
+                                                new[] {4, 5, 5, 4, 4},
+                                                new[] {3, 2, 4, 4, 4},
+                                                new[] {5, 4, 2, 2, 4},  // 40
+                                                new[] {5, 4, 4, 4, 4},
+                                                new[] {2, 3, 3, 4, 6},
+                                                new[] {2, 3, 5, 6, 6},
+                                                new[] {4, 5, 3, 4, 6},
+                                                new[] {2, 4, 4, 3, 6},  // 45
+                                                new[] {2, 4, 6, 5, 6},
+                                                new[] {4, 6, 4, 3, 6},
+                                                new[] {4, 4, 4, 3, 8},
+                                                new[] {3, 2, 4, 6, 6},
+                                                new[] {5, 4, 2, 4, 6},  // 50
+                                                new[] {3, 4, 4, 2, 6},
+                                                new[] {3, 4, 6, 4, 6},
+                                                new[] {3, 4, 4, 4, 8},
+                                                new[] {4, 2, 2, 3, 6},
+                                                new[] {4, 2, 4, 5, 6},  // 55
+                                                new[] {6, 4, 2, 3, 6},
+                                                new[] {4, 3, 3, 2, 6},
+                                                new[] {4, 3, 5, 4, 6},
+                                                new[] {6, 5, 3, 2, 6},
+                                                new[] {4, 5, 5, 2, 8},  // 60
+                                                new[] {4, 3, 5, 5, 4},
+                                                new[] {7, 4, 2, 2, 6},
+                                                new[] {2, 2, 3, 4, 4},
+                                                new[] {2, 2, 5, 6, 4},
+                                                new[] {3, 3, 2, 3, 4},  // 65
+                                                new[] {3, 3, 5, 6, 4},
+                                                new[] {5, 5, 2, 3, 4},
+                                                new[] {5, 5, 3, 4, 4},
+                                                new[] {2, 3, 4, 3, 4},
+                                                new[] {2, 3, 6, 5, 4},  // 70
+                                                new[] {3, 4, 3, 2, 4},
+                                                new[] {3, 4, 6, 5, 4},
+                                                new[] {5, 6, 3, 2, 4},
+                                                new[] {5, 6, 4, 3, 4},
+                                                new[] {6, 5, 3, 3, 4},  // 75
+                                                new[] {4, 3, 2, 2, 4},
+                                                new[] {5, 4, 4, 2, 8},
+                                                new[] {6, 5, 2, 2, 4},
+                                                new[] {4, 7, 5, 2, 6},
+                                                new[] {2, 2, 3, 6, 6},  // 80
+                                                new[] {3, 3, 2, 5, 6},
+                                                new[] {3, 3, 3, 6, 6},
+                                                new[] {2, 5, 6, 3, 6},
+                                                new[] {3, 6, 5, 2, 6},
+                                                new[] {3, 6, 6, 3, 6},  // 85
+                                                new[] {5, 2, 3, 3, 6},
+                                                new[] {6, 3, 2, 2, 6},
+                                                new[] {6, 3, 3, 3, 6},
+                                                new[] {3, 3, 3, 5, 8},
+                                                new[] {3, 5, 5, 3, 8},  // 90
+                                                new[] {5, 3, 3, 3, 8},
+                                                new[] {2, 2, 2, 5, 6},
+                                                new[] {2, 2, 4, 7, 6},
+                                                new[] {4, 4, 2, 5, 6},
+                                                new[] {2, 5, 5, 2, 6},  // 95
+                                                new[] {2, 5, 7, 4, 6},
+                                                new[] {5, 2, 2, 2, 6},
+                                                new[] {5, 2, 4, 4, 6},
+                                                new[] {2, 4, 4, 5, 8},
+                                                new[] {2, 5, 5, 4, 8},  // 100
+                                                new[] {4, 2, 2, 5, 8},
+                                                new[] {5, 2, 2, 4, 8},
+                                                new[] {3, 2, 5, 5, 4},
+                                                new[] {3, 2, 3, 3, 4},
+                                                new[] {3, 2, 3, 5, 6},  // 105
+                                                new[] {5, 6, 4, 2, 6},
+                                                new[] {3, 2, 2, 4, 6}
+                                             };
+
         private static readonly int MAX_AVG_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.25f);
         private static readonly int MAX_INDIVIDUAL_VARIANCE = (int)(PATTERN_MATCH_RESULT_SCALE_FACTOR * 0.7f);
 
@@ -160,6 +271,8 @@ namespace ZXing.OneD
 
         private static int[] findStartPattern(BitArray row)
         {
+            int blop = 0;
+
             int width = row.Size;
             int rowOffset = row.getNextSet(0);
 
@@ -171,6 +284,8 @@ namespace ZXing.OneD
 
             for (int i = rowOffset; i < width; i++)
             {
+                blop = row.Size;
+
                 if (row[i] != isWhite)
                 {
                     counters[counterPosition]++;
@@ -179,27 +294,13 @@ namespace ZXing.OneD
                 {
                     if (counterPosition == patternLength - 1)
                     {
-                        int bestVariance = MAX_AVG_VARIANCE;
-                        int bestMatch = -1;
-                        for (int startCode = CODE_START_A; startCode <= CODE_START_C; startCode++)
+                        int edgeDifferences_id = getEdgeDifferences(counters);
+
+                        if ((edgeDifferences_id == CODE_START_A) || (edgeDifferences_id == CODE_START_B) || (edgeDifferences_id == CODE_START_C))
                         {
-                            int variance = patternMatchVariance(counters, CODE_PATTERNS[startCode],
-                                MAX_INDIVIDUAL_VARIANCE);
-                            if (variance < bestVariance)
-                            {
-                                bestVariance = variance;
-                                bestMatch = startCode;
-                            }
+                            return new int[] { patternStart, i, edgeDifferences_id };
                         }
-                        if (bestMatch >= 0)
-                        {
-                            // Look for whitespace before start pattern, >= 50% of width of start pattern
-                            if (row.isRange(Math.Max(0, patternStart - (i - patternStart) / 2), patternStart,
-                                false))
-                            {
-                                return new int[] { patternStart, i, bestMatch };
-                            }
-                        }
+                        
                         patternStart += counters[0] + counters[1];
                         Array.Copy(counters, 2, counters, 0, counterPosition - 1);
                         counters[counterPosition - 1] = 0;
@@ -236,6 +337,105 @@ namespace ZXing.OneD
             }
             // TODO We're overlooking the fact that the STOP pattern has 7 values, not 6.
             return code >= 0;
+        }
+
+
+        /// <summary>
+        /// Determines how closely a set of observed counts of runs of black/white values matches a given
+        /// target pattern. This is reported as the ratio of the total variance from the expected pattern
+        /// proportions across all pattern elements, to the length of the pattern.
+        /// </summary>
+        /// <param name="counters">observed counters</param>
+        /// <param name="pattern">expected pattern</param>
+        /// <param name="maxIndividualVariance">The most any counter can differ before we give up</param>
+        /// <returns>ratio of total variance between counters and pattern compared to total pattern size,
+        ///  where the ratio has been multiplied by 256. So, 0 means no variance (perfect match); 256 means
+        ///  the total variance between counters and patterns equals the pattern length, higher values mean
+        ///  even more variance</returns>
+        private static int getEdgeDifferences(int[] counters)        
+        {
+            int numCounters = counters.Length;
+            int total = 0;
+            
+            int[] pattern = new int[5];
+
+            // Get length of the patern 
+            for (int i = 0; i < numCounters; i++)
+            {
+                total += counters[i];
+            }
+
+            // Set the calculated parten
+            for (int i = 0; i < numCounters-2; i++)
+            {
+                int e_i = counters[i] + counters[i + 1];
+                if ((1.5 * total / 11 <= e_i) &&  (e_i < 2.5 * total / 11))
+                {
+                    pattern[i] = 2;
+                }
+                else if ((2.5 * total / 11 <= e_i) && (e_i < 3.5 * total / 11))
+                {
+                    pattern[i] = 3;
+                }
+                else if ((3.5 * total / 11 <= e_i) && (e_i < 4.5 * total / 11))
+                {
+                    pattern[i] = 4;
+                }
+                else if ((4.5 * total / 11 <= e_i) && (e_i < 5.5 * total / 11))
+                {
+                    pattern[i] = 5;
+                }
+                else if ((5.5 * total / 11 <= e_i) && (e_i < 6.5 * total / 11))
+                {
+                    pattern[i] = 6;
+                }
+                else if ((6.5 * total / 11 <= e_i) && (e_i < 7.5 * total / 11))
+                {
+                    pattern[i] = 7;
+                }
+            }
+
+            // Find the parttent in the edge differences table
+            for (int d = 0; d < EDGE_DIFFERENCES_PATTERNS.Length; d++)
+            {
+                if(    pattern[0] == EDGE_DIFFERENCES_PATTERNS[d][0]
+                    && pattern[1] == EDGE_DIFFERENCES_PATTERNS[d][1]
+                    && pattern[2] == EDGE_DIFFERENCES_PATTERNS[d][2]
+                    && pattern[3] == EDGE_DIFFERENCES_PATTERNS[d][3])
+
+                {
+                    // Pattern found, check its avalidity
+                    int V = EDGE_DIFFERENCES_PATTERNS[d][4];
+
+                    double minRange = ((V - 1.75) * total) / 11;
+                    double maxRange = ((V + 1.75) * total) / 11;
+
+                    int barLength = counters[0] + counters[2] + counters[4];
+
+                    if ((minRange < barLength) && (barLength < maxRange))
+                    {
+                        return d;
+                    }
+                }
+            }
+
+            // Not found
+            return -1;
+        }
+
+        private static bool decodeCode_ed(BitArray row, int[] counters, int rowOffset, out int code)
+        {
+            code = -1;
+
+            if (!recordPattern(row, rowOffset, counters))
+                return false;
+
+            code = getEdgeDifferences(counters);
+
+            if (code >= 0)
+            { return true; }
+            else
+            { return false; }
         }
 
         /// <summary>
@@ -304,8 +504,13 @@ namespace ZXing.OneD
                 lastCode = code;
 
                 // Decode another code from image
-                if (!decodeCode(row, counters, nextStart, out code))
-                    return null;
+                if (!decodeCode_ed(row, counters, nextStart, out code))
+                {
+                    if (!decodeCode(row, counters, nextStart, out code))
+                    {
+                        return null;
+                    }
+                }
 
                 rawCodes.Add((byte)code);
 
