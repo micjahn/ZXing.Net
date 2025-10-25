@@ -224,7 +224,7 @@ namespace ZXing.Rendering
 #if WindowsCE
                   var textAreaHeight = (int)font.Size + 5;
 #else
-                        var textAreaHeight = font.Height;
+                        var textAreaHeight = (int)font.GetHeight(g);
 #endif
 
                         emptyArea = height > textAreaHeight ? textAreaHeight : 0;
@@ -295,3 +295,4 @@ namespace ZXing.Rendering
         }
     }
 }
+
