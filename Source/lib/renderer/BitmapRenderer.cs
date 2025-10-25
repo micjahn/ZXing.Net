@@ -216,7 +216,7 @@ namespace ZXing.Rendering
                     // fill the bottom area with the background color if the content should be written below the barcode
                     if (outputContent)
                     {
-                        var textAreaHeight = font.Height;
+                        var textAreaHeight = (int)font.GetHeight(g);
 
                         emptyArea = height > textAreaHeight ? textAreaHeight : 0;
 
@@ -286,3 +286,4 @@ namespace ZXing.Rendering
         }
     }
 }
+
