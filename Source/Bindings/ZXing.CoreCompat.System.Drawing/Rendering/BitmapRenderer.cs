@@ -104,7 +104,7 @@ namespace ZXing.CoreCompat.Rendering
         /// <param name="content">The content.</param>
         /// <param name="options">The options.</param>
         /// <returns></returns>
-        public Bitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+        virtual public Bitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
         {
             var width = matrix.Width;
             var height = matrix.Height;
@@ -207,7 +207,7 @@ namespace ZXing.CoreCompat.Rendering
                     // fill the bottom area with the background color if the content should be written below the barcode
                     if (outputContent)
                     {
-                        var textAreaHeight = font.Height;
+                        var textAreaHeight = (int)font.GetHeight(g);
 
                         emptyArea = height > textAreaHeight ? textAreaHeight : 0;
 

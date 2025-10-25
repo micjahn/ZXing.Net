@@ -59,7 +59,7 @@ namespace ZXing.Magick.Rendering
         /// <param name="content"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public IMagickImage<TQuantumType> Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+        virtual public IMagickImage<TQuantumType> Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
         {
             byte[] header = System.Text.Encoding.UTF8.GetBytes($"P4\n{matrix.Width} {matrix.Height}\n");
 

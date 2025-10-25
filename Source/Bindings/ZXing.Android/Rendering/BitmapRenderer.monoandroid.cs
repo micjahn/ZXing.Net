@@ -73,7 +73,7 @@ namespace ZXing.Android.Rendering
         /// <param name="options">The options.</param>
         /// <returns></returns>
         [System.CLSCompliant(false)]
-        public Bitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+        virtual public Bitmap Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
         {
             var width = matrix.Width;
             var height = matrix.Height;
