@@ -66,15 +66,15 @@ namespace ZXing.Datamatrix.Encoder
                                                          new SymbolInfo(false, 144, 56, 20, 20, 4),
                                                          new SymbolInfo(false, 174, 68, 22, 22, 4),
 
-                                                         new SymbolInfo(false, 204, 84, 24, 24, 4, 102, 42),
-                                                         new SymbolInfo(false, 280, 112, 14, 14, 16, 140, 56),
-                                                         new SymbolInfo(false, 368, 144, 16, 16, 16, 92, 36),
-                                                         new SymbolInfo(false, 456, 192, 18, 18, 16, 114, 48),
-                                                         new SymbolInfo(false, 576, 224, 20, 20, 16, 144, 56),
-                                                         new SymbolInfo(false, 696, 272, 22, 22, 16, 174, 68),
-                                                         new SymbolInfo(false, 816, 336, 24, 24, 16, 136, 56),
-                                                         new SymbolInfo(false, 1050, 408, 18, 18, 36, 175, 68),
-                                                         new SymbolInfo(false, 1304, 496, 20, 20, 36, 163, 62),
+                                                         new SymbolInfo(false, 204, 84, 24, 24, 4, 102, 42, false),
+                                                         new SymbolInfo(false, 280, 112, 14, 14, 16, 140, 56, false),
+                                                         new SymbolInfo(false, 368, 144, 16, 16, 16, 92, 36, false),
+                                                         new SymbolInfo(false, 456, 192, 18, 18, 16, 114, 48, false),
+                                                         new SymbolInfo(false, 576, 224, 20, 20, 16, 144, 56, false),
+                                                         new SymbolInfo(false, 696, 272, 22, 22, 16, 174, 68, false),
+                                                         new SymbolInfo(false, 816, 336, 24, 24, 16, 136, 56, false),
+                                                         new SymbolInfo(false, 1050, 408, 18, 18, 36, 175, 68, false),
+                                                         new SymbolInfo(false, 1304, 496, 20, 20, 36, 163, 62, false),
                                                          new DataMatrixSymbolInfo144(),
                                                       };
 
@@ -117,11 +117,11 @@ namespace ZXing.Datamatrix.Encoder
         public SymbolInfo(bool rectangular, int dataCapacity, int errorCodewords,
                           int matrixWidth, int matrixHeight, int dataRegions)
            : this(rectangular, dataCapacity, errorCodewords, matrixWidth, matrixHeight, dataRegions,
-                dataCapacity, errorCodewords)
+                dataCapacity, errorCodewords, false)
         {
         }
         public SymbolInfo(bool rectangular, int dataCapacity, int errorCodewords,
-                          int matrixWidth, int matrixHeight, int dataRegions, bool dmre = false)
+                          int matrixWidth, int matrixHeight, int dataRegions, bool dmre)
            : this(rectangular, dataCapacity, errorCodewords, matrixWidth, matrixHeight, dataRegions,
                 dataCapacity, errorCodewords, dmre)
         {
@@ -129,7 +129,7 @@ namespace ZXing.Datamatrix.Encoder
 
         internal SymbolInfo(bool rectangular, int dataCapacity, int errorCodewords,
                            int matrixWidth, int matrixHeight, int dataRegions,
-                           int rsBlockData, int rsBlockError, bool dmre = false)
+                           int rsBlockData, int rsBlockError, bool dmre)
         {
             this.rectangular = rectangular;
             this.dataCapacity = dataCapacity;

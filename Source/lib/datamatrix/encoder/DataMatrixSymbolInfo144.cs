@@ -19,7 +19,7 @@ namespace ZXing.Datamatrix.Encoder
     internal sealed class DataMatrixSymbolInfo144 : SymbolInfo
     {
         public DataMatrixSymbolInfo144()
-           : base(false, 1558, 620, 22, 22, 36, -1, 62)
+           : base(false, 1558, 620, 22, 22, 36, -1, 62, false)
         {
         }
 
