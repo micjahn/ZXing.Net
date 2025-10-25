@@ -82,7 +82,7 @@ using System.Runtime.InteropServices;
 #if INTEROP
 [assembly: AssemblyTitle("zxing.net for com interop")]
 #endif
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 17.11.2024 17:25:04)")]
+[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 04.02.2025 17:18:13)")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyProduct("ZXing.Net")]
 [assembly: AssemblyCopyright("Copyright © 2012")]

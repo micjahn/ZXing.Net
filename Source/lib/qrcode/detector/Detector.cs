@@ -230,7 +230,8 @@ namespace ZXing.QrCode.Internal
                     dimension--;
                     break;
                 case 3:
-                    return true;
+                    dimension -= 2;
+                    break;
             }
             return true;
         }
