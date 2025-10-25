@@ -67,7 +67,7 @@ namespace ZXing.ImageSharp.Rendering
         /// <param name="content"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public Image<TPixel> Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
+        virtual public Image<TPixel> Render(BitMatrix matrix, BarcodeFormat format, string content, EncodingOptions options)
         {
             var width = matrix.Width;
             var height = matrix.Height;
