@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
-    <version>0.16.10</version>
+    <version>0.16.11</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <license type="expression">Apache-2.0</license>
@@ -19,7 +19,7 @@
     <repository type="git" url="https://github.com/micjahn/ZXing.Net/" />
     <dependencies>
       <group targetFramework="MonoAndroid">
-        <dependency id="ZXing.Net" version="0.16.10" exclude="Build,Analyzers" />
+        <dependency id="ZXing.Net" version="0.16.11" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>
