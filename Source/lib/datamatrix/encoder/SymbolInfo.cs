@@ -196,6 +196,10 @@ namespace ZXing.Datamatrix.Encoder
         {
             foreach (SymbolInfo symbol in symbols)
             {
+                if (symbol.dmre)
+                    // DMRE Symbols doesn't work in all cases
+                    continue;
+
                 if (shape == SymbolShapeHint.FORCE_SQUARE && symbol.rectangular)
                 {
                     continue;
