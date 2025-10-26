@@ -4,11 +4,11 @@
     <TargetFrameworks>netstandard2.0;netcoreapp3.0;netcoreapp3.1;</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(VisualStudioVersion)' == '17.0'"> 
-    <TargetFrameworks>netstandard2.0;netcoreapp3.0;netcoreapp3.1;net6.0-windows;net7.0-windows;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.0;netcoreapp3.1;net8.0-windows;net9.0-windows</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>0.16.12</VersionPrefix>
+    <VersionPrefix>0.16.14</VersionPrefix>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <PackageId>ZXing.Net.Bindings.Windows.Compatibility</PackageId>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,7 +31,7 @@
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
     <DelaySign>false</DelaySign>
-    <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
+    <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
     <DefineConstants>$(DefineConstants);NETSTANDARD2_0;WPF;WINDOWS_COMPATIBILITY</DefineConstants>
   </PropertyGroup>
 
@@ -47,7 +47,7 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='net6.0-windows' OR '$(TargetFramework)'=='net7.0-windows' OR '$(TargetFramework)'=='net8.0-windows'">
+  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-windows' OR '$(TargetFramework)'=='net9.0-windows'">
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
@@ -63,7 +63,7 @@
     <Compile Include="Properties/AssemblyInfo.cs" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows' OR '$(TargetFramework)' == 'net7.0-windows' OR '$(TargetFramework)' == 'net8.0-windows'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows' OR '$(TargetFramework)' == 'net9.0-windows'">
     <Compile Include="..\..\lib\renderer\GeometryRenderer.cs" Link="Rendering\GeometryRenderer.cs" />
     <Compile Include="..\..\lib\renderer\WriteableBitmapRenderer.Presentation.cs" Link="Rendering\WriteableBitmapRenderer.Presentation.cs" />
     <Compile Include="..\..\lib\presentation\BarcodeReader.cs" Link="BarcodeReaderWriteableBitmap.cs" />
@@ -76,11 +76,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ZXing.Net" Version="0.16.9" />
+    <PackageReference Include="ZXing.Net" Version="0.16.11" />
   </ItemGroup>
   
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net6.0-windows' OR '$(TargetFramework)' == 'net7.0-windows' OR '$(TargetFramework)' == 'net8.0-windows'">
-    <PackageReference Include="System.Drawing.Common" Version="8.0.17" />
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'net8.0-windows' OR '$(TargetFramework)' == 'net9.0-windows'">
+    <PackageReference Include="System.Drawing.Common" Version="9.0.10" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">

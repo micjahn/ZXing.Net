@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<VersionPrefix>0.16.7</VersionPrefix>
+		<VersionPrefix>0.16.8</VersionPrefix>
 		<TargetFrameworks>netstandard2.0;net35</TargetFrameworks>
 		<RootNamespace>ZXing.Unity</RootNamespace>
 		<AssemblyName>ZXing.Unity</AssemblyName>
@@ -9,7 +9,7 @@
 		<AssemblyOriginatorKeyFile>../../../Key/private.snk</AssemblyOriginatorKeyFile>
 		<SignAssembly>false</SignAssembly>
 		<PackageId>ZXing.Net.Bindings.Unity3D</PackageId>
-		<NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard2.0' ">2.0.0</NetStandardImplicitPackageVersion>
+		<NetStandardImplicitPackageVersion Condition="$(TargetFramework.StartsWith('netstandard'))">2.0.3</NetStandardImplicitPackageVersion>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
 		<GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
@@ -17,7 +17,7 @@
 		<EnableDefaultCompileItems>False</EnableDefaultCompileItems>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="ZXing.Net" Version="0.16.9" />
+		<PackageReference Include="ZXing.Net" Version="0.16.11" />
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="UnityEngine">

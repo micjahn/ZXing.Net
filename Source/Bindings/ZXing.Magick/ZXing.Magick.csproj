@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.16.15</VersionPrefix>
+    <VersionPrefix>0.16.17</VersionPrefix>
     <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>anycpu</PlatformTarget>
@@ -28,12 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Magick.NET.Core" Version="14.6.0" />
-    <PackageReference Include="ZXing.Net" Version="0.16.9" />
+    <PackageReference Include="Magick.NET.Core" Version="14.9.0" />
+    <PackageReference Include="ZXing.Net" Version="0.16.11" />
   </ItemGroup>
 
   <PropertyGroup Condition="$(TargetFramework.StartsWith('netstandard'))">
-    <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
+    <NetStandardImplicitPackageVersion>2.0.3</NetStandardImplicitPackageVersion>
   </PropertyGroup>
 
 </Project>

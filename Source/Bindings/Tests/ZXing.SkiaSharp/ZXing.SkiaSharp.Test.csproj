@@ -68,7 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="SkiaSharp">
-      <Version>3.119.0</Version>
+      <Version>3.119.1</Version>
     </PackageReference>
     <PackageReference Include="System.Buffers">
       <Version>4.6.1</Version>
@@ -80,7 +80,7 @@
       <Version>6.1.2</Version>
     </PackageReference>
     <PackageReference Include="ZXing.Net">
-      <Version>0.16.9</Version>
+      <Version>0.16.11</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

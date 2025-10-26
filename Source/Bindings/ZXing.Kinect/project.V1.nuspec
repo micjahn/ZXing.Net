@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.8</version>
+    <version>0.16.11</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <license type="expression">Apache-2.0</license>
@@ -18,7 +18,7 @@
     <tags>ZXing Kinect</tags>
     <dependencies>
       <group targetFramework="net40">
-        <dependency id="ZXing.Net" version="0.16.9.0" exclude="Build,Analyzers" />
+        <dependency id="ZXing.Net" version="0.16.11.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>

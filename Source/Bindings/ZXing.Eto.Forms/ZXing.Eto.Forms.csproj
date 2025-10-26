@@ -1,14 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup Condition="'$(VisualStudioVersion)' == '16.0'">
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(VisualStudioVersion)' == '17.0'"> 
-    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net6.0;net8.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>0.16.4</VersionPrefix>
+    <VersionPrefix>0.16.6</VersionPrefix>
     <PackageId>ZXing.Net.Bindings.Eto.Forms</PackageId>
     <PlatformTarget>anycpu</PlatformTarget>
     <SignAssembly>false</SignAssembly>
@@ -43,8 +43,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.9.0" />
-    <PackageReference Include="ZXing.Net" Version="0.16.9" />
+    <PackageReference Include="Eto.Forms" Version="2.10.2" />
+    <PackageReference Include="ZXing.Net" Version="0.16.11" />
   </ItemGroup>
 
 </Project>
