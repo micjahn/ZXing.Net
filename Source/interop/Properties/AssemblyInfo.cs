@@ -82,7 +82,7 @@ using System.Runtime.InteropServices;
 #if INTEROP
 [assembly: AssemblyTitle("zxing.net for com interop")]
 #endif
-[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 17.11.2024 17:25:04)")]
+[assembly: AssemblyDescription("port of the java based barcode scanning library for .net (java zxing 10.02.2025 15:22:04)")]
 [assembly: AssemblyCompany("ZXing.Net Development")]
 [assembly: AssemblyProduct("ZXing.Net")]
 [assembly: AssemblyCopyright("Copyright © 2012")]
@@ -102,9 +102,9 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("0.16.10.0")]
+[assembly: AssemblyVersion("0.16.11.0")]
 #if !WindowsCE
-[assembly: AssemblyFileVersion("0.16.10.0")]
+[assembly: AssemblyFileVersion("0.16.11.0")]
 #endif
 
 [assembly: CLSCompliant(true)]

@@ -2,7 +2,7 @@
 
 SETLOCAL EnableDelayedExpansion EnableExtensions
 
-SET VERSION=0.16.10.0
+SET VERSION=0.16.11.0
 
 SET CURRENT_DIR=%CD%
 SET BUILD_DIR=%CD%\Build
