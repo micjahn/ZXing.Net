@@ -141,7 +141,7 @@ CD "%BINARY_DIR%"
 echo Build assembly archive...
 echo.
 
-"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net2.0.unsigned net3.5 net4.0 net4.0.unsigned net4.5 net4.6 net4.7 net4.8 net5.0 net6.0 net7.0 winrt uwp netcoreapp netstandard unity sl4 sl5 wp7.0 wp7.1 wp8.0 winmd portable interop ..\..\THANKS ..\..\COPYING -xr^^!Documentation >> %LOGFILE% 2>&1
+"%ZIP_TOOL%" a -tzip -mx9 -r "%FILENAME_BINARY%" ce2.0 ce3.5 net2.0 net2.0.unsigned net3.5 net4.0 net4.0.unsigned net4.5 net4.6 net4.7 net4.8 net5.0 net6.0 net7.0 net8.0 net9.0 winrt uwp netcoreapp netstandard unity sl4 sl5 wp7.0 wp7.1 wp8.0 winmd portable interop ..\..\THANKS ..\..\COPYING -xr^^!Documentation >> %LOGFILE% 2>&1
 if ERRORLEVEL 1 GOTO ERROR_OPERATION
 
 echo Build assembly archive - demo clients...
