@@ -223,7 +223,8 @@ namespace ZXing
         private void CalculateLuminanceRGB565(byte[] rgb565RawData)
         {
             var luminanceIndex = 0;
-            for (var index = 0; index < rgb565RawData.Length && luminanceIndex < luminances.Length; index += 2, luminanceIndex++)
+            var maxIndex = rgb565RawData.Length - 1;
+            for (var index = 0; index < maxIndex && luminanceIndex < luminances.Length; index += 2, luminanceIndex++)
             {
                 var byte1 = rgb565RawData[index];
                 var byte2 = rgb565RawData[index + 1];
@@ -247,7 +248,8 @@ namespace ZXing
 
         private void CalculateLuminanceRGB24(byte[] rgbRawBytes)
         {
-            for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length && luminanceIndex < luminances.Length; luminanceIndex++)
+            var maxIndex = rgbRawBytes.Length - 2;
+            for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < maxIndex && luminanceIndex < luminances.Length; luminanceIndex++)
             {
                 // Calculate luminance cheaply, favoring green.
                 int r = rgbRawBytes[rgbIndex++];
@@ -259,7 +261,8 @@ namespace ZXing
 
         private void CalculateLuminanceBGR24(byte[] rgbRawBytes)
         {
-            for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length && luminanceIndex < luminances.Length; luminanceIndex++)
+            var maxIndex = rgbRawBytes.Length - 2;
+            for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < maxIndex && luminanceIndex < luminances.Length; luminanceIndex++)
             {
                 // Calculate luminance cheaply, favoring green.
                 int b = rgbRawBytes[rgbIndex++];
@@ -271,7 +274,8 @@ namespace ZXing
 
         private void CalculateLuminanceRGB32(byte[] rgbRawBytes)
         {
-            for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length && luminanceIndex < luminances.Length; luminanceIndex++)
+            var maxIndex = rgbRawBytes.Length - 3;
+            for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < maxIndex && luminanceIndex < luminances.Length; luminanceIndex++)
             {
                 // Calculate luminance cheaply, favoring green.
                 int r = rgbRawBytes[rgbIndex++];
@@ -284,7 +288,8 @@ namespace ZXing
 
         private void CalculateLuminanceBGR32(byte[] rgbRawBytes)
         {
-            for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length && luminanceIndex < luminances.Length; luminanceIndex++)
+            var maxIndex = rgbRawBytes.Length - 3;
+            for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < maxIndex && luminanceIndex < luminances.Length; luminanceIndex++)
             {
                 // Calculate luminance cheaply, favoring green.
                 int b = rgbRawBytes[rgbIndex++];
@@ -297,7 +302,8 @@ namespace ZXing
 
         private void CalculateLuminanceBGRA32(byte[] rgbRawBytes)
         {
-            for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length && luminanceIndex < luminances.Length; luminanceIndex++)
+            var maxIndex = rgbRawBytes.Length - 3;
+            for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < maxIndex && luminanceIndex < luminances.Length; luminanceIndex++)
             {
                 // Calculate luminance cheaply, favoring green.
                 var b = rgbRawBytes[rgbIndex++];
@@ -311,7 +317,8 @@ namespace ZXing
 
         private void CalculateLuminanceRGBA32(byte[] rgbRawBytes)
         {
-            for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length && luminanceIndex < luminances.Length; luminanceIndex++)
+            var maxIndex = rgbRawBytes.Length - 3;
+            for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < maxIndex && luminanceIndex < luminances.Length; luminanceIndex++)
             {
                 // Calculate luminance cheaply, favoring green.
                 var r = rgbRawBytes[rgbIndex++];
@@ -325,7 +332,8 @@ namespace ZXing
 
         private void CalculateLuminanceARGB32(byte[] rgbRawBytes)
         {
-            for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < rgbRawBytes.Length && luminanceIndex < luminances.Length; luminanceIndex++)
+            var maxIndex = rgbRawBytes.Length - 3;
+            for (int rgbIndex = 0, luminanceIndex = 0; rgbIndex < maxIndex && luminanceIndex < luminances.Length; luminanceIndex++)
             {
                 // Calculate luminance cheaply, favoring green.
                 var alpha = rgbRawBytes[rgbIndex++];
@@ -339,8 +347,9 @@ namespace ZXing
 
         private void CalculateLuminanceUYVY(byte[] uyvyRawBytes)
         {
+            var maxIndex = uyvyRawBytes.Length - 3;
             // start by 1, jump over first U byte
-            for (int uyvyIndex = 1, luminanceIndex = 0; uyvyIndex < uyvyRawBytes.Length - 3 && luminanceIndex < luminances.Length;)
+            for (int uyvyIndex = 1, luminanceIndex = 0; uyvyIndex < maxIndex && luminanceIndex < luminances.Length;)
             {
                 byte y1 = uyvyRawBytes[uyvyIndex];
                 uyvyIndex += 2; // jump from 1 to 3 (from Y1 over to Y2)
@@ -354,8 +363,9 @@ namespace ZXing
 
         private void CalculateLuminanceYUYV(byte[] yuyvRawBytes)
         {
+            var maxIndex = yuyvRawBytes.Length - 3;
             // start by 0 not by 1 like UYUV
-            for (int yuyvIndex = 0, luminanceIndex = 0; yuyvIndex < yuyvRawBytes.Length - 3 && luminanceIndex < luminances.Length;)
+            for (int yuyvIndex = 0, luminanceIndex = 0; yuyvIndex < maxIndex && luminanceIndex < luminances.Length;)
             {
                 byte y1 = yuyvRawBytes[yuyvIndex];
                 yuyvIndex += 2; // jump from 0 to 2 (from Y1 over over to Y2)
@@ -369,7 +379,8 @@ namespace ZXing
 
         private void CalculateLuminanceGray16(byte[] gray16RawBytes)
         {
-            for (int grayIndex = 0, luminanceIndex = 0; grayIndex < gray16RawBytes.Length && luminanceIndex < luminances.Length; grayIndex += 2, luminanceIndex++)
+            var maxIndex = gray16RawBytes.Length;
+            for (int grayIndex = 0, luminanceIndex = 0; grayIndex < maxIndex && luminanceIndex < luminances.Length; grayIndex += 2, luminanceIndex++)
             {
                 byte gray8 = gray16RawBytes[grayIndex];
 
