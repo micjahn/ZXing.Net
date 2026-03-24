@@ -80,11 +80,6 @@ namespace ZXing.Multi
 
         private void doDecodeMultiple(BinaryBitmap image, IDictionary<DecodeHintType, object> hints, IList<Result> results, int xOffset, int yOffset, int currentDepth)
         {
-            if (currentDepth > MAX_DEPTH)
-            {
-                return;
-            }
-
             Result result = _delegate.decode(image, hints);
             if (result == null)
                 return;
@@ -102,6 +97,11 @@ namespace ZXing.Multi
             if (!alreadyFound)
             {
                 results.Add(translateResultPoints(result, xOffset, yOffset));
+            }
+
+            if (currentDepth >= MAX_DEPTH)
+            {
+                return;
             }
 
             ResultPoint[] resultPoints = result.ResultPoints;
