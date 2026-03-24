@@ -114,6 +114,11 @@ namespace ZXing.Maxicode
             if (top + height >= image.Height)
                 height = image.Height - top - 1;
 
+            if (height < MATRIX_HEIGHT || width < MATRIX_WIDTH)
+            {
+                return null;
+            }
+
             // Now just read off the bits
             BitMatrix bits = new BitMatrix(MATRIX_WIDTH, MATRIX_HEIGHT);
             for (int y = 0; y < MATRIX_HEIGHT; y++)
