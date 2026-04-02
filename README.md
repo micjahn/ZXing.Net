@@ -1,3 +1,35 @@
+
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=id">Bahasa Indonesia</a>
+        | <a href="https://openaitx.github.io/view.html?user=micjahn&project=ZXing.Net&lang=as">অসমীয়া</
+      </div>
+    </div>
+  </details>
+</div>
+
 # ZXing.Net 
 
 [![N|NuGet](https://img.shields.io/nuget/v/ZXing.Net.svg)](https://www.nuget.org/packages/ZXing.Net/)
