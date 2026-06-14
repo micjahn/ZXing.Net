@@ -200,6 +200,8 @@ namespace ZXing
         public virtual Result Decode(LuminanceSource luminanceSource)
         {
             var result = default(Result);
+            var originalWidth = luminanceSource.Width;
+            var originalHeight = luminanceSource.Height;
             var binarizer = CreateBinarizer(luminanceSource);
             var binaryBitmap = new BinaryBitmap(binarizer);
             var multiformatReader = Reader as MultiFormatReader;
@@ -241,6 +243,9 @@ namespace ZXing
 
             if (result != null)
             {
+                if (result.ResultPoints != null)
+                    ResultPoint.TranslateResultPointsBack(result.ResultPoints, rotationCount * 90, originalWidth, originalHeight);
+
                 if (result.ResultMetadata == null)
                 {
                     result.putMetadata(ResultMetadataType.ORIENTATION, rotationCount * 90);
@@ -273,6 +278,8 @@ namespace ZXing
         public virtual Result[] DecodeMultiple(LuminanceSource luminanceSource)
         {
             var results = default(Result[]);
+            var originalWidth = luminanceSource.Width;
+            var originalHeight = luminanceSource.Height;
             var binarizer = CreateBinarizer(luminanceSource);
             var binaryBitmap = new BinaryBitmap(binarizer);
             var rotationCount = 0;
@@ -306,13 +313,17 @@ namespace ZXing
                     !AutoRotate)
                     break;
 
-                binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource.rotateCounterClockwise()));
+                luminanceSource = luminanceSource.rotateCounterClockwise();
+                binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource));
             }
 
             if (results != null)
             {
                 foreach (var result in results)
                 {
+                    if (result.ResultPoints != null)
+                        ResultPoint.TranslateResultPointsBack(result.ResultPoints, rotationCount * 90, originalWidth, originalHeight);
+
                     if (result.ResultMetadata == null)
                     {
                         result.putMetadata(ResultMetadataType.ORIENTATION, rotationCount * 90);

@@ -183,6 +183,58 @@ namespace ZXing
             return MathUtils.distance(pattern1.x, pattern1.y, pattern2.x, pattern2.y);
         }
 
+        internal static void TranslateResultPointsBack(ResultPoint[] points, int rotation, int originalWidth, int originalHeight)
+        {
+            if (points == null || points.Length == 0)
+            {
+                return;
+            }
+
+            rotation = ((rotation % 360) + 360) % 360;
+            if (rotation == 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < points.Length; i++)
+            {
+                points[i] = TranslateResultPointBack(points[i], rotation, originalWidth, originalHeight);
+            }
+        }
+
+        internal static ResultPoint[] TranslateResultPointsBackCopy(ResultPoint[] points, int rotation, int originalWidth, int originalHeight)
+        {
+            if (points == null || points.Length == 0)
+            {
+                return points;
+            }
+
+            var translatedPoints = new ResultPoint[points.Length];
+            Array.Copy(points, translatedPoints, points.Length);
+            TranslateResultPointsBack(translatedPoints, rotation, originalWidth, originalHeight);
+            return translatedPoints;
+        }
+
+        private static ResultPoint TranslateResultPointBack(ResultPoint point, int rotation, int originalWidth, int originalHeight)
+        {
+            if (point == null)
+            {
+                return null;
+            }
+
+            switch (rotation)
+            {
+                case 90:
+                    return new ResultPoint(originalWidth - point.Y - 1, point.X);
+                case 180:
+                    return new ResultPoint(originalWidth - point.X - 1, originalHeight - point.Y - 1);
+                case 270:
+                    return new ResultPoint(point.Y, originalHeight - point.X - 1);
+                default:
+                    return point;
+            }
+        }
+
         /// <summary>
         /// Returns the z component of the cross product between vectors BC and BA.
         /// </summary>
