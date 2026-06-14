@@ -200,6 +200,8 @@ namespace ZXing
         public virtual Result Decode(LuminanceSource luminanceSource)
         {
             var result = default(Result);
+            var originalWidth = luminanceSource.Width;
+            var originalHeight = luminanceSource.Height;
             var binarizer = CreateBinarizer(luminanceSource);
             var binaryBitmap = new BinaryBitmap(binarizer);
             var multiformatReader = Reader as MultiFormatReader;
@@ -241,6 +243,8 @@ namespace ZXing
 
             if (result != null)
             {
+                TranslateResultPointsBack(result, rotationCount, originalWidth, originalHeight);
+
                 if (result.ResultMetadata == null)
                 {
                     result.putMetadata(ResultMetadataType.ORIENTATION, rotationCount * 90);
@@ -273,6 +277,8 @@ namespace ZXing
         public virtual Result[] DecodeMultiple(LuminanceSource luminanceSource)
         {
             var results = default(Result[]);
+            var originalWidth = luminanceSource.Width;
+            var originalHeight = luminanceSource.Height;
             var binarizer = CreateBinarizer(luminanceSource);
             var binaryBitmap = new BinaryBitmap(binarizer);
             var rotationCount = 0;
@@ -306,13 +312,16 @@ namespace ZXing
                     !AutoRotate)
                     break;
 
-                binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource.rotateCounterClockwise()));
+                luminanceSource = luminanceSource.rotateCounterClockwise();
+                binaryBitmap = new BinaryBitmap(CreateBinarizer(luminanceSource));
             }
 
             if (results != null)
             {
                 foreach (var result in results)
                 {
+                    TranslateResultPointsBack(result, rotationCount, originalWidth, originalHeight);
+
                     if (result.ResultMetadata == null)
                     {
                         result.putMetadata(ResultMetadataType.ORIENTATION, rotationCount * 90);
@@ -333,6 +342,39 @@ namespace ZXing
             }
 
             return results;
+        }
+
+        private static void TranslateResultPointsBack(Result result, int rotationCount, int originalWidth, int originalHeight)
+        {
+            if (result == null ||
+                result.ResultPoints == null ||
+                result.ResultPoints.Length == 0)
+                return;
+
+            rotationCount = rotationCount % 4;
+            if (rotationCount == 0)
+                return;
+
+            var points = result.ResultPoints;
+            for (var index = 0; index < points.Length; index++)
+            {
+                points[index] = TranslateResultPointBack(points[index], rotationCount, originalWidth, originalHeight);
+            }
+        }
+
+        private static ResultPoint TranslateResultPointBack(ResultPoint point, int rotationCount, int originalWidth, int originalHeight)
+        {
+            switch (rotationCount)
+            {
+                case 1:
+                    return new ResultPoint(originalWidth - point.Y - 1, point.X);
+                case 2:
+                    return new ResultPoint(originalWidth - point.X - 1, originalHeight - point.Y - 1);
+                case 3:
+                    return new ResultPoint(point.Y, originalHeight - point.X - 1);
+                default:
+                    return point;
+            }
         }
 
         /// <summary>
