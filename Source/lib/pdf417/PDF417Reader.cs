@@ -129,7 +129,7 @@ namespace ZXing.PDF417
                     {
                         continue;
                     }
-                    var result = new Result(decoderResult.Text, decoderResult.RawBytes, points, BarcodeFormat.PDF_417);
+                    var result = new Result(decoderResult.Text, decoderResult.RawBytes, ResultPoint.TranslateResultPointsBackCopy(points, detectorResult.Rotation, image.Width, image.Height), BarcodeFormat.PDF_417);
                     result.putMetadata(ResultMetadataType.ERROR_CORRECTION_LEVEL, decoderResult.ECLevel);
                     result.putMetadata(ResultMetadataType.ERRORS_CORRECTED, decoderResult.ErrorsCorrected);
                     result.putMetadata(ResultMetadataType.ERASURES_CORRECTED, decoderResult.Erasures);
