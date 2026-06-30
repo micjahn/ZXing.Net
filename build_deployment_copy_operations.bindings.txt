@@ -49,6 +49,12 @@
 %CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp.V3\bin\Release\net6.0\zxing.imagesharp.V3.dll %BINARY_DIR%\Bindings\ImageSharp.V3\net6.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp.V3\bin\Release\net6.0\zxing.imagesharp.V3.pdb %BINARY_DIR%\Bindings\ImageSharp.V3\net6.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp.V3\bin\Release\net6.0\zxing.imagesharp.V3.xml %BINARY_DIR%\Bindings\ImageSharp.V3\net6.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp.V4\bin\Release\net8.0\zxing.imagesharp.V4.dll %BINARY_DIR%\Bindings\ImageSharp.V4\net8.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp.V4\bin\Release\net8.0\zxing.imagesharp.V4.pdb %BINARY_DIR%\Bindings\ImageSharp.V4\net8.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp.V4\bin\Release\net8.0\zxing.imagesharp.V4.xml %BINARY_DIR%\Bindings\ImageSharp.V4\net8.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp.V4\bin\Release\net10.0\zxing.imagesharp.V4.dll %BINARY_DIR%\Bindings\ImageSharp.V4\net10.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp.V4\bin\Release\net10.0\zxing.imagesharp.V4.pdb %BINARY_DIR%\Bindings\ImageSharp.V4\net10.0\
+%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp.V4\bin\Release\net10.0\zxing.imagesharp.V4.xml %BINARY_DIR%\Bindings\ImageSharp.V4\net10.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\netstandard2.0\zxing.magick.dll %BINARY_DIR%\Bindings\Magick\netstandard2.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\netstandard2.0\zxing.magick.pdb %BINARY_DIR%\Bindings\Magick\netstandard2.0\
 %CURRENT_DIR%\Source\Bindings\ZXing.Magick\bin\Release\netstandard2.0\zxing.magick.xml %BINARY_DIR%\Bindings\Magick\netstandard2.0\
