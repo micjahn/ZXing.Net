@@ -16,6 +16,8 @@ CD "%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp.V2\"
 CALL nuget-pack.cmd
 CD "%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp.V3\"
 CALL nuget-pack.cmd
+CD "%CURRENT_DIR%\Source\Bindings\ZXing.ImageSharp.V4\"
+CALL nuget-pack.cmd
 CD "%CURRENT_DIR%\Source\Bindings\ZXing.Kinect\"
 CALL nuget-pack.cmd
 CD "%CURRENT_DIR%\Source\Bindings\ZXing.Magick\"
