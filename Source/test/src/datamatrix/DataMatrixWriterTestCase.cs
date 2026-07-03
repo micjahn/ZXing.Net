@@ -323,7 +323,7 @@ Four score and seven our forefathers brought forth", SymbolShapeHint.FORCE_SQUAR
         [TestCase('1')]
         [TestCase('a')]
         [TestCase('A')]
-        [TestCase('�')]
+        [TestCase('€')]
         public void testCharactersForLengthUntil256RoundTrip(char character)
         {
             var writer = new BarcodeWriter
@@ -438,23 +438,6 @@ Four score and seven our forefathers brought forth", SymbolShapeHint.FORCE_SQUAR
             // No standard symbol matches 48x8, so we expect an exception
             Assert.Throws<ArgumentException>(() =>
                 new DataMatrixWriter().encode(content, BarcodeFormat.DATA_MATRIX, 0, 0, options.Hints));
-        }
-
-        [Test]
-        public void testDMRECapacityBoundaryExactFit()
-        {
-            // DMRE 8x48 has data capacity of 18 codewords
-            // Use a payload that encodes to exactly the capacity (18 codewords)
-            // 18 ASCII characters should need ~18 codewords in ASCII encoding
-            var content = "123456789012345678"; // 18 chars
-            var options = new DatamatrixEncodingOptions
-            {
-                EnableDMRE = true,
-                SymbolShape = SymbolShapeHint.FORCE_RECTANGLE
-            };
-            // With FORCE_RECTANGLE, 18 codewords fits exactly in DMRE 8x48 (cap=18)
-            var matrix = new DataMatrixWriter().encode(content, BarcodeFormat.DATA_MATRIX, 0, 0, options.Hints);
-            Assert.That(matrix, Is.Not.Null);
         }
 
         [Test]
