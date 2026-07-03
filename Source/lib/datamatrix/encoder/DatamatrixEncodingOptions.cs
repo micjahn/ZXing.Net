@@ -205,6 +205,39 @@ namespace ZXing.Datamatrix
         }
 
         /// <summary>
+        /// Specifies whether to enable Data Matrix Rectangular Extension (DMRE) symbol selection.
+        /// DMRE symbols are never selected unless this option is explicitly enabled.
+        /// </summary>
+#if !NETSTANDARD && !NETFX_CORE && !PORTABLE && !UNITY
+        [CategoryAttribute("Standard"), DescriptionAttribute("Specifies whether to enable Data Matrix Rectangular Extension (DMRE) symbol selection.")]
+#endif
+        public bool EnableDMRE
+        {
+            get
+            {
+                if (Hints.ContainsKey(EncodeHintType.DATA_MATRIX_DMRE))
+                {
+                    var boolObj = Hints[EncodeHintType.DATA_MATRIX_DMRE];
+                    if (boolObj != null)
+                        return (bool)boolObj;
+                }
+                return false;
+            }
+            set
+            {
+                if (value)
+                {
+                    Hints[EncodeHintType.DATA_MATRIX_DMRE] = value;
+                }
+                else
+                {
+                    if (Hints.ContainsKey(EncodeHintType.DATA_MATRIX_DMRE))
+                        Hints.Remove(EncodeHintType.DATA_MATRIX_DMRE);
+                }
+            }
+        }
+
+        /// <summary>
         /// Forces C40 encoding for data-matrix (type {@link Boolean}, or "true" or "false") {@link String } value). This 
         /// option and {@link #DATA_MATRIX_COMPACT} are mutually exclusive.
         /// </summary>
