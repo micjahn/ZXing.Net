@@ -1,14 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup Condition="'$(VisualStudioVersion)' == '16.0'">
-    <TargetFrameworks>net462;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net462;net48;netstandard2.0;netstandard2.1</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(VisualStudioVersion)' == '17.0'"> 
-    <TargetFrameworks>net462;netstandard2.0;netstandard2.1;net6.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net462;net48;netstandard2.0;netstandard2.1;net6.0;net9.0</TargetFrameworks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(VisualStudioVersion)' &gt;= '18.0'">
+    <TargetFrameworks>net462;net48;netstandard2.0;netstandard2.1;net6.0;net9.0;net10.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>0.16.22</VersionPrefix>
+    <VersionPrefix>0.16.23</VersionPrefix>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>anycpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -42,8 +45,18 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
     <DefineConstants>$(DefineConstants);NET46</DefineConstants>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net48' ">
+    <DefineConstants>$(DefineConstants);NET48</DefineConstants>
     <DebugType>full</DebugType>
   </PropertyGroup>
 
