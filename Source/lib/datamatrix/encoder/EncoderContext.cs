@@ -26,6 +26,7 @@ namespace ZXing.Datamatrix.Encoder
         private SymbolShapeHint shape;
         private Dimension minSize;
         private Dimension maxSize;
+        private bool allowDMRE;
         private readonly StringBuilder codewords;
         private int pos;
         private int newEncoding;
@@ -82,6 +83,11 @@ namespace ZXing.Datamatrix.Encoder
         {
             this.minSize = minSize;
             this.maxSize = maxSize;
+        }
+
+        public void setAllowDMRE(bool allowDMRE)
+        {
+            this.allowDMRE = allowDMRE;
         }
 
         public void setSkipAtEnd(int count)
@@ -148,7 +154,7 @@ namespace ZXing.Datamatrix.Encoder
         {
             if (this.symbolInfo == null || len > this.symbolInfo.dataCapacity)
             {
-                this.symbolInfo = SymbolInfo.lookup(len, shape, minSize, maxSize, true);
+                this.symbolInfo = SymbolInfo.lookup(len, shape, minSize, maxSize, true, allowDMRE);
             }
         }
 
