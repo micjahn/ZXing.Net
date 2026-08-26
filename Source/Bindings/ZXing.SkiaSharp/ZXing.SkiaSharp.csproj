@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SkiaSharp" Version="4.148.0" />
+    <PackageReference Include="SkiaSharp" Version="4.151.1" />
     <PackageReference Include="ZXing.Net" Version="0.16.11" />
   </ItemGroup>
 
