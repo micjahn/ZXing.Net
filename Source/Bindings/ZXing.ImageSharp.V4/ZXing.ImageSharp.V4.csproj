@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <VersionPrefix>0.16.19</VersionPrefix>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
     <PlatformTarget>anycpu</PlatformTarget>
     <DebugType>portable</DebugType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <AssemblyName>ZXing.ImageSharp.V3</AssemblyName>
-    <PackageId>ZXing.Net.Bindings.ImageSharp.V3</PackageId>
+    <AssemblyName>ZXing.ImageSharp.V4</AssemblyName>
+    <PackageId>ZXing.Net.Bindings.ImageSharp.V4</PackageId>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="4.1.1" />
     <PackageReference Include="ZXing.Net" Version="0.16.11" />
   </ItemGroup>
 
