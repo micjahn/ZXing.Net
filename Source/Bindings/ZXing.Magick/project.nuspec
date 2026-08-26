@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
 	<metadata>
-		<version>0.16.17</version>
+		<version>0.16.18</version>
 		<authors>Michael Jahn</authors>
 		<owners>Michael Jahn</owners>
 		<license type="expression">Apache-2.0</license>
@@ -19,12 +19,12 @@
 		<dependencies>
 			<group targetFramework="netstandard2.0">
 				<dependency id="ZXing.Net" version="0.16.11.0" exclude="Build,Analyzers" />
-				<dependency id="Magick.NET.Core" version="14.9.0" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET.Core" version="14.16.0" exclude="Build,Analyzers" />
 				<dependency id="NETStandard.Library" version="2.0.3" exclude="Build,Analyzers" />
 			</group>
 			<group targetFramework="net8.0">
 				<dependency id="ZXing.Net" version="0.16.11.0" exclude="Build,Analyzers" />
-				<dependency id="Magick.NET.Core" version="14.9.0" exclude="Build,Analyzers" />
+				<dependency id="Magick.NET.Core" version="14.16.0" exclude="Build,Analyzers" />
 			</group>
 		</dependencies>
 	</metadata>
