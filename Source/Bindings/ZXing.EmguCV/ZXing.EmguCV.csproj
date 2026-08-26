@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>0.16.6</VersionPrefix>
+    <VersionPrefix>0.16.7</VersionPrefix>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);NETSTANDARD</DefineConstants>
     <PlatformTarget>anycpu</PlatformTarget>
@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Emgu.CV" Version="4.12.0.5764" />
+    <PackageReference Include="Emgu.CV" Version="4.13.0.5924" />
     <PackageReference Include="ZXing.Net" Version="0.16.11" />
   </ItemGroup>
   
