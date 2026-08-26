@@ -115,7 +115,7 @@ namespace ZXing.Datamatrix.Encoder
         /// <returns>the encoded message (the char values range from 0 to 255)</returns>
         public static String encodeHighLevel(String msg)
         {
-            return encodeHighLevel(msg, SymbolShapeHint.FORCE_NONE, null, null, Encodation.ASCII, false, null, false);
+            return encodeHighLevel(msg, SymbolShapeHint.FORCE_NONE, null, null, Encodation.ASCII, false, null, false, false);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace ZXing.Datamatrix.Encoder
                                              Dimension maxSize,
                                              int defaultEncodation)
         {
-            return encodeHighLevel(msg, shape, minSize, maxSize, defaultEncodation, false, null, false);
+            return encodeHighLevel(msg, shape, minSize, maxSize, defaultEncodation, false, null, false, false);
         }
 
         /// <summary>
@@ -159,6 +159,31 @@ namespace ZXing.Datamatrix.Encoder
                                              Encoding encoding,
                                              bool disableEci)
         {
+            return encodeHighLevel(msg, shape, minSize, maxSize, defaultEncodation, forceC40, encoding, disableEci, false);
+        }
+
+        /// <summary>
+        /// Performs message encoding of a DataMatrix message using the algorithm described in annex P
+        /// of ISO/IEC 16022:2000(E).
+        /// </summary>
+        /// <param name="msg">the message</param>
+        /// <param name="shape">requested shape. May be {@code SymbolShapeHint.FORCE_NONE},{@code SymbolShapeHint.FORCE_SQUARE} or {@code SymbolShapeHint.FORCE_RECTANGLE}.</param>
+        /// <param name="minSize">the minimum symbol size constraint or null for no constraint</param>
+        /// <param name="maxSize">the maximum symbol size constraint or null for no constraint</param>
+        /// <param name="defaultEncodation">encoding mode to start with</param>
+        /// <param name="forceC40">enforce C40 encoding</param>
+        /// <param name="allowDMRE">if true, DMRE symbols may be selected</param>
+        /// <returns>the encoded message (the char values range from 0 to 255)</returns>
+        public static String encodeHighLevel(String msg,
+                                             SymbolShapeHint shape,
+                                             Dimension minSize,
+                                             Dimension maxSize,
+                                             int defaultEncodation,
+                                             bool forceC40,
+                                             Encoding encoding,
+                                             bool disableEci,
+                                             bool allowDMRE)
+        {
             //the codewords 0..255 are encoded as Unicode characters
             C40Encoder c40Encoder = new C40Encoder();
             Encoder[] encoders =
@@ -170,6 +195,7 @@ namespace ZXing.Datamatrix.Encoder
             var context = new EncoderContext(msg, encoding, disableEci);
             context.setSymbolShape(shape);
             context.setSizeConstraints(minSize, maxSize);
+            context.setAllowDMRE(allowDMRE);
 
             if (msg.StartsWith(MACRO_05_HEADER) && msg.EndsWith(MACRO_TRAILER))
             {

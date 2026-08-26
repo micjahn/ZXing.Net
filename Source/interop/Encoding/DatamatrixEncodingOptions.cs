@@ -125,6 +125,16 @@ namespace ZXing.Interop.Encoding
         }
 
         /// <summary>
+        /// Specifies whether to enable Data Matrix Rectangular Extension (DMRE) symbol selection.
+        /// DMRE symbols are never selected unless this option is explicitly enabled.
+        /// </summary>
+        public bool EnableDMRE
+        {
+            get { return wrappedDatamatrixEncodingOptions.EnableDMRE; }
+            set { wrappedDatamatrixEncodingOptions.EnableDMRE = value; }
+        }
+
+        /// <summary>
         /// Specifies what character encoding to use where applicable (type {@link String})
         /// </summary>
         public string CharacterSet

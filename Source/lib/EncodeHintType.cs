@@ -215,6 +215,13 @@ namespace ZXing
         DATA_MATRIX_COMPACT,
 
         /// <summary>
+        /// Whether to enable Data Matrix Rectangular Extension (DMRE) symbol selection.
+        /// type: <see cref="System.Boolean" />, or "true" or "false"
+        /// DMRE symbols are never selected unless this hint is explicitly enabled.
+        /// </summary>
+        DATA_MATRIX_DMRE,
+
+        /// <summary>
         /// Specifies whether to use compact mode for Code-128 code (type {@link Boolean}, or "true" or "false"
         /// This can yield slightly smaller bar codes. This option and {@link #FORCE_CODE_SET} are mutually
         /// exclusive options.

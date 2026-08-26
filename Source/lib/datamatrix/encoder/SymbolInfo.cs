@@ -177,7 +177,7 @@ namespace ZXing.Datamatrix.Encoder
 
         private static SymbolInfo lookup(int dataCodewords, SymbolShapeHint shape, bool fail)
         {
-            return lookup(dataCodewords, shape, null, null, fail);
+            return lookup(dataCodewords, shape, null, null, fail, false);
         }
         /// <summary>
         /// 
@@ -194,9 +194,29 @@ namespace ZXing.Datamatrix.Encoder
                                         Dimension maxSize,
                                         bool fail)
         {
+            return lookup(dataCodewords, shape, minSize, maxSize, fail, false);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dataCodewords"></param>
+        /// <param name="shape"></param>
+        /// <param name="minSize"></param>
+        /// <param name="maxSize"></param>
+        /// <param name="fail"></param>
+        /// <param name="allowDMRE">if true, DMRE symbols may be selected</param>
+        /// <returns></returns>
+        public static SymbolInfo lookup(int dataCodewords,
+                                        SymbolShapeHint shape,
+                                        Dimension minSize,
+                                        Dimension maxSize,
+                                        bool fail,
+                                        bool allowDMRE)
+        {
             foreach (SymbolInfo symbol in symbols)
             {
-                if (symbol.dmre)
+                if (symbol.dmre && !allowDMRE)
                     // DMRE Symbols doesn't work in all cases
                     continue;
 

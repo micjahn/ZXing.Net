@@ -77,6 +77,7 @@ namespace ZXing.Datamatrix
             var noPadding = false;
             System.Text.Encoding encoding = null;
             var disableEci = false;
+            var allowDMRE = false;
             if (hints != null)
             {
                 shape = IDictionaryExtensions.GetEnumValue<SymbolShapeHint>(hints, EncodeHintType.DATA_MATRIX_SHAPE, shape);
@@ -102,6 +103,7 @@ namespace ZXing.Datamatrix
                 noPadding = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.NO_PADDING, false);
                 encoding = IDictionaryExtensions.GetEncoding(hints, null);
                 disableEci = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.DISABLE_ECI, disableEci);
+                allowDMRE = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.DATA_MATRIX_DMRE, allowDMRE);
             }
 
             //1. step: Data encodation
@@ -116,10 +118,10 @@ namespace ZXing.Datamatrix
             else
             {
                 var hasForceC40Hint = IDictionaryExtensions.IsBooleanFlagSet(hints, EncodeHintType.FORCE_C40);
-                encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize, defaultEncodation, hasForceC40Hint, encoding, disableEci);
+                encoded = HighLevelEncoder.encodeHighLevel(contents, shape, minSize, maxSize, defaultEncodation, hasForceC40Hint, encoding, disableEci, allowDMRE);
             }
 
-            SymbolInfo symbolInfo = SymbolInfo.lookup(encoded.Length, shape, minSize, maxSize, true);
+            SymbolInfo symbolInfo = SymbolInfo.lookup(encoded.Length, shape, minSize, maxSize, true, allowDMRE);
 
             //2. step: ECC generation
             String codewords = ErrorCorrection.encodeECC200(encoded, symbolInfo);

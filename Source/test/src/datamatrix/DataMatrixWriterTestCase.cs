@@ -325,7 +325,7 @@ Four score and seven our forefathers brought forth", SymbolShapeHint.FORCE_SQUAR
         [TestCase('1')]
         [TestCase('a')]
         [TestCase('A')]
-        [TestCase('€')]
+        [TestCase('â‚¬')]
         public void testCharactersForLengthUntil256RoundTrip(char character)
         {
             var writer = new BarcodeWriter
@@ -371,6 +371,117 @@ Four score and seven our forefathers brought forth", SymbolShapeHint.FORCE_SQUAR
 
             if (errors.Count > 0)
                 throw new AssertionException("not every content could be encoded and decoded");
+        }
+
+        [Test]
+        public void testDefaultDoesNotSelectDMRE()
+        {
+            // 33 digits encode to ~17 codewords (16 pairs + 1 single digit).
+            // Without DMRE and FORCE_RECTANGLE: skips rect cap=5, cap=10, cap=16 symbols,
+            // then skips DMRE 8x48 (dmre=true), lands on rect cap=22 (SymbolInfo 22x18@16x10r2 -> 36x12).
+            var content = "123456789012345678901234567890123"; // 33 digits -> 17 codewords
+            var options = new DatamatrixEncodingOptions
+            {
+                SymbolShape = SymbolShapeHint.FORCE_RECTANGLE,
+            };
+            var matrix = new DataMatrixWriter().encode(content, BarcodeFormat.DATA_MATRIX, 0, 0, options.Hints);
+            Assert.That(matrix, Is.Not.Null);
+            // Should be a standard rectangular symbol (36x12), NOT DMRE 48x8
+            Assert.That(matrix.Width, Is.EqualTo(36));
+            Assert.That(matrix.Height, Is.EqualTo(12));
+        }
+
+        [Test]
+        public void testDMREOptInSelectsDMRESymbol()
+        {
+            // Same payload, but with DMRE enabled and FORCE_RECTANGLE
+            // 33 digits -> 17 codewords, fits DMRE 8x48 (cap=18), skips rect cap=5/10/16
+            var content = "123456789012345678901234567890123"; // 33 digits -> 17 codewords
+            var options = new DatamatrixEncodingOptions
+            {
+                SymbolShape = SymbolShapeHint.FORCE_RECTANGLE,
+                EnableDMRE = true
+            };
+            var matrix = new DataMatrixWriter().encode(content, BarcodeFormat.DATA_MATRIX, 0, 0, options.Hints);
+            Assert.That(matrix, Is.Not.Null);
+            // Should select DMRE 8x48 (48x8) instead of standard 36x12
+            Assert.That(matrix.Width, Is.EqualTo(48));
+            Assert.That(matrix.Height, Is.EqualTo(8));
+        }
+
+        [Test]
+        public void testDMREExactSizeViaMinMax()
+        {
+            // Constrain to DMRE 8x48 dimensions with DMRE enabled
+            var content = "Hello";
+            var options = new DatamatrixEncodingOptions
+            {
+                MinSize = new Dimension(48, 8),
+                MaxSize = new Dimension(48, 8),
+                EnableDMRE = true
+            };
+            var matrix = new DataMatrixWriter().encode(content, BarcodeFormat.DATA_MATRIX, 0, 0, options.Hints);
+            Assert.That(matrix, Is.Not.Null);
+            Assert.That(matrix.Width, Is.EqualTo(48));
+            Assert.That(matrix.Height, Is.EqualTo(8));
+        }
+
+        [Test]
+        public void testDMREWithoutOptInFailsWithExactDMREConstraints()
+        {
+            // Same min/max constraint but without EnableDMRE - DMRE symbol is skipped
+            var content = "Hello";
+            var options = new DatamatrixEncodingOptions
+            {
+                MinSize = new Dimension(48, 8),
+                MaxSize = new Dimension(48, 8),
+                // EnableDMRE not set - defaults to false
+            };
+            // No standard symbol matches 48x8, so we expect an exception
+            Assert.Throws<ArgumentException>(() =>
+                new DataMatrixWriter().encode(content, BarcodeFormat.DATA_MATRIX, 0, 0, options.Hints));
+        }
+
+        [Test]
+        public void testDMRECapacityBoundaryFallsThroughToNextSymbol()
+        {
+            // 35 digits encode to 18 digit-pair codewords? Actually:
+            // 34 digits -> 17 codewords, 35 digits -> 18 codewords.
+            // To exceed 8x48 capacity 18, use 37 digits -> 19 codewords.
+            var content = "1234567890123456789012345678901234567"; // 37 digits -> 19 codewords
+
+            var options = new DatamatrixEncodingOptions
+            {
+                EnableDMRE = true,
+                SymbolShape = SymbolShapeHint.FORCE_RECTANGLE
+            };
+
+            var matrix = new DataMatrixWriter().encode(content, BarcodeFormat.DATA_MATRIX, 0, 0, options.Hints);
+
+            Assert.That(matrix, Is.Not.Null);
+            Assert.That(matrix.Width, Is.Not.EqualTo(48));
+            Assert.That(matrix.Height, Is.Not.EqualTo(8));
+        }
+
+        [Test]
+        public void testDMREOptInRoundTrip()
+        {
+            // Round-trip encode/decode with DMRE enabled using Internal.Decoder on the raw matrix
+            var content = "123456789012345678901234567890123"; // 33 digits -> 17 codewords
+            var options = new DatamatrixEncodingOptions
+            {
+                EnableDMRE = true,
+                SymbolShape = SymbolShapeHint.FORCE_RECTANGLE
+            };
+            var writer = new DataMatrixWriter();
+            var matrix = writer.encode(content, BarcodeFormat.DATA_MATRIX, 0, 0, options.Hints);
+            Assert.That(matrix, Is.Not.Null);
+            Assert.That(matrix.Width, Is.EqualTo(48));
+            Assert.That(matrix.Height, Is.EqualTo(8));
+
+            var res = new Internal.Decoder().decode(matrix);
+            Assert.That(res, Is.Not.Null);
+            Assert.That(res.Text, Is.EqualTo(content));
         }
     }
 }
