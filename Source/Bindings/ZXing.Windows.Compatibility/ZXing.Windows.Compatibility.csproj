@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>0.16.15</VersionPrefix>
+    <VersionPrefix>0.16.16</VersionPrefix>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <PackageId>ZXing.Net.Bindings.Windows.Compatibility</PackageId>
     <PlatformTarget>AnyCPU</PlatformTarget>
