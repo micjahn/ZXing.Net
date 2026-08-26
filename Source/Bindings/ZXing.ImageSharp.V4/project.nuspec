@@ -22,10 +22,6 @@
         <dependency id="ZXing.Net" version="0.16.11.0" exclude="Build,Analyzers" />
         <dependency id="SixLabors.ImageSharp" version="4.1.1" exclude="Build,Analyzers" />
       </group>
-      <group targetFramework="net10.0">
-        <dependency id="ZXing.Net" version="0.16.11.0" exclude="Build,Analyzers" />
-        <dependency id="SixLabors.ImageSharp" version="4.1.1" exclude="Build,Analyzers" />
-      </group>
     </dependencies>
   </metadata>
   <files>
