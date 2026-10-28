@@ -173,6 +173,9 @@ namespace ZXing
         /// <param name="bitmapFormat"></param>
         protected void CalculateLuminance(byte[] rgbRawBytes, BitmapFormat bitmapFormat)
         {
+            if (rgbRawBytes == null)
+                throw new ArgumentNullException(nameof(rgbRawBytes));
+
             if (bitmapFormat == BitmapFormat.Unknown)
             {
                 bitmapFormat = DetermineBitmapFormat(rgbRawBytes, Width, Height);

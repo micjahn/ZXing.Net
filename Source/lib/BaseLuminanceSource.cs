@@ -69,8 +69,16 @@ namespace ZXing
         protected BaseLuminanceSource(byte[] luminanceArray, int width, int height)
            : base(width, height)
         {
-            luminances = new byte[width * height];
-            Buffer.BlockCopy(luminanceArray, 0, luminances, 0, width * height);
+            if (luminanceArray == null)
+                throw new ArgumentNullException(nameof(luminanceArray));
+
+            var size = width * height;
+            if (luminanceArray.Length < size) {
+                throw new ArgumentException("luminance array length is less than width * height");
+            }
+
+            luminances = new byte[size];
+            Buffer.BlockCopy(luminanceArray, 0, luminances, 0, size);
         }
 
         /// <summary>
