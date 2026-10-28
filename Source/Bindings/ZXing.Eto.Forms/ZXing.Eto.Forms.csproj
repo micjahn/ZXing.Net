@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>0.16.7</VersionPrefix>
+    <VersionPrefix>0.16.8</VersionPrefix>
     <PackageId>ZXing.Net.Bindings.Eto.Forms</PackageId>
     <PlatformTarget>anycpu</PlatformTarget>
     <SignAssembly>false</SignAssembly>
@@ -43,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Eto.Forms" Version="2.11.0" />
+    <PackageReference Include="Eto.Forms" Version="2.13.0" />
     <PackageReference Include="ZXing.Net" Version="0.16.11" />
   </ItemGroup>
 

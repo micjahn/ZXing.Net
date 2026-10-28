@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>0.16.24</VersionPrefix>
+    <VersionPrefix>0.16.25</VersionPrefix>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>anycpu</PlatformTarget>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SkiaSharp" Version="4.151.1" />
+    <PackageReference Include="SkiaSharp" Version="4.154.0" />
     <PackageReference Include="ZXing.Net" Version="0.16.11" />
   </ItemGroup>
 

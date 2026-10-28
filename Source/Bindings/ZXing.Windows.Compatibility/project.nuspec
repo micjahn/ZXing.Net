@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
-    <version>0.16.16</version>
+    <version>0.16.17</version>
     <authors>Michael Jahn</authors>
     <owners>Michael Jahn</owners>
     <license type="expression">Apache-2.0</license>
@@ -19,7 +19,7 @@
     <dependencies>
       <group targetFramework="net462">
         <dependency id="ZXing.Net" version="0.16.11" exclude="Build,Analyzers" />
-        <dependency id="System.Drawing.Common" version="10.0.11" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="10.0.14" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="netcoreapp3.0">
         <dependency id="ZXing.Net" version="0.16.11" exclude="Build,Analyzers" />
@@ -33,20 +33,20 @@
       </group>
       <group targetFramework="netstandard2.0">
         <dependency id="ZXing.Net" version="0.16.11" exclude="Build,Analyzers" />
-        <dependency id="System.Drawing.Common" version="10.0.11" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="10.0.14" exclude="Build,Analyzers" />
         <dependency id="NETStandard.Library" version="2.0.3" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net8.0">
         <dependency id="ZXing.Net" version="0.16.11" exclude="Build,Analyzers" />
-        <dependency id="System.Drawing.Common" version="10.0.11" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="10.0.14" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net9.0">
         <dependency id="ZXing.Net" version="0.16.11" exclude="Build,Analyzers" />
-        <dependency id="System.Drawing.Common" version="10.0.11" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="10.0.14" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net10.0">
         <dependency id="ZXing.Net" version="0.16.11" exclude="Build,Analyzers" />
-        <dependency id="System.Drawing.Common" version="10.0.11" exclude="Build,Analyzers" />
+        <dependency id="System.Drawing.Common" version="10.0.14" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>
