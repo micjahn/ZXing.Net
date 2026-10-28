@@ -224,5 +224,24 @@ namespace ZXing.Test
             data = new byte[12];
             source = new RGBLuminanceSource(data, 100, 100, format); // expects 30000 bytes, gets 12
         }
+		
+		[Test]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void testNullPixelArray()
+		{
+			// Test regression: null pixel array should throw IllegalArgumentException
+			new RGBLuminanceSource(null, 3, 3);
+		}
+
+		[Test]
+		[ExpectedException(typeof(ArgumentException))]
+		public void testPixelArrayTooSmall()
+		{
+			// Test regression: pixel array smaller than width * height should throw IllegalArgumentException
+			int width = 3;
+			int height = 3;
+			byte[] pixels = new byte[width * height - 1]; // One pixel short
+			new RGBLuminanceSource(pixels, width, height);
+		}
     }
 }
