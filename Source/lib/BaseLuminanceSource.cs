@@ -165,8 +165,8 @@ namespace ZXing
         /// Returns a new object with cropped image data. Implementations may keep a reference to the
         /// original data rather than a copy. Only callable if CropSupported is true.
         /// </summary>
-        /// <param name="left">The left coordinate, 0 &lt;= left &lt; Width.</param>
-        /// <param name="top">The top coordinate, 0 &lt;= top &lt;= Height.</param>
+        /// <param name="left">The left coordinate, which must be in [0, Width)</param>
+        /// <param name="top">The top coordinate, which must be in [0, Height)</param>
         /// <param name="width">The width of the rectangle to crop.</param>
         /// <param name="height">The height of the rectangle to crop.</param>
         /// <returns>
