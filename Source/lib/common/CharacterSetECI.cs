@@ -138,7 +138,7 @@ namespace ZXing.Common
         /// <returns><see cref="CharacterSetECI"/> representing ECI for character encoding, or null if it is legal but unsupported</returns>
         public static CharacterSetECI getCharacterSetECIByName(String name)
         {
-            var upperName = name.ToUpper();
+            var upperName = name.ToUpperInvariant();
             if (!NAME_TO_ECI.ContainsKey(upperName))
                 return null;
             return NAME_TO_ECI[upperName];
@@ -150,7 +150,7 @@ namespace ZXing.Common
         /// <returns>CharacterSetECI representing ECI for character encoding, or null if it is legal but unsupported</returns>
         public static CharacterSetECI getCharacterSetECI(System.Text.Encoding encoding)
         {
-            var name = encoding.WebName.ToUpper();
+            var name = encoding.WebName.ToUpperInvariant();
             if (!NAME_TO_ECI.ContainsKey(name))
                 return null;
             return NAME_TO_ECI[name];
@@ -206,4 +206,4 @@ namespace ZXing.Common
             return encoding;
         }
     }
-}
+}

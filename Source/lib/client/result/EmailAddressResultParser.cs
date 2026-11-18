@@ -41,7 +41,7 @@ namespace ZXing.Client.Result
                 return null;
             }
 
-            if (rawText.ToLower().StartsWith("mailto:"))
+            if (rawText.ToLowerInvariant().StartsWith("mailto:"))
             {
                 // If it starts with mailto:, assume it is definitely trying to be an email address
                 String hostEmail = rawText.Substring(7);
@@ -93,4 +93,4 @@ namespace ZXing.Client.Result
             return new EmailAddressParsedResult(rawText);
         }
     }
-}
+}
