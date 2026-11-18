@@ -145,5 +145,22 @@ namespace ZXing.Common.Test
             var eciFromEncodingName = CharacterSetECI.getCharacterSetECIByName(encoding.WebName);
             Assert.That(eciFromEncodingName, Is.Not.Null);
         }
+
+        [Test]
+        public void Should_Resolve_ECI_Independent_Of_Current_Culture()
+        {
+            var previousCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
+            try
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("tr-TR");
+
+                Assert.That(CharacterSetECI.getCharacterSetECIByName("iso-8859-1"), Is.Not.Null);
+                Assert.That(CharacterSetECI.getCharacterSetECI(Encoding.GetEncoding("iso-8859-1")), Is.Not.Null);
+            }
+            finally
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture = previousCulture;
+            }
+        }
     }
 }

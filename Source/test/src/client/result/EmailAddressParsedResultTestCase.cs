@@ -61,6 +61,22 @@ namespace ZXing.Client.Result.Test
         }
 
         [Test]
+        public void testMailtoPrefixIsCultureIndependent()
+        {
+            var previousCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
+            try
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("tr-TR");
+
+                doTest("MAILTO:srowen@example.org", "srowen@example.org", null, null);
+            }
+            finally
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture = previousCulture;
+            }
+        }
+
+        [Test]
         public void testTos()
         {
             doTest("mailto:srowen@example.org,bob@example.org",
